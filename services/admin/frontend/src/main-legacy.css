@@ -1,0 +1,6 @@
+/* 仅用于承载从 src/main/resources/html 迁移来的 legacy 模板样式。
+   注意：这套样式是全局的，可能会影响 Arco 组件；后续可考虑加选择器前缀做隔离。 */
+
+@import url('../public/assets/legacy/css/bootstrap.css');
+@import url('../public/assets/legacy/css/style.css');
+@import url('../public/assets/legacy/css/responsive.css');

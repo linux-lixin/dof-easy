@@ -1,0 +1,2 @@
+PASS: i386 legacy and native shm create/open/shared-read/unlink, CLOEXEC, traversal and symlink rejection
+PASS: i386 legacy and native shm create/open/shared-read/unlink, CLOEXEC, traversal and symlink rejection

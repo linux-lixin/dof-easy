@@ -1,0 +1,119 @@
+[
+  {
+    "path": "/opt/dnf/compat/amd64/libcrypto.so.6",
+    "sha256": "b86c09d4b0a36e04579be747df37b1a665294adc73c4e231c454094ab0e12efe",
+    "architecture": "amd64",
+    "interpreter": null,
+    "needed": [
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "GLIBC_2.14",
+      "GLIBC_2.2.5",
+      "GLIBC_2.3",
+      "GLIBC_2.3.4",
+      "GLIBC_2.33",
+      "GLIBC_2.34",
+      "GLIBC_2.4",
+      "GLIBC_2.7"
+    ],
+    "resolution": "linux-vdso.so.1 (0x00007fffddb94000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000726c7b828000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000726c7bbdd000)",
+    "errors": []
+  },
+  {
+    "path": "/opt/dnf/compat/amd64/libmysqlclient.so.15",
+    "sha256": "c9fc03966602b5072775cfba906a141565e48c9baf1c531db6669fcc5695de0f",
+    "architecture": "amd64",
+    "interpreter": null,
+    "needed": [
+      "libpthread.so.0",
+      "libcrypt.so.1",
+      "libnsl.so.1",
+      "libm.so.6",
+      "libz.so.1",
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "GLIBC_2.2.5",
+      "GLIBC_2.3.4",
+      "GLIBC_2.4"
+    ],
+    "resolution": "linux-vdso.so.1 (0x00007ffeb876f000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f5a2e176000)\n\tlibcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007f5a2e13c000)\n\tlibnsl.so.1 => /lib/x86_64-linux-gnu/libnsl.so.1 (0x00007f5a2e120000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f5a2e037000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f5a2e01b000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5a2d9ed000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f5a2e180000)",
+    "errors": []
+  },
+  {
+    "path": "/opt/dnf/compat/amd64/libssl.so.6",
+    "sha256": "08175689d753495d8056a4198c672ef6fc02bba9be5bb8bb564a186f905f8cad",
+    "architecture": "amd64",
+    "interpreter": null,
+    "needed": [
+      "libcrypto.so.6",
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "GLIBC_2.14",
+      "GLIBC_2.2.5",
+      "GLIBC_2.3.4",
+      "GLIBC_2.4"
+    ],
+    "resolution": "linux-vdso.so.1 (0x00007ffc829a5000)\n\tlibcrypto.so.6 => /opt/dnf/compat/amd64/libcrypto.so.6 (0x0000776efed81000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000776efeb6b000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000776efef73000)",
+    "errors": []
+  },
+  {
+    "path": "/opt/dnf/compat/i386/libGeoIP.so.1",
+    "sha256": "69e47d880ae2fa52855217617c89dfa4af2d7181434dc0cd929c277e8142904b",
+    "architecture": "i386",
+    "interpreter": null,
+    "needed": [
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "GLIBC_2.0",
+      "GLIBC_2.1",
+      "GLIBC_2.1.2",
+      "GLIBC_2.1.3",
+      "GLIBC_2.3.4",
+      "GLIBC_2.33",
+      "GLIBC_2.4"
+    ],
+    "resolution": "linux-gate.so.1 (0xf7fab000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7d26000)\n\t/lib/ld-linux.so.2 (0xf7fad000)",
+    "errors": []
+  },
+  {
+    "path": "/opt/dnf/compat/i386/liblegacy-shm.so",
+    "sha256": "c1d664bcc7e58250de9113c6fdcf0b53a651560a39568788bee3512f274dbeb2",
+    "architecture": "i386",
+    "interpreter": null,
+    "needed": [
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "GLIBC_2.0",
+      "GLIBC_2.1.3",
+      "GLIBC_2.34",
+      "GLIBC_2.4"
+    ],
+    "resolution": "linux-gate.so.1 (0xf7ee7000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c9e000)\n\t/lib/ld-linux.so.2 (0xf7ee9000)",
+    "errors": []
+  },
+  {
+    "path": "/opt/dnf/compat/i386/libnxencryption.so",
+    "sha256": "cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76",
+    "architecture": "i386",
+    "interpreter": null,
+    "needed": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "CXXABI_1.3",
+      "GLIBCXX_3.4",
+      "GLIBC_2.0",
+      "GLIBC_2.1.3"
+    ],
+    "resolution": "linux-gate.so.1 (0xf7f11000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c86000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b7c000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b44000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7909000)\n\t/lib/ld-linux.so.2 (0xf7f13000)",
+    "errors": []
+  }
+]

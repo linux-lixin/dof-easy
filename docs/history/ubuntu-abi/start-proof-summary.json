@@ -1,0 +1,112 @@
+[
+  {
+    "path": "/assets/TeaEncrypt",
+    "preload": null,
+    "result": -11
+  },
+  {
+    "path": "/assets/home/template/init/df_game_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/init/mysql_proxy/forward",
+    "preload": null,
+    "result": "timeout"
+  },
+  {
+    "path": "/assets/home/template/neople/auction/df_auction_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/bridge/df_bridge_r",
+    "preload": "/assets/home/template/init/bridge_hook.so:/assets/home/template/init/libhook.so",
+    "result": 0
+  },
+  {
+    "path": "/assets/home/template/neople/channel/df_channel_r",
+    "preload": "/assets/home/template/init/channel_hook.so:/assets/home/template/init/libhook.so",
+    "result": 0
+  },
+  {
+    "path": "/assets/home/template/neople/community/df_community_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 0
+  },
+  {
+    "path": "/assets/home/template/neople/coserver/df_coserver_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/dbmw_guild/df_dbmw_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/dbmw_mnt/df_dbmw_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/dbmw_stat/df_dbmw_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/guild/df_guild_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/manager/df_manager_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/monitor/df_monitor_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": -6
+  },
+  {
+    "path": "/assets/home/template/neople/point/df_point_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/relay/df_relay_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 0
+  },
+  {
+    "path": "/assets/home/template/neople/secsvr/gunnersvr/gunnersvr",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 0
+  },
+  {
+    "path": "/assets/home/template/neople/secsvr/zergsvr/secagent",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 35
+  },
+  {
+    "path": "/assets/home/template/neople/secsvr/zergsvr/zergsvr",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 45
+  },
+  {
+    "path": "/assets/home/template/neople/statics/df_statics_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1
+  },
+  {
+    "path": "/assets/home/template/neople/stun/df_stun_r",
+    "preload": null,
+    "result": 0
+  },
+  {
+    "path": "/assets/home/template/root/DnfGateServer",
+    "preload": null,
+    "result": -6
+  }
+]

@@ -1,0 +1,6 @@
+; Copy to login.ini beside DNFLogin.exe and set your own API address.
+; A blank or invalid BaseUrl intentionally prevents all network requests.
+[Login]
+BaseUrl=
+WindowTitle=地下城与勇士 86
+GameVersion=1.0.0

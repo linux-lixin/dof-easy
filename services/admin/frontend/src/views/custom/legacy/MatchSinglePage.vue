@@ -1,0 +1,246 @@
+<script setup lang="ts">
+import LegacyLayout from './LegacyLayout.vue';
+import { useLegacyScripts } from '../../../composables/legacy/useLegacyScripts';
+
+useLegacyScripts(true);
+</script>
+
+<template>
+  <LegacyLayout>
+    <!--Page Title-->
+    <section class="page-banner" style="background-image:url(/assets/legacy/images/background/title-bg.jpg);">
+      <div class="auto-container">
+        <div class="inner-container clearfix">
+          <ul class="bread-crumb clearfix">
+            <li><a href="/home">Home</a></li>
+            <li>Matches</li>
+          </ul>
+          <h1>Single Match</h1>
+        </div>
+      </div>
+    </section>
+    <!--End Page Title-->
+
+    <!--Sidebar Page Container-->
+    <div class="sidebar-page-container">
+      <div class="auto-container">
+        <div class="row clearfix">
+          <!--Content Side / Match Single -->
+          <div class="content-side col-lg-8 col-md-12 col-sm-12">
+            <div class="match-single">
+              <!-- Title Box -->
+              <div class="title-box">
+                <div class="recent-result">Recent Results <span>. 40 : 32</span></div>
+                <h3>BACON TENDERLOIN DRUMSTICK MEATBALL</h3>
+                <div class="date">17th APRIL 2019, 11:00 PM</div>
+              </div>
+
+              <!-- Team Box -->
+              <div class="team-box clearfix">
+                <div class="match-item pull-left">
+                  <div class="inner-item">
+                    <div class="icon-box"><span class="icon flaticon-bull"></span></div>
+                    <a href="#" class="product" @click.prevent>bull eye</a>
+                  </div>
+                </div>
+
+                <div class="match-item pull-right">
+                  <div class="inner-item">
+                    <div class="icon-box"><span class="icon flaticon-playground"></span></div>
+                    <a href="#" class="product" @click.prevent>Monkey</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Text Box -->
+              <div class="text-box">
+                <p>
+                  There are many variations of passages of lorem ipsum available, but the majority have suffered
+                  alteration in some form, by injected humour, or simply free textinh randomised words which don't look
+                  even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there
+                  isn't anything embarrassing hidden in the middle of text. Aelltes port lacus quis enim ipsu var sed
+                  efficitur turpis gilla sed sit lorem ipsum is simply free text available amet finibus eros. Lorem
+                  ipsum is simply free text used by copytyping refreshing. Neque porro est qui dolorem ipsum quia quaed
+                  inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Lorem is simply free text
+                  used by copytyping refreshing. Neque porro est qui dolorem ipsum quia quaed inventore veritatis et
+                  quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus quis enim var sed efficitur
+                  turpis gilla sed sit amet finibus eros. Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry.
+                </p>
+                <div class="row">
+                  <div class="column col-lg-6 col-md-6 col-sm-12">
+                    <figure class="image">
+                      <a href="/assets/legacy/images/resource/match-img-1.jpg" class="lightbox-image">
+                        <img src="/assets/legacy/images/resource/match-img-1.jpg" alt="" />
+                      </a>
+                    </figure>
+                  </div>
+                  <div class="column col-lg-6 col-md-6 col-sm-12">
+                    <figure class="image">
+                      <a href="/assets/legacy/images/resource/match-img-2.jpg" class="lightbox-image">
+                        <img src="/assets/legacy/images/resource/match-img-2.jpg" alt="" />
+                      </a>
+                    </figure>
+                  </div>
+                </div>
+                <p>
+                  Lorem Ipsum has been the ndustry standard dummy text ever since the 1500s, when an unknown printer
+                  took a galley of type and scrambled it to make a type specimen book. It has survived not only five
+                  centuries. Lorem Ipsum is simply dummy text of the new design printng and type setting Ipsum Take a
+                  look at our round up of the best shows coming soon to your telly box has been the is industrys. Lorem
+                  Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has industr standard
+                  dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
+                  make a type specimen book. It has survived not only five centuries, but also the leap into electronic
+                  typesetting, remaining essentially unchanged.
+                </p>
+              </div>
+
+              <!-- Comments Area -->
+              <div class="comments-area">
+                <div class="group-title"><h3>2 Comments</h3></div>
+                <div class="comment-box">
+                  <div class="comment">
+                    <div class="author-thumb">
+                      <figure class="thumb"><img src="/assets/legacy/images/resource/thumb-1.jpg" alt="" /></figure>
+                    </div>
+                    <h4 class="name">Kevin Martin</h4>
+                    <div class="text">
+                      Lorem ipsum is simply free text used by copytyping refreshing. Neque porro est qui dolorem ipsum
+                      quia quaed inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo var sed
+                      efficitur turpis gilla sed sit amet finibus eros.
+                    </div>
+                    <a href="#" class="reply-btn" @click.prevent>Reply</a>
+                  </div>
+                </div>
+
+                <div class="comment-box reply-comment">
+                  <div class="comment">
+                    <div class="author-thumb">
+                      <figure class="thumb"><img src="/assets/legacy/images/resource/thumb-2.jpg" alt="" /></figure>
+                    </div>
+                    <h4 class="name">Sarah Albert</h4>
+                    <div class="text">
+                      Lorem ipsum is simply free text used by copytyping refreshing. Neque porro est qui dolorem ipsum
+                      quia quaed inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo var sed
+                      efficitur turpis gilla sed sit amet finibus eros.
+                    </div>
+                    <a href="#" class="reply-btn" @click.prevent>Reply</a>
+                  </div>
+                </div>
+              </div>
+
+              <!--Comment Form-->
+              <div class="comment-form">
+                <div class="group-title"><h3>Leave a comment</h3></div>
+
+                <form method="post" action="/blog" @submit.prevent>
+                  <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12 form-group">
+                      <input type="text" name="username" placeholder="Full name" required />
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 form-group">
+                      <input type="email" name="email" placeholder="Email address" required />
+                    </div>
+
+                    <div class="col-md-12 col-sm-12 form-group">
+                      <textarea name="message" placeholder="Write a comment"></textarea>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12 form-group">
+                      <button class="theme-btn btn-style-one" type="submit" name="submit-form">
+                        <span class="btn-title">Post Comment</span>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!--Sidebar Side-->
+          <div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
+            <aside class="sidebar">
+              <!-- Next Match Widget -->
+              <div class="sidebar-widget next-match-widget">
+                <div class="widget-content">
+                  <h4 class="sidebar-title">Next Match</h4>
+                  <div class="team-box clearfix">
+                    <div class="match-item pull-left">
+                      <div class="inner-item">
+                        <div class="icon-box"><span class="icon flaticon-lion"></span></div>
+                        <a href="#" class="product" @click.prevent>Loin king</a>
+                      </div>
+                    </div>
+
+                    <div class="match-item pull-right">
+                      <div class="inner-item">
+                        <div class="icon-box"><span class="icon flaticon-wolf"></span></div>
+                        <a href="#" class="product" @click.prevent>Wolf Smart</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="title-box">
+                    <span class="title">Watch Stream</span>
+                    <h4><a href="#" @click.prevent>Need for speed Match part 2</a></h4>
+                    <div class="date">30th MAY 2019, 11:00 PM</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Studio Widget -->
+              <div class="sidebar-widget studio-widget">
+                <div class="widget-content" style="background-image: url(/assets/legacy/images/resource/widget-bg.jpg);">
+                  <h2 class="title"><a href="#" @click.prevent>Gaming<Br /> studio</a></h2>
+                </div>
+              </div>
+
+              <!-- Upcoming Widget -->
+              <div class="sidebar-widget upcoming-widget">
+                <div class="widget-content">
+                  <h4 class="sidebar-title">Upcoming matches</h4>
+
+                  <div class="upcoming-match">
+                    <div class="inner">
+                      <div class="team-box clearfix">
+                        <div class="match-item pull-left"><div class="icon-box"><span class="icon flaticon-skull"></span></div></div>
+                        <div class="match-item pull-right"><div class="icon-box"><span class="icon flaticon-bear"></span></div></div>
+                      </div>
+                      <span class="date">12th MAY 2019</span>
+                      <a href="#" class="overlay-link" @click.prevent></a>
+                    </div>
+                  </div>
+
+                  <div class="upcoming-match">
+                    <div class="inner">
+                      <div class="team-box clearfix">
+                        <div class="match-item pull-left"><div class="icon-box"><span class="icon flaticon-portrait"></span></div></div>
+                        <div class="match-item pull-right"><div class="icon-box"><span class="icon flaticon-bird"></span></div></div>
+                      </div>
+                      <span class="date">18th MAY 2019</span>
+                      <a href="#" class="overlay-link" @click.prevent></a>
+                    </div>
+                  </div>
+
+                  <div class="upcoming-match">
+                    <div class="inner">
+                      <div class="team-box clearfix">
+                        <div class="match-item pull-left"><div class="icon-box"><span class="icon flaticon-lion"></span></div></div>
+                        <div class="match-item pull-right"><div class="icon-box"><span class="icon flaticon-wolf"></span></div></div>
+                      </div>
+                      <span class="date">30th MAY 2019</span>
+                      <a href="#" class="overlay-link" @click.prevent></a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Sidebar Page Container -->
+  </LegacyLayout>
+</template>

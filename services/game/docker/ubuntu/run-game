@@ -1,0 +1,139 @@
+#!/usr/bin/python3
+"""Execute a trusted game ELF with compatibility libraries scoped to this process."""
+import os
+from pathlib import Path
+import re
+import selectors
+import signal
+import sys
+import time
+
+
+def redact_output():
+    """Keep the exec PID; a separate uninjected reader filters both native streams."""
+    secret_key = re.compile(r'(?:^|_)(?:PASSWORD|PASS|PWD|SECRET|TOKEN|KEY)(?:_|$)')
+    secrets = sorted({os.fsencode(value) for key, value in os.environ.items()
+                      if value and key != 'PWD' and secret_key.search(key.upper())},
+                     key=len, reverse=True)
+    # Legacy DB diagnostics can expose a value absent from the inherited environment.
+    # Suppress the entire tail, including quoted values with embedded quotes.
+    password_field = re.compile(rb'\b(?:pw|pwd|password)\s*[:=].*', re.IGNORECASE)
+
+    def clean(line):
+        line = password_field.sub(b'password=[REDACTED]', line)
+        for secret in secrets:
+            line = line.replace(secret, b'[REDACTED]')
+        return line
+
+    pipes = [os.pipe(), os.pipe()]
+    outputs = [os.dup(1), os.dup(2)]
+    ready_read, ready_write = os.pipe()
+    if os.fork() == 0:
+        # Group shutdown must kill the game while allowing its last output to drain.
+        for signum in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGQUIT):
+            signal.signal(signum, signal.SIG_IGN)
+        keep = {ready_write, *outputs, *(pair[0] for pair in pipes)}
+        # Do not keep unrelated inherited descriptors or pipe writers alive.
+        for name in os.listdir('/proc/self/fd'):
+            fd = int(name)
+            if fd not in keep:
+                try:
+                    os.close(fd)
+                except OSError:
+                    pass
+        selector = selectors.DefaultSelector()
+        pending = {}
+        discarded = set()
+        for (read_fd, _), output_fd in zip(pipes, outputs):
+            selector.register(read_fd, selectors.EVENT_READ, output_fd)
+            pending[read_fd] = b''
+        os.write(ready_write, b'1')
+        os.close(ready_write)
+
+        def emit(fd, data):
+            while data:
+                data = data[os.write(fd, data):]
+
+        try:
+            while selector.get_map():
+                for key, _ in selector.select():
+                    fd, output_fd = key.fd, key.data
+                    data = os.read(fd, 8192)
+                    if not data:
+                        if fd not in discarded:
+                            emit(output_fd, clean(pending[fd]))
+                        selector.unregister(fd)
+                        os.close(fd)
+                        continue
+                    # Wait for a complete line so a password split across writes is safe.
+                    # Oversized lines are suppressed in full, keeping memory bounded.
+                    parts = data.split(b'\n')
+                    for index, part in enumerate(parts):
+                        complete = index < len(parts) - 1
+                        if fd not in discarded:
+                            pending[fd] += part
+                            if len(pending[fd]) > 65536:
+                                pending[fd] = b''
+                                discarded.add(fd)
+                                emit(output_fd, b'[REDACTED oversized log line]\n')
+                        if complete:
+                            if fd not in discarded:
+                                emit(output_fd, clean(pending[fd]) + b'\n')
+                            pending[fd] = b''
+                            discarded.discard(fd)
+        except (BrokenPipeError, OSError):
+            # Never fall back to unfiltered output if the downstream logger closes.
+            os._exit(1)
+        os._exit(0)
+    os.close(ready_write)
+    if os.read(ready_read, 1) != b'1':
+        raise SystemExit('game output reader failed to initialize')
+    os.close(ready_read)
+    for (read_fd, write_fd), output_fd, target in zip(pipes, outputs, (1, 2)):
+        os.close(read_fd)
+        os.close(output_fd)
+        os.dup2(write_fd, target)
+        os.close(write_fd)
+
+
+if len(sys.argv) < 2:
+    raise SystemExit('usage: run-game ELF [arguments...]')
+binary = Path(sys.argv[1]).resolve(strict=True)
+with binary.open('rb') as stream:
+    head = stream.read(20)
+if head[:4] != b'\x7fELF' or head[4] not in (1, 2):
+    raise SystemExit(f'not a supported ELF: {binary}')
+arch = 'i386' if head[4] == 1 else 'amd64'
+environment = dict(os.environ)
+environment.pop('LD_LIBRARY_PATH', None)
+if arch == 'i386':
+    environment['LD_LIBRARY_PATH'] = '/opt/dnf/compat/i386'
+# The adapter passes preloads through a neutral name so Python itself never loads them.
+preload = environment.pop('DNF_GAME_PRELOAD', '')
+environment.pop('LD_PRELOAD', None)
+# Plugins are selected explicitly and loaded only into the game process.
+if binary.name == 'df_game_r':
+    mode = environment.get('PLUGIN_MODE', 'dp2-frida')
+    if mode not in ('none', 'dp2', 'frida', 'dp2-frida'):
+        raise SystemExit('invalid PLUGIN_MODE')
+    entries = [name for name in preload.split(':') if name]
+    selected = []
+    if mode in ('dp2', 'dp2-frida'): selected.append('/dp2/libdp2pre.so')
+    if mode in ('frida', 'dp2-frida'):
+        selected.extend(['/opt/dnf/compat/i386/libfrida-compat.so', '/home/neople/game/frida.so'])
+    for loader in selected:
+        if not Path(loader).is_file(): raise SystemExit('missing selected plugin: '+loader)
+        if loader not in entries: entries.append(loader)
+    preload = ':'.join(entries)
+if arch == 'i386':
+    shim = '/opt/dnf/compat/i386/liblegacy-shm.so'
+    preload = ':'.join([shim, *([preload] if preload else [])])
+if preload:
+    for name in preload.split(':'):
+        with open(name, 'rb') as stream:
+            hook = stream.read(5)
+        if hook[:4] != b'\x7fELF' or hook[4] != head[4]:
+            raise SystemExit(f'incompatible preload architecture: {name}')
+    environment['LD_PRELOAD'] = preload
+redact_output()
+os.execve(str(binary), [str(binary), *sys.argv[2:]], environment)

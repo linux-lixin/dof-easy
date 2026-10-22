@@ -1,0 +1,22 @@
+{
+  "repositories": [
+    {
+      "directory": "services/game",
+      "repository": "https://github.com/1995chen/dnf.git",
+      "commit": "08f724c25b12748f8eb4bf11b24a90accfc3b223",
+      "localFixesIncluded": true
+    },
+    {
+      "directory": "services/admin",
+      "repository": "https://github.com/onlyGuo/dnf-server-public.git",
+      "commit": "4b03fe72c288e2c96db491640c7eaefe45c8c5b5",
+      "localFixesIncluded": true
+    },
+    {
+      "directory": "clients/launcher",
+      "repository": "https://github.com/onlyGuo/DNFLogin.git",
+      "commit": "7f82eea909ec01b5a9cf36ada176bf373316136b",
+      "localFixesIncluded": false
+    }
+  ]
+}

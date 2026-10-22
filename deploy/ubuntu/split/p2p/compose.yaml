@@ -1,0 +1,19 @@
+name: dnf-ubuntu-p2p
+services:
+  p2p:
+    image: ${GAME_IMAGE:-dnf-game:ubuntu24.04}
+    pull_policy: never
+    restart: unless-stopped
+    environment:
+      SERVER_TYPE: P2P
+      SERVER_GROUP: "3"
+      PUBLIC_IP: ${PUBLIC_IP:?Set P2P player-reachable IPv4}
+      CORE_PUBLIC_IP: ${CORE_IP:?Set CORE reachable private IPv4}
+      MAIN_BRIDGE_IP: ${BRIDGE_IP:?Set bridge reachable private IPv4}
+      P2P_RELAY_INDEX: "${P2P_RELAY_INDEX:-1}"
+    volumes:
+      - ${RUNTIME_ROOT:-./runtime}/p2p/data:/data
+    ports:
+      - "7300:7300/tcp"
+      - "7300:7300/udp"
+      - "2311-2313:2311-2313/udp"

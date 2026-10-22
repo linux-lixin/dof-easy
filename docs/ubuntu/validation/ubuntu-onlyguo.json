@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "mode": "all",
+  "started_at": "2026-10-16T19:35:43",
+  "finished_at": "2026-10-16T19:42:43",
+  "checks": [
+    "Ubuntu24; no Python2, database server or VPN binaries",
+    "Invalid role, missing database and nonempty VPN credential fail before startup",
+    "Wrong password fails before creating game schemas",
+    "Fresh schema, repaired seed, new query insert and both monthly tables",
+    "Old unified launcher gateway absent from Supervisor, processes and listening ports",
+    "Pinned netcat implementation exchanges legacy relay registration with acknowledgment",
+    "Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes",
+    "Current-run five countries and real PIDs/ports stable",
+    "Single channel kill and database outage recover with readiness transitions",
+    "Three stop/start cycles preserve database sentinel, admin and RSA pair",
+    "Raw game and backend logs contain no configured plaintext or encrypted DB credentials"
+  ],
+  "images": {
+    "dnf-game:ubuntu24-onlyguo": "sha256:22184731f97eb9d213c5ff1c31255bba26a3b13a7b78226f551da769dda97ea9",
+    "dnf-admin:admin-default-check": "sha256:72ed0dba2a3e7014e405d3e8cfc1fdfff6777f4cffacd522386aecf00738908f"
+  },
+  "resources": [
+    "dnf-ubuntu-test-18c9aab0-game 2.459GiB / 10GiB 10.89%",
+    "dnf-ubuntu-test-18c9aab0-admin 342.8MiB / 10GiB 0.16%",
+    "dnf-ubuntu-test-18c9aab0-mysql 481.6MiB / 10GiB 0.03%"
+  ],
+  "container_restarts": {
+    "dnf-ubuntu-test-18c9aab0-game": 0
+  },
+  "real_windows_client": "NOT TESTED: registration, gameplay, party, automatic update",
+  "stability_seconds": 60,
+  "scope": "ALL mode; no production host access. Split Compose validated, split runtime not repeated."
+}

@@ -1,0 +1,9 @@
+
+*.iml
+.idea/
+backend/target/
+*.class
+*.log
+logs/
+/dnf-server-web
+/data/

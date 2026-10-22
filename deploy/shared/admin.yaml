@@ -1,0 +1,15 @@
+# Shared onlyGuo backend; runtime mounts belong to each deployment leaf.
+services:
+  admin-base:
+    image: ${ADMIN_IMAGE:-dnf-admin:latest}
+    pull_policy: never
+    restart: "no"
+    environment:
+      TZ: Asia/Shanghai
+      SPRING_DATASOURCE_URL: "jdbc:mysql://${DB_HOST:?Set DB_HOST}:${DB_PORT:-3306}/dnf_service?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD}
+      MYSQL_INIT_SSL_MODE: ${MYSQL_INIT_SSL_MODE:-disabled}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    ports:
+      - "18080:80/tcp"

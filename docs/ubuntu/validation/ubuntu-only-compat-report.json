@@ -1,0 +1,59 @@
+[
+  {
+    "path": "/opt/dnf/compat/i386/libGeoIP.so.1",
+    "sha256": "69e47d880ae2fa52855217617c89dfa4af2d7181434dc0cd929c277e8142904b",
+    "architecture": "i386",
+    "interpreter": null,
+    "needed": [
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "GLIBC_2.0",
+      "GLIBC_2.1",
+      "GLIBC_2.1.2",
+      "GLIBC_2.1.3",
+      "GLIBC_2.3.4",
+      "GLIBC_2.33",
+      "GLIBC_2.4"
+    ],
+    "resolution": "linux-gate.so.1 (0xf7f0f000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7c8a000)\n\t/lib/ld-linux.so.2 (0xf7f11000)",
+    "errors": []
+  },
+  {
+    "path": "/opt/dnf/compat/i386/liblegacy-shm.so",
+    "sha256": "c1d664bcc7e58250de9113c6fdcf0b53a651560a39568788bee3512f274dbeb2",
+    "architecture": "i386",
+    "interpreter": null,
+    "needed": [
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "GLIBC_2.0",
+      "GLIBC_2.1.3",
+      "GLIBC_2.34",
+      "GLIBC_2.4"
+    ],
+    "resolution": "linux-gate.so.1 (0xf7eeb000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7ca2000)\n\t/lib/ld-linux.so.2 (0xf7eed000)",
+    "errors": []
+  },
+  {
+    "path": "/opt/dnf/compat/i386/libnxencryption.so",
+    "sha256": "cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76",
+    "architecture": "i386",
+    "interpreter": null,
+    "needed": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ],
+    "symbol_versions": [
+      "CXXABI_1.3",
+      "GLIBCXX_3.4",
+      "GLIBC_2.0",
+      "GLIBC_2.1.3"
+    ],
+    "resolution": "linux-gate.so.1 (0xf7f0d000)\n\tlibstdc++.so.6 => /lib/i386-linux-gnu/libstdc++.so.6 (0xf7c82000)\n\tlibm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7b78000)\n\tlibgcc_s.so.1 => /lib/i386-linux-gnu/libgcc_s.so.1 (0xf7b40000)\n\tlibc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7905000)\n\t/lib/ld-linux.so.2 (0xf7f0f000)",
+    "errors": []
+  }
+]

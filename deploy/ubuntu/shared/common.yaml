@@ -1,0 +1,30 @@
+# Shared service definitions; leaf deployment directories own their runtime mounts.
+services:
+  game-base:
+    image: ${GAME_IMAGE:-dnf-game:ubuntu24.04}
+    pull_policy: never
+    restart: unless-stopped
+    shm_size: 8g
+    environment:
+      TZ: Asia/Shanghai
+      SERVER_GROUP: "3"
+      SERVER_GROUP_DB: cain
+      OPEN_CHANNEL: "11,52"
+      CLIENT_POOL_SIZE: "3"
+      PUBLIC_IP: ${PUBLIC_IP:?Set this node's advertised IPv4}
+      CORE_PUBLIC_IP: ${CORE_IP:-127.0.0.1}
+      MAIN_BRIDGE_IP: ${BRIDGE_IP:-127.0.0.1}
+      P2P_PUBLIC_IP: ${P2P_IP:-127.0.0.1}
+      P2P_RELAY_INDEX: "1"
+      MAIN_MYSQL_HOST: ${DB_HOST:?Set externally managed database IPv4}
+      MAIN_MYSQL_PORT: "${DB_PORT:-3306}"
+      MAIN_MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD}
+      MAIN_MYSQL_GAME_ALLOW_IP: "${GAME_DB_ALLOW_IP:-}"
+      MYSQL_HOST: ${DB_HOST:?Set DB_HOST}
+      MYSQL_PORT: "${DB_PORT:-3306}"
+      MYSQL_GAME_ALLOW_IP: "${GAME_DB_ALLOW_IP:-}"
+      DNF_DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set DB_ROOT_PASSWORD}
+      DNF_DB_GAME_PASSWORD: ${GAME_DB_PASSWORD:?Set exactly 8 alphanumeric characters}
+      MYSQL_INIT_SSL_MODE: ${MYSQL_INIT_SSL_MODE:-disabled}
+      WEB_USER: admin
+      WEB_PASS: ${SUPERVISOR_PASSWORD:?Set SUPERVISOR_PASSWORD}

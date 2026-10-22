@@ -1,0 +1,17 @@
+name: dnf-ubuntu-game
+services:
+  game:
+    extends: {file: ../../shared/common.yaml, service: game-base}
+    volumes:
+      - ${RUNTIME_ROOT:-./runtime}/game/data:/data
+      - ${RUNTIME_ROOT:-./runtime}/game/log:/home/neople/game/log
+    environment:
+      SERVER_TYPE: GAME
+      CORE_PUBLIC_IP: ${CORE_IP:?Set CORE node reachable private IPv4}
+      MAIN_BRIDGE_IP: ${BRIDGE_IP:?Set bridge reachable private IPv4}
+      P2P_PUBLIC_IP: ${P2P_IP:?Set P2P player-reachable IPv4}
+    ports:
+      - "30011:30011/tcp"
+      - "30052:30052/tcp"
+      - "31011:31011/udp"
+      - "31052:31052/udp"

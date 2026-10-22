@@ -1,0 +1,27 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: DNF Service Web Application
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    driver-class-name: com.mysql.jdbc.Driver
+  freemarker:
+    suffix: .ftl
+mybatis:
+  mapper-locations: classpath*:mappers/*.xml
+  type-aliases-package: com.aiyi.game.dnfserver.entity
+logging:
+  file: logs/dnf.log
+  level:
+    com.aiyi: INFO
+
+aliyun:
+  access-key-id: ${ALIYUN_ACCESS_KEY_ID:}
+  access-secret: ${ALIYUN_ACCESS_SECRET:}
+  sms:
+    enabled: ${ALIYUN_SMS_ENABLED:false}
+    sign-name: ${ALIYUN_SMS_SIGN_NAME:}
+    template-code: ${ALIYUN_SMS_TEMPLATE_CODE:}

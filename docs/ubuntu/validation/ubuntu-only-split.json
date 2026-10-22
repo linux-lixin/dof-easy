@@ -1,0 +1,53 @@
+{
+  "started_at": "2026-10-16T21:04:41",
+  "mode": "split",
+  "checks": [
+    "Ubuntu24; no Python2, database server or VPN binaries",
+    "Invalid role, missing database and nonempty VPN credential fail before startup",
+    "Wrong password fails before creating game schemas",
+    "P2P starts before delayed CORE, remains unready, then registers automatically",
+    "Fresh schema, repaired seed, new query insert and both monthly tables",
+    "One overall startup-complete log after role health and current five countries",
+    "Old unified launcher gateway absent from Supervisor, processes and listening ports",
+    "Pinned netcat implementation exchanges legacy relay registration with acknowledgment",
+    "Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes",
+    "Current-run five countries and real PIDs/ports stable",
+    "Single channel kill and database outage recover with readiness transitions",
+    "Three stop/start cycles preserve database sentinel, admin and RSA pair",
+    "Raw game and backend logs contain no configured plaintext or encrypted DB credentials"
+  ],
+  "status": "passed",
+  "real_windows_client": "NOT TESTED: registration, gameplay, party, automatic update",
+  "images": {
+    "dnf-game:ubuntu-only-final": "sha256:8abdd16a163c2ea3cc4d49dbaa3fab96456e13714f5c1fb56f2d8e1cf48ca6e7",
+    "dnf-admin:layout-check": "sha256:3300faa1f66d796c33eb4db34b4d97806011305a98b6a1e34a7f77568fdc0c89"
+  },
+  "mysql_version": "5.6.51",
+  "startup_seconds": 105,
+  "stable_seconds": 30,
+  "resources": [
+    "dnf-ubuntu-test-02db6e62-core 541.6MiB / 10GiB 8.43%",
+    "dnf-ubuntu-test-02db6e62-p2p 259.6MiB / 10GiB 0.05%",
+    "dnf-ubuntu-test-02db6e62-game 1.729GiB / 10GiB 3.09%",
+    "dnf-ubuntu-test-02db6e62-admin 337.5MiB / 10GiB 0.21%",
+    "dnf-ubuntu-test-02db6e62-mysql 482.2MiB / 10GiB 0.03%"
+  ],
+  "image_bytes": {
+    "dnf-game:ubuntu-only-final": 276638926,
+    "dnf-admin:layout-check": 199956333
+  },
+  "container_restarts": {
+    "dnf-ubuntu-test-02db6e62-core": 0,
+    "dnf-ubuntu-test-02db6e62-p2p": 0,
+    "dnf-ubuntu-test-02db6e62-game": 0
+  },
+  "finished_at": "2026-10-16T21:11:25",
+  "scope": "Ubuntu-only cleanup regression; stability observation 30 seconds, not a repeat of the previous 30-minute release matrix.",
+  "image_checks": {
+    "retired_runtime_absent": true,
+    "unchanged_managed_files": 21,
+    "final_and_all_test_runtime_equal_files": 576,
+    "redaction_signal_tests": 2
+  },
+  "test_resources_cleaned": true
+}

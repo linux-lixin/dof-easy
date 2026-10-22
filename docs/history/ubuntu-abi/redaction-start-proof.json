@@ -1,0 +1,23 @@
+{
+  "scope": "Source launcher bind-mounted into disposable current Ubuntu image; no running acceptance containers changed",
+  "credentials": "Synthetic values only; no deployment secrets read",
+  "probe_source": "run-game-probe.c",
+  "test_source": "test_run_game_redaction.py",
+  "compiler_flags": "gcc [-m32] -Wall -Wextra -Werror",
+  "architectures": ["amd64", "i386"],
+  "red_before_fix": "Both architectures exposed native stdout/stderr configured credentials",
+  "red_unknown_colon_labels": "Both architectures exposed unknown Game DB Password: and Auction DB Password: values before extending the fallback",
+  "green": "2 test methods, 6 native-process subcases passed",
+  "signal_synchronization": "Wait up to 5 seconds for the native child's flushed PID marker before sending SIGTERM; /proc exec visibility alone races native main startup",
+  "synchronized_rerun": "Three consecutive complete runs passed on the newly built dnf-game:ubuntu24-v1 image (18 native-process subcases)",
+  "assertions": [
+    "Configured password, encoded password, root, web, GM password and key values absent from both output streams",
+    "Unknown pw=, PW =, Game DB Password: and Auction DB Password: values absent",
+    "Byte-at-a-time secret writes and EOF without newline redacted",
+    "Oversized lines suppressed with bounded buffering",
+    "stdout/stderr remain separate; ordinary lines preserved",
+    "Native process retains original launcher PID and exit status 37",
+    "Direct and process-group SIGTERM retain signal exit status -15",
+    "Exactly one output reader, with no /opt/dnf/compat library in its memory mappings"
+  ]
+}

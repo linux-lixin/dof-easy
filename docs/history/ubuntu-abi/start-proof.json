@@ -1,0 +1,134 @@
+[
+  {
+    "path": "/assets/TeaEncrypt",
+    "preload": null,
+    "result": -11,
+    "output": ""
+  },
+  {
+    "path": "/assets/home/template/init/df_game_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[!] Check Args ...\n[!] Check Args Success\n[!] Init Log ...\n\t- log path: ./log//\n[!] Init Log Success\n[!] Init Taiwan Garena Auth Key ... publickey.pem Fail\n"
+  },
+  {
+    "path": "/assets/home/template/init/mysql_proxy/forward",
+    "preload": null,
+    "result": "timeout",
+    "output": "2026/10/16 08:18:27 Forward 0.0.0.0:3306/tcp--->mysql:3306/tcp\n"
+  },
+  {
+    "path": "/assets/home/template/neople/auction/df_auction_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "_S_MOD_DB_RECONNECT_FOR_AUCTION_TAIWAN_\n_S_MOD_USE_MYSQL_OPT_RECONNECT_\nIn LinuxService::processCommandLine\nIn ServiceInfo::setInfo\nOut ServiceInfo::setInfo\n19\ufffd\ufffd signal \ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\nCalled readConfig\nCalled load_script\n[!] Server environment() script loading : \nscript load fail : \nERROR readConfig()\n"
+  },
+  {
+    "path": "/assets/home/template/neople/bridge/df_bridge_r",
+    "preload": "/assets/home/template/init/bridge_hook.so:/assets/home/template/init/libhook.so",
+    "result": 0,
+    "output": ""
+  },
+  {
+    "path": "/assets/home/template/neople/channel/df_channel_r",
+    "preload": "/assets/home/template/init/channel_hook.so:/assets/home/template/init/libhook.so",
+    "result": 0,
+    "output": ""
+  },
+  {
+    "path": "/assets/home/template/neople/community/df_community_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 0,
+    "output": "**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                  ver   1.  0.  0.  0   *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\nwrong parameter!\n[execute filename]  [cfg filename]  [command]\n"
+  },
+  {
+    "path": "/assets/home/template/neople/coserver/df_coserver_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[08:18:29] what(26): CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\nCApplication::Init() Exception Break : CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\nApplication Free Start!\nUDP Handler Free Success!\nThread Free Success!\nUDP Handler Free Success!\nGame Server Handler Free Success!\nSignal Translater Free Success!\nApplication Config Free Success!\nApplication Server Config Free Success!\nApplication Initor Free Success!\nApplication \ufffd\ufffd\ufffd\ufffd!\nApplication Stop!\n"
+  },
+  {
+    "path": "/assets/home/template/neople/dbmw_guild/df_dbmw_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[08:18:29] what(26): CApplication::CheckArgv() start argument error\n\nCApplication::Init() Exception Break : CApplication::CheckArgv() start argument error\n\nApplication Free Start!\nThread Free Success!\nGame Server Handler Free Success!\nUDP Handler Free Success!\nSignal Translater Free Success!\nApplication Config Free Success!\nApplication Server Config Free Success!\nApplication Initor Free Success!\nGuild Manager Free Success!\nApplication End!\nApplication Stop!\n"
+  },
+  {
+    "path": "/assets/home/template/neople/dbmw_mnt/df_dbmw_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[08:18:29] what(26): CApplication::CheckArgv() start argument error\n\nCApplication::Init() Exception Break : CApplication::CheckArgv() start argument error\n\nApplication Free Start!\nThread Free Success!\nGame Server Handler Free Success!\nUDP Handler Free Success!\nSignal Translater Free Success!\nApplication Config Free Success!\nApplication Server Config Free Success!\nApplication Initor Free Success!\nGuild Manager Free Success!\nApplication End!\nApplication Stop!\n"
+  },
+  {
+    "path": "/assets/home/template/neople/dbmw_stat/df_dbmw_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[08:18:29] what(26): CApplication::CheckArgv() start argument error\n\nCApplication::Init() Exception Break : CApplication::CheckArgv() start argument error\n\nApplication Free Start!\nThread Free Success!\nGame Server Handler Free Success!\nUDP Handler Free Success!\nSignal Translater Free Success!\nApplication Config Free Success!\nApplication Server Config Free Success!\nApplication Initor Free Success!\nGuild Manager Free Success!\nApplication End!\nApplication Stop!\n"
+  },
+  {
+    "path": "/assets/home/template/neople/guild/df_guild_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[CServerXml] Load Fail File : server_str.xml\n[08:18:29] what(26): CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\nCApplication::Init() Exception Break : CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\nApplication Free Start!\nGuild And Guild Member DB Save Success!\nUdp Thread Free Success!\nUDP Handler Free Success!\nGame Server Handler Free Success!\nUDP Handler Free Success!\nSignal Translater Free Success!\nApplication Config Free Success!\nApplication Initor Free Success!\nApplication \ufffd\ufffd\ufffd\ufffd!\nApplication Stop!\nPower War Config Free Success!\n"
+  },
+  {
+    "path": "/assets/home/template/neople/manager/df_manager_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[08:18:29] what(26): CApplication::CheckArgv() start argument error\n\nCApplication::Init() Exception Break : CApplication::CheckArgv() start argument error\n\nApplication Free Start!\nThread Free Success!\nGame Server Handler Free Success!\nUDP Handler Free Success!\nSignal Translater Free Success!\nApplication Config Free Success!\nApplication Server Config Free Success!\nApplication Initor Free Success!\nApplication End!\nApplication Stop!\n"
+  },
+  {
+    "path": "/assets/home/template/neople/monitor/df_monitor_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": -6,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[CServerXml] Load Fail File : server_str.xml\n[08:18:29] what(26): CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\nterminate called after throwing an instance of 'CDNFException'\nCApplication::Init() Exception Break : CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\n[08:18:29] what(26): CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\n  what():  CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\n"
+  },
+  {
+    "path": "/assets/home/template/neople/point/df_point_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "_S_MOD_DB_RECONNECT_FOR_AUCTION_TAIWAN_\n_S_MOD_USE_MYSQL_OPT_RECONNECT_\nIn LinuxService::processCommandLine\nIn ServiceInfo::setInfo\nOut ServiceInfo::setInfo\n19\ufffd\ufffd signal \ufffd\ufffd\ufffd \ufffd\ufffd\ufffd\ufffd\nCalled readConfig\nCalled load_script\n[!] Server environment() script loading : \nscript load fail : \nERROR readConfig()\n"
+  },
+  {
+    "path": "/assets/home/template/neople/relay/df_relay_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 0,
+    "output": ""
+  },
+  {
+    "path": "/assets/home/template/neople/secsvr/gunnersvr/gunnersvr",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 0,
+    "output": "2026-10-16 08:18:29.482346[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.482390[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.482392[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.482394[INFO][framework] gunnersvr start init\n2026-10-16 08:18:29.482397[INFO][framework] change work dir to /tmp/tmpawf4pzqk\n2026-10-16 08:18:29.482644[INFO][framework]Not find cfgsdk_config.xml\n2026-10-16 08:18:29.482649[INFO][framework] cfgsdk init succ. start task succ\n2026-10-16 08:18:29.482837[ERROR]Comm_Svrd_Config: load zerg config fail. ret=-22, path=/tmp/tmpawf4pzqk/cfg/zergsvrd.xml\n2026-10-16 08:18:29.482852[ERROR][framework] framwork config init fail. ret=5155\n2026-10-16 08:18:29.482855[ERROR]application: init_instance fail. ret=5155\n"
+  },
+  {
+    "path": "/assets/home/template/neople/secsvr/zergsvr/secagent",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 35,
+    "output": "2026-10-16 08:18:29.495275[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.495326[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.495328[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.495330[INFO][framework] secagent start init\n2026-10-16 08:18:29.495333[INFO][framework] change work dir to /tmp/tmpaivi12d1\n2026-10-16 08:18:29.495358[INFO][framework]Not find cfgsdk_config.xml\n2026-10-16 08:18:29.495360[INFO][framework] cfgsdk init succ. start task succ\n2026-10-16 08:18:29.495696[ERROR]Comm_Svrd_Config: load zerg config fail. ret=-22, path=/tmp/tmpaivi12d1/cfg/zergsvrd.xml\n2026-10-16 08:18:29.495707[ERROR][framework] framwork config init fail. ret=5155\n2026-10-16 08:18:29.495710[ERROR]application: init_instance fail. ret=5155\n"
+  },
+  {
+    "path": "/assets/home/template/neople/secsvr/zergsvr/zergsvr",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 45,
+    "output": "2026-10-16 08:18:29.511021[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.511064[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.511066[INFO]------------------------------------------------------------------------------------------------------\n2026-10-16 08:18:29.511068[INFO][framework] zergsvr start init\n2026-10-16 08:18:29.511071[INFO][framework] change work dir to /tmp/tmp4x0kcuav\n2026-10-16 08:18:29.511145[ERROR][framework] can't get service type. use -t to set service type\n2026-10-16 08:18:29.511148[ERROR][framework] cfgsvrsdk init fail. ret=5165\n2026-10-16 08:18:29.511150[ERROR]application: init_instance fail. ret=5165\n"
+  },
+  {
+    "path": "/assets/home/template/neople/statics/df_statics_r",
+    "preload": "/assets/home/template/init/libhook.so",
+    "result": 1,
+    "output": "\n**********************************************************\n* +---   +-+ +  +----         DUNGEON & FIGHTER          *\n* |   |  | | |  |                                        *\n* |   |  | | |  +----                                    *\n* |   |  | | |  |      Open Beta Test on 2005.08.10~     *\n* +---   + +-+  |      Copyright(c) 2004,2005 Neople Co. *\n**********************************************************\n[!] Service Date (26-10-16/08:18)\n[08:18:29] what(26): CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\nCApplication::Init() Exception Break : CApplication::CheckArgv() \ufffd\ufffd\ufffd\ufffd \ufffd\u01b1\u0538\ufffd\u01ae \ufffd\ufffd\ufffd\ufffd\n\nApplication Free Start!\nUDP Handler Free Success!\nGame Server Handler Free Success!\nUDP Handler Free Success!\nSignal Translater Free Success!\nApplication Config Free Success!\nApplication Server Config Free Success!\nApplication Initor Free Success!\napplication \ufffd\ufffd\ufffd\ufffd!\nApplication Stop!\n"
+  },
+  {
+    "path": "/assets/home/template/neople/stun/df_stun_r",
+    "preload": null,
+    "result": 0,
+    "output": "\n*****************************************************\n**             STUN Server v1.4.0.0                **\n**                                                 **\n**                                                 **\n**                            CopyRight 2010~2015. **\n**                       Young-san, Kim in Neople. **\n*****************************************************\n"
+  },
+  {
+    "path": "/assets/home/template/root/DnfGateServer",
+    "preload": null,
+    "result": -6,
+    "output": "terminate called after throwing an instance of 'std::invalid_argument'\n  what():  invalid ini file:Config.ini\n"
+  }
+]

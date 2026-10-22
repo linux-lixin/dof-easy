@@ -1,0 +1,40 @@
+{
+  "base": "ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "platform": "linux/amd64",
+  "resources": [
+    {
+      "file": "legacy-shm.c",
+      "sha256": "d8fb57b31d9b29ad576e0100d6fa67e71aa19c3e6d994e5e0a5957e41caec772",
+      "source": "Local Ubuntu compatibility implementation; source shipped in this repository",
+      "license": "MIT, SHM-COMPAT-LICENSE",
+      "build": "gcc -m32 -shared -fPIC -Wall -Wextra -Werror -O2 -ldl",
+      "scope": "i386 game children only; observed sec/tss_sdk_bus_<digits> names preserved below /dev/shm/sec; all other names delegate to native shm_open/shm_unlink"
+    },
+    {
+      "file": "GeoIP.dat",
+      "sha256": "58fcdeaac15e222a744b27333a776a2b91dc493d212acbe971ba6b987265a73c",
+      "bytes": 1183408,
+      "source": "https://raw.githubusercontent.com/1995chen/dnf_util/d259833bdf3c7b02d92c01a48ca3d8c23a10f8ac/common_pkgs/GeoIP-1.4.8.tgz",
+      "source_sha256": "4e4eef7715f8f58b35074952604316d055410414e0f3e6e7cf4c1585996604e7",
+      "archive_path": "GeoIP-1.4.8/data/GeoIP.dat",
+      "verification": "Exact match to legacy image /usr/local/share/GeoIP/GeoIP.dat; historical GeoLite Country database bundled with the source archive, no live lookup/download at runtime",
+      "attribution": "This product includes GeoLite data created by MaxMind, available from https://www.maxmind.com/",
+      "license": "Historical GeoLite Country data; retained upstream README and GeoIP LICENSE data terms (CC-BY-SA-3.0)",
+      "installed_path": "/opt/dnf/compat/i386/share/GeoIP/GeoIP.dat"
+    },
+    {
+      "file": "geoip_1.6.12.orig.tar.gz",
+      "sha256": "99b119f8e21e94f1dfd6d49fbeed29a70df1544896e76cd456f25e397b07d476",
+      "source": "https://archive.ubuntu.com/ubuntu/pool/universe/g/geoip/geoip_1.6.12.orig.tar.gz",
+      "authentication": "apt-get source, Ubuntu noble signed Sources index, geoip 1.6.12-11.1build1",
+      "license": "LGPL-2.1-or-later, ISC; source COPYRIGHT/COPYING/LICENSE and GEOIP-COPYRIGHT",
+      "build": "autoreconf -fi; CC='gcc -m32' ./configure --host=i686-linux-gnu --disable-static; make"
+    },
+    {
+      "file": "../../assets/home/template/neople/game/libnxencryption.so",
+      "sha256": "cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76",
+      "source": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/libnxencryption.so",
+      "license": "Proprietary upstream game asset; no new redistribution permission asserted"
+    }
+  ]
+}

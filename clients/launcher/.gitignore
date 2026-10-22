@@ -1,0 +1,6 @@
+/bin
+/obj
+/.build-tools
+/.n
+/artifacts
+/login.ini

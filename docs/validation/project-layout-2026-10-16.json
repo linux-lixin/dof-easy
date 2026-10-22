@@ -1,0 +1,69 @@
+{
+  "started_at": "2026-10-16T20:36:46",
+  "mode": "all",
+  "checks": [
+    "Ubuntu24; no Python2, database server or VPN binaries",
+    "Invalid role, missing database and nonempty VPN credential fail before startup",
+    "Wrong password fails before creating game schemas",
+    "Fresh schema, repaired seed, new query insert and both monthly tables",
+    "One overall startup-complete log after role health and current five countries",
+    "Old unified launcher gateway absent from Supervisor, processes and listening ports",
+    "Pinned netcat implementation exchanges legacy relay registration with acknowledgment",
+    "Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes",
+    "Current-run five countries and real PIDs/ports stable",
+    "Single channel kill and database outage recover with readiness transitions",
+    "Three stop/start cycles preserve database sentinel, admin and RSA pair",
+    "Raw game and backend logs contain no configured plaintext or encrypted DB credentials"
+  ],
+  "status": "passed",
+  "real_windows_client": "NOT TESTED: registration, gameplay, party, automatic update",
+  "images": {
+    "dnf-game:layout-ubuntu": "sha256:f56346cd28a2ca740cd9d9db66f61dcb4cd78b9a3e58e26cf1ffe6c7a75ef3e6",
+    "dnf-admin:layout-check": "sha256:3300faa1f66d796c33eb4db34b4d97806011305a98b6a1e34a7f77568fdc0c89"
+  },
+  "mysql_version": "5.6.51",
+  "startup_seconds": 100,
+  "stable_seconds": 10,
+  "resources": [
+    "dnf-ubuntu-test-221ffeeb-game 2.459GiB / 10GiB 13.89%",
+    "dnf-ubuntu-test-221ffeeb-admin 338.5MiB / 10GiB 0.11%",
+    "dnf-ubuntu-test-221ffeeb-mysql 475.6MiB / 10GiB 0.10%"
+  ],
+  "image_bytes": {
+    "dnf-game:layout-ubuntu": 282249536,
+    "dnf-admin:layout-check": 199956333
+  },
+  "container_restarts": {
+    "dnf-ubuntu-test-221ffeeb-game": 0
+  },
+  "finished_at": "2026-10-16T20:42:58",
+  "scope": "Repository layout regression only; 10-second stability sample, not a repeat of 30-minute ALL/split acceptance.",
+  "build_images": {
+    "dnf-game:layout-ubuntu": "sha256:f56346cd28a2ca740cd9d9db66f61dcb4cd78b9a3e58e26cf1ffe6c7a75ef3e6",
+    "dnf-game:layout-ubuntu-final": "sha256:5bfc663b2f600a16edc019f6620514db0be266641c02d7add4627617715948c7",
+    "dnf-admin:layout-check": "sha256:3300faa1f66d796c33eb4db34b4d97806011305a98b6a1e34a7f77568fdc0c89",
+    "dnf-game:layout-centos": "sha256:a8d19dd1867cd120091f12f90635d7cf6d68f46dbe923d9e2c809a026fd4ca62"
+  },
+  "final_ubuntu_runtime_comparison": {
+    "files": 581,
+    "equal": true,
+    "tested_image": "sha256:f56346cd28a2ca740cd9d9db66f61dcb4cd78b9a3e58e26cf1ffe6c7a75ef3e6",
+    "final_image": "sha256:5bfc663b2f600a16edc019f6620514db0be266641c02d7add4627617715948c7",
+    "note": "Only compat-lock local source path corrected after the integration run; runtime directories and executable hashes match."
+  },
+  "offline_checks": {
+    "unit_tests": 39,
+    "structure_tests": 10,
+    "game_resources_hashed": 400,
+    "original_tracked_files_mapped": 1186,
+    "protected_source_changed": false,
+    "release_script_syntax": "Bash and PowerShell passed"
+  },
+  "not_repeated": [
+    "Windows launcher compilation",
+    "Real Windows client end-to-end",
+    "30-minute ALL/split stability",
+    "CentOS runtime acceptance"
+  ],
+  "test_resources_cleaned": true
+}

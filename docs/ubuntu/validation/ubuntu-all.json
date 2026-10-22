@@ -1,0 +1,45 @@
+{
+  "started_at": "2026-10-16T17:44:21",
+  "mode": "all",
+  "checks": [
+    "Ubuntu24; no Python2, database server or VPN binaries",
+    "Invalid role, missing database and nonempty VPN credential fail before startup",
+    "Wrong password fails before creating game schemas",
+    "Fresh schema, repaired seed, new query insert and both monthly tables",
+    "Pinned netcat implementation exchanges legacy relay registration with acknowledgment",
+    "Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes",
+    "Current-run five countries and real PIDs/ports stable",
+    "Single channel kill and database outage recover with readiness transitions",
+    "Three stop/start cycles preserve database sentinel, admin and RSA pair",
+    "Raw game and backend logs contain no configured plaintext or encrypted DB credentials"
+  ],
+  "status": "passed",
+  "real_windows_client": "NOT TESTED: registration, gameplay, party, automatic update",
+  "images": {
+    "dnf-game:ubuntu24-v1": "sha256:90edebbc8aa919681c7f5a8a79081e99bfb6bba1fb2f81aaa502ecc7231f9c3f",
+    "dnf-admin:local-fix-20261015": "sha256:46ae9003db8b1e6131900e13c71d11c652fb009b63ab7e237ca9b8a1297003f4"
+  },
+  "mysql_version": "5.6.51",
+  "startup_seconds": 132,
+  "stable_seconds": 1800,
+  "resources": [
+    "dnf-ubuntu-test-f4817d5a-game 2.468GiB / 10GiB 12.87%",
+    "dnf-ubuntu-test-f4817d5a-admin 335.5MiB / 10GiB 0.12%",
+    "dnf-ubuntu-test-f4817d5a-mysql 485.3MiB / 10GiB 0.03%"
+  ],
+  "image_bytes": {
+    "dnf-game:ubuntu24-v1": 282248517,
+    "dnf-admin:local-fix-20261015": 199959853
+  },
+  "container_restarts": {
+    "dnf-ubuntu-test-f4817d5a-game": 0
+  },
+  "finished_at": "2026-10-16T18:21:15",
+  "node_diagnostics": {
+    "dnf-ubuntu-test-f4817d5a-game": {
+      "health_exit_code": 0,
+      "health_output": "",
+      "supervisor": "core:auction                     RUNNING   pid 610, uptime 0:01:03\ncore:bridge                      RUNNING   pid 1098, uptime 0:00:41\ncore:channel                     RUNNING   pid 445, uptime 0:01:09\ncore:community                   RUNNING   pid 778, uptime 0:00:57\ncore:coserver                    RUNNING   pid 732, uptime 0:00:58\ncore:daily_job                   RUNNING   pid 297, uptime 0:01:17\ncore:dbmw_guild                  RUNNING   pid 475, uptime 0:01:08\ncore:dbmw_mnt                    RUNNING   pid 522, uptime 0:01:06\ncore:dbmw_stat                   RUNNING   pid 569, uptime 0:01:05\ncore:guild                       RUNNING   pid 671, uptime 0:01:01\ncore:manager                     RUNNING   pid 344, uptime 0:01:15\ncore:monitor                     RUNNING   pid 847, uptime 0:00:55\ncore:point                       RUNNING   pid 639, uptime 0:01:02\ncore:relay_config_server         RUNNING   pid 295, uptime 0:01:18\ncore:statics                     RUNNING   pid 697, uptime 0:01:00\ngame:game_siroco11               RUNNING   pid 939, uptime 0:00:45\ngame:game_siroco52               RUNNING   pid 1204, uptime 0:00:26\nmonitor_ip                       EXITED    Oct 16 06:19 PM\nmysql_proxy:main_mysql_proxy     RUNNING   pid 912, uptime 0:00:49\nmysql_proxy:sg_mysql_proxy       RUNNING   pid 927, uptime 0:00:48\np2p:relay                        RUNNING   pid 805, uptime 0:00:55\np2p:relay_config_client          RUNNING   pid 806, uptime 0:00:55\np2p:stun                         RUNNING   pid 804, uptime 0:00:55\nstarter                          EXITED    Oct 16 06:20 PM\ntongyi_gate                      RUNNING   pid 406, uptime 0:01:11\ntss:gunnersvr                    RUNNING   pid 872, uptime 0:00:54\ntss:zergsvr                      RUNNING   pid 904, uptime 0:00:51\ntss:zergsvr_secagent             RUNNING   pid 899, uptime 0:00:52\n"
+    }
+  }
+}

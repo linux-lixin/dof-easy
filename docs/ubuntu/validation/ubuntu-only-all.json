@@ -1,0 +1,55 @@
+{
+  "started_at": "2026-10-16T20:57:17",
+  "mode": "all",
+  "checks": [
+    "Ubuntu24; no Python2, database server or VPN binaries",
+    "Invalid role, missing database and nonempty VPN credential fail before startup",
+    "Wrong password fails before creating game schemas",
+    "Fresh schema, repaired seed, new query insert and both monthly tables",
+    "One overall startup-complete log after role health and current five countries",
+    "Old unified launcher gateway absent from Supervisor, processes and listening ports",
+    "Pinned netcat implementation exchanges legacy relay registration with acknowledgment",
+    "Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes",
+    "Current-run five countries and real PIDs/ports stable",
+    "Single channel kill and database outage recover with readiness transitions",
+    "Three stop/start cycles preserve database sentinel, admin and RSA pair",
+    "Raw game and backend logs contain no configured plaintext or encrypted DB credentials"
+  ],
+  "status": "passed",
+  "real_windows_client": "NOT TESTED: registration, gameplay, party, automatic update",
+  "images": {
+    "dnf-game:ubuntu-only-clean": "sha256:f809cd84538787d46c72235cd6537a5431f347965ded3407a641022cdc3b5f2f",
+    "dnf-admin:layout-check": "sha256:3300faa1f66d796c33eb4db34b4d97806011305a98b6a1e34a7f77568fdc0c89"
+  },
+  "mysql_version": "5.6.51",
+  "startup_seconds": 102,
+  "stable_seconds": 30,
+  "resources": [
+    "dnf-ubuntu-test-0a218ee0-game 2.46GiB / 10GiB 17.04%",
+    "dnf-ubuntu-test-0a218ee0-admin 347.8MiB / 10GiB 0.34%",
+    "dnf-ubuntu-test-0a218ee0-mysql 476.3MiB / 10GiB 0.10%"
+  ],
+  "image_bytes": {
+    "dnf-game:ubuntu-only-clean": 276638945,
+    "dnf-admin:layout-check": 199956333
+  },
+  "container_restarts": {
+    "dnf-ubuntu-test-0a218ee0-game": 0
+  },
+  "finished_at": "2026-10-16T21:04:28",
+  "scope": "Ubuntu-only cleanup regression; stability observation 30 seconds, not the previous 30-minute release matrix.",
+  "image_checks": {
+    "retired_runtime_absent": true,
+    "unchanged_managed_files": 21,
+    "final_and_all_test_runtime_equal_files": 576,
+    "redaction_signal_tests": 2
+  },
+  "offline_checks": {
+    "unit_tests": 39,
+    "structure_tests": 11,
+    "bash_scripts": 38,
+    "preserved_locked_assets": 394,
+    "unchanged_application_source_files": 295
+  },
+  "test_resources_cleaned": true
+}

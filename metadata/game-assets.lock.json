@@ -1,0 +1,2763 @@
+{
+  "schema": 1,
+  "assets": [
+    {
+      "path": "services/game/assets/TeaEncrypt",
+      "bytes": 12984,
+      "sha256": "97713ee8f75e172cbdee796acae54b2c760362c8ec9df4b0c5cbff755053ab7a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/TeaEncrypt",
+      "executable": false
+    },
+    {
+      "path": "services/game/assets/home/template/init/Script.tgz",
+      "bytes": 100605091,
+      "sha256": "dfad7847225c167ed2d0f9ef0a3c2fbb28318437668a09e63a9162f658c7503d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/Script.tgz",
+      "executable": false
+    },
+    {
+      "path": "services/game/assets/home/template/init/bridge_hook.so",
+      "bytes": 390624,
+      "sha256": "6e64b056c3e4dc374998dffff86a984a8b25377d69326ad271dd20d65f21b61f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/bridge_hook.so",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/init/channel_hook.so",
+      "bytes": 390624,
+      "sha256": "3a2405104f8ed44200947025802142e619265a3709a471b4b4df196287c7965b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/channel_hook.so",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/init/df_game_r",
+      "bytes": 36360954,
+      "sha256": "dd0ae672b1dce3ff9c6c403beaec71b3ef666b14deb567d4cab0da99d8711f9e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/df_game_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/init/init_sql.tgz",
+      "bytes": 2631764,
+      "sha256": "3a3d16c7981d91002835f0ba9bc89e9657b9147c5d2bc1ce347871266130609a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/init_sql.tgz",
+      "executable": false
+    },
+    {
+      "path": "services/game/assets/home/template/init/libhook.so",
+      "bytes": 3248,
+      "sha256": "9c599ecd6d40b3983018e4338acecff6f20d53e5bc58728679d7c6703fbe4706",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/libhook.so",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/init/publickey.pem",
+      "bytes": 451,
+      "sha256": "42d1a646178dbda9f4e67171cb326aec838d8d42bc3672b85fa56f0f4d91a2cf",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/publickey.pem",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/auction/AvatarColorVariation.etc",
+      "bytes": 1187,
+      "sha256": "9405f689aa08dd518c3ebadea3b5c5285d784ca2c7ff39340b2f619edf948168",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/auction/AvatarColorVariation.etc",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/auction/df_auction_r",
+      "bytes": 12202759,
+      "sha256": "b31eafd5068b450929133365f071fc2d0dedc7a8a5b80f9c81da44ce4008290c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/auction/df_auction_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/auction/iteminfo.dat",
+      "bytes": 2092947,
+      "sha256": "e7980ea5074fbde87e86a02dccfcc44c04604ca8804dbcd33c334fdb4d474f22",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/auction/iteminfo.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/bridge/df_bridge_r",
+      "bytes": 3379127,
+      "sha256": "30a5741015b3701cee2d9b388140ac1711345bbe8d879b6f152e74a9334ea6b0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/bridge/df_bridge_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/channel/df_channel_r",
+      "bytes": 1305013,
+      "sha256": "7f7f6bd9eea6452dc463bca2f2e33f07eec7675e9f37e280e92739cfb87747bd",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/channel/df_channel_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/community/df_community_r",
+      "bytes": 967844,
+      "sha256": "fe1b06e880218fc0ed89c011506aef59b46e0322b999e54a3ebd741c238b8a1e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/community/df_community_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/coserver/df_coserver_r",
+      "bytes": 1073816,
+      "sha256": "1a626560bcf4d5272a92931cf14b09663aa45ae4f7d1f8a3b19f067aaf6c2f75",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/coserver/df_coserver_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/dbmw_guild/df_dbmw_r",
+      "bytes": 4041084,
+      "sha256": "0979ef164615e5e3eae006fde74ca2a39a920367dae6a143847dbc0a8d49a967",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/dbmw_guild/df_dbmw_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/dbmw_mnt/df_dbmw_r",
+      "bytes": 4041084,
+      "sha256": "0979ef164615e5e3eae006fde74ca2a39a920367dae6a143847dbc0a8d49a967",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/dbmw_mnt/df_dbmw_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/dbmw_stat/df_dbmw_r",
+      "bytes": 4041084,
+      "sha256": "0979ef164615e5e3eae006fde74ca2a39a920367dae6a143847dbc0a8d49a967",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/dbmw_stat/df_dbmw_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/3N.mhe",
+      "bytes": 465503,
+      "sha256": "0b713c271f97a65458b4ff4e3f0f72594e6db2d55736c62132900861d4a71f36",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/3N.mhe",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/DNFAntiCpX.hsb",
+      "bytes": 20428,
+      "sha256": "d3905e806c1ecc0ee65db76bc1e166c7dbe79dd93981b5e9d0eaf4b1f0f09437",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/DNFAntiCpX.hsb",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/HSPub.key",
+      "bytes": 4864,
+      "sha256": "bde6189a26e3b3fdc39d0d87bb18f496cdcc41b7bb4a10b1dd980db9f2f5cc28",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/HSPub.key",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/Hshield.dat",
+      "bytes": 160,
+      "sha256": "cf683cdd08fda246fb40936ef0bca39247487b1964e2d6f2ffdb163ec1ddde35",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/Hshield.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/captcha_font/SeoulHangangL.ttf",
+      "bytes": 9092952,
+      "sha256": "70230c86a217980f0f23621a7d60b6840a6d813004fdaa9dcbc5d5640fb8b170",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/captcha_font/SeoulHangangL.ttf",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/captcha_font/msgothic.ttc",
+      "bytes": 9176636,
+      "sha256": "ef9044f54896c6d045a425e62e38b3232d49facc5549a12837d077ff0bf74298",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/captcha_font/msgothic.ttc",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/libantisvrimport.so",
+      "bytes": 31904293,
+      "sha256": "8f6263dae6fcd1eb19baece6f7c9408d2161abd1a05bd492d398d5cb7783d2a7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/libantisvrimport.so",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/libnxencryption.so",
+      "bytes": 9908,
+      "sha256": "cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/libnxencryption.so",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/game/libtss_sdk.so.1.0.394",
+      "bytes": 31904293,
+      "sha256": "8f6263dae6fcd1eb19baece6f7c9408d2161abd1a05bd492d398d5cb7783d2a7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/libtss_sdk.so.1.0.394",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/guild/df_guild_r",
+      "bytes": 2254651,
+      "sha256": "51eae69e23a92df3a429881436d8ee41dad28450094a60b649f08f93f6084069",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/guild/df_guild_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/manager/df_manager_r",
+      "bytes": 3199927,
+      "sha256": "74b3adba3c2d376547ee65c53940129bd20af9e48926be3f4facc7d729dd65e3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/manager/df_manager_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/monitor/df_monitor_r",
+      "bytes": 2461318,
+      "sha256": "a099d2b3ebc77bfe1393bec3543a41ba8c20c99d0abc26619241d31964dea6d7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/monitor/df_monitor_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/point/AvatarColorVariation.etc",
+      "bytes": 1187,
+      "sha256": "9405f689aa08dd518c3ebadea3b5c5285d784ca2c7ff39340b2f619edf948168",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/point/AvatarColorVariation.etc",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/point/df_point_r",
+      "bytes": 12202755,
+      "sha256": "0339aa6cc51f32c4b50fe9e55f3fd8b00d4b495fcad46871c59a5eda345c9256",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/point/df_point_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/point/iteminfo.dat",
+      "bytes": 2092947,
+      "sha256": "e7980ea5074fbde87e86a02dccfcc44c04604ca8804dbcd33c334fdb4d474f22",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/point/iteminfo.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/relay/df_relay_r",
+      "bytes": 418098,
+      "sha256": "39c87b68408a82f840808c09c520b911c01176349af9eaa3bf071cce2295c3eb",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/relay/df_relay_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/gunnersvr/cfg/framework.xml",
+      "bytes": 2305,
+      "sha256": "e0b791dcf983ad50eb09207737cf61228a05ccb01252fb94ae4edf4d09964e66",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/gunnersvr/cfg/framework.xml",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/gunnersvr/cfg/gunnersvr_config.xml",
+      "bytes": 1077,
+      "sha256": "1a987cd59d842e5402bed14aa6baf8044395e8cb075ee3a04aa04f7258349e69",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/gunnersvr/cfg/gunnersvr_config.xml",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/gunnersvr/gunnersvr",
+      "bytes": 13563137,
+      "sha256": "ce26717f3fd8c69c2b079c120f00d3f93e0cd6cc53dcc24aa2d5639fec2b8a8b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/gunnersvr/gunnersvr",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/base_cfg/TE0001.dat",
+      "bytes": 3175,
+      "sha256": "e13c7deeb7b116124b360c1f09dbf4b3db1e8ec6019007f4d04968784cca9f16",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/base_cfg/TE0001.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/base_cfg/Tenparty.dat",
+      "bytes": 8674,
+      "sha256": "9c1c8444bf97ec3025cb9336241f34c19dae942ab6ff2333723d752371b52119",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/base_cfg/Tenparty.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des800.bin",
+      "bytes": 113,
+      "sha256": "9e30752c3a797c6bba9da7a3520584e04ccfe2b78c33394f6f93bd638a3856df",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des801.bin",
+      "bytes": 113,
+      "sha256": "016faf44f5dddf0666c3af6e350625d665c240da1963aba62f7cf743f6841618",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des801.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des802.bin",
+      "bytes": 113,
+      "sha256": "6d3e0d6bd4fd01ad2cf7cef1e44da0a0087950a80bb81a009a796c31a855f4b5",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des802.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des803.bin",
+      "bytes": 113,
+      "sha256": "1fa29f140b4735553e1c9ff1b864b311f103dec1a3d181e1bf2d9539b9a4676d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des803.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des804.bin",
+      "bytes": 113,
+      "sha256": "d3410a47209d598790e2f2a3296d198fae54d08e0ff69fdb8c1c0b31ca30b7f2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/d3des804.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des00.bin",
+      "bytes": 103,
+      "sha256": "5c753dcc4da5851f2aa7195b2eab1e6534d4c1c2226b9fb708d6d365631cc6aa",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des01.bin",
+      "bytes": 103,
+      "sha256": "1172a322608a0452b31d812f96760016716efe5ffc057380c0b946ca0b4b691d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des02.bin",
+      "bytes": 103,
+      "sha256": "64b76846d57f29ef203a373057e53ea81f79fb48763494a8137dc7f903aed881",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des03.bin",
+      "bytes": 103,
+      "sha256": "e5b4e1a18e3541730de3edf82e641e2e13a8f449bc107b457d3089d6ad4fadbe",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des04.bin",
+      "bytes": 103,
+      "sha256": "74a671b7761d39e1f46930e68ae766efa1809c612624ca2f1c521e274e502969",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/des04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea00.bin",
+      "bytes": 89,
+      "sha256": "2d2294978a819af1650e7ecce35ff84216694a460454fbce212acdba5a5c3600",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea01.bin",
+      "bytes": 89,
+      "sha256": "3319a7da481c98010f78e13ba94bd0f1fa5c5d9360a87c592e8f69d9fb5ad161",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea02.bin",
+      "bytes": 89,
+      "sha256": "362fb990bbd5b3b2d936ce4402dfeba78481c649566c01885ca2b72f549d544c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea03.bin",
+      "bytes": 89,
+      "sha256": "f3d40840a621dc8a9e253b967bbf932cf3c9317697d4ad4d6f1c5ec69529dcc9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea04.bin",
+      "bytes": 89,
+      "sha256": "bef160c14d6edd4fb4780e4b78dfc286013e95ad3b4dfc21e928dad69e2af67b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/idea04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1600.bin",
+      "bytes": 113,
+      "sha256": "75ad039455cdf58355b2578dd16a856a31ddd221c5cd048ed70d615df67760fb",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1601.bin",
+      "bytes": 113,
+      "sha256": "73f5752e87960b97842ee56fb0415ebba23feed241dafd51a7fb9f5bf6b91bac",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1601.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1602.bin",
+      "bytes": 113,
+      "sha256": "3ce953abf8007f40c3d3e2aacb3370e08688dde99e2dbd76494946504ff44119",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1602.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1603.bin",
+      "bytes": 113,
+      "sha256": "9eec0845a67e6591ded4c62da4c98211af13334e75e62be268a203e1acf5b4a4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1603.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1604.bin",
+      "bytes": 113,
+      "sha256": "472433890cc8a83bdb5e9eb6a8cdff161a84c4b633207f8acdec8feedbb062c8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_1604.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3200.bin",
+      "bytes": 177,
+      "sha256": "3fcda44f0d4d3d69dbf0f25214fed30b24318aee87f83ed4fac665aabaa99de1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3201.bin",
+      "bytes": 177,
+      "sha256": "6e8114c4297e2fd63d5bee3e07f3262e5a0f0a72d2950424c3b945ce17c1d91b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3201.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3202.bin",
+      "bytes": 177,
+      "sha256": "359644a88be2b1f644a176e3c5266682452386c1d42ea257c7b479fdffe3f0e9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3202.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3203.bin",
+      "bytes": 177,
+      "sha256": "f06f21a2de0d856a7db19ea7afacc6a229fcf0be366669b5c65f75601b91ad79",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3203.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3204.bin",
+      "bytes": 177,
+      "sha256": "5e686d054daf96b602037e0f425aab45c340c297e8cc7685a839227d9d1a879f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_3204.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_800.bin",
+      "bytes": 81,
+      "sha256": "dbcdf5e128e3a7d33b566af982206788f2160a8a53488545bf0d87fdd887b7c0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_801.bin",
+      "bytes": 81,
+      "sha256": "7026316516d85c4fda7bdf7100261aa69bbae499076e354299620e42021f0f08",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_801.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_802.bin",
+      "bytes": 81,
+      "sha256": "76e9fa4143ac4fac66acf25ea0775ea8bb5da1a0d9ed9468fda2066af426be25",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_802.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_803.bin",
+      "bytes": 81,
+      "sha256": "f50c6fe8c3ad35aa4e2b916b25cd747e39c39f2eaa9127f709e1a17fb3d80f4d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_803.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_804.bin",
+      "bytes": 81,
+      "sha256": "8d2f4718bcd60f8699419a76606e72b42a5b3489fe3dd4fd49668e4681f4664b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/magic_804.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars00.bin",
+      "bytes": 114,
+      "sha256": "04a49aad867d9eb2c6018bad540d9c4472dbf693908e38563bb7d4fa36614ffd",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars01.bin",
+      "bytes": 114,
+      "sha256": "774018d24d5b293661247cc38724b086c0d0ca9f2ad42150ed9f093a8619c216",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars02.bin",
+      "bytes": 114,
+      "sha256": "f927f7de1f6acbb6c47221857ffa239581fb87440f69baa2cd716b19bdd7d5f3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars03.bin",
+      "bytes": 114,
+      "sha256": "0668ef2e38eeb8bbd44eb2609e04e0464b921d9ab806425d28eb36b1bf6855f4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars04.bin",
+      "bytes": 114,
+      "sha256": "74638b4a648fdde21b8a4e8adabdf161ccb147bfe6499c485bb7554a7bdeb476",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/mars04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota00.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota01.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota02.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota03.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota04.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/nota04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc600.bin",
+      "bytes": 113,
+      "sha256": "bc22bbb9360a814844153b02340a504b26c322eeac62b1337d39e1b834085a3b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc601.bin",
+      "bytes": 113,
+      "sha256": "68339b977ddb205741d81a574c659942eecee566834f3cbd54eeec999b4e7407",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc601.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc602.bin",
+      "bytes": 113,
+      "sha256": "2994ac9909b1d6bdb916c2badf896983af3aa9844e5911b29e5996380c431b5f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc602.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc603.bin",
+      "bytes": 113,
+      "sha256": "230501d9b74092d553fd0450161f40e359c7ca4f1656e9c18639fe056dffab45",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc603.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc604.bin",
+      "bytes": 113,
+      "sha256": "98ce8cc739ea4100d44c316588f9b5dc3079a003a7a17474f285695f74cba7b1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/rc604.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena00.bin",
+      "bytes": 114,
+      "sha256": "a1f6dd9881060886ba03db8b4eff595bb4cf71becb406ab53a9ba1d43abd229c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena01.bin",
+      "bytes": 114,
+      "sha256": "768bbda8de1ad7e50f5fead97747c32202a8b03fe4510ae34f57bd97806799a3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena02.bin",
+      "bytes": 114,
+      "sha256": "31127f413d483ca6a2f64213fb5ff33e8807743188aa73a9117d93f632323f8d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena03.bin",
+      "bytes": 114,
+      "sha256": "323f5378c99f4f85d62186f298cc6db92864608e97aa9c0aa34011bea62e947d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena04.bin",
+      "bytes": 114,
+      "sha256": "5ae8b4c5c88f6943994b1c404f3e69ac5f2925ebfbebb54d321f490148d7aec1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/tena04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora00.bin",
+      "bytes": 41,
+      "sha256": "af18f9177e59d92f4bddc2d789f8d78fbd7913c1224a3989a0c8f98c32e9db86",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora01.bin",
+      "bytes": 41,
+      "sha256": "1fd904dc4ccba70566ec1cb50061bf14d930740f1ad417f060ec24fb1d59ab4d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora02.bin",
+      "bytes": 41,
+      "sha256": "c20a2850fcaf66ab38e9dd02e54db09833cc435c8464505ff28168a461814ad6",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora03.bin",
+      "bytes": 41,
+      "sha256": "5e75551ad8d12bdec0998bc6fc705b595ab7211ec4f2032f8f9e8bb7d0decc0a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora04.bin",
+      "bytes": 41,
+      "sha256": "20df39de4597a261d4d54bd2eab4a458bc7fbc1633dbbd8b846072bdfb8691f0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/crypt/xora04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/adder00.bin",
+      "bytes": 93,
+      "sha256": "b1978ba9553b9dc517b7b96a5b71e1019c53ecfadd4a7635f8486010d029159f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/adder00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish1600.bin",
+      "bytes": 125,
+      "sha256": "ece2e5739026349209ffd065bda1d3d1fb3ac8f7ddc1264d40896031614edec3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish1600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish2400.bin",
+      "bytes": 157,
+      "sha256": "a30ed92f607841e0281fea3056b81eb1320cc36ea8ca7dd8d37ab393bcfee85f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish2400.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish3200.bin",
+      "bytes": 189,
+      "sha256": "4a3b5f410268ec403ca650e861c76826912bd945bde2f5fd04fc198306d2d35e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish3200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish5600.bin",
+      "bytes": 285,
+      "sha256": "4c5bffa37e10ec4cda9926b9430244a36045e850b0fae6d39a65b14e95751be9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish5600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish800.bin",
+      "bytes": 115,
+      "sha256": "79f0d3e0039246d7edd08bee1ec549bb15db7fec61856135114ec3769e00a052",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/blowfish800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/cast00.bin",
+      "bytes": 125,
+      "sha256": "b13bf33b2473ad44cda56cc32d155817314ae05de79d65a22db4f5c0b93bd20e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/cast00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/d3des16100.bin",
+      "bytes": 125,
+      "sha256": "8e0a9299f89b710e641147e69a0978d5f0f7bdf5b5cfce3fef52a0bcb51ad91b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/d3des16100.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/d3des16200.bin",
+      "bytes": 125,
+      "sha256": "872a8fab7325462a0bbe0a84d6a44a4a3431adc1eabcfd76bba35f8c2381eb6f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/d3des16200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/des2p00.bin",
+      "bytes": 93,
+      "sha256": "51d89986d2da63e0c834a440304702764f76c586a9cfd42adf7ef39b44b0ff40",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/des2p00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/desbig00.bin",
+      "bytes": 93,
+      "sha256": "499928c2dfae24a73209825d82602eaec5747a214dcffd7e0ccd6df615b0aa11",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/desbig00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/desmo00.bin",
+      "bytes": 115,
+      "sha256": "831ac552a6370b61cf92b16a2f704e606e33dc276514bbb308fcae1f2a3ab7f7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/desmo00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/desnew00.bin",
+      "bytes": 125,
+      "sha256": "1ed6aff4f66b715a7a3eede0b7bea00ea9a70d050ac81267f86b8e5b2d3349e6",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/desnew00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/despc00.bin",
+      "bytes": 93,
+      "sha256": "388908314f9ff8258bc9030b5b2e614cbb949b5e2df1c54d18d044f0e3e1dd6c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/despc00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/destoo00.bin",
+      "bytes": 93,
+      "sha256": "fc470d12e52a0b36f9b1f567454f8a285b44f411d05972adb334bc18c8861d6a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/destoo00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/fastdes00.bin",
+      "bytes": 93,
+      "sha256": "f517eef582415e32e469593014a48720837cfbe3b6b48d202ac9879073f5f27e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/fastdes00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/feal800.bin",
+      "bytes": 93,
+      "sha256": "b87d48c3367da4a1481fc4a3f7767e6a4c868b3fba3fe7bfe0c58d04bd84b7cf",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/feal800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/gene00.bin",
+      "bytes": 93,
+      "sha256": "59107615d3a6fd07006fa87f241e4c15ef7486886ede13d5c7aae2a2c6e78604",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/gene00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/gost00.bin",
+      "bytes": 189,
+      "sha256": "8da43943edcd516d464010bafe2fb7bbbb7d85c666283c2b0b0590405304f2e2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/gost00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/gramary00.bin",
+      "bytes": 93,
+      "sha256": "7b0555c117f9adc4cc6b7bacae9f961611c26f396de4b361965aa2f1d62ad282",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/gramary00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/idea00.bin",
+      "bytes": 125,
+      "sha256": "8907d920a7a4549e8d46a622f5ba597058abc846a09e7e1b7eb2f6aeb8975a17",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/idea00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/mars00.bin",
+      "bytes": 125,
+      "sha256": "9563e219da5c9430827b91227110f0825d39e7caad61471631453e423926dd57",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/mars00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/rc600.bin",
+      "bytes": 125,
+      "sha256": "a7e511159083ab1626bf2de86d034f853ad4bcb0d1aa5a45ee2e57f7164eb51d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/rc600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/shift00.bin",
+      "bytes": 93,
+      "sha256": "038ca413a8e1785669efb9bbe986fc6fcfc5b2d3c65f23cb6679248e5aa166e2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/shift00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/subtracter00.bin",
+      "bytes": 93,
+      "sha256": "2b4392469b5c865cc4d47acd53c450c9bced886c171308191086f55de1c621b1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/subtracter00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/tean00.bin",
+      "bytes": 125,
+      "sha256": "5c1138e1fa0573a9328a95613194d5b8f5229875807b64a63c8c6867e5b5292e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/clientcodedata/cryptdata/tean00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/adder.dib",
+      "bytes": 1025,
+      "sha256": "0f8a63ed21c29116ce0b7e3cc8342f90c3e417194de4f066ff8f6ef295dcaed2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/adder.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_16.dib",
+      "bytes": 8656,
+      "sha256": "44963756f66e942ff5bb91f4f84dfeb4fda416167cd740a4e1237e782c1980b0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_16.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_24.dib",
+      "bytes": 8655,
+      "sha256": "4cf8e3b2459bd0d002ecf77772cd9fdd14ab763c52173d92dc1066b3f7e14d6b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_24.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_32.dib",
+      "bytes": 8657,
+      "sha256": "1e85a17bd9b64b15dd941e662d82bd06d2c3da69a278b7fbeb9b59756cd4c2f5",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_32.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_56.dib",
+      "bytes": 8657,
+      "sha256": "8ba646f50d8350aa7c47f8acd64a00eaa4452c1f71d884196b113691d907afa8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_56.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_8.dib",
+      "bytes": 8657,
+      "sha256": "b648ffaafa1a76131abcf10075d0144ee0cd52bd05ec4874ba441d31697d735c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/blowfish_8.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/cast.dib",
+      "bytes": 15944,
+      "sha256": "a228eb15561781c5c837ba50e777a379804df71341a8210d6d17827b9bf7c112",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/cast.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/d3des_161.dib",
+      "bytes": 4475,
+      "sha256": "845478c738b0d878f133b39130a708fa51c8f600885d87a227c0c60d3b860637",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/d3des_161.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/d3des_162.dib",
+      "bytes": 4544,
+      "sha256": "09b4131a2df96cc4d45d8cb141fb0a1fbb03f73f10fc1dbb207416e1fb72a1ff",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/d3des_162.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/des2p.dib",
+      "bytes": 4365,
+      "sha256": "56f12d463d88ff38ea2228c50ce7706be1344fbe437f93decd8dbaf34664f563",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/des2p.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/desbig.dib",
+      "bytes": 10287,
+      "sha256": "961b904ed2b513e6a2567d2114b60d38f24001e06a4165bb7fe6a3b758018c8c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/desbig.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/desmo.dib",
+      "bytes": 1394,
+      "sha256": "c08ce63cde0293811f5f4efdadc90b1eb0e97670d127d40c712d3b6fca012a8a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/desmo.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/desnew.dib",
+      "bytes": 1957,
+      "sha256": "1d0cd88ea3561b74d0560d402185e9f8264afaebe6faa652efba72ca605a7531",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/desnew.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/despc.dib",
+      "bytes": 5178,
+      "sha256": "29c07e315a1da68f63b5bdeead0fd689a5316ad763285faadc7025f42fee2321",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/despc.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/destoo.dib",
+      "bytes": 4516,
+      "sha256": "e2b0b52f8ea1742848428394d218530e3d901073baa5662ec54f10140e2f73d2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/destoo.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/fastdes.dib",
+      "bytes": 4375,
+      "sha256": "732884920114790f0a84642aa1ec26035abecbbb3594713287e4953700386dd8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/fastdes.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/feal8.dib",
+      "bytes": 1150,
+      "sha256": "64c2647a194887e05c01c6e7831362134ecb2b84c079d9a5f5cf68ee058f141c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/feal8.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/gene.dib",
+      "bytes": 866,
+      "sha256": "2cb4916f5e1c8ec071ec0cfda6c5faa605db3953f6a4481707ab4d8ef8c79ad4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/gene.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/gost.dib",
+      "bytes": 1464,
+      "sha256": "8fb8230b22157d3e03ffa35b226f625a5312e86c7208fdc2d4e0d7b716744ef4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/gost.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/gramary.dib",
+      "bytes": 1720,
+      "sha256": "60129b66b0d592846eca30f6457aec8c33c6fdf0723800a0251c278f5f892d57",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/gramary.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/idea.dib",
+      "bytes": 1461,
+      "sha256": "490bc81534ca9059c602a2be8f5ab336fea45a7b4141983c7f3a809e91bc55a2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/idea.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/mars.dib",
+      "bytes": 7175,
+      "sha256": "54a5c08316c80a7569d132f84a4026b3ce56fe8d5faf28db229b870528ce47d2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/mars.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/rc6.dib",
+      "bytes": 2025,
+      "sha256": "c50d95863d8ff15896e4bb5dc72dd5f51d608d803da8e96ea679c1c3a500b9bc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/rc6.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/shift.dib",
+      "bytes": 1373,
+      "sha256": "4454f1d7bc55c89b7bb78f8b14640c4a9aea9bc3edd5d6c6dd3eee35fd4897b9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/shift.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/subtracter.dib",
+      "bytes": 1135,
+      "sha256": "34aa66a9aaafe450dc69dea517bcd5581d93fc4f92a601926fd59727b293128a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/subtracter.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/tean.dib",
+      "bytes": 772,
+      "sha256": "0392a9088c6c39fc566fff4c8e573b93b3ff451cdaf15fc2aa3f30663f0e04a7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/bin/tean.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des800.bin",
+      "bytes": 113,
+      "sha256": "9e30752c3a797c6bba9da7a3520584e04ccfe2b78c33394f6f93bd638a3856df",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des801.bin",
+      "bytes": 113,
+      "sha256": "016faf44f5dddf0666c3af6e350625d665c240da1963aba62f7cf743f6841618",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des801.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des802.bin",
+      "bytes": 113,
+      "sha256": "6d3e0d6bd4fd01ad2cf7cef1e44da0a0087950a80bb81a009a796c31a855f4b5",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des802.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des803.bin",
+      "bytes": 113,
+      "sha256": "1fa29f140b4735553e1c9ff1b864b311f103dec1a3d181e1bf2d9539b9a4676d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des803.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des804.bin",
+      "bytes": 113,
+      "sha256": "d3410a47209d598790e2f2a3296d198fae54d08e0ff69fdb8c1c0b31ca30b7f2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/d3des804.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des00.bin",
+      "bytes": 103,
+      "sha256": "5c753dcc4da5851f2aa7195b2eab1e6534d4c1c2226b9fb708d6d365631cc6aa",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des01.bin",
+      "bytes": 103,
+      "sha256": "1172a322608a0452b31d812f96760016716efe5ffc057380c0b946ca0b4b691d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des02.bin",
+      "bytes": 103,
+      "sha256": "64b76846d57f29ef203a373057e53ea81f79fb48763494a8137dc7f903aed881",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des03.bin",
+      "bytes": 103,
+      "sha256": "e5b4e1a18e3541730de3edf82e641e2e13a8f449bc107b457d3089d6ad4fadbe",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des04.bin",
+      "bytes": 103,
+      "sha256": "74a671b7761d39e1f46930e68ae766efa1809c612624ca2f1c521e274e502969",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/des04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea00.bin",
+      "bytes": 89,
+      "sha256": "2d2294978a819af1650e7ecce35ff84216694a460454fbce212acdba5a5c3600",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea01.bin",
+      "bytes": 89,
+      "sha256": "3319a7da481c98010f78e13ba94bd0f1fa5c5d9360a87c592e8f69d9fb5ad161",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea02.bin",
+      "bytes": 89,
+      "sha256": "362fb990bbd5b3b2d936ce4402dfeba78481c649566c01885ca2b72f549d544c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea03.bin",
+      "bytes": 89,
+      "sha256": "f3d40840a621dc8a9e253b967bbf932cf3c9317697d4ad4d6f1c5ec69529dcc9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea04.bin",
+      "bytes": 89,
+      "sha256": "bef160c14d6edd4fb4780e4b78dfc286013e95ad3b4dfc21e928dad69e2af67b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/idea04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1600.bin",
+      "bytes": 113,
+      "sha256": "75ad039455cdf58355b2578dd16a856a31ddd221c5cd048ed70d615df67760fb",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1601.bin",
+      "bytes": 113,
+      "sha256": "73f5752e87960b97842ee56fb0415ebba23feed241dafd51a7fb9f5bf6b91bac",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1601.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1602.bin",
+      "bytes": 113,
+      "sha256": "3ce953abf8007f40c3d3e2aacb3370e08688dde99e2dbd76494946504ff44119",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1602.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1603.bin",
+      "bytes": 113,
+      "sha256": "9eec0845a67e6591ded4c62da4c98211af13334e75e62be268a203e1acf5b4a4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1603.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1604.bin",
+      "bytes": 113,
+      "sha256": "472433890cc8a83bdb5e9eb6a8cdff161a84c4b633207f8acdec8feedbb062c8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_1604.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3200.bin",
+      "bytes": 177,
+      "sha256": "3fcda44f0d4d3d69dbf0f25214fed30b24318aee87f83ed4fac665aabaa99de1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3201.bin",
+      "bytes": 177,
+      "sha256": "6e8114c4297e2fd63d5bee3e07f3262e5a0f0a72d2950424c3b945ce17c1d91b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3201.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3202.bin",
+      "bytes": 177,
+      "sha256": "359644a88be2b1f644a176e3c5266682452386c1d42ea257c7b479fdffe3f0e9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3202.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3203.bin",
+      "bytes": 177,
+      "sha256": "f06f21a2de0d856a7db19ea7afacc6a229fcf0be366669b5c65f75601b91ad79",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3203.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3204.bin",
+      "bytes": 177,
+      "sha256": "5e686d054daf96b602037e0f425aab45c340c297e8cc7685a839227d9d1a879f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_3204.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_800.bin",
+      "bytes": 81,
+      "sha256": "dbcdf5e128e3a7d33b566af982206788f2160a8a53488545bf0d87fdd887b7c0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_801.bin",
+      "bytes": 81,
+      "sha256": "7026316516d85c4fda7bdf7100261aa69bbae499076e354299620e42021f0f08",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_801.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_802.bin",
+      "bytes": 81,
+      "sha256": "76e9fa4143ac4fac66acf25ea0775ea8bb5da1a0d9ed9468fda2066af426be25",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_802.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_803.bin",
+      "bytes": 81,
+      "sha256": "f50c6fe8c3ad35aa4e2b916b25cd747e39c39f2eaa9127f709e1a17fb3d80f4d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_803.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_804.bin",
+      "bytes": 81,
+      "sha256": "8d2f4718bcd60f8699419a76606e72b42a5b3489fe3dd4fd49668e4681f4664b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/magic_804.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars00.bin",
+      "bytes": 114,
+      "sha256": "04a49aad867d9eb2c6018bad540d9c4472dbf693908e38563bb7d4fa36614ffd",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars01.bin",
+      "bytes": 114,
+      "sha256": "774018d24d5b293661247cc38724b086c0d0ca9f2ad42150ed9f093a8619c216",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars02.bin",
+      "bytes": 114,
+      "sha256": "f927f7de1f6acbb6c47221857ffa239581fb87440f69baa2cd716b19bdd7d5f3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars03.bin",
+      "bytes": 114,
+      "sha256": "0668ef2e38eeb8bbd44eb2609e04e0464b921d9ab806425d28eb36b1bf6855f4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars04.bin",
+      "bytes": 114,
+      "sha256": "74638b4a648fdde21b8a4e8adabdf161ccb147bfe6499c485bb7554a7bdeb476",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/mars04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota00.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota01.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota02.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota03.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota04.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/nota04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc600.bin",
+      "bytes": 113,
+      "sha256": "bc22bbb9360a814844153b02340a504b26c322eeac62b1337d39e1b834085a3b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc601.bin",
+      "bytes": 113,
+      "sha256": "68339b977ddb205741d81a574c659942eecee566834f3cbd54eeec999b4e7407",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc601.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc602.bin",
+      "bytes": 113,
+      "sha256": "2994ac9909b1d6bdb916c2badf896983af3aa9844e5911b29e5996380c431b5f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc602.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc603.bin",
+      "bytes": 113,
+      "sha256": "230501d9b74092d553fd0450161f40e359c7ca4f1656e9c18639fe056dffab45",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc603.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc604.bin",
+      "bytes": 113,
+      "sha256": "98ce8cc739ea4100d44c316588f9b5dc3079a003a7a17474f285695f74cba7b1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/rc604.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena00.bin",
+      "bytes": 114,
+      "sha256": "a1f6dd9881060886ba03db8b4eff595bb4cf71becb406ab53a9ba1d43abd229c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena01.bin",
+      "bytes": 114,
+      "sha256": "768bbda8de1ad7e50f5fead97747c32202a8b03fe4510ae34f57bd97806799a3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena02.bin",
+      "bytes": 114,
+      "sha256": "31127f413d483ca6a2f64213fb5ff33e8807743188aa73a9117d93f632323f8d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena03.bin",
+      "bytes": 114,
+      "sha256": "323f5378c99f4f85d62186f298cc6db92864608e97aa9c0aa34011bea62e947d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena04.bin",
+      "bytes": 114,
+      "sha256": "5ae8b4c5c88f6943994b1c404f3e69ac5f2925ebfbebb54d321f490148d7aec1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/tena04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora00.bin",
+      "bytes": 41,
+      "sha256": "af18f9177e59d92f4bddc2d789f8d78fbd7913c1224a3989a0c8f98c32e9db86",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora01.bin",
+      "bytes": 41,
+      "sha256": "1fd904dc4ccba70566ec1cb50061bf14d930740f1ad417f060ec24fb1d59ab4d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora02.bin",
+      "bytes": 41,
+      "sha256": "c20a2850fcaf66ab38e9dd02e54db09833cc435c8464505ff28168a461814ad6",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora03.bin",
+      "bytes": 41,
+      "sha256": "5e75551ad8d12bdec0998bc6fc705b595ab7211ec4f2032f8f9e8bb7d0decc0a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora04.bin",
+      "bytes": 41,
+      "sha256": "20df39de4597a261d4d54bd2eab4a458bc7fbc1633dbbd8b846072bdfb8691f0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/crypt/xora04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/adder00.bin",
+      "bytes": 93,
+      "sha256": "b1978ba9553b9dc517b7b96a5b71e1019c53ecfadd4a7635f8486010d029159f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/adder00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish1600.bin",
+      "bytes": 125,
+      "sha256": "ece2e5739026349209ffd065bda1d3d1fb3ac8f7ddc1264d40896031614edec3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish1600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish2400.bin",
+      "bytes": 157,
+      "sha256": "a30ed92f607841e0281fea3056b81eb1320cc36ea8ca7dd8d37ab393bcfee85f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish2400.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish3200.bin",
+      "bytes": 189,
+      "sha256": "4a3b5f410268ec403ca650e861c76826912bd945bde2f5fd04fc198306d2d35e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish3200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish5600.bin",
+      "bytes": 285,
+      "sha256": "4c5bffa37e10ec4cda9926b9430244a36045e850b0fae6d39a65b14e95751be9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish5600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish800.bin",
+      "bytes": 115,
+      "sha256": "79f0d3e0039246d7edd08bee1ec549bb15db7fec61856135114ec3769e00a052",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/blowfish800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/cast00.bin",
+      "bytes": 125,
+      "sha256": "b13bf33b2473ad44cda56cc32d155817314ae05de79d65a22db4f5c0b93bd20e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/cast00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/d3des16100.bin",
+      "bytes": 125,
+      "sha256": "8e0a9299f89b710e641147e69a0978d5f0f7bdf5b5cfce3fef52a0bcb51ad91b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/d3des16100.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/d3des16200.bin",
+      "bytes": 125,
+      "sha256": "872a8fab7325462a0bbe0a84d6a44a4a3431adc1eabcfd76bba35f8c2381eb6f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/d3des16200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/des2p00.bin",
+      "bytes": 93,
+      "sha256": "51d89986d2da63e0c834a440304702764f76c586a9cfd42adf7ef39b44b0ff40",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/des2p00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/desbig00.bin",
+      "bytes": 93,
+      "sha256": "499928c2dfae24a73209825d82602eaec5747a214dcffd7e0ccd6df615b0aa11",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/desbig00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/desmo00.bin",
+      "bytes": 115,
+      "sha256": "831ac552a6370b61cf92b16a2f704e606e33dc276514bbb308fcae1f2a3ab7f7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/desmo00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/desnew00.bin",
+      "bytes": 125,
+      "sha256": "1ed6aff4f66b715a7a3eede0b7bea00ea9a70d050ac81267f86b8e5b2d3349e6",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/desnew00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/despc00.bin",
+      "bytes": 93,
+      "sha256": "388908314f9ff8258bc9030b5b2e614cbb949b5e2df1c54d18d044f0e3e1dd6c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/despc00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/destoo00.bin",
+      "bytes": 93,
+      "sha256": "fc470d12e52a0b36f9b1f567454f8a285b44f411d05972adb334bc18c8861d6a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/destoo00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/fastdes00.bin",
+      "bytes": 93,
+      "sha256": "f517eef582415e32e469593014a48720837cfbe3b6b48d202ac9879073f5f27e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/fastdes00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/feal800.bin",
+      "bytes": 93,
+      "sha256": "b87d48c3367da4a1481fc4a3f7767e6a4c868b3fba3fe7bfe0c58d04bd84b7cf",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/feal800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/gene00.bin",
+      "bytes": 93,
+      "sha256": "59107615d3a6fd07006fa87f241e4c15ef7486886ede13d5c7aae2a2c6e78604",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/gene00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/gost00.bin",
+      "bytes": 189,
+      "sha256": "8da43943edcd516d464010bafe2fb7bbbb7d85c666283c2b0b0590405304f2e2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/gost00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/gramary00.bin",
+      "bytes": 93,
+      "sha256": "7b0555c117f9adc4cc6b7bacae9f961611c26f396de4b361965aa2f1d62ad282",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/gramary00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/idea00.bin",
+      "bytes": 125,
+      "sha256": "8907d920a7a4549e8d46a622f5ba597058abc846a09e7e1b7eb2f6aeb8975a17",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/idea00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/mars00.bin",
+      "bytes": 125,
+      "sha256": "9563e219da5c9430827b91227110f0825d39e7caad61471631453e423926dd57",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/mars00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/rc600.bin",
+      "bytes": 125,
+      "sha256": "a7e511159083ab1626bf2de86d034f853ad4bcb0d1aa5a45ee2e57f7164eb51d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/rc600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/shift00.bin",
+      "bytes": 93,
+      "sha256": "038ca413a8e1785669efb9bbe986fc6fcfc5b2d3c65f23cb6679248e5aa166e2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/shift00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/subtracter00.bin",
+      "bytes": 93,
+      "sha256": "2b4392469b5c865cc4d47acd53c450c9bced886c171308191086f55de1c621b1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/subtracter00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/tean00.bin",
+      "bytes": 125,
+      "sha256": "5c1138e1fa0573a9328a95613194d5b8f5229875807b64a63c8c6867e5b5292e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/p2pcodedata/cryptdata/tean00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/anti/check_debugger_driver00.bin",
+      "bytes": 42,
+      "sha256": "4c6e00709d1afae003ad3f2c09ba0c4898342b8729dcd66942a559cfa712abee",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/anti/check_debugger_driver00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/anti/check_debugger_process00.bin",
+      "bytes": 42,
+      "sha256": "35f1776ccc1c6704155f784d7913de6f8e0935c3e2a386582a2a9f9aeb6c1dd2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/anti/check_debugger_process00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/anti/check_debugger_wnd00.bin",
+      "bytes": 42,
+      "sha256": "034adceab999c1705b96a3167594be083d68c18be6f38ea88d99546a75a1ca3f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/anti/check_debugger_wnd00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/adder.dib",
+      "bytes": 1025,
+      "sha256": "0f8a63ed21c29116ce0b7e3cc8342f90c3e417194de4f066ff8f6ef295dcaed2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/adder.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_16.dib",
+      "bytes": 8656,
+      "sha256": "44963756f66e942ff5bb91f4f84dfeb4fda416167cd740a4e1237e782c1980b0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_16.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_24.dib",
+      "bytes": 8655,
+      "sha256": "4cf8e3b2459bd0d002ecf77772cd9fdd14ab763c52173d92dc1066b3f7e14d6b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_24.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_32.dib",
+      "bytes": 8657,
+      "sha256": "1e85a17bd9b64b15dd941e662d82bd06d2c3da69a278b7fbeb9b59756cd4c2f5",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_32.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_56.dib",
+      "bytes": 8657,
+      "sha256": "8ba646f50d8350aa7c47f8acd64a00eaa4452c1f71d884196b113691d907afa8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_56.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_8.dib",
+      "bytes": 8657,
+      "sha256": "b648ffaafa1a76131abcf10075d0144ee0cd52bd05ec4874ba441d31697d735c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/blowfish_8.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/cast.dib",
+      "bytes": 15944,
+      "sha256": "a228eb15561781c5c837ba50e777a379804df71341a8210d6d17827b9bf7c112",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/cast.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/d3des_161.dib",
+      "bytes": 4475,
+      "sha256": "845478c738b0d878f133b39130a708fa51c8f600885d87a227c0c60d3b860637",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/d3des_161.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/d3des_162.dib",
+      "bytes": 4544,
+      "sha256": "09b4131a2df96cc4d45d8cb141fb0a1fbb03f73f10fc1dbb207416e1fb72a1ff",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/d3des_162.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/des2p.dib",
+      "bytes": 4365,
+      "sha256": "56f12d463d88ff38ea2228c50ce7706be1344fbe437f93decd8dbaf34664f563",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/des2p.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/desbig.dib",
+      "bytes": 10287,
+      "sha256": "961b904ed2b513e6a2567d2114b60d38f24001e06a4165bb7fe6a3b758018c8c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/desbig.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/desmo.dib",
+      "bytes": 1394,
+      "sha256": "c08ce63cde0293811f5f4efdadc90b1eb0e97670d127d40c712d3b6fca012a8a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/desmo.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/desnew.dib",
+      "bytes": 1957,
+      "sha256": "1d0cd88ea3561b74d0560d402185e9f8264afaebe6faa652efba72ca605a7531",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/desnew.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/despc.dib",
+      "bytes": 5178,
+      "sha256": "29c07e315a1da68f63b5bdeead0fd689a5316ad763285faadc7025f42fee2321",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/despc.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/destoo.dib",
+      "bytes": 4516,
+      "sha256": "e2b0b52f8ea1742848428394d218530e3d901073baa5662ec54f10140e2f73d2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/destoo.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/fastdes.dib",
+      "bytes": 4375,
+      "sha256": "732884920114790f0a84642aa1ec26035abecbbb3594713287e4953700386dd8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/fastdes.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/feal8.dib",
+      "bytes": 1150,
+      "sha256": "64c2647a194887e05c01c6e7831362134ecb2b84c079d9a5f5cf68ee058f141c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/feal8.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/gene.dib",
+      "bytes": 866,
+      "sha256": "2cb4916f5e1c8ec071ec0cfda6c5faa605db3953f6a4481707ab4d8ef8c79ad4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/gene.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/gost.dib",
+      "bytes": 1464,
+      "sha256": "8fb8230b22157d3e03ffa35b226f625a5312e86c7208fdc2d4e0d7b716744ef4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/gost.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/gramary.dib",
+      "bytes": 1720,
+      "sha256": "60129b66b0d592846eca30f6457aec8c33c6fdf0723800a0251c278f5f892d57",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/gramary.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/idea.dib",
+      "bytes": 1461,
+      "sha256": "490bc81534ca9059c602a2be8f5ab336fea45a7b4141983c7f3a809e91bc55a2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/idea.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/mars.dib",
+      "bytes": 7175,
+      "sha256": "54a5c08316c80a7569d132f84a4026b3ce56fe8d5faf28db229b870528ce47d2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/mars.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/rc6.dib",
+      "bytes": 2025,
+      "sha256": "c50d95863d8ff15896e4bb5dc72dd5f51d608d803da8e96ea679c1c3a500b9bc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/rc6.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/shift.dib",
+      "bytes": 1373,
+      "sha256": "4454f1d7bc55c89b7bb78f8b14640c4a9aea9bc3edd5d6c6dd3eee35fd4897b9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/shift.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/subtracter.dib",
+      "bytes": 1135,
+      "sha256": "34aa66a9aaafe450dc69dea517bcd5581d93fc4f92a601926fd59727b293128a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/subtracter.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/tean.dib",
+      "bytes": 772,
+      "sha256": "0392a9088c6c39fc566fff4c8e573b93b3ff451cdaf15fc2aa3f30663f0e04a7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/bin/tean.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast00.bin",
+      "bytes": 105,
+      "sha256": "c814663a69905edf9c5b3bafdf9bec84cf51fc41322e872135e13f8ae70a0d6d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast01.bin",
+      "bytes": 105,
+      "sha256": "a9dcd573d30d2428ab89a28a43f13a16df44681ecb2513c53b073f6b6995969e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast02.bin",
+      "bytes": 105,
+      "sha256": "7c8602998c4d6b7b1fe6cf5e2d97b233eb44a7444d57d225ccb8a269e932fbff",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast03.bin",
+      "bytes": 105,
+      "sha256": "77b190bb214834a72491b8c43ba6d511c972cf43a57d89fa4e56c002307bd558",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast04.bin",
+      "bytes": 105,
+      "sha256": "ce30d6dff94174480e914130c7fcf6f21e24cf5c7e093a5d7bbabe0eeba8b024",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/cast04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1600.bin",
+      "bytes": 105,
+      "sha256": "a0a6bd9016f4ee16afc280a320839e332dfc9d34b58a9fd1a16dbc7c335d3df3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1601.bin",
+      "bytes": 105,
+      "sha256": "fce41b6f73cabe1f73789e8d98b409c1a417db06ab2ced7b7bb20195cfd2a405",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1601.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1602.bin",
+      "bytes": 105,
+      "sha256": "5f3fb98583908ceed337e12981acc5fd74faac022db928c193c02eb0f17e7160",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1602.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1603.bin",
+      "bytes": 105,
+      "sha256": "a0a6bd9016f4ee16afc280a320839e332dfc9d34b58a9fd1a16dbc7c335d3df3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1603.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1604.bin",
+      "bytes": 105,
+      "sha256": "441f3bf8f47f07231d32db086e38810d3a3722d74d1ed4b94b77631f0a24543b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des1604.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2400.bin",
+      "bytes": 121,
+      "sha256": "7e140e3ac778ade7c0c1c545e19163fecb24ccf469a33acf6b528e04f91f9ec8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2400.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2401.bin",
+      "bytes": 121,
+      "sha256": "827d3c5b083c7b7d2a44d6371fb02b6f035b11ef94bb673ba601cab129919411",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2401.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2402.bin",
+      "bytes": 121,
+      "sha256": "7559acf2561639750506fe48b6f09695fa98cfa128b3dd40e8061d91496e70b9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2402.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2403.bin",
+      "bytes": 121,
+      "sha256": "25f959c244e935419c8a20fb396cd2cb8c89b239f9fbe6b924515a282fb356ad",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2403.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2404.bin",
+      "bytes": 121,
+      "sha256": "97f9594d7d5360f4ed9ffcb1ac802a6e4daef0fb9cad8103bc4b82e6a7a4362e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des2404.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des800.bin",
+      "bytes": 113,
+      "sha256": "9e30752c3a797c6bba9da7a3520584e04ccfe2b78c33394f6f93bd638a3856df",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des801.bin",
+      "bytes": 113,
+      "sha256": "016faf44f5dddf0666c3af6e350625d665c240da1963aba62f7cf743f6841618",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des801.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des802.bin",
+      "bytes": 113,
+      "sha256": "6d3e0d6bd4fd01ad2cf7cef1e44da0a0087950a80bb81a009a796c31a855f4b5",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des802.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des803.bin",
+      "bytes": 113,
+      "sha256": "1fa29f140b4735553e1c9ff1b864b311f103dec1a3d181e1bf2d9539b9a4676d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des803.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des804.bin",
+      "bytes": 113,
+      "sha256": "d3410a47209d598790e2f2a3296d198fae54d08e0ff69fdb8c1c0b31ca30b7f2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/d3des804.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des00.bin",
+      "bytes": 103,
+      "sha256": "5c753dcc4da5851f2aa7195b2eab1e6534d4c1c2226b9fb708d6d365631cc6aa",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des01.bin",
+      "bytes": 103,
+      "sha256": "1172a322608a0452b31d812f96760016716efe5ffc057380c0b946ca0b4b691d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des02.bin",
+      "bytes": 103,
+      "sha256": "64b76846d57f29ef203a373057e53ea81f79fb48763494a8137dc7f903aed881",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des03.bin",
+      "bytes": 103,
+      "sha256": "e5b4e1a18e3541730de3edf82e641e2e13a8f449bc107b457d3089d6ad4fadbe",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des04.bin",
+      "bytes": 103,
+      "sha256": "74a671b7761d39e1f46930e68ae766efa1809c612624ca2f1c521e274e502969",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/des04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost00.bin",
+      "bytes": 137,
+      "sha256": "de8567bdff2b52226d1cbcfc28bac549849d1f13b463fccdcccdb4915081f7b7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost01.bin",
+      "bytes": 137,
+      "sha256": "a4049ac54eefa3e88fca1c0735d84600de43fb70eda0acfcb396284a156a2b49",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost02.bin",
+      "bytes": 137,
+      "sha256": "74177785d0c4425c03b5cc87366bfce2b5e28232451ea7c5730495cda1720afe",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost03.bin",
+      "bytes": 137,
+      "sha256": "5249a45ff36bcb172e1e8b0470004f41c7aef01fa59626f3b406e338f68f74b6",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost04.bin",
+      "bytes": 137,
+      "sha256": "6e19abd814382f29dcd35acfe530693f0a21e2d2abaf2593d6d81f289b7bf927",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/gost04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea00.bin",
+      "bytes": 89,
+      "sha256": "2d2294978a819af1650e7ecce35ff84216694a460454fbce212acdba5a5c3600",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea01.bin",
+      "bytes": 89,
+      "sha256": "3319a7da481c98010f78e13ba94bd0f1fa5c5d9360a87c592e8f69d9fb5ad161",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea02.bin",
+      "bytes": 89,
+      "sha256": "362fb990bbd5b3b2d936ce4402dfeba78481c649566c01885ca2b72f549d544c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea03.bin",
+      "bytes": 89,
+      "sha256": "f3d40840a621dc8a9e253b967bbf932cf3c9317697d4ad4d6f1c5ec69529dcc9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea04.bin",
+      "bytes": 89,
+      "sha256": "bef160c14d6edd4fb4780e4b78dfc286013e95ad3b4dfc21e928dad69e2af67b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/idea04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1600.bin",
+      "bytes": 113,
+      "sha256": "75ad039455cdf58355b2578dd16a856a31ddd221c5cd048ed70d615df67760fb",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1601.bin",
+      "bytes": 113,
+      "sha256": "73f5752e87960b97842ee56fb0415ebba23feed241dafd51a7fb9f5bf6b91bac",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1601.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1602.bin",
+      "bytes": 113,
+      "sha256": "3ce953abf8007f40c3d3e2aacb3370e08688dde99e2dbd76494946504ff44119",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1602.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1603.bin",
+      "bytes": 113,
+      "sha256": "9eec0845a67e6591ded4c62da4c98211af13334e75e62be268a203e1acf5b4a4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1603.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1604.bin",
+      "bytes": 113,
+      "sha256": "472433890cc8a83bdb5e9eb6a8cdff161a84c4b633207f8acdec8feedbb062c8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_1604.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3200.bin",
+      "bytes": 177,
+      "sha256": "3fcda44f0d4d3d69dbf0f25214fed30b24318aee87f83ed4fac665aabaa99de1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3201.bin",
+      "bytes": 177,
+      "sha256": "6e8114c4297e2fd63d5bee3e07f3262e5a0f0a72d2950424c3b945ce17c1d91b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3201.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3202.bin",
+      "bytes": 177,
+      "sha256": "359644a88be2b1f644a176e3c5266682452386c1d42ea257c7b479fdffe3f0e9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3202.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3203.bin",
+      "bytes": 177,
+      "sha256": "f06f21a2de0d856a7db19ea7afacc6a229fcf0be366669b5c65f75601b91ad79",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3203.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3204.bin",
+      "bytes": 177,
+      "sha256": "5e686d054daf96b602037e0f425aab45c340c297e8cc7685a839227d9d1a879f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_3204.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_800.bin",
+      "bytes": 81,
+      "sha256": "dbcdf5e128e3a7d33b566af982206788f2160a8a53488545bf0d87fdd887b7c0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_801.bin",
+      "bytes": 81,
+      "sha256": "7026316516d85c4fda7bdf7100261aa69bbae499076e354299620e42021f0f08",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_801.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_802.bin",
+      "bytes": 81,
+      "sha256": "76e9fa4143ac4fac66acf25ea0775ea8bb5da1a0d9ed9468fda2066af426be25",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_802.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_803.bin",
+      "bytes": 81,
+      "sha256": "f50c6fe8c3ad35aa4e2b916b25cd747e39c39f2eaa9127f709e1a17fb3d80f4d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_803.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_804.bin",
+      "bytes": 81,
+      "sha256": "8d2f4718bcd60f8699419a76606e72b42a5b3489fe3dd4fd49668e4681f4664b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/magic_804.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars00.bin",
+      "bytes": 114,
+      "sha256": "04a49aad867d9eb2c6018bad540d9c4472dbf693908e38563bb7d4fa36614ffd",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars01.bin",
+      "bytes": 114,
+      "sha256": "774018d24d5b293661247cc38724b086c0d0ca9f2ad42150ed9f093a8619c216",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars02.bin",
+      "bytes": 114,
+      "sha256": "f927f7de1f6acbb6c47221857ffa239581fb87440f69baa2cd716b19bdd7d5f3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars03.bin",
+      "bytes": 114,
+      "sha256": "0668ef2e38eeb8bbd44eb2609e04e0464b921d9ab806425d28eb36b1bf6855f4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars04.bin",
+      "bytes": 114,
+      "sha256": "74638b4a648fdde21b8a4e8adabdf161ccb147bfe6499c485bb7554a7bdeb476",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/mars04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota00.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota01.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota02.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota03.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota04.bin",
+      "bytes": 27,
+      "sha256": "5f303db40accc1ad953bfd9682bef5067aed0529b13936213d76889fa334fdbc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/nota04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc600.bin",
+      "bytes": 113,
+      "sha256": "bc22bbb9360a814844153b02340a504b26c322eeac62b1337d39e1b834085a3b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc601.bin",
+      "bytes": 113,
+      "sha256": "68339b977ddb205741d81a574c659942eecee566834f3cbd54eeec999b4e7407",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc601.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc602.bin",
+      "bytes": 113,
+      "sha256": "2994ac9909b1d6bdb916c2badf896983af3aa9844e5911b29e5996380c431b5f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc602.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc603.bin",
+      "bytes": 113,
+      "sha256": "230501d9b74092d553fd0450161f40e359c7ca4f1656e9c18639fe056dffab45",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc603.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc604.bin",
+      "bytes": 113,
+      "sha256": "98ce8cc739ea4100d44c316588f9b5dc3079a003a7a17474f285695f74cba7b1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/rc604.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena00.bin",
+      "bytes": 114,
+      "sha256": "a1f6dd9881060886ba03db8b4eff595bb4cf71becb406ab53a9ba1d43abd229c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena01.bin",
+      "bytes": 114,
+      "sha256": "768bbda8de1ad7e50f5fead97747c32202a8b03fe4510ae34f57bd97806799a3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena02.bin",
+      "bytes": 114,
+      "sha256": "31127f413d483ca6a2f64213fb5ff33e8807743188aa73a9117d93f632323f8d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena03.bin",
+      "bytes": 114,
+      "sha256": "323f5378c99f4f85d62186f298cc6db92864608e97aa9c0aa34011bea62e947d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena04.bin",
+      "bytes": 114,
+      "sha256": "5ae8b4c5c88f6943994b1c404f3e69ac5f2925ebfbebb54d321f490148d7aec1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/tena04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora00.bin",
+      "bytes": 41,
+      "sha256": "af18f9177e59d92f4bddc2d789f8d78fbd7913c1224a3989a0c8f98c32e9db86",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora01.bin",
+      "bytes": 41,
+      "sha256": "1fd904dc4ccba70566ec1cb50061bf14d930740f1ad417f060ec24fb1d59ab4d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora01.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora02.bin",
+      "bytes": 41,
+      "sha256": "c20a2850fcaf66ab38e9dd02e54db09833cc435c8464505ff28168a461814ad6",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora02.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora03.bin",
+      "bytes": 41,
+      "sha256": "5e75551ad8d12bdec0998bc6fc705b595ab7211ec4f2032f8f9e8bb7d0decc0a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora03.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora04.bin",
+      "bytes": 41,
+      "sha256": "20df39de4597a261d4d54bd2eab4a458bc7fbc1633dbbd8b846072bdfb8691f0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/crypt/xora04.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/adder00.bin",
+      "bytes": 93,
+      "sha256": "b1978ba9553b9dc517b7b96a5b71e1019c53ecfadd4a7635f8486010d029159f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/adder00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish1600.bin",
+      "bytes": 125,
+      "sha256": "ece2e5739026349209ffd065bda1d3d1fb3ac8f7ddc1264d40896031614edec3",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish1600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish2400.bin",
+      "bytes": 157,
+      "sha256": "a30ed92f607841e0281fea3056b81eb1320cc36ea8ca7dd8d37ab393bcfee85f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish2400.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish3200.bin",
+      "bytes": 189,
+      "sha256": "4a3b5f410268ec403ca650e861c76826912bd945bde2f5fd04fc198306d2d35e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish3200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish5600.bin",
+      "bytes": 285,
+      "sha256": "4c5bffa37e10ec4cda9926b9430244a36045e850b0fae6d39a65b14e95751be9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish5600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish800.bin",
+      "bytes": 115,
+      "sha256": "79f0d3e0039246d7edd08bee1ec549bb15db7fec61856135114ec3769e00a052",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/blowfish800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/cast00.bin",
+      "bytes": 125,
+      "sha256": "b13bf33b2473ad44cda56cc32d155817314ae05de79d65a22db4f5c0b93bd20e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/cast00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/d3des16100.bin",
+      "bytes": 125,
+      "sha256": "8e0a9299f89b710e641147e69a0978d5f0f7bdf5b5cfce3fef52a0bcb51ad91b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/d3des16100.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/d3des16200.bin",
+      "bytes": 125,
+      "sha256": "872a8fab7325462a0bbe0a84d6a44a4a3431adc1eabcfd76bba35f8c2381eb6f",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/d3des16200.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/des2p00.bin",
+      "bytes": 93,
+      "sha256": "51d89986d2da63e0c834a440304702764f76c586a9cfd42adf7ef39b44b0ff40",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/des2p00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/desbig00.bin",
+      "bytes": 93,
+      "sha256": "499928c2dfae24a73209825d82602eaec5747a214dcffd7e0ccd6df615b0aa11",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/desbig00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/desmo00.bin",
+      "bytes": 115,
+      "sha256": "831ac552a6370b61cf92b16a2f704e606e33dc276514bbb308fcae1f2a3ab7f7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/desmo00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/desnew00.bin",
+      "bytes": 125,
+      "sha256": "1ed6aff4f66b715a7a3eede0b7bea00ea9a70d050ac81267f86b8e5b2d3349e6",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/desnew00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/despc00.bin",
+      "bytes": 93,
+      "sha256": "388908314f9ff8258bc9030b5b2e614cbb949b5e2df1c54d18d044f0e3e1dd6c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/despc00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/destoo00.bin",
+      "bytes": 93,
+      "sha256": "fc470d12e52a0b36f9b1f567454f8a285b44f411d05972adb334bc18c8861d6a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/destoo00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/fastdes00.bin",
+      "bytes": 93,
+      "sha256": "f517eef582415e32e469593014a48720837cfbe3b6b48d202ac9879073f5f27e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/fastdes00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/feal800.bin",
+      "bytes": 93,
+      "sha256": "b87d48c3367da4a1481fc4a3f7767e6a4c868b3fba3fe7bfe0c58d04bd84b7cf",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/feal800.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/gene00.bin",
+      "bytes": 93,
+      "sha256": "59107615d3a6fd07006fa87f241e4c15ef7486886ede13d5c7aae2a2c6e78604",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/gene00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/gost00.bin",
+      "bytes": 189,
+      "sha256": "8da43943edcd516d464010bafe2fb7bbbb7d85c666283c2b0b0590405304f2e2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/gost00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/gramary00.bin",
+      "bytes": 93,
+      "sha256": "7b0555c117f9adc4cc6b7bacae9f961611c26f396de4b361965aa2f1d62ad282",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/gramary00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/idea00.bin",
+      "bytes": 125,
+      "sha256": "8907d920a7a4549e8d46a622f5ba597058abc846a09e7e1b7eb2f6aeb8975a17",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/idea00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/mars00.bin",
+      "bytes": 125,
+      "sha256": "9563e219da5c9430827b91227110f0825d39e7caad61471631453e423926dd57",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/mars00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/rc600.bin",
+      "bytes": 125,
+      "sha256": "a7e511159083ab1626bf2de86d034f853ad4bcb0d1aa5a45ee2e57f7164eb51d",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/rc600.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/shift00.bin",
+      "bytes": 93,
+      "sha256": "038ca413a8e1785669efb9bbe986fc6fcfc5b2d3c65f23cb6679248e5aa166e2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/shift00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/subtracter00.bin",
+      "bytes": 93,
+      "sha256": "2b4392469b5c865cc4d47acd53c450c9bced886c171308191086f55de1c621b1",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/subtracter00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/tean00.bin",
+      "bytes": 125,
+      "sha256": "5c1138e1fa0573a9328a95613194d5b8f5229875807b64a63c8c6867e5b5292e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/data/servercodedata/cryptdata/tean00.bin",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/__+_ dib.cfg",
+      "bytes": 535,
+      "sha256": "10016c6e9fc9395bd04876e5aa7b40a04eb5a5720ec65d92b3f752ebb11bc69c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/__+_ dib.cfg",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/adder.dib",
+      "bytes": 1025,
+      "sha256": "0f8a63ed21c29116ce0b7e3cc8342f90c3e417194de4f066ff8f6ef295dcaed2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/adder.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_16.dib",
+      "bytes": 8656,
+      "sha256": "44963756f66e942ff5bb91f4f84dfeb4fda416167cd740a4e1237e782c1980b0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_16.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_24.dib",
+      "bytes": 8655,
+      "sha256": "4cf8e3b2459bd0d002ecf77772cd9fdd14ab763c52173d92dc1066b3f7e14d6b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_24.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_32.dib",
+      "bytes": 8657,
+      "sha256": "1e85a17bd9b64b15dd941e662d82bd06d2c3da69a278b7fbeb9b59756cd4c2f5",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_32.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_56.dib",
+      "bytes": 8657,
+      "sha256": "8ba646f50d8350aa7c47f8acd64a00eaa4452c1f71d884196b113691d907afa8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_56.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_8.dib",
+      "bytes": 8657,
+      "sha256": "b648ffaafa1a76131abcf10075d0144ee0cd52bd05ec4874ba441d31697d735c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/blowfish_8.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/cast.dib",
+      "bytes": 15944,
+      "sha256": "a228eb15561781c5c837ba50e777a379804df71341a8210d6d17827b9bf7c112",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/cast.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/d3des_161.dib",
+      "bytes": 4475,
+      "sha256": "845478c738b0d878f133b39130a708fa51c8f600885d87a227c0c60d3b860637",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/d3des_161.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/d3des_162.dib",
+      "bytes": 4544,
+      "sha256": "09b4131a2df96cc4d45d8cb141fb0a1fbb03f73f10fc1dbb207416e1fb72a1ff",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/d3des_162.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/des2p.dib",
+      "bytes": 4365,
+      "sha256": "56f12d463d88ff38ea2228c50ce7706be1344fbe437f93decd8dbaf34664f563",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/des2p.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/desbig.dib",
+      "bytes": 10287,
+      "sha256": "961b904ed2b513e6a2567d2114b60d38f24001e06a4165bb7fe6a3b758018c8c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/desbig.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/desmo.dib",
+      "bytes": 1394,
+      "sha256": "c08ce63cde0293811f5f4efdadc90b1eb0e97670d127d40c712d3b6fca012a8a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/desmo.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/desnew.dib",
+      "bytes": 1957,
+      "sha256": "1d0cd88ea3561b74d0560d402185e9f8264afaebe6faa652efba72ca605a7531",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/desnew.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/despc.dib",
+      "bytes": 5178,
+      "sha256": "29c07e315a1da68f63b5bdeead0fd689a5316ad763285faadc7025f42fee2321",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/despc.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/destoo.dib",
+      "bytes": 4516,
+      "sha256": "e2b0b52f8ea1742848428394d218530e3d901073baa5662ec54f10140e2f73d2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/destoo.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/dib.cfg",
+      "bytes": 1902,
+      "sha256": "6425c83f616384e78b3dccdce70d6232fbafb5f75c81d377703f8d218933eb8a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/dib.cfg",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/fastdes.dib",
+      "bytes": 4375,
+      "sha256": "732884920114790f0a84642aa1ec26035abecbbb3594713287e4953700386dd8",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/fastdes.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/feal8.dib",
+      "bytes": 1150,
+      "sha256": "64c2647a194887e05c01c6e7831362134ecb2b84c079d9a5f5cf68ee058f141c",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/feal8.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/gene.dib",
+      "bytes": 866,
+      "sha256": "2cb4916f5e1c8ec071ec0cfda6c5faa605db3953f6a4481707ab4d8ef8c79ad4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/gene.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/gost.dib",
+      "bytes": 1464,
+      "sha256": "8fb8230b22157d3e03ffa35b226f625a5312e86c7208fdc2d4e0d7b716744ef4",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/gost.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/gramary.dib",
+      "bytes": 1720,
+      "sha256": "60129b66b0d592846eca30f6457aec8c33c6fdf0723800a0251c278f5f892d57",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/gramary.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/idea.dib",
+      "bytes": 1461,
+      "sha256": "490bc81534ca9059c602a2be8f5ab336fea45a7b4141983c7f3a809e91bc55a2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/idea.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/mars.dib",
+      "bytes": 7175,
+      "sha256": "54a5c08316c80a7569d132f84a4026b3ce56fe8d5faf28db229b870528ce47d2",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/mars.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/rc6.dib",
+      "bytes": 2025,
+      "sha256": "c50d95863d8ff15896e4bb5dc72dd5f51d608d803da8e96ea679c1c3a500b9bc",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/rc6.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/shift.dib",
+      "bytes": 1373,
+      "sha256": "4454f1d7bc55c89b7bb78f8b14640c4a9aea9bc3edd5d6c6dd3eee35fd4897b9",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/shift.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/subtracter.dib",
+      "bytes": 1135,
+      "sha256": "34aa66a9aaafe450dc69dea517bcd5581d93fc4f92a601926fd59727b293128a",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/subtracter.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/dib/tean.dib",
+      "bytes": 772,
+      "sha256": "0392a9088c6c39fc566fff4c8e573b93b3ff451cdaf15fc2aa3f30663f0e04a7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/dib/tean.dib",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/framework.xml",
+      "bytes": 2305,
+      "sha256": "e0b791dcf983ad50eb09207737cf61228a05ccb01252fb94ae4edf4d09964e66",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/framework.xml",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/game.exe",
+      "bytes": 204800,
+      "sha256": "5e92f60dd488a0bb890c4702627ea6f420f9f3b9bc59da23ecbb25c9255ffbf0",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/game.exe",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/sanlix/TE0001.dat",
+      "bytes": 3175,
+      "sha256": "e13c7deeb7b116124b360c1f09dbf4b3db1e8ec6019007f4d04968784cca9f16",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/sanlix/TE0001.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/sanlix/TP0001.dat",
+      "bytes": 92,
+      "sha256": "a52dde5b9cef811cb07abc49ee1360419185e9f52042c40f757d6557d687d74e",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/sanlix/TP0001.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/cfg/sanlix/TS0001.dat",
+      "bytes": 30072,
+      "sha256": "57aaed0458ae01ebba1aaf450ebef6fa9b0f695056b43983e22a711730b70ec7",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/cfg/sanlix/TS0001.dat",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/secagent",
+      "bytes": 19579673,
+      "sha256": "4416aeffccc8b2064c5548d3867638789bb10912d6ce8ea50289b13bbcee2b5b",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/secagent",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/secsvr/zergsvr/zergsvr",
+      "bytes": 16222299,
+      "sha256": "c2def44c445d372c544fd49f79dc79ac62a72750a04035818f3eceb407f26c17",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/secsvr/zergsvr/zergsvr",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/statics/df_statics_r",
+      "bytes": 1748067,
+      "sha256": "37c3ba4e5fd87bb6eaac598c6eac8c726c5b4602122cfdc22a59590f8903be79",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/statics/df_statics_r",
+      "executable": true
+    },
+    {
+      "path": "services/game/assets/home/template/neople/stun/df_stun_r",
+      "bytes": 131126,
+      "sha256": "63d94ee108d3f0b2f0f6aa433a2b97c96438da66447117b66d106750efb97528",
+      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/stun/df_stun_r",
+      "executable": true
+    }
+  ]
+}

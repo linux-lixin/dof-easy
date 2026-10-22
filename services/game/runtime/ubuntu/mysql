@@ -1,0 +1,8 @@
+#!/bin/bash
+# All shared SQL scripts resolve this wrapper through PATH. Only CLI TLS changes.
+case "${MYSQL_INIT_SSL_MODE:-disabled}" in
+  disabled) tls=(--skip-ssl) ;;
+  auto) tls=() ;;
+  *) echo 'MYSQL_INIT_SSL_MODE must be disabled or auto' >&2; exit 2 ;;
+esac
+exec /usr/bin/mariadb "${tls[@]}" --connect-timeout=2 "$@"

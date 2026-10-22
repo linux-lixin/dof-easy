@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "mode": "all",
+  "started_at": "2026-10-16T20:13:26",
+  "finished_at": "2026-10-16T20:19:52",
+  "checks": [
+    "Ubuntu24; no Python2, database server or VPN binaries",
+    "Invalid role, missing database and nonempty VPN credential fail before startup",
+    "Wrong password fails before creating game schemas",
+    "Fresh schema, repaired seed, new query insert and both monthly tables",
+    "One overall startup-complete log after role health and current five countries",
+    "Old unified launcher gateway absent from Supervisor, processes and listening ports",
+    "Pinned netcat implementation exchanges legacy relay registration with acknowledgment",
+    "Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes",
+    "Current-run five countries and real PIDs/ports stable",
+    "Single channel kill and database outage recover with readiness transitions",
+    "Three stop/start cycles preserve database sentinel, admin and RSA pair",
+    "Raw game and backend logs contain no configured plaintext or encrypted DB credentials"
+  ],
+  "images": {
+    "dnf-game:ubuntu24-startup-notice": "sha256:0d89f8db16d29f17bd889b422a2ab1f5e04f501a94a5eadb24da9b4bc1c21145",
+    "dnf-admin:admin-default-check": "sha256:72ed0dba2a3e7014e405d3e8cfc1fdfff6777f4cffacd522386aecf00738908f"
+  },
+  "resources": [
+    "dnf-ubuntu-test-7dda4567-game 2.459GiB / 10GiB 12.41%",
+    "dnf-ubuntu-test-7dda4567-admin 332MiB / 10GiB 0.13%",
+    "dnf-ubuntu-test-7dda4567-mysql 476.8MiB / 10GiB 0.20%"
+  ],
+  "container_restarts": {
+    "dnf-ubuntu-test-7dda4567-game": 0
+  },
+  "real_windows_client": "NOT TESTED: registration, gameplay, party, automatic update",
+  "stability_seconds": 10,
+  "scope": "Startup completion notice increment; ALL mode; three stop/start cycles. No production host access; split runtime and 30-minute stability not repeated."
+}

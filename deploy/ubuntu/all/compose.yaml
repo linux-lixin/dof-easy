@@ -1,0 +1,28 @@
+name: dnf-ubuntu-all
+services:
+  game:
+    extends: {file: ../shared/common.yaml, service: game-base}
+    volumes:
+      - ${RUNTIME_ROOT:-./runtime}/game/data:/data
+      - ${RUNTIME_ROOT:-./runtime}/game/log:/home/neople/game/log
+    environment:
+      SERVER_TYPE: ALL
+      CORE_PUBLIC_IP: 127.0.0.1
+      MAIN_BRIDGE_IP: 127.0.0.1
+      P2P_PUBLIC_IP: ${PUBLIC_IP:?Set PUBLIC_IP}
+    ports:
+      - "7001:7001/tcp"
+      - "7001:7001/udp"
+      - "7300:7300/tcp"
+      - "7300:7300/udp"
+      - "30011:30011/tcp"
+      - "30052:30052/tcp"
+      - "31011:31011/udp"
+      - "31052:31052/udp"
+      - "2311-2313:2311-2313/udp"
+  admin:
+    extends: {file: ../../shared/admin.yaml, service: admin-base}
+    volumes:
+      - ${RUNTIME_ROOT:-./runtime}/admin/data:/app/data
+    depends_on:
+      game: {condition: service_healthy}

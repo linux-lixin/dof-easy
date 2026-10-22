@@ -1,0 +1,89 @@
+# syntax=docker/dockerfile:1
+# This manifest is pinned; build on an x86_64 Docker host using its default platform.
+FROM ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55 AS runtime
+ENV TZ=Asia/Shanghai
+RUN dpkg --add-architecture i386 \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ca-certificates tzdata python3 supervisor socat netcat-openbsd mariadb-client \
+    bash coreutils findutils grep sed gawk perl procps psmisc binutils openssl curl iproute2 net-tools \
+    libc6:i386 libstdc++6:i386 libgcc-s1:i386 zlib1g:i386 \
+    libstdc++6 libgcc-s1 zlib1g libcrypt1 \
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+FROM runtime AS hooks
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gcc gcc-multilib libc6-dev autoconf automake libtool make \
+ && rm -rf /var/lib/apt/lists/*
+COPY assets/home/template/neople/stun/stun_hook.c /tmp/stun_hook.c
+RUN gcc -shared -fPIC -o /tmp/stun_hook.so /tmp/stun_hook.c -ldl -Wall -O2
+COPY docker/ubuntu/geoip_1.6.12.orig.tar.gz /tmp/geoip.tar.gz
+RUN echo '99b119f8e21e94f1dfd6d49fbeed29a70df1544896e76cd456f25e397b07d476  /tmp/geoip.tar.gz' | sha256sum -c - \
+ && mkdir /tmp/geoip && tar -xzf /tmp/geoip.tar.gz -C /tmp/geoip --strip-components=1 \
+ && cd /tmp/geoip && autoreconf -fi \
+ && CC='gcc -m32' ./configure --host=i686-linux-gnu --prefix=/opt/dnf/compat/i386 --disable-static \
+ && make -j2 && make install
+COPY docker/ubuntu/audit/geoip-probe.c /tmp/geoip-probe.c
+RUN gcc -m32 -I/tmp/geoip/libGeoIP -L/opt/dnf/compat/i386/lib -o /tmp/geoip-probe /tmp/geoip-probe.c -lGeoIP
+COPY docker/ubuntu/legacy-shm.c /tmp/legacy-shm.c
+COPY docker/ubuntu/frida-compat.c docker/ubuntu/frida-compat.map /tmp/
+COPY docker/ubuntu/audit/frida-probe.c /tmp/frida-probe.c
+RUN gcc -m32 -shared -fPIC -Wall -Wextra -Werror -O2 -Wl,--version-script=/tmp/frida-compat.map -o /tmp/libfrida-compat.so /tmp/frida-compat.c -ldl \
+ && gcc -m32 -Wall -Wextra -Werror -rdynamic -o /tmp/frida-probe /tmp/frida-probe.c -ldl
+COPY docker/ubuntu/audit/shm-probe.c /tmp/shm-probe.c
+RUN echo 'd8fb57b31d9b29ad576e0100d6fa67e71aa19c3e6d994e5e0a5957e41caec772  /tmp/legacy-shm.c' | sha256sum -c - \
+ && gcc -m32 -shared -fPIC -Wall -Wextra -Werror -O2 -o /tmp/liblegacy-shm.so /tmp/legacy-shm.c -ldl \
+ && gcc -m32 -Wall -Wextra -Werror -o /tmp/shm-probe /tmp/shm-probe.c -lrt
+
+FROM runtime AS game
+COPY assets/home/template/ /home/template/
+COPY assets/root/ /root/
+COPY assets/TeaEncrypt /TeaEncrypt
+COPY assets/etc/supervisor/ /etc/supervisor/
+COPY assets/etc/supervisord.conf /etc/supervisord.conf
+COPY --from=hooks /tmp/stun_hook.so /home/template/neople/stun/stun_hook.so
+COPY --from=hooks /opt/dnf/compat/i386/lib/libGeoIP.so.1.6.12 /opt/dnf/compat/i386/libGeoIP.so.1
+COPY --from=hooks /tmp/geoip/COPYING /opt/dnf/licenses/GeoIP-COPYING
+COPY --from=hooks /tmp/geoip/LICENSE /opt/dnf/licenses/GeoIP-LICENSE
+COPY --from=hooks /tmp/geoip-probe /opt/dnf/audit/geoip-probe
+COPY --from=hooks /tmp/liblegacy-shm.so /opt/dnf/compat/i386/liblegacy-shm.so
+COPY --from=hooks /tmp/shm-probe /opt/dnf/audit/shm-probe
+COPY --from=hooks /tmp/libfrida-compat.so /opt/dnf/compat/i386/libfrida-compat.so
+COPY --from=hooks /tmp/frida-probe /opt/dnf/audit/frida-probe
+COPY docker/ubuntu/audit/frida-probe.py /opt/dnf/audit/frida-probe.py
+COPY docker/ubuntu/SHM-COMPAT-LICENSE /opt/dnf/licenses/SHM-COMPAT-LICENSE
+COPY docker/ubuntu/GeoIP.dat /opt/dnf/compat/i386/share/GeoIP/GeoIP.dat
+COPY docker/ubuntu/GEOIP-DATA-README /opt/dnf/licenses/GeoIP-DATA-README
+COPY docker/ubuntu/compat-lock.json /opt/dnf/audit/compat-lock.json
+COPY docker/ubuntu/run-game /opt/dnf/ubuntu/run-game
+COPY docker/ubuntu/audit/elf-audit.py /opt/dnf/audit/elf-audit.py
+RUN mkdir -p /opt/dnf/compat/i386 \
+ && cp /home/template/neople/game/libnxencryption.so /opt/dnf/compat/i386/ \
+ && echo 'cd1d9db9700d581e40547ff609a26bcf04415198fe9f3e4ecfc910eefc437f76  /opt/dnf/compat/i386/libnxencryption.so' | sha256sum -c - \
+ && echo '58fcdeaac15e222a744b27333a776a2b91dc493d212acbe971ba6b987265a73c  /opt/dnf/compat/i386/share/GeoIP/GeoIP.dat' | sha256sum -c - \
+ && find /home/template -type f -name '*.sh' -exec sed -i 's/\r$//' {} + \
+ && sed -i 's/\r$//' /opt/dnf/ubuntu/run-game \
+ && chmod 755 /TeaEncrypt /opt/dnf/ubuntu/run-game \
+ && find /home/template -type f -exec chmod u+x {} + \
+ && python3 /opt/dnf/audit/elf-audit.py /home/template --extra /TeaEncrypt --output /opt/dnf/audit/elf-report.json \
+ && python3 /opt/dnf/audit/elf-audit.py /opt/dnf/compat --output /opt/dnf/audit/compat-report.json \
+ && LD_LIBRARY_PATH=/opt/dnf/compat/i386 /opt/dnf/audit/geoip-probe > /opt/dnf/audit/geoip-start-proof.txt \
+ && /opt/dnf/ubuntu/run-game /opt/dnf/audit/shm-probe > /opt/dnf/audit/shm-start-proof.txt \
+ && DNF_GAME_PRELOAD=/home/template/init/libhook.so /opt/dnf/ubuntu/run-game /opt/dnf/audit/shm-probe >> /opt/dnf/audit/shm-start-proof.txt \
+ && dpkg-query -W > /opt/dnf/audit/packages.tsv
+
+FROM game AS final
+COPY runtime/ubuntu/ /opt/dnf/ubuntu/
+COPY vipai86-assets/ /opt/dnf/vipai86/
+RUN cp /opt/dnf/vipai86/game/df_game_r /home/template/init/df_game_r \
+ && chmod 755 /home/template/init/df_game_r \
+ && python3 /opt/dnf/audit/elf-audit.py /opt/dnf/vipai86 --preload-i386 /opt/dnf/compat/i386/libfrida-compat.so --output /opt/dnf/audit/vipai86-elf.json
+RUN --network=none python3 /opt/dnf/audit/frida-probe.py --gadget /opt/dnf/vipai86/frida/frida.so --shim /opt/dnf/compat/i386/libfrida-compat.so --probe /opt/dnf/audit/frida-probe > /opt/dnf/audit/frida-start-proof.txt
+RUN python3 /opt/dnf/ubuntu/prepare_image.py \
+ && python3 /opt/dnf/ubuntu/tss_config.py
+COPY vipai86-pvf/Script.pvf /opt/dnf/pvf/Script.pvf
+RUN echo '2e65c17d075afec73203ba8f2bc9f5508f3b44706300f4ae7f9c13b5e0687fc5  /opt/dnf/pvf/Script.pvf' | sha256sum -c -
+WORKDIR /root
+HEALTHCHECK --interval=30s --timeout=10s --start-period=180s --retries=3 CMD ["python3", "/opt/dnf/ubuntu/health.py"]
+ENTRYPOINT ["/bin/bash", "/opt/dnf/ubuntu/entrypoint.sh"]

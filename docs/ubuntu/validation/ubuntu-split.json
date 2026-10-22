@@ -1,0 +1,60 @@
+{
+  "started_at": "2026-10-16T17:44:35",
+  "mode": "split",
+  "checks": [
+    "Ubuntu24; no Python2, database server or VPN binaries",
+    "Invalid role, missing database and nonempty VPN credential fail before startup",
+    "Wrong password fails before creating game schemas",
+    "P2P starts before delayed CORE, remains unready, then registers automatically",
+    "Fresh schema, repaired seed, new query insert and both monthly tables",
+    "Pinned netcat implementation exchanges legacy relay registration with acknowledgment",
+    "Nonlocal advertised IPv4 binds successfully; CORE routes target actual GAME nodes",
+    "Current-run five countries and real PIDs/ports stable",
+    "Single channel kill and database outage recover with readiness transitions",
+    "Three stop/start cycles preserve database sentinel, admin and RSA pair",
+    "Raw game and backend logs contain no configured plaintext or encrypted DB credentials"
+  ],
+  "status": "passed",
+  "real_windows_client": "NOT TESTED: registration, gameplay, party, automatic update",
+  "images": {
+    "dnf-game:ubuntu24-v1": "sha256:90edebbc8aa919681c7f5a8a79081e99bfb6bba1fb2f81aaa502ecc7231f9c3f",
+    "dnf-admin:local-fix-20261015": "sha256:46ae9003db8b1e6131900e13c71d11c652fb009b63ab7e237ca9b8a1297003f4"
+  },
+  "mysql_version": "5.6.51",
+  "startup_seconds": 111,
+  "stable_seconds": 1800,
+  "resources": [
+    "dnf-ubuntu-test-812b5df3-core 550.1MiB / 10GiB 8.05%",
+    "dnf-ubuntu-test-812b5df3-p2p 259.8MiB / 10GiB 0.05%",
+    "dnf-ubuntu-test-812b5df3-game 1.728GiB / 10GiB 2.92%",
+    "dnf-ubuntu-test-812b5df3-admin 338.5MiB / 10GiB 0.09%",
+    "dnf-ubuntu-test-812b5df3-mysql 485.8MiB / 10GiB 0.11%"
+  ],
+  "image_bytes": {
+    "dnf-game:ubuntu24-v1": 282248517,
+    "dnf-admin:local-fix-20261015": 199959853
+  },
+  "container_restarts": {
+    "dnf-ubuntu-test-812b5df3-core": 0,
+    "dnf-ubuntu-test-812b5df3-p2p": 0,
+    "dnf-ubuntu-test-812b5df3-game": 0
+  },
+  "finished_at": "2026-10-16T18:20:02",
+  "node_diagnostics": {
+    "dnf-ubuntu-test-812b5df3-core": {
+      "health_exit_code": 0,
+      "health_output": "",
+      "supervisor": "core:auction                     RUNNING   pid 547, uptime 0:00:38\ncore:bridge                      RUNNING   pid 322, uptime 0:00:48\ncore:channel                     RUNNING   pid 388, uptime 0:00:45\ncore:community                   RUNNING   pid 703, uptime 0:00:32\ncore:coserver                    RUNNING   pid 657, uptime 0:00:33\ncore:daily_job                   RUNNING   pid 229, uptime 0:00:52\ncore:dbmw_guild                  RUNNING   pid 418, uptime 0:00:44\ncore:dbmw_mnt                    RUNNING   pid 459, uptime 0:00:42\ncore:dbmw_stat                   RUNNING   pid 500, uptime 0:00:40\ncore:guild                       RUNNING   pid 596, uptime 0:00:36\ncore:manager                     RUNNING   pid 293, uptime 0:00:50\ncore:monitor                     RUNNING   pid 270, uptime 0:00:51\ncore:point                       RUNNING   pid 570, uptime 0:00:37\ncore:relay_config_server         RUNNING   pid 227, uptime 0:00:53\ncore:statics                     RUNNING   pid 622, uptime 0:00:35\nmonitor_ip                       EXITED    Oct 16 06:19 PM\nmysql_proxy:main_mysql_proxy     RUNNING   pid 215, uptime 0:00:56\nmysql_proxy:sg_mysql_proxy       RUNNING   pid 218, uptime 0:00:55\nstarter                          EXITED    Oct 16 06:19 PM\ntongyi_gate                      RUNNING   pid 349, uptime 0:00:47\n"
+    },
+    "dnf-ubuntu-test-812b5df3-p2p": {
+      "health_exit_code": 0,
+      "health_output": "",
+      "supervisor": "monitor_ip                       EXITED    Oct 16 06:19 PM\np2p:relay                        RUNNING   pid 56, uptime 0:00:57\np2p:relay_config_client          RUNNING   pid 57, uptime 0:00:57\np2p:stun                         RUNNING   pid 55, uptime 0:00:57\nstarter                          EXITED    Oct 16 06:19 PM\n"
+    },
+    "dnf-ubuntu-test-812b5df3-game": {
+      "health_exit_code": 0,
+      "health_output": "",
+      "supervisor": "game:game_siroco11               RUNNING   pid 155, uptime 0:00:48\ngame:game_siroco52               RUNNING   pid 156, uptime 0:00:48\nmonitor_ip                       EXITED    Oct 16 06:19 PM\nmysql_proxy:main_mysql_proxy     RUNNING   pid 136, uptime 0:00:52\nmysql_proxy:sg_mysql_proxy       RUNNING   pid 139, uptime 0:00:51\nstarter                          EXITED    Oct 16 06:19 PM\ntss:gunnersvr                    RUNNING   pid 99, uptime 0:00:58\ntss:zergsvr                      RUNNING   pid 122, uptime 0:00:54\ntss:zergsvr_secagent             RUNNING   pid 111, uptime 0:00:56\n"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+name: dnf-ubuntu-core
+services:
+  core:
+    extends: {file: ../../shared/common.yaml, service: game-base}
+    volumes:
+      - ${RUNTIME_ROOT:-./runtime}/core/data:/data
+      - ${RUNTIME_ROOT:-./runtime}/core/log:/home/neople/game/log
+    environment:
+      SERVER_TYPE: CORE
+      CORE_PUBLIC_IP: 127.0.0.1
+      MAIN_BRIDGE_IP: 127.0.0.1
+      MAIN_MYSQL_GAME_ALLOW_IP: ${GAME_DB_ALLOW_IP:?Set a database source IPv4 pattern covering CORE and all GAME nodes}
+      MYSQL_GAME_ALLOW_IP: ${GAME_DB_ALLOW_IP:?Set a database source IPv4 pattern covering CORE and all GAME nodes}
+      GAME_CHANNEL_HOSTS: ${GAME_CHANNEL_HOSTS:?Map each channel to its reachable GAME node IPv4}
+    ports:
+      - "7001:7001/tcp"
+      - "7001:7001/udp"
+      # Only reachable from trusted GAME/P2P nodes; NODE_BIND_IP is host private IP.
+      - "${NODE_BIND_IP:?Set CORE host private IPv4}:7000:7000/tcp"
+      - "${NODE_BIND_IP}:7000:7000/udp"
+      - "${NODE_BIND_IP}:5003:5003/tcp"
+      - "${NODE_BIND_IP}:33303:33303/tcp"
+      - "${NODE_BIND_IP}:33303:33303/udp"
+      - "${NODE_BIND_IP}:33403:33403/tcp"
+      - "${NODE_BIND_IP}:33403:33403/udp"
+      - "${NODE_BIND_IP}:33503:33503/udp"
+      - "${NODE_BIND_IP}:33703:33703/udp"
+      - "${NODE_BIND_IP}:33803:33803/tcp"
+      - "${NODE_BIND_IP}:33803:33803/udp"
+      - "${NODE_BIND_IP}:33603:33603/tcp"
+      - "${NODE_BIND_IP}:33603:33603/udp"
+      - "${NODE_BIND_IP}:33100:33100/tcp"
+  admin:
+    extends: {file: ../../../shared/admin.yaml, service: admin-base}
+    volumes:
+      - ${RUNTIME_ROOT:-./runtime}/admin/data:/app/data
+    depends_on:
+      core: {condition: service_healthy}

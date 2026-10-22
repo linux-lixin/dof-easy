@@ -1,0 +1,21 @@
+{
+  "source_commit": "f10f04d81cbab998e502bff638a2fb16d4d23027",
+  "images": {
+    "dnf-game:ubuntu24-v1": "sha256:90edebbc8aa919681c7f5a8a79081e99bfb6bba1fb2f81aaa502ecc7231f9c3f",
+    "dnf-game:ubuntu24-clean-clone": "sha256:ab2577316244432cc5c9daa2e55c0de981b3af0d3785ead2be8207736881c84e"
+  },
+  "runtime_file_count": 592,
+  "differences": [
+    "/opt/dnf/compat/amd64/libcrypto.so.6"
+  ],
+  "scope": "prepared Ubuntu runtime, private compat libraries, shared templates, Supervisor and mysql wrapper; audit ASLR reports excluded",
+  "libcrypto_comparison": {
+    "test_only_strings": [
+      "Fri Oct 16 16:17:43 CST 2026"
+    ],
+    "clone_only_strings": [
+      "Fri Oct 16 17:09:20 CST 2026"
+    ],
+    "both_objdump_sha256": "3586f5a546bef03ee8cd0ad8bbfe4e784f4fd0ea047844aa959a5cc30274befa"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "image_id": "sha256:90edebbc8aa919681c7f5a8a79081e99bfb6bba1fb2f81aaa502ecc7231f9c3f",
+  "method": "docker image inspect immutable ID; docker create; docker cp /opt/dnf/audit; SHA256 byte comparison; docker rm (export container never started)",
+  "refreshed_report": "All seven embedded artifacts are byte-for-byte unchanged from the prior 9b3aaa image after excluding host Python caches. A fresh runtime inventory differs only by image ID and ASLR addresses; package versions, ELF hashes, dependency paths and library hashes are unchanged.",
+  "inventory_result": "29 ELF files; 24 resolved library paths; zero not-found or undefined-symbol entries",
+  "files": [
+    {
+      "image_path": "/opt/dnf/audit/elf-report.json",
+      "saved_path": "image-elf-report.json",
+      "sha256": "3d809e5a55cf14c9859d8d4b7e8aafda1835e045aa72b7a19ce98e15638ad618",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/compat-report.json",
+      "saved_path": "image-compat-report.json",
+      "sha256": "973d3f2df16e89cd1c897fda89a2fd1778d28b78e78a788cbe9ba0790df88c58",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/gate-start-proof.json",
+      "saved_path": "image-gate-start-proof.json",
+      "sha256": "4754fd6fedb1fcc6e4e95760dc7f3b22bb684074ea8f0d7ed42ec5a859aaa5cc",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/packages.tsv",
+      "saved_path": "image-packages.tsv",
+      "sha256": "bb78e1bd9333d42473090c0366b0e16be17b283bbd5927b610ed6ae137803c00",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/geoip-start-proof.txt",
+      "saved_path": "image-geoip-start-proof.txt",
+      "sha256": "7dd7cd9a18744eea5a3d0e4485a51c46841766329cc982282b29186e609104ae",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/shm-start-proof.txt",
+      "saved_path": "image-shm-start-proof.txt",
+      "sha256": "6882718bfb252c74a8768c5fe4fbdcbf7d8528baf8b0f64305f8c287621f81a4",
+      "exact_match": true
+    },
+    {
+      "image_path": "/opt/dnf/audit/compat-lock.json",
+      "saved_path": "../compat-lock.json",
+      "sha256": "36ded4d0f02f21f9b4e637a19f3be31b457527784728e81b25bd2c433cac252a",
+      "exact_match": true
+    }
+  ]
+}

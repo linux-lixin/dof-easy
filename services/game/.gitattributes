@@ -1,0 +1,19 @@
+
+# Deployment entrypoints must remain executable by Linux shells.
+*.sh text eol=lf
+
+Dockerfile text eol=lf
+
+*.repo text eol=lf
+
+.dockerignore text eol=lf
+
+# Ubuntu configuration materialized from the verified image.
+/assets/etc/supervisord.conf text eol=lf
+/assets/etc/supervisor/conf.d/*.conf text eol=lf
+/assets/etc/supervisor/conf.d/*.template text eol=lf
+/assets/home/template/neople/auction/cfg/server.cfg text eol=lf
+/assets/home/template/neople/point/cfg/server.cfg text eol=lf
+/runtime/ubuntu/mysql text eol=lf
+/runtime/ubuntu/startup_notice.conf text eol=lf
+/docker/ubuntu/Dockerfile.dockerignore text eol=lf

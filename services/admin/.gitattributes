@@ -1,0 +1,11 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Deployment entrypoints must remain executable by Linux shells.
+*.sh text eol=lf
+
+Dockerfile text eol=lf
+
+*.repo text eol=lf
+
+.dockerignore text eol=lf

@@ -1,0 +1,6 @@
+name: dnf-ubuntu-admin
+services:
+  admin:
+    extends: {file: ../../../shared/admin.yaml, service: admin-base}
+    volumes:
+      - ${RUNTIME_ROOT:-./runtime}/admin/data:/app/data
