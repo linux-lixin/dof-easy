@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <a exe="df_game_r">
+        <script><![CDATA[/dp2/df_game_r.lua]]></script>
+        <plugin><![CDATA[/dp2/lib/libdp2game.so]]></plugin>
+    </a>
+</root>

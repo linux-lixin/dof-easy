@@ -9,13 +9,6 @@
       "executable": false
     },
     {
-      "path": "services/game/assets/home/template/init/Script.tgz",
-      "bytes": 100605091,
-      "sha256": "dfad7847225c167ed2d0f9ef0a3c2fbb28318437668a09e63a9162f658c7503d",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/Script.tgz",
-      "executable": false
-    },
-    {
       "path": "services/game/assets/home/template/init/bridge_hook.so",
       "bytes": 390624,
       "sha256": "6e64b056c3e4dc374998dffff86a984a8b25377d69326ad271dd20d65f21b61f",
@@ -27,13 +20,6 @@
       "bytes": 390624,
       "sha256": "3a2405104f8ed44200947025802142e619265a3709a471b4b4df196287c7965b",
       "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/channel_hook.so",
-      "executable": true
-    },
-    {
-      "path": "services/game/assets/home/template/init/df_game_r",
-      "bytes": 36360954,
-      "sha256": "dd0ae672b1dce3ff9c6c403beaec71b3ef666b14deb567d4cab0da99d8711f9e",
-      "url": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/init/df_game_r",
       "executable": true
     },
     {

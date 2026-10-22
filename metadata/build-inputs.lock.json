@@ -1,52 +1,11 @@
 {
-  "inputs": [
-    {
-      "id": "server_files__Server20230919.tar.gz",
-      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/server_files__Server20230919.tar.gz",
-      "size": 56344126,
-      "sha256": "27874716501c530bd0301800870177852c305f9ccb7f5e3a0800b6399b54c516"
-    },
-    {
-      "id": "df_game_r_files__unnotice86.tar.gz",
-      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/df_game_r_files__unnotice86.tar.gz",
-      "size": 10593793,
-      "sha256": "2defff18548cb100aa8030e24cb79790e4494aef9d068c68c9e57dbb0ff746ad"
-    },
-    {
-      "id": "mysql_files__dnfsql_5.6.51_20230919.sql",
-      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/mysql_files__dnfsql_5.6.51_20230919.sql",
-      "size": 800864,
-      "sha256": "a8be8fa742f8c4e3f1a87c8ec18aac03493395174755950b170481764a03beb8"
-    },
-    {
-      "id": "dp2frida__dp2.tar.gz",
-      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/dp2frida__dp2.tar.gz",
-      "size": 6669544,
-      "sha256": "26065e133d203c12acfedd2fff33a6e92ba7bc1e0b86049f7a38bfadab36f188"
-    },
-    {
-      "id": "dp2frida__frida.tar.gz",
-      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/dp2frida__frida.tar.gz",
-      "size": 8442355,
-      "sha256": "4bd4c3ea8e38a3ff128edb3685eabfa5c4528cc654c80298a043d3122f188f23"
-    },
-    {
-      "id": "dof-60d58715.tar.gz",
-      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/dof-60d58715.tar.gz",
-      "size": 217483443,
-      "sha256": "877bde7e596835d3c8f5d0f9f21ba03e38630e0f0d7a40fdf867cf62c94eddbe"
-    }
-  ],
-  "upstream_assets": [
+  "schema": 1,
+  "storage": "git",
+  "files": [
     {
       "path": "services/game/assets/TeaEncrypt",
       "bytes": 12984,
       "sha256": "97713ee8f75e172cbdee796acae54b2c760362c8ec9df4b0c5cbff755053ab7a"
-    },
-    {
-      "path": "services/game/assets/home/template/init/Script.tgz",
-      "bytes": 100605091,
-      "sha256": "dfad7847225c167ed2d0f9ef0a3c2fbb28318437668a09e63a9162f658c7503d"
     },
     {
       "path": "services/game/assets/home/template/init/bridge_hook.so",
@@ -57,11 +16,6 @@
       "path": "services/game/assets/home/template/init/channel_hook.so",
       "bytes": 390624,
       "sha256": "3a2405104f8ed44200947025802142e619265a3709a471b4b4df196287c7965b"
-    },
-    {
-      "path": "services/game/assets/home/template/init/df_game_r",
-      "bytes": 36360954,
-      "sha256": "dd0ae672b1dce3ff9c6c403beaec71b3ef666b14deb567d4cab0da99d8711f9e"
     },
     {
       "path": "services/game/assets/home/template/init/init_sql.tgz",
@@ -2007,6 +1961,166 @@
       "path": "services/game/assets/home/template/neople/stun/df_stun_r",
       "bytes": 131126,
       "sha256": "63d94ee108d3f0b2f0f6aa433a2b97c96438da66447117b66d106750efb97528"
+    },
+    {
+      "path": "services/game/plugin-assets/archive/dp2-pvf-patch.zip",
+      "bytes": 6634,
+      "sha256": "101e65b3f4e08e4567829b5bbd98568fca90ba4359721ed4b35b00a1bd14b4c1"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/df_game_r.lua",
+      "bytes": 7575,
+      "sha256": "e3366b49b25f21dde5de361118c15dfe7c217e973f2cab02ca9de7ed49c4d039"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lib/libdp2game.so",
+      "bytes": 2878856,
+      "sha256": "2185779b76890e360c8ef1ed9a9c766504d957c95ccf11c1b594ae2244e896c3"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/libdp2.so",
+      "bytes": 1713522,
+      "sha256": "e8567f40573450ff56aaf46718ea134ccf48fc01001c7206d11dc375fc8bba78"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/libdp2.xml",
+      "bytes": 212,
+      "sha256": "088c052aa5db403a02edbd68b2dc755b3ee27200d691cc94d7bf4175074dde51"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/libdp2pre.so",
+      "bytes": 3448,
+      "sha256": "edaddd5c2176d116c5df9a937b7cce6b87361a0cf29834e149349d2d4ef277cf"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/libGeoIP.so.1",
+      "bytes": 431408,
+      "sha256": "bd666d8ba4b231aaddfde7a282fe69403bc0ac00dc9bac88e06286614f194809"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/demo/work.lua",
+      "bytes": 741,
+      "sha256": "dc8a839474a364b3d681ee2d5bfb3311a1163d1bb05c4590f909074f47b08b2b"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/df/game/report.lua",
+      "bytes": 189,
+      "sha256": "b074b6bc9ed03cdbd80032c8785569b3cf51a6fd3342ddf5c9f4dbb0e80a8810"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/df/game/symbols.lua",
+      "bytes": 22535240,
+      "sha256": "1fcf4cc0c3cab17d4f4a91ad6a2fd8e0f78e6250aaa7b0a875ec85f4cec659cf"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/df/game.lua",
+      "bytes": 17539,
+      "sha256": "874bc0fe7f867320c94ae86c6f39c02a8ef91e02c690d616340359aa5cd4dac2"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/json.lua",
+      "bytes": 10026,
+      "sha256": "23031288e528880354d3d4651a9dc299b4c85e28889d9f5ae1dcca76b3cdc8b1"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/ltn12.lua",
+      "bytes": 8872,
+      "sha256": "f8ebb246919c73c9fe1c12a0a8fb0f1124835a0bd56a55df02163f96d664f795"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/mime.lua",
+      "bytes": 2463,
+      "sha256": "922ca4eb2baf9e24fdf6177027bca8e569563608748d1d658a20d7bfa2fd3c2a"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/msgpack.lua",
+      "bytes": 19119,
+      "sha256": "85a9296796e7d32ba44d9f6f9b62966bc4d41018f808271be705c07e1dd1dce2"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/socket/ftp.lua",
+      "bytes": 10640,
+      "sha256": "f874ae11becdef5ad36488a2b2e7eb330443212be37d8170536938c9caf83f64"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/socket/headers.lua",
+      "bytes": 3698,
+      "sha256": "aecff8c2d99d77a6473269367d5b085ad0db189d9699c2f47dcb97ae5ad348df"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/socket/http.lua",
+      "bytes": 16598,
+      "sha256": "2dd5dff5b567aea3f95c575ad46b3aafc077a5e46e6d4a6b57c54bc7388972ad"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/socket/smtp.lua",
+      "bytes": 8074,
+      "sha256": "55bdeff392dffc381b1487b6e9493a7aadb52f851f78ec29316decf50d88df58"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/socket/tp.lua",
+      "bytes": 3766,
+      "sha256": "3ab4f0fc85807c1b1c0b329ff82c74f8dccf9b2a0eac4f2571956641e890c149"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/socket/url.lua",
+      "bytes": 11675,
+      "sha256": "50c742a3e7b9989e3b2502e81845e4818360ae3d648895a8875cc14008436ab7"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/lua/socket.lua",
+      "bytes": 4448,
+      "sha256": "a92ae132ce092dc5b8e164ccbc7c737f987b8bbbd481b531db9b64d6c2be4e11"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/script/covert_at_swordman.sh",
+      "bytes": 473,
+      "sha256": "0db69cc1c96762b4699b8e9eb1f793e6709fa86c7d5f323d8c277fc063601b33"
+    },
+    {
+      "path": "services/game/plugin-assets/dp2/script/delete_creature_item.sh",
+      "bytes": 498,
+      "sha256": "81ab0fef1d96dc612cebccc9e9b56f710fe750d8b407f89a8479ff0201a536a8"
+    },
+    {
+      "path": "services/game/plugin-assets/frida/frida.config",
+      "bytes": 118,
+      "sha256": "ff4310a81a5695dd40ca098af6876242539e8aaffc5a57463b380fdf868c296f"
+    },
+    {
+      "path": "services/game/plugin-assets/frida/frida.js",
+      "bytes": 284009,
+      "sha256": "3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d"
+    },
+    {
+      "path": "services/game/plugin-assets/frida/frida.so",
+      "bytes": 22631136,
+      "sha256": "669c0d4e13a50b2e114663d22cc5e6fc876303fffb2b685ecc48a47cb74b984a"
+    },
+    {
+      "path": "services/game/plugin-assets/frida/frida_config.json",
+      "bytes": 243,
+      "sha256": "89b1855ec9440f19cfb76b3eb5111586c4845e73247c53255e85f522400e697f"
+    },
+    {
+      "path": "services/game/plugin-assets/manifest.json",
+      "bytes": 9248,
+      "sha256": "9917077954343dd1fd67b86b289225a91c1fbbf0d61cff615b954a283100bc87"
+    },
+    {
+      "path": "services/game/plugin-assets/seed/vipai.sql",
+      "bytes": 800864,
+      "sha256": "a8be8fa742f8c4e3f1a87c8ec18aac03493395174755950b170481764a03beb8"
+    },
+    {
+      "path": "deploy/vipai86/db/vipai.sql",
+      "bytes": 800750,
+      "sha256": "e634a80f09968fd65891fb78f06ae60cb5288414f92020a3e40fdb60a9846312"
+    },
+    {
+      "path": "deploy/vipai86/db/compat-tables.sql",
+      "bytes": 3914,
+      "sha256": "9ad42e7171c7149691e35b0cc1585e046b32e849ab6af3bd66a7164f0a315aba"
     }
   ]
 }

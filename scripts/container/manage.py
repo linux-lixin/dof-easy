@@ -31,7 +31,7 @@ def module(name, relative):
     return value
 
 
-source = module('dof_source', 'scripts/vipai86/prepare_source.py')
+source = module('dof_source', 'scripts/container/resources.py')
 runtime_config = module('dof_config', 'services/game/runtime/ubuntu/config.py')
 
 
@@ -83,10 +83,7 @@ def extract_game(archive, target, row):
 
 
 def prepare(resources, offline=False):
-    command = [sys.executable, ROOT / 'scripts/vipai86/prepare_source.py', '--generic', '--resources', resources]
-    if not offline:
-        command.append('--download')
-    run(command)
+    run([sys.executable, ROOT / 'scripts/container/resources.py'])
 
 
 def build():
@@ -313,7 +310,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description='通用一键容器端：资源下载、构建、数据库、密钥、启动一次完成。')
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('versions', help='列出原安装器支持的等级')
-    resources = sub.add_parser('resources', help='下载并校验全部等级及共享资源')
+    resources = sub.add_parser('resources', help='下载全部等级包并校验仓库内公共资源')
     resources.add_argument('--resources', type=Path, default=STATE / 'resources')
     for command in ('install', 'start', 'stop', 'restart', 'status', 'logs', 'backup', 'config'):
         p = sub.add_parser(command)
@@ -348,10 +345,10 @@ def main(argv=None):
         print('默认 70；可选：' + ', '.join(map(str, catalog())))
         return 0
     if args.command == 'resources':
+        prepare(args.resources)
         for row in catalog().values():
             fetch(row, args.resources)
-        prepare(args.resources)
-        print('全部资源已归档：' + str(args.resources.resolve()))
+        print('全部等级包已归档；公共构建输入随代码提供：' + str(args.resources.resolve()))
         return 0
     root = instance_path(args.instance)
     STATE.mkdir(parents=True, exist_ok=True)

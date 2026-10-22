@@ -2,7 +2,7 @@
 
 在仓库根目录使用 Python 3.9 或更新版本。不要对整个 `tests` 递归执行 discovery：集成脚本有独立参数和容器生命周期，必须显式调用。
 
-从 dof-easy 源码检出后，先运行 `python scripts/vipai86/prepare_source.py` 恢复固定摘要资源。Frida 的两项原生测试还需要 Linux 的 `gcc-multilib`；没有 gcc 的精简运行镜像会跳过，镜像构建阶段仍执行原生 Frida 检查。历史结构检查针对上游通用部署布局，不能替代 `deploy/vipai86` 的部署验收。
+从 dof-easy 源码检出后，公共资源已齐全，可运行 `python scripts/container/resources.py` 离线校验，无需下载归档。Frida 的两项原生测试还需要 Linux 的 `gcc-multilib`；没有 gcc 的精简运行镜像会跳过，镜像构建阶段仍执行原生 Frida 检查。历史部署布局检查针对上游旧入口，不能替代根目录通用容器入口的验收。
 
 | 目录 | 范围 | 环境 |
 |---|---|---|

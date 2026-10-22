@@ -9,23 +9,41 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = importlib.util.spec_from_file_location('prepare_source', ROOT / 'scripts/vipai86/prepare_source.py')
+SPEC = importlib.util.spec_from_file_location('prepare_source', ROOT / 'scripts/container/resources.py')
 source = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(source)
 
 
 class SourcePreparation(unittest.TestCase):
-    def test_all_installation_inputs_use_the_pinned_release(self):
+    def test_only_level_packages_need_the_pinned_release(self):
         base = 'https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/'
-        seen = {}
-        for filename, key in [('vipai86-inputs.lock.json', 'inputs'), ('levels.lock.json', 'levels')]:
-            lock = json.loads((ROOT / 'metadata' / filename).read_text(encoding='utf-8'))
-            for row in lock[key]:
-                self.assertEqual(row['url'], base + row['id'])
-                if row['id'] in seen:
-                    self.assertEqual(seen[row['id']], (row['size'], row['sha256']))
-                seen[row['id']] = (row['size'], row['sha256'])
-        self.assertEqual(len(seen), 18)
+        rows = json.loads((ROOT / 'metadata/levels.lock.json').read_text())['levels']
+        self.assertEqual(len(rows), 13)
+        for row in rows:
+            self.assertEqual(row['url'], base + row['id'])
+        self.assertFalse((ROOT / 'metadata/vipai86-inputs.lock.json').exists())
+
+    def test_shared_build_inputs_are_available_without_network(self):
+        with patch('urllib.request.urlopen', side_effect=AssertionError('Unexpected network access')):
+            self.assertEqual(source.verify_build_inputs(), 424)
+
+    def test_missing_or_changed_repo_input_is_rejected_without_restore(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(source, 'ROOT', Path(directory)):
+            root = Path(directory)
+            (root / 'metadata').mkdir()
+            lock = {'schema': 1, 'storage': 'git', 'files': [dict(self.row(b'valid'), path='asset')]}
+            (root / 'metadata/build-inputs.lock.json').write_text(json.dumps(lock))
+            with self.assertRaisesRegex(ValueError, 'Missing/non-regular'):
+                source.verify_build_inputs()
+            target = root / 'asset'
+            target.write_bytes(b'wrong')
+            with self.assertRaisesRegex(ValueError, 'Hash/size mismatch'):
+                source.verify_build_inputs()
+            self.assertEqual(target.read_bytes(), b'wrong')
+
+    def test_published_plugin_has_no_static_database_password(self):
+        config = json.loads((ROOT / 'services/game/plugin-assets/frida/frida_config.json').read_text())
+        self.assertEqual(config['db_config']['password'], '')
 
     def row(self, data):
         return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}

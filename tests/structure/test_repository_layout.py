@@ -11,6 +11,16 @@ import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[2]
 
 class RepositoryLayout(unittest.TestCase):
+    def test_shared_build_inputs_are_tracked_and_levels_are_external(self):
+        tracked = set(subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT).decode('utf-8').split('\0'))
+        rows = json.loads((ROOT/'metadata/build-inputs.lock.json').read_text())['files']
+        for row in rows:
+            self.assertIn(row['path'], tracked)
+            self.assertLess(row['bytes'], 50 * 1024 * 1024)
+        self.assertNotIn('services/game/assets/home/template/init/Script.tgz', tracked)
+        self.assertNotIn('services/game/assets/home/template/init/df_game_r', tracked)
+        self.assertFalse(any(path.startswith('.dof-easy/') for path in tracked))
+
     def test_retired_runtime_components_are_absent(self):
         retired=('netbird','tailscale','tailscaled','DnfGateServer','GateRestart','GateStop',
                  'init_local_db.sh','gate.conf.template','netbird.conf','tailscale.conf',
@@ -25,7 +35,7 @@ class RepositoryLayout(unittest.TestCase):
 
     def test_locked_game_resources_match(self):
         records=json.loads((ROOT/'metadata/game-assets.lock.json').read_text(encoding='utf8'))['assets']
-        self.assertEqual(len(records),394)
+        self.assertEqual(len(records),392)
         for record in records:
             with self.subTest(path=record['path']):
                 path=ROOT/record['path']

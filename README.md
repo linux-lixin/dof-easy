@@ -14,7 +14,7 @@ cd dof-easy
 bash dof.sh
 ```
 
-在菜单输入等级、服务器 IPv4 和 PVF 路径，安装器会连续完成：**下载并校验资源 → 构建四个共享镜像 → 初始化数据库 → 生成独立密码和 RSA 密钥 → 安装所选插件 → 启动并等待游戏及后台就绪**。
+在菜单输入等级、服务器 IPv4 和 PVF 路径，安装器会连续完成：**校验仓库内公共资源、下载所选等级包 → 构建四个共享镜像 → 初始化数据库 → 生成独立密码和 RSA 密钥 → 安装所选插件 → 启动并等待游戏及后台就绪**。
 
 Windows 对应入口：
 
@@ -54,15 +54,17 @@ bash dof.sh versions
 
 ## 资源与离线部署
 
-安装默认从本仓库固定的 [resources-v1 Release](https://github.com/linux-lixin/dof-easy/releases/tag/resources-v1) 下载所选等级及公共构建输入，不再连接原网盘或上游源码下载源，也不回退到旧源。需要归档全部 13 个等级时：
+公共构建输入已经随 Git 提供：服务端公共文件、初始化 SQL、普通 DP2、Frida、Lua/JS 和配置模板都在仓库中。克隆后无需额外下载 Server、DP2、Frida 或整份 dof 源码归档；可直接构建共享镜像。
+
+只有等级程序从固定的 [resources-v1 Release](https://github.com/linux-lixin/dof-easy/releases/tag/resources-v1) 按需下载，每次安装约 10.6 MB，不访问原网盘或上游下载源。13 个等级解压后共约 473 MB，单个实例只用其中一个，因此不全部塞进每次 Git 检出。需要缓存全部等级时：
 
 ```sh
 bash dof.sh resources --resources /data/dof-resources
 ```
 
-已有缓存可以在安装时传 `--resources /data/dof-resources`。每个资源都按仓库内固定大小和 SHA-256 验证，解包不执行原安装脚本；不匹配时停止。清单见 [等级资源](metadata/levels.lock.json) 和 [公共构建输入](metadata/vipai86-inputs.lock.json)。PVF 必须自行提供，安装器不把任意一个 PVF 冒充所有等级的配套文件。
+已有缓存可以在安装时传 `--resources /data/dof-resources`。文件名和 SHA-256 未改变，旧缓存中的等级包仍可复用。仓库内公共输入和下载的等级包都验证大小及 SHA-256，不匹配时停止，不覆盖修改过的文件。清单见 [等级资源](metadata/levels.lock.json) 和 [仓库内构建输入](metadata/build-inputs.lock.json)。PVF 必须自行提供。
 
-Release 提供 18 个资源文件：13 个等级包、服务端基础包、SQL、普通 DP2、Frida，以及固定版本的 dof 构建输入归档，附 `resources-manifest.json` 和 `SHA256SUMS`。这些是锁定的原始输入；安装器解包时应用本仓库的上报禁用及运行配置修改。Release 不包含操作者提供的 PVF、实例数据或容器镜像。系统软件包、npm、Maven 和 Docker 基础镜像仍由各自依赖源提供。
+仓库直接维护禁用上报后的插件代码，Frida 配置没有固定数据库密码，运行时由实例注入。Release 中早期上传的五个公共归档保留供旧提交使用，当前入口不再引用。具体分配和维护规则见 [资源布局](docs/resource-layout.md)。系统软件包、npm、Maven 和 Docker 基础镜像仍由各自依赖源提供。
 
 离线安装可以在同一命令加 `--offline --images /data/dof-easy-images.tar --resources /data/dof-resources`，自动导入预构建的 `dof-easy-game/admin/db/netguard:local` 四个镜像后初始化启动。镜像已导入时可省略 `--images`。离线模式不访问下载源、不运行镜像构建；缺镜像或资源会报错并保留实例数据。联网源码构建还需要访问系统软件、npm、Maven 的依赖源。
 
@@ -73,7 +75,7 @@ Release 提供 18 个资源文件：13 个等级包、服务端基础包、SQL�
 - 游戏只能连接内部数据库并回复客户端，其他主动外联由独立 netguard 容器阻止。没有宿主机网络模式，不改宿主机防火墙，不公开数据库 3306。
 - 初次建库将后台等级设置为所选版本；改 IP 同步修改后台客户端配置。后台已有其他设置和插件 Lua/JS 保留。
 
-代码和构建输入保持分离：Git 不包含 PVF、第三方游戏/插件二进制、运行数据、密码或私钥。部分共享实现仍保留在 `deploy/vipai86`、`scripts/vipai86` 下以兼容早期代码；**当前入口是根目录 `dof.sh` / `dof.ps1`，不是旧的手动 86 级部署步骤**。
+Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。部分共享实现仍保留在 `deploy/vipai86`、`scripts/vipai86` 下以兼容早期代码；**当前入口是根目录 `dof.sh` / `dof.ps1`，不是旧的手动 86 级部署步骤**。
 
 ## 验证与来源
 

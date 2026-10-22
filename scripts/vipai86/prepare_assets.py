@@ -176,6 +176,10 @@ def import_archive(source, archive, stage, records, excluded):
                 data = REPORT_STUB
             elif relative in ('dp2/script/delete_creature_item.sh', 'dp2/script/covert_at_swordman.sh'):
                 data = shell_helper(PurePosixPath(relative).name)
+            elif relative == 'frida/frida_config.json':
+                config = json.loads(data)
+                config['db_config'] = {'account': 'game', 'password': ''}
+                data = (json.dumps(config, indent=2, ensure_ascii=True) + '\n').encode('utf-8')
             put_file(stage, relative, data, records, archive, name, original_hash)
 
 
@@ -218,7 +222,8 @@ def prepare(source, output, include_server=False, plugins_only=False):
                     'excluded': sorted(excluded, key=lambda row: (row['source'], row['member'])),
                     'changes': ['DP2 report.create/send/close replaced with no-network no-op',
                                 'DP2 SQL helpers validate numeric arguments and use runtime MYSQL_PWD',
-                                'Historical logs omitted; PVF ZIP kept as an unapplied archive'],
+                                'Historical logs omitted; PVF ZIP kept as an unapplied archive',
+                                'Frida database password removed from template; supplied per instance at runtime'],
                     'runtime_requirements': ['Render frida_config.json db_config from runtime secrets',
                                              'Validate game, DP2 and Frida fixed-address ABI together before enabling hooks',
                                              'Binary code has not been executed or exhaustively audited']}

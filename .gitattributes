@@ -411,3 +411,8 @@ Dockerfile text eol=lf
 "/services/game/assets/home/template/neople/secsvr/zergsvr/zergsvr" binary
 "/services/game/assets/home/template/neople/statics/df_statics_r" binary
 "/services/game/assets/home/template/neople/stun/df_stun_r" binary
+
+# Keep imported plugin data and legacy encodings byte-exact on Windows.
+/services/game/plugin-assets/** -text -whitespace
+/services/game/plugin-assets/**/*.so binary
+/services/game/plugin-assets/dp2/lua/df/game/symbols.lua binary
