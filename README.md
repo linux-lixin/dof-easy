@@ -11,14 +11,18 @@
 ```sh
 git clone https://github.com/linux-lixin/dof-easy.git
 cd dof-easy
+bash dof.sh images --registry registry.example.com/your-project --tag v1
 bash dof.sh
 ```
 
-在菜单输入等级、服务器 IPv4 和 PVF 路径，安装器会连续完成：**校验仓库内公共资源、下载所选等级包 → 构建四个共享镜像 → 初始化数据库 → 生成独立密码和 RSA 密钥 → 安装所选插件 → 启动并等待游戏及后台就绪**。
+先将示例仓库替换为你上传镜像的地址及命名空间。私有仓库先执行 `docker login 仓库域名`，凭据由 Docker 管理。配置保存在本机 `.dof-easy/images.json`，不会提交 Git。
+
+在菜单输入等级、服务器 IPv4 和 PVF 路径，安装器会连续完成：**拉取四个镜像、下载所选等级包 → 初始化数据库 → 生成独立密码和 RSA 密钥 → 安装所选插件 → 启动并等待游戏及后台就绪**。默认不从源码构建；仓库未配置或拉取失败会报错，不自动回退构建。
 
 Windows 对应入口：
 
 ```powershell
+.\dof.ps1 images --registry registry.example.com/your-project --tag v1
 .\dof.ps1
 ```
 
@@ -26,6 +30,8 @@ Windows 对应入口：
 
 ```sh
 bash dof.sh install --level 70 --ip 192.168.1.100 --pvf /data/Script.pvf --plugins dp2-frida
+# 也可在同一条安装命令中指定，省略前面的 images 配置步骤：
+# bash dof.sh install --registry registry.example.com/your-project --tag v1 --ip 192.168.1.100 --pvf /data/Script.pvf
 # 86 只是同一入口的一个选项：
 # bash dof.sh install --instance my86 --level 86 --ip 192.168.1.100 --pvf /data/86/Script.pvf
 ```
@@ -33,6 +39,8 @@ bash dof.sh install --level 70 --ip 192.168.1.100 --pvf /data/Script.pvf --plugi
 默认频道 `15,52`，可以用 `--channels "11,12,52"` 指定（PowerShell 中须保留引号）；端口映射和容器防火墙同步生成。默认监听 `0.0.0.0`，本机测试可加 `--bind 127.0.0.1`。`--admin-port` 默认 `18080`。`--ip` 填客户端实际能访问的服务器 IPv4。
 
 安装结束会显示后台地址和密码文件位置。管理员账号 `admin`，密码在 `.dof-easy/instances/main/.env` 的 `ADMIN_PASSWORD`。登录器公钥和地址配置示例自动导出到该实例的 `client/`。将 [dof 登录器](clients/launcher/README.md) 放进配套客户端目录，使用自己的后台地址；公网部署使用自己的 HTTPS 入口。
+
+四个镜像名固定为 `仓库/命名空间/dof-easy-db:标签`、`dof-easy-admin:标签`、`dof-easy-game:标签`、`dof-easy-netguard:标签`，均为 Linux amd64，使用同一版本标签。源码构建及上传命名示例见 [镜像仓库配置](docs/image-registry.md)。
 
 ## 日常管理
 
@@ -50,11 +58,13 @@ bash dof.sh versions
 
 以上命令都可加 `--instance 名称`，默认 `main`。停止、重启和重跑安装不会清库、换密码或覆盖插件脚本。已有实例不允许用 `install --level` 改成另一版本；用新实例名创建新服，原实例保留。相同宿主机监听地址下的游戏端口不能被两个实例同时占用，切换前先停止旧实例。
 
+实例保存自己的镜像地址及标签；修改全局配置不会改变已有实例。`start`、`restart` 和备份均使用该实例的镜像，不拉取、不构建。需要更换已上传的镜像版本时运行 `bash dof.sh install --instance main --tag v2`，四个镜像全部获取成功后才更新实例配置并启动。
+
 备份会短暂停止写入服务，将 SQL、PVF、密钥、配置、插件和日志打包到本机 `.dof-easy/backups/`，然后恢复原先运行的服务。备份包含密码和私钥，不要提交 Git。
 
 ## 资源与离线部署
 
-公共构建输入已经随 Git 提供：服务端公共文件、初始化 SQL、普通 DP2、Frida、Lua/JS 和配置模板都在仓库中。克隆后无需额外下载 Server、DP2、Frida 或整份 dof 源码归档；可直接构建共享镜像。
+公共构建输入已经随 Git 提供：服务端公共文件、初始化 SQL、普通 DP2、Frida、Lua/JS 和配置模板都在仓库中。需要自己构建时显式运行 `bash dof.sh build`（只构建，不安装或上传），或在安装命令加 `--build`。普通安装直接拉取成品镜像，不检查或编译这些构建输入。
 
 只有等级程序从固定的 [resources-v1 Release](https://github.com/linux-lixin/dof-easy/releases/tag/resources-v1) 按需下载，每次安装约 10.6 MB，不访问原网盘或上游下载源。13 个等级解压后共约 473 MB，单个实例只用其中一个，因此不全部塞进每次 Git 检出。需要缓存全部等级时：
 
@@ -66,7 +76,7 @@ bash dof.sh resources --resources /data/dof-resources
 
 仓库直接维护禁用上报后的插件代码，Frida 配置没有固定数据库密码，运行时由实例注入。Release 中早期上传的五个公共归档保留供旧提交使用，当前入口不再引用。具体分配和维护规则见 [资源布局](docs/resource-layout.md)。系统软件包、npm、Maven 和 Docker 基础镜像仍由各自依赖源提供。
 
-离线安装可以在同一命令加 `--offline --images /data/dof-easy-images.tar --resources /data/dof-resources`，自动导入预构建的 `dof-easy-game/admin/db/netguard:local` 四个镜像后初始化启动。镜像已导入时可省略 `--images`。离线模式不访问下载源、不运行镜像构建；缺镜像或资源会报错并保留实例数据。联网源码构建还需要访问系统软件、npm、Maven 的依赖源。
+离线安装可加 `--offline --images /data/dof-easy-images.tar --resources /data/dof-resources`，自动导入镜像后初始化启动。镜像名称须与所配置的仓库及标签一致，已经导入时可省略 `--images`。旧 `dof-easy-*:local` 归档可显式加 `--registry= --tag local` 使用。离线模式不下载、不拉取、不构建；与 `--build` 互斥。缺镜像或资源会报错并保留实例数据。只有源码构建需要系统软件、npm、Maven 等构建依赖源。
 
 ## 数据和行为
 

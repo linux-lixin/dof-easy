@@ -33,6 +33,7 @@ def module(name, relative):
 
 source = module('dof_source', 'scripts/container/resources.py')
 runtime_config = module('dof_config', 'services/game/runtime/ubuntu/config.py')
+image_config = module('dof_images', 'scripts/container/image_config.py')
 
 
 def catalog():
@@ -86,8 +87,9 @@ def prepare(resources, offline=False):
     run([sys.executable, ROOT / 'scripts/container/resources.py'])
 
 
-def build():
+def build(settings):
     # Docker reuses unchanged layers; all levels share these four images.
+    references = image_config.references(settings)
     for tag, context, dockerfile in (
         ('db', 'deploy/vipai86/db', 'Dockerfile'),
         ('admin', 'services/admin', 'docker/Dockerfile'),
@@ -95,7 +97,30 @@ def build():
         ('netguard', 'deploy/vipai86/netguard', 'Dockerfile'),
     ):
         print('构建共享镜像：' + tag, flush=True)
-        run(['docker', 'build', '-t', 'dof-easy-' + tag + ':local', '-f', ROOT / context / dockerfile, ROOT / context])
+        run(['docker', 'build', '-t', references[tag], '-f', ROOT / context / dockerfile, ROOT / context])
+
+
+def acquire_images(settings, mode, archive=None):
+    references = image_config.references(settings)
+    if mode == 'build':
+        prepare(None)
+        build(settings)
+    elif mode == 'pull':
+        for reference in references.values():
+            print('拉取镜像：' + reference, flush=True)
+            try:
+                run(['docker', 'pull', '--platform', 'linux/amd64', reference])
+            except subprocess.CalledProcessError as error:
+                raise ValueError('镜像拉取失败：' + reference + '；请检查地址、标签及 docker login。不会回退到源码构建。') from error
+    elif mode == 'offline':
+        if archive:
+            run(['docker', 'load', '-i', archive])
+    else:
+        raise ValueError('未知镜像获取方式。')
+    for reference in references.values():
+        result = run(['docker', 'image', 'inspect', '--format', '{{.Os}}/{{.Architecture}}', reference], capture_output=True, text=True)
+        if result.stdout.strip() != 'linux/amd64':
+            raise ValueError('镜像必须为 linux/amd64：' + reference)
 
 
 def write_json(path, data):
@@ -138,11 +163,13 @@ def ports_override(values):
     return {'services': {'netguard': {'ports': ports}}}
 
 
-def create_instance(root, args, row, archive):
+def create_instance(root, args, row, archive, image_settings=None):
     pvf = Path(args.pvf).resolve()
     if pvf.is_symlink() or not pvf.is_file() or pvf.suffix.lower() != '.pvf' or pvf.stat().st_size < 1024:
         raise ValueError('请提供已下载完成的 .pvf 文件，不能使用下载临时文件。')
     values = initial_values(args, row, root)
+    if image_settings is not None:
+        values.update(image_config.environment(image_settings))
     root.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.install-', dir=root.parent) as directory:
         stage = Path(directory) / 'instance'
@@ -178,8 +205,13 @@ def check_instance(root, requested_level=None, pvf=None):
 
 
 def compose(root, *arguments, **kwargs):
+    # Shell variables take priority over --env-file in Compose. Keep the
+    # instance's image choices authoritative, including old local instances.
+    env = dict(kwargs.pop('env', os.environ))
+    values = read_env(root)
+    env.update({key: image_config.instance_reference(values, role) for role, key in image_config.KEYS.items()})
     return run(['docker', 'compose', '--project-directory', ROOT, '-p', 'dof-' + root.name,
-                '--env-file', root / '.env', '-f', ROOT / 'compose.yaml', '-f', root / 'channels.json', *arguments], **kwargs)
+                '--env-file', root / '.env', '-f', ROOT / 'compose.yaml', '-f', root / 'channels.json', *arguments], env=env, **kwargs)
 
 
 def start(root, recreate=False):
@@ -234,6 +266,7 @@ def locked(root):
 
 
 def backup(root):
+    values = read_env(root)
     output = STATE / 'backups' / (root.name + '-' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.tar.gz')
     output.parent.mkdir(parents=True, exist_ok=True)
     output.parent.chmod(0o700)
@@ -260,7 +293,7 @@ def backup(root):
                      '--security-opt', 'no-new-privileges', '--entrypoint', '/bin/tar',
                      '--mount', 'type=bind,source=' + str(root) + ',target=/payload/instance,readonly',
                      '--mount', 'type=bind,source=' + directory + ',target=/backup-input,readonly',
-                     'dof-easy-game:local', '-czf', '-', '-C', '/backup-input', 'databases.sql',
+                     image_config.instance_reference(values, 'game'), '-czf', '-', '-C', '/backup-input', 'databases.sql',
                      '-C', '/payload', 'instance'], stdout=stream)
             partial.chmod(0o600)
             partial.rename(output)
@@ -283,8 +316,8 @@ def update_admin_address(root, address):
 
 
 def wizard():
-    print('dof-easy 通用容器管理\n1 安装新服 / 继续安装\n2 启动\n3 停止\n4 重建并重启容器\n5 状态\n6 日志\n7 本地备份\n8 等级列表\n9 修改插件\n0 退出')
-    choices = {'1': 'install', '2': 'start', '3': 'stop', '4': 'restart', '5': 'status', '6': 'logs', '7': 'backup', '8': 'versions', '9': 'config'}
+    print('dof-easy 通用容器管理\n1 拉取镜像安装 / 继续安装\n2 启动\n3 停止\n4 重建并重启容器\n5 状态\n6 日志\n7 本地备份\n8 等级列表\n9 修改插件\n10 配置镜像仓库\n0 退出')
+    choices = {'1': 'install', '2': 'start', '3': 'stop', '4': 'restart', '5': 'status', '6': 'logs', '7': 'backup', '8': 'versions', '9': 'config', '10': 'images'}
     choice = input('选择 [1]：').strip() or '1'
     if choice == '0':
         return None
@@ -293,6 +326,10 @@ def wizard():
         raise ValueError('无效菜单选项。')
     if command == 'versions':
         return [command]
+    if command == 'images':
+        current = image_config.load(STATE)
+        return [command, '--registry', input('镜像仓库/命名空间：').strip() or current.get('registry', ''),
+                '--tag', input('镜像标签 [' + current.get('tag', 'latest') + ']：').strip() or current.get('tag', 'latest')]
     name = input('实例名 [main]：').strip() or 'main'
     arguments = [command, '--instance', name]
     if command == 'install' and not instance_path(name).exists():
@@ -303,15 +340,26 @@ def wizard():
                       '--plugins', input('插件 dp2-frida / dp2 / frida / none [dp2-frida]：').strip() or 'dp2-frida']
     elif command == 'config':
         arguments += ['--plugins', input('插件 dp2-frida / dp2 / frida / none：').strip()]
+    if command == 'install':
+        root = instance_path(name)
+        existing = read_env(root) if root.exists() else {}
+        defaults = image_config.load(STATE)
+        if not existing.get('IMAGE_REGISTRY', defaults.get('registry')):
+            arguments += ['--registry', input('镜像仓库/命名空间（如 ghcr.io/你的用户名）：').strip(),
+                          '--tag', input('镜像标签 [latest]：').strip() or 'latest']
     return arguments
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description='通用一键容器端：资源下载、构建、数据库、密钥、启动一次完成。')
+    parser = argparse.ArgumentParser(description='通用一键容器端：默认拉取自有仓库镜像；源码构建必须显式选择。')
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('versions', help='列出原安装器支持的等级')
     resources = sub.add_parser('resources', help='下载全部等级包并校验仓库内公共资源')
     resources.add_argument('--resources', type=Path, default=STATE / 'resources')
+    for command in ('images', 'build'):
+        p = sub.add_parser(command, help='配置/查看默认镜像仓库' if command == 'images' else '显式从源码构建四个镜像，不上传')
+        p.add_argument('--registry', help='仓库地址及命名空间，例如 ghcr.io/用户名')
+        p.add_argument('--tag', help='四个镜像使用的版本标签')
     for command in ('install', 'start', 'stop', 'restart', 'status', 'logs', 'backup', 'config'):
         p = sub.add_parser(command)
         p.add_argument('--instance', default='main')
@@ -324,7 +372,11 @@ def main(argv=None):
             p.add_argument('--bind', default='0.0.0.0')
             p.add_argument('--admin-port', type=int, default=18080, metavar='PORT')
             p.add_argument('--resources', type=Path, default=STATE / 'resources')
-            p.add_argument('--offline', action='store_true', help='要求本地资源和预构建镜像已齐全')
+            mode = p.add_mutually_exclusive_group()
+            mode.add_argument('--offline', action='store_true', help='仅使用本地资源及镜像，不拉取、不构建')
+            mode.add_argument('--build', action='store_true', help='显式从源码构建，不拉取发布镜像')
+            p.add_argument('--registry', help='覆盖默认镜像仓库及命名空间')
+            p.add_argument('--tag', help='覆盖默认镜像版本标签')
             p.add_argument('--images', type=Path, help='离线安装时自动导入 docker save 镜像包')
         if command == 'config':
             p.add_argument('--ip')
@@ -343,6 +395,24 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.command == 'versions':
         print('默认 70；可选：' + ', '.join(map(str, catalog())))
+        return 0
+    if args.command == 'images':
+        settings = image_config.load(STATE)
+        if args.registry is not None or args.tag is not None:
+            settings = image_config.resolve(args, settings)
+            image_config.save(STATE, settings)
+        if not settings:
+            print('尚未配置镜像仓库：dof.sh images --registry 仓库地址/命名空间 --tag 版本')
+        else:
+            print('默认镜像（新安装使用；已有实例保留自己的版本）：')
+            for reference in image_config.references(settings).values():
+                print(reference)
+        return 0
+    if args.command == 'build':
+        settings = image_config.resolve(args, image_config.load(STATE), allow_local=True)
+        docker_check()
+        acquire_images(settings, 'build')
+        print('四个镜像已构建；未上传。使用 docker push 发布到你自己的仓库。')
         return 0
     if args.command == 'resources':
         prepare(args.resources)
@@ -363,20 +433,26 @@ def main(argv=None):
                 if args.ip and args.ip != values['PUBLIC_IP']:
                     raise ValueError('已有实例改 IP 请使用 config --ip；install 保留现有配置。')
             else:
+                values = None
                 args.level = args.level or 70
                 if not args.ip or not args.pvf:
                     raise ValueError('新服需要 --ip 和 --pvf；不带参数运行可使用交互菜单。')
                 row = catalog()[args.level]
                 initial_values(args, row, root)  # Validate all inputs before downloading.
-                if not args.pvf.is_file() or args.pvf.suffix.lower() != '.pvf':
+                if args.pvf.is_symlink() or not args.pvf.is_file() or args.pvf.suffix.lower() != '.pvf' or args.pvf.stat().st_size < 1024:
                     raise ValueError('找不到完整的 .pvf 文件：' + str(args.pvf))
+            settings = image_config.resolve(args, image_config.load(STATE), values, allow_local=args.build or args.offline)
+            acquire_images(settings, 'offline' if args.offline else 'build' if args.build else 'pull', args.images)
+            if values is None:
                 archive = fetch(row, args.resources, args.offline)
-                create_instance(root, args, row, archive)
-            if not args.offline:
-                prepare(args.resources)
-                build()
-            elif args.images:
-                run(['docker', 'load', '-i', args.images])
+                create_instance(root, args, row, archive, settings)
+            else:
+                # Change the instance only after all four requested images are
+                # available. A failed pull preserves its previous configuration.
+                values.update(image_config.environment(settings))
+                temporary = root / '.env.new'
+                write_env(temporary, values)
+                temporary.replace(root / '.env')
             start(root)
         else:
             values = read_env(root)

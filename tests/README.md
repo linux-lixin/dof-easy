@@ -19,6 +19,14 @@ python -m unittest discover -s tests/structure -p "test_*.py"
 
 ## 数据库与镜像验收
 
+镜像仓库拉取及 Compose 引用集成检查（需要本地已有 `dof-easy-game:local`，也可用 `DOF_REGISTRY_TEST_IMAGE` 指定含 Python 的本地镜像）：
+
+```sh
+python tests/integration/test_registry_images.py
+```
+
+该检查仅在 Docker 主机网络的回环地址创建临时只读 Registry V2 服务，真实拉取四个空测试镜像并检查 Compose，结束后删除测试容器和测试标签。不上传、构建或启动生产镜像，不改变生产 Compose 的网络或 TLS 配置。
+
 ```sh
 python tests/integration/test_mysql56_fixes.py
 python tests/integration/test_built_images.py --game-image dnf-game:ubuntu24.04 --admin-image dnf-admin:latest --mode all --state-file dist/ubuntu-all-state.json --stable-seconds 1800

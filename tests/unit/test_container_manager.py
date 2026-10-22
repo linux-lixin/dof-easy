@@ -4,7 +4,9 @@ import hashlib
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
+import subprocess
 import tarfile
 import tempfile
 import unittest
@@ -119,16 +121,24 @@ class ContainerManager(unittest.TestCase):
             game_profile.validate(path)
 
     def test_default_install_uses_70_and_drives_all_steps(self):
+        settings = {'registry': 'ghcr.io/test-owner', 'tag': 'v1'}
+        manager.image_config.save(self.root / 'state', settings)
         with patch.object(manager, 'STATE', self.root / 'state'), \
              patch.object(manager, 'docker_check'), patch.object(manager, 'catalog', return_value={70: self.row}), \
              patch.object(manager, 'fetch', return_value=self.archive), \
              patch.object(manager, 'prepare') as prepare, patch.object(manager, 'build') as build, \
+             patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker, \
              patch.object(manager, 'start') as start:
             manager.main(['install', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
             record = json.loads((self.root / 'state/instances/main/instance.json').read_text())
             self.assertEqual(record['level'], 70)
-            prepare.assert_called_once()
-            build.assert_called_once()
+            prepare.assert_not_called()
+            build.assert_not_called()
+            pulls = [call.args[0] for call in docker.call_args_list if call.args[0][1] == 'pull']
+            self.assertEqual(pulls, [['docker', 'pull', '--platform', 'linux/amd64', ref]
+                                    for ref in manager.image_config.references(settings).values()])
+            values = manager.read_env(self.root / 'state/instances/main')
+            self.assertEqual(values['DOF_GAME_IMAGE'], 'ghcr.io/test-owner/dof-easy-game:v1')
             start.assert_called_once()
 
     def test_offline_install_never_downloads_or_builds(self):
@@ -140,11 +150,127 @@ class ContainerManager(unittest.TestCase):
         with patch.object(manager, 'STATE', self.root / 'state'), \
              patch.object(manager, 'catalog', return_value={70: row}), patch.object(manager, 'docker_check'), \
              patch.object(manager, 'prepare') as prepare, patch.object(manager, 'build') as build, \
+             patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker, \
              patch.object(manager, 'start'), patch.object(manager.urllib.request, 'urlopen') as network:
             manager.main(['install', '--ip', '127.0.0.1', '--pvf', str(self.pvf), '--resources', str(cache), '--offline'])
             prepare.assert_not_called()
             build.assert_not_called()
             network.assert_not_called()
+            self.assertTrue(all(call.args[0][1:3] == ['image', 'inspect'] for call in docker.call_args_list))
+
+    def test_missing_registry_never_builds_or_creates_instance(self):
+        with patch.object(manager, 'STATE', self.root / 'state'), patch.object(manager, 'docker_check'), \
+             patch.object(manager, 'catalog', return_value={70: self.row}), \
+             patch.object(manager, 'fetch') as fetch, patch.object(manager, 'build') as build:
+            with self.assertRaisesRegex(ValueError, '尚未配置镜像仓库'):
+                manager.main(['install', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
+            fetch.assert_not_called()
+            build.assert_not_called()
+            self.assertFalse((self.root / 'state/instances/main').exists())
+
+    def test_explicit_build_uses_configured_tags_without_pulling(self):
+        settings = {'registry': 'registry.example.com:5000/team', 'tag': 'v2'}
+        with patch.object(manager, 'STATE', self.root / 'state'), patch.object(manager, 'docker_check'), \
+             patch.object(manager, 'prepare') as prepare, \
+             patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker:
+            manager.main(['build', '--registry', settings['registry'], '--tag', settings['tag']])
+            prepare.assert_called_once()
+            commands = [call.args[0] for call in docker.call_args_list]
+            built = [command[command.index('-t') + 1] for command in commands if command[1] == 'build']
+            self.assertEqual(set(built), set(manager.image_config.references(settings).values()))
+            self.assertFalse(any(command[1] in ('pull', 'push') for command in commands))
+
+    def test_failed_pull_preserves_existing_instance_and_never_builds(self):
+        state = self.root / 'state'
+        instance = state / 'instances/main'
+        old = {'registry': 'ghcr.io/old-owner', 'tag': 'v1'}
+        manager.create_instance(instance, self.args, self.row, self.archive, old)
+        before = (instance / '.env').read_bytes()
+        with patch.object(manager, 'STATE', state), patch.object(manager, 'docker_check'), \
+             patch.object(manager, 'catalog', return_value={70: self.row}), \
+             patch.object(manager, 'run', side_effect=subprocess.CalledProcessError(1, ['docker', 'pull'])), \
+             patch.object(manager, 'build') as build, patch.object(manager, 'start') as start:
+            with self.assertRaisesRegex(ValueError, '不会回退到源码构建'):
+                manager.main(['install', '--registry', 'ghcr.io/new-owner', '--tag', 'v2'])
+            self.assertEqual((instance / '.env').read_bytes(), before)
+            build.assert_not_called()
+            start.assert_not_called()
+
+    def test_global_defaults_do_not_override_existing_instance_or_shell(self):
+        state = self.root / 'state'
+        instance = state / 'instances/main'
+        settings = {'registry': 'ghcr.io/instance-owner', 'tag': 'v1'}
+        manager.create_instance(instance, self.args, self.row, self.archive, settings)
+        manager.image_config.save(state, {'registry': 'ghcr.io/new-default', 'tag': 'v9'})
+        with patch.object(manager, 'STATE', state), patch.object(manager, 'docker_check'), \
+             patch.object(manager, 'catalog', return_value={70: self.row}), \
+             patch.object(manager, 'acquire_images') as acquire, patch.object(manager, 'start'):
+            manager.main(['install'])
+            acquire.assert_called_once_with(settings, 'pull', None)
+        with patch.dict(os.environ, {'DOF_GAME_IMAGE': 'other:image'}), patch.object(manager, 'run') as docker:
+            manager.compose(instance, 'config')
+            self.assertEqual(docker.call_args.kwargs['env']['DOF_GAME_IMAGE'], 'ghcr.io/instance-owner/dof-easy-game:v1')
+
+    def test_bad_registry_and_architecture_are_rejected(self):
+        for registry in ('https://ghcr.io/owner', 'ghcr.io/Owner', 'bad host/team', 'ghcr.io/u;cmd',
+                         'localhost:70000/team', 'ghcr.io/a//b', 'ghcr.io/user:password@host'):
+            with self.subTest(registry=registry), self.assertRaises(ValueError):
+                manager.image_config.validate(registry, 'v1')
+        with patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/arm64\n')):
+            with self.assertRaisesRegex(ValueError, 'linux/amd64'):
+                manager.acquire_images({'registry': '', 'tag': 'local'}, 'offline')
+
+    def test_backup_uses_instance_game_image(self):
+        instance = self.root / 'state/instances/main'
+        settings = {'registry': 'ghcr.io/backup-owner', 'tag': 'v3'}
+        manager.create_instance(instance, self.args, self.row, self.archive, settings)
+        with patch.object(manager, 'STATE', self.root / 'state'), \
+             patch.object(manager, 'compose', return_value=subprocess.CompletedProcess([], 0, 'db\n')), \
+             patch.object(manager, 'run') as docker:
+            manager.backup(instance)
+            command = docker.call_args.args[0]
+            self.assertIn('ghcr.io/backup-owner/dof-easy-game:v3', command)
+            self.assertNotIn('dof-easy-game:local', command)
+
+    def test_registry_settings_persist_without_touching_docker(self):
+        with patch.object(manager, 'STATE', self.root / 'state'), patch.object(manager, 'docker_check') as docker:
+            manager.main(['images', '--registry', 'ghcr.io/owner', '--tag', 'v4'])
+            self.assertEqual(manager.image_config.load(self.root / 'state'), {'registry': 'ghcr.io/owner', 'tag': 'v4'})
+            manager.main(['images', '--tag', 'v5'])
+            self.assertEqual(manager.image_config.load(self.root / 'state')['tag'], 'v5')
+            docker.assert_not_called()
+
+    def test_offline_import_keeps_custom_references_and_never_pulls(self):
+        settings = {'registry': 'ghcr.io/offline-owner', 'tag': 'v1'}
+        with patch.object(manager, 'prepare') as prepare, patch.object(manager, 'build') as build, \
+             patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker:
+            manager.acquire_images(settings, 'offline', self.root / 'images.tar')
+            commands = [call.args[0] for call in docker.call_args_list]
+            self.assertEqual(commands[0], ['docker', 'load', '-i', self.root / 'images.tar'])
+            self.assertEqual({command[-1] for command in commands[1:]}, set(manager.image_config.references(settings).values()))
+            self.assertFalse(any(command[1] in ('pull', 'build') for command in commands))
+            prepare.assert_not_called()
+            build.assert_not_called()
+
+    def test_install_tag_change_preserves_credentials_and_runtime(self):
+        state = self.root / 'state'
+        instance = state / 'instances/main'
+        manager.create_instance(instance, self.args, self.row, self.archive,
+                                {'registry': 'ghcr.io/instance-owner', 'tag': 'v1'})
+        before = manager.read_env(instance)
+        sentinel = instance / 'runtime/game/data/operator.lua'
+        sentinel.write_bytes(b'operator edits')
+        with patch.object(manager, 'STATE', state), patch.object(manager, 'docker_check'), \
+             patch.object(manager, 'catalog', return_value={70: self.row}), \
+             patch.object(manager, 'acquire_images') as acquire, patch.object(manager, 'start'):
+            manager.main(['install', '--tag', 'v2'])
+            acquire.assert_called_once_with({'registry': 'ghcr.io/instance-owner', 'tag': 'v2'}, 'pull', None)
+        after = manager.read_env(instance)
+        for key, value in before.items():
+            if not key.startswith('DOF_') and key != 'IMAGE_TAG':
+                self.assertEqual(after[key], value)
+        self.assertEqual(after['DOF_GAME_IMAGE'], 'ghcr.io/instance-owner/dof-easy-game:v2')
+        self.assertEqual(sentinel.read_bytes(), b'operator edits')
 
 
 if __name__ == '__main__':

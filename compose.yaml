@@ -1,7 +1,7 @@
 # Managed by dof.sh / dof.ps1; levels and PVF are instance data.
 services:
   db:
-    image: dof-easy-db:local
+    image: ${DOF_DB_IMAGE:-dof-easy-db:local}
     pull_policy: never
     restart: unless-stopped
     environment:
@@ -22,11 +22,8 @@ services:
       retries: 30
     logging:
       driver: json-file
-    build:
-      context: ./deploy/vipai86/db
-      dockerfile: Dockerfile
   keys:
-    image: dof-easy-admin:local
+    image: ${DOF_ADMIN_IMAGE:-dof-easy-admin:local}
     pull_policy: never
     entrypoint:
     - /bin/sh
@@ -39,7 +36,7 @@ services:
     logging:
       driver: json-file
   game:
-    image: dof-easy-game:local
+    image: ${DOF_GAME_IMAGE:-dof-easy-game:local}
     pull_policy: never
     restart: unless-stopped
     shm_size: 4g
@@ -107,11 +104,8 @@ services:
     - ${RUNTIME_ROOT:-./runtime}/game/frida-log:/home/neople/game/frida_log
     logging:
       driver: json-file
-    build:
-      context: ./services/game
-      dockerfile: docker/ubuntu/Dockerfile
   admin:
-    image: dof-easy-admin:local
+    image: ${DOF_ADMIN_IMAGE:-dof-easy-admin:local}
     pull_policy: never
     restart: unless-stopped
     depends_on:
@@ -132,11 +126,8 @@ services:
     - private
     logging:
       driver: json-file
-    build:
-      context: ./services/admin
-      dockerfile: docker/Dockerfile
   ingress:
-    image: dof-easy-game:local
+    image: ${DOF_GAME_IMAGE:-dof-easy-game:local}
     pull_policy: never
     restart: unless-stopped
     entrypoint:
@@ -177,7 +168,7 @@ services:
     logging:
       driver: json-file
   netguard:
-    image: dof-easy-netguard:local
+    image: ${DOF_NETGUARD_IMAGE:-dof-easy-netguard:local}
     pull_policy: never
     restart: unless-stopped
     read_only: true
@@ -207,9 +198,6 @@ services:
     - public
     logging:
       driver: json-file
-    build:
-      context: ./deploy/vipai86/netguard
-      dockerfile: Dockerfile
 networks:
   private:
     internal: true
