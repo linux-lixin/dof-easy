@@ -54,13 +54,15 @@ bash dof.sh versions
 
 ## 资源与离线部署
 
-安装默认只下载所选等级及公共构建输入。需要归档全部 13 个等级时：
+安装默认从本仓库固定的 [resources-v1 Release](https://github.com/linux-lixin/dof-easy/releases/tag/resources-v1) 下载所选等级及公共构建输入，不再连接原网盘或上游源码下载源，也不回退到旧源。需要归档全部 13 个等级时：
 
 ```sh
 bash dof.sh resources --resources /data/dof-resources
 ```
 
 已有缓存可以在安装时传 `--resources /data/dof-resources`。每个资源都按仓库内固定大小和 SHA-256 验证，解包不执行原安装脚本；不匹配时停止。清单见 [等级资源](metadata/levels.lock.json) 和 [公共构建输入](metadata/vipai86-inputs.lock.json)。PVF 必须自行提供，安装器不把任意一个 PVF 冒充所有等级的配套文件。
+
+Release 提供 18 个资源文件：13 个等级包、服务端基础包、SQL、普通 DP2、Frida，以及固定版本的 dof 构建输入归档，附 `resources-manifest.json` 和 `SHA256SUMS`。这些是锁定的原始输入；安装器解包时应用本仓库的上报禁用及运行配置修改。Release 不包含操作者提供的 PVF、实例数据或容器镜像。系统软件包、npm、Maven 和 Docker 基础镜像仍由各自依赖源提供。
 
 离线安装可以在同一命令加 `--offline --images /data/dof-easy-images.tar --resources /data/dof-resources`，自动导入预构建的 `dof-easy-game/admin/db/netguard:local` 四个镜像后初始化启动。镜像已导入时可省略 `--images`。离线模式不访问下载源、不运行镜像构建；缺镜像或资源会报错并保留实例数据。联网源码构建还需要访问系统软件、npm、Maven 的依赖源。
 

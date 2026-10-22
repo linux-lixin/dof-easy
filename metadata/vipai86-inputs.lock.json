@@ -2,37 +2,37 @@
   "inputs": [
     {
       "id": "server_files__Server20230919.tar.gz",
-      "url": "https://vip.123pan.cn/1811773577/ZL/server_files/Server20230919.tar.gz",
+      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/server_files__Server20230919.tar.gz",
       "size": 56344126,
       "sha256": "27874716501c530bd0301800870177852c305f9ccb7f5e3a0800b6399b54c516"
     },
     {
       "id": "df_game_r_files__unnotice86.tar.gz",
-      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice86.tar.gz",
+      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/df_game_r_files__unnotice86.tar.gz",
       "size": 10593793,
       "sha256": "2defff18548cb100aa8030e24cb79790e4494aef9d068c68c9e57dbb0ff746ad"
     },
     {
       "id": "mysql_files__dnfsql_5.6.51_20230919.sql",
-      "url": "https://vip.123pan.cn/1811773577/ZL/mysql_files/dnfsql_5.6.51_20230919.sql",
+      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/mysql_files__dnfsql_5.6.51_20230919.sql",
       "size": 800864,
       "sha256": "a8be8fa742f8c4e3f1a87c8ec18aac03493395174755950b170481764a03beb8"
     },
     {
       "id": "dp2frida__dp2.tar.gz",
-      "url": "https://vip.123pan.cn/1811773577/ZL/dp2frida/dp2.tar.gz",
+      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/dp2frida__dp2.tar.gz",
       "size": 6669544,
       "sha256": "26065e133d203c12acfedd2fff33a6e92ba7bc1e0b86049f7a38bfadab36f188"
     },
     {
       "id": "dp2frida__frida.tar.gz",
-      "url": "https://vip.123pan.cn/1811773577/ZL/dp2frida/frida.tar.gz",
+      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/dp2frida__frida.tar.gz",
       "size": 8442355,
       "sha256": "4bd4c3ea8e38a3ff128edb3685eabfa5c4528cc654c80298a043d3122f188f23"
     },
     {
       "id": "dof-60d58715.tar.gz",
-      "url": "https://codeload.github.com/linux-lixin/dof/tar.gz/60d58715beaa870d0314b5c7fe050bd78cb3f258",
+      "url": "https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/dof-60d58715.tar.gz",
       "size": 217483443,
       "sha256": "877bde7e596835d3c8f5d0f9f21ba03e38630e0f0d7a40fdf867cf62c94eddbe"
     }

@@ -2,6 +2,7 @@
 import hashlib
 import importlib.util
 import io
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -14,6 +15,18 @@ SPEC.loader.exec_module(source)
 
 
 class SourcePreparation(unittest.TestCase):
+    def test_all_installation_inputs_use_the_pinned_release(self):
+        base = 'https://github.com/linux-lixin/dof-easy/releases/download/resources-v1/'
+        seen = {}
+        for filename, key in [('vipai86-inputs.lock.json', 'inputs'), ('levels.lock.json', 'levels')]:
+            lock = json.loads((ROOT / 'metadata' / filename).read_text(encoding='utf-8'))
+            for row in lock[key]:
+                self.assertEqual(row['url'], base + row['id'])
+                if row['id'] in seen:
+                    self.assertEqual(seen[row['id']], (row['size'], row['sha256']))
+                seen[row['id']] = (row['size'], row['sha256'])
+        self.assertEqual(len(seen), 18)
+
     def row(self, data):
         return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
 
