@@ -74,11 +74,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--resources', type=Path, default=ROOT.parent / 'resource-archive')
     parser.add_argument('--download', action='store_true', help='download missing locked inputs')
+    parser.add_argument('--generic', action='store_true', help='prepare shared build inputs; select the game at deployment time')
     args = parser.parse_args()
     lock = json.loads((ROOT / 'metadata/vipai86-inputs.lock.json').read_text(encoding='utf-8'))
     resources = args.resources.resolve()
     resources.mkdir(parents=True, exist_ok=True)
+    verified_inputs = []
     for row in lock['inputs']:
+        if args.generic and row['id'].startswith('df_game_r_files__'):
+            continue
         if Path(row['id']).name != row['id']:
             raise ValueError('Invalid input filename')
         target = resources / row['id']
@@ -88,10 +92,11 @@ def main():
             with urllib.request.urlopen(request, timeout=60) as response:
                 write_verified(response, target, row)
         verify(target, row)
+        verified_inputs.append(row)
     manifest = resources / 'manifest.json'
     if not manifest.exists():
         with manifest.open('x', encoding='utf-8') as stream:
-            json.dump([dict(row, status='downloaded') for row in lock['inputs']], stream, indent=2)
+            json.dump([dict(row, status='downloaded') for row in verified_inputs], stream, indent=2)
     with tarfile.open(resources / ARCHIVE, 'r:gz') as archive:
         members = {}
         for member in archive:
@@ -108,10 +113,12 @@ def main():
                 raise ValueError('Unexpected archive member type/size')
             with archive.extractfile(member) as stream:
                 write_verified(stream, target, row)
-    subprocess.run([sys.executable, str(ROOT / 'scripts/vipai86/prepare_assets.py'),
-                    '--source', str(resources)], check=True)
+    command = [sys.executable, str(ROOT / 'scripts/vipai86/prepare_assets.py'), '--source', str(resources)]
+    if args.generic:
+        command += ['--plugins-only', '--output', str(ROOT / 'services/game/plugin-assets')]
+    subprocess.run(command, check=True)
     subprocess.run([sys.executable, str(ROOT / 'deploy/vipai86/db/generate_compat.py')], check=True)
-    print('Build inputs verified. Supply your Script.pvf before building the game image.')
+    print('Shared build inputs verified. The installer supplies the selected game and PVF at runtime.')
 
 
 if __name__ == '__main__':

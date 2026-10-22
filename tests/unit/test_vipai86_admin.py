@@ -13,7 +13,7 @@ from test_deployment_fixes import BASH, ROOT, shellpath
 
 class Vipai86Admin(unittest.TestCase):
     def boot(self, *, password='LocalTestPass42', secret='LocalTestSecret43',
-             mode='ok', marker=False, public_ip='203.0.113.86'):
+             mode='ok', marker=False, public_ip='203.0.113.86', level='86'):
         with tempfile.TemporaryDirectory() as td:
             root = pathlib.Path(td)
             app = root / 'app'
@@ -37,7 +37,7 @@ case "$input" in *'ALTER TABLE'*) [ "$TEST_MODE" != import_fail ] || exit 42;;
 *'INSERT INTO d_taiwan.accounts'*) [ "$TEST_MODE" != bootstrap_fail ] || exit 43;; esac
 ''',
                 'envsubst': r'''#!/bin/sh
-sed -e "s/\${DB_NAME}/$DB_NAME/g" -e "s/\${DNF_PUBLIC_IP}/$DNF_PUBLIC_IP/g"
+sed -e "s/\${DB_NAME}/$DB_NAME/g" -e "s/\${DNF_PUBLIC_IP}/$DNF_PUBLIC_IP/g" -e "s/\${DNF_MAX_LEVEL}/$DNF_MAX_LEVEL/g"
 ''',
                 'service': '#!/bin/sh\nexit 0\n',
                 'java': '#!/bin/sh\necho java-started\n',
@@ -68,7 +68,7 @@ sed -e "s/\${DB_NAME}/$DB_NAME/g" -e "s/\${DNF_PUBLIC_IP}/$DNF_PUBLIC_IP/g"
                        SPRING_DATASOURCE_URL='jdbc:mysql://mysql:3306/dnf_service?useSSL=false',
                        SPRING_DATASOURCE_USERNAME='root', SPRING_DATASOURCE_PASSWORD='TestOnlyDb',
                        ADMIN_PASSWORD=password, ADMIN_TEMP_SECRET=secret,
-                       DNF_PUBLIC_IP=public_ip, NGINX_PORT='80', SERVER_PORT='9001')
+                       DNF_PUBLIC_IP=public_ip, DNF_MAX_LEVEL=level, NGINX_PORT='80', SERVER_PORT='9001')
             result = subprocess.run([BASH, shellpath(target)], env=env, text=True,
                                     encoding='utf8', capture_output=True, timeout=20)
             return result, sql.read_text(encoding='utf8') if sql.exists() else '', (app / 'data/.db_initialized').exists()
@@ -123,6 +123,16 @@ sed -e "s/\${DB_NAME}/$DB_NAME/g" -e "s/\${DNF_PUBLIC_IP}/$DNF_PUBLIC_IP/g"
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(sql, '')
         self.assertFalse(marker)
+
+    def test_selected_level_is_rendered_and_invalid_level_rejected(self):
+        for level in ('55', '70', '120'):
+            result, sql, marker = self.boot(level=level)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('角色等级上限\\":' + level, sql)
+        result, sql, marker = self.boot(level='70;DROP')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(marker)
+        self.assertEqual(sql, '')
 
     @unittest.skipUnless(os.environ.get('VIPAI86_DB_TESTS') == '1', 'requires isolated vipai86-audit MySQL 5.6')
     def test_mysql56_bootstrap_sql_creates_once_and_preserves_credentials(self):

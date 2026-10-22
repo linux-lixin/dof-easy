@@ -127,7 +127,8 @@ if binary.name == 'df_game_r':
     preload = ':'.join(entries)
 if arch == 'i386':
     shim = '/opt/dnf/compat/i386/liblegacy-shm.so'
-    preload = ':'.join([shim, *([preload] if preload else [])])
+    stat_shim = '/opt/dnf/compat/i386/liblegacy-stat.so'
+    preload = ':'.join([shim, stat_shim, *([preload] if preload else [])])
 if preload:
     for name in preload.split(':'):
         with open(name, 'rb') as stream:

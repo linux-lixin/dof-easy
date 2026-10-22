@@ -27,6 +27,8 @@ RUN echo '99b119f8e21e94f1dfd6d49fbeed29a70df1544896e76cd456f25e397b07d476  /tmp
 COPY docker/ubuntu/audit/geoip-probe.c /tmp/geoip-probe.c
 RUN gcc -m32 -I/tmp/geoip/libGeoIP -L/opt/dnf/compat/i386/lib -o /tmp/geoip-probe /tmp/geoip-probe.c -lGeoIP
 COPY docker/ubuntu/legacy-shm.c /tmp/legacy-shm.c
+COPY docker/ubuntu/legacy-stat.c /tmp/legacy-stat.c
+RUN gcc -m32 -shared -fPIC -Wall -Wextra -Werror -O2 -o /tmp/liblegacy-stat.so /tmp/legacy-stat.c -ldl
 COPY docker/ubuntu/frida-compat.c docker/ubuntu/frida-compat.map /tmp/
 COPY docker/ubuntu/audit/frida-probe.c /tmp/frida-probe.c
 RUN gcc -m32 -shared -fPIC -Wall -Wextra -Werror -O2 -Wl,--version-script=/tmp/frida-compat.map -o /tmp/libfrida-compat.so /tmp/frida-compat.c -ldl \
@@ -48,6 +50,7 @@ COPY --from=hooks /tmp/geoip/COPYING /opt/dnf/licenses/GeoIP-COPYING
 COPY --from=hooks /tmp/geoip/LICENSE /opt/dnf/licenses/GeoIP-LICENSE
 COPY --from=hooks /tmp/geoip-probe /opt/dnf/audit/geoip-probe
 COPY --from=hooks /tmp/liblegacy-shm.so /opt/dnf/compat/i386/liblegacy-shm.so
+COPY --from=hooks /tmp/liblegacy-stat.so /opt/dnf/compat/i386/liblegacy-stat.so
 COPY --from=hooks /tmp/shm-probe /opt/dnf/audit/shm-probe
 COPY --from=hooks /tmp/libfrida-compat.so /opt/dnf/compat/i386/libfrida-compat.so
 COPY --from=hooks /tmp/frida-probe /opt/dnf/audit/frida-probe
@@ -75,15 +78,11 @@ RUN mkdir -p /opt/dnf/compat/i386 \
 
 FROM game AS final
 COPY runtime/ubuntu/ /opt/dnf/ubuntu/
-COPY vipai86-assets/ /opt/dnf/vipai86/
-RUN cp /opt/dnf/vipai86/game/df_game_r /home/template/init/df_game_r \
- && chmod 755 /home/template/init/df_game_r \
- && python3 /opt/dnf/audit/elf-audit.py /opt/dnf/vipai86 --preload-i386 /opt/dnf/compat/i386/libfrida-compat.so --output /opt/dnf/audit/vipai86-elf.json
-RUN --network=none python3 /opt/dnf/audit/frida-probe.py --gadget /opt/dnf/vipai86/frida/frida.so --shim /opt/dnf/compat/i386/libfrida-compat.so --probe /opt/dnf/audit/frida-probe > /opt/dnf/audit/frida-start-proof.txt
+COPY plugin-assets/ /opt/dnf/plugins/
+RUN python3 /opt/dnf/audit/elf-audit.py /opt/dnf/plugins --preload-i386 /opt/dnf/compat/i386/libfrida-compat.so --output /opt/dnf/audit/plugins-elf.json
+RUN --network=none python3 /opt/dnf/audit/frida-probe.py --gadget /opt/dnf/plugins/frida/frida.so --shim /opt/dnf/compat/i386/libfrida-compat.so --probe /opt/dnf/audit/frida-probe > /opt/dnf/audit/frida-start-proof.txt
 RUN python3 /opt/dnf/ubuntu/prepare_image.py \
  && python3 /opt/dnf/ubuntu/tss_config.py
-COPY vipai86-pvf/Script.pvf /opt/dnf/pvf/Script.pvf
-RUN echo '2e65c17d075afec73203ba8f2bc9f5508f3b44706300f4ae7f9c13b5e0687fc5  /opt/dnf/pvf/Script.pvf' | sha256sum -c -
 WORKDIR /root
 HEALTHCHECK --interval=30s --timeout=10s --start-period=180s --retries=3 CMD ["python3", "/opt/dnf/ubuntu/health.py"]
 ENTRYPOINT ["/bin/bash", "/opt/dnf/ubuntu/entrypoint.sh"]

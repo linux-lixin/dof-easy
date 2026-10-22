@@ -2,5 +2,5 @@
 ; A blank or invalid BaseUrl intentionally prevents all network requests.
 [Login]
 BaseUrl=
-WindowTitle=地下城与勇士 86
+WindowTitle=地下城与勇士
 GameVersion=1.0.0

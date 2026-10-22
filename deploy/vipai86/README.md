@@ -1,4 +1,6 @@
-# 86 级全新服容器部署
+# 历史 86 级离线交付说明
+
+**下面描述的是最初的 `vipai86-*:local` 离线镜像交付，仅用于维护已有旧实例。当前通用版本请使用仓库根目录 `bash dof.sh` 或 `dof.ps1`；选择 86 级也使用同一入口，见 [当前 README](../../README.md)。新的共享镜像不再内置固定等级程序或 PVF。**
 
 本方案使用 vipai 的 86 级 `df_game_r`、数据库种子、普通 DP2 与 Frida，以及修改后的 linux-lixin/dof 后台和 Windows 登录器。不包含花枝专用插件。只适用于**全新数据库**，不要把既有生产数据卷接到首次初始化流程。
 
@@ -47,14 +49,7 @@
 将资源归档解压为此仓库同级的 `resource-archive`，在仓库根目录执行：
 
 ```sh
-python scripts/vipai86/prepare_source.py
-python deploy/vipai86/db/generate_compat.py
-mkdir -p services/game/vipai86-pvf
-cp ../resource-archive/operator-Script.pvf services/game/vipai86-pvf/Script.pvf
-docker build -t vipai86-db:local deploy/vipai86/db
-docker build -f services/admin/docker/Dockerfile -t vipai86-admin:local services/admin
-docker build -f services/game/docker/ubuntu/Dockerfile -t vipai86-game:local services/game
-docker build -t vipai86-netguard:local deploy/vipai86/netguard
+bash dof.sh install --instance my86 --level 86 --ip 你的服务器IPv4 --pvf /path/to/Script.pvf --resources ../resource-archive
 ```
 
 原始数据库种子仅将 `DEFINER=game@127.0.0.1` 改为 `DEFINER=CURRENT_USER` 后用于初始化；附加 SQL 只补建 5 张缺失的维护模板表，不删除或覆盖原表。Frida 的旧 glibc 私有符号通过限定到游戏进程的 32 位兼容库处理，镜像构建执行 ELF 检查和无网络 Frida 原生 hook 测试。

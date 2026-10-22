@@ -143,6 +143,15 @@ class ImportAssets(unittest.TestCase):
         self.run_import(False)
         self.assertEqual(target.read_bytes(), b'user changes')
 
+    def test_shared_plugin_import_needs_no_level_executable(self):
+        (self.source / GAME).unlink()
+        self.write_manifest()
+        result = subprocess.run([sys.executable, str(SCRIPT), '--source', str(self.source),
+                                 '--output', str(self.out), '--plugins-only'], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.out / 'game').exists())
+        self.assertTrue((self.out / 'dp2/libdp2.so').is_file())
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -66,7 +66,7 @@ def safe_name(name):
     return '/'.join(parts)
 
 
-def verified_sources(source, include_server):
+def verified_sources(source, include_server, plugins_only=False):
     manifest = json.loads((source / 'manifest.json').read_text(encoding='utf-8-sig'))
     if not isinstance(manifest, list):
         raise ValueError('source manifest must be a list')
@@ -76,7 +76,7 @@ def verified_sources(source, include_server):
         if name in rows:
             raise ValueError('duplicate manifest id: ' + name)
         rows[name] = row
-    selected = [GAME, DP2, FRIDA, SQL] + ([SERVER] if include_server else [])
+    selected = ([] if plugins_only else [GAME]) + [DP2, FRIDA, SQL] + ([SERVER] if include_server else [])
     verified = []
     for name in selected:
         row = rows.get(name)
@@ -189,14 +189,14 @@ def tree_hashes(root):
     return result
 
 
-def prepare(source, output, include_server=False):
+def prepare(source, output, include_server=False, plugins_only=False):
     source = source.resolve()
     if output.is_symlink():
         raise ValueError('output must not be a symlink')
     output = output.absolute()
     if source == output.resolve() or source in output.resolve().parents:
         raise ValueError('output must be outside source archive directory')
-    inputs = verified_sources(source, include_server)
+    inputs = verified_sources(source, include_server, plugins_only)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.vipai86-', dir=output.parent) as temp:
         stage = Path(temp) / 'overlay'
@@ -208,10 +208,12 @@ def prepare(source, output, include_server=False):
         put_file(stage, 'seed/vipai.sql', (source / SQL).read_bytes(), records, SQL, SQL)
         required = {'game/df_game_r', 'dp2/libdp2.so', 'dp2/df_game_r.lua',
                     'dp2/lua/df/game/report.lua'} | {'frida/' + name for name in FRIDA_FILES}
+        if plugins_only:
+            required.remove('game/df_game_r')
         missing = required - {row['path'] for row in records}
         if missing:
             raise ValueError('missing required assets: ' + ', '.join(sorted(missing)))
-        manifest = {'schema_version': 1, 'profile': 'vipai86-ordinary-dp2-frida',
+        manifest = {'schema_version': 1, 'profile': 'ordinary-dp2-frida' if plugins_only else 'vipai86-ordinary-dp2-frida',
                     'sources': inputs, 'files': sorted(records, key=lambda row: row['path']),
                     'excluded': sorted(excluded, key=lambda row: (row['source'], row['member'])),
                     'changes': ['DP2 report.create/send/close replaced with no-network no-op',
@@ -223,7 +225,7 @@ def prepare(source, output, include_server=False):
         metadata = stage / 'manifest.json'
         metadata.write_bytes((json.dumps(manifest, indent=2, sort_keys=True, ensure_ascii=True) + '\n').encode('utf-8'))
         os.utime(metadata, (0, 0))
-        if verified_sources(source, include_server) != inputs:
+        if verified_sources(source, include_server, plugins_only) != inputs:
             raise ValueError('sources changed during import')
         if output.exists():
             if not output.is_dir() or tree_hashes(output) != tree_hashes(stage):
@@ -238,9 +240,10 @@ def main():
     parser.add_argument('--source', type=Path, default=ROOT.parent / 'resource-archive')
     parser.add_argument('--output', type=Path, default=ROOT / 'services/game/vipai86-assets')
     parser.add_argument('--include-server', action='store_true', help='include allowlisted upstream service executables only')
+    parser.add_argument('--plugins-only', action='store_true', help='prepare shared plugins without a level-specific executable')
     args = parser.parse_args()
     try:
-        count = prepare(args.source, args.output, args.include_server)
+        count = prepare(args.source, args.output, args.include_server, args.plugins_only)
     except (ValueError, OSError, KeyError, tarfile.TarError) as error:
         print('Asset import failed: ' + str(error), file=sys.stderr)
         return 1

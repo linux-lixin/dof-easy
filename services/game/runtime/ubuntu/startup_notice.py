@@ -45,8 +45,8 @@ def output(message):
 
 def make_check(health,env,log_root='/home/neople/game/log'):
     profile=env.get('DNF_READINESS_PROFILE','dof')
-    if profile not in ('dof','vipai86'):
-        raise ValueError('DNF_READINESS_PROFILE must be dof or vipai86')
+    if profile not in ('dof','vipai86','native'):
+        raise ValueError('DNF_READINESS_PROFILE must be dof, native or vipai86 (legacy alias)')
 
     def check():
         health.check()
@@ -98,8 +98,8 @@ def main():
     role=os.environ.get('SERVER_TYPE','ALL')
     names=channel_names(os.environ)
     detail=role+('；频道：'+'、'.join(names) if names else '')
-    if os.environ.get('DNF_READINESS_PROFILE','dof')=='vipai86':
-        message=f'[启动完成] 服务健康检查已连续稳定通过（{detail}；vipai86）；尚未验证客户端实玩流程'
+    if os.environ.get('DNF_READINESS_PROFILE','dof') in ('native','vipai86'):
+        message=f'[启动完成] 服务健康检查已连续稳定通过（{detail}）；尚未验证客户端实玩流程'
     else:
         message=f'[启动完成] 游戏服务已全部就绪（{detail}）'
     return wait_ready(check,message,int(os.environ.get('STARTUP_TIMEOUT','600')))

@@ -56,7 +56,7 @@ const loading = ref(false);
 
 const defaultConfig = (): ClientConfig => ({
   '服务器地址': '127.0.0.1',
-  '角色等级上限': 86,
+  '角色等级上限': 70,
   '一键卖分品级': 2,
   '含宠物装备': 0,
   [KEYS.SSS]: 1,

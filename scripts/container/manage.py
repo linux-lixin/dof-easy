@@ -1,0 +1,423 @@
+#!/usr/bin/env python3
+"""One-command installation and local lifecycle management for dof-easy."""
+import argparse
+from contextlib import contextmanager
+from datetime import datetime, timezone
+import importlib.util
+import ipaddress
+import json
+import os
+from pathlib import Path
+import re
+import secrets
+import shutil
+import subprocess
+import sys
+import tarfile
+import tempfile
+import time
+import urllib.error
+import urllib.request
+
+ROOT = Path(__file__).resolve().parents[2]
+STATE = ROOT / '.dof-easy'
+MODES = ('dp2-frida', 'dp2', 'frida', 'none')
+
+
+def module(name, relative):
+    spec = importlib.util.spec_from_file_location(name, ROOT / relative)
+    value = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(value)
+    return value
+
+
+source = module('dof_source', 'scripts/vipai86/prepare_source.py')
+runtime_config = module('dof_config', 'services/game/runtime/ubuntu/config.py')
+
+
+def catalog():
+    return {row['level']: row for row in json.loads((ROOT / 'metadata/levels.lock.json').read_text())['levels']}
+
+
+def run(command, **kwargs):
+    return subprocess.run([str(x) for x in command], check=True, cwd=ROOT, **kwargs)
+
+
+def docker_check():
+    result = run(['docker', 'info', '--format', '{{.OSType}}/{{.Architecture}}'], capture_output=True, text=True, timeout=30)
+    if result.stdout.strip() not in ('linux/x86_64', 'linux/amd64'):
+        raise ValueError('需要 Linux amd64 Docker；Windows 请切换 Docker Desktop 到 Linux 容器。')
+    run(['docker', 'compose', 'version'], timeout=20)
+
+
+def instance_path(name):
+    if not re.fullmatch('[a-z][a-z0-9-]{0,39}', name):
+        raise ValueError('实例名只能使用小写英文字母、数字、连字符，并以字母开头（最多 40 字符）。')
+    return STATE / 'instances' / name
+
+
+def fetch(row, resources, offline=False):
+    target = resources / row['id']
+    resources.mkdir(parents=True, exist_ok=True)
+    if not target.exists():
+        if offline:
+            raise ValueError('离线缓存缺少 ' + str(target))
+        print('下载并校验：' + row['id'], flush=True)
+        request = urllib.request.Request(row['url'], headers={'User-Agent': 'dof-easy'})
+        with urllib.request.urlopen(request, timeout=90) as stream:
+            source.write_verified(stream, target, row)
+    source.verify(target, row)
+    return target
+
+
+def extract_game(archive, target, row):
+    with tarfile.open(archive, 'r:gz') as stream:
+        members = stream.getmembers()
+        if len(members) != 1 or members[0].name != 'df_game_r' or not members[0].isfile():
+            raise ValueError('等级包必须且只能包含一个普通 df_game_r 文件。')
+        if members[0].size != row['game']['bytes']:
+            raise ValueError('等级程序大小不匹配。')
+        with stream.extractfile(members[0]) as content:
+            source.write_verified(content, target, row['game'])
+    target.chmod(0o700)
+
+
+def prepare(resources, offline=False):
+    command = [sys.executable, ROOT / 'scripts/vipai86/prepare_source.py', '--generic', '--resources', resources]
+    if not offline:
+        command.append('--download')
+    run(command)
+
+
+def build():
+    # Docker reuses unchanged layers; all levels share these four images.
+    for tag, context, dockerfile in (
+        ('db', 'deploy/vipai86/db', 'Dockerfile'),
+        ('admin', 'services/admin', 'docker/Dockerfile'),
+        ('game', 'services/game', 'docker/ubuntu/Dockerfile'),
+        ('netguard', 'deploy/vipai86/netguard', 'Dockerfile'),
+    ):
+        print('构建共享镜像：' + tag, flush=True)
+        run(['docker', 'build', '-t', 'dof-easy-' + tag + ':local', '-f', ROOT / context / dockerfile, ROOT / context])
+
+
+def write_json(path, data):
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
+def write_env(path, values):
+    # Values are individually validated or generated; no shell is involved.
+    for value in values.values():
+        if any(c in str(value) for c in '\r\n\x00$#\'"'):
+            raise ValueError('配置含不支持的换行、引号或 Compose 插值字符。')
+    with path.open('w', encoding='utf-8', newline='\n') as stream:
+        stream.write(''.join(f'{k}={v}\n' for k, v in values.items()))
+    path.chmod(0o600)
+
+
+def read_env(root):
+    return dict(line.split('=', 1) for line in (root / '.env').read_text(encoding='utf-8').splitlines() if line and not line.startswith('#'))
+
+
+def initial_values(args, row, root):
+    channels = runtime_config.channels(args.channels)
+    if not 1 <= args.admin_port <= 65535:
+        raise ValueError('后台端口必须在 1..65535 范围内。')
+    return dict(PUBLIC_IP=str(ipaddress.IPv4Address(args.ip)), BIND_IP=str(ipaddress.IPv4Address(args.bind)),
+                ADMIN_PORT=str(args.admin_port), OPEN_CHANNEL=','.join(map(str, channels)),
+                DNF_MAX_LEVEL=str(row['level']), DNF_GAME_SHA256=row['game']['sha256'],
+                PLUGIN_MODE=args.plugins, RUNTIME_ROOT=(root / 'runtime').as_posix(),
+                DB_ROOT_PASSWORD=secrets.token_hex(24), GAME_DB_PASSWORD=secrets.token_hex(4),
+                SUPERVISOR_PASSWORD=secrets.token_hex(16), ADMIN_PASSWORD=secrets.token_hex(16),
+                ADMIN_TEMP_SECRET=secrets.token_hex(16))
+
+
+def ports_override(values):
+    ports = []
+    for channel in runtime_config.channels(values['OPEN_CHANNEL']):
+        for base, protocol in ((30000, 'tcp'), (31000, 'udp')):
+            port = base + channel
+            ports.append(f"{values['BIND_IP']}:{port}:{port}/{protocol}")
+    return {'services': {'netguard': {'ports': ports}}}
+
+
+def create_instance(root, args, row, archive):
+    pvf = Path(args.pvf).resolve()
+    if pvf.is_symlink() or not pvf.is_file() or pvf.suffix.lower() != '.pvf' or pvf.stat().st_size < 1024:
+        raise ValueError('请提供已下载完成的 .pvf 文件，不能使用下载临时文件。')
+    values = initial_values(args, row, root)
+    root.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.install-', dir=root.parent) as directory:
+        stage = Path(directory) / 'instance'
+        data = stage / 'runtime/game/data'
+        data.mkdir(parents=True)
+        stage.chmod(0o700)
+        extract_game(archive, data / 'df_game_r', row)
+        shutil.copyfile(pvf, data / 'Script.pvf')
+        (data / 'Script.pvf').chmod(0o600)
+        write_json(stage / 'instance.json', dict(schema=1, name=args.instance, level=row['level'],
+                   game_sha256=row['game']['sha256'], pvf_sha256=source.digest(data / 'Script.pvf'),
+                   pvf_bytes=pvf.stat().st_size, created_at=datetime.now(timezone.utc).isoformat()))
+        write_env(stage / '.env', values)
+        write_json(stage / 'channels.json', ports_override(values))
+        stage.rename(root)  # Never merge an existing instance or change its credentials.
+    return values
+
+
+def check_instance(root, requested_level=None, pvf=None):
+    record = json.loads((root / 'instance.json').read_text(encoding='utf-8'))
+    if record.get('schema') != 1 or record['name'] != root.name:
+        raise ValueError('实例元数据不匹配。')
+    if requested_level is not None and requested_level != record['level']:
+        raise ValueError('该实例已有数据，不能通过 install 改等级。请用 --instance 新名称创建独立新服。')
+    values = read_env(root)
+    row = catalog()[record['level']]
+    if values['DNF_MAX_LEVEL'] != str(row['level']) or values['DNF_GAME_SHA256'] != row['game']['sha256']:
+        raise ValueError('实例等级配置与资源清单不一致。')
+    source.verify(root / 'runtime/game/data/df_game_r', row['game'])
+    if pvf and source.digest(Path(pvf)) != source.digest(root / 'runtime/game/data/Script.pvf'):
+        raise ValueError('已存在不同 PVF；install 不覆盖现有服的资源。')
+    return values
+
+
+def compose(root, *arguments, **kwargs):
+    return run(['docker', 'compose', '--project-directory', ROOT, '-p', 'dof-' + root.name,
+                '--env-file', root / '.env', '-f', ROOT / 'compose.yaml', '-f', root / 'channels.json', *arguments], **kwargs)
+
+
+def start(root, recreate=False):
+    values = check_instance(root)
+    args = ['up', '-d', '--wait', '--wait-timeout', '900', '--no-build', '--pull', 'never']
+    if recreate:
+        args.append('--force-recreate')
+    compose(root, *args)
+    # Compose also waits for database/game/guard health. Probe the Java API,
+    # not only Nginx's static page or the ingress TCP listening socket.
+    host = '127.0.0.1' if values['BIND_IP'] == '0.0.0.0' else values['BIND_IP']
+    url = f"http://{host}:{values['ADMIN_PORT']}/api/v1/admin/assist/config-text"
+    deadline = time.monotonic() + 180
+    while True:
+        try:
+            with urllib.request.urlopen(url, timeout=5) as response:
+                payload = response.read(16384)
+                if response.status == 200 and '角色等级上限'.encode('utf-8') in payload:
+                    break
+        except (OSError, urllib.error.URLError):
+            pass
+        if time.monotonic() >= deadline:
+            raise ValueError('后台 API 未就绪；运行 dof.sh logs 查看日志，实例数据已保留。')
+        time.sleep(3)
+    client = root / 'client'
+    client.mkdir(exist_ok=True)
+    # Container-owned key files are 0600 on Linux. Export only the public key
+    # through Docker, without weakening runtime permissions for a non-root host.
+    with (client / 'publickey.pem').open('wb') as stream:
+        compose(root, 'exec', '-T', 'game', 'cat', '/data/publickey.pem', stdout=stream)
+    (client / 'login.ini.example').write_text(
+        '[Login]\nBaseUrl=http://' + values['PUBLIC_IP'] + ':' + values['ADMIN_PORT']
+        + '\nWindowTitle=地下城与勇士 ' + values['DNF_MAX_LEVEL'] + '\nGameVersion=1.0.0\n', encoding='utf-8')
+    print(f"部署完成：{values['DNF_MAX_LEVEL']} 级，插件 {values['PLUGIN_MODE']}，频道 {values['OPEN_CHANNEL']}")
+    print(f"后台：http://{values['PUBLIC_IP']}:{values['ADMIN_PORT']}；账号：admin")
+    print('密码保存在 ' + str(root / '.env') + ' 的 ADMIN_PASSWORD；公钥在 ' + str(client))
+
+
+@contextmanager
+def locked(root):
+    root.parent.mkdir(parents=True, exist_ok=True)
+    path = root.parent / ('.' + root.name + '.lock')
+    try:
+        with path.open('x') as stream:
+            stream.write(str(os.getpid()))
+    except FileExistsError:
+        raise ValueError('该实例有正在执行或中断的操作；检查进程后再处理锁文件：' + str(path))
+    try:
+        yield
+    finally:
+        path.unlink()
+
+
+def backup(root):
+    output = STATE / 'backups' / (root.name + '-' + datetime.now().strftime('%Y%m%d-%H%M%S') + '.tar.gz')
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.parent.chmod(0o700)
+    running = compose(root, 'ps', '--status', 'running', '--services', capture_output=True, text=True).stdout.split()
+    if 'db' not in running:
+        raise ValueError('请先启动数据库再备份。')
+    stopped = [s for s in ('ingress', 'admin', 'game') if s in running]
+    with tempfile.TemporaryDirectory(prefix='.backup-', dir=STATE) as directory:
+        sql = Path(directory) / 'databases.sql'
+        try:
+            if stopped:
+                compose(root, 'stop', *stopped)
+            with sql.open('wb') as stream:
+                compose(root, 'exec', '-T', 'db', 'sh', '-c',
+                        'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysqldump -uroot --all-databases --single-transaction --routines --events', stdout=stream)
+            partial = output.with_suffix('.partial')
+            with partial.open('xb'):
+                pass
+            partial.chmod(0o600)
+            # Read root-owned runtime keys/plugins in an isolated, read-only
+            # helper; the host user owns the output archive, even without sudo.
+            with partial.open('wb') as stream:
+                run(['docker', 'run', '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--cap-add', 'DAC_OVERRIDE',
+                     '--security-opt', 'no-new-privileges', '--entrypoint', '/bin/tar',
+                     '--mount', 'type=bind,source=' + str(root) + ',target=/payload/instance,readonly',
+                     '--mount', 'type=bind,source=' + directory + ',target=/backup-input,readonly',
+                     'dof-easy-game:local', '-czf', '-', '-C', '/backup-input', 'databases.sql',
+                     '-C', '/payload', 'instance'], stdout=stream)
+            partial.chmod(0o600)
+            partial.rename(output)
+        finally:
+            if stopped:
+                compose(root, 'start', *stopped)
+    print('本地备份完成（含数据库、密钥、密码、PVF、插件和日志）：' + str(output))
+
+
+def update_admin_address(root, address):
+    command = ['exec', '-T', 'db', 'sh', '-c',
+               'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot --default-character-set=utf8 -N -r']
+    result = compose(root, *command, input='SELECT CONFIG_JSON FROM dnf_service.ASSIST_CONFIG WHERE ID=1;\n',
+                     text=True, encoding='utf-8', capture_output=True)
+    config = json.loads(result.stdout)
+    config['服务器地址'] = address
+    encoded = json.dumps(config, ensure_ascii=False).encode('utf-8').hex()
+    compose(root, *command, input='UPDATE dnf_service.ASSIST_CONFIG SET CONFIG_JSON=CONVERT(0x'
+            + encoded + ' USING utf8), UPDATE_TIME=NOW() WHERE ID=1;\n', text=True, encoding='utf-8', capture_output=True)
+
+
+def wizard():
+    print('dof-easy 通用容器管理\n1 安装新服 / 继续安装\n2 启动\n3 停止\n4 重建并重启容器\n5 状态\n6 日志\n7 本地备份\n8 等级列表\n9 修改插件\n0 退出')
+    choices = {'1': 'install', '2': 'start', '3': 'stop', '4': 'restart', '5': 'status', '6': 'logs', '7': 'backup', '8': 'versions', '9': 'config'}
+    choice = input('选择 [1]：').strip() or '1'
+    if choice == '0':
+        return None
+    command = choices.get(choice)
+    if not command:
+        raise ValueError('无效菜单选项。')
+    if command == 'versions':
+        return [command]
+    name = input('实例名 [main]：').strip() or 'main'
+    arguments = [command, '--instance', name]
+    if command == 'install' and not instance_path(name).exists():
+        print('可选等级：' + ', '.join(map(str, catalog())))
+        arguments += ['--level', input('等级 [70]：').strip() or '70',
+                      '--ip', input('客户端可访问的服务器 IPv4：').strip(),
+                      '--pvf', input('配套 PVF 文件路径：').strip().strip('"'),
+                      '--plugins', input('插件 dp2-frida / dp2 / frida / none [dp2-frida]：').strip() or 'dp2-frida']
+    elif command == 'config':
+        arguments += ['--plugins', input('插件 dp2-frida / dp2 / frida / none：').strip()]
+    return arguments
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='通用一键容器端：资源下载、构建、数据库、密钥、启动一次完成。')
+    sub = parser.add_subparsers(dest='command', required=True)
+    sub.add_parser('versions', help='列出原安装器支持的等级')
+    resources = sub.add_parser('resources', help='下载并校验全部等级及共享资源')
+    resources.add_argument('--resources', type=Path, default=STATE / 'resources')
+    for command in ('install', 'start', 'stop', 'restart', 'status', 'logs', 'backup', 'config'):
+        p = sub.add_parser(command)
+        p.add_argument('--instance', default='main')
+        if command == 'install':
+            p.add_argument('--level', type=int, choices=list(catalog()))
+            p.add_argument('--ip')
+            p.add_argument('--pvf', type=Path)
+            p.add_argument('--plugins', choices=MODES, default='dp2-frida')
+            p.add_argument('--channels', default='15,52')
+            p.add_argument('--bind', default='0.0.0.0')
+            p.add_argument('--admin-port', type=int, default=18080, metavar='PORT')
+            p.add_argument('--resources', type=Path, default=STATE / 'resources')
+            p.add_argument('--offline', action='store_true', help='要求本地资源和预构建镜像已齐全')
+            p.add_argument('--images', type=Path, help='离线安装时自动导入 docker save 镜像包')
+        if command == 'config':
+            p.add_argument('--ip')
+            p.add_argument('--plugins', choices=MODES)
+        if command == 'logs':
+            p.add_argument('--follow', action='store_true')
+            p.add_argument('--service', choices=('db', 'game', 'admin', 'ingress', 'netguard'))
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if not argv:
+        if not sys.stdin.isatty():
+            parser.print_help()
+            return 0
+        argv = wizard()
+        if argv is None:
+            return 0
+    args = parser.parse_args(argv)
+    if args.command == 'versions':
+        print('默认 70；可选：' + ', '.join(map(str, catalog())))
+        return 0
+    if args.command == 'resources':
+        for row in catalog().values():
+            fetch(row, args.resources)
+        prepare(args.resources)
+        print('全部资源已归档：' + str(args.resources.resolve()))
+        return 0
+    root = instance_path(args.instance)
+    STATE.mkdir(parents=True, exist_ok=True)
+    STATE.chmod(0o700)
+    docker_check()
+    with locked(root):
+        if args.command == 'install':
+            if args.images and (not args.offline or not args.images.is_file()):
+                raise ValueError('--images 需要配合 --offline，并提供已完成的镜像归档文件。')
+            if root.exists():
+                values = check_instance(root, args.level, args.pvf)
+                if args.ip and args.ip != values['PUBLIC_IP']:
+                    raise ValueError('已有实例改 IP 请使用 config --ip；install 保留现有配置。')
+            else:
+                args.level = args.level or 70
+                if not args.ip or not args.pvf:
+                    raise ValueError('新服需要 --ip 和 --pvf；不带参数运行可使用交互菜单。')
+                row = catalog()[args.level]
+                initial_values(args, row, root)  # Validate all inputs before downloading.
+                if not args.pvf.is_file() or args.pvf.suffix.lower() != '.pvf':
+                    raise ValueError('找不到完整的 .pvf 文件：' + str(args.pvf))
+                archive = fetch(row, args.resources, args.offline)
+                create_instance(root, args, row, archive)
+            if not args.offline:
+                prepare(args.resources)
+                build()
+            elif args.images:
+                run(['docker', 'load', '-i', args.images])
+            start(root)
+        else:
+            values = read_env(root)
+            if args.command == 'start':
+                start(root)
+            elif args.command == 'restart':
+                start(root, recreate=True)
+            elif args.command == 'stop':
+                compose(root, 'stop')
+            elif args.command == 'status':
+                print(f"实例 {root.name}：{values['DNF_MAX_LEVEL']} 级，{values['PLUGIN_MODE']}，频道 {values['OPEN_CHANNEL']}")
+                compose(root, 'ps', '-a')
+            elif args.command == 'logs':
+                compose(root, 'logs', '--tail', '150', *(['-f'] if args.follow else []), *([args.service] if args.service else []))
+            elif args.command == 'backup':
+                backup(root)
+            elif args.command == 'config':
+                check_instance(root)
+                if args.ip:
+                    values['PUBLIC_IP'] = str(ipaddress.IPv4Address(args.ip))
+                if args.plugins:
+                    values['PLUGIN_MODE'] = args.plugins
+                temporary = root / '.env.new'
+                write_env(temporary, values)
+                temporary.replace(root / '.env')
+                start(root, recreate=True)
+                if args.ip:
+                    update_admin_address(root, values['PUBLIC_IP'])
+    return 0
+
+
+if __name__ == '__main__':
+    if os.name == 'nt':
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    try:
+        raise SystemExit(main())
+    except (ValueError, OSError, KeyError, subprocess.SubprocessError, tarfile.TarError) as error:
+        print('操作未完成：' + str(error), file=sys.stderr)
+        print('已有数据和日志已保留；修正原因后可重试同一命令。', file=sys.stderr)
+        raise SystemExit(1)

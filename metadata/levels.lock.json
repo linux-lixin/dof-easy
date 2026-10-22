@@ -1,0 +1,148 @@
+{
+  "default": 70,
+  "levels": [
+    {
+      "level": 55,
+      "id": "df_game_r_files__unnotice55.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice55.tar.gz",
+      "size": 10593788,
+      "sha256": "ce706efd73ac5eef632f97099e0e00b769380e4ef78c377a608dd2e26bdb1909",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "2a8ce2f44aa97648791ba0c372ae9fac664d81528d8a9ea3ffdf9ab0a44bfc52"
+      }
+    },
+    {
+      "level": 60,
+      "id": "df_game_r_files__unnotice60.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice60.tar.gz",
+      "size": 10593783,
+      "sha256": "1bfa526a311dc9b9b393a47fee34be55d06c7d2511529b5cc8ca81e94aab3ee1",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "61c6c924c81b69dc32ef05ff1d36e389c903866f0b932b89242f4847cd246902"
+      }
+    },
+    {
+      "level": 65,
+      "id": "df_game_r_files__unnotice65.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice65.tar.gz",
+      "size": 10594192,
+      "sha256": "40fc82ddbad8c7b6d395b82c4622b22c4833762323a2dd938900cf694450a159",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "13e57445134516c79a86a0647c8f9c8a803652e240ce58738c5374f39a662431"
+      }
+    },
+    {
+      "level": 70,
+      "id": "df_game_r_files__unnotice70.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice70.tar.gz",
+      "size": 10593791,
+      "sha256": "9fd1d19eb2804f76c569e5cb28ef286009438d95899bccd4f1ad4740d9e247a3",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "9456a546b88edd63566b8157159714ff6457c5e4214831e2b8d1618faddda021"
+      }
+    },
+    {
+      "level": 75,
+      "id": "df_game_r_files__unnotice75.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice75.tar.gz",
+      "size": 10593783,
+      "sha256": "64e6c91108b8cbb6776040249fde0143ca67ca335bac4d777d6d7b70a8edbccd",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "e16e6e19e83bd224a0d39b3560c8fc5f57e5798e98e226665afd4436450105e4"
+      }
+    },
+    {
+      "level": 80,
+      "id": "df_game_r_files__unnotice80.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice80.tar.gz",
+      "size": 10593781,
+      "sha256": "9b24fd448a6c4a7d5479db1aa8fafc0e59fb4527d47488845133a852aaac53b9",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "1e62d9bdab4acae0fa09caff6d0517dae9af243608b6fc84a60558bde4ff3683"
+      }
+    },
+    {
+      "level": 85,
+      "id": "df_game_r_files__unnotice85.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice85.tar.gz",
+      "size": 10593778,
+      "sha256": "ba4c87fdde7dcf685d8721ea72535bbd918c1ec527a1ca7eebba38ff30f642f7",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "25d6d6675649b7831c54617e7ec22183c28828587ba550d264d939822603e2e4"
+      }
+    },
+    {
+      "level": 86,
+      "id": "df_game_r_files__unnotice86.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice86.tar.gz",
+      "size": 10593793,
+      "sha256": "2defff18548cb100aa8030e24cb79790e4494aef9d068c68c9e57dbb0ff746ad",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "6aead2cc5a63bf47e33bf9eb633733a257606483a71dbbf89581a67f6c0c1549"
+      }
+    },
+    {
+      "level": 90,
+      "id": "df_game_r_files__unnotice90.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice90.tar.gz",
+      "size": 10593872,
+      "sha256": "436b178c217201ccb8bc65130e74b7850a9c729764a2dd82f8bf02f1791e318d",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "e3de4feaebb7adef10aaaed4b2cf7eff94968581cc9b4240783282eec6aa3130"
+      }
+    },
+    {
+      "level": 95,
+      "id": "df_game_r_files__unnotice95.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice95.tar.gz",
+      "size": 10593870,
+      "sha256": "d13307da4e388bed09fc0280ac0b5aa1ee968b2b3f56454507216f264b64fd08",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "e1ae75f23038d610ce56ec40a391c67d75c4fd9fa5c22ec7f0982a6a4daa756e"
+      }
+    },
+    {
+      "level": 100,
+      "id": "df_game_r_files__unnotice100.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice100.tar.gz",
+      "size": 10593793,
+      "sha256": "6797fc340c3e70780af28879dbcf89430e175c50c10057736860d179e4f3df44",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "be8f53323e9c85493715af454135f22be606a9bc1669d2c4737088ed47685a27"
+      }
+    },
+    {
+      "level": 110,
+      "id": "df_game_r_files__unnotice110.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice110.tar.gz",
+      "size": 10593872,
+      "sha256": "3e7aab2644b20a23ff7933d0e3fe54c8c338de928e4354e56f09d2327174df52",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "efa78ed52ea079996833b3fad6110d4cd521f296f387ce8c7727170dd744545f"
+      }
+    },
+    {
+      "level": 120,
+      "id": "df_game_r_files__unnotice120.tar.gz",
+      "url": "https://vip.123pan.cn/1811773577/ZL/df_game_r_files/unnotice120.tar.gz",
+      "size": 10593783,
+      "sha256": "7112149b5bbc5c8cdf9dbf8c1ec871a3294e033f6efe6ff06267dd60a37fe1ad",
+      "game": {
+        "bytes": 36360954,
+        "sha256": "c95e40ac3a87f1d570882634ccc1c3352cae31e818c86518f41fb14a9779205b"
+      }
+    }
+  ]
+}

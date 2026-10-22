@@ -46,5 +46,5 @@ def prepare(source, data, game, password, mode):
 
 
 if __name__=='__main__':
-    prepare('/opt/dnf/vipai86','/data','/home/neople/game',
+    prepare(os.environ.get('DNF_PLUGIN_ASSETS','/opt/dnf/plugins'),'/data','/home/neople/game',
             os.environ['DNF_DB_GAME_PASSWORD'],os.environ.get('PLUGIN_MODE','dp2-frida'))

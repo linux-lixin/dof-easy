@@ -180,7 +180,7 @@ public class AssistConfigServiceImpl implements AssistConfigService {
     private Map<String, Object> defaultConfig() {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("服务器地址", System.getenv().getOrDefault("DNF_PUBLIC_IP", "127.0.0.1"));
-        m.put("角色等级上限", 86);
+        m.put("角色等级上限", Integer.parseInt(System.getenv().getOrDefault("DNF_MAX_LEVEL", "70")));
         m.put("一键卖分品级", 2);
         m.put("含宠物装备", 0);
         m.put("SSS评分开关", 1);

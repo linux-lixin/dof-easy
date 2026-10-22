@@ -1,7 +1,7 @@
-FROM vipai86-game:local
+FROM ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55
 USER root
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends iptables \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 iptables \
     && rm -rf /var/lib/apt/lists/*
 COPY entrypoint.py /usr/local/bin/vipai86-netguard.py
 RUN mkdir -p /run/netguard

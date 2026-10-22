@@ -4,6 +4,7 @@ import argparse
 import ipaddress
 import logging
 import os
+import re
 from pathlib import Path
 import signal
 import socket
@@ -16,17 +17,31 @@ UDP_PORTS = (7001, 7300, 31015, 31052, 2311, 2312, 2313)
 DEFAULT_MARKER = "/run/netguard/ready"
 
 
+def selected_ports():
+    raw = os.environ.get('OPEN_CHANNEL', '15,52')
+    if not re.fullmatch(r'[0-9]+(?:,[0-9]+)*', raw):
+        raise ValueError('OPEN_CHANNEL must be a normalized channel list')
+    channels = sorted({int(x) for x in raw.split(',')})
+    if not set(channels) <= ({1, 6, 7} | set(range(11, 40)) | set(range(52, 57))):
+        raise ValueError('Unsupported OPEN_CHANNEL')
+    return [7001, 7300] + [30000+c for c in channels], [7001, 7300, 2311, 2312, 2313] + [31000+c for c in channels]
+
+
 def render_rules(db_addresses=(), ipv6=False):
     addresses = sorted({str(ipaddress.IPv4Address(value)) for value in db_addresses})
     if not ipv6 and not addresses:
         raise ValueError("At least one database IPv4 address is required")
+    tcp, udp = selected_ports()
     lines = ["*filter", ":INPUT DROP [0:0]", ":FORWARD DROP [0:0]", ":OUTPUT DROP [0:0]",
              "-A INPUT -i lo -j ACCEPT",
              "-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT",
-             "-A INPUT -p tcp -m multiport --dports " + ",".join(map(str, TCP_PORTS)) + " -m conntrack --ctstate NEW -j ACCEPT",
-             "-A INPUT -p udp -m multiport --dports " + ",".join(map(str, UDP_PORTS)) + " -j ACCEPT",
              "-A OUTPUT -o lo -j ACCEPT",
              "-A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"]
+    # xt_multiport permits at most 15 ports per rule.
+    for protocol, ports in (('tcp', tcp), ('udp', udp)):
+        for start in range(0, len(ports), 15):
+            lines.append('-A INPUT -p ' + protocol + ' -m multiport --dports '
+                         + ','.join(map(str, ports[start:start+15])) + ' -j ACCEPT')
     if not ipv6:
         for address in addresses:
             lines.append(f"-A OUTPUT -d {address}/32 -p tcp --dport 3306 -m conntrack --ctstate NEW -j ACCEPT")

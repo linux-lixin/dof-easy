@@ -1,6 +1,13 @@
 #!/bin/sh
 set -eu
 
+DNF_MAX_LEVEL=${DNF_MAX_LEVEL:-70}
+case "$DNF_MAX_LEVEL" in
+    55|60|65|70|75|80|85|86|90|95|100|110|120) ;;
+    *) echo "DNF_MAX_LEVEL must match a supported deployment level." >&2; exit 1;;
+esac
+export DNF_MAX_LEVEL
+
 mkdir -p /app/data
 if [ ! -f /app/data/private.key ] || [ ! -f /app/data/publickey.pem ]; then
     if [ -f /app/data/private.key ] || [ -f /app/data/publickey.pem ]; then
@@ -70,7 +77,7 @@ if [ ! -f "$MARKER_FILE" ]; then
         echo "Existing/partial backend schema without initialization marker; inspect and complete it manually. No SQL imported." >&2
         exit 1
     fi
-    envsubst '${DB_NAME} ${DNF_PUBLIC_IP}' < /app/init.sql.template > /app/init.sql
+    envsubst '${DB_NAME} ${DNF_PUBLIC_IP} ${DNF_MAX_LEVEL}' < /app/init.sql.template > /app/init.sql
     if ! db_query "$@" < /app/init.sql; then
         echo "Database initialization failed; stopping before Nginx/Java. No success marker written." >&2
         exit 1
