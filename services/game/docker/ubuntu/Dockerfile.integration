@@ -1,0 +1,23 @@
+# Reuse a locally pinned Ubuntu game foundation; caller verifies its immutable ID.
+# No network downloads or source mutation are performed by this build.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+ARG MAIN_COMMIT
+ARG BASE_IMAGE_ID
+LABEL org.opencontainers.image.revision=$MAIN_COMMIT \
+      org.opencontainers.image.base.digest=$BASE_IMAGE_ID \
+      io.dof.runtime="native-server-v1"
+RUN rm -rf /opt/dnf/ubuntu /opt/dof-easy/runtime/gateway
+COPY runtime/ubuntu/ /opt/dnf/ubuntu/
+RUN mkdir -p /opt/dof-easy/runtime && mv /opt/dnf/ubuntu/gateway /opt/dof-easy/runtime/gateway
+COPY assets/home/template/ /home/template/
+COPY plugin-assets/ /opt/dnf/plugins/
+COPY docker/ubuntu/run-game /opt/dnf/ubuntu/run-game
+RUN python3 /opt/dnf/ubuntu/bridge_compat.py \
+      --source /home/template/neople/bridge/df_bridge_r --output /opt/dnf/audit/integration-bridge \
+ && install -m 755 /opt/dnf/audit/integration-bridge/df_bridge_r /home/template/neople/bridge/df_bridge_r \
+ && rm /opt/dnf/audit/integration-bridge/df_bridge_r \
+ && python3 /opt/dnf/ubuntu/prepare_image.py \
+ && python3 /opt/dnf/ubuntu/tss_config.py \
+ && chmod 755 /opt/dnf/ubuntu/run-game
+ENTRYPOINT ["/bin/bash", "/opt/dnf/ubuntu/entrypoint.sh"]
