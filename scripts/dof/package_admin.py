@@ -65,7 +65,7 @@ def package(base_jar, classes, resources, frontend, output):
     hashes = {p.relative_to(output).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
               for p in sorted(output.rglob('*')) if p.is_file()}
     (output / 'build-manifest.json').write_text(json.dumps({
-        'adapter': 'qingkong-2.8-current-20261024', 'environment': 'isolated',
+        'adapter': 'dof-native-1', 'environment': 'isolated',
         'completeReplacement': False, 'files': hashes}, indent=2) + '\n')
     return hashes
 

@@ -44,7 +44,7 @@ public class NativeClientPayloadTest {
         rejects(() -> NativeClientPayload.decode(new NativeConfigContainer.Document(duplicate,true,false),server.getPublic()));
     }
     @Test public void privateNativeFixtureCanBeReencodedWithoutChangingExistingKey() throws Exception {
-        String fixture = System.getProperty("qingkong.native.current", ""), identity = System.getProperty("qingkong.native.public", "");
+        String fixture = System.getProperty("dof.native.current", ""), identity = System.getProperty("dof.native.public", "");
         org.junit.Assume.assumeFalse("Private native fixture/public identity not configured",fixture.isEmpty() || identity.isEmpty());
         PublicKey server = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Files.readAllBytes(Paths.get(identity))));
         NativeConfigContainer.Document doc = NativeConfigContainer.decode(Files.readAllBytes(Paths.get(fixture)),new byte[0]);

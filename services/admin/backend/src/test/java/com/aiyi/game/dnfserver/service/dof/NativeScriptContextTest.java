@@ -11,7 +11,7 @@ public class NativeScriptContextTest {
     private static final String PIN = NativeScriptContext.CLIENT_DLL_SHA256;
 
     @Test public void authorizedNativeSampleRegeneratesEveryByteWhenProvided() throws Exception {
-        String path = System.getProperty("qingkong.script.privateParameters");
+        String path = System.getProperty("dof.script.privateParameters");
         org.junit.Assume.assumeNotNull(path);
         JsonNode sample = new ObjectMapper().readTree(new File(path));
         String encoded = new String(hex(sample.get("contentKeyParameterHex").asText()), StandardCharsets.US_ASCII);

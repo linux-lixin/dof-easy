@@ -72,7 +72,7 @@ public class NativeScriptFileCodecTest {
         catch(IOException expected) {assertEquals("disk full",expected.getMessage());}
     }
     @Test public void twoCompleteOriginalArtifactsMatchIncludingNativeTrailersWhenProvided() throws Exception {
-        String path=System.getProperty("qingkong.script.pairDirectory");Assume.assumeNotNull(path);
+        String path=System.getProperty("dof.script.pairDirectory");Assume.assumeNotNull(path);
         Path dir=Paths.get(path),source=dir.resolve("Script.pvf");
         String sourceHash="2e65c17d075afec73203ba8f2bc9f5508f3b44706300f4ae7f9c13b5e0687fc5";
         JsonNode analysis=new ObjectMapper().readTree(dir.resolve("compressed-analysis.private.json").toFile());

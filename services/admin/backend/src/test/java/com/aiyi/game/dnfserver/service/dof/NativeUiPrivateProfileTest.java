@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.junit.Assert.*;
 public class NativeUiPrivateProfileTest {
     @Test public void privateMigrationIsExplicitAndCannotOverwriteAnotherState() throws Exception {
-        String name="qingkong.legacy.ui.profile", old=System.getProperty(name);
+        String name="dof.legacy.ui.profile", old=System.getProperty(name);
         Path file=Files.createTempFile("ui-private-synthetic-", ".json");
         try {
             System.setProperty(name, "");

@@ -9,7 +9,7 @@ import java.util.*;
 public final class NativeUiProfiles {
     private NativeUiState before, after;
     public NativeUiProfiles() {
-        String profile=System.getProperty("qingkong.legacy.ui.profile",System.getenv("QINGKONG_LEGACY_UI_PROFILE"));
+        String profile=System.getProperty("dof.legacy.ui.profile",System.getenv("DOF_LEGACY_UI_PROFILE"));
         if(profile==null||profile.isEmpty())return;
         java.nio.file.Path path=java.nio.file.Paths.get(profile).toAbsolutePath().normalize();
         try {

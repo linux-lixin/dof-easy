@@ -10,9 +10,9 @@ import static org.junit.Assert.*;
 
 public class NativeScriptCompressionTest {
     @Test public void realCompressedIndexAndResourcesWhenProvided() throws Exception {
-        String originalPath=System.getProperty("qingkong.script.original");
-        String nativePath=System.getProperty("qingkong.script.compressed");
-        String analysisPath=System.getProperty("qingkong.script.compressedAnalysis");
+        String originalPath=System.getProperty("dof.script.original");
+        String nativePath=System.getProperty("dof.script.compressed");
+        String analysisPath=System.getProperty("dof.script.compressedAnalysis");
         org.junit.Assume.assumeNotNull(originalPath,nativePath,analysisPath);
         JsonNode info=new ObjectMapper().readTree(new File(analysisPath));
         long size=info.get("indexBytes").asLong(), compressedSize=info.get("compressedIndexBytes").asLong();

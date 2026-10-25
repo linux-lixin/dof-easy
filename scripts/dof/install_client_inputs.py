@@ -41,7 +41,7 @@ def read_bundle(path):
     binding = json.loads(values['inputs/binding.json'])
     if (binding.get('instanceId') != INSTANCE
             or binding.get('environment') != 'isolated'
-            or binding.get('adapterVersion') != 'qingkong-2.8-current-20261024'
+            or binding.get('adapterVersion') != 'dof-native-1'
             or set(binding.get('sha256', {})) != {name[7:] for name in NAMES - {'inputs/binding.json'}}):
         raise ValueError('Publication input binding mismatch')
     for name, value in values.items():
@@ -64,12 +64,12 @@ def install(archive):
     peak=sum(len(value) for value in values.values()) + (ROOT/'runtime.env').stat().st_size*3 + 1024*1024
     if shutil.disk_usage(ROOT).free < 2*1024**3 + peak:
         raise RuntimeError('Insufficient space: requires 2 GiB reserve plus installation peak')
-    destination = ROOT / 'data/qingkong-client-publication'
+    destination = ROOT / 'data/dof-client-publication'
     if destination.exists() or destination.is_symlink():
         raise ValueError('Existing publication workspace will not be overwritten')
     env_path = ROOT / 'runtime.env'
     original = env_path.read_bytes()
-    if b'QINGKONG_CLIENT_WORKSPACE=' in original:
+    if b'DOF_CLIENT_WORKSPACE=' in original:
         raise ValueError('Publication environment is already configured')
     temp = Path(tempfile.mkdtemp(prefix='.client-inputs-', dir=ROOT / 'data'))
     try:
@@ -85,7 +85,7 @@ def install(archive):
             stream.write(original); stream.flush(); os.fsync(stream.fileno())
         fd, temporary = tempfile.mkstemp(prefix='.runtime-client-', dir=ROOT)
         with os.fdopen(fd, 'wb') as stream:
-            stream.write(original.rstrip(b'\n') + b'\nQINGKONG_CLIENT_WORKSPACE=/app/data/qingkong-client-publication\n')
+            stream.write(original.rstrip(b'\n') + b'\nDOF_CLIENT_WORKSPACE=/app/data/dof-client-publication\n')
             stream.flush(); os.fsync(stream.fileno())
         os.replace(temporary, env_path)
         validate_files(ROOT)

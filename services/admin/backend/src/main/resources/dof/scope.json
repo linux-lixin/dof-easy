@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "adapter": "qingkong-2.8-current-20261024",
+  "adapter": "dof-native-1",
   "baselineClasses": 71,
   "baselineOperations": 209,
   "nativeMenuAuditComplete": false,
@@ -446,7 +446,7 @@
           "evidence": [],
           "implementationSubsets": [
             {
-              "location": "qk.qingkong_config.is_open_up_pwd",
+              "location": "dof_native.config.is_open_up_pwd",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
@@ -468,7 +468,7 @@
           "evidence": [],
           "implementationSubsets": [
             {
-              "location": "qk.qingkong_config.switch_regCdkey",
+              "location": "dof_native.config.switch_regCdkey",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
@@ -496,7 +496,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.billing.ip_reg_control",
+          "nativeLocation": "dof_native.billing.ip_reg_control",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "既有 QK 注册路径；不新增网页注册执行器",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -513,7 +513,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.billing.regnumber / regtype",
+          "nativeLocation": "dof_native.billing.regnumber / regtype",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "既有 QK 注册路径，发放效果待核对",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -728,7 +728,7 @@
           "evidence": [],
           "implementationSubsets": [
             {
-              "location": "qk.qingkong_config.Basic_color",
+              "location": "dof_native.config.Basic_color",
               "status": "native_codec_tested_http_persistence_and_effect_pending",
               "evidence": []
             }
@@ -757,7 +757,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -774,7 +774,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -791,7 +791,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -808,7 +808,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -825,7 +825,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -842,7 +842,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -859,7 +859,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -876,7 +876,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -893,7 +893,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -910,7 +910,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -927,7 +927,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -944,7 +944,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -961,7 +961,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -978,7 +978,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -1059,7 +1059,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -1076,7 +1076,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -1093,7 +1093,7 @@
           "nativeMenuConfirmed": true,
           "nativeMenuId": "native-menu-11",
           "input": "绑定隔离实例的配置版本、操作编号与所选预设/坐标/开关；预览图为只读请求",
-          "nativeLocation": "qk.qingkong_config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
+          "nativeLocation": "dof_native.config：Hotkeys、temp_2、temp_3（只写本次涉及字段）",
           "encoding": "Hotkeys 使用配套 GBK/RC4 与星号分隔；temp_3 保留 ## 分段、& 字段及未知扩展；开关使用原生真/假或既有0",
           "executor": "网页保存；现有 QK 与客户端 DLL 消费，尚未取得这批修改的实际游戏效果证据",
           "activation": "已持久化与已生效分别显示；客户端重新加载后才可核对实际效果",
@@ -1604,7 +1604,7 @@
           "evidence": [],
           "implementationSubsets": [
             {
-              "location": "qk.qingkong_config.Switch[37]",
+              "location": "dof_native.config.Switch[37]",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
@@ -1749,7 +1749,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.billing.bubbleCount / bubbleTime / bubbleType",
+          "nativeLocation": "dof_native.billing.bubbleCount / bubbleTime / bubbleType",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "既有 QK 泡点线程；网页没有奖励线程",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -2647,7 +2647,7 @@
           "evidence": [],
           "implementationSubsets": [
             {
-              "location": "qk.qingkong_config.Switch[31]",
+              "location": "dof_native.config.Switch[31]",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
@@ -2792,7 +2792,7 @@
           "evidence": [],
           "implementationSubsets": [
             {
-              "location": "qk.qingkong_config.Switch[24..29,35]",
+              "location": "dof_native.config.Switch[24..29,35]",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
@@ -2871,7 +2871,7 @@
           "evidence": [],
           "implementationSubsets": [
             {
-              "location": "qk.qingkong_config.Switch[30,34,36,38,39]",
+              "location": "dof_native.config.Switch[30,34,36,38,39]",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
@@ -2914,7 +2914,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.qingkong_config.Switch[0..5]",
+          "nativeLocation": "dof_native.config.Switch[0..5]",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "现有客户端/QK 组件，费用与执行结果待核对",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -2931,7 +2931,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.qingkong_config.Switch[6..11]",
+          "nativeLocation": "dof_native.config.Switch[6..11]",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "现有客户端/QK 组件，费用与执行结果待核对",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -2948,7 +2948,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.qingkong_config.Switch[12..17]",
+          "nativeLocation": "dof_native.config.Switch[12..17]",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "现有客户端/QK 组件，费用与执行结果待核对",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -2965,7 +2965,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.qingkong_config.Switch[18..23]",
+          "nativeLocation": "dof_native.config.Switch[18..23]",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "现有客户端/QK 组件，费用与执行结果待核对",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -2982,7 +2982,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.qingkong_config.Switch[32]",
+          "nativeLocation": "dof_native.config.Switch[32]",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "现有客户端/QK 组件，费用与执行结果待核对",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
@@ -2999,7 +2999,7 @@
           "included": true,
           "nativeMenuConfirmed": true,
           "input": "原工具对应设置；网页只接受固定字段和类型",
-          "nativeLocation": "qk.qingkong_config.Switch[33]",
+          "nativeLocation": "dof_native.config.Switch[33]",
           "encoding": "整数原值或 Switch 星号分隔中文布尔；未知字段和尾部分隔符保留",
           "executor": "现有客户端/QK 组件，费用与执行结果待核对",
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",

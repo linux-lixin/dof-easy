@@ -6,7 +6,7 @@ import type { PageResult } from './entitys/PageResult';
 
 export const LauncherApi = {
   getRuntime() {
-    return Request.get<{ mode: 'dof' | 'qingkong'; configurationOwner: string }>('/api/v1/admin/launcher/runtime');
+    return Request.get<{ mode: 'dof' | 'native'; configurationOwner: string }>('/api/v1/admin/launcher/runtime');
   },
   getConfig() {
     return Request.get<LauncherConfig>('/api/v1/admin/launcher/config');

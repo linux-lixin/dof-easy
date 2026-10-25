@@ -13,8 +13,8 @@ import java.util.*;
 @Service
 public class DofClientService {
     @Resource private DofAdminService adminService;
-    @Value("${QINGKONG_CLIENT_WORKSPACE:}") private String workspace;
-    @Value("${QINGKONG_GAME_PVF:}") private String gamePvf;
+    @Value("${DOF_CLIENT_WORKSPACE:}") private String workspace;
+    @Value("${DOF_GAME_PVF:}") private String gamePvf;
     private NativeClientJobs jobs;
     private volatile NativeScriptJobs scripts;
     private long guard() {
@@ -66,7 +66,7 @@ public class DofClientService {
     }
     DofScriptReleaseService.Candidate releaseCandidate(String bundleId)throws IOException {
         guard();NativeClientJobs client=jobs();NativeClientJobs.Job bundle=client.read(bundleId);
-        if(bundle.scriptTaskId==null||!"isolated-qingkong-pvf-bundle".equals(bundle.packageKind))throw new DofFailure(409,"请选择包含加密 PVF 的配套包");
+        if(bundle.scriptTaskId==null||!"isolated-dof-pvf-bundle".equals(bundle.packageKind))throw new DofFailure(409,"请选择包含加密 PVF 的配套包");
         if(!bundle.revision.equals(currentRevision()))throw new DofFailure(409,"配套包的组件版本已经改变");
         client.download(bundleId);NativeScriptJobs store=scripts();NativeScriptJobs.Artifact artifact=store.artifact(bundle.scriptTaskId,bundle.revision);
         if(!artifact.job.sha256.equals(bundle.scriptSha256)||artifact.job.bytes!=bundle.scriptBytes)throw new DofFailure(409,"配套包与 PVF 任务不匹配");

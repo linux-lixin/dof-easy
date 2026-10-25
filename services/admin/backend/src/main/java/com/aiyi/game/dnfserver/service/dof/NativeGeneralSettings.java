@@ -17,8 +17,8 @@ public final class NativeGeneralSettings {
         }
     }
     static final List<String> COLUMNS=Collections.unmodifiableList(Arrays.asList(
-        "billing.ip_reg_control","billing.regnumber","billing.regtype","qingkong_config.is_open_up_pwd","qingkong_config.switch_regCdkey",
-        "billing.bubbleCount","billing.bubbleTime","billing.bubbleType","qingkong_config.Switch"));
+        "billing.ip_reg_control","billing.regnumber","billing.regtype","config.is_open_up_pwd","config.switch_regCdkey",
+        "billing.bubbleCount","billing.bubbleTime","billing.bubbleType","config.Switch"));
     static final Map<String,Field> FIELDS=fields();
     private static Map<String,Field> fields() {
         Map<String,Field> out=new LinkedHashMap<>();

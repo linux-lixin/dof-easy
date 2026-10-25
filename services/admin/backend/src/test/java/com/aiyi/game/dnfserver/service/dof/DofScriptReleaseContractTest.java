@@ -20,15 +20,15 @@ public class DofScriptReleaseContractTest {
     @Before public void setup()throws Exception {
         DofMyisamContractTest fixture=new DofMyisamContractTest();fixture.setup();
         ds=(DataSource)ReflectionTestUtils.getField(fixture,"ds");access=(DofAdminService)ReflectionTestUtils.getField(fixture,"service");
-        pvf=Files.createTempFile("qk-script-release-test-",".pvf");Files.write(pvf,NativeScriptJobsTest.fixture(12));
+        pvf=Files.createTempFile("dof_native-script-release-test-",".pvf");Files.write(pvf,NativeScriptJobsTest.fixture(12));
         bundleId=UUID.randomUUID().toString();parameter=NativeScriptParameters.create(new java.security.SecureRandom()).envelope(NativeScriptContext.CLIENT_DLL_SHA256);
         clients=mock(DofClientService.class);when(clients.releaseCandidate(bundleId)).thenReturn(new DofScriptReleaseService.Candidate(bundleId,UUID.randomUUID().toString(),NativeScriptJobs.hash(pvf),NativeScriptJobsTest.REV,parameter));
         service=new DofScriptReleaseService();ReflectionTestUtils.setField(service,"access",access);ReflectionTestUtils.setField(service,"clients",clients);ReflectionTestUtils.setField(service,"gamePvf",pvf.toString());
         try(Connection c=ds.getConnection();Statement s=c.createStatement()) {
-            s.execute("DELETE FROM dnf_service.QINGKONG_SCRIPT_RELEASE");s.execute("DROP TABLE IF EXISTS qk.billing");
-            s.execute("CREATE TABLE qk.billing(ID INT PRIMARY KEY,decrypt VARCHAR(255),unrelated INT) ENGINE=MyISAM DEFAULT CHARSET=utf8");s.execute("INSERT INTO qk.billing VALUES(1,'previous-billing',17)");
-            s.execute("ALTER TABLE qk.qingkong_config ADD pvfencryption VARCHAR(255),ADD Scriptmd5 VARCHAR(255),ADD Scriptverification VARCHAR(255),ADD updatec VARCHAR(255),ADD updatetype VARCHAR(255)");
-            s.execute("UPDATE qk.qingkong_config SET pvfencryption='previous-qk',Scriptmd5='unknown-old-metadata',Scriptverification='0',updatec='0',updatetype='1'");
+            s.execute("DELETE FROM dnf_service.DOF_SCRIPT_RELEASE");s.execute("DROP TABLE IF EXISTS dof_native.billing");
+            s.execute("CREATE TABLE dof_native.billing(ID INT PRIMARY KEY,decrypt VARCHAR(255),unrelated INT) ENGINE=MyISAM DEFAULT CHARSET=utf8");s.execute("INSERT INTO dof_native.billing VALUES(1,'previous-billing',17)");
+            s.execute("ALTER TABLE dof_native.config ADD pvfencryption VARCHAR(255),ADD Scriptmd5 VARCHAR(255),ADD Scriptverification VARCHAR(255),ADD updatec VARCHAR(255),ADD updatetype VARCHAR(255)");
+            s.execute("UPDATE dof_native.config SET pvfencryption='previous-dof_native',Scriptmd5='unknown-old-metadata',Scriptverification='0',updatec='0',updatetype='1'");
         }
     }
     @After public void cleanup()throws Exception {if(pvf!=null)Files.deleteIfExists(pvf);}
@@ -52,26 +52,26 @@ public class DofScriptReleaseContractTest {
     @Test public void appliesOnlyParametersReplaysAndRestoresUnequalOriginalValues()throws Exception {
         DofScriptReleaseService.Edit e=edit();assertFalse((Boolean)map(service.preview(e)).get("persisted"));
         String response=new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(service.apply(e,null));assertFalse(response.contains(parameter));assertFalse(response.contains("beforeJson"));
-        assertEquals("PERSISTED",map(service.apply(e,null)).get("state"));assertEquals(parameter,scalar("SELECT decrypt FROM qk.billing"));assertEquals(parameter,scalar("SELECT pvfencryption FROM qk.qingkong_config"));
-        assertEquals("unknown-old-metadata",scalar("SELECT Scriptmd5 FROM qk.qingkong_config"));assertEquals("1",scalar("SELECT COUNT(*) FROM dnf_service.QINGKONG_SCRIPT_RELEASE"));
-        execute("UPDATE qk.billing SET unrelated=22");execute("UPDATE qk.qingkong_config SET Scriptmd5='later-metadata'");
+        assertEquals("PERSISTED",map(service.apply(e,null)).get("state"));assertEquals(parameter,scalar("SELECT decrypt FROM dof_native.billing"));assertEquals(parameter,scalar("SELECT pvfencryption FROM dof_native.config"));
+        assertEquals("unknown-old-metadata",scalar("SELECT Scriptmd5 FROM dof_native.config"));assertEquals("1",scalar("SELECT COUNT(*) FROM dnf_service.DOF_SCRIPT_RELEASE"));
+        execute("UPDATE dof_native.billing SET unrelated=22");execute("UPDATE dof_native.config SET Scriptmd5='later-metadata'");
         DofScriptReleaseService.Edit restore=edit();restore.bundleId=null;service.apply(restore,e.requestId);
-        assertEquals("previous-billing",scalar("SELECT decrypt FROM qk.billing"));assertEquals("previous-qk",scalar("SELECT pvfencryption FROM qk.qingkong_config"));assertEquals("later-metadata",scalar("SELECT Scriptmd5 FROM qk.qingkong_config"));assertEquals("22",scalar("SELECT unrelated FROM qk.billing"));
+        assertEquals("previous-billing",scalar("SELECT decrypt FROM dof_native.billing"));assertEquals("previous-dof_native",scalar("SELECT pvfencryption FROM dof_native.config"));assertEquals("later-metadata",scalar("SELECT Scriptmd5 FROM dof_native.config"));assertEquals("22",scalar("SELECT unrelated FROM dof_native.billing"));
     }
     @Test public void staleRevisionWrongSourceAndEnabledUpdateFailWithoutWrites()throws Exception {
-        DofScriptReleaseService.Edit e=edit();execute("UPDATE qk.qingkong_config SET Scriptverification='1'");rejects(409,()->service.apply(e,null));rejects(409,()->service.apply(edit(),null));
-        execute("UPDATE qk.qingkong_config SET Scriptverification='0'");Files.write(pvf,new byte[]{1,2});rejects(409,()->service.apply(edit(),null));assertEquals("0",scalar("SELECT COUNT(*) FROM dnf_service.QINGKONG_SCRIPT_RELEASE"));
+        DofScriptReleaseService.Edit e=edit();execute("UPDATE dof_native.config SET Scriptverification='1'");rejects(409,()->service.apply(e,null));rejects(409,()->service.apply(edit(),null));
+        execute("UPDATE dof_native.config SET Scriptverification='0'");Files.write(pvf,new byte[]{1,2});rejects(409,()->service.apply(edit(),null));assertEquals("0",scalar("SELECT COUNT(*) FROM dnf_service.DOF_SCRIPT_RELEASE"));
     }
     @Test public void partialMyisamWriteIsReconciledAndFieldScopedRecoveryWorks()throws Exception {
-        DofScriptReleaseService.Edit e=edit();rejects(503,()->failing("UPDATE `qk`.`qingkong_config`").apply(e,null));
-        assertEquals(parameter,scalar("SELECT decrypt FROM qk.billing"));assertEquals("previous-qk",scalar("SELECT pvfencryption FROM qk.qingkong_config"));
+        DofScriptReleaseService.Edit e=edit();rejects(503,()->failing("UPDATE `dof_native`.`config`").apply(e,null));
+        assertEquals(parameter,scalar("SELECT decrypt FROM dof_native.billing"));assertEquals("previous-dof_native",scalar("SELECT pvfencryption FROM dof_native.config"));
         assertEquals("PARTIAL",map(service.reconcile(e.requestId)).get("state"));rejects(409,()->service.apply(edit(),null));
-        DofScriptReleaseService.Edit restore=edit();restore.bundleId=null;service.apply(restore,e.requestId);assertEquals("previous-billing",scalar("SELECT decrypt FROM qk.billing"));
+        DofScriptReleaseService.Edit restore=edit();restore.bundleId=null;service.apply(restore,e.requestId);assertEquals("previous-billing",scalar("SELECT decrypt FROM dof_native.billing"));
     }
     @Test public void disconnectBeforeOrAfterWritesDoesNotTriggerAutomaticRetry()throws Exception {
-        DofScriptReleaseService.Edit first=edit();rejects(503,()->failing("UPDATE `qk`.`billing`").apply(first,null));assertEquals("NOT_APPLIED",map(service.reconcile(first.requestId)).get("state"));
+        DofScriptReleaseService.Edit first=edit();rejects(503,()->failing("UPDATE `dof_native`.`billing`").apply(first,null));assertEquals("NOT_APPLIED",map(service.reconcile(first.requestId)).get("state"));
         assertEquals("NOT_APPLIED",map(service.apply(first,null)).get("state"));
-        DofScriptReleaseService.Edit next=edit();rejects(503,()->failing("UPDATE `dnf_service`.`QINGKONG_SCRIPT_RELEASE`").apply(next,null));assertEquals("PERSISTED",map(service.reconcile(next.requestId)).get("state"));
+        DofScriptReleaseService.Edit next=edit();rejects(503,()->failing("UPDATE `dnf_service`.`DOF_SCRIPT_RELEASE`").apply(next,null));assertEquals("PERSISTED",map(service.reconcile(next.requestId)).get("state"));
     }
     @Test public void concurrentApplicationsCannotOverwriteAndIdCannotChangePayload()throws Exception {
         DofScriptReleaseService.Edit a=edit(),b=edit();ExecutorService pool=Executors.newFixedThreadPool(2);CountDownLatch start=new CountDownLatch(1);
@@ -80,11 +80,11 @@ public class DofScriptReleaseContractTest {
             Callable<Integer> two=()->{ThreadUtil.setUserId(1L);start.await();try{service.apply(b,null);return 200;}catch(DofFailure e){return e.status;}};
             Future<Integer>x=pool.submit(one),y=pool.submit(two);start.countDown();List<Integer> results=Arrays.asList(x.get(30,TimeUnit.SECONDS),y.get(30,TimeUnit.SECONDS));assertTrue(results.contains(200));assertTrue(results.contains(409));
         }finally{pool.shutdownNow();}
-        String applied=scalar("SELECT request_id FROM dnf_service.QINGKONG_SCRIPT_RELEASE");DofScriptReleaseService.Edit original=applied.equals(a.requestId)?a:b;original.bundleId=UUID.randomUUID().toString();rejects(409,()->service.apply(original,null));
+        String applied=scalar("SELECT request_id FROM dnf_service.DOF_SCRIPT_RELEASE");DofScriptReleaseService.Edit original=applied.equals(a.requestId)?a:b;original.bundleId=UUID.randomUUID().toString();rejects(409,()->service.apply(original,null));
     }
     @Test public void thirdPartyParameterChangesBlockRecoveryAndAuditEngineMustBeDurable()throws Exception {
-        DofScriptReleaseService.Edit e=edit();service.apply(e,null);execute("UPDATE qk.billing SET decrypt='third-party'");DofScriptReleaseService.Edit restore=edit();restore.bundleId=null;rejects(409,()->service.apply(restore,e.requestId));
-        execute("ALTER TABLE dnf_service.QINGKONG_SCRIPT_RELEASE ENGINE=MyISAM");
-        try{rejects(409,()->service.status());}finally{execute("ALTER TABLE dnf_service.QINGKONG_SCRIPT_RELEASE ENGINE=InnoDB");}
+        DofScriptReleaseService.Edit e=edit();service.apply(e,null);execute("UPDATE dof_native.billing SET decrypt='third-party'");DofScriptReleaseService.Edit restore=edit();restore.bundleId=null;rejects(409,()->service.apply(restore,e.requestId));
+        execute("ALTER TABLE dnf_service.DOF_SCRIPT_RELEASE ENGINE=MyISAM");
+        try{rejects(409,()->service.status());}finally{execute("ALTER TABLE dnf_service.DOF_SCRIPT_RELEASE ENGINE=InnoDB");}
     }
 }

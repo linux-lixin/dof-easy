@@ -17,10 +17,10 @@ public class DofTextContractTest {
         ds = (DataSource) ReflectionTestUtils.getField(fixture, "ds");
         service = new DofTextService(); ReflectionTestUtils.setField(service, "access", ReflectionTestUtils.getField(fixture, "service"));
         try (Connection c = ds.getConnection(); Statement s = c.createStatement()) {
-            s.execute("DELETE FROM dnf_service.QINGKONG_TEXT_AUDIT");
-            for (String field : DofTextService.FIELDS) s.execute("ALTER TABLE qk.qingkong_config ADD `" + field + "` TEXT NULL");
-            s.execute("UPDATE qk.qingkong_config SET name='隔离测试',Notice='旧公告',Official='https://example.test',webreg='' ");
-            try (ResultSet r = s.executeQuery("SELECT MD5(Hotkeys) FROM qk.qingkong_config")) { r.next(); hotkeys = r.getString(1); }
+            s.execute("DELETE FROM dnf_service.DOF_TEXT_AUDIT");
+            for (String field : DofTextService.FIELDS) s.execute("ALTER TABLE dof_native.config ADD `" + field + "` TEXT NULL");
+            s.execute("UPDATE dof_native.config SET name='隔离测试',Notice='旧公告',Official='https://example.test',webreg='' ");
+            try (ResultSet r = s.executeQuery("SELECT MD5(Hotkeys) FROM dof_native.config")) { r.next(); hotkeys = r.getString(1); }
         }
     }
     @SuppressWarnings("unchecked") private Map<String,Object> read() { return (Map<String,Object>) service.read(); }
@@ -37,7 +37,7 @@ public class DofTextContractTest {
         assertEquals("not_observed", read().get("effectState"));
         DofTextService.Edit restore = edit(); restore.values = null; service.save(restore, e.requestId);
         assertEquals(before, read().get("revision"));
-        try (Connection c = ds.getConnection(); Statement s = c.createStatement(); ResultSet r = s.executeQuery("SELECT MD5(Hotkeys),HEX(unknown_setting) FROM qk.qingkong_config")) {
+        try (Connection c = ds.getConnection(); Statement s = c.createStatement(); ResultSet r = s.executeQuery("SELECT MD5(Hotkeys),HEX(unknown_setting) FROM dof_native.config")) {
             r.next(); assertEquals(hotkeys, r.getString(1)); assertEquals("00FF01", r.getString(2));
         }
     }
@@ -56,12 +56,12 @@ public class DofTextContractTest {
     }
     @Test public void pendingRecordRequiresReconciliationAndCorruptRestoreIsRejected() throws Exception {
         DofTextService.Edit e = edit(); e.values.put("Notice", "可核对公告"); service.save(e, null);
-        try (Connection c = ds.getConnection(); PreparedStatement p = c.prepareStatement("UPDATE dnf_service.QINGKONG_TEXT_AUDIT SET state='PREPARED' WHERE request_id=?")) {
+        try (Connection c = ds.getConnection(); PreparedStatement p = c.prepareStatement("UPDATE dnf_service.DOF_TEXT_AUDIT SET state='PREPARED' WHERE request_id=?")) {
             p.setString(1, e.requestId); p.executeUpdate();
         }
         rejects(409, () -> service.save(edit(), null));
         assertEquals("PERSISTED", ((Map<?,?>)service.reconcile(e.requestId)).get("state"));
-        try (Connection c = ds.getConnection(); PreparedStatement p = c.prepareStatement("UPDATE dnf_service.QINGKONG_TEXT_AUDIT SET before_json='{}' WHERE request_id=?")) {
+        try (Connection c = ds.getConnection(); PreparedStatement p = c.prepareStatement("UPDATE dnf_service.DOF_TEXT_AUDIT SET before_json='{}' WHERE request_id=?")) {
             p.setString(1, e.requestId); p.executeUpdate();
         }
         rejects(409, () -> service.save(edit(), e.requestId));

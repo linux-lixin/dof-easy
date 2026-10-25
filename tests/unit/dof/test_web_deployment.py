@@ -55,28 +55,34 @@ class DeploymentGuards(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / 'data').mkdir()
-            (root / 'data/qingkong-isolated.json').write_text(json.dumps({
+            (root / 'data/dof-isolated.json').write_text(json.dumps({
                 'instanceId': deploy.INSTANCE, 'databaseUuid': deploy.UUID, 'environment': 'isolated'}))
             runtime = root / 'runtime.env'
-            lines = ['QINGKONG_ADMIN_ENABLED=true', 'QINGKONG_ENVIRONMENT=isolated',
-                     'QINGKONG_DATABASE_UUID=' + deploy.UUID, 'QINGKONG_INSTANCE_ID=' + deploy.INSTANCE,
-                     'QINGKONG_ADAPTER_VERSION=qingkong-2.8-current-20261024', 'SPRING_DATASOURCE_USERNAME=' + deploy.DB_USER,
+            lines = ['LAUNCHER_MODE=native', 'DOF_ADMIN_ENABLED=true', 'DOF_ENVIRONMENT=isolated',
+                     'DOF_DATABASE_UUID=' + deploy.UUID, 'DOF_INSTANCE_ID=' + deploy.INSTANCE,
+                     'DOF_ADAPTER_VERSION=dof-native-1', 'SPRING_DATASOURCE_USERNAME=' + deploy.DB_USER,
                      'SPRING_DATASOURCE_URL=jdbc:mysql://' + deploy.DB + ':3306/dnf_service?useUnicode=true&characterEncoding=UTF-8&useSSL=false']
             runtime.write_text('\n'.join(lines)); runtime.chmod(0o600)
             deploy.validate_files(root)
+            original = runtime.read_text()
+            runtime.write_text(original + '\nQINGKONG_ADMIN_ENABLED=true')
+            with self.assertRaisesRegex(ValueError, 'Legacy'): deploy.validate_files(root)
+            runtime.write_text(original.replace('LAUNCHER_MODE=native','LAUNCHER_MODE=qingkong'))
+            with self.assertRaises(ValueError): deploy.validate_files(root)
+            runtime.write_text(original)
             runtime.chmod(0o644)
             with self.assertRaises(ValueError): deploy.validate_files(root)
-            runtime.chmod(0o600); runtime.write_text(runtime.read_text().replace('QINGKONG_ENVIRONMENT=isolated','QINGKONG_ENVIRONMENT=production'))
+            runtime.chmod(0o600); runtime.write_text(runtime.read_text().replace('DOF_ENVIRONMENT=isolated','DOF_ENVIRONMENT=production'))
             with self.assertRaises(ValueError): deploy.validate_files(root)
 
     def test_pvf_binding_is_explicit_read_only(self):
         image = 'sha256:' + '1' * 64
         self.assertNotIn('--mount', deploy.command(image))
-        cmd = deploy.command(image, {'QINGKONG_GAME_PVF': '/app/paired/Script.pvf'})
+        cmd = deploy.command(image, {'DOF_GAME_PVF': '/app/paired/Script.pvf'})
         self.assertEqual(cmd[cmd.index('--mount') + 1],
                          'type=bind,src=' + str(deploy.GAME_PVF) + ',dst=/app/paired/Script.pvf,readonly')
         with self.assertRaises(ValueError):
-            deploy.command(image, {'QINGKONG_GAME_PVF': '/some/other/path'})
+            deploy.command(image, {'DOF_GAME_PVF': '/some/other/path'})
 
 
 if __name__ == '__main__':

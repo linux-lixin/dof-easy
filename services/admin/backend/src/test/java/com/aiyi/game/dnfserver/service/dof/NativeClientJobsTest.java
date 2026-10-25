@@ -12,9 +12,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class NativeClientJobsTest {
     private static final ObjectMapper JSON = new ObjectMapper();
-    private static final String INSTANCE = "qk-contract-only";
+    private static final String INSTANCE = "dof-contract-only";
     private static final class Fixture implements AutoCloseable {
-        final Path root = Files.createTempDirectory("qk-publication-test-");
+        final Path root = Files.createTempDirectory("dof_native-publication-test-");
         final KeyPair identity = NativeClientPayloadTest.pair();
         Fixture() throws Exception {
             Path inputs = Files.createDirectory(root.resolve("inputs"));

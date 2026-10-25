@@ -17,7 +17,7 @@ public class ExtensionQueryService {
     @Resource private AccountVODao accountVODao;
     @Resource private DataSource dataSource;
     @org.springframework.beans.factory.annotation.Value("${DNF_COMPANION_PREVIEW:}") private String companionPreview;
-    public static class View { public String key,title,table,filter,order; public String database="qk"; public List<String> columns; }
+    public static class View { public String key,title,table,filter,order; public String database="dof_native"; public List<String> columns; }
     private final List<View> views;
     public ExtensionQueryService() {
         try {views=new ObjectMapper().readValue(getClass().getResourceAsStream("/extension/records.json"),new TypeReference<List<View>>(){});}
@@ -33,7 +33,7 @@ public class ExtensionQueryService {
         if(page<1 || page>10000 || size<1 || size>100 || owner!=null && owner<1)throw new ActivityConfigService.Failure(400,"分页或玩家编号无效");
         View v=views.stream().filter(x->x.key.equals(key)).findFirst().orElseThrow(()->new ActivityConfigService.Failure(404,"未知记录分类"));
         if(owner!=null && v.filter==null)throw new ActivityConfigService.Failure(400,"此记录不支持玩家过滤");
-        if(!Arrays.asList("qk","taiwan_cain_log").contains(v.database))throw new ActivityConfigService.Failure(409,"记录来源版本不兼容");
+        if(!Arrays.asList("dof_native","taiwan_cain_log").contains(v.database))throw new ActivityConfigService.Failure(409,"记录来源版本不兼容");
         String where=owner==null?"":" WHERE `"+v.filter+"`=?";
         List<Map<String,Object>> items=new ArrayList<>();
         String columns="`"+String.join("`,`",v.columns)+"`";

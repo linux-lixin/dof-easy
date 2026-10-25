@@ -38,23 +38,23 @@ public class ClientLauncherAdminController {
     @Value("${LAUNCHER_MODE:dof}")
     private String launcherMode;
 
-    @Value("${QINGKONG_ADMIN_ENABLED:false}") private boolean qingkongAdminEnabled;
-    @Value("${QINGKONG_ENVIRONMENT:}") private String qingkongEnvironment;
-    @Value("${QINGKONG_INSTANCE_ID:}") private String qingkongInstance;
+    @Value("${DOF_ADMIN_ENABLED:false}") private boolean dofAdminEnabled;
+    @Value("${DOF_ENVIRONMENT:}") private String dofEnvironment;
+    @Value("${DOF_INSTANCE_ID:}") private String dofInstance;
 
     @GetMapping("runtime")
     public Map<String, Object> runtime() {
         security.requireAdmin();
-        if (!"dof".equals(launcherMode) && !"qingkong".equals(launcherMode)) {
+        if (!"dof".equals(launcherMode) && !"native".equals(launcherMode)) {
             throw new IllegalStateException("Invalid LAUNCHER_MODE");
         }
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("mode", launcherMode);
-        result.put("configurationOwner", "qingkong".equals(launcherMode) ? "qingkong-tool" : "web-admin");
-        result.put("qingkongDevelopment", qingkongAdminEnabled);
-        if (qingkongAdminEnabled) {
-            result.put("environment", qingkongEnvironment);
-            result.put("instanceId", qingkongInstance);
+        result.put("configurationOwner", "web-admin");
+        result.put("nativeDevelopment", dofAdminEnabled);
+        if (dofAdminEnabled) {
+            result.put("environment", dofEnvironment);
+            result.put("instanceId", dofInstance);
         }
         return result;
     }

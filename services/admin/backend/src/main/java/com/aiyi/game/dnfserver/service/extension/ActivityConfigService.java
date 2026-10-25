@@ -63,7 +63,7 @@ public class ActivityConfigService {
         return sections.stream().filter(s -> s.key.equals(key)).findFirst()
             .orElseThrow(() -> new Failure(404, "未知活动配置"));
     }
-    private String table(Section s) { return "`qk`.`" + s.table + "`"; }
+    private String table(Section s) { return "`dof_native`.`" + s.table + "`"; }
     private String columns(Section s) {
         return s.fields.stream().map(f -> "`" + f.name + "`").collect(Collectors.joining(","));
     }
@@ -71,7 +71,7 @@ public class ActivityConfigService {
 
     private void schema(Connection c, Section s) throws SQLException {
         Map<String,String> actual = new HashMap<>();
-        try (PreparedStatement p = c.prepareStatement("SELECT COLUMN_NAME,DATA_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='qk' AND TABLE_NAME=?")) {
+        try (PreparedStatement p = c.prepareStatement("SELECT COLUMN_NAME,DATA_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME=?")) {
             p.setString(1, s.table);
             try (ResultSet r = p.executeQuery()) { while(r.next()) actual.put(r.getString(1), r.getString(2)); }
         }
@@ -195,16 +195,16 @@ public class ActivityConfigService {
         }
     }
     private boolean referenced(Connection c,long id) throws SQLException {
-        try(PreparedStatement p=c.prepareStatement("SELECT 1 FROM `qk`.`Collection_box_user_item` WHERE Slot=? LIMIT 1")) {
+        try(PreparedStatement p=c.prepareStatement("SELECT 1 FROM `dof_native`.`Collection_box_user_item` WHERE Slot=? LIMIT 1")) {
             p.setLong(1,id);try(ResultSet r=p.executeQuery()) {return r.next();}
         }
     }
     private void guard(Connection c,Section s) throws SQLException {
         String sql=null;
-        if(s.key.startsWith("pot-") && !s.key.equals("pot-switch"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(item_off_1),0)=0 AND COALESCE(MAX(item_off_2),0)=0 AND COALESCE(MAX(item_off_3),0)=0 FROM qk.earthenware_pot_item";
-        if(s.key.equals("shop"))sql="SELECT (SELECT COUNT(*) FROM qk.new_shop)=1 AND (SELECT COUNT(*) FROM qk.new_shop WHERE swoff<>0)=0 AND (SELECT COUNT(*) FROM qk.timed_task WHERE task_state=1)=0";
-        if(s.key.equals("charts-rewards"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(status),0)=0 FROM qk.game_charts_config";
-        if(s.key.equals("appearance"))sql="SELECT COUNT(*)<=1 AND COALESCE(MAX(swoff),0)=0 FROM qk.transformation_item";
+        if(s.key.startsWith("pot-") && !s.key.equals("pot-switch"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(item_off_1),0)=0 AND COALESCE(MAX(item_off_2),0)=0 AND COALESCE(MAX(item_off_3),0)=0 FROM dof_native.earthenware_pot_item";
+        if(s.key.equals("shop"))sql="SELECT (SELECT COUNT(*) FROM dof_native.new_shop)=1 AND (SELECT COUNT(*) FROM dof_native.new_shop WHERE swoff<>0)=0 AND (SELECT COUNT(*) FROM dof_native.timed_task WHERE task_state=1)=0";
+        if(s.key.equals("charts-rewards"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(status),0)=0 FROM dof_native.game_charts_config";
+        if(s.key.equals("appearance"))sql="SELECT COUNT(*)<=1 AND COALESCE(MAX(swoff),0)=0 FROM dof_native.transformation_item";
         if(sql!=null)try(Statement st=c.createStatement();ResultSet r=st.executeQuery(sql)){if(!r.next() || !r.getBoolean(1))throw new Failure(409,"原生功能仍在启用或开关状态不明确，拒绝改写，请先完成停用及兼容验证");}
     }
     public Map<String,Object> preview(String key, Edit edit) {
@@ -241,10 +241,10 @@ public class ActivityConfigService {
         try(Connection c=dataSource.getConnection()) {
             c.setAutoCommit(true);schema(c,s);auditTable(c);
             String locks=table(s)+" WRITE,"+AUDIT+" WRITE";
-            if(s.key.startsWith("pot-") && !s.key.equals("pot-switch")) locks+=",qk.earthenware_pot_item READ";
-            if(s.key.equals("shop"))locks+=",qk.new_shop READ,qk.timed_task READ";
-            if(s.key.equals("charts-rewards"))locks+=",qk.game_charts_config READ";
-            if(s.key.equals("collection")) locks+=",`qk`.`Collection_box_user_item` READ";
+            if(s.key.startsWith("pot-") && !s.key.equals("pot-switch")) locks+=",dof_native.earthenware_pot_item READ";
+            if(s.key.equals("shop"))locks+=",dof_native.new_shop READ,dof_native.timed_task READ";
+            if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ";
+            if(s.key.equals("collection")) locks+=",`dof_native`.`Collection_box_user_item` READ";
             // Native tables include MyISAM. Use explicit table locks, not fictional transaction rollback.
             try(Statement st=c.createStatement()) {st.execute("LOCK TABLES "+locks);}
             try {

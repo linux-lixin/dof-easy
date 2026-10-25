@@ -43,35 +43,37 @@ def protected_state():
 
 
 def validate_files(root):
-    expected = {'QINGKONG_ADMIN_ENABLED': 'true', 'QINGKONG_ENVIRONMENT': 'isolated',
-                'QINGKONG_DATABASE_UUID': UUID, 'QINGKONG_INSTANCE_ID': INSTANCE,
-                'QINGKONG_ADAPTER_VERSION': 'qingkong-2.8-current-20261024',
+    expected = {'LAUNCHER_MODE': 'native', 'DOF_ADMIN_ENABLED': 'true', 'DOF_ENVIRONMENT': 'isolated',
+                'DOF_DATABASE_UUID': UUID, 'DOF_INSTANCE_ID': INSTANCE,
+                'DOF_ADAPTER_VERSION': 'dof-native-1',
                 'SPRING_DATASOURCE_USERNAME': DB_USER}
     env_file = root / 'runtime.env'
     if env_file.stat().st_mode & 0o077:
         raise ValueError('Runtime credentials must not be group/world readable')
     values = dict(line.split('=', 1) for line in env_file.read_text().splitlines() if line)
+    if any(key.startswith('QINGKONG_') for key in values):
+        raise ValueError('Legacy native environment is not supported')
     if any(values.get(k) != v for k, v in expected.items()):
         raise ValueError('Isolated runtime identity mismatch')
     if values.get('SPRING_DATASOURCE_URL') != ('jdbc:mysql://' + DB + ':3306/'
             'dnf_service?useUnicode=true&characterEncoding=UTF-8&useSSL=false'):
         raise ValueError('Unexpected database connection')
-    marker = json.loads((root / 'data/qingkong-isolated.json').read_text())
-    if marker != {'instanceId': expected['QINGKONG_INSTANCE_ID'], 'databaseUuid': UUID, 'environment': 'isolated'}:
+    marker = json.loads((root / 'data/dof-isolated.json').read_text())
+    if marker != {'instanceId': expected['DOF_INSTANCE_ID'], 'databaseUuid': UUID, 'environment': 'isolated'}:
         raise ValueError('Isolated deployment marker mismatch')
-    if 'QINGKONG_CLIENT_WORKSPACE' in values:
-        if values['QINGKONG_CLIENT_WORKSPACE'] != '/app/data/qingkong-client-publication':
+    if 'DOF_CLIENT_WORKSPACE' in values:
+        if values['DOF_CLIENT_WORKSPACE'] != '/app/data/dof-client-publication':
             raise ValueError('Unexpected client publication workspace')
-        workspace = root / 'data/qingkong-client-publication'
+        workspace = root / 'data/dof-client-publication'
         if workspace.is_symlink() or not workspace.is_dir() or workspace.stat().st_mode & 0o077:
             raise ValueError('Client publication workspace must be a private directory')
         binding = json.loads((workspace / 'inputs/binding.json').read_text())
-        if (binding.get('instanceId') != expected['QINGKONG_INSTANCE_ID']
+        if (binding.get('instanceId') != expected['DOF_INSTANCE_ID']
                 or binding.get('environment') != 'isolated'
-                or binding.get('adapterVersion') != expected['QINGKONG_ADAPTER_VERSION']):
+                or binding.get('adapterVersion') != expected['DOF_ADAPTER_VERSION']):
             raise ValueError('Client publication sources belong to a different instance')
-    if 'QINGKONG_GAME_PVF' in values:
-        if values['QINGKONG_GAME_PVF'] != '/app/paired/Script.pvf':
+    if 'DOF_GAME_PVF' in values:
+        if values['DOF_GAME_PVF'] != '/app/paired/Script.pvf':
             raise ValueError('Unexpected paired PVF container path')
         if not GAME_PVF.is_file() or GAME_PVF.resolve() != GAME_PVF:
             raise ValueError('Paired PVF source must be a regular, direct file')
@@ -87,8 +89,8 @@ def command(image, values=None):
             '--env-file', str(ROOT / 'runtime.env'),
             '-v', str(ROOT / 'data') + ':/app/data', '-v', str(ROOT / 'logs') + ':/app/logs']
     values = values or {}
-    if 'QINGKONG_GAME_PVF' in values:
-        if values['QINGKONG_GAME_PVF'] != '/app/paired/Script.pvf':
+    if 'DOF_GAME_PVF' in values:
+        if values['DOF_GAME_PVF'] != '/app/paired/Script.pvf':
             raise ValueError('Unexpected paired PVF container path')
         args += ['--mount', 'type=bind,src=' + str(GAME_PVF) + ',dst=/app/paired/Script.pvf,readonly']
     return args + [image]
@@ -121,7 +123,7 @@ def main():
     if existing.returncode == 0:
         current = json.loads(existing.stdout)[0]
         env = dict(v.split('=', 1) for v in current['Config']['Env'] if '=' in v)
-        if env.get('QINGKONG_DATABASE_UUID') != UUID or env.get('QINGKONG_ENVIRONMENT') != 'isolated':
+        if env.get('DOF_DATABASE_UUID') != UUID or env.get('DOF_ENVIRONMENT') != 'isolated':
             raise ValueError('Existing container does not match the isolated identity')
         if not args.replace_web:
             raise ValueError('Web container exists; use --replace-web for explicit development-only recreation')

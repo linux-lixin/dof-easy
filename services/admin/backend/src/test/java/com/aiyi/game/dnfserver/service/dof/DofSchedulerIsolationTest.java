@@ -14,7 +14,7 @@ public class DofSchedulerIsolationTest {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             AccountVODao dao = mock(AccountVODao.class);
             context.getBeanFactory().registerSingleton("accountVODao", dao);
-            context.getEnvironment().getPropertySources().addFirst(new MapPropertySource("test", Collections.singletonMap("QINGKONG_ADMIN_ENABLED", "true")));
+            context.getEnvironment().getPropertySources().addFirst(new MapPropertySource("test", Collections.singletonMap("DOF_ADMIN_ENABLED", "true")));
             context.register(MemberTask.class); context.refresh();
             assertTrue(context.getBeansOfType(MemberTask.class).isEmpty()); verifyZeroInteractions(dao);
         }

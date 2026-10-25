@@ -13,8 +13,8 @@ import java.util.*;
 public class DofSettingsService {
     @Resource private DofAdminService access;
     private final ObjectMapper json=new ObjectMapper();
-    private static final String AUDIT="`dnf_service`.`QINGKONG_SETTINGS_AUDIT`";
-    private static final List<String> TABLES=Arrays.asList("billing","qingkong_config");
+    private static final String AUDIT="`dnf_service`.`DOF_SETTINGS_AUDIT`";
+    private static final List<String> TABLES=Arrays.asList("billing","config");
     public static class Edit { public String revision,requestId; public Map<String,JsonNode> values; }
     private String instance(){return access.context().get("instanceId").toString();}
     private String encode(Map<String,String> state) {
@@ -35,12 +35,12 @@ public class DofSettingsService {
     }
     private void schema(Connection c)throws SQLException {
         Map<String,String> engines=new HashMap<>(),columns=new HashMap<>();
-        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_NAME,ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='qk' AND TABLE_NAME IN ('billing','qingkong_config')")) {
+        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_NAME,ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME IN ('billing','config')")) {
             while(r.next())engines.put(r.getString(1),r.getString(2));
         }
         for(String table:TABLES)if(!Arrays.asList("MyISAM","InnoDB").contains(engines.get(table)))
             throw new DofFailure(409,"原生表引擎缺失或不受支持，停止保存");
-        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE,COLUMN_TYPE,CHARACTER_SET_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='qk' AND TABLE_NAME IN ('billing','qingkong_config')")) {
+        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE,COLUMN_TYPE,CHARACTER_SET_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME IN ('billing','config')")) {
             while(r.next()) {
                 String key=r.getString(1)+"."+r.getString(2),type=r.getString(3);
                 if("int".equals(type) && !r.getString(4).toLowerCase(Locale.ROOT).contains("unsigned"))columns.put(key,"signed-int");
@@ -57,7 +57,7 @@ public class DofSettingsService {
         for(String table:TABLES) {
             List<String> keys=new ArrayList<>();for(String key:NativeGeneralSettings.COLUMNS)if(key.startsWith(table+"."))keys.add(key);
             List<String> columns=new ArrayList<>();for(String key:keys)columns.add("BINARY `"+key.substring(table.length()+1)+"`");
-            try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT ID,"+String.join(",",columns)+" FROM `qk`.`"+table+"` LIMIT 2")) {
+            try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT ID,"+String.join(",",columns)+" FROM `dof_native`.`"+table+"` LIMIT 2")) {
                 if(!r.next() || r.getInt(1)!=1)throw new DofFailure(409,"原生设置缺失，不自动初始化");
                 for(int i=0;i<keys.size();i++) {
                     byte[] value=r.getBytes(i+2);if(value!=null && value.length>1024*1024)throw new DofFailure(409,"原生设置超过读取上限");
@@ -71,9 +71,9 @@ public class DofSettingsService {
     private void lock(Connection c)throws SQLException {
         // Table write locks serialize native MyISAM data with durable InnoDB audit.
         // The bound connection uses autocommit; never promise transactional undo.
-        try(Statement s=c.createStatement()){s.execute("LOCK TABLES `qk`.`billing` WRITE,`qk`.`qingkong_config` WRITE,"+AUDIT+" WRITE");}
+        try(Statement s=c.createStatement()){s.execute("LOCK TABLES `dof_native`.`billing` WRITE,`dof_native`.`config` WRITE,"+AUDIT+" WRITE");}
         // Check while locks prevent concurrent DDL from replacing the audit table.
-        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='dnf_service' AND TABLE_NAME='QINGKONG_SETTINGS_AUDIT'")) {
+        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='dnf_service' AND TABLE_NAME='DOF_SETTINGS_AUDIT'")) {
             if(!r.next() || !"InnoDB".equals(r.getString(1)) || r.next())throw new DofFailure(409,"审计存储引擎不兼容，停止保存");
         }
     }
@@ -143,10 +143,10 @@ public class DofSettingsService {
             List<String> keys=new ArrayList<>(),assignments=new ArrayList<>();
             for(String key:changes)if(key.startsWith(table+".")){keys.add(key);assignments.add("`"+key.substring(table.length()+1)+"`=?");}
             if(keys.isEmpty())continue;
-            try(PreparedStatement p=c.prepareStatement("UPDATE `qk`.`"+table+"` SET "+String.join(",",assignments)+" WHERE ID=1")) {
+            try(PreparedStatement p=c.prepareStatement("UPDATE `dof_native`.`"+table+"` SET "+String.join(",",assignments)+" WHERE ID=1")) {
                 for(int i=0;i<keys.size();i++) {
                     String key=keys.get(i),value=after.get(key);
-                    if(key.equals("qingkong_config.Switch"))p.setBytes(i+1,value==null?null:Base64.getDecoder().decode(value));
+                    if(key.equals("config.Switch"))p.setBytes(i+1,value==null?null:Base64.getDecoder().decode(value));
                     else if(value==null)p.setNull(i+1,Types.INTEGER);
                     else {
                         // Connector/J may emit setBytes as a hex literal. In an

@@ -46,7 +46,7 @@ def prepare(client, public_key, workspace, instance, public_sha256):
     try:
         inputs = workspace / 'inputs'; inputs.mkdir(mode=0o700)
         binding = {'instanceId': instance, 'environment': 'isolated',
-                   'adapterVersion': 'qingkong-2.8-current-20261024',
+                   'adapterVersion': 'dof-native-1',
                    'sha256': {name: hashlib.sha256(value).hexdigest() for name, value in data.items()}}
         for name, value in data.items():
             fd = os.open(inputs / name, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)

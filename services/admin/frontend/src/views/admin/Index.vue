@@ -184,7 +184,7 @@ Request.get('/api/v1/admin/launcher/runtime').then(response => {
 
 <template>
 <div class="admin-page">
-  <a-alert v-if="runtime?.qingkongDevelopment" type="warning" banner>
+  <a-alert v-if="runtime?.nativeDevelopment" type="warning" banner>
     dof-easy隔离开发环境 · {{ runtime.instanceId }} · 尚未完成统一验收
   </a-alert>
   <a-alert v-if="runtimeError" type="error" banner>{{ runtimeError }}</a-alert>

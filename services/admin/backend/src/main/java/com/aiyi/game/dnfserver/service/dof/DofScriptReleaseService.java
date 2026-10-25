@@ -19,10 +19,10 @@ import java.util.*;
 public class DofScriptReleaseService {
     @Resource private DofAdminService access;
     @Resource private DofClientService clients;
-    @Value("${QINGKONG_GAME_PVF:}") private String gamePvf;
-    private static final String AUDIT="`dnf_service`.`QINGKONG_SCRIPT_RELEASE`";
-    private static final List<String> KEYS=Arrays.asList("billing.decrypt","qingkong_config.pvfencryption",
-        "qingkong_config.Scriptmd5","qingkong_config.Scriptverification","qingkong_config.updatec","qingkong_config.updatetype");
+    @Value("${DOF_GAME_PVF:}") private String gamePvf;
+    private static final String AUDIT="`dnf_service`.`DOF_SCRIPT_RELEASE`";
+    private static final List<String> KEYS=Arrays.asList("billing.decrypt","config.pvfencryption",
+        "config.Scriptmd5","config.Scriptverification","config.updatec","config.updatetype");
     private static final ObjectMapper JSON=new ObjectMapper();
     public static class Edit {public String requestId,revision,bundleId;}
     static final class Candidate {
@@ -45,22 +45,22 @@ public class DofScriptReleaseService {
     }
     private void schema(Connection c)throws SQLException {
         Map<String,String> engines=new HashMap<>();
-        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_SCHEMA,TABLE_NAME,ENGINE FROM information_schema.TABLES WHERE (TABLE_SCHEMA='qk' AND TABLE_NAME IN ('billing','qingkong_config')) OR (TABLE_SCHEMA='dnf_service' AND TABLE_NAME='QINGKONG_SCRIPT_RELEASE')")) {
+        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_SCHEMA,TABLE_NAME,ENGINE FROM information_schema.TABLES WHERE (TABLE_SCHEMA='dof_native' AND TABLE_NAME IN ('billing','config')) OR (TABLE_SCHEMA='dnf_service' AND TABLE_NAME='DOF_SCRIPT_RELEASE')")) {
             while(r.next())engines.put(r.getString(1)+"."+r.getString(2),r.getString(3));
         }
-        for(String table:Arrays.asList("billing","qingkong_config"))if(!Arrays.asList("MyISAM","InnoDB").contains(engines.get("qk."+table)))throw new DofFailure(409,"原生配置表引擎不兼容");
-        if(!"InnoDB".equals(engines.get("dnf_service.QINGKONG_SCRIPT_RELEASE")))throw new DofFailure(409,"发布审计表尚未准备或引擎不兼容");
+        for(String table:Arrays.asList("billing","config"))if(!Arrays.asList("MyISAM","InnoDB").contains(engines.get("dof_native."+table)))throw new DofFailure(409,"原生配置表引擎不兼容");
+        if(!"InnoDB".equals(engines.get("dnf_service.DOF_SCRIPT_RELEASE")))throw new DofFailure(409,"发布审计表尚未准备或引擎不兼容");
         Set<String> valid=new HashSet<>();
-        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='qk' AND TABLE_NAME IN ('billing','qingkong_config')")) {
+        try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT TABLE_NAME,COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME IN ('billing','config')")) {
             while(r.next())if("varchar".equals(r.getString(3))&&r.getLong(4)>=128)valid.add(r.getString(1)+"."+r.getString(2));
         }
         if(!valid.containsAll(KEYS))throw new DofFailure(409,"原生 Script 字段类型不兼容，不初始化或修改结构");
     }
     private Map<String,String> read(Connection c)throws SQLException {
         schema(c);Map<String,String> found=new HashMap<>(),out=new LinkedHashMap<>();
-        for(String table:Arrays.asList("billing","qingkong_config")) {
+        for(String table:Arrays.asList("billing","config")) {
             List<String> keys=new ArrayList<>(),columns=new ArrayList<>();for(String key:KEYS)if(key.startsWith(table+".")){keys.add(key);columns.add("BINARY `"+key.substring(table.length()+1)+"`");}
-            try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT ID,"+String.join(",",columns)+" FROM `qk`.`"+table+"` LIMIT 2")) {
+            try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT ID,"+String.join(",",columns)+" FROM `dof_native`.`"+table+"` LIMIT 2")) {
                 if(!r.next()||r.getInt(1)!=1)throw new DofFailure(409,"原生配置行缺失，停止应用");
                 for(int i=0;i<keys.size();i++){byte[] value=r.getBytes(i+2);if(value!=null&&value.length>4096)throw new DofFailure(409,"原生 Script 字段超限");found.put(keys.get(i),value==null?null:Base64.getEncoder().encodeToString(value));}
                 if(r.next())throw new DofFailure(409,"原生配置存在多行，停止应用");
@@ -69,7 +69,7 @@ public class DofScriptReleaseService {
         for(String key:KEYS)out.put(key,found.get(key));return out;
     }
     private static List<String> changed(Map<String,String>a,Map<String,String>b){List<String> out=new ArrayList<>();for(String k:KEYS)if(!Objects.equals(a.get(k),b.get(k)))out.add(k);return out;}
-    private void lock(Connection c)throws SQLException{try(Statement s=c.createStatement()){s.execute("LOCK TABLES qk.billing WRITE,qk.qingkong_config WRITE,"+AUDIT+" WRITE");}}
+    private void lock(Connection c)throws SQLException{try(Statement s=c.createStatement()){s.execute("LOCK TABLES dof_native.billing WRITE,dof_native.config WRITE,"+AUDIT+" WRITE");}}
     private void unlock(Connection c)throws SQLException{try(Statement s=c.createStatement()){s.execute("UNLOCK TABLES");}}
     public Object status() {
         access.admin();try(Connection c=access.connection()) {
@@ -78,7 +78,7 @@ public class DofScriptReleaseService {
             out.put("manualModeCompatible",manual(s));out.put("sourceConfigured",gamePvf!=null&&!gamePvf.isEmpty());out.put("nativeClientAcceptance",false);return out;
         }catch(SQLException e){throw new DofFailure(503,"隔离发布配置或审计表不可用");}
     }
-    private static boolean manual(Map<String,String>s){return "0".equals(text(s,"qingkong_config.Scriptverification"))&&"0".equals(text(s,"qingkong_config.updatec"));}
+    private static boolean manual(Map<String,String>s){return "0".equals(text(s,"config.Scriptverification"))&&"0".equals(text(s,"config.updatec"));}
     public Object preview(Edit edit)throws IOException {
         access.admin();if(edit==null)throw new DofFailure(400,"缺少发布参数");id(edit.requestId);id(edit.bundleId);
         try(Connection c=access.connection()) {
@@ -112,7 +112,7 @@ public class DofScriptReleaseService {
     private void write(Connection c,Map<String,String> old,Map<String,String> target)throws SQLException {
         for(String key:changed(old,target)) {
             if(!KEYS.subList(0,2).contains(key))throw new DofFailure(409,"手动配套发布不能更改更新协议字段");
-            String[] parts=key.split("\\.");try(PreparedStatement p=c.prepareStatement("UPDATE `qk`.`"+parts[0]+"` SET `"+parts[1]+"`=? WHERE ID=1")) {
+            String[] parts=key.split("\\.");try(PreparedStatement p=c.prepareStatement("UPDATE `dof_native`.`"+parts[0]+"` SET `"+parts[1]+"`=? WHERE ID=1")) {
                 String value=target.get(key);p.setBytes(1,value==null?null:Base64.getDecoder().decode(value));if(p.executeUpdate()!=1)throw new SQLException("Native row changed");
             }
         }
