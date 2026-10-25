@@ -12,8 +12,8 @@ Dockerfile text eol=lf
 .gitignore text eol=lf
 .gitattributes text eol=lf
 .dockerignore text eol=lf
-/services/game/runtime/ubuntu/qk-db-adapter.js text eol=lf
-/tests/unit/qk-scope.cjs text eol=lf
+/services/game/runtime/ubuntu/gateway/db_adapter.js text eol=lf
+/tests/unit/dof/adapter-scope.cjs text eol=lf
 
 # Preserve upstream runtime inputs byte-for-byte, including legacy encodings.
 "/services/game/assets/root/qk_plugin_*.ini" -text

@@ -13,3 +13,10 @@ vipai86-pvf
 assets/home/template/init/Script.tgz
 assets/home/template/init/Script.pvf
 assets/home/template/init/df_game_r
+
+# Optional raid resources belong to instance data, never shared image layers.
+assets/root/QK
+assets/root/qk_plugin.so
+assets/root/qingkong
+assets/root/dungeon.lst
+assets/home/template/neople/game/libantisvrinline.so

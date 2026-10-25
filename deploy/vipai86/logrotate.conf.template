@@ -1,0 +1,15 @@
+# Operational logs only. Player transaction/history/money records are excluded.
+"@RUNTIME_ROOT@/game/core-log/*/*.log"
+"@RUNTIME_ROOT@/game/frida-log/*.log"
+"@RUNTIME_ROOT@/game/log/*/*.log"
+"@RUNTIME_ROOT@/game/log/*/*.debug" {
+    daily
+    maxsize 25M
+    rotate 14
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+    su root root
+}

@@ -1,0 +1,805 @@
+{
+  "schema": 1,
+  "sourceSha256": "67553a3b45de80ebea5f767f6e3a51d577d2cbb6c6647bd4c97037cb50a41f9b",
+  "method": "Constant stack SQL construction and original mysql_query wrapper analysis; every site requires instruction oracle verification",
+  "calls": [
+    {
+      "call": 4464670,
+      "target": 4784656,
+      "before": "e8ede10400",
+      "text": "select cfg_content,cfg_type,UID,function_type from qk.Robot_stall_config where state=1 and cfg_type in(1,2);",
+      "blockStart": 4464384,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "r15": [
+          "rbp",
+          -440
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4633128,
+      "target": 4784656,
+      "before": "e8e34f0200",
+      "text": "Select speed From qk.Robot limit 1;",
+      "blockStart": 4633012,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -288
+      ],
+      "supported": true
+    },
+    {
+      "call": 4645314,
+      "target": 4784656,
+      "before": "e849200200",
+      "text": "select id,uid,ai_type,ai_speak from qk.ai_sys where ai_state=1;",
+      "blockStart": 4645102,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4684338,
+      "target": 4784656,
+      "before": "e8d9870100",
+      "text": "Select aiState From qk.robot limit 1;",
+      "blockStart": 4684210,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4686757,
+      "target": 4784656,
+      "before": "e8667e0100",
+      "text": "Select seal_ip, seal_mac, seal_uid, seal_announcement, seal_content From qk.titles limit 1;",
+      "blockStart": 4686522,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4697624,
+      "target": 4784656,
+      "before": "e8f3530100",
+      "text": "select id,ai_msg,ai_zhanjie,ai_yisu,ai_sleep from qk.qk_ai where ai_state=1 limit 1;",
+      "blockStart": 4697406,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4701318,
+      "target": 4784656,
+      "before": "e885450100",
+      "text": "SELECT hh_text FROM qk.qk_ai_hh where hh_state =1;",
+      "blockStart": 4701166,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -288
+      ],
+      "supported": true
+    },
+    {
+      "call": 4702063,
+      "target": 4784656,
+      "before": "e89c420100",
+      "text": "select ditu_id,fangjian_id,x_min,x_max,y_min,y_max,fangjian_max_time from qk.qk_ai_map where ditu_state=1;",
+      "blockStart": 4701792,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -288
+      ],
+      "supported": true
+    },
+    {
+      "call": 4704275,
+      "target": 4784656,
+      "before": "e8f8390100",
+      "text": "select id,uid,ai_type,ai_speak from qk.ai_sys where ai_state=1;",
+      "blockStart": 4704101,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4737327,
+      "target": 4784656,
+      "before": "e8dcb80000",
+      "text": "select ID from qk.qingkong_config where switch_regCdkey=1;",
+      "blockStart": 4737120,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "r12": [
+          "rbp",
+          -304
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4738176,
+      "target": 4784656,
+      "before": "e88bb50000",
+      "text": "select regtype,regnumber from qk.billing limit 1",
+      "blockStart": 4737956,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "r12": [
+          "rbp",
+          -304
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4741196,
+      "target": 4784656,
+      "before": "e8bfa90000",
+      "text": "select ID from qk.qingkong_config where switch_regCdkey=1;",
+      "blockStart": 4740989,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "r12": [
+          "rbp",
+          -304
+        ],
+        "r15": 0
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4742029,
+      "target": 4784656,
+      "before": "e87ea60000",
+      "text": "select regtype,regnumber from qk.billing limit 1",
+      "blockStart": 4741802,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "r12": [
+          "rbp",
+          -304
+        ],
+        "r15": [
+          "rbp",
+          -801
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4745679,
+      "target": 4784656,
+      "before": "e83c980000",
+      "blockStart": 4745552,
+      "initialRegisters": {
+        "r12": [
+          "rbp",
+          -288
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -288
+      ],
+      "supported": true,
+      "text": "select uidsecure from qk.billing limit 1;"
+    },
+    {
+      "call": 4752923,
+      "target": 4784656,
+      "before": "e8f07b0000",
+      "text": "select uidsecure from qk.billing limit 1;",
+      "blockStart": 4752788,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "r13": [
+          "rbp",
+          -480
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -304
+      ],
+      "supported": true
+    },
+    {
+      "call": 4762562,
+      "target": 4784656,
+      "before": "e849560000",
+      "text": "SELECT NAME, price, Lv, blacklist FROM qk.fightingcapacity price WHERE blacklist = 0 ORDER BY price DESC LIMIT 0, 10;",
+      "blockStart": 4762264,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -288
+      ],
+      "supported": true
+    },
+    {
+      "call": 4771857,
+      "target": 4784656,
+      "before": "e8fa310000",
+      "text": "select DXW from qk.config where limit 1;",
+      "blockStart": 4771734,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -288
+      ],
+      "supported": true
+    },
+    {
+      "call": 4772362,
+      "target": 4784656,
+      "before": "e801300000",
+      "text": "select DGJZ from qk.config limit 1;",
+      "blockStart": 4772246,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -288
+      ],
+      "supported": true
+    },
+    {
+      "call": 4809008,
+      "target": 4784656,
+      "before": "e8dba0ffff",
+      "text": "select count(1) from information_schema.SCHEMATA where SCHEMA_NAME='qk';",
+      "blockStart": 4808838,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4811273,
+      "target": 4784656,
+      "before": "e80298ffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='game_tongguan_config';",
+      "blockStart": 4811018,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 15143
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4811685,
+      "target": 4784656,
+      "before": "e86696ffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='game_charts_mobai';",
+      "blockStart": 4811437,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 15143
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4812169,
+      "target": 4784656,
+      "before": "e88294ffff",
+      "text": "select TABLE_SCHEMA from information_schema.COLUMNS where TABLE_NAME='qingkong_config' and COLUMN_NAME='is_open_up_pwd';",
+      "blockStart": 4811897,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 15143
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4812906,
+      "target": 4784656,
+      "before": "e8a191ffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='qk_ai';",
+      "blockStart": 4812685,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 15143
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4813317,
+      "target": 4784656,
+      "before": "e80690ffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='robot';",
+      "blockStart": 4813096,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 15143
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4813617,
+      "target": 4784656,
+      "before": "e8da8effff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='robot_stall';",
+      "blockStart": 4813374,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 15143
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4813938,
+      "target": 4784656,
+      "before": "e8998dffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='robot_stall_config';",
+      "blockStart": 4813676,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 15143
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4814232,
+      "target": 4784656,
+      "before": "e8738cffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='titles';",
+      "blockStart": 4813997,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 59
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4814522,
+      "target": 4784656,
+      "before": "e8518bffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='gift_task';",
+      "blockStart": 4814291,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 59
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4814903,
+      "target": 4784656,
+      "before": "e8d489ffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='cdk_copy';",
+      "blockStart": 4814672,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 59
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4815191,
+      "target": 4784656,
+      "before": "e8b488ffff",
+      "text": "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='qk' and TABLE_NAME='map_task';",
+      "blockStart": 4814960,
+      "initialRegisters": {
+        "rbp": [
+          "rbp",
+          0
+        ],
+        "rsp": [
+          "rsp",
+          0
+        ],
+        "rbx": [
+          "rbp",
+          -10272
+        ],
+        "r13": 59
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true
+    },
+    {
+      "call": 4816794,
+      "target": 4786576,
+      "before": "e8f189ffff",
+      "blockStart": 4816527,
+      "initialRegisters": {
+        "rbx": [
+          "rbp",
+          -10272
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true,
+      "text": "alter table qk.fightingcapacity add mobai_num int(10) default 0 not null comment '\u819c\u62dc\u6b21\u6570';"
+    },
+    {
+      "call": 4816971,
+      "target": 4786576,
+      "before": "e84089ffff",
+      "blockStart": 4816823,
+      "initialRegisters": {
+        "rbx": [
+          "rbp",
+          -10272
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true,
+      "text": "alter table qk.fightingcapacity add column CID int(11) not null;"
+    },
+    {
+      "call": 4817170,
+      "target": 4786576,
+      "before": "e87988ffff",
+      "blockStart": 4817063,
+      "initialRegisters": {
+        "rbx": [
+          "rbp",
+          -10272
+        ]
+      },
+      "buffer": [
+        "rbp",
+        -10272
+      ],
+      "supported": true,
+      "text": "alter table qk.dungeonCheck add num int(11);"
+    }
+  ]
+}

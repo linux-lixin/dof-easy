@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "runtimeManifest": {
+    "schema": 2,
+    "artifact": "dof-server-runtime",
+    "sourceEdition": "replacement-only",
+    "files": [
+      {
+        "path": "bin/dof-gateway",
+        "bytes": 1120061,
+        "sha256": "8e05eb8f2741061a8f9682d819eb774516ac7d8c357a5a90e688fcbc6ac0e9e1",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libPocoFoundation.so.16",
+        "bytes": 1788536,
+        "sha256": "10bb01ee842f7c23a6fca2698cd0d6235f3afee4289b8244166ee64f8ee4f246",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libPocoNet.so.16",
+        "bytes": 1170672,
+        "sha256": "4fa3b3145b46d9815962d2a9171162d7bf90d06eafd95605bf779de501a1624d",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libPocoUtil.so.16",
+        "bytes": 374768,
+        "sha256": "668ffc723e9e96d10edd14a872902a96097878710d8231f7a0ecabd7f9d16255",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libPocoXML.so.16",
+        "bytes": 634952,
+        "sha256": "56f2ef131395a848e0400f360b5bd6c1ae24fec3878ae2197a167acf860358ee",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libcolib.so.0.5",
+        "bytes": 86660,
+        "sha256": "bb06bae3d2a51376009ed7e68f0016367fe5d1c69b3e899f5559c06a128e890c",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libcrypto.so.1.0.0",
+        "bytes": 2470301,
+        "sha256": "6a3634c2c2f5377c0b6381b5eda8528f29225d39214f638cd155be12dd32990a",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libdof-inline.so",
+        "bytes": 2571100,
+        "sha256": "35e3a05e86b950f5ac4880fbc8fb75bb9d0926662d9344ea808af4c2aad327f8",
+        "elf_class": 1
+      },
+      {
+        "path": "lib/libdof-plugin.so",
+        "bytes": 9193440,
+        "sha256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+        "elf_class": 1
+      },
+      {
+        "path": "lib/libjson.so",
+        "bytes": 336408,
+        "sha256": "23a31e2679acc64bfa1e470743e2e568a6d02b401842c121792cbc47401e48fe",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libmysqlclient.so.18",
+        "bytes": 8190300,
+        "sha256": "2da38cd7f1a3d79d0ec3991ad0ee30b02ef083272dad6bd6dd754d560e127edd",
+        "elf_class": 2
+      },
+      {
+        "path": "lib/libuv.so.1",
+        "bytes": 734012,
+        "sha256": "d2f052020ef9e9925f9be9b886621b0214dc6c96a5d1b481aecb39358f9db524",
+        "elf_class": 2
+      },
+      {
+        "path": "runtime/gateway/equipment-abi.json",
+        "bytes": 311,
+        "sha256": "2304416e42843465e1211467b01cc19786274096c8a14196160b2258d00347f0"
+      },
+      {
+        "path": "runtime/gateway/equipment.js",
+        "bytes": 9296,
+        "sha256": "649e23cdbc33fad77793814c4796748d75209f9a46c5d6c3fb274443c4e23933"
+      },
+      {
+        "path": "runtime/gateway/schema.sql",
+        "bytes": 20192,
+        "sha256": "9e396cf9ecbb0f3be92e41f4f312ab24e436dd7bb64e00297b2642cd2b83ae71"
+      }
+    ]
+  },
+  "releaseReady": false,
+  "scope": "source integration before remote 86-level/web/client acceptance",
+  "checks": {
+    "affectedUnitTests": {
+      "passed": 101,
+      "failed": 0,
+      "skipped": 0
+    },
+    "deterministicRuntimeMatchesLock": true
+  },
+  "previousEvidence": {
+    "scope": "70-level local server only; not evidence for the 86-level target",
+    "nativeLoad": "previously verified",
+    "equipment": "native dispatch verified; player pickup and display pending",
+    "randomBox": "native query verified; inventory rewards pending"
+  },
+  "pending": [
+    "86-level ABI and native load",
+    "web config read/save and client package generation",
+    "Windows native consumer compatibility",
+    "login, character, town, dungeon, combat, return and relogin",
+    "equipment pickup/broadcast and random-box rewards",
+    "complete raid workflows"
+  ],
+  "databaseMigration": "not applicable: project has not launched"
+}

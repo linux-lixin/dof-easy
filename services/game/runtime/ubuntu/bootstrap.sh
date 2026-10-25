@@ -1,5 +1,12 @@
 #!/bin/bash
 set -e
+# /dev/shm is a fresh runtime mount; directories made by image build probes do
+# not survive container creation. The original TSS SDK requires this bus path.
+if [ -L /dev/shm/sec ]; then
+  echo "invalid TSS shared-memory directory" >&2
+  exit 1
+fi
+mkdir -p -m 700 /dev/shm/sec
 # 清除MONITOR_PUBLIC_IP文件
 rm -rf /data/monitor_ip/MONITOR_PUBLIC_IP
 # 清除MONITOR_RELAY_CONFIG文件
@@ -67,6 +74,7 @@ fi
 chmod 700 -R /data/dp
 # Install the explicitly selected ordinary plugins.
 python3 /opt/dnf/ubuntu/vipai86.py || exit 1
+python3 /opt/dof-easy/runtime/gateway/service.py prepare || exit 1
 # 重设supervisor web网页密码
 sed -i "s/^username=.*/username=$WEB_USER/" /etc/supervisord.conf
 sed -i "s/^password=.*/password=$WEB_PASS/" /etc/supervisord.conf

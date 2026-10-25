@@ -36,5 +36,14 @@
       "source": "https://raw.githubusercontent.com/1995chen/dnf/08f724c25b12748f8eb4bf11b24a90accfc3b223/build/dnf_data/home/template/neople/game/libnxencryption.so",
       "license": "Proprietary upstream game asset; no new redistribution permission asserted"
     }
-  ]
+  ],
+  "bridgeIteratorRepair": {
+    "source": "assets/home/template/neople/bridge/df_bridge_r",
+    "sourceSha256": "30a5741015b3701cee2d9b388140ac1711345bbe8d879b6f152e74a9334ea6b0",
+    "derivedSha256": "774e05865dab5b3cbf4dc69119b98f4c7abffdcd6c6e0f11f903faf9ce322be5",
+    "adapter": "runtime/ubuntu/bridge_compat.py",
+    "adapterSha256": "02f463521ec50ee2776267dfd87bf35ca8e24161c65b87b4beb84bb9aaea5dce",
+    "scope": "Advance a disconnected server map iterator before erasing its node; preserve original timeout, erase and count updates",
+    "buildEvidence": "/opt/dnf/audit/bridge-repair/derivation.json"
+  }
 }

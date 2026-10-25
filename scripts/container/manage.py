@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import secrets
 import shutil
+import socket
 import subprocess
 import sys
 import tarfile
@@ -34,6 +35,7 @@ def module(name, relative):
 source = module('dof_source', 'scripts/container/resources.py')
 runtime_config = module('dof_config', 'services/game/runtime/ubuntu/config.py')
 image_config = module('dof_images', 'scripts/container/image_config.py')
+raid_assets = module('dof_raid_assets', 'services/game/runtime/ubuntu/gateway/assets.py')
 
 
 def catalog():
@@ -138,17 +140,23 @@ def write_env(path, values):
 
 
 def read_env(root):
-    return dict(line.split('=', 1) for line in (root / '.env').read_text(encoding='utf-8').splitlines() if line and not line.startswith('#'))
+    values = dict(line.split('=', 1) for line in (root / '.env').read_text(encoding='utf-8').splitlines() if line and not line.startswith('#'))
+    raid_assets.profile_for(values)
+    return values
 
 
 def initial_values(args, row, root):
+    raid = getattr(args, 'raid_extension', None) or 'off'
+    launcher = getattr(args, 'launcher', None) or 'dof'
+    raid_assets.profile_for({'LAUNCHER_MODE': launcher})
+    raid_assets.validate_options(args.plugins, raid)
     channels = runtime_config.channels(args.channels)
     if not 1 <= args.admin_port <= 65535:
         raise ValueError('后台端口必须在 1..65535 范围内。')
     return dict(PUBLIC_IP=str(ipaddress.IPv4Address(args.ip)), BIND_IP=str(ipaddress.IPv4Address(args.bind)),
                 ADMIN_PORT=str(args.admin_port), OPEN_CHANNEL=','.join(map(str, channels)),
                 DNF_MAX_LEVEL=str(row['level']), DNF_GAME_SHA256=row['game']['sha256'],
-                PLUGIN_MODE=args.plugins, RUNTIME_ROOT=(root / 'runtime').as_posix(),
+                PLUGIN_MODE=args.plugins, RAID_EXTENSION=raid, LAUNCHER_MODE=launcher, RUNTIME_ROOT=(root / 'runtime').as_posix(),
                 DB_ROOT_PASSWORD=secrets.token_hex(24), GAME_DB_PASSWORD=secrets.token_hex(4),
                 SUPERVISOR_PASSWORD=secrets.token_hex(16), ADMIN_PASSWORD=secrets.token_hex(16),
                 ADMIN_TEMP_SECRET=secrets.token_hex(16))
@@ -156,11 +164,56 @@ def initial_values(args, row, root):
 
 def ports_override(values):
     ports = []
+    if raid_assets.launcher_mode(values) == 'native':
+        ports.append(f"{values.get('GAME_BIND_IP', values['BIND_IP'])}:8887:8887/tcp")
     for channel in runtime_config.channels(values['OPEN_CHANNEL']):
         for base, protocol in ((30000, 'tcp'), (31000, 'udp')):
             port = base + channel
-            ports.append(f"{values['BIND_IP']}:{port}:{port}/{protocol}")
+            ports.append(f"{values.get('GAME_BIND_IP', values['BIND_IP'])}:{port}:{port}/{protocol}")
     return {'services': {'netguard': {'ports': ports}}}
+
+
+def check_gateway_port(values, previous=None):
+    if raid_assets.launcher_mode(values) != 'native':
+        return
+    bind = values.get('GAME_BIND_IP', values['BIND_IP'])
+    if previous and raid_assets.launcher_mode(previous) == 'native' and bind == previous.get('GAME_BIND_IP', previous['BIND_IP']):
+        return
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+            probe.bind((bind, 8887))
+    except OSError as exc:
+        raise ValueError('Dof 网关监听地址的 TCP 8887 不可用；请先解决占用或保留端口冲突。') from exc
+
+
+def apply_configuration(root, values):
+    """Keep a local rollback snapshot and restore it if recreation fails."""
+    files = (root / '.env', root / 'channels.json')
+    previous = {p: p.read_bytes() if p.exists() else None for p in files}
+    snapshot = root / 'config-backups' / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S') + '-' + secrets.token_hex(3))
+    snapshot.mkdir(parents=True, mode=0o700)
+    for path, content in previous.items():
+        if content is not None:
+            (snapshot / path.name).write_bytes(content)
+            (snapshot / path.name).chmod(0o600)
+    try:
+        temporary = root / '.env.new'
+        write_env(temporary, values)
+        temporary.replace(root / '.env')
+        write_json(root / 'channels.json', ports_override(values))
+        start(root, recreate=True)
+    except Exception:
+        for path, content in previous.items():
+            if content is None:
+                path.unlink(missing_ok=True)
+            else:
+                path.write_bytes(content)
+                path.chmod(0o600)
+        try:
+            start(root, recreate=True)
+        except Exception:
+            print('原配置已恢复，但旧服务自动恢复未通过；请检查日志。', file=sys.stderr)
+        raise
 
 
 def create_instance(root, args, row, archive, image_settings=None):
@@ -177,18 +230,43 @@ def create_instance(root, args, row, archive, image_settings=None):
         data.mkdir(parents=True)
         stage.chmod(0o700)
         extract_game(archive, data / 'df_game_r', row)
-        shutil.copyfile(pvf, data / 'Script.pvf')
+        if raid_assets.required(values):
+            raid_assets.validate_game(data / 'df_game_r')
+            profile = raid_assets.profile_for(values)
+            supplied = getattr(args, 'dof_assets', None)
+            raid_assets.install(supplied or default_dof_assets(values), raid_assets.state_for(values, data), profile)
+        if raid_assets.required(values):
+            converter = module('dof_server_pvf', 'services/game/runtime/ubuntu/gateway/pvf.py')
+            record = converter.convert(pvf, data / 'Script.pvf')
+            write_json(stage / 'pvf-migration.json', record)
+        else:
+            shutil.copyfile(pvf, data / 'Script.pvf')
         (data / 'Script.pvf').chmod(0o600)
         write_json(stage / 'instance.json', dict(schema=1, name=args.instance, level=row['level'],
                    game_sha256=row['game']['sha256'], pvf_sha256=source.digest(data / 'Script.pvf'),
-                   pvf_bytes=pvf.stat().st_size, created_at=datetime.now(timezone.utc).isoformat()))
+                   pvf_bytes=(data / 'Script.pvf').stat().st_size, created_at=datetime.now(timezone.utc).isoformat()))
         write_env(stage / '.env', values)
         write_json(stage / 'channels.json', ports_override(values))
         stage.rename(root)  # Never merge an existing instance or change its credentials.
     return values
 
 
-def check_instance(root, requested_level=None, pvf=None):
+def default_dof_assets(values):
+    raid_assets.profile_for(values)
+    return STATE / 'server-runtime/current'
+
+
+def validate_raid(root, values):
+    enabled = values.get('RAID_EXTENSION', 'off')
+    raid_assets.validate_options(values['PLUGIN_MODE'], enabled)
+    if raid_assets.required(values):
+        state = raid_assets.state_for(values, root / 'runtime/game/data')
+        raid_assets.verify(state / 'assets', raid_assets.profile_for(values))
+        raid_assets.verify_config(state)
+        raid_assets.validate_game(root / 'runtime/game/data/df_game_r')
+
+
+def check_instance(root, requested_level=None, pvf=None, validate_extension=True):
     record = json.loads((root / 'instance.json').read_text(encoding='utf-8'))
     if record.get('schema') != 1 or record['name'] != root.name:
         raise ValueError('实例元数据不匹配。')
@@ -199,6 +277,8 @@ def check_instance(root, requested_level=None, pvf=None):
     if values['DNF_MAX_LEVEL'] != str(row['level']) or values['DNF_GAME_SHA256'] != row['game']['sha256']:
         raise ValueError('实例等级配置与资源清单不一致。')
     source.verify(root / 'runtime/game/data/df_game_r', row['game'])
+    if validate_extension:
+        validate_raid(root, values)
     if pvf and source.digest(Path(pvf)) != source.digest(root / 'runtime/game/data/Script.pvf'):
         raise ValueError('已存在不同 PVF；install 不覆盖现有服的资源。')
     return values
@@ -210,19 +290,38 @@ def compose(root, *arguments, **kwargs):
     env = dict(kwargs.pop('env', os.environ))
     values = read_env(root)
     env.update({key: image_config.instance_reference(values, role) for role, key in image_config.KEYS.items()})
+    env['RAID_EXTENSION'] = values.get('RAID_EXTENSION', 'off')
+    env['LAUNCHER_MODE'] = values.get('LAUNCHER_MODE', 'dof')
+    env['PLUGIN_MODE'] = values['PLUGIN_MODE']
+    for name in list(env):
+        if name.startswith('QINGKONG_'):
+            del env[name]
     return run(['docker', 'compose', '--project-directory', ROOT, '-p', 'dof-' + root.name,
                 '--env-file', root / '.env', '-f', ROOT / 'compose.yaml', '-f', root / 'channels.json', *arguments], env=env, **kwargs)
 
 
 def start(root, recreate=False):
     values = check_instance(root)
+    write_json(root / 'channels.json', ports_override(values))
     args = ['up', '-d', '--wait', '--wait-timeout', '900', '--no-build', '--pull', 'never']
     if recreate:
         args.append('--force-recreate')
     compose(root, *args)
+    if raid_assets.launcher_mode(values) == 'native':
+        # Older cached images ignore LAUNCHER_MODE. Do not accept their generic
+        # health status as a successful launcher migration.
+        compose(root, 'exec', '-T', 'game', 'python3', '-c',
+                "import sys,os; sys.path[:0]=['/opt/dnf/ubuntu','/opt/dof-easy/runtime']; "
+                "from gateway import assets as raid_assets; import health; "
+                "assert raid_assets.launcher_mode(os.environ)=='native'; "
+                "raid_assets.preflight(); health.check()")
+        compose(root, 'exec', '-T', 'netguard', 'python3', '-c',
+                "import runpy; guard=runpy.run_path('/usr/local/bin/vipai86-netguard.py'); "
+                "assert 8887 in guard['selected_ports']()[0]")
     # Compose also waits for database/game/guard health. Probe the Java API,
     # not only Nginx's static page or the ingress TCP listening socket.
-    host = '127.0.0.1' if values['BIND_IP'] == '0.0.0.0' else values['BIND_IP']
+    admin_bind = values.get('ADMIN_BIND_IP', values['BIND_IP'])
+    host = '127.0.0.1' if admin_bind == '0.0.0.0' else admin_bind
     url = f"http://{host}:{values['ADMIN_PORT']}/api/v1/admin/assist/config-text"
     deadline = time.monotonic() + 180
     while True:
@@ -242,11 +341,22 @@ def start(root, recreate=False):
     # through Docker, without weakening runtime permissions for a non-root host.
     with (client / 'publickey.pem').open('wb') as stream:
         compose(root, 'exec', '-T', 'game', 'cat', '/data/publickey.pem', stdout=stream)
-    (client / 'login.ini.example').write_text(
-        '[Login]\nBaseUrl=http://' + values['PUBLIC_IP'] + ':' + values['ADMIN_PORT']
-        + '\nWindowTitle=地下城与勇士 ' + values['DNF_MAX_LEVEL'] + '\nGameVersion=1.0.0\n', encoding='utf-8')
-    print(f"部署完成：{values['DNF_MAX_LEVEL']} 级，插件 {values['PLUGIN_MODE']}，频道 {values['OPEN_CHANNEL']}")
-    print(f"后台：http://{values['PUBLIC_IP']}:{values['ADMIN_PORT']}；账号：admin")
+    admin_host = '127.0.0.1' if ipaddress.ip_address(admin_bind).is_loopback else values['PUBLIC_IP']
+    if raid_assets.launcher_mode(values) == 'dof':
+        (client / 'login.ini.example').write_text(
+            '[Login]\nBaseUrl=http://' + admin_host + ':' + values['ADMIN_PORT']
+            + '\nWindowTitle=地下城与勇士 ' + values['DNF_MAX_LEVEL'] + '\nGameVersion=1.0.0\n', encoding='utf-8')
+    else:
+        write_json(client / 'native-endpoints.json', {
+            'launcherMode': 'native', 'serverAddress': values['PUBLIC_IP'], 'gatewayPort': 8887,
+            'channels': runtime_config.channels(values['OPEN_CHANNEL']),
+            'adminUrl': f"http://{admin_host}:{values['ADMIN_PORT']}",
+            'note': '本文件仅提供服务端端口信息，不是客户端配置容器。'})
+    print(f"部署完成：{values['DNF_MAX_LEVEL']} 级，插件 {values['PLUGIN_MODE']}，团本扩展 {values.get('RAID_EXTENSION', 'off')}，频道 {values['OPEN_CHANNEL']}")
+    print(f"后台：http://{admin_host}:{values['ADMIN_PORT']}；账号：admin")
+    print('登录方式：' + raid_assets.launcher_mode(values))
+    if ipaddress.ip_address(admin_bind).is_loopback:
+        print('后台仅本机访问；远程登录器和管理页面需要 SSH 本地端口转发。')
     print('密码保存在 ' + str(root / '.env') + ' 的 ADMIN_PASSWORD；公钥在 ' + str(client))
 
 
@@ -281,7 +391,7 @@ def backup(root):
                 compose(root, 'stop', *stopped)
             with sql.open('wb') as stream:
                 compose(root, 'exec', '-T', 'db', 'sh', '-c',
-                        'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysqldump -uroot --all-databases --single-transaction --routines --events', stdout=stream)
+                        'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysqldump -uroot --all-databases --single-transaction --routines --events --ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats', stdout=stream)
             partial = output.with_suffix('.partial')
             with partial.open('xb'):
                 pass
@@ -337,9 +447,31 @@ def wizard():
         arguments += ['--level', input('等级 [70]：').strip() or '70',
                       '--ip', input('客户端可访问的服务器 IPv4：').strip(),
                       '--pvf', input('配套 PVF 文件路径：').strip().strip('"'),
-                      '--plugins', input('插件 dp2-frida / dp2 / frida / none [dp2-frida]：').strip() or 'dp2-frida']
+                      '--plugins', input('插件 dp2-frida / dp2 / frida / none [dp2-frida]：').strip() or 'dp2-frida',
+                      '--raid-extension', input('团本扩展 on / off [off]：').strip() or 'off']
+        if arguments[-1] == 'on':
+            supplied = input('团本扩展已导入资源目录 [默认本地缓存]：').strip().strip('\"')
+            if supplied:
+                arguments += ['--dof-assets', supplied]
     elif command == 'config':
-        arguments += ['--plugins', input('插件 dp2-frida / dp2 / frida / none：').strip()]
+        selected = input('插件 dp2-frida / dp2 / frida / none [保留]：').strip()
+        if selected:
+            arguments += ['--plugins', selected]
+        raid = input('团本扩展 on / off [保留]：').strip()
+        if raid:
+            arguments += ['--raid-extension', raid]
+        if raid == 'on':
+            supplied = input('团本扩展已导入资源目录 [默认本地缓存]：').strip().strip('\"')
+            if supplied:
+                arguments += ['--dof-assets', supplied]
+    if command == 'config' or (command == 'install' and not instance_path(name).exists()):
+        launcher = input('登录器 dof / native [' + ('保留' if command == 'config' else 'dof') + ']：').strip()
+        if launcher:
+            arguments += ['--launcher', launcher]
+        if launcher == 'native':
+            supplied = input('原生服务端产物目录 [默认本地缓存]：').strip().strip('"')
+            if supplied:
+                arguments += ['--dof-assets', supplied]
     if command == 'install':
         root = instance_path(name)
         existing = read_env(root) if root.exists() else {}
@@ -363,6 +495,10 @@ def main(argv=None):
     for command in ('install', 'start', 'stop', 'restart', 'status', 'logs', 'backup', 'config'):
         p = sub.add_parser(command)
         p.add_argument('--instance', default='main')
+        if command in ('install', 'config'):
+            p.add_argument('--launcher', choices=('dof', 'native'), help='玩家登录方式；旧实例默认 dof')
+            p.add_argument('--dof-assets', type=Path, help='已派生并校验的正式服务端资源目录')
+            p.add_argument('--raid-extension', choices=('on', 'off'), help='团本扩展，默认关闭；启用需要 DP2')
         if command == 'install':
             p.add_argument('--level', type=int, choices=list(catalog()))
             p.add_argument('--ip')
@@ -381,6 +517,9 @@ def main(argv=None):
         if command == 'config':
             p.add_argument('--ip')
             p.add_argument('--plugins', choices=MODES)
+            p.add_argument('--game-bind', help='游戏监听 IPv4；与后台监听独立')
+            p.add_argument('--admin-bind', help='后台监听 IPv4；联调建议 127.0.0.1')
+            p.add_argument('--client-cidrs', help='游戏允许的来源网段，逗号分隔；空字符串恢复原有不限来源行为')
         if command == 'logs':
             p.add_argument('--follow', action='store_true')
             p.add_argument('--service', choices=('db', 'game', 'admin', 'ingress', 'netguard'))
@@ -430,6 +569,12 @@ def main(argv=None):
                 raise ValueError('--images 需要配合 --offline，并提供已完成的镜像归档文件。')
             if root.exists():
                 values = check_instance(root, args.level, args.pvf)
+                if args.launcher is not None and args.launcher != values.get('LAUNCHER_MODE', 'dof'):
+                    raise ValueError('已有实例切换登录方式请使用 config --launcher。')
+                if args.dof_assets:
+                    raise ValueError('已有实例导入原生资源请使用 config --dof-assets。')
+                if args.raid_extension is not None and args.raid_extension != values.get('RAID_EXTENSION', 'off'):
+                    raise ValueError('已有实例请使用 config --raid-extension 修改团本扩展开关。')
                 if args.ip and args.ip != values['PUBLIC_IP']:
                     raise ValueError('已有实例改 IP 请使用 config --ip；install 保留现有配置。')
             else:
@@ -438,7 +583,12 @@ def main(argv=None):
                 if not args.ip or not args.pvf:
                     raise ValueError('新服需要 --ip 和 --pvf；不带参数运行可使用交互菜单。')
                 row = catalog()[args.level]
-                initial_values(args, row, root)  # Validate all inputs before downloading.
+                initial = initial_values(args, row, root)  # Validate all inputs before downloading.
+                check_gateway_port(initial)
+                if raid_assets.required(initial):
+                    raid_assets.verify(args.dof_assets or default_dof_assets(initial))
+                elif args.dof_assets:
+                    raise ValueError('--dof-assets 需要原生登录或团本扩展')
                 if args.pvf.is_symlink() or not args.pvf.is_file() or args.pvf.suffix.lower() != '.pvf' or args.pvf.stat().st_size < 1024:
                     raise ValueError('找不到完整的 .pvf 文件：' + str(args.pvf))
             settings = image_config.resolve(args, image_config.load(STATE), values, allow_local=args.build or args.offline)
@@ -463,22 +613,50 @@ def main(argv=None):
             elif args.command == 'stop':
                 compose(root, 'stop')
             elif args.command == 'status':
-                print(f"实例 {root.name}：{values['DNF_MAX_LEVEL']} 级，{values['PLUGIN_MODE']}，频道 {values['OPEN_CHANNEL']}")
+                print('登录方式：' + raid_assets.launcher_mode(values))
+                print(f"实例 {root.name}：{values['DNF_MAX_LEVEL']} 级，{values['PLUGIN_MODE']}，团本扩展 {values.get('RAID_EXTENSION', 'off')}，频道 {values['OPEN_CHANNEL']}")
                 compose(root, 'ps', '-a')
             elif args.command == 'logs':
                 compose(root, 'logs', '--tail', '150', *(['-f'] if args.follow else []), *([args.service] if args.service else []))
             elif args.command == 'backup':
                 backup(root)
             elif args.command == 'config':
-                check_instance(root)
+                check_instance(root, validate_extension=False)
+                previous = dict(values)
+                if args.launcher is not None:
+                    values['LAUNCHER_MODE'] = args.launcher
                 if args.ip:
                     values['PUBLIC_IP'] = str(ipaddress.IPv4Address(args.ip))
                 if args.plugins:
                     values['PLUGIN_MODE'] = args.plugins
-                temporary = root / '.env.new'
-                write_env(temporary, values)
-                temporary.replace(root / '.env')
-                start(root, recreate=True)
+                if args.game_bind is not None:
+                    values['GAME_BIND_IP'] = str(ipaddress.IPv4Address(args.game_bind))
+                if args.admin_bind is not None:
+                    values['ADMIN_BIND_IP'] = str(ipaddress.IPv4Address(args.admin_bind))
+                if args.client_cidrs is not None:
+                    values['ALLOWED_CLIENT_CIDRS'] = ','.join(str(ipaddress.ip_network(x.strip(), strict=False)) for x in args.client_cidrs.split(',')) if args.client_cidrs.strip() else ''
+                if args.raid_extension is not None:
+                    values['RAID_EXTENSION'] = args.raid_extension
+                raid_assets.validate_options(values['PLUGIN_MODE'], values.get('RAID_EXTENSION', 'off'))
+                check_gateway_port(values, previous)
+                profile = raid_assets.profile_for(values)
+                if args.dof_assets and not raid_assets.required(values):
+                    raise ValueError('--dof-assets 需要原生登录或团本扩展')
+                target = raid_assets.state_for(values, root / 'runtime/game/data')
+                if raid_assets.required(values):
+                    raid_assets.validate_game(root / 'runtime/game/data/df_game_r')
+                    supplied = args.dof_assets
+                    if supplied or not target.exists():
+                        was_missing = not target.exists()
+                        raid_assets.install(supplied or default_dof_assets(values), target, profile)
+                        # On a profile transition preserve the active instance's gameplay settings.
+                        old = raid_assets.state_for(previous, root / 'runtime/game/data')
+                        if was_missing and old != target and (old / 'config').is_dir():
+                            raid_assets.verify_config(old)
+                            for config in (old / 'config').glob('*.ini'):
+                                shutil.copyfile(raid_assets.regular(config, old), target / 'config' / config.name)
+                validate_raid(root, values)
+                apply_configuration(root, values)
                 if args.ip:
                     update_admin_address(root, values['PUBLIC_IP'])
     return 0

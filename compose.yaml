@@ -22,6 +22,9 @@ services:
       retries: 30
     logging:
       driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
   keys:
     image: ${DOF_ADMIN_IMAGE:-dof-easy-admin:local}
     pull_policy: never
@@ -29,12 +32,18 @@ services:
     - /bin/sh
     - /init-keys.sh
     network_mode: none
+    environment:
+      RAID_EXTENSION: ${RAID_EXTENSION:-off}
+      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
     volumes:
     - ./deploy/vipai86/init-keys.sh:/init-keys.sh:ro
     - ${RUNTIME_ROOT:-./runtime}/admin/data:/keys
     - ${RUNTIME_ROOT:-./runtime}/game/data:/game
     logging:
       driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
   game:
     image: ${DOF_GAME_IMAGE:-dof-easy-game:local}
     pull_policy: never
@@ -75,11 +84,14 @@ services:
       MYSQL_PORT: '3306'
       MYSQL_GAME_ALLOW_IP: '%'
       DNF_DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set password}
+      DOF_DB_GAME_PASSWORD: ${GAME_DB_PASSWORD:?required}
       DNF_DB_GAME_PASSWORD: ${GAME_DB_PASSWORD:?Set password}
       MYSQL_INIT_SSL_MODE: disabled
       WEB_USER: admin
       WEB_PASS: ${SUPERVISOR_PASSWORD:?Set password}
       PLUGIN_MODE: ${PLUGIN_MODE:-dp2-frida}
+      RAID_EXTENSION: ${RAID_EXTENSION:-off}
+      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
       DNF_READINESS_PROFILE: native
       DNF_MAX_LEVEL: ${DNF_MAX_LEVEL:?Run dof.sh install}
       DNF_GAME_SHA256: ${DNF_GAME_SHA256:?Run dof.sh install}
@@ -104,6 +116,9 @@ services:
     - ${RUNTIME_ROOT:-./runtime}/game/frida-log:/home/neople/game/frida_log
     logging:
       driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
   admin:
     image: ${DOF_ADMIN_IMAGE:-dof-easy-admin:local}
     pull_policy: never
@@ -118,10 +133,10 @@ services:
       MYSQL_INIT_SSL_MODE: disabled
       DNF_PVF_PATH: /app/game-resources/Script.pvf
       DNF_PVF_INDEX: /app/data/pvf-index.json
-      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
       DNF_PUBLIC_IP: ${PUBLIC_IP:?Set public IPv4}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set password}
       ADMIN_TEMP_SECRET: ${ADMIN_TEMP_SECRET:?Set secret}
+      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
       DNF_MAX_LEVEL: ${DNF_MAX_LEVEL:?Run dof.sh install}
     volumes:
     - ${RUNTIME_ROOT:-./runtime}/admin/data:/app/data
@@ -130,6 +145,9 @@ services:
     - private
     logging:
       driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
   ingress:
     image: ${DOF_GAME_IMAGE:-dof-easy-game:local}
     pull_policy: never
@@ -165,12 +183,15 @@ services:
       timeout: 3s
       retries: 5
     ports:
-    - ${BIND_IP:-127.0.0.1}:${ADMIN_PORT:-18080}:18080/tcp
+    - ${ADMIN_BIND_IP:-${BIND_IP:-127.0.0.1}}:${ADMIN_PORT:-18080}:18080/tcp
     networks:
     - private
     - public
     logging:
       driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
   netguard:
     image: ${DOF_NETGUARD_IMAGE:-dof-easy-netguard:local}
     pull_policy: never
@@ -186,22 +207,27 @@ services:
     - /run/netguard
     environment:
       NETGUARD_DB_HOST: db
+      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
+      NETGUARD_ALLOWED_CLIENTS: ${ALLOWED_CLIENT_CIDRS:-}
       XTABLES_LOCKFILE: /run/netguard/xtables.lock
       OPEN_CHANNEL: ${OPEN_CHANNEL:-15,52}
     depends_on:
       db:
         condition: service_healthy
     ports:
-    - ${BIND_IP:-127.0.0.1}:7001:7001/tcp
-    - ${BIND_IP:-127.0.0.1}:7001:7001/udp
-    - ${BIND_IP:-127.0.0.1}:7300:7300/tcp
-    - ${BIND_IP:-127.0.0.1}:7300:7300/udp
-    - ${BIND_IP:-127.0.0.1}:2311-2313:2311-2313/udp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7001:7001/tcp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7001:7001/udp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7300:7300/tcp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7300:7300/udp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:2311-2313:2311-2313/udp
     networks:
     - private
     - public
     logging:
       driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 networks:
   private:
     internal: true

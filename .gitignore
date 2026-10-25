@@ -82,3 +82,7 @@ Thumbs.db
 /services/admin/backend/src/test/resources/dof/
 /services/admin/backend/src/main/resources/dof/ui-native-100.json
 /services/admin/backend/src/main/resources/extension/companion-preview.json
+
+# Local integration snapshots, launcher checks and generated release assets
+/tests/unit/launcher/bin/
+/tests/unit/launcher/obj/

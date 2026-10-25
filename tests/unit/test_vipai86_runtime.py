@@ -44,10 +44,13 @@ class RuntimeTests(unittest.TestCase):
                 with self.assertRaises(ValueError): module.prepare(root/'src',root/'data',root/'game',password,mode)
             self.assertFalse((root/'data').exists())
 
-    def test_runtime_no_log_wipe_or_qk_start(self):
+    def test_runtime_preserves_logs_and_prepares_optional_extension(self):
         content=(ROOT/'services/game/runtime/ubuntu/bootstrap.sh').read_text(encoding='utf-8')
-        for forbidden in ['rm -rf /data/log/*','rm -rf /home/neople/game/log/*', "-name '*.log' -type f -print -exec rm", 'qk.py prepare']:
+        for forbidden in ['rm -rf /data/log/*','rm -rf /home/neople/game/log/*', "-name '*.log' -type f -print -exec rm"]:
             self.assertNotIn(forbidden,content)
+        self.assertIn('gateway/service.py prepare', content)
+        qk=(ROOT/'services/game/runtime/ubuntu/gateway/service.py').read_text()
+        self.assertIn("os.environ.get('RAID_EXTENSION', 'off') != 'on'", qk)
 
     def test_operator_pvf_seed_only_initializes_missing_file(self):
         spec=importlib.util.spec_from_file_location('pvf', ROOT/'services/game/runtime/ubuntu/pvf.py')

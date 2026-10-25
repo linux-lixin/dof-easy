@@ -1,4 +1,5 @@
 """Install ordinary plugins without overwriting operator scripts or erasing logs."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -20,6 +21,22 @@ def copy_missing(source, target):
             destination.chmod(0o700 if original.suffix=='.sh' else 0o600)
 
 
+def check_frida_ownership(source, target, mode):
+    """Upgrade only the exact previous shipped script; report custom overlap."""
+    previous = {'3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d',
+                '6ca2de364e9b94405a1f433ad3fcda627b5fb68f6ead7774d2f6af93f37e2afa'}
+    original = target.read_bytes()
+    if hashlib.sha256(original).hexdigest() in previous:
+        temporary = target.with_name(target.name + '.new')
+        shutil.copyfile(source, temporary)
+        temporary.chmod(0o600)
+        temporary.replace(target)
+        original = target.read_bytes()
+    if (mode == 'dp2-frida' and b'DOF_DP2_ITEM_OWNERSHIP_V1' not in original
+            and any(item in original for item in (b'2021458801', b'2021458802'))):
+        print('[插件冲突提示] 自定义 Frida 脚本含 DP2 同名道具处理；未自动修改：' + str(target), flush=True)
+
+
 def prepare(source, data, game, password, mode):
     if mode not in ('none','dp2','frida','dp2-frida'):
         raise ValueError('PLUGIN_MODE must be none, dp2, frida or dp2-frida')
@@ -31,6 +48,7 @@ def prepare(source, data, game, password, mode):
     if mode in ('frida','dp2-frida'):
         destination=data/'plugins/frida'
         copy_missing(source/'frida',destination)
+        check_frida_ownership(source/'frida/frida.js', destination/'frida.js', mode)
         config_path=destination/'frida_config.json'
         config=json.loads(config_path.read_text(encoding='utf-8'))
         config['db_config']={'account':'game','password':password}
