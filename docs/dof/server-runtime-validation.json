@@ -89,13 +89,13 @@
       },
       {
         "path": "runtime/gateway/schema.sql",
-        "bytes": 20192,
-        "sha256": "9e396cf9ecbb0f3be92e41f4f312ab24e436dd7bb64e00297b2642cd2b83ae71"
+        "bytes": 20953,
+        "sha256": "d91662fa6f1476abda8687bc5b9aabadabf24cd4861e440face9bf7f7c85982d"
       }
     ]
   },
   "releaseReady": false,
-  "scope": "source integration before remote 86-level/web/client acceptance",
+  "scope": "Server binary hashes unchanged; schema changed after 33238aa 86-level load evidence",
   "checks": {
     "affectedUnitTests": {
       "passed": 101,
@@ -103,7 +103,19 @@
       "skipped": 0
     },
     "deterministicRuntimeMatchesLock": true,
-    "localWebContract": "See web-integration-validation.json; not target-instance/browser acceptance"
+    "localWebContract": "See web-integration-validation.json; not target-instance/browser acceptance",
+    "featureSchema": {
+      "mysqlVersion": "5.6.51",
+      "freshTables": 23,
+      "featureTablesInitiallyEmpty": true,
+      "secondInitializationChangedTables": 0,
+      "existingRewardsAndPointsPreserved": true,
+      "serverAccessed": false
+    },
+    "schemaUnitRegression": {
+      "passed": 3,
+      "failed": 0
+    }
   },
   "previousEvidence": {
     "scope": "70-level local server only; not evidence for the 86-level target",
@@ -117,7 +129,8 @@
     "login, character, town, dungeon, combat, return and relogin",
     "equipment pickup/broadcast and random-box rewards",
     "complete raid workflows",
-    "target web browser operation and new-protocol client package generation"
+    "target web browser operation and new-protocol client package generation",
+    "deploy and verify new schema on the 86-level target"
   ],
   "databaseMigration": "not applicable: project has not launched"
 }

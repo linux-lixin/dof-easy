@@ -22,7 +22,9 @@ def definitions(schema):
         elif seed:
             seeds[seed[1]] = statement
         # Deliberately do not execute the embedded DROP or blanket init block.
-    if len(creates) != 20 or set(seeds) != {'billing', 'robot', 'titles', 'config', 'config_v2'}:
+    feature_tables = {'randombox', 'randombox_config', 'randombox_user'}
+    if (len(creates) != 23 or not feature_tables <= set(creates)
+            or set(seeds) != {'billing', 'robot', 'titles', 'config', 'config_v2'}):
         raise ValueError('Unexpected Dof base schema layout')
     return creates, seeds
 

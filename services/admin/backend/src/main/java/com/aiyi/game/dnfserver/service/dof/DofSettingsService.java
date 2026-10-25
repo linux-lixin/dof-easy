@@ -90,7 +90,7 @@ public class DofSettingsService {
     }
     private Map<String,Object> envelope(String module,Map<String,String> state) {
         Map<String,Object> out=access.context();out.put("module",module);out.put("revision",revision(state));out.put("fields",NativeGeneralSettings.inspect(module,state));
-        out.put("effectState","not_observed");out.put("activation","已保存仅表示原生配置持久化；QK 读取与客户端实际效果仍需核对。网页不执行奖励发放。");return out;
+        out.put("effectState","not_observed");out.put("activation","已保存仅表示原生配置持久化；网关读取与客户端实际效果仍需核对。网页不执行奖励发放。");return out;
     }
     public Object read(String module) {
         access.admin();NativeGeneralSettings.module(module);
