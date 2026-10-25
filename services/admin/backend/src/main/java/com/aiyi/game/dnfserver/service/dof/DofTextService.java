@@ -110,7 +110,7 @@ public class DofTextService {
             Map<String,Object> f = new LinkedHashMap<>(); f.put("key", FIELDS.get(i)); f.put("label", LABELS.get(i)); f.put("multiline", i == 1 || i == 2); fields.add(f);
         }
         out.put("fields", fields); out.put("effectState", "not_observed");
-        out.put("activation", "QK 读取原生配置后下发；客户端实际刷新时机仍待对照，保存不代表已显示");
+        out.put("activation", "网关读取原生配置后下发；客户端实际刷新时机仍待对照，保存不代表已显示");
         return out;
     }
     public Object read() {

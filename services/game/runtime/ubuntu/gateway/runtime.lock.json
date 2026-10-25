@@ -87,8 +87,8 @@
     },
     {
       "path": "runtime/gateway/schema.sql",
-      "bytes": 20192,
-      "sha256": "9e396cf9ecbb0f3be92e41f4f312ab24e436dd7bb64e00297b2642cd2b83ae71"
+      "bytes": 20953,
+      "sha256": "d91662fa6f1476abda8687bc5b9aabadabf24cd4861e440face9bf7f7c85982d"
     }
   ]
 }

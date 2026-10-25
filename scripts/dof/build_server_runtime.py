@@ -43,7 +43,10 @@ def schema(raw):
         statements.append(statement + ';')
     if sum(s.startswith('CREATE TABLE') for s in statements) != 20:
         raise ValueError('Unexpected native base schema')
-    return ('\n'.join(statements) + '\n').encode()
+    # Feature tables are absent from the gateway's embedded base schema.
+    # Ship empty definitions; never import old rewards, player rows or counters.
+    feature = (ROOT / 'services/game/runtime/ubuntu/gateway/feature-schema.sql').read_bytes()
+    return ('\n'.join(statements) + '\n').encode() + feature
 
 
 def normalize_uv(raw):
