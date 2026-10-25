@@ -116,12 +116,16 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: ${DB_ROOT_PASSWORD:?Set password}
       MYSQL_INIT_SSL_MODE: disabled
+      DNF_PVF_PATH: /app/game-resources/Script.pvf
+      DNF_PVF_INDEX: /app/data/pvf-index.json
+      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
       DNF_PUBLIC_IP: ${PUBLIC_IP:?Set public IPv4}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set password}
       ADMIN_TEMP_SECRET: ${ADMIN_TEMP_SECRET:?Set secret}
       DNF_MAX_LEVEL: ${DNF_MAX_LEVEL:?Run dof.sh install}
     volumes:
     - ${RUNTIME_ROOT:-./runtime}/admin/data:/app/data
+    - ${RUNTIME_ROOT:-./runtime}/game/data/Script.pvf:/app/game-resources/Script.pvf:ro
     networks:
     - private
     logging:

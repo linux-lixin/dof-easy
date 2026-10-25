@@ -22,6 +22,12 @@ public class ClientLauncherVersion extends PO {
     @FieldName(name = "DOWNLOAD_URL")
     private String downloadUrl;
 
+    @FieldName(name = "SHA256")
+    private String sha256;
+
+    public String getSha256() { return sha256; }
+    public void setSha256(String sha256) { this.sha256 = sha256; }
+
     @FieldName(name = "DESCRIPTION")
     private String description;
 

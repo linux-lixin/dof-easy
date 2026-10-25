@@ -1,0 +1,392 @@
+[
+  {
+    "id": "creation-60",
+    "label": "5职业60级",
+    "handler": "0x8e954c",
+    "layout": {
+      "create.0": 204,
+      "create.1": 468,
+      "create.2": 999,
+      "create.3": 999,
+      "create.4": 270,
+      "create.5": 468,
+      "create.6": 999,
+      "create.7": 999,
+      "create.8": 340,
+      "create.9": 468,
+      "create.10": 999,
+      "create.11": 999,
+      "create.12": 999,
+      "create.13": 999,
+      "create.14": 999,
+      "create.15": 999,
+      "create.16": 410,
+      "create.17": 468,
+      "create.18": 480,
+      "create.19": 468,
+      "create.20": 999,
+      "create.21": 999
+    },
+    "nativeGuiWrites": [
+      {
+        "control": "0x16022a03",
+        "value": 204
+      },
+      {
+        "control": "0x16022a01",
+        "value": 468
+      },
+      {
+        "control": "0x160229fd",
+        "value": 999
+      },
+      {
+        "control": "0x160229fe",
+        "value": 999
+      },
+      {
+        "control": "0x160229f9",
+        "value": 270
+      },
+      {
+        "control": "0x160229fa",
+        "value": 468
+      },
+      {
+        "control": "0x160229de",
+        "value": 999
+      },
+      {
+        "control": "0x160229df",
+        "value": 999
+      },
+      {
+        "control": "0x160229f5",
+        "value": 340
+      },
+      {
+        "control": "0x160229f6",
+        "value": 468
+      },
+      {
+        "control": "0x160229f1",
+        "value": 999
+      },
+      {
+        "control": "0x160229f2",
+        "value": 999
+      },
+      {
+        "control": "0x160229ed",
+        "value": 999
+      },
+      {
+        "control": "0x160229ee",
+        "value": 999
+      },
+      {
+        "control": "0x160229d9",
+        "value": 999
+      },
+      {
+        "control": "0x160229da",
+        "value": 999
+      },
+      {
+        "control": "0x160229e9",
+        "value": 410
+      },
+      {
+        "control": "0x160229ea",
+        "value": 468
+      },
+      {
+        "control": "0x160229e5",
+        "value": 480
+      },
+      {
+        "control": "0x160229e6",
+        "value": 468
+      },
+      {
+        "control": "0x160229e1",
+        "value": 999
+      },
+      {
+        "control": "0x160229e2",
+        "value": 999
+      }
+    ],
+    "stop": "before-final-prompt-0x7d1b6c",
+    "previewHandler": "0x85e22c",
+    "previewTarget": {
+      "form": "0x52022ce0",
+      "window": "0x6022ce1"
+    },
+    "image": "creation-60.png",
+    "width": 937,
+    "height": 711,
+    "sha256": "4f324769c0815bbe3344e21151e2470e1f973881f88fc350132cf8658cff5d8c",
+    "resourceAddress": "0x179dd7e"
+  },
+  {
+    "id": "creation-85",
+    "label": "85级",
+    "handler": "0x8fb074",
+    "layout": {
+      "create.0": 70,
+      "create.1": 75,
+      "create.2": 190,
+      "create.3": 75,
+      "create.4": 250,
+      "create.5": 75,
+      "create.6": 670,
+      "create.7": 75,
+      "create.8": 310,
+      "create.9": 75,
+      "create.10": 370,
+      "create.11": 75,
+      "create.12": 430,
+      "create.13": 75,
+      "create.14": 130,
+      "create.15": 75,
+      "create.16": 490,
+      "create.17": 75,
+      "create.18": 550,
+      "create.19": 75,
+      "create.20": 610,
+      "create.21": 75
+    },
+    "nativeGuiWrites": [
+      {
+        "control": "0x16022a03",
+        "value": 70
+      },
+      {
+        "control": "0x16022a01",
+        "value": 75
+      },
+      {
+        "control": "0x160229fd",
+        "value": 190
+      },
+      {
+        "control": "0x160229fe",
+        "value": 75
+      },
+      {
+        "control": "0x160229f9",
+        "value": 250
+      },
+      {
+        "control": "0x160229fa",
+        "value": 75
+      },
+      {
+        "control": "0x160229de",
+        "value": 670
+      },
+      {
+        "control": "0x160229df",
+        "value": 75
+      },
+      {
+        "control": "0x160229f5",
+        "value": 310
+      },
+      {
+        "control": "0x160229f6",
+        "value": 75
+      },
+      {
+        "control": "0x160229f1",
+        "value": 370
+      },
+      {
+        "control": "0x160229f2",
+        "value": 75
+      },
+      {
+        "control": "0x160229ed",
+        "value": 430
+      },
+      {
+        "control": "0x160229ee",
+        "value": 75
+      },
+      {
+        "control": "0x160229d9",
+        "value": 130
+      },
+      {
+        "control": "0x160229da",
+        "value": 75
+      },
+      {
+        "control": "0x160229e9",
+        "value": 490
+      },
+      {
+        "control": "0x160229ea",
+        "value": 75
+      },
+      {
+        "control": "0x160229e5",
+        "value": 550
+      },
+      {
+        "control": "0x160229e6",
+        "value": 75
+      },
+      {
+        "control": "0x160229e1",
+        "value": 610
+      },
+      {
+        "control": "0x160229e2",
+        "value": 75
+      }
+    ],
+    "stop": "before-final-prompt-0x7d1b6c",
+    "previewHandler": "0x7d6238",
+    "previewTarget": {
+      "form": "0x52022ce6",
+      "window": "0x6022ce7"
+    },
+    "image": "creation-85.png",
+    "width": 1028,
+    "height": 714,
+    "sha256": "b1266b6340cedee0a5264c234da00cc598498664d7fee8d812af903254aa00a0",
+    "resourceAddress": "0x19690fe"
+  },
+  {
+    "id": "creation-100",
+    "label": "100级",
+    "handler": "0x883c10",
+    "layout": {
+      "create.0": 80,
+      "create.1": 65,
+      "create.2": 220,
+      "create.3": 65,
+      "create.4": 290,
+      "create.5": 65,
+      "create.6": 220,
+      "create.7": 205,
+      "create.8": 80,
+      "create.9": 135,
+      "create.10": 150,
+      "create.11": 135,
+      "create.12": 220,
+      "create.13": 135,
+      "create.14": 150,
+      "create.15": 65,
+      "create.16": 290,
+      "create.17": 135,
+      "create.18": 80,
+      "create.19": 205,
+      "create.20": 150,
+      "create.21": 205
+    },
+    "nativeGuiWrites": [
+      {
+        "control": "0x16022a03",
+        "value": 80
+      },
+      {
+        "control": "0x16022a01",
+        "value": 65
+      },
+      {
+        "control": "0x160229fd",
+        "value": 220
+      },
+      {
+        "control": "0x160229fe",
+        "value": 65
+      },
+      {
+        "control": "0x160229f9",
+        "value": 290
+      },
+      {
+        "control": "0x160229fa",
+        "value": 65
+      },
+      {
+        "control": "0x160229de",
+        "value": 220
+      },
+      {
+        "control": "0x160229df",
+        "value": 205
+      },
+      {
+        "control": "0x160229f5",
+        "value": 80
+      },
+      {
+        "control": "0x160229f6",
+        "value": 135
+      },
+      {
+        "control": "0x160229f1",
+        "value": 150
+      },
+      {
+        "control": "0x160229f2",
+        "value": 135
+      },
+      {
+        "control": "0x160229ed",
+        "value": 220
+      },
+      {
+        "control": "0x160229ee",
+        "value": 135
+      },
+      {
+        "control": "0x160229d9",
+        "value": 150
+      },
+      {
+        "control": "0x160229da",
+        "value": 65
+      },
+      {
+        "control": "0x160229e9",
+        "value": 290
+      },
+      {
+        "control": "0x160229ea",
+        "value": 135
+      },
+      {
+        "control": "0x160229e5",
+        "value": 80
+      },
+      {
+        "control": "0x160229e6",
+        "value": 205
+      },
+      {
+        "control": "0x160229e1",
+        "value": 150
+      },
+      {
+        "control": "0x160229e2",
+        "value": 205
+      }
+    ],
+    "stop": "before-final-prompt-0x7d1b6c",
+    "previewHandler": "0x8da8d8",
+    "previewTarget": {
+      "form": "0x52022ce3",
+      "window": "0x6022ce4"
+    },
+    "image": "creation-100.png",
+    "width": 941,
+    "height": 702,
+    "sha256": "8cfc3a8c6eed3586b1cc1ac40b0c12c55db1555cf5aec0ee958290f6b89abec1",
+    "resourceAddress": "0x18a25c0"
+  }
+]

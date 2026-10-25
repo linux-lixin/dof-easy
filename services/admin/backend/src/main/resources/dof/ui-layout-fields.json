@@ -1,0 +1,1058 @@
+[
+  {
+    "id": "blood.0",
+    "section": "blood",
+    "index": 0,
+    "nativeControl": "0x16022a66",
+    "controlName": "编辑框_GMUID1",
+    "nativeLoadAddress": "007fe3ca"
+  },
+  {
+    "id": "blood.1",
+    "section": "blood",
+    "index": 1,
+    "nativeControl": "0x16022a64",
+    "controlName": "编辑框_GMUID2",
+    "nativeLoadAddress": "007fe417"
+  },
+  {
+    "id": "blood.2",
+    "section": "blood",
+    "index": 2,
+    "nativeControl": "0x16022a61",
+    "controlName": "编辑框_GMUID3",
+    "nativeLoadAddress": "007fe464"
+  },
+  {
+    "id": "blood.3",
+    "section": "blood",
+    "index": 3,
+    "nativeControl": "0x16022a60",
+    "controlName": "编辑框_GMUID4",
+    "nativeLoadAddress": "007fe4b1"
+  },
+  {
+    "id": "blood.4",
+    "section": "blood",
+    "index": 4,
+    "nativeControl": "0x16022a5e",
+    "controlName": "编辑框_GMUID5",
+    "nativeLoadAddress": "007fe4fe"
+  },
+  {
+    "id": "blood.5",
+    "section": "blood",
+    "index": 5,
+    "nativeControl": "0x16022a5c",
+    "controlName": "编辑框_GMUID6",
+    "nativeLoadAddress": "007fe54b"
+  },
+  {
+    "id": "blood.6",
+    "section": "blood",
+    "index": 6,
+    "nativeControl": "0x16022a58",
+    "controlName": "编辑框_GMUID7",
+    "nativeLoadAddress": "007fe598"
+  },
+  {
+    "id": "blood.7",
+    "section": "blood",
+    "index": 7,
+    "nativeControl": "0x16022a59",
+    "controlName": "编辑框_GMUID8",
+    "nativeLoadAddress": "007fe5e5"
+  },
+  {
+    "id": "blood.8",
+    "section": "blood",
+    "index": 8,
+    "nativeControl": "0x16022a56",
+    "controlName": "编辑框_GMUID9",
+    "nativeLoadAddress": "007fe632"
+  },
+  {
+    "id": "blood.9",
+    "section": "blood",
+    "index": 9,
+    "nativeControl": "0x16022a54",
+    "controlName": "编辑框_GMUID10",
+    "nativeLoadAddress": "007fe67f"
+  },
+  {
+    "id": "blood.10",
+    "section": "blood",
+    "index": 10,
+    "nativeControl": "0x16022a50",
+    "controlName": "编辑框_GMUID11",
+    "nativeLoadAddress": "007fe6cc"
+  },
+  {
+    "id": "blood.11",
+    "section": "blood",
+    "index": 11,
+    "nativeControl": "0x16022a51",
+    "controlName": "编辑框_GMUID12",
+    "nativeLoadAddress": "007fe719"
+  },
+  {
+    "id": "blood.12",
+    "section": "blood",
+    "index": 12,
+    "nativeControl": "0x16022a4c",
+    "controlName": "编辑框_GMUID13",
+    "nativeLoadAddress": "007fe766"
+  },
+  {
+    "id": "blood.13",
+    "section": "blood",
+    "index": 13,
+    "nativeControl": "0x16022a4d",
+    "controlName": "编辑框_GMUID14",
+    "nativeLoadAddress": "007fe7b3"
+  },
+  {
+    "id": "blood.14",
+    "section": "blood",
+    "index": 14,
+    "nativeControl": "0x16022a4a",
+    "controlName": "编辑框_GMUID15",
+    "nativeLoadAddress": "007fe800"
+  },
+  {
+    "id": "blood.15",
+    "section": "blood",
+    "index": 15,
+    "nativeControl": "0x16022a48",
+    "controlName": "编辑框_GMUID16",
+    "nativeLoadAddress": "007fe84d"
+  },
+  {
+    "id": "blood.16",
+    "section": "blood",
+    "index": 16,
+    "nativeControl": "0x16022a46",
+    "controlName": "编辑框_GMUID17",
+    "nativeLoadAddress": "007fe89a"
+  },
+  {
+    "id": "blood.17",
+    "section": "blood",
+    "index": 17,
+    "nativeControl": "0x16022a44",
+    "controlName": "编辑框_GMUID18",
+    "nativeLoadAddress": "007fe8e7"
+  },
+  {
+    "id": "blood.18",
+    "section": "blood",
+    "index": 18,
+    "nativeControl": "0x16022a42",
+    "controlName": "编辑框_GMUID19",
+    "nativeLoadAddress": "007fe934"
+  },
+  {
+    "id": "blood.19",
+    "section": "blood",
+    "index": 19,
+    "nativeControl": "0x16022a40",
+    "controlName": "编辑框_GMUID20",
+    "nativeLoadAddress": "007fe981"
+  },
+  {
+    "id": "blood.20",
+    "section": "blood",
+    "index": 20,
+    "nativeControl": "0x16022a2c",
+    "controlName": "编辑框_GMUID21",
+    "nativeLoadAddress": "007fe9ce"
+  },
+  {
+    "id": "blood.21",
+    "section": "blood",
+    "index": 21,
+    "nativeControl": "0x16022a2d",
+    "controlName": "编辑框_GMUID22",
+    "nativeLoadAddress": "007fea1b"
+  },
+  {
+    "id": "blood.22",
+    "section": "blood",
+    "index": 22,
+    "nativeControl": "0x16022a30",
+    "controlName": "编辑框_GMUID23",
+    "nativeLoadAddress": "007fea68"
+  },
+  {
+    "id": "blood.23",
+    "section": "blood",
+    "index": 23,
+    "nativeControl": "0x16022a31",
+    "controlName": "编辑框_GMUID24",
+    "nativeLoadAddress": "007feab5"
+  },
+  {
+    "id": "blood.24",
+    "section": "blood",
+    "index": 24,
+    "nativeControl": "0x16022a34",
+    "controlName": "编辑框_GMUID25",
+    "nativeLoadAddress": "007feb02"
+  },
+  {
+    "id": "blood.25",
+    "section": "blood",
+    "index": 25,
+    "nativeControl": "0x16022a35",
+    "controlName": "编辑框_GMUID26",
+    "nativeLoadAddress": "007feb4f"
+  },
+  {
+    "id": "blood.26",
+    "section": "blood",
+    "index": 26,
+    "nativeControl": "0x16022a38",
+    "controlName": "编辑框_GMUID27",
+    "nativeLoadAddress": "007feb9c"
+  },
+  {
+    "id": "blood.27",
+    "section": "blood",
+    "index": 27,
+    "nativeControl": "0x16022a39",
+    "controlName": "编辑框_GMUID28",
+    "nativeLoadAddress": "007febe9"
+  },
+  {
+    "id": "blood.28",
+    "section": "blood",
+    "index": 28,
+    "nativeControl": "0x16022a3c",
+    "controlName": "编辑框_GMUID29",
+    "nativeLoadAddress": "007fec36"
+  },
+  {
+    "id": "blood.29",
+    "section": "blood",
+    "index": 29,
+    "nativeControl": "0x16022a3e",
+    "controlName": "编辑框_GMUID30",
+    "nativeLoadAddress": "007fec83"
+  },
+  {
+    "id": "blood.30",
+    "section": "blood",
+    "index": 30,
+    "nativeControl": "0x16022a18",
+    "controlName": "编辑框_GMUID31",
+    "nativeLoadAddress": "007fecd0"
+  },
+  {
+    "id": "blood.31",
+    "section": "blood",
+    "index": 31,
+    "nativeControl": "0x16022a19",
+    "controlName": "编辑框_GMUID32",
+    "nativeLoadAddress": "007fed1d"
+  },
+  {
+    "id": "blood.32",
+    "section": "blood",
+    "index": 32,
+    "nativeControl": "0x16022a1c",
+    "controlName": "编辑框_GMUID33",
+    "nativeLoadAddress": "007fed6a"
+  },
+  {
+    "id": "blood.33",
+    "section": "blood",
+    "index": 33,
+    "nativeControl": "0x16022a1d",
+    "controlName": "编辑框_GMUID34",
+    "nativeLoadAddress": "007fedb7"
+  },
+  {
+    "id": "blood.34",
+    "section": "blood",
+    "index": 34,
+    "nativeControl": "0x16022a20",
+    "controlName": "编辑框_GMUID35",
+    "nativeLoadAddress": "007fee04"
+  },
+  {
+    "id": "blood.35",
+    "section": "blood",
+    "index": 35,
+    "nativeControl": "0x16022a21",
+    "controlName": "编辑框_GMUID36",
+    "nativeLoadAddress": "007fee51"
+  },
+  {
+    "id": "blood.36",
+    "section": "blood",
+    "index": 36,
+    "nativeControl": "0x16022a24",
+    "controlName": "编辑框_GMUID37",
+    "nativeLoadAddress": "007fee9e"
+  },
+  {
+    "id": "blood.37",
+    "section": "blood",
+    "index": 37,
+    "nativeControl": "0x16022a25",
+    "controlName": "编辑框_GMUID38",
+    "nativeLoadAddress": "007feeeb"
+  },
+  {
+    "id": "blood.38",
+    "section": "blood",
+    "index": 38,
+    "nativeControl": "0x16022a28",
+    "controlName": "编辑框_GMUID39",
+    "nativeLoadAddress": "007fef38"
+  },
+  {
+    "id": "blood.39",
+    "section": "blood",
+    "index": 39,
+    "nativeControl": "0x16022a29",
+    "controlName": "编辑框_GMUID40",
+    "nativeLoadAddress": "007fef85"
+  },
+  {
+    "id": "blood.40",
+    "section": "blood",
+    "index": 40,
+    "nativeControl": "0x16022a12",
+    "controlName": "编辑框_GMUID80",
+    "nativeLoadAddress": "007fefd2"
+  },
+  {
+    "id": "blood.41",
+    "section": "blood",
+    "index": 41,
+    "nativeControl": "0x16022ab1",
+    "controlName": "编辑框_GMUID79",
+    "nativeLoadAddress": "007ff01f"
+  },
+  {
+    "id": "blood.42",
+    "section": "blood",
+    "index": 42,
+    "nativeControl": "0x16022aae",
+    "controlName": "编辑框_GMUID78",
+    "nativeLoadAddress": "007ff06c"
+  },
+  {
+    "id": "blood.43",
+    "section": "blood",
+    "index": 43,
+    "nativeControl": "0x16022aad",
+    "controlName": "编辑框_GMUID77",
+    "nativeLoadAddress": "007ff0b9"
+  },
+  {
+    "id": "blood.44",
+    "section": "blood",
+    "index": 44,
+    "nativeControl": "0x16022a14",
+    "controlName": "编辑框_GMUID76",
+    "nativeLoadAddress": "007ff106"
+  },
+  {
+    "id": "blood.45",
+    "section": "blood",
+    "index": 45,
+    "nativeControl": "0x16022a15",
+    "controlName": "编辑框_GMUID75",
+    "nativeLoadAddress": "007ff153"
+  },
+  {
+    "id": "blood.46",
+    "section": "blood",
+    "index": 46,
+    "nativeControl": "0x16022aa9",
+    "controlName": "编辑框_GMUID73",
+    "nativeLoadAddress": "007ff1a0"
+  },
+  {
+    "id": "blood.47",
+    "section": "blood",
+    "index": 47,
+    "nativeControl": "0x16022aaa",
+    "controlName": "编辑框_GMUID74",
+    "nativeLoadAddress": "007ff1ed"
+  },
+  {
+    "id": "blood.48",
+    "section": "blood",
+    "index": 48,
+    "nativeControl": "0x16022aa7",
+    "controlName": "编辑框_GMUID72",
+    "nativeLoadAddress": "007ff23a"
+  },
+  {
+    "id": "blood.49",
+    "section": "blood",
+    "index": 49,
+    "nativeControl": "0x16022aa5",
+    "controlName": "编辑框_GMUID71",
+    "nativeLoadAddress": "007ff287"
+  },
+  {
+    "id": "blood.50",
+    "section": "blood",
+    "index": 50,
+    "nativeControl": "0x16022aa1",
+    "controlName": "编辑框_GMUID69",
+    "nativeLoadAddress": "007ff2d4"
+  },
+  {
+    "id": "blood.51",
+    "section": "blood",
+    "index": 51,
+    "nativeControl": "0x16022aa2",
+    "controlName": "编辑框_GMUID70",
+    "nativeLoadAddress": "007ff321"
+  },
+  {
+    "id": "blood.52",
+    "section": "blood",
+    "index": 52,
+    "nativeControl": "0x16022a9d",
+    "controlName": "编辑框_GMUID67",
+    "nativeLoadAddress": "007ff36e"
+  },
+  {
+    "id": "blood.53",
+    "section": "blood",
+    "index": 53,
+    "nativeControl": "0x16022a9e",
+    "controlName": "编辑框_GMUID68",
+    "nativeLoadAddress": "007ff3bb"
+  },
+  {
+    "id": "blood.54",
+    "section": "blood",
+    "index": 54,
+    "nativeControl": "0x16022a9b",
+    "controlName": "编辑框_GMUID66",
+    "nativeLoadAddress": "007ff408"
+  },
+  {
+    "id": "blood.55",
+    "section": "blood",
+    "index": 55,
+    "nativeControl": "0x16022a99",
+    "controlName": "编辑框_GMUID65",
+    "nativeLoadAddress": "007ff455"
+  },
+  {
+    "id": "blood.56",
+    "section": "blood",
+    "index": 56,
+    "nativeControl": "0x16022a97",
+    "controlName": "编辑框_GMUID64",
+    "nativeLoadAddress": "007ff4a2"
+  },
+  {
+    "id": "blood.57",
+    "section": "blood",
+    "index": 57,
+    "nativeControl": "0x16022a95",
+    "controlName": "编辑框_GMUID63",
+    "nativeLoadAddress": "007ff4ef"
+  },
+  {
+    "id": "blood.58",
+    "section": "blood",
+    "index": 58,
+    "nativeControl": "0x16022a93",
+    "controlName": "编辑框_GMUID62",
+    "nativeLoadAddress": "007ff53c"
+  },
+  {
+    "id": "blood.59",
+    "section": "blood",
+    "index": 59,
+    "nativeControl": "0x16022a91",
+    "controlName": "编辑框_GMUID61",
+    "nativeLoadAddress": "007ff589"
+  },
+  {
+    "id": "blood.60",
+    "section": "blood",
+    "index": 60,
+    "nativeControl": "0x16022a7d",
+    "controlName": "编辑框_GMUID51",
+    "nativeLoadAddress": "007ff5d6"
+  },
+  {
+    "id": "blood.61",
+    "section": "blood",
+    "index": 61,
+    "nativeControl": "0x16022a7e",
+    "controlName": "编辑框_GMUID52",
+    "nativeLoadAddress": "007ff623"
+  },
+  {
+    "id": "blood.62",
+    "section": "blood",
+    "index": 62,
+    "nativeControl": "0x16022a81",
+    "controlName": "编辑框_GMUID53",
+    "nativeLoadAddress": "007ff670"
+  },
+  {
+    "id": "blood.63",
+    "section": "blood",
+    "index": 63,
+    "nativeControl": "0x16022a82",
+    "controlName": "编辑框_GMUID54",
+    "nativeLoadAddress": "007ff6bd"
+  },
+  {
+    "id": "blood.64",
+    "section": "blood",
+    "index": 64,
+    "nativeControl": "0x16022a85",
+    "controlName": "编辑框_GMUID55",
+    "nativeLoadAddress": "007ff70a"
+  },
+  {
+    "id": "blood.65",
+    "section": "blood",
+    "index": 65,
+    "nativeControl": "0x16022a86",
+    "controlName": "编辑框_GMUID56",
+    "nativeLoadAddress": "007ff757"
+  },
+  {
+    "id": "blood.66",
+    "section": "blood",
+    "index": 66,
+    "nativeControl": "0x16022a89",
+    "controlName": "编辑框_GMUID57",
+    "nativeLoadAddress": "007ff7a4"
+  },
+  {
+    "id": "blood.67",
+    "section": "blood",
+    "index": 67,
+    "nativeControl": "0x16022a8a",
+    "controlName": "编辑框_GMUID58",
+    "nativeLoadAddress": "007ff7f1"
+  },
+  {
+    "id": "blood.68",
+    "section": "blood",
+    "index": 68,
+    "nativeControl": "0x16022a8d",
+    "controlName": "编辑框_GMUID59",
+    "nativeLoadAddress": "007ff83e"
+  },
+  {
+    "id": "blood.69",
+    "section": "blood",
+    "index": 69,
+    "nativeControl": "0x16022a8f",
+    "controlName": "编辑框_GMUID60",
+    "nativeLoadAddress": "007ff88b"
+  },
+  {
+    "id": "blood.70",
+    "section": "blood",
+    "index": 70,
+    "nativeControl": "0x16022a69",
+    "controlName": "编辑框_GMUID41",
+    "nativeLoadAddress": "007ff8d8"
+  },
+  {
+    "id": "blood.71",
+    "section": "blood",
+    "index": 71,
+    "nativeControl": "0x16022a6a",
+    "controlName": "编辑框_GMUID42",
+    "nativeLoadAddress": "007ff925"
+  },
+  {
+    "id": "blood.72",
+    "section": "blood",
+    "index": 72,
+    "nativeControl": "0x16022a6d",
+    "controlName": "编辑框_GMUID43",
+    "nativeLoadAddress": "007ff972"
+  },
+  {
+    "id": "blood.73",
+    "section": "blood",
+    "index": 73,
+    "nativeControl": "0x16022a6e",
+    "controlName": "编辑框_GMUID44",
+    "nativeLoadAddress": "007ff9bf"
+  },
+  {
+    "id": "blood.74",
+    "section": "blood",
+    "index": 74,
+    "nativeControl": "0x16022a71",
+    "controlName": "编辑框_GMUID45",
+    "nativeLoadAddress": "007ffa0c"
+  },
+  {
+    "id": "blood.75",
+    "section": "blood",
+    "index": 75,
+    "nativeControl": "0x16022a72",
+    "controlName": "编辑框_GMUID46",
+    "nativeLoadAddress": "007ffa59"
+  },
+  {
+    "id": "blood.76",
+    "section": "blood",
+    "index": 76,
+    "nativeControl": "0x16022a75",
+    "controlName": "编辑框_GMUID47",
+    "nativeLoadAddress": "007ffaa6"
+  },
+  {
+    "id": "blood.77",
+    "section": "blood",
+    "index": 77,
+    "nativeControl": "0x16022a76",
+    "controlName": "编辑框_GMUID48",
+    "nativeLoadAddress": "007ffaf3"
+  },
+  {
+    "id": "blood.78",
+    "section": "blood",
+    "index": 78,
+    "nativeControl": "0x16022a79",
+    "controlName": "编辑框_GMUID49",
+    "nativeLoadAddress": "007ffb40"
+  },
+  {
+    "id": "blood.79",
+    "section": "blood",
+    "index": 79,
+    "nativeControl": "0x16022a7a",
+    "controlName": "编辑框_GMUID50",
+    "nativeLoadAddress": "007ffb8d"
+  },
+  {
+    "id": "blood.80",
+    "section": "blood",
+    "index": 80,
+    "nativeControl": "0x16022aef",
+    "controlName": "编辑框_GMUID120",
+    "nativeLoadAddress": "007ffbda"
+  },
+  {
+    "id": "blood.81",
+    "section": "blood",
+    "index": 81,
+    "nativeControl": "0x16022aed",
+    "controlName": "编辑框_GMUID119",
+    "nativeLoadAddress": "007ffc27"
+  },
+  {
+    "id": "blood.82",
+    "section": "blood",
+    "index": 82,
+    "nativeControl": "0x16022aea",
+    "controlName": "编辑框_GMUID118",
+    "nativeLoadAddress": "007ffc74"
+  },
+  {
+    "id": "blood.83",
+    "section": "blood",
+    "index": 83,
+    "nativeControl": "0x16022ae9",
+    "controlName": "编辑框_GMUID117",
+    "nativeLoadAddress": "007ffcc1"
+  },
+  {
+    "id": "blood.84",
+    "section": "blood",
+    "index": 84,
+    "nativeControl": "0x16022ae7",
+    "controlName": "编辑框_GMUID116",
+    "nativeLoadAddress": "007ffd0e"
+  },
+  {
+    "id": "blood.85",
+    "section": "blood",
+    "index": 85,
+    "nativeControl": "0x16022ae5",
+    "controlName": "编辑框_GMUID115",
+    "nativeLoadAddress": "007ffd5b"
+  },
+  {
+    "id": "blood.86",
+    "section": "blood",
+    "index": 86,
+    "nativeControl": "0x16022adb",
+    "controlName": "编辑框_GMUID113",
+    "nativeLoadAddress": "007ffda8"
+  },
+  {
+    "id": "blood.87",
+    "section": "blood",
+    "index": 87,
+    "nativeControl": "0x16022ada",
+    "controlName": "编辑框_GMUID114",
+    "nativeLoadAddress": "007ffdf5"
+  },
+  {
+    "id": "blood.88",
+    "section": "blood",
+    "index": 88,
+    "nativeControl": "0x16022adf",
+    "controlName": "编辑框_GMUID109",
+    "nativeLoadAddress": "007ffe42"
+  },
+  {
+    "id": "blood.89",
+    "section": "blood",
+    "index": 89,
+    "nativeControl": "0x16022ae0",
+    "controlName": "编辑框_GMUID110",
+    "nativeLoadAddress": "007ffe8f"
+  },
+  {
+    "id": "blood.90",
+    "section": "blood",
+    "index": 90,
+    "nativeControl": "0x16022add",
+    "controlName": "编辑框_GMUID81",
+    "nativeLoadAddress": "007ffedc"
+  },
+  {
+    "id": "blood.91",
+    "section": "blood",
+    "index": 91,
+    "nativeControl": "0x16022ad9",
+    "controlName": "编辑框_GMUID86",
+    "nativeLoadAddress": "007fff29"
+  },
+  {
+    "id": "blood.92",
+    "section": "blood",
+    "index": 92,
+    "nativeControl": "0x16022ad7",
+    "controlName": "编辑框_GMUID87",
+    "nativeLoadAddress": "007fff76"
+  },
+  {
+    "id": "blood.93",
+    "section": "blood",
+    "index": 93,
+    "nativeControl": "0x16022ad3",
+    "controlName": "编辑框_GMUID88",
+    "nativeLoadAddress": "007fffc3"
+  },
+  {
+    "id": "blood.94",
+    "section": "blood",
+    "index": 94,
+    "nativeControl": "0x16022ad4",
+    "controlName": "编辑框_GMUID89",
+    "nativeLoadAddress": "00800010"
+  },
+  {
+    "id": "blood.95",
+    "section": "blood",
+    "index": 95,
+    "nativeControl": "0x16022acb",
+    "controlName": "编辑框_GMUID84",
+    "nativeLoadAddress": "0080005d"
+  },
+  {
+    "id": "blood.96",
+    "section": "blood",
+    "index": 96,
+    "nativeControl": "0x16022acd",
+    "controlName": "编辑框_GMUID85",
+    "nativeLoadAddress": "008000aa"
+  },
+  {
+    "id": "blood.97",
+    "section": "blood",
+    "index": 97,
+    "nativeControl": "0x16022acf",
+    "controlName": "编辑框_GMUID82",
+    "nativeLoadAddress": "008000f7"
+  },
+  {
+    "id": "blood.98",
+    "section": "blood",
+    "index": 98,
+    "nativeControl": "0x16022ad0",
+    "controlName": "编辑框_GMUID83",
+    "nativeLoadAddress": "00800144"
+  },
+  {
+    "id": "blood.99",
+    "section": "blood",
+    "index": 99,
+    "nativeControl": "0x16022ac8",
+    "controlName": "编辑框_GMUID90",
+    "nativeLoadAddress": "00800191"
+  },
+  {
+    "id": "blood.100",
+    "section": "blood",
+    "index": 100,
+    "nativeControl": "0x16022ac7",
+    "controlName": "编辑框_缔造者A",
+    "nativeLoadAddress": "008001de"
+  },
+  {
+    "id": "blood.101",
+    "section": "blood",
+    "index": 101,
+    "nativeControl": "0x16022ac6",
+    "controlName": "编辑框_缔造者S",
+    "nativeLoadAddress": "0080022b"
+  },
+  {
+    "id": "blood.102",
+    "section": "blood",
+    "index": 102,
+    "nativeControl": "0x16022ac5",
+    "controlName": "编辑框_缔造者D",
+    "nativeLoadAddress": "00800278"
+  },
+  {
+    "id": "blood.103",
+    "section": "blood",
+    "index": 103,
+    "nativeControl": "0x16022ac4",
+    "controlName": "编辑框_缔造者F",
+    "nativeLoadAddress": "008002c5"
+  },
+  {
+    "id": "blood.104",
+    "section": "blood",
+    "index": 104,
+    "nativeControl": "0x16022ac3",
+    "controlName": "编辑框_缔造者G",
+    "nativeLoadAddress": "00800312"
+  },
+  {
+    "id": "blood.105",
+    "section": "blood",
+    "index": 105,
+    "nativeControl": "0x16022ab5",
+    "controlName": "编辑框_缔造者A1",
+    "nativeLoadAddress": "0080035f"
+  },
+  {
+    "id": "blood.106",
+    "section": "blood",
+    "index": 106,
+    "nativeControl": "0x16022ab6",
+    "controlName": "编辑框_缔造者S1",
+    "nativeLoadAddress": "008003ac"
+  },
+  {
+    "id": "blood.107",
+    "section": "blood",
+    "index": 107,
+    "nativeControl": "0x16022ab9",
+    "controlName": "编辑框_缔造者D1",
+    "nativeLoadAddress": "008003f9"
+  },
+  {
+    "id": "blood.108",
+    "section": "blood",
+    "index": 108,
+    "nativeControl": "0x16022aba",
+    "controlName": "编辑框_缔造者F1",
+    "nativeLoadAddress": "00800446"
+  },
+  {
+    "id": "blood.109",
+    "section": "blood",
+    "index": 109,
+    "nativeControl": "0x16022abd",
+    "controlName": "编辑框_缔造者G1",
+    "nativeLoadAddress": "00800493"
+  },
+  {
+    "id": "create.0",
+    "section": "create",
+    "index": 0,
+    "nativeControl": "0x16022a03",
+    "controlName": "编辑框_创建角色1",
+    "nativeLoadAddress": "007fdd2c"
+  },
+  {
+    "id": "create.1",
+    "section": "create",
+    "index": 1,
+    "nativeControl": "0x16022a01",
+    "controlName": "编辑框_创建角色2",
+    "nativeLoadAddress": "007fdd79"
+  },
+  {
+    "id": "create.2",
+    "section": "create",
+    "index": 2,
+    "nativeControl": "0x160229fd",
+    "controlName": "编辑框_创建角色3",
+    "nativeLoadAddress": "007fddc6"
+  },
+  {
+    "id": "create.3",
+    "section": "create",
+    "index": 3,
+    "nativeControl": "0x160229fe",
+    "controlName": "编辑框_创建角色4",
+    "nativeLoadAddress": "007fde13"
+  },
+  {
+    "id": "create.4",
+    "section": "create",
+    "index": 4,
+    "nativeControl": "0x160229f9",
+    "controlName": "编辑框_创建角色5",
+    "nativeLoadAddress": "007fde60"
+  },
+  {
+    "id": "create.5",
+    "section": "create",
+    "index": 5,
+    "nativeControl": "0x160229fa",
+    "controlName": "编辑框_创建角色6",
+    "nativeLoadAddress": "007fdead"
+  },
+  {
+    "id": "create.6",
+    "section": "create",
+    "index": 6,
+    "nativeControl": "0x160229de",
+    "controlName": "编辑框_创建角色19",
+    "nativeLoadAddress": "007fdefa"
+  },
+  {
+    "id": "create.7",
+    "section": "create",
+    "index": 7,
+    "nativeControl": "0x160229df",
+    "controlName": "编辑框_创建角色20",
+    "nativeLoadAddress": "007fdf47"
+  },
+  {
+    "id": "create.8",
+    "section": "create",
+    "index": 8,
+    "nativeControl": "0x160229f5",
+    "controlName": "编辑框_创建角色7",
+    "nativeLoadAddress": "007fdf94"
+  },
+  {
+    "id": "create.9",
+    "section": "create",
+    "index": 9,
+    "nativeControl": "0x160229f6",
+    "controlName": "编辑框_创建角色8",
+    "nativeLoadAddress": "007fdfe1"
+  },
+  {
+    "id": "create.10",
+    "section": "create",
+    "index": 10,
+    "nativeControl": "0x160229f1",
+    "controlName": "编辑框_创建角色9",
+    "nativeLoadAddress": "007fe02e"
+  },
+  {
+    "id": "create.11",
+    "section": "create",
+    "index": 11,
+    "nativeControl": "0x160229f2",
+    "controlName": "编辑框_创建角色10",
+    "nativeLoadAddress": "007fe07b"
+  },
+  {
+    "id": "create.12",
+    "section": "create",
+    "index": 12,
+    "nativeControl": "0x160229ed",
+    "controlName": "编辑框_创建角色11",
+    "nativeLoadAddress": "007fe0c8"
+  },
+  {
+    "id": "create.13",
+    "section": "create",
+    "index": 13,
+    "nativeControl": "0x160229ee",
+    "controlName": "编辑框_创建角色12",
+    "nativeLoadAddress": "007fe115"
+  },
+  {
+    "id": "create.14",
+    "section": "create",
+    "index": 14,
+    "nativeControl": "0x160229d9",
+    "controlName": "编辑框_创建角色21",
+    "nativeLoadAddress": "007fe162"
+  },
+  {
+    "id": "create.15",
+    "section": "create",
+    "index": 15,
+    "nativeControl": "0x160229da",
+    "controlName": "编辑框_创建角色22",
+    "nativeLoadAddress": "007fe1af"
+  },
+  {
+    "id": "create.16",
+    "section": "create",
+    "index": 16,
+    "nativeControl": "0x160229e9",
+    "controlName": "编辑框_创建角色13",
+    "nativeLoadAddress": "007fe1fc"
+  },
+  {
+    "id": "create.17",
+    "section": "create",
+    "index": 17,
+    "nativeControl": "0x160229ea",
+    "controlName": "编辑框_创建角色14",
+    "nativeLoadAddress": "007fe249"
+  },
+  {
+    "id": "create.18",
+    "section": "create",
+    "index": 18,
+    "nativeControl": "0x160229e5",
+    "controlName": "编辑框_创建角色15",
+    "nativeLoadAddress": "007fe296"
+  },
+  {
+    "id": "create.19",
+    "section": "create",
+    "index": 19,
+    "nativeControl": "0x160229e6",
+    "controlName": "编辑框_创建角色16",
+    "nativeLoadAddress": "007fe2e3"
+  },
+  {
+    "id": "create.20",
+    "section": "create",
+    "index": 20,
+    "nativeControl": "0x160229e1",
+    "controlName": "编辑框_创建角色17",
+    "nativeLoadAddress": "007fe330"
+  },
+  {
+    "id": "create.21",
+    "section": "create",
+    "index": 21,
+    "nativeControl": "0x160229e2",
+    "controlName": "编辑框_创建角色18",
+    "nativeLoadAddress": "007fe37d"
+  }
+]

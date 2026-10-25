@@ -1,0 +1,562 @@
+[
+  {
+    "key": "native-010",
+    "index": 10,
+    "label": "积分商城",
+    "nativeControl": "0x1602cf0b",
+    "nativeName": "选择框_积分商城",
+    "writable": true
+  },
+  {
+    "key": "native-011",
+    "index": 11,
+    "label": "影子",
+    "nativeControl": "0x1602cef6",
+    "nativeName": "影子_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-012",
+    "index": 12,
+    "label": "通关提示",
+    "nativeControl": "0x1602cef8",
+    "nativeName": "通关提示_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-013",
+    "index": 13,
+    "label": "装备套装",
+    "nativeControl": "0x1602cefc",
+    "nativeName": "选择框_装备套装",
+    "writable": true
+  },
+  {
+    "key": "native-014",
+    "index": 14,
+    "label": "黑钻功能",
+    "nativeControl": "0x1602ceff",
+    "nativeName": "选择框_黑钻功能",
+    "writable": true
+  },
+  {
+    "key": "native-015",
+    "index": 15,
+    "label": "战力排行",
+    "nativeControl": "0x1602cf01",
+    "nativeName": "战力排行_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-016",
+    "index": 16,
+    "label": "虚拟机",
+    "nativeControl": "0x1602cf05",
+    "nativeName": "虚拟机_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-017",
+    "index": 17,
+    "label": "快速翻牌",
+    "nativeControl": "0x1602cf06",
+    "nativeName": "快速翻牌_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-018",
+    "index": 18,
+    "label": "英雄难度开关",
+    "nativeControl": "0x1602cf09",
+    "nativeName": "英雄难度开关_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-019",
+    "index": 19,
+    "label": "史诗闪光",
+    "nativeControl": "0x1602cf0a",
+    "nativeName": "史诗闪光_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-021",
+    "index": 21,
+    "label": "复古菜单",
+    "nativeControl": "0x1602cef4",
+    "nativeName": "复古菜单_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-022",
+    "index": 22,
+    "label": "导师技能",
+    "nativeControl": "0x1602cef3",
+    "nativeName": "导师技能_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-023",
+    "index": 23,
+    "label": "佣兵",
+    "nativeControl": "0x1602cef2",
+    "nativeName": "佣兵_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-024",
+    "index": 24,
+    "label": "网页注册",
+    "nativeControl": "0x1602cef1",
+    "nativeName": "网页注册_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-025",
+    "index": 25,
+    "label": "复古评分",
+    "nativeControl": "0x1602cef0",
+    "nativeName": "复古评分_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-032",
+    "index": 32,
+    "label": "简体编码",
+    "nativeControl": "0x16030cba",
+    "nativeName": "选择框_简体编码",
+    "writable": true
+  },
+  {
+    "key": "native-038",
+    "index": 38,
+    "label": "记录QQ",
+    "nativeControl": "0x1602ceed",
+    "nativeName": "记录QQ_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-039",
+    "index": 39,
+    "label": "内辅提示",
+    "nativeControl": "0x1602ceeb",
+    "nativeName": "内辅提示_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-040",
+    "index": 40,
+    "label": "布局",
+    "nativeControl": "0x1602ceec",
+    "nativeName": "布局_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-041",
+    "index": 41,
+    "label": "缔造者显示拓展技能按键",
+    "nativeControl": "0x1602cee8",
+    "nativeName": "缔造者显示拓展技能按键_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-042",
+    "index": 42,
+    "label": "练习模式",
+    "nativeControl": "0x1602cee3",
+    "nativeName": "练习模式_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-043",
+    "index": 43,
+    "label": "在线人数",
+    "nativeControl": "0x16030bd3",
+    "nativeName": "在线人数_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-045",
+    "index": 45,
+    "label": "关闭回购商店",
+    "nativeControl": "0x1602cee2",
+    "nativeName": "关闭回购商店_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-046",
+    "index": 46,
+    "label": "快速换装",
+    "nativeControl": "0x1602cee1",
+    "nativeName": "快速换装_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-047",
+    "index": 47,
+    "label": "存储仓库",
+    "nativeControl": "0x1602cee0",
+    "nativeName": "存储仓库_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-050",
+    "index": 50,
+    "label": "选择角色",
+    "nativeControl": "0x1602cede",
+    "nativeName": "选择角色_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-052",
+    "index": 52,
+    "label": "关闭时装轮盘",
+    "nativeControl": "0x1602cedc",
+    "nativeName": "关闭时装轮盘_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-053",
+    "index": 53,
+    "label": "连发",
+    "nativeControl": "0x1602cedb",
+    "nativeName": "连发_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-057",
+    "index": 57,
+    "label": "复古副本选图按钮",
+    "nativeControl": "0x1602ced7",
+    "nativeName": "复古副本选图按钮_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-059",
+    "index": 59,
+    "label": "音乐",
+    "nativeControl": "0x16024162",
+    "nativeName": "选择框_音乐",
+    "writable": true
+  },
+  {
+    "key": "native-061",
+    "index": 61,
+    "label": "跳过大区按钮",
+    "nativeControl": "0x1602ced5",
+    "nativeName": "跳过大区按钮_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-062",
+    "index": 62,
+    "label": "装备镶嵌",
+    "nativeControl": "0x16030b52",
+    "nativeName": "付费功能_选择框_装备镶嵌",
+    "writable": true
+  },
+  {
+    "key": "native-063",
+    "index": 63,
+    "label": "时装镶嵌",
+    "nativeControl": "0x16030b53",
+    "nativeName": "付费功能_选择框_时装镶嵌",
+    "writable": true
+  },
+  {
+    "key": "native-064",
+    "index": 64,
+    "label": "边框特效",
+    "nativeControl": "0x1602ced4",
+    "nativeName": "边框特效_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-065",
+    "index": 65,
+    "label": "便利功能",
+    "nativeControl": "0x1602ced3",
+    "nativeName": "便利功能_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-068",
+    "index": 68,
+    "label": "战力排行榜",
+    "nativeControl": "0x16031c69",
+    "nativeName": "付费功能_选择框_战力排行榜",
+    "writable": true
+  },
+  {
+    "key": "native-079",
+    "index": 79,
+    "label": "关闭死亡慢放开关",
+    "nativeControl": "0x1602fff9",
+    "nativeName": "关闭死亡慢放开关_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-080",
+    "index": 80,
+    "label": "脚下金币拾取开关",
+    "nativeControl": "0x1602fffe",
+    "nativeName": "脚下金币拾取开关_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-081",
+    "index": 81,
+    "label": "副本难度图标开关",
+    "nativeControl": "0x160302ed",
+    "nativeName": "副本难度图标开关_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-083",
+    "index": 83,
+    "label": "暴击缩放开关",
+    "nativeControl": "0x160302ef",
+    "nativeName": "暴击缩放开关_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-085",
+    "index": 85,
+    "label": "十四技能附加开关（原工具：14技能1）",
+    "nativeControl": "0x16030b56",
+    "nativeName": "付费功能_选择框_14技能1",
+    "writable": true
+  },
+  {
+    "key": "native-086",
+    "index": 86,
+    "label": "竞速榜",
+    "nativeControl": "0x16031c66",
+    "nativeName": "付费功能_选择框_竞速榜",
+    "writable": true
+  },
+  {
+    "key": "native-087",
+    "index": 87,
+    "label": "工会告示栏",
+    "nativeControl": "0x160308f2",
+    "nativeName": "工会告示栏_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-088",
+    "index": 88,
+    "label": "UI玩家控制开关",
+    "nativeControl": "0x16030957",
+    "nativeName": "UI玩家控制开关_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-090",
+    "index": 90,
+    "label": "预览开关",
+    "nativeControl": "0x16030963",
+    "nativeName": "预览开关_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-091",
+    "index": 91,
+    "label": "内置CDK",
+    "nativeControl": "0x16030c31",
+    "nativeName": "内置CDK_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-092",
+    "index": 92,
+    "label": "瞬移赛丽亚房间",
+    "nativeControl": "0x16030ca8",
+    "nativeName": "瞬移赛丽亚房间_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-093",
+    "index": 93,
+    "label": "回收系统",
+    "nativeControl": "0x16030caf",
+    "nativeName": "回收系统_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-094",
+    "index": 94,
+    "label": "装备跨界",
+    "nativeControl": "0x16030cb2",
+    "nativeName": "装备跨界_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-095",
+    "index": 95,
+    "label": "装备继承",
+    "nativeControl": "0x16030cb3",
+    "nativeName": "装备继承_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-096",
+    "index": 96,
+    "label": "传送开关",
+    "nativeControl": "0x16030efe",
+    "nativeName": "选择框_传送开关",
+    "writable": true
+  },
+  {
+    "key": "native-100",
+    "index": 100,
+    "label": "五转职业",
+    "nativeControl": "0x160422ce",
+    "nativeName": "五转职业_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-103",
+    "index": 103,
+    "label": "解锁共享难度地下城",
+    "nativeControl": "0x160310f0",
+    "nativeName": "解锁共享难度地下城_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-104",
+    "index": 104,
+    "label": "内置道具查看",
+    "nativeControl": "0x160310ff",
+    "nativeName": "内置道具查看_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-106",
+    "index": 106,
+    "label": "克隆皮肤修复",
+    "nativeControl": "0x16031b64",
+    "nativeName": "克隆皮肤修复_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-107",
+    "index": 107,
+    "label": "收集箱开关",
+    "nativeControl": "0x1604224a",
+    "nativeName": "_选择框_收集箱开关",
+    "writable": true
+  },
+  {
+    "key": "native-108",
+    "index": 108,
+    "label": "无视防御改攻击",
+    "nativeControl": "0x16034a35",
+    "nativeName": "付费功能_选择框_无视防御改攻击",
+    "writable": true
+  },
+  {
+    "key": "native-120",
+    "index": 120,
+    "label": "背包两栏",
+    "nativeControl": "0x16038d82",
+    "nativeName": "功能开关_背包两栏",
+    "writable": true
+  },
+  {
+    "key": "native-122",
+    "index": 122,
+    "label": "外传职业进入PKC",
+    "nativeControl": "0x16038e29",
+    "nativeName": "功能开关_外传职业进入PKC",
+    "writable": true
+  },
+  {
+    "key": "native-123",
+    "index": 123,
+    "label": "免任务移动药剂",
+    "nativeControl": "0x16038f29",
+    "nativeName": "功能开关_免任务移动药剂",
+    "writable": true
+  },
+  {
+    "key": "native-124",
+    "index": 124,
+    "label": "团本开启",
+    "nativeControl": "0x16038f40",
+    "nativeName": "功能开关_团本开启",
+    "writable": true
+  },
+  {
+    "key": "native-127",
+    "index": 127,
+    "label": "选角UI背景",
+    "nativeControl": "0x16038fca",
+    "nativeName": "功能开关_选角UI背景",
+    "writable": true
+  },
+  {
+    "key": "native-128",
+    "index": 128,
+    "label": "残影开关",
+    "nativeControl": "0x16038fd3",
+    "nativeName": "功能开关_残影开关",
+    "writable": true
+  },
+  {
+    "key": "native-129",
+    "index": 129,
+    "label": "创建角色36",
+    "nativeControl": "0x16039058",
+    "nativeName": "功能开关_创建角色36",
+    "writable": true
+  },
+  {
+    "key": "native-130",
+    "index": 130,
+    "label": "耳环",
+    "nativeControl": "0x160391a0",
+    "nativeName": "选择框_耳环",
+    "writable": false
+  },
+  {
+    "key": "native-132",
+    "index": 132,
+    "label": "热键分解",
+    "nativeControl": "0x1603b397",
+    "nativeName": "热键分解_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-133",
+    "index": 133,
+    "label": "热键出售",
+    "nativeControl": "0x1603b396",
+    "nativeName": "热键出售_选择框",
+    "writable": true
+  },
+  {
+    "key": "native-134",
+    "index": 134,
+    "label": "积分评分",
+    "nativeControl": "0x16041776",
+    "nativeName": "功能开关_积分评分",
+    "writable": true
+  },
+  {
+    "key": "native-135",
+    "index": 135,
+    "label": "鼠标点击传送",
+    "nativeControl": "0x1604186f",
+    "nativeName": "功能开关_鼠标点击传送",
+    "writable": true
+  },
+  {
+    "key": "native-136",
+    "index": 136,
+    "label": "快捷栏自动吃药",
+    "nativeControl": "0x1604239a",
+    "nativeName": "功能开关_快捷栏自动吃药",
+    "writable": true
+  }
+]

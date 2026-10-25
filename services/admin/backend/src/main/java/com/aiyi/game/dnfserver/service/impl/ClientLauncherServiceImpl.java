@@ -24,6 +24,8 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import com.aiyi.game.dnfserver.service.extension.ReleaseVersion;
 
 /**
  * 登录器管理业务实现
@@ -43,6 +45,12 @@ public class ClientLauncherServiceImpl implements ClientLauncherService {
 
     @Resource
     private AccountVODao accountVODao;
+
+    private static void checksum(String value, boolean required) {
+        if ((!StringUtils.hasText(value) && required) ||
+            (StringUtils.hasText(value) && !value.matches("[a-fA-F0-9]{64}")))
+            throw new com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure(400, "发布更新包必须填写 64 位 SHA-256");
+    }
 
     @Override
     public ClientLauncherConfig getConfig() {
@@ -71,10 +79,15 @@ public class ClientLauncherServiceImpl implements ClientLauncherService {
         if (config.getId() == 0) {
             config.setId(1);
         }
+        if (config.getId() != 1)
+            throw new com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure(400, "仅允许修改主登录器配置");
+        checksum(config.getSha256(), StringUtils.hasText(config.getDownloadUrl()) &&
+            (config.getMd5() == null || !config.getMd5().matches("[a-fA-F0-9]{32}")));
         if (!StringUtils.hasText(config.getVersion())) {
             throw new ValidationException("版本号不能为空");
         }
 
+        ReleaseVersion.require(config.getVersion());
         config.setUpdateTime(new Date());
         ClientLauncherConfig exists = configDao.get(config.getId());
         if (exists == null) {
@@ -124,8 +137,10 @@ public class ClientLauncherServiceImpl implements ClientLauncherService {
         }
 
         if (version.getEnabled() == null) {
-            version.setEnabled(1);
+            version.setEnabled(0);
         }
+        ReleaseVersion.require(version.getVersion());
+        checksum(version.getSha256(), version.getEnabled() == 1);
         if (version.getForceUpdate() == null) {
             version.setForceUpdate(0);
         }
@@ -156,6 +171,8 @@ public class ClientLauncherServiceImpl implements ClientLauncherService {
         if (version.getCreateTime() == null) {
             version.setCreateTime(exists.getCreateTime());
         }
+        ReleaseVersion.require(version.getVersion());
+        checksum(version.getSha256(), version.getEnabled() != null && version.getEnabled() == 1);
         versionDao.update(version);
         return versionDao.get(version.getId());
     }
@@ -178,8 +195,8 @@ public class ClientLauncherServiceImpl implements ClientLauncherService {
         WherePrams where = Method.createDefault();
         where.and(ClientLauncherVersion::getEnabled, C.EQ, 1);
         where.orderBy(Sort.of(ClientLauncherVersion::getCreateTime, OrderBy.DESC));
-        ResultPage<ClientLauncherVersion> page = versionDao.list(where, 1, 1);
-        return page.getList().isEmpty() ? null : page.getList().get(0);
+        return versionDao.list(where).stream().filter(v -> ReleaseVersion.valid(v.getVersion()))
+            .max((a,b) -> ReleaseVersion.compare(a.getVersion(),b.getVersion())).orElse(null);
     }
 
     @Override
@@ -270,8 +287,9 @@ public class ClientLauncherServiceImpl implements ClientLauncherService {
     public List<ClientLauncherVersion> listUpdateVersions(String clientVersion) {
         WherePrams where = Method.createDefault();
         where.and(ClientLauncherVersion::getEnabled, C.EQ, 1);
-        where.and(ClientLauncherVersion::getVersion, C.DA, clientVersion);
-        where.orderBy(Sort.of(ClientLauncherVersion::getCreateTime, OrderBy.DESC));
-        return versionDao.list(where);
+        ReleaseVersion.require(clientVersion);
+        return versionDao.list(where).stream().filter(v -> ReleaseVersion.valid(v.getVersion()))
+            .filter(v -> ReleaseVersion.compare(v.getVersion(),clientVersion)>0)
+            .sorted((a,b) -> ReleaseVersion.compare(a.getVersion(),b.getVersion())).collect(Collectors.toList());
     }
 }

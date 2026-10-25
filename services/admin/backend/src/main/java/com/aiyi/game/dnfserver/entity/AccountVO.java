@@ -93,6 +93,11 @@ public class AccountVO extends PO {
     @TempField
     private String authCode;
 
+    @TempField
+    private String activationCode;
+    public String getActivationCode() { return activationCode; }
+    public void setActivationCode(String value) { activationCode = value; }
+
     public long getUid() {
         return uid;
     }

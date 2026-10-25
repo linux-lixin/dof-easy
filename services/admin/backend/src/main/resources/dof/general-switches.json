@@ -1,0 +1,242 @@
+[
+  {
+    "index": 0,
+    "control": "0x16030ba1",
+    "nativeName": "出售人白_选择框",
+    "label": "出售角色装备·白"
+  },
+  {
+    "index": 1,
+    "control": "0x16030ba6",
+    "nativeName": "出售人蓝_选择框",
+    "label": "出售角色装备·蓝"
+  },
+  {
+    "index": 2,
+    "control": "0x16030bac",
+    "nativeName": "出售人紫_选择框",
+    "label": "出售角色装备·紫"
+  },
+  {
+    "index": 3,
+    "control": "0x16030bb2",
+    "nativeName": "出售人粉_选择框",
+    "label": "出售角色装备·粉"
+  },
+  {
+    "index": 4,
+    "control": "0x16030bb8",
+    "nativeName": "出售人史诗_选择框",
+    "label": "出售角色装备·史诗"
+  },
+  {
+    "index": 5,
+    "control": "0x16030bbe",
+    "nativeName": "出售人勇者_选择框",
+    "label": "出售角色装备·勇者"
+  },
+  {
+    "index": 6,
+    "control": "0x16030ba2",
+    "nativeName": "出售宠物白_选择框",
+    "label": "出售宠物装备·白"
+  },
+  {
+    "index": 7,
+    "control": "0x16030ba5",
+    "nativeName": "出售宠物蓝_选择框",
+    "label": "出售宠物装备·蓝"
+  },
+  {
+    "index": 8,
+    "control": "0x16030bab",
+    "nativeName": "出售宠物紫_选择框",
+    "label": "出售宠物装备·紫"
+  },
+  {
+    "index": 9,
+    "control": "0x16030bb1",
+    "nativeName": "出售宠物粉_选择框",
+    "label": "出售宠物装备·粉"
+  },
+  {
+    "index": 10,
+    "control": "0x16030bb7",
+    "nativeName": "出售宠物史诗_选择框",
+    "label": "出售宠物装备·史诗"
+  },
+  {
+    "index": 11,
+    "control": "0x16030bbd",
+    "nativeName": "出售宠物勇者_选择框",
+    "label": "出售宠物装备·勇者"
+  },
+  {
+    "index": 12,
+    "control": "0x16030ba3",
+    "nativeName": "分解人白_选择框",
+    "label": "分解角色装备·白"
+  },
+  {
+    "index": 13,
+    "control": "0x16030ba4",
+    "nativeName": "分解人蓝_选择框",
+    "label": "分解角色装备·蓝"
+  },
+  {
+    "index": 14,
+    "control": "0x16030baa",
+    "nativeName": "分解人紫_选择框",
+    "label": "分解角色装备·紫"
+  },
+  {
+    "index": 15,
+    "control": "0x16030bb0",
+    "nativeName": "分解人粉_选择框",
+    "label": "分解角色装备·粉"
+  },
+  {
+    "index": 16,
+    "control": "0x16030bb6",
+    "nativeName": "分解人史诗_选择框",
+    "label": "分解角色装备·史诗"
+  },
+  {
+    "index": 17,
+    "control": "0x16030bbc",
+    "nativeName": "分解人勇者_选择框",
+    "label": "分解角色装备·勇者"
+  },
+  {
+    "index": 18,
+    "control": "0x16030b8f",
+    "nativeName": "分解宠物白_选择框",
+    "label": "分解宠物装备·白"
+  },
+  {
+    "index": 19,
+    "control": "0x16030b97",
+    "nativeName": "分解宠物蓝_选择框",
+    "label": "分解宠物装备·蓝"
+  },
+  {
+    "index": 20,
+    "control": "0x16030b98",
+    "nativeName": "分解宠物紫_选择框",
+    "label": "分解宠物装备·紫"
+  },
+  {
+    "index": 21,
+    "control": "0x16030b99",
+    "nativeName": "分解宠物粉_选择框",
+    "label": "分解宠物装备·粉"
+  },
+  {
+    "index": 22,
+    "control": "0x16030b93",
+    "nativeName": "分解宠物史诗_选择框",
+    "label": "分解宠物装备·史诗"
+  },
+  {
+    "index": 23,
+    "control": "0x16030b95",
+    "nativeName": "分解宠物勇者_选择框",
+    "label": "分解宠物装备·勇者"
+  },
+  {
+    "index": 24,
+    "control": "0x16030b82",
+    "nativeName": "选择框_拾取_普通",
+    "label": "拾取_普通"
+  },
+  {
+    "index": 25,
+    "control": "0x16030b8a",
+    "nativeName": "选择框_拾取_高级",
+    "label": "拾取_高级"
+  },
+  {
+    "index": 26,
+    "control": "0x16030b8b",
+    "nativeName": "选择框_拾取_稀有",
+    "label": "拾取_稀有"
+  },
+  {
+    "index": 27,
+    "control": "0x16030b8c",
+    "nativeName": "选择框_拾取_神器",
+    "label": "拾取_神器"
+  },
+  {
+    "index": 28,
+    "control": "0x16030b86",
+    "nativeName": "选择框_拾取_史诗",
+    "label": "拾取_史诗"
+  },
+  {
+    "index": 29,
+    "control": "0x16030b88",
+    "nativeName": "选择框_拾取_勇者",
+    "label": "拾取_勇者"
+  },
+  {
+    "index": 30,
+    "control": "0x16030bc8",
+    "nativeName": "选择框评分",
+    "label": "评分"
+  },
+  {
+    "index": 31,
+    "control": "0x16030bca",
+    "nativeName": "顺图_选择框",
+    "label": "顺图"
+  },
+  {
+    "index": 32,
+    "control": "0x16030bcc",
+    "nativeName": "选择框远程修理",
+    "label": "远程修理"
+  },
+  {
+    "index": 33,
+    "control": "0x16030bc7",
+    "nativeName": "修理穿戴_选择框",
+    "label": "修理穿戴"
+  },
+  {
+    "index": 34,
+    "control": "0x16030bc5",
+    "nativeName": "分解_选择框",
+    "label": "分解"
+  },
+  {
+    "index": 35,
+    "control": "0x16030bc9",
+    "nativeName": "选择框拾取",
+    "label": "拾取"
+  },
+  {
+    "index": 36,
+    "control": "0x16030bcb",
+    "nativeName": "仓库_选择框",
+    "label": "仓库"
+  },
+  {
+    "index": 37,
+    "control": "0x16030bcd",
+    "nativeName": "ss确认总开关",
+    "label": "史诗操作确认总开关"
+  },
+  {
+    "index": 38,
+    "control": "0x16030bc6",
+    "nativeName": "出售_选择框",
+    "label": "出售"
+  },
+  {
+    "index": 39,
+    "control": "0x16030bc4",
+    "nativeName": "热键_选择框",
+    "label": "热键"
+  }
+]

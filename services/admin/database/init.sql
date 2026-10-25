@@ -74,6 +74,7 @@ CREATE TABLE `CLIENT_LAUNCHER_CONFIG` (
                                          `VERSION` varchar(64) character set utf8 NOT NULL,
                                          `DOWNLOAD_URL` varchar(1024) character set utf8 NOT NULL,
                                          `MD5` varchar(64) character set utf8 NOT NULL,
+                                         `SHA256` varchar(64) character set utf8 DEFAULT NULL,
                                          `REMARK` varchar(1024) character set utf8 NOT NULL,
                                          `UPDATE_TIME` datetime default NULL,
                                          `TITLE` varchar(255) character set utf8 NOT NULL,
@@ -92,6 +93,7 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `CLIENT_LAUNCHER_VERSION`;
 CREATE TABLE `CLIENT_LAUNCHER_VERSION` (
+                                          `SHA256` varchar(64) character set utf8 DEFAULT NULL,
                                           `ID` int(11) NOT NULL auto_increment,
                                           `VERSION` varchar(64) character set utf8 NOT NULL,
                                           `DOWNLOAD_URL` varchar(1024) character set utf8 NOT NULL,

@@ -32,3 +32,7 @@ mvn package -DskipTests
 
 页面、管理员、RSA 和客户端版本管理的图文说明保留在 [上游说明存档](upstream/README.md)。
 存档中的旧默认值与旧路径不是当前部署入口。当前默认管理员名为 `admin`，密码需自行设置；后台不是玩家完整客户端包的替代物。
+
+活动配置入口与验收边界见[签到、战令与收集箱管理](activities.md)。
+
+晴空网页适配的发布范围、私有输入及验收限制见 [源码发布说明](../dof/publication.txt)，隔离部署见 [部署与恢复](../dof/deployment.txt)，PVF 与配套包接口见 [协议与操作说明](../dof/protocol.txt)。

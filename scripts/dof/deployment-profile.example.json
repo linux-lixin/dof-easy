@@ -1,0 +1,20 @@
+{
+  "environment": "isolated",
+  "root": "/opt/dof-isolated/web-admin",
+  "databaseContainer": "dof-isolated-db",
+  "databaseDirectory": "/opt/dof-isolated/database",
+  "databaseUuid": "00000000-0000-0000-0000-000000000000",
+  "webContainer": "dof-isolated-web",
+  "gameContainer": "dof-isolated-game",
+  "network": "dof-isolated-internal",
+  "gamePvf": "/opt/dof-isolated/game/Script.pvf",
+  "instanceId": "dof-isolated",
+  "databaseUser": "dof_adapter",
+  "adminAccount": "isolated_admin",
+  "databaseClientHost": "172.30.%",
+  "publicKeySha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "protectedContainers": [
+    "dof-isolated-db",
+    "dof-isolated-game"
+  ]
+}

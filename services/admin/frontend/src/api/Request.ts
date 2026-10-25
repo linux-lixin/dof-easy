@@ -83,10 +83,10 @@ class Request {
                         msg = '请求资源不存在 (404)'
                         break
                     case 500:
-                        msg = error.response.data.message || error.message || '服务器内部错误 (500)'
+                        msg = error.response?.data?.message || error.message || '服务器内部错误 (500)'
                         break
                     default:
-                        msg = error.response.data.message || error.message || '网络连接故障'
+                        msg = error.response?.data?.message || error.message || '网络连接故障'
                 }
                 ArcoVue.Message.error(msg)
                 return Promise.reject(error)

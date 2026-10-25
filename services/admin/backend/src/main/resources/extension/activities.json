@@ -1,0 +1,3299 @@
+[
+  {
+    "key": "signin",
+    "title": "签到",
+    "table": "sign_in_config",
+    "primaryKey": null,
+    "autoId": false,
+    "fields": [
+      {
+        "name": "d_Name",
+        "label": "活动名称",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "start_time",
+        "label": "开始日期",
+        "type": "date",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "end_time",
+        "label": "结束日期",
+        "type": "date",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "code_1",
+        "label": "第1天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_2",
+        "label": "第2天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_3",
+        "label": "第3天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_4",
+        "label": "第4天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_5",
+        "label": "第5天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_6",
+        "label": "第6天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_7",
+        "label": "第7天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_8",
+        "label": "第8天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_9",
+        "label": "第9天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_10",
+        "label": "第10天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_11",
+        "label": "第11天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_12",
+        "label": "第12天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_13",
+        "label": "第13天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_14",
+        "label": "第14天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_15",
+        "label": "第15天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_16",
+        "label": "第16天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_17",
+        "label": "第17天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_18",
+        "label": "第18天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_19",
+        "label": "第19天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_20",
+        "label": "第20天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_21",
+        "label": "第21天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_22",
+        "label": "第22天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_23",
+        "label": "第23天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_24",
+        "label": "第24天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_25",
+        "label": "第25天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_26",
+        "label": "第26天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_27",
+        "label": "第27天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_28",
+        "label": "第28天道具 ID",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_1",
+        "label": "第1天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_2",
+        "label": "第2天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_3",
+        "label": "第3天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_4",
+        "label": "第4天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_5",
+        "label": "第5天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_6",
+        "label": "第6天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_7",
+        "label": "第7天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_8",
+        "label": "第8天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_9",
+        "label": "第9天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_10",
+        "label": "第10天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_11",
+        "label": "第11天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_12",
+        "label": "第12天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_13",
+        "label": "第13天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_14",
+        "label": "第14天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_15",
+        "label": "第15天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_16",
+        "label": "第16天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_17",
+        "label": "第17天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_18",
+        "label": "第18天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_19",
+        "label": "第19天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_20",
+        "label": "第20天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_21",
+        "label": "第21天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_22",
+        "label": "第22天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_23",
+        "label": "第23天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_24",
+        "label": "第24天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_25",
+        "label": "第25天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_26",
+        "label": "第26天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_27",
+        "label": "第27天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num_28",
+        "label": "第28天数量",
+        "type": "int",
+        "group": "每日奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Cum_1",
+        "label": "7天累计道具 ID",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Cum_2",
+        "label": "14天累计道具 ID",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Cum_3",
+        "label": "21天累计道具 ID",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Cum_4",
+        "label": "28天累计道具 ID",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "C_num_1",
+        "label": "7天累计数量",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "C_num_2",
+        "label": "14天累计数量",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "C_num_3",
+        "label": "21天累计数量",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "C_num_4",
+        "label": "28天累计数量",
+        "type": "int",
+        "group": "累计奖励",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "d_off",
+        "label": "启用签到",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 1,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "d_itme",
+        "label": "双倍奖励道具 ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "notice": "到期不自动清空记录。双倍开关、累计奖励与普通日奖励分别配置；账号领取与角色奖励归属请通过“扩展运营与验收”查询并在游戏核对。签到按数据库日期判断，当前配套截止日期保持 2026-11-19。"
+  },
+  {
+    "key": "battle",
+    "title": "战令设置",
+    "table": "disposition_o_battle_order",
+    "primaryKey": null,
+    "autoId": false,
+    "fields": [
+      {
+        "name": "name",
+        "label": "战令名称",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "show1",
+        "label": "展示道具 1 ID",
+        "type": "int",
+        "group": "展示道具",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "show2",
+        "label": "展示道具 2 ID",
+        "type": "int",
+        "group": "展示道具",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "show3",
+        "label": "展示道具 3 ID",
+        "type": "int",
+        "group": "展示道具",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "show4",
+        "label": "展示道具 4 ID",
+        "type": "int",
+        "group": "展示道具",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "show5",
+        "label": "展示道具 5 ID",
+        "type": "int",
+        "group": "展示道具",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "end_date",
+        "label": "结束时间",
+        "type": "datetime",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "end_day",
+        "label": "周期天数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Daily_login_exp",
+        "label": "每日登录经验",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "pl_exp",
+        "label": "疲劳任务经验",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "copy_exp",
+        "label": "副本任务经验",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "pl_num",
+        "label": "疲劳任务目标",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "copy_num",
+        "label": "副本任务目标",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_1",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 1",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_1",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 1",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_1",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 1",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_1",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 1",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_1",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 1",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_2",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 2",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_2",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 2",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_2",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 2",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_2",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 2",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_2",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 2",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_3",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 3",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_3",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 3",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_3",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 3",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_3",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 3",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_3",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 3",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_4",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 4",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_4",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 4",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_4",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 4",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_4",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 4",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_4",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 4",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_5",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 5",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_5",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 5",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_5",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 5",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_5",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 5",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_5",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 5",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_6",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 6",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_6",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 6",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_6",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 6",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_6",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 6",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_6",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 6",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_7",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 7",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_7",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 7",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_7",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 7",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_7",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 7",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_7",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 7",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_8",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 8",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_8",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 8",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_8",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 8",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_8",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 8",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_8",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 8",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_9",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 9",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_9",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 9",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_9",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 9",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_9",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 9",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_9",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 9",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_ID_10",
+        "label": "目标 ID",
+        "type": "int",
+        "group": "重复任务 10",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_name_10",
+        "label": "任务名称",
+        "type": "varchar",
+        "group": "重复任务 10",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Repeat_task_num_10",
+        "label": "目标数量",
+        "type": "int",
+        "group": "重复任务 10",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_type_10",
+        "label": "任务类型（保留配套值）",
+        "type": "int",
+        "group": "重复任务 10",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Repeat_task_exp_10",
+        "label": "任务经验",
+        "type": "int",
+        "group": "重复任务 10",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "d_on",
+        "label": "启用战令",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 1,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "exp_max",
+        "label": "每周任务经验上限",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 6000
+      }
+    ],
+    "notice": "每级固定 1000 经验；exp_max 为每周任务经验上限。现有基础任务：每日登录 100、消耗 30 疲劳得 50、通关 4 次得 50。额外任务及高级激活缺映射依据，保持原值；不通过提高奖励填满 50 级。截止北京时间 2026-11-19 08:00，续期不重置进度。"
+  },
+  {
+    "key": "rewards",
+    "title": "战令奖励",
+    "table": "list_of_warorder_rewards",
+    "primaryKey": "lv",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "lv",
+        "label": "战令等级",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 50,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "item1",
+        "label": "奖励 1 道具 ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_code1",
+        "label": "奖励 1 数量",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item2",
+        "label": "奖励 2 道具 ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_code2",
+        "label": "奖励 2 数量",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item3",
+        "label": "奖励 3 道具 ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_code3",
+        "label": "奖励 3 数量",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ]
+  },
+  {
+    "key": "collection",
+    "title": "收集箱",
+    "table": "Collection_box",
+    "primaryKey": "id",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "id",
+        "label": "记录编号",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "box_id",
+        "label": "收集箱编号",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "Isunique",
+        "label": "唯一限制参数（保留配套值）",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 1,
+        "readonly": true,
+        "default": 1
+      },
+      {
+        "name": "Dname",
+        "label": "收集箱名称",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "te_date_end",
+        "label": "到期时间",
+        "type": "datetime",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "item_id",
+        "label": "收集道具 ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "physical_attack",
+        "label": "力量参数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "magical_attack",
+        "label": "智力参数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "physical_defense",
+        "label": "体力参数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "magical_defense",
+        "label": "精神参数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equipment_physical_attack",
+        "label": "物理攻击参数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equipment_magical_attack",
+        "label": "魔法攻击参数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "separate_attack",
+        "label": "独立攻击参数",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "fire_attack",
+        "label": "火属性强化",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "light_attack",
+        "label": "光属性强化",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "water_attack",
+        "label": "水属性强化",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "dark_attack",
+        "label": "暗属性强化",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "is_unloaded",
+        "label": "取出参数（保留配套值）",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 1,
+        "readonly": true,
+        "default": 0
+      }
+    ],
+    "notice": "这里只配置槽位和属性，玩家已保存属性在运营记录中单独查询，不随配置修改批量重算。已有收集记录的槽位禁止修改身份或删除。截止时间按数据库时区解释。"
+  },
+  {
+    "key": "online",
+    "title": "在线奖励",
+    "table": "online_rewards_config",
+    "primaryKey": "config_id",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "config_id",
+        "label": "config_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "stage1_minutes",
+        "label": "stage1_minutes",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "stage2_minutes",
+        "label": "stage2_minutes",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "stage3_minutes",
+        "label": "stage3_minutes",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "stage4_minutes",
+        "label": "stage4_minutes",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "stage1_item_id",
+        "label": "stage1_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "stage1_item_count",
+        "label": "stage1_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "stage2_item_id",
+        "label": "stage2_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "stage2_item_count",
+        "label": "stage2_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "stage3_item_id",
+        "label": "stage3_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "stage3_item_count",
+        "label": "stage3_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "stage4_item_id",
+        "label": "stage4_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "stage4_item_count",
+        "label": "stage4_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative1_required",
+        "label": "cumulative1_required",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 5
+      },
+      {
+        "name": "cumulative2_required",
+        "label": "cumulative2_required",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 10
+      },
+      {
+        "name": "cumulative3_required",
+        "label": "cumulative3_required",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 15
+      },
+      {
+        "name": "cumulative4_required",
+        "label": "cumulative4_required",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 25
+      },
+      {
+        "name": "cumulative1_item_id",
+        "label": "cumulative1_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative1_item_count",
+        "label": "cumulative1_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative2_item_id",
+        "label": "cumulative2_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative2_item_count",
+        "label": "cumulative2_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative3_item_id",
+        "label": "cumulative3_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative3_item_count",
+        "label": "cumulative3_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative4_item_id",
+        "label": "cumulative4_item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cumulative4_item_count",
+        "label": "cumulative4_item_count",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "dm_off",
+        "label": "dm_off",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "Report",
+        "label": "Report",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": true,
+    "deleteAllowed": false,
+    "notice": "配套截图奖励可导入，但启用开关只读并保持关闭。阶段分钟 15/30/45/60；累计阈值 5/10/15/25 的原生周期语义尚未验证，不擅自解释为天数；Frida 在线奖励入口仍关闭。"
+  },
+  {
+    "key": "shop",
+    "title": "神秘商店商品",
+    "table": "new_mystery_shop_item",
+    "primaryKey": "id",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "id",
+        "label": "id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id",
+        "label": "ä¸Šæž¶çš„ç‰©å“id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_num",
+        "label": "ä¸Šæž¶çš„ç‰©å“æ•°é‡",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "deduction_item_id",
+        "label": "æ‰£é™¤çš„ç‰©å“ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "deduction_item_num",
+        "label": "æ‰£é™¤çš„ç‰©å“æ•°é‡",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "deduction_item_id2",
+        "label": "é‡‘å¸",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "deduction_item_num2",
+        "label": "deduction_item_num2",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "restricted_type",
+        "label": "限购：1角色日/2周/3月/8累计；4账号日/5周/6月/7累计（0保留原值）",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 8,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "limit_the_number_of_times",
+        "label": "é™åˆ¶çš„æ¬¡æ•°",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Gold_Card",
+        "label": "æ˜¯å¦é‡‘å¡",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "shop_id",
+        "label": "shop_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": true,
+    "deleteAllowed": false,
+    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+  },
+  {
+    "key": "shop-switch",
+    "title": "神秘商店入口",
+    "table": "new_shop",
+    "primaryKey": null,
+    "autoId": false,
+    "fields": [
+      {
+        "name": "swoff",
+        "label": "swoff",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "cid",
+        "label": "cid",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "pot-one",
+    "title": "土罐奖池一",
+    "table": "earthenware_pot",
+    "primaryKey": "ID",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "ID",
+        "label": "ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id",
+        "label": "item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num",
+        "label": "num",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Probability",
+        "label": "Probability",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "rarity",
+        "label": "rarity",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "broadcast",
+        "label": "broadcast",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "dc_name",
+        "label": "dc_name",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      }
+    ],
+    "writable": true,
+    "deleteAllowed": false,
+    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+  },
+  {
+    "key": "pot-two",
+    "title": "土罐奖池二",
+    "table": "earthenware_pot_2",
+    "primaryKey": "ID",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "ID",
+        "label": "ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id",
+        "label": "item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num",
+        "label": "num",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Probability",
+        "label": "Probability",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "rarity",
+        "label": "rarity",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "broadcast",
+        "label": "broadcast",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "dc_name",
+        "label": "dc_name",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      }
+    ],
+    "writable": true,
+    "deleteAllowed": false,
+    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+  },
+  {
+    "key": "pot-three",
+    "title": "土罐奖池三",
+    "table": "earthenware_pot_3",
+    "primaryKey": "ID",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "ID",
+        "label": "ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id",
+        "label": "item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "num",
+        "label": "num",
+        "type": "int",
+        "group": "基本设置",
+        "min": 1,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Probability",
+        "label": "Probability",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "rarity",
+        "label": "rarity",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "broadcast",
+        "label": "broadcast",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "dc_name",
+        "label": "dc_name",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      }
+    ],
+    "writable": true,
+    "deleteAllowed": false,
+    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+  },
+  {
+    "key": "pot-switch",
+    "title": "土罐触发道具及开关",
+    "table": "earthenware_pot_item",
+    "primaryKey": null,
+    "autoId": false,
+    "fields": [
+      {
+        "name": "item_id",
+        "label": "item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id_2",
+        "label": "item_id_2",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id_3",
+        "label": "item_id_3",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_off_1",
+        "label": "item_off_1",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_off_2",
+        "label": "item_off_2",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_off_3",
+        "label": "item_off_3",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "random-box",
+    "title": "魔盒奖池",
+    "table": "randombox",
+    "primaryKey": "id",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "id",
+        "label": "id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id",
+        "label": "ç‰©å“id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_num",
+        "label": "ç‰©å“æ•°é‡",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Probability",
+        "label": "æ¦‚çŽ‡",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Announcement",
+        "label": "å…¬å‘Š",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Grouping",
+        "label": "åˆ†ç»„",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "rarity",
+        "label": "ç¨€æœ‰åº¦",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "random-box-settings",
+    "title": "魔盒规则",
+    "table": "randombox_config",
+    "primaryKey": "id",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "id",
+        "label": "id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_id",
+        "label": "ç‰©å“id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_key",
+        "label": "é’¥åŒ™",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "item_keynum",
+        "label": "item_keynum",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Lucky_points",
+        "label": "å¹¸è¿å€¼",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "edxof",
+        "label": "edxof",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "inheritance",
+    "title": "装备继承",
+    "table": "inheritance",
+    "primaryKey": "code",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "code",
+        "label": "code",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "restitution",
+        "label": "restitution",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Return_quantity",
+        "label": "Return_quantity",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "differ_lv",
+        "label": "differ_lv",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "cross-border",
+    "title": "装备跨界",
+    "table": "cross_border",
+    "primaryKey": "code",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "code",
+        "label": "code",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "restitution",
+        "label": "restitution",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Return_quantity",
+        "label": "Return_quantity",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "announcement",
+        "label": "announcement",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "codenum",
+        "label": "codenum",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "recovery",
+    "title": "物品回收",
+    "table": "item_recovery",
+    "primaryKey": "code",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "code",
+        "label": "code",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "restitution",
+        "label": "restitution",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "Return_quantity",
+        "label": "Return_quantity",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "announcement",
+        "label": "announcement",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "codenum",
+        "label": "codenum",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "extra_consumption_id",
+        "label": "extra_consumption_id",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "extra_consumption_num",
+        "label": "extra_consumption_num",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "appearance",
+    "title": "幻化入口",
+    "table": "transformation_item",
+    "primaryKey": null,
+    "autoId": false,
+    "fields": [
+      {
+        "name": "itme_id",
+        "label": "itme_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "swoff",
+        "label": "swoff",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": true,
+        "default": 0
+      },
+      {
+        "name": "npc_id",
+        "label": "npc_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "halo_itme_id",
+        "label": "halo_itme_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "creature_itme_id",
+        "label": "creature_itme_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Halo_x",
+        "label": "Halo_x",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Halo_y",
+        "label": "Halo_y",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "creature_x",
+        "label": "creature_x",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "creature_y",
+        "label": "creature_y",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": true,
+    "deleteAllowed": false,
+    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+  },
+  {
+    "key": "dragon-robe",
+    "title": "龙袍配置",
+    "table": "dragon_robe",
+    "primaryKey": "id",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "id",
+        "label": "id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "userjob",
+        "label": "userjob",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Monster_id",
+        "label": "Monster_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "button_type",
+        "label": "button_type",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id1",
+        "label": "equ_id1",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id2",
+        "label": "equ_id2",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id3",
+        "label": "equ_id3",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id4",
+        "label": "equ_id4",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id5",
+        "label": "equ_id5",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id6",
+        "label": "equ_id6",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id7",
+        "label": "equ_id7",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "equ_id8",
+        "label": "equ_id8",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "charts",
+    "title": "战力排行榜规则",
+    "table": "game_charts_config",
+    "primaryKey": "id",
+    "autoId": true,
+    "fields": [
+      {
+        "name": "id",
+        "label": "主键ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "min_zhanli",
+        "label": "最小上榜战力要求",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "jiangli_day",
+        "label": "多少天发一次奖励     填1就是每天   填3就是每三天发一次",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "jiangli_hour",
+        "label": "发送奖励的时间 - 时   就是jiangli_day的几点发奖励   填19就是晚上7点发",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "is_mobai",
+        "label": "是否开启膜拜  1开始  0不开启",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "status",
+        "label": "状态 1可用 0不可用",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 1
+      },
+      {
+        "name": "next_time",
+        "label": "下次奖励发放时间",
+        "type": "datetime",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "charts-rewards",
+    "title": "战力排行奖励",
+    "table": "game_charts_code",
+    "primaryKey": "top_index",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "top_index",
+        "label": "奖励内容  , 0是膜拜奖励    从1开始  这是第几名的奖励1就是第一名",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "code_data",
+        "label": "奖励的内容代码，用逗号分割 如：3331,3332,3235",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "code_num",
+        "label": "奖励的内容的数量，用逗号分割 如：1,20,50       数量个数需要与代码个数对应",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      }
+    ],
+    "writable": true,
+    "deleteAllowed": false,
+    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+  },
+  {
+    "key": "clearance",
+    "title": "通关播报",
+    "table": "clearance_report",
+    "primaryKey": "Copy_ID",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "Copy_ID",
+        "label": "å‰¯æœ¬ID",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Color_1",
+        "label": "å…¬å‘Šé¢œè‰²",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Color_2",
+        "label": "å‰¯æœ¬é¢œè‰²",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Color_3",
+        "label": "æ—¶é—´é¢œè‰²",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Difficulty",
+        "label": "å‰¯æœ¬éš¾åº¦",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Leave_the_copy",
+        "label": "ç¦»å¼€æ˜¯å¦æ’­æŠ¥",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "Type",
+        "label": "å…¬å‘Šç±»åž‹",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "warorder-items",
+    "title": "战令激活及经验道具",
+    "table": "use_warorder_items",
+    "primaryKey": "id",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "id",
+        "label": "id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "type",
+        "label": "type",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "exp",
+        "label": "exp",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  },
+  {
+    "key": "ui-channel",
+    "title": "界面切换资源",
+    "table": "ui_channel",
+    "primaryKey": "item_id",
+    "autoId": false,
+    "fields": [
+      {
+        "name": "item_id",
+        "label": "item_id",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "ui_name",
+        "label": "ui_name",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "img_1",
+        "label": "img_1",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "img_1num",
+        "label": "img_1num",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "img_2",
+        "label": "img_2",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      },
+      {
+        "name": "img_2num",
+        "label": "img_2num",
+        "type": "int",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": 0
+      },
+      {
+        "name": "bgm",
+        "label": "bgm",
+        "type": "varchar",
+        "group": "基本设置",
+        "min": 0,
+        "max": 2147483647,
+        "readonly": false,
+        "default": ""
+      }
+    ],
+    "writable": false,
+    "deleteAllowed": false,
+    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+  }
+]

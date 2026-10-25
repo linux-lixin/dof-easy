@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import { LauncherApi } from '../../../api/launcher';
+import LauncherModeNotice from './LauncherModeNotice.vue';
 import type { LauncherConfig } from '../../../api/entitys/LauncherConfig';
 import type { LauncherBanner } from '../../../api/entitys/LauncherBanner';
 
@@ -96,6 +97,7 @@ onMounted(loadAll);
 
 <template>
   <a-space direction="vertical" fill size="large">
+    <LauncherModeNotice />
     <a-spin :loading="loading" style="width: 100%">
       <a-card title="核心配置" style="margin: 24px;">
         <template #extra>
@@ -130,6 +132,11 @@ onMounted(loadAll);
               </a-form-item>
             </a-grid-item>
 
+            <a-grid-item :span="24">
+              <a-form-item label="整包 SHA-256">
+                <a-input v-model="config.sha256" placeholder="完整下载包的 64 位 SHA-256；优先于旧 MD5 校验" />
+              </a-form-item>
+            </a-grid-item>
             <a-grid-item :span="24">
               <a-form-item label="备注（可选）">
                 <a-textarea v-model="config.remark" :auto-size="{ minRows: 2, maxRows: 6 }" />

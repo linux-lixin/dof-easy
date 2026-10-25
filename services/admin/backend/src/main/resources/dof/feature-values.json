@@ -1,0 +1,763 @@
+[
+  {
+    "key": "contractLevel",
+    "label": "霸王契约等级",
+    "index": 31,
+    "nativeControl": "0x16023ae1",
+    "nativeName": "编辑框_霸王契约等级",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "normalDifficulty",
+    "label": "普通难度",
+    "index": 33,
+    "nativeControl": "0x16023ad5",
+    "nativeName": "编辑框_普通难度",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "adventureDifficulty",
+    "label": "冒险难度",
+    "index": 34,
+    "nativeControl": "0x16023ad3",
+    "nativeName": "编辑框_冒险难度",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "kingDifficulty",
+    "label": "王者难度",
+    "index": 35,
+    "nativeControl": "0x16023ad1",
+    "nativeName": "编辑框_王者难度",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "hellDifficulty",
+    "label": "地狱难度",
+    "index": 36,
+    "nativeControl": "0x16023acf",
+    "nativeName": "编辑框_地狱难度",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "heroDifficulty",
+    "label": "英雄难度",
+    "index": 37,
+    "nativeControl": "0x16023acd",
+    "nativeName": "编辑框_英雄难度",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "displayedOnlineCount",
+    "label": "显示在线人数",
+    "index": 44,
+    "nativeControl": "0x16030bd2",
+    "nativeName": "编辑框在线人数_",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "multiClientAccounts",
+    "label": "允许多开的账号编号",
+    "index": 49,
+    "nativeControl": "0x160295f7",
+    "nativeName": "编辑框_多开UID",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "externalMusic",
+    "label": "外联音乐",
+    "index": 58,
+    "nativeControl": "0x16024163",
+    "nativeName": "编辑框_外联音乐",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "blockedAutoDungeons",
+    "label": "禁止顺图的地下城编号",
+    "index": 105,
+    "nativeControl": "0x160313db",
+    "nativeName": "编辑框_禁止顺图ID",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "slayerAdvancement",
+    "label": "鬼剑士五转配置",
+    "index": 109,
+    "nativeControl": "0x160422e5",
+    "nativeName": "编辑框_五转_鬼剑士",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "femaleFighterAdvancement",
+    "label": "女格斗五转配置",
+    "index": 110,
+    "nativeControl": "0x160422e3",
+    "nativeName": "编辑框_五转_女格斗",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "maleFighterAdvancement",
+    "label": "男格斗五转配置",
+    "index": 111,
+    "nativeControl": "0x160422de",
+    "nativeName": "编辑框_五转_男格斗",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "maleGunnerAdvancement",
+    "label": "男枪手五转配置",
+    "index": 112,
+    "nativeControl": "0x160422e1",
+    "nativeName": "编辑框_五转_男枪手",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "femaleGunnerAdvancement",
+    "label": "女枪手五转配置",
+    "index": 113,
+    "nativeControl": "0x160422d7",
+    "nativeName": "编辑框_五转_女枪手",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "maleMageAdvancement",
+    "label": "男魔法五转配置",
+    "index": 114,
+    "nativeControl": "0x160422d8",
+    "nativeName": "编辑框_五转_男魔法",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "femaleMageAdvancement",
+    "label": "女魔法五转配置",
+    "index": 115,
+    "nativeControl": "0x160422db",
+    "nativeName": "编辑框_五转_女魔法",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "priestAdvancement",
+    "label": "圣职者五转配置",
+    "index": 116,
+    "nativeControl": "0x160422dc",
+    "nativeName": "编辑框_五转_圣职者",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "thiefAdvancement",
+    "label": "暗夜五转配置",
+    "index": 117,
+    "nativeControl": "0x160422d1",
+    "nativeName": "编辑框_五转_暗夜",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "darkKnightAdvancement",
+    "label": "黑暗武士五转配置",
+    "index": 118,
+    "nativeControl": "0x160422d2",
+    "nativeName": "编辑框_五转_黑暗武士",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "creatorAdvancement",
+    "label": "缔造者五转配置",
+    "index": 119,
+    "nativeControl": "0x160422d5",
+    "nativeName": "编辑框_五转_缔造者",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "dungeonList",
+    "label": "地图列表",
+    "index": 121,
+    "nativeControl": "0x16038e20",
+    "nativeName": "编辑框地图列表",
+    "group": "基础与高级参数"
+  },
+  {
+    "key": "earring.typeName",
+    "label": "耳环类型名称",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 0,
+    "nativeControl": "0x1603919f",
+    "nativeName": "耳环类型名称编辑框"
+  },
+  {
+    "key": "earring.enhancementText",
+    "label": "耳环强化字符串",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 1,
+    "nativeControl": "0x1603919e",
+    "nativeName": "耳环强化字符串编辑框"
+  },
+  {
+    "key": "earring.attackMultiplier1",
+    "label": "攻击力倍数1",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 2,
+    "nativeControl": "0x16039136",
+    "nativeName": "攻击力倍数1"
+  },
+  {
+    "key": "earring.attackMultiplier2",
+    "label": "攻击力倍数2",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 3,
+    "nativeControl": "0x16039137",
+    "nativeName": "攻击力倍数2"
+  },
+  {
+    "key": "earring.attackMultiplier3",
+    "label": "攻击力倍数3",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 4,
+    "nativeControl": "0x16039138",
+    "nativeName": "攻击力倍数3"
+  },
+  {
+    "key": "earring.position5",
+    "label": "他人面板8X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 5,
+    "nativeControl": "0x16039186",
+    "nativeName": "他人面板8X"
+  },
+  {
+    "key": "earring.position6",
+    "label": "他人面板7X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 6,
+    "nativeControl": "0x16039189",
+    "nativeName": "他人面板7X"
+  },
+  {
+    "key": "earring.position7",
+    "label": "他人面板9X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 7,
+    "nativeControl": "0x16039182",
+    "nativeName": "他人面板9X"
+  },
+  {
+    "key": "earring.position8",
+    "label": "他人面板11X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 8,
+    "nativeControl": "0x1603917d",
+    "nativeName": "他人面板11X"
+  },
+  {
+    "key": "earring.position9",
+    "label": "他人面板19X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 9,
+    "nativeControl": "0x16039165",
+    "nativeName": "他人面板19X"
+  },
+  {
+    "key": "earring.position10",
+    "label": "他人面板20X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 10,
+    "nativeControl": "0x16039162",
+    "nativeName": "他人面板20X"
+  },
+  {
+    "key": "earring.position11",
+    "label": "他人面板10X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 11,
+    "nativeControl": "0x16039180",
+    "nativeName": "他人面板10X"
+  },
+  {
+    "key": "earring.position12",
+    "label": "他人面板12X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 12,
+    "nativeControl": "0x16039179",
+    "nativeName": "他人面板12X"
+  },
+  {
+    "key": "earring.position13",
+    "label": "他人面板27X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 13,
+    "nativeControl": "0x1603914c",
+    "nativeName": "他人面板27X"
+  },
+  {
+    "key": "earring.position14",
+    "label": "他人面板26X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 14,
+    "nativeControl": "0x16039150",
+    "nativeName": "他人面板26X"
+  },
+  {
+    "key": "earring.position15",
+    "label": "他人面板1X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 15,
+    "nativeControl": "0x1603919c",
+    "nativeName": "他人面板1X"
+  },
+  {
+    "key": "earring.position16",
+    "label": "他人面板13X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 16,
+    "nativeControl": "0x16039177",
+    "nativeName": "他人面板13X"
+  },
+  {
+    "key": "earring.position17",
+    "label": "他人面板3X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 17,
+    "nativeControl": "0x16039194",
+    "nativeName": "他人面板3X"
+  },
+  {
+    "key": "earring.position18",
+    "label": "他人面板2X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 18,
+    "nativeControl": "0x16039196",
+    "nativeName": "他人面板2X"
+  },
+  {
+    "key": "earring.position19",
+    "label": "他人面板4X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 19,
+    "nativeControl": "0x16039192",
+    "nativeName": "他人面板4X"
+  },
+  {
+    "key": "earring.position20",
+    "label": "他人面板6X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 20,
+    "nativeControl": "0x1603918b",
+    "nativeName": "他人面板6X"
+  },
+  {
+    "key": "earring.position21",
+    "label": "他人面板5X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 21,
+    "nativeControl": "0x1603918f",
+    "nativeName": "他人面板5X"
+  },
+  {
+    "key": "earring.position22",
+    "label": "他人面板15X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 22,
+    "nativeControl": "0x16039170",
+    "nativeName": "他人面板15X"
+  },
+  {
+    "key": "earring.position23",
+    "label": "他人面板14X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 23,
+    "nativeControl": "0x16039174",
+    "nativeName": "他人面板14X"
+  },
+  {
+    "key": "earring.position24",
+    "label": "他人面板16X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 24,
+    "nativeControl": "0x1603916e",
+    "nativeName": "他人面板16X"
+  },
+  {
+    "key": "earring.position25",
+    "label": "他人面板17X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 25,
+    "nativeControl": "0x1603916b",
+    "nativeName": "他人面板17X"
+  },
+  {
+    "key": "earring.position26",
+    "label": "他人面板18X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 26,
+    "nativeControl": "0x16039167",
+    "nativeName": "他人面板18X"
+  },
+  {
+    "key": "earring.position27",
+    "label": "他人面板21X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 27,
+    "nativeControl": "0x1603915e",
+    "nativeName": "他人面板21X"
+  },
+  {
+    "key": "earring.position28",
+    "label": "他人面板22X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 28,
+    "nativeControl": "0x1603915c",
+    "nativeName": "他人面板22X"
+  },
+  {
+    "key": "earring.position29",
+    "label": "他人面板23X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 29,
+    "nativeControl": "0x16039159",
+    "nativeName": "他人面板23X"
+  },
+  {
+    "key": "earring.position30",
+    "label": "他人面板24X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 30,
+    "nativeControl": "0x16039155",
+    "nativeName": "他人面板24X"
+  },
+  {
+    "key": "earring.position32",
+    "label": "他人面板25X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 32,
+    "nativeControl": "0x16039153",
+    "nativeName": "他人面板25X"
+  },
+  {
+    "key": "earring.position33",
+    "label": "他人面板30X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 33,
+    "nativeControl": "0x16039140",
+    "nativeName": "他人面板30X"
+  },
+  {
+    "key": "earring.position34",
+    "label": "他人面板29X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 34,
+    "nativeControl": "0x16039141",
+    "nativeName": "他人面板29X"
+  },
+  {
+    "key": "earring.position35",
+    "label": "他人面板28X",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 35,
+    "nativeControl": "0x16039144",
+    "nativeName": "他人面板28X"
+  },
+  {
+    "key": "earring.position36",
+    "label": "他人面板8Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 36,
+    "nativeControl": "0x16039187",
+    "nativeName": "他人面板8Y"
+  },
+  {
+    "key": "earring.position37",
+    "label": "他人面板7Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 37,
+    "nativeControl": "0x16039188",
+    "nativeName": "他人面板7Y"
+  },
+  {
+    "key": "earring.position38",
+    "label": "他人面板9Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 38,
+    "nativeControl": "0x16039183",
+    "nativeName": "他人面板9Y"
+  },
+  {
+    "key": "earring.position39",
+    "label": "他人面板11Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 39,
+    "nativeControl": "0x1603917e",
+    "nativeName": "他人面板11Y"
+  },
+  {
+    "key": "earring.position40",
+    "label": "他人面板19Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 40,
+    "nativeControl": "0x16039164",
+    "nativeName": "他人面板19Y"
+  },
+  {
+    "key": "earring.position41",
+    "label": "他人面板20Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 41,
+    "nativeControl": "0x16039163",
+    "nativeName": "他人面板20Y"
+  },
+  {
+    "key": "earring.position42",
+    "label": "他人面板10Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 42,
+    "nativeControl": "0x1603917f",
+    "nativeName": "他人面板10Y"
+  },
+  {
+    "key": "earring.position43",
+    "label": "他人面板12Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 43,
+    "nativeControl": "0x1603917a",
+    "nativeName": "他人面板12Y"
+  },
+  {
+    "key": "earring.position44",
+    "label": "他人面板27Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 44,
+    "nativeControl": "0x1603914d",
+    "nativeName": "他人面板27Y"
+  },
+  {
+    "key": "earring.position45",
+    "label": "他人面板26Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 45,
+    "nativeControl": "0x16039151",
+    "nativeName": "他人面板26Y"
+  },
+  {
+    "key": "earring.position46",
+    "label": "他人面板1Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 46,
+    "nativeControl": "0x16039198",
+    "nativeName": "他人面板1Y"
+  },
+  {
+    "key": "earring.position47",
+    "label": "他人面板13Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 47,
+    "nativeControl": "0x16039176",
+    "nativeName": "他人面板13Y"
+  },
+  {
+    "key": "earring.position48",
+    "label": "他人面板3Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 48,
+    "nativeControl": "0x16039195",
+    "nativeName": "他人面板3Y"
+  },
+  {
+    "key": "earring.position49",
+    "label": "他人面板2Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 49,
+    "nativeControl": "0x16039197",
+    "nativeName": "他人面板2Y"
+  },
+  {
+    "key": "earring.position50",
+    "label": "他人面板4Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 50,
+    "nativeControl": "0x16039191",
+    "nativeName": "他人面板4Y"
+  },
+  {
+    "key": "earring.position51",
+    "label": "他人面板6Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 51,
+    "nativeControl": "0x1603918c",
+    "nativeName": "他人面板6Y"
+  },
+  {
+    "key": "earring.position52",
+    "label": "他人面板5Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 52,
+    "nativeControl": "0x16039190",
+    "nativeName": "他人面板5Y"
+  },
+  {
+    "key": "earring.position53",
+    "label": "他人面板15Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 53,
+    "nativeControl": "0x16039171",
+    "nativeName": "他人面板15Y"
+  },
+  {
+    "key": "earring.position54",
+    "label": "他人面板14Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 54,
+    "nativeControl": "0x16039175",
+    "nativeName": "他人面板14Y"
+  },
+  {
+    "key": "earring.position55",
+    "label": "他人面板16Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 55,
+    "nativeControl": "0x1603916d",
+    "nativeName": "他人面板16Y"
+  },
+  {
+    "key": "earring.position56",
+    "label": "他人面板17Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 56,
+    "nativeControl": "0x1603916c",
+    "nativeName": "他人面板17Y"
+  },
+  {
+    "key": "earring.position57",
+    "label": "他人面板18Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 57,
+    "nativeControl": "0x16039168",
+    "nativeName": "他人面板18Y"
+  },
+  {
+    "key": "earring.position58",
+    "label": "他人面板21Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 58,
+    "nativeControl": "0x1603915f",
+    "nativeName": "他人面板21Y"
+  },
+  {
+    "key": "earring.position59",
+    "label": "他人面板22Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 59,
+    "nativeControl": "0x1603915b",
+    "nativeName": "他人面板22Y"
+  },
+  {
+    "key": "earring.position60",
+    "label": "他人面板23Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 60,
+    "nativeControl": "0x1603915a",
+    "nativeName": "他人面板23Y"
+  },
+  {
+    "key": "earring.position61",
+    "label": "他人面板24Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 61,
+    "nativeControl": "0x16039156",
+    "nativeName": "他人面板24Y"
+  },
+  {
+    "key": "earring.position63",
+    "label": "他人面板25Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 63,
+    "nativeControl": "0x16039152",
+    "nativeName": "他人面板25Y"
+  },
+  {
+    "key": "earring.position64",
+    "label": "他人面板30Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 64,
+    "nativeControl": "0x16039143",
+    "nativeName": "他人面板30Y"
+  },
+  {
+    "key": "earring.position65",
+    "label": "他人面板29Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 65,
+    "nativeControl": "0x16039142",
+    "nativeName": "他人面板29Y"
+  },
+  {
+    "key": "earring.position66",
+    "label": "他人面板28Y",
+    "group": "耳环与他人面板",
+    "index": 131,
+    "part": 66,
+    "nativeControl": "0x16039145",
+    "nativeName": "他人面板28Y"
+  }
+]
