@@ -145,38 +145,84 @@ def imported_environment(env):
     return result
 
 
-def stage_data(source, destination, runtime, old_managed, new_managed):
-    source, destination = Path(source), Path(destination)
-    # This explicit deployment import is the only conversion of retired paths.
-    old = source / 'qingkong-extension'
-    inputs = json.loads((ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json').read_text())['files']
-    for row in inputs:
-        if digest(old / row['path']) != row['sha256']: raise ValueError('Source replacement pin mismatch')
+def verify_previous_assets(state, lock):
+    """Verify copied old assets against the immutable source image's own lock."""
+    expected = json.loads(Path(lock).read_text())
+    installed = state / 'assets'
+    if (expected.get('artifact') != 'dof-server-runtime'
+            or expected.get('sourceEdition') != 'replacement-only'
+            or json.loads((installed / 'manifest.json').read_text()) != expected):
+        raise ValueError('Previous runtime manifest does not match its image')
+    seen = set()
+    for row in expected['files']:
+        relative = Path(row['path'])
+        if relative.is_absolute() or '..' in relative.parts or relative.as_posix() in seen:
+            raise ValueError('Invalid previous runtime asset path')
+        seen.add(relative.as_posix())
+        file = installed / relative
+        if file.is_symlink() or file.stat().st_size != row['bytes'] or digest(file) != row['sha256']:
+            raise ValueError('Previous runtime asset was modified')
+
+
+def upgrade_state(state, runtime, previous_lock):
+    verify_previous_assets(state, previous_lock)
+    replacement = state / '.next-assets'
+    if replacement.exists(): raise ValueError('Incomplete staged asset upgrade')
+    replacement.mkdir(mode=0o700)
+    for row in assets.manifest():
+        destination = replacement / row['path']
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(runtime / row['path'], destination)
+    shutil.copy2(runtime / 'manifest.json', replacement / 'manifest.json')
+    assets.verify(replacement)
+    # Only this new, disposable deployment copy is replaced; source data is kept.
+    previous = state / '.previous-assets'
+    if previous.exists(): raise ValueError('Ambiguous staged asset upgrade')
+    (state / 'assets').rename(previous)
+    replacement.rename(state / 'assets')
+    shutil.rmtree(previous)
+
+
+def stage_data(source, destination, runtime, old_managed, new_managed, previous_lock=None):
+    source, destination, runtime = Path(source), Path(destination), Path(runtime)
     if any(p.is_symlink() for p in source.rglob('*')): raise ValueError('Source data contains links')
-    shutil.copytree(source, destination, ignore=lambda folder, names:
-                    {'qingkong-extension', 'Script.pvf'} & set(names) if Path(folder) == source else set())
-    state = destination / 'dof-easy'
-    assets.install(runtime, state)
-    mapping = {'qk_plugin_config.ini': 'plugin.ini', 'qk_plugin_antonRaid.ini': 'anton-raid.ini',
-               'qk_plugin_lukeRaid.ini': 'luke-raid.ini', 'dungeon.lst': 'dungeon.lst'}
-    for legacy, current in mapping.items():
-        candidates = [p for p in (old / 'config' / legacy, old / legacy) if p.is_file()]
-        if not candidates and current == 'dungeon.lst': continue
-        if len(candidates) != 1: raise ValueError('Ambiguous or missing imported config: ' + legacy)
-        text = candidates[0].read_text(encoding='utf-8-sig')
-        if current == 'plugin.ini':
-            for key in ('Inlay_function', 'Equ_unlocked_instantly', 'Task_Completion_coupon'):
-                text, count = re.subn(r'(?m)^' + key + r'\s*=.*$', key + '=0', text)
-                if count != 1: raise ValueError('Missing native feature ownership switch')
-        (state / 'config' / current).write_text(text)
-    config = configparser.ConfigParser(interpolation=None); config.optionxform = str
-    config.read(old / 'config.ini')
-    config['sever']['LogPath'] = '/var/log/dof-easy/'
-    config['Gate']['DfGameR'] = '/home/neople/game/df_game_r'
-    with (state / 'config/gateway.ini').open('w') as stream: config.write(stream, space_around_delimiters=False)
-    (state / 'config/gateway.ini').chmod(0o600)
-    shutil.copyfile(old / 'privatekey.pem', state / 'keys/privatekey.pem')
-    (state / 'keys/privatekey.pem').chmod(0o600)
+    if (source / 'dof-easy').exists():
+        if previous_lock is None or (source / 'qingkong-extension').exists():
+            raise ValueError('Native upgrade requires an unambiguous previous image lock')
+        shutil.copytree(source, destination, ignore=lambda folder, names:
+                        {'Script.pvf'} & set(names) if Path(folder) == source else set())
+        state = destination / 'dof-easy'
+        upgrade_state(state, runtime, previous_lock)
+    else:
+        # Retired names are accepted only at this explicit legacy import boundary.
+        old = source / 'qingkong-extension'
+        inputs = json.loads((ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json').read_text())['files']
+        for row in inputs:
+            if digest(old / row['path']) != row['sha256']: raise ValueError('Source replacement pin mismatch')
+        shutil.copytree(source, destination, ignore=lambda folder, names:
+                        {'qingkong-extension', 'Script.pvf'} & set(names) if Path(folder) == source else set())
+        state = destination / 'dof-easy'
+        assets.install(runtime, state)
+        mapping = {'qk_plugin_config.ini': 'plugin.ini', 'qk_plugin_antonRaid.ini': 'anton-raid.ini',
+                   'qk_plugin_lukeRaid.ini': 'luke-raid.ini', 'dungeon.lst': 'dungeon.lst'}
+        for legacy, current in mapping.items():
+            candidates = [p for p in (old / 'config' / legacy, old / legacy) if p.is_file()]
+            if not candidates and current == 'dungeon.lst': continue
+            if len(candidates) != 1: raise ValueError('Ambiguous or missing imported config: ' + legacy)
+            text = candidates[0].read_text(encoding='utf-8-sig')
+            if current == 'plugin.ini':
+                for key in ('Inlay_function', 'Equ_unlocked_instantly', 'Task_Completion_coupon'):
+                    text, count = re.subn(r'(?m)^' + key + r'\s*=.*$', key + '=0', text)
+                    if count != 1: raise ValueError('Missing native feature ownership switch')
+            (state / 'config' / current).write_text(text)
+        config = configparser.ConfigParser(interpolation=None); config.optionxform = str
+        config.read(old / 'config.ini')
+        config['sever']['LogPath'] = '/var/log/dof-easy/'
+        config['Gate']['DfGameR'] = '/home/neople/game/df_game_r'
+        with (state / 'config/gateway.ini').open('w') as stream: config.write(stream, space_around_delimiters=False)
+        (state / 'config/gateway.ini').chmod(0o600)
+        shutil.copyfile(old / 'privatekey.pem', state / 'keys/privatekey.pem')
+        (state / 'keys/privatekey.pem').chmod(0o600)
     # Accept only scripts identical to the inspected old image. Custom scripts
     # require deliberate review; do not overwrite them using the marker alone.
     for path in new_managed.rglob('*'):
@@ -208,7 +254,12 @@ def main():
         print(json.dumps({'preflight': 'passed', 'mutated': False})); return
     root = Path(p['outputDirectory'])
     if root.exists(): raise ValueError('Deployment output must be new')
-    require_space([root.parent, '/var/lib/docker'], 1024 ** 3)
+    # Include cloned persistent data, the game's PVF copy, runtime files and
+    # startup logs. This is additional to the fixed filesystem reserve.
+    cloned_bytes = sum(f.stat().st_size for f in Path(p['dataDirectory']).rglob('*')
+                       if f.is_file() and f.name != 'Script.pvf')
+    peak = cloned_bytes + Path(p['pvf']).stat().st_size + 1024 ** 3
+    require_space([root.parent, '/var/lib/docker'], peak)
     original_states = states(p['gameId'])
     root.mkdir(mode=0o700, parents=True)
     private_json(root / 'source-container.json', game)
@@ -221,9 +272,19 @@ def main():
         docker('create', '--name', probe, '--entrypoint', '/bin/true', args.image)
         for name, container in (('old-managed', p['gameContainer']), ('new-managed', probe)):
             docker('cp', container + ':/opt/dnf/ubuntu/managed', str(root / name))
+        previous_lock = None
+        if env.get('LAUNCHER_MODE') == 'native':
+            previous_lock = root / 'previous-runtime.lock.json'
+            source_probe = probe + '-source'
+            docker('create', '--name', source_probe, '--network', 'none',
+                   '--entrypoint', '/bin/true', p['gameImage'])
+            try:
+                docker('cp', source_probe + ':/opt/dof-easy/runtime/gateway/runtime.lock.json', str(previous_lock))
+            finally:
+                docker('rm', source_probe)
         docker('rm', probe)
         docker('stop', '-t', '30', p['gameContainer']); stopped = True
-        stage_data(p['dataDirectory'], root / 'data', args.runtime, root / 'old-managed', root / 'new-managed')
+        stage_data(p['dataDirectory'], root / 'data', args.runtime, root / 'old-managed', root / 'new-managed', previous_lock)
         values = imported_environment(env)
         envfile = root / 'runtime.env'
         if any('\n' in v or '\r' in v for v in values.values()): raise ValueError('Invalid environment value')
