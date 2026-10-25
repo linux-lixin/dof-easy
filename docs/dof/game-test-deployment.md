@@ -37,3 +37,22 @@ Existing configurations and keys are preserved without legacy import or schema
 migration. Disk admission includes the persistent data copy, the actual PVF
 size, and 1 GiB for runtime files and startup overhead, in addition to the fixed
 2 GiB reserve. The currently running instance is not stopped if admission fails.
+
+## Main 175e0624 target result
+
+The subsequent deployment of `175e06241c496877cc05496800db1991e2e9527d`
+reached healthy status with the real renamed gateway and both native modules.
+The three random-box tables now exist in `dof_native`. The web image from the
+same commit passed browser login; the exact client and script status routes
+returned HTTP 200 without redirects. The previous display-name save and audit
+survived replacement. The database container was not restarted.
+
+The new paired-source web action copies only the deployment-bound read-only
+`DOF_GAME_PVF` into a normal validated upload task. Requests supply an operation
+ID and source revision, never a filesystem path. It uses the same capacity,
+index, checksum and failure handling as browser uploads; it neither applies
+parameters nor overwrites the game PVF. This avoids transmitting the same large
+file over a slow network when it is already bound to the selected instance.
+
+The target's signin record view still returns HTTP 409 for incompatible schema.
+Windows reader adaptation and actual player acceptance remain outstanding.

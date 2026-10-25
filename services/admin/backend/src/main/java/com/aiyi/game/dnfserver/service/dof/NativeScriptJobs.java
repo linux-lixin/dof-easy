@@ -126,6 +126,21 @@ public final class NativeScriptJobs implements AutoCloseable {
         }catch(IOException|RuntimeException e){u.state=e instanceof InterruptedIOException?"INTERRUPTED":"FAILED";u.error=safeError(e);save(dir,u);throw e;}
         finally{Files.deleteIfExists(part);}
     }
+    /** Import only the deployment-bound, read-only source through the ordinary upload validator. */
+    public Upload uploadPaired(String id,String revision,long actor,Path source)throws IOException {
+        Path p=source.toAbsolutePath().normalize();
+        java.nio.file.attribute.BasicFileAttributes before=Files.readAttributes(p,java.nio.file.attribute.BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);
+        if(!before.isRegularFile() || !p.equals(p.toRealPath()))throw fail(409,"绑定的服务端 PVF 必须是直接的普通文件");
+        try(InputStream input=new FilterInputStream(Files.newInputStream(p,LinkOption.NOFOLLOW_LINKS)) {
+            private void unchanged()throws IOException {
+                java.nio.file.attribute.BasicFileAttributes after=Files.readAttributes(p,java.nio.file.attribute.BasicFileAttributes.class,LinkOption.NOFOLLOW_LINKS);
+                if(!after.isRegularFile() || before.size()!=after.size() || !before.lastModifiedTime().equals(after.lastModifiedTime())
+                    || !Objects.equals(before.fileKey(),after.fileKey()))throw new IOException("Bound PVF changed during import");
+            }
+            @Override public int read()throws IOException {int value=in.read();if(value<0)unchanged();return value;}
+            @Override public int read(byte[] b,int off,int len)throws IOException {int value=in.read(b,off,len);if(value<0)unchanged();return value;}
+        }) {return upload(id,revision,actor,before.size(),input);}
+    }
     public synchronized Upload readUpload(String id)throws IOException {
         id(id);Upload u=load(uploads.resolve(id),Upload.class);
         if(!id.equals(u.uploadId)||!instance.equals(u.instanceId))throw fail(409,"上传记录不属于当前实例");return u;

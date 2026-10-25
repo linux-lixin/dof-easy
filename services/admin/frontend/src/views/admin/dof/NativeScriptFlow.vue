@@ -45,6 +45,12 @@ function upload() { return run(async () => {
   })
   await refresh()
 }) }
+function importPaired() { return run(async () => {
+  if (pendingUpload.value) return
+  const requestId = id(); pendingUpload.value = requestId
+  await Request.post(`${root}/uploads/paired`, { requestId, revision: status.value.revision }, { timeout: 1800000 })
+  await refresh()
+}) }
 function generate(u: Upload) { return run(async () => {
   if (!pendingTask.value) pendingTask.value = { requestId: id(), uploadId: u.uploadId, revision: status.value.revision }
   await Request.post(`${root}/tasks`, pendingTask.value, { timeout: 1800000 }); await refresh()
@@ -61,6 +67,10 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
     <template v-if="status?.enabled">
       <p>环境：隔离测试 · 实例：{{ status.instanceId }}</p>
       <a-alert v-if="!status.applicationEnabled" type="warning">{{ status.applicationBlocker }}。当前产物供开发核对，尚不能作为已通过登录验收的交付包。</a-alert>
+      <p v-if="status.pairedSourceAvailable">
+        <a-button :disabled="busy || !!pendingUpload" @click="importPaired">使用当前服务端 PVF</a-button>
+        从当前实例的只读配套文件创建独立任务副本，保留服务器原件；也可上传本地文件。
+      </p>
       <p><input type="file" accept=".pvf" :disabled="busy || !!pendingUpload" aria-label="选择原始 Script.pvf" @change="choose" /></p>
       <p v-if="file">{{ file.name }} · {{ (file.size / 1024 / 1024).toFixed(2) }} MiB</p>
       <a-button :disabled="busy || !file || !!pendingUpload" @click="upload">上传原始 PVF</a-button>

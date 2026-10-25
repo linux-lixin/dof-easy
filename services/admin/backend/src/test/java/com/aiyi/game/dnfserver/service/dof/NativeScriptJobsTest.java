@@ -36,6 +36,49 @@ public class NativeScriptJobsTest {
         long until=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(15);
         do{NativeScriptJobs.Job j=store.read(id);if(!Arrays.asList("RUNNING","QUEUED").contains(j.state))return j;Thread.sleep(20);}while(System.nanoTime()<until);throw new AssertionError("Worker timed out");
     }
+    @Test public void pairedSourceCreatesIndependentValidatedCopyAndPreservesOriginal()throws Exception {
+        try(Fixture f=new Fixture();NativeScriptJobs store=f.open()) {
+            byte[] raw=fixture(19);Path source=f.path.resolve("paired.pvf");Files.write(source,raw);
+            Files.setPosixFilePermissions(source,java.nio.file.attribute.PosixFilePermissions.fromString("r--------"));
+            String id=UUID.randomUUID().toString();NativeScriptJobs.Upload result=store.uploadPaired(id,REV,42,source);
+            assertEquals("READY",result.state);assertEquals(NativeScriptJobs.hash(source),result.sha256);
+            Path copy=f.path.resolve("uploads").resolve(id).resolve("source.pvf");
+            assertFalse(Files.isSameFile(copy,source));assertArrayEquals(raw,Files.readAllBytes(copy));
+            assertArrayEquals(raw,Files.readAllBytes(source));
+            try{store.uploadPaired(id,REV,42,source);fail();}catch(DofFailure e){assertEquals(409,e.status);}
+        }
+    }
+    @Test public void sourceChangeDuringImportCannotBecomeReady()throws Exception {
+        try(Fixture f=new Fixture()) {
+            Path source=f.path.resolve("paired.pvf");Files.write(source,fixture(22));
+            java.util.concurrent.atomic.AtomicBoolean changed=new java.util.concurrent.atomic.AtomicBoolean();
+            try(NativeScriptJobs store=new NativeScriptJobs(f.path,"isolated-test",p->{
+                if(changed.compareAndSet(false,true))Files.setLastModifiedTime(source,java.nio.file.attribute.FileTime.fromMillis(Files.getLastModifiedTime(source).toMillis()+5000));
+                return Long.MAX_VALUE;
+            })) {
+                String id=UUID.randomUUID().toString();
+                try{store.uploadPaired(id,REV,42,source);fail();}catch(IOException expected){}
+                assertEquals("FAILED",store.readUpload(id).state);
+                assertFalse(Files.exists(f.path.resolve("uploads").resolve(id).resolve("source.pvf")));
+                assertFalse(Files.exists(f.path.resolve("uploads").resolve(id).resolve("source.pvf.part")));
+            }
+        }
+    }
+    @Test public void pairedSourceRejectsLinksMalformedDataAndInsufficientSpace()throws Exception {
+        try(Fixture f=new Fixture();NativeScriptJobs store=f.open()) {
+            Path source=f.path.resolve("paired.pvf"),link=f.path.resolve("link.pvf");Files.write(source,fixture(20));Files.createSymbolicLink(link,source);
+            try{store.uploadPaired(UUID.randomUUID().toString(),REV,42,link);fail();}catch(DofFailure e){assertEquals(409,e.status);}
+            assertTrue(store.uploads().isEmpty());
+            Files.write(source,new byte[84]);String id=UUID.randomUUID().toString();
+            try{store.uploadPaired(id,REV,42,source);fail();}catch(IOException expected){}
+            assertEquals("FAILED",store.readUpload(id).state);assertFalse(Files.exists(f.path.resolve("uploads").resolve(id).resolve("source.pvf")));
+        }
+        try(Fixture f=new Fixture();NativeScriptJobs store=new NativeScriptJobs(f.path,"isolated-test",p->NativeScriptJobs.RESERVE)) {
+            Path source=f.path.resolve("paired.pvf");Files.write(source,fixture(21));
+            try{store.uploadPaired(UUID.randomUUID().toString(),REV,42,source);fail();}catch(DofFailure e){assertEquals(507,e.status);}
+            assertTrue(store.uploads().isEmpty());assertArrayEquals(fixture(21),Files.readAllBytes(source));
+        }
+    }
     @Test public void validatesOriginalIndexAndRejectsEncryptedOrTruncatedSources()throws Exception {
         byte[] original=fixture(4);assertEquals(1,NativePvfSource.validate(new ByteArrayInputStream(original),original.length).fileCount);
         byte[] encrypted=original.clone();NativeScriptIndex.transform(encrypted,56,24,0x12345678,1234,true);
