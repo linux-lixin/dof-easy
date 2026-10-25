@@ -1,0 +1,60 @@
+隔离网页部署与恢复
+
+所有命令先准备显式私有目标配置，不内置实际服务器、账号或测试实例。
+将 scripts/dof/deployment-profile.example.json 复制到仓库外，保存为 deployment-profile.json，
+权限设为 0600，逐项核对路径、容器、网络、数据库 UUID、公钥 SHA-256 及受保护容器列表。
+示例全零 UUID/哈希刻意无法通过校验。账号名是占位示例；密码不填入这个文件。
+密码仅由首次准备脚本随机生成并保存在本机 credentials.json/runtime.env，权限 0600。
+
+首次准备（仅对已有独立游戏/数据库副本）
+python3 scripts/dof/prepare_isolated.py --profile /private/deployment-profile.json \
+  --sources services/admin/database --peak-bytes <备份和新增文件预计峰值>
+脚本先核对挂载、UUID、隔离标记和容量，保存私有备份，仅添加服务表和专用管理身份。
+它只提取旧 init.sql 的 CREATE 定义，不执行玩家初始化、默认种子或 DROP。
+已存在 runtime.env 时拒绝重新准备，防止升级时重置环境和覆盖发布设置。
+
+客户端来源
+python3 scripts/protocol/dof/prepare_client_inputs.py --client <配套客户端目录> \
+  --public-key <现有服务器公钥DER> --public-sha256 <已核对哈希> \
+  --workspace <全新私有来源目录> --instance <配置中实例ID>
+将该目录里的 inputs 打包到私有传输包，使用 install_client_inputs.py --profile ... --archive ...
+安装到隔离网页持久卷。服务端私钥不能作为输入。脚本核对版本、公钥哈希和实例身份，
+不会覆盖已有工作目录或重生成密钥。
+
+构建
+在本地准备 JDK、Java 依赖和前端依赖，compile_admin.py 编译时保留 Java 参数名。
+package_admin.py --base-jar <配套SpringBoot归档> --classes <新类目录> \
+  --resources services/admin/backend/src/main/resources --frontend <dist> --output <新构建目录>
+原 JAR 只提供加载器和依赖；业务类取自本次编译。不复制私有输入或测试文件。
+按 build-manifest.json 校验产物。在服务器使用已核对的本地基础镜像标签构建：
+docker build --network=none --pull=false --build-arg RUNTIME_IMAGE=<本地标签> <构建目录>
+标签必须先核对为预期镜像 ID；不要把 sha256:镜像ID 当作 FROM 标签。
+jar_delta.py 可传输 JAR 差量，但会严格核对基准及目标哈希，和原生游戏更新协议无关。
+
+运行与升级
+python3 scripts/dof/run_isolated.py --profile /private/deployment-profile.json \
+  --image sha256:<本次完整镜像ID> --replace-web --peak-bytes <本次额外峰值>
+仅允许替换 profile 中的网页容器。数据库和游戏以及其他 protectedContainers 不操作。
+不发布公网端口；管理页面通过 SSH 隧道访问。不会初始化玩家库或生成身份密钥。
+/root 等实际部署目录必须与私有 profile 一致；不要套用其他实例的配置。
+
+配套包参数应用前，runtime.env 设置 QINGKONG_GAME_PVF=/app/paired/Script.pvf。
+运行脚本确认 host gamePvf 与隔离游戏 /data/Script.pvf 的实际挂载相同，随后只读挂载。
+服务器共享 PVF 从不被网页改写；上传来源哈希不一致时拒绝应用。
+数据卷保留 inputs、jobs、script/uploads、script/tasks 和私有参数；日志单独持久化。
+新版本 dof-admin.sql 仅添加审计表；已准备环境按迁移核对后执行增量，勿重跑首次准备。
+PVF 应用需要专用数据库用户对 qk.billing.decrypt 和 qk.qingkong_config.pvfencryption
+拥有字段 UPDATE 权限，另需原生表读取/锁和服务库审计权限。不要授予全库玩家写权限。
+
+容量
+每个目标文件系统需至少 2 GiB 可用基础余量，加本步新增峰值。
+PVF 需按原始上传、加密文件、ZIP 及临时文件实际规模计算，不能沿用小登录器包预算。
+读取 statvfs.f_bavail，不使用保留块。空间不够即停止，不清理正式数据、备份或回退镜像。
+
+恢复
+更新前保留 runtime.env、原镜像 ID、发布来源与任务目录；不要把秘密写入 recovery 描述。
+网页失败时用同一 profile 和旧镜像 ID 重建网页，保留持久卷。
+参数保存断连先按操作编号 reconcile；MyISAM 不依赖事务回滚。
+只恢复本次字段及文件，后续修改冲突则拒绝覆盖。不要回滚玩家整库。
+游戏验收必须关闭 Windows 晴空后台工具，使用网页生成包完成进城、战斗、返城和重登。
+正式服部署、切换和重新初始化不属于这些命令的用途。

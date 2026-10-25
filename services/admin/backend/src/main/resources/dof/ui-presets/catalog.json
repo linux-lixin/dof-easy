@@ -1,0 +1,167 @@
+[
+  {
+    "id": "native-60",
+    "index": 0,
+    "label": "60血槽",
+    "image": "e1b9bc.png",
+    "width": 1398,
+    "height": 192,
+    "sha256": "873d9d417f051cfffd1fb92d2f5d39bf47c745e6750bcfc057679d9236867c56",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-70",
+    "index": 1,
+    "label": "70血槽",
+    "image": "e8157c.png",
+    "width": 1396,
+    "height": 163,
+    "sha256": "4f28d51a9f3c5425e3dc84deb9ee7609be4be4bacb02e509b936aa6dbe7c1456",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-100",
+    "index": 2,
+    "label": "100血槽",
+    "image": "ed3888.png",
+    "width": 1008,
+    "height": 119,
+    "sha256": "420161723bbdfa374b637738f16c4ab74f39223bd793a79508f1e6af7d3282f3",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "captured-full-state-only"
+  },
+  {
+    "id": "native-110-wide-stretch",
+    "index": 3,
+    "label": "110宽屏血槽（拉伸）",
+    "image": "eff9fc.png",
+    "width": 1780,
+    "height": 204,
+    "sha256": "6355b07e4459076bd07aa588e5971123ee1656b49d534dd4b6cc5939578124f5",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-90-wide-stretch",
+    "index": 4,
+    "label": "90宽屏血槽（拉伸）",
+    "image": "f8e260.png",
+    "width": 1998,
+    "height": 241,
+    "sha256": "7dcf7e481873e3e731221e2cb7cb3094ed7084e0d9b5d05e3458ac07f2c4ab65",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-original-wide-stretch",
+    "index": 5,
+    "label": "宽屏原版血槽（拉伸）",
+    "image": "104c2d4.png",
+    "width": 1996,
+    "height": 270,
+    "sha256": "51d567a85ef302813bd8ea3cf2b5076d2b991077737dccc23a4001249ecd314c",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-110-wide",
+    "index": 6,
+    "label": "110宽屏血槽（不拉伸）",
+    "image": "eff9fc.png",
+    "width": 1780,
+    "height": 204,
+    "sha256": "6355b07e4459076bd07aa588e5971123ee1656b49d534dd4b6cc5939578124f5",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-90-wide",
+    "index": 7,
+    "label": "90宽屏血槽（不拉伸）",
+    "image": "f8e260.png",
+    "width": 1998,
+    "height": 241,
+    "sha256": "7dcf7e481873e3e731221e2cb7cb3094ed7084e0d9b5d05e3458ac07f2c4ab65",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-original-wide",
+    "index": 8,
+    "label": "宽屏原版血槽（不拉伸）",
+    "image": "104c2d4.png",
+    "width": 1996,
+    "height": 270,
+    "sha256": "51d567a85ef302813bd8ea3cf2b5076d2b991077737dccc23a4001249ecd314c",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-70-large",
+    "index": 9,
+    "label": "70放大血槽",
+    "image": "1151dfc.png",
+    "width": 1632,
+    "height": 269,
+    "sha256": "606d2647fcf18c650c4c82071195d3d1469fb00736c3539f5777f07ce8edbc1a",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-70-large-wide-stretch",
+    "index": 10,
+    "label": "70放大血槽宽屏（拉伸）",
+    "image": "1151dfc.png",
+    "width": 1632,
+    "height": 269,
+    "sha256": "606d2647fcf18c650c4c82071195d3d1469fb00736c3539f5777f07ce8edbc1a",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-70-large-wide",
+    "index": 11,
+    "label": "70放大血槽宽屏（不拉伸）",
+    "image": "1151dfc.png",
+    "width": 1632,
+    "height": 269,
+    "sha256": "606d2647fcf18c650c4c82071195d3d1469fb00736c3539f5777f07ce8edbc1a",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-55",
+    "index": 12,
+    "label": "55血槽",
+    "image": "11ed668.png",
+    "width": 1665,
+    "height": 267,
+    "sha256": "88319d40e0e3fb14d89ddc3f205567cfbfcfa2f289b1760105cc0c02dda7e5bd",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-60-double",
+    "index": 13,
+    "label": "60双排技能血槽",
+    "image": "12aaf74.png",
+    "width": 1660,
+    "height": 235,
+    "sha256": "9a275a4ab5f0b383a2246dbece2c210585b6b67168a2288b1c5a0aa9733e3dae",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  },
+  {
+    "id": "native-90",
+    "index": 14,
+    "label": "90血槽",
+    "image": "13556ec.png",
+    "width": 2112,
+    "height": 255,
+    "sha256": "3dce82195b5a1475fe5798f5b8a772220d0bcb6755717afdeccd8fc667d60540",
+    "previewEvidence": "original-handler-offline",
+    "saveEvidence": "pending-native-save-trace"
+  }
+]

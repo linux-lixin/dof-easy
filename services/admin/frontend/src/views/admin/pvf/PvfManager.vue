@@ -41,13 +41,17 @@ type PvfInfo = {
   equipmentCount: number;
   itemCount: number;
   canUpload: boolean;
+  nameWarnings: number;
+  unverifiedItemCount: number;
 };
 
 const pvfInfo = ref<PvfInfo>({
   size: '0 KB',
   equipmentCount: 0,
   itemCount: 0,
-  canUpload: false
+  canUpload: false,
+  nameWarnings: 0,
+  unverifiedItemCount: 0
 });
 
 const loading = ref(false);
@@ -254,7 +258,9 @@ const loadPvfInfo = async () => {
     size: res.data?.size ?? '0 KB',
     equipmentCount: res.data?.equipmentCount ?? 0,
     itemCount: res.data?.itemCount ?? 0,
-    canUpload: !!res.data?.canUpload
+    canUpload: !!res.data?.canUpload,
+    unverifiedItemCount: res.data?.unverifiedItemCount ?? 0,
+    nameWarnings: (res.data?.unparsedNameLines ?? 0) + (res.data?.duplicateNameKeys ?? 0)
   };
 };
 
@@ -297,80 +303,6 @@ const hoverPos = ref({ x: 0, y: 0 });
 const updateHoverPos = (evt: MouseEvent) => {
   hoverPos.value = { x: evt.clientX + 16, y: evt.clientY + 16 };
 };
-
-const rowsForHover = computed(() => {
-  if (!hoverItem.value) return [] as Array<{ k: string; v: string }>;
-  const it = hoverItem.value;
-
-  // Priority fields first (roughly equals the old table columns)
-  const known: Array<[string, any]> = [
-    ['ID', it.id],
-    ['名称', it.name],
-    ['类型', getTypeText(it)],
-    ['等级', it.minimumLevel],
-    ['稀有度', it.rarity],
-    ['交易类型', it.attachType],
-    ['携带上限', it.stackLimit],
-    ['职业', getJobText(it)],
-    ['说明(面板)', it.explain],
-    ['描述', it.description]
-  ];
-
-  const out: Array<{ k: string; v: string }> = [];
-  const usedKeys = new Set<string>();
-
-  for (const [k, v] of known) {
-    if (v == null || v === '' || (Array.isArray(v) && v.length === 0)) continue;
-    out.push({ k, v: Array.isArray(v) ? v.join(', ') : String(v) });
-  }
-
-  // Append any extra fields returned by backend
-  for (const key of Object.keys(it)) {
-    if (
-      ['icon'].includes(key) ||
-      typeof it[key] === 'function'
-    ) {
-      continue;
-    }
-    // skip duplicates already shown
-    if (
-      [
-        'id',
-        'name',
-        'type',
-        'equipmentType',
-        'equipmentTypeStr',
-        'stackableType',
-        'stackableTypeStr',
-        'minimumLevel',
-        'rarity',
-        'attachType',
-        'stackLimit',
-        'usableJobsStr',
-        'description',
-        'explain'
-      ].includes(key)
-    ) {
-      continue;
-    }
-
-    if (usedKeys.has(key)) continue;
-    const v = it[key];
-    if (v == null || v === '') continue;
-
-    if (typeof v === 'object') {
-      try {
-        out.push({ k: key, v: JSON.stringify(v) });
-      } catch {
-        out.push({ k: key, v: String(v) });
-      }
-    } else {
-      out.push({ k: key, v: String(v) });
-    }
-  }
-
-  return out;
-});
 
 // upload
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -486,6 +418,8 @@ onMounted(async () => {
       <div class="pvf-sub">
         当前PVF：{{ pvfInfo.size }} · 装备：{{ pvfInfo.equipmentCount }} · 道具：{{ pvfInfo.itemCount }}
       </div>
+      <a-alert v-if="pvfInfo.nameWarnings" type="warning">文本字典有 {{ pvfInfo.nameWarnings }} 处无效行或重复键；相关名称未完全验证，请按道具编号核对。</a-alert>
+      <a-alert v-if="pvfInfo.unverifiedItemCount" type="warning">{{ pvfInfo.unverifiedItemCount }} 个条目的名称或属性无法完整解析，未列入查询结果；不能据此认定道具不存在。</a-alert>
       <div class="pvf-actions">
         <a-button type="primary" :disabled="!pvfInfo.canUpload || uploading" @click="selectPvfFile">
           上传新PVF

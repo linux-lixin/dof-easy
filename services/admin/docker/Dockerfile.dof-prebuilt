@@ -1,0 +1,10 @@
+# Internal development image. Artifacts must be compiled and tested before packaging.
+ARG RUNTIME_IMAGE
+FROM ${RUNTIME_IMAGE}
+COPY app.jar /app/app.jar
+RUN rm -rf /app/static
+COPY static/ /app/static/
+COPY dof-entrypoint.sh /app/dof-entrypoint.sh
+COPY dof-nginx.conf.template /etc/nginx/nginx.conf.template
+RUN chmod 755 /app/dof-entrypoint.sh
+ENTRYPOINT ["/app/dof-entrypoint.sh"]

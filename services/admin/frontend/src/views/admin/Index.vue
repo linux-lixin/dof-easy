@@ -15,6 +15,8 @@ const breadcrumbList = ref<string[]>(['系统后台', '首页']);
 const selectedKeys = ref<string[]>(['/dashboard']);
 const openKeys = ref<string[]>([]);
 const userInfo = ref<any>(null);
+const runtime = ref<any>(null);
+const runtimeError = ref('');
 const historyPages = ref<any[]>([{
   path: '/dashboard',
   meta: { title: '首页', icon: 'home' }
@@ -62,6 +64,18 @@ menus.value = [
         meta: { title: '版本管理', icon: 'home' },
       }
     ]
+  },
+  {
+    path: '/extension-operations',
+    meta: { title: '扩展运营与验收', icon: 'home' }
+  },
+  {
+    path: '/dof',
+    meta: { title: 'dof-easy 管理', icon: 'home' }
+  },
+  {
+    path: '/activities',
+    meta: { title: '活动管理', icon: 'home' }
   },
   {
     path: '/assist',
@@ -142,7 +156,8 @@ const imgBaseUrl = ApiGlobalConfig.imageViewer.baseURL
 
 
 
-const onDeleteTab = (tabKey: string) => {
+const onDeleteTab = (key: string | number) => {
+  const tabKey = String(key);
   const index = historyPages.value.findIndex(page => page.path === tabKey);
   if (index !== -1) {
     historyPages.value.splice(index, 1);
@@ -161,12 +176,18 @@ const logout = () => {
   router.replace('/login')
 }
 
-// TODO 临时先随便请求个接口，触发后端验证token逻辑，获取用户信息
-Request.get('api/v1/account?page=1&pageSize=1')
+// Authenticate the admin shell without loading unrelated player records.
+Request.get('/api/v1/admin/launcher/runtime').then(response => {
+  runtime.value = response.data;
+}).catch(() => { runtimeError.value = '无法确认后台实例身份，请重新连接后再操作'; });
 </script>
 
 <template>
 <div class="admin-page">
+  <a-alert v-if="runtime?.qingkongDevelopment" type="warning" banner>
+    dof-easy隔离开发环境 · {{ runtime.instanceId }} · 尚未完成统一验收
+  </a-alert>
+  <a-alert v-if="runtimeError" type="error" banner>{{ runtimeError }}</a-alert>
   <a-layout class="admin-layout">
     <a-layout-sider
         hide-trigger
@@ -246,7 +267,7 @@ Request.get('api/v1/account?page=1&pageSize=1')
         </div>
       </a-layout-header>
       <a-layout-content class="layout-content">
-        <a-tabs class="layout-tabs" hide-content closable editable @delete="onDeleteTab" v-model:active-key="selectedKeys[0]" @change="(key: string | number, _ev: Event) => onClickMenuItem(String(key))">
+        <a-tabs class="layout-tabs" hide-content closable editable @delete="onDeleteTab" v-model:active-key="selectedKeys[0]" @change="(key: string | number) => onClickMenuItem(String(key))">
           <a-tab-pane v-for="page in historyPages" :key="page.path" :title="page.meta.title" :closable="page.path !== selectedKeys[0]">
           </a-tab-pane>
         </a-tabs>
@@ -268,8 +289,11 @@ Request.get('api/v1/account?page=1&pageSize=1')
 <style scoped lang="less">
 .admin-page{
   height: 100vh;
+  display: flex;
+  flex-direction: column;
   .admin-layout {
-    height: 100%;
+    flex: 1;
+    min-height: 0;
 
     .logo{
       display: flex;

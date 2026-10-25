@@ -92,9 +92,7 @@ public class Item {
             this.minimumLevel = script.getJSONArray("[minimum level]").getInt(0);
         }
         this.description = ZhConverterUtil.toSimple(script.getStr("[flavor text]", "[\"\"]"));
-        this.explain = ZhConverterUtil.toSimple(
-                script.getStr("[detail explain]",
-                        script.getStr("[basic explain]", "[\"\"]")));
+        this.explain = ZhConverterUtil.toSimple(explanation(script));
         if (script.containsKey("[stack limit]")){
             this.stackLimit = script.getJSONArray("[stack limit]").getInt(0);
         }else{
@@ -123,13 +121,6 @@ public class Item {
             this.description = "";
         }
 
-        JSONArray objects1 = JSON.parseArray(this.explain);
-        if (null != objects1 && !objects1.isEmpty()) {
-            this.explain = objects1.getString(0);
-        }else {
-            this.explain = "";
-        }
-
         if (script.containsKey("[icon]") && !script.getJSONArray("[icon]").isEmpty()){
             JSONArray arrays = JSON.parseArray(script.getStr("[icon]"));
             ItemIcon itemIcon = new ItemIcon();
@@ -141,6 +132,18 @@ public class Item {
         } else {
             this.icon = null;
         }
+    }
+
+    private static String explanation(JSONObject script) {
+        // Jianlai consumables use [explain]; equipment can provide more specific text.
+        for (String key : new String[]{"[detail explain]", "[basic explain]", "[explain]"}) {
+            JSONArray values = JSON.parseArray(script.getStr(key, "[]"));
+            if (values != null && !values.isEmpty()) {
+                String value = values.getString(0);
+                if (value != null && !value.trim().isEmpty()) return value;
+            }
+        }
+        return "";
     }
 
     public int getId() {

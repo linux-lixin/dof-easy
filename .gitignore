@@ -71,3 +71,14 @@ Thumbs.db
 # Committed shared build inputs; level binaries and PVF remain external.
 !/services/game/assets/home/template/init/init_sql.tgz
 !/services/game/plugin-assets/archive/dp2-pvf-patch.zip
+
+# Private admin deployment inputs, acceptance snapshots and generated client files
+*.private
+*.private.*
+**/runtime.env
+**/credentials.json
+**/deployment-profile.json
+**/contract.properties
+/services/admin/backend/src/test/resources/dof/
+/services/admin/backend/src/main/resources/dof/ui-native-100.json
+/services/admin/backend/src/main/resources/extension/companion-preview.json

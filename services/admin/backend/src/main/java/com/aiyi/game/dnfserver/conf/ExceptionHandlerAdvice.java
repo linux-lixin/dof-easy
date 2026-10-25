@@ -53,9 +53,8 @@ public class ExceptionHandlerAdvice {
     public ResultBean defaultErrorHandler(HttpServletRequest req, HttpServletResponse rep, Exception e) throws Exception {
         getLogger(e.getStackTrace()[0].getClassName()).error(StringUtils.isEmpty(e.getMessage()) ? "未知异常." : e.getMessage() ,e);
         rep.setStatus(500);
-        return ResultBean.error(StringUtils.isEmpty(e.getMessage()) ? "未知异常" : e.getMessage())
-                .setCode(500)
-                .setResponseBody(e.getStackTrace());
+        return ResultBean.error("服务暂时不可用，请稍后重试或联系管理员")
+                .setCode(500);
     }
 
     /**

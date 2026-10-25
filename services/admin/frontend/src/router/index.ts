@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 // 定义路由记录
 const routes: Array<RouteRecordRaw> = [
+    { path: '/account-security', name: 'AccountSecurity', component: () => import('../views/AccountSecurity.vue'), meta: { title: '玩家改密', requiresAuth: false } },
     // 1. 登录页面 (独立页面，不需要布局容器)
     {
         path: '/login',
@@ -113,6 +114,12 @@ const routes: Array<RouteRecordRaw> = [
         redirect: '/admin/dashboard',
         children: [
             {
+                path: 'dof',
+                name: 'DofManager',
+                component: () => import('../views/admin/dof/DofManager.vue'),
+                meta: { title: 'dof-easy 管理', requiresAuth: true }
+            },
+            {
                 path: 'dashboard', // 访问地址: /admin/dashboard
                 name: 'AdminDashboard',
                 component: () => import('../views/admin/Dashboard.vue'),
@@ -183,6 +190,18 @@ const routes: Array<RouteRecordRaw> = [
                         }
                     }
                 ]
+            },
+            {
+                path: 'extension-operations',
+                name: 'ExtensionOperations',
+                component: () => import('../views/admin/activities/ExtensionOperations.vue'),
+                meta: { title: '扩展运营与验收' }
+            },
+            {
+                path: 'activities',
+                name: 'ActivityManager',
+                component: () => import('../views/admin/activities/ActivityManager.vue'),
+                meta: { title: '活动管理' }
             },
             {
                 path: 'assist',

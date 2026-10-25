@@ -87,6 +87,7 @@ public class ClientAccountController {
         Map<String, Object> map = new HashMap<>();
         map.put("version", cfg.getVersion());
         map.put("downloadUrl", cfg.getDownloadUrl());
+        map.put("sha256", cfg.getSha256());
         if (cfg.getMd5() != null && !cfg.getMd5().trim().isEmpty()) {
             map.put("md5", cfg.getMd5());
         }
@@ -110,6 +111,7 @@ public class ClientAccountController {
         }
         map.put("version", v.getVersion());
         map.put("downloadUrl", v.getDownloadUrl());
+        map.put("sha256", v.getSha256());
         map.put("description", v.getDescription() == null ? "" : v.getDescription());
         map.put("forceUpdate", v.getForceUpdate() != null && v.getForceUpdate() == 1);
         return map;

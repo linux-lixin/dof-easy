@@ -37,6 +37,12 @@ import java.util.List;
  */
 @Service
 public class AccountServiceImpl implements AccountService {
+    @Resource private com.aiyi.game.dnfserver.service.extension.RegistrationCodesService registrationCodes;
+    @Resource private com.aiyi.game.dnfserver.service.extension.NativeAccountRegistration nativeAccountRegistration;
+
+
+    @Resource
+    private com.aiyi.game.dnfserver.service.extension.AccountOperationsService accountOperations;
 
     @Resource
     private AccountDao accountDao;
@@ -63,6 +69,8 @@ public class AccountServiceImpl implements AccountService {
             }
         }
 
+
+        accountOperations.requireLoginAllowed(account.getUid());
 
         // 得到待加密的用户标识
 //        String head = "0001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
@@ -103,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
 //        }
 
         String code = CacheUtil.get(Key.as(CommonAttr.CACHE.VALIDATION_CODE, accountVO.getValidationIndex()), String.class);
-        if (null == code || !code.equals(accountVO.getValicode())){
+        if (null == code || !code.equalsIgnoreCase(accountVO.getValicode())){
             throw new ValidationException("验证码不正确或已过期");
         }
 
@@ -112,6 +120,11 @@ public class AccountServiceImpl implements AccountService {
             throw new ValidationException("该用户名已存在, 请更换其他用户名");
         }
 
+        // Privileged persistence fields are always server-owned, including legacy GET registration.
+        accountVO.setUid(0);
+        accountVO.setAdmin(isAdmin);
+        accountVO.setVip("");
+        accountVO.setParentUid(0);
         if (!isAdmin){
             if (StringUtils.isEmpty(accountVO.getRecommender())){
                 accountVO.setRecommender("admin");
@@ -146,8 +159,9 @@ public class AccountServiceImpl implements AccountService {
         }
 
 
+        Long activationId = isAdmin ? null : registrationCodes.claim(accountVO.getActivationCode(), accountVO.getAccountname());
         accountVO.setPassword(MD5.getMd5(accountVO.getPassword()));
-        accountVODao.add(accountVO);
+        nativeAccountRegistration.insert(accountVO);
 //        accountDao.insert(accountVO);
 
         accountDao.execute("INSERT INTO d_taiwan.member_info(m_id, user_id)VALUES('" + accountVO.getUid() + "', '" + accountVO.getUid() + "')");
@@ -156,6 +170,7 @@ public class AccountServiceImpl implements AccountService {
         accountDao.execute("INSERT INTO taiwan_billing.cash_cera(account, cera,mod_tran, mod_date, reg_date)VALUES('" + accountVO.getUid() + "', 1000, 0, NOW(), NOW())");
         accountDao.execute("INSERT INTO taiwan_billing.cash_cera_point(account, cera_point,mod_date, reg_date)VALUES('" + accountVO.getUid() + "', 0, NOW(), NOW())");
         accountDao.execute("INSERT INTO taiwan_cain_2nd.member_avatar_coin(m_id)VALUES('" + accountVO.getUid() + "')");
+        registrationCodes.finish(activationId, accountVO.getUid());
 
         /*
          *# 充值10点券

@@ -61,13 +61,16 @@ public class PvfController {
         ensurePvfCache();
         HashMap<String, Object> result = new HashMap<>();
         AccountVO accountVO = accountVODao.get(ThreadUtil.getUserId());
-        result.put("canUpload", accountVO.isAdmin());
+        result.put("canUpload", accountVO.isAdmin() && !pvfManager.managedSource());
         int size = PvfCache.getSize();
         String fileSizeStr = size + " KB";
         if (size > 1024) {
             fileSizeStr = String.format("%.2f MB", size / 1024.0);
         }
         result.put("size", fileSizeStr);
+        result.put("unverifiedItemCount", pvfManager.unverifiedItemCount());
+        result.put("unparsedNameLines", pvfManager.invalidNameLines());
+        result.put("duplicateNameKeys", pvfManager.duplicateNameKeys());
         result.put("equipmentCount", PvfCache.getEquipmentList().size());
 //        result.put("equipmentList", PvfCache.getEquipmentList());
         result.put("itemCount", PvfCache.getStackableList().size());
@@ -132,6 +135,8 @@ public class PvfController {
             }
         }
 
+        page = Math.max(1, Math.min(page, 100000));
+        pageSize = Math.max(1, Math.min(pageSize, 100));
         int total = filtered.size();
         int fromIndex = Math.max(0, (page - 1) * pageSize);
         if (fromIndex >= total) {
@@ -171,17 +176,18 @@ public class PvfController {
         if (!accountVO.isAdmin()) {
             throw new ValidationException("您不能上传PVF");
         }
+        if (pvfManager.managedSource()) throw new ValidationException("当前使用实例配套 PVF，请通过实例资源流程更新，后台不覆盖游戏资源");
         // 临时保存
         CacheUtil.lock(20000, Key.as("pvf_upload_lock"), () -> {
-            MinFieldUtil.cpyFile("Script.pvf", "Script_backup.pvf");
+            MinFieldUtil.cpyFile("data/Script.pvf", "data/Script_backup.pvf");
             try {
-                MinFieldUtil.writeFile("Script.pvf", file.getBytes());
+                MinFieldUtil.writeFile("data/Script.pvf", file.getBytes());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             try {
                 pvfManager.init();
-                int size = MinFieldUtil.getFileSizeKB(new File("Script.pvf").getAbsolutePath());
+                int size = MinFieldUtil.getFileSizeKB(new File("data/Script.pvf").getAbsolutePath());
                 List<Equipment> equipmentList = pvfManager.getEquipmentList();
                 List<Stackable> stackableList = pvfManager.getStackableList();
                 PvfCache.setPvfSize(size);
@@ -189,7 +195,7 @@ public class PvfController {
                 PvfCache.setStackableList(stackableList);
             } catch (Exception e) {
                 // 恢复备份文件
-                MinFieldUtil.cpyFile("Script_backup.pvf", "Script.pvf");
+                MinFieldUtil.cpyFile("data/Script_backup.pvf", "data/Script.pvf");
                 pvfManager.init();
                 throw new ValidationException("PVF文件解析失败，已恢复为原文件，请检查后重新上传！错误信息：" + e.getMessage());
             }
@@ -197,17 +203,14 @@ public class PvfController {
         });
     }
 
-    private void ensurePvfCache() {
-        int size = PvfCache.getSize();
-        if (0 == size) {
-            size = MinFieldUtil.getFileSizeKB(new File("data/Script.pvf").getAbsolutePath());
-            PvfCache.setPvfSize(size);
-            System.out.println(PvfCache.getSize());
-            List<Equipment> equipmentList = pvfManager.getEquipmentList();
-            PvfCache.setEquipmentList(equipmentList);
-            List<Stackable> stackableList = pvfManager.getStackableList();
-            PvfCache.setStackableList(stackableList);
-        }
+    private synchronized void ensurePvfCache() {
+        pvfManager.validateIndex();
+        if (PvfCache.getSize() != 0) return;
+        List<Equipment> equipment = pvfManager.getEquipmentList();
+        List<Stackable> stackable = pvfManager.getStackableList();
+        PvfCache.setEquipmentList(equipment);
+        PvfCache.setStackableList(stackable);
+        PvfCache.setPvfSize(Math.max(1, (int)(pvfManager.sourceFile().length()/1024)));
     }
 
     private boolean matchKeyword(Item item, String keyword, Integer keywordId) {

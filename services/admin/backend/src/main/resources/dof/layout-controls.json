@@ -1,0 +1,1058 @@
+[
+  {
+    "key": "blood.0",
+    "label": "EXP_UP贴图坐标X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a66",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.1",
+    "label": "EXP_UP贴图坐标Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a64",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.2",
+    "label": "等级位置X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a61",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.3",
+    "label": "等级位置Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a60",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.4",
+    "label": "疲劳值位置X轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a5e",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.5",
+    "label": "疲劳值位置Y轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a5c",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.6",
+    "label": "疲劳值贴图X轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a58",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.7",
+    "label": "疲劳值贴图Y轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a59",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.8",
+    "label": "BUFF X轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a56",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.9",
+    "label": "BUFF Y轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a54",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.10",
+    "label": "血槽坐标X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a50",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.11",
+    "label": "血槽坐标Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a51",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.12",
+    "label": "蓝槽坐标X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a4c",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.13",
+    "label": "蓝槽坐标Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a4d",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.14",
+    "label": "SP点坐标X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a4a",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.15",
+    "label": "SP点坐标Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a48",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.16",
+    "label": "活动图标坐标Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a46",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.17",
+    "label": "活动图标坐标X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a44",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.18",
+    "label": "切换PK X轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a42",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.19",
+    "label": "切换PK Y轴",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a40",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.20",
+    "label": "物品栏 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a2c",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.21",
+    "label": "物品栏 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a2d",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.22",
+    "label": "物品栏2 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a30",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.23",
+    "label": "物品栏2 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a31",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.24",
+    "label": "物品栏3 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a34",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.25",
+    "label": "物品栏3 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a35",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.26",
+    "label": "物品栏4 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a38",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.27",
+    "label": "物品栏4 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a39",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.28",
+    "label": "物品栏5 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a3c",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.29",
+    "label": "物品栏5 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a3e",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.30",
+    "label": "物品栏6 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a18",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.31",
+    "label": "物品栏6 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a19",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.32",
+    "label": "基础技能栏 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a1c",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.33",
+    "label": "基础技能栏 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a1d",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.34",
+    "label": "技能S X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a20",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.35",
+    "label": "技能S Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a21",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.36",
+    "label": "技能D X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a24",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.37",
+    "label": "技能D Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a25",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.38",
+    "label": "技能F X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a28",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.39",
+    "label": "技能F Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a29",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.40",
+    "label": "栏位中间间隔",
+    "group": "自定义第一页",
+    "decimal": true,
+    "nativeControl": "0x16022a12",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.41",
+    "label": "技能G Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022ab1",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.42",
+    "label": "技能H X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aae",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.43",
+    "label": "技能H Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aad",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.44",
+    "label": "拓展技能栏 X",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a14",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.45",
+    "label": "拓展技能栏 Y",
+    "group": "自定义第一页",
+    "decimal": false,
+    "nativeControl": "0x16022a15",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.46",
+    "label": "技能W X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aa9",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.47",
+    "label": "技能W Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aaa",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.48",
+    "label": "技能E X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aa7",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.49",
+    "label": "技能E Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aa5",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.50",
+    "label": "技能R X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aa1",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.51",
+    "label": "技能R Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022aa2",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.52",
+    "label": "技能T X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a9d",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.53",
+    "label": "技能T Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a9e",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.54",
+    "label": "技能Y X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a9b",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.55",
+    "label": "技能Y Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a99",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.56",
+    "label": "任务图标坐标X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a97",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.57",
+    "label": "任务图标坐标Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a95",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.58",
+    "label": "技能图标坐标X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a93",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.59",
+    "label": "技能图标坐标Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a91",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.60",
+    "label": "拍卖行图标坐标X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a7d",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.61",
+    "label": "拍卖行图标坐标Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a7e",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.62",
+    "label": "物品栏图标坐标X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a81",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.63",
+    "label": "物品栏图标坐标Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a82",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.64",
+    "label": "技能切换图标X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a85",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.65",
+    "label": "技能切换图标Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a86",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.66",
+    "label": "商城图标X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a89",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.67",
+    "label": "商城图标Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a8a",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.68",
+    "label": "菜单图标 X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a8d",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.69",
+    "label": "菜单图标 Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a8f",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.70",
+    "label": "个人信息 X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a69",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.71",
+    "label": "个人信息 Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a6a",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.72",
+    "label": "支援兵 X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a6d",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.73",
+    "label": "支援兵 Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a6e",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.74",
+    "label": "经验值 X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a71",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.75",
+    "label": "经验值 Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a72",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.76",
+    "label": "LV贴图 X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a75",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.77",
+    "label": "LV贴图 Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a76",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.78",
+    "label": "攻击转换 X",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a79",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.79",
+    "label": "攻击转换 Y",
+    "group": "自定义第二页",
+    "decimal": false,
+    "nativeControl": "0x16022a7a",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.80",
+    "label": "SP描述 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022aef",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.81",
+    "label": "SP描述 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022aed",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.82",
+    "label": "技能BUFF X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022aea",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.83",
+    "label": "技能BUFF Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ae9",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.84",
+    "label": "血量描述 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ae7",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.85",
+    "label": "蓝量描述 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ae5",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.86",
+    "label": "PL值文本描述 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022adb",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.87",
+    "label": "PL值文本描述 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ada",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.88",
+    "label": "血蓝扣血显示 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022adf",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.89",
+    "label": "决斗等级图标X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ae0",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.90",
+    "label": "疲劳值长度 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022add",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.91",
+    "label": "经验值长度",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ad9",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.92",
+    "label": "疲劳描述长度",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ad7",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.93",
+    "label": "经验值描述 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ad3",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.94",
+    "label": "经验值描述 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ad4",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.95",
+    "label": "百分比血 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022acb",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.96",
+    "label": "百分比蓝 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022acd",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.97",
+    "label": "百分比血 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022acf",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.98",
+    "label": "百分比蓝 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ad0",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.99",
+    "label": "决斗等级图标Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ac8",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.100",
+    "label": "传送光环 X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ac7",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.101",
+    "label": "传送光环 Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ac6",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.102",
+    "label": "缔造者 D 位置（原工具未标注坐标轴）",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ac5",
+    "labelEvidence": "native-control-name-with-explicit-missing-axis-label"
+  },
+  {
+    "key": "blood.103",
+    "label": "缔造技能F X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ac4",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.104",
+    "label": "缔造技能G X",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ac3",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.105",
+    "label": "缔造技能A Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ab5",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.106",
+    "label": "缔造技能S Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ab6",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.107",
+    "label": "缔造技能D Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022ab9",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.108",
+    "label": "缔造技能F Y",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022aba",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "blood.109",
+    "label": "疲劳数字",
+    "group": "自定义第三页",
+    "decimal": false,
+    "nativeControl": "0x16022abd",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.0",
+    "label": "鬼剑士X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x16022a03",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.1",
+    "label": "鬼剑士Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x16022a01",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.2",
+    "label": "男格斗X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229fd",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.3",
+    "label": "男格斗Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229fe",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.4",
+    "label": "女格斗X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229f9",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.5",
+    "label": "女格斗Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229fa",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.6",
+    "label": "黑暗武士X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229de",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.7",
+    "label": "黑暗武士Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229df",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.8",
+    "label": "男枪手X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229f5",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.9",
+    "label": "男枪手Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229f6",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.10",
+    "label": "女枪手X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229f1",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.11",
+    "label": "女枪手Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229f2",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.12",
+    "label": "男魔法X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229ed",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.13",
+    "label": "男魔法Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229ee",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.14",
+    "label": "缔造者X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229d9",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.15",
+    "label": "缔造者Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229da",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.16",
+    "label": "女魔法X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229e9",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.17",
+    "label": "女魔法Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229ea",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.18",
+    "label": "圣职者X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229e5",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.19",
+    "label": "圣职者Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229e6",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.20",
+    "label": "暗夜X轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229e1",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  },
+  {
+    "key": "create.21",
+    "label": "暗夜Y轴",
+    "group": "创建角色界面",
+    "decimal": false,
+    "nativeControl": "0x160229e2",
+    "labelEvidence": "inference_from_same_parent_and_adjacent_geometry"
+  }
+]

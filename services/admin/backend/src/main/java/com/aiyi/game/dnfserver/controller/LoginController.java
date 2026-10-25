@@ -38,6 +38,9 @@ public class LoginController {
 
 
     @Resource
+    private com.aiyi.game.dnfserver.service.extension.AccountOperationsService accountOperations;
+
+    @Resource
     private AccountVODao accountVODao;
 
     @PostMapping
@@ -52,6 +55,7 @@ public class LoginController {
         if (!account.isAdmin() && account.getParentUid() != 0){
             throw new ValidationException("只有GM账号才能登录后台管理系统");
         }
+        accountOperations.requireLoginAllowed(account.getUid());
         user.setId(account.getUid());
         String token = UUID.randomUUID().toString().replace("-", "");
         UserTokenCacheUtil.putUserCache(token, user);

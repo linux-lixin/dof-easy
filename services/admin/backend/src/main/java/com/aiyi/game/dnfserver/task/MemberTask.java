@@ -4,10 +4,12 @@ import com.aiyi.game.dnfserver.dao.AccountDao;
 import com.aiyi.game.dnfserver.dao.AccountVODao;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import javax.annotation.Resource;
 
 @Component
+@ConditionalOnProperty(name = "QINGKONG_ADMIN_ENABLED", havingValue = "false", matchIfMissing = true)
 public class MemberTask {
 
     @Resource

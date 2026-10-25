@@ -1,0 +1,305 @@
+{
+  "schema": 1,
+  "adapter": "qingkong-2.8-current-20261024",
+  "completeReplacement": false,
+  "unifiedAcceptanceStarted": false,
+  "productionChangesAllowed": false,
+  "completionRule": "每项必须有原生对应、实现、持久化、实际执行及失败恢复证据；只读操作验证查询完整性。每包完成证据不得为空。",
+  "packages": [
+    {
+      "id": "wp01",
+      "name": "账号、角色与注册",
+      "groupIds": [
+        "feature-001",
+        "feature-002",
+        "feature-005",
+        "feature-006",
+        "feature-010",
+        "feature-011"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "复用现有账号角色服务，绑定隔离实例和操作审计",
+        "注册限制、赠送与改密开关已有原生映射和 MyISAM 合同；继续核对实际账号初始化、登录、封禁和属性修改",
+        "验证重复请求、在线角色冲突及失败后实际记录"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp02",
+      "name": "邮件、货币与兑换",
+      "groupIds": [
+        "feature-007",
+        "feature-008",
+        "feature-009",
+        "feature-043",
+        "feature-068"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "接入邮件装备参数、充值、CDK及内置兑换入口",
+        "核对原生执行归属，禁止网页重复发奖或扣款",
+        "完成并发兑换、重复请求和结果不明后的记录核对"
+      ],
+      "completionEvidence": []
+    },
+    {
+      "id": "wp03",
+      "name": "客户端与 Script 发布",
+      "groupIds": [
+        "feature-003",
+        "feature-004",
+        "feature-016"
+      ],
+      "dependsOn": [
+        "wp11",
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "完成原生内容参数和更新上下文的生成及消费对照",
+        "连接上传、整文件生成、校验下载、独立发布和回滚",
+        "验证凭据过滤、损坏更新、断网与任务恢复"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp04",
+      "name": "记录与提示",
+      "groupIds": [
+        "feature-012",
+        "feature-070"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "补齐副本、交易、聊天及提示配置的查询和边界",
+        "核对分页、筛选、编码、权限与原生记录完整性"
+      ],
+      "completionEvidence": []
+    },
+    {
+      "id": "wp05",
+      "name": "假人与限制",
+      "groupIds": [
+        "feature-013",
+        "feature-014",
+        "feature-062"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "接入假人配置、上线、交易摆摊喊话及维护限制",
+        "核对 QK 管理调用和生效时机",
+        "验证封挂、公平 PVP、虚拟机限制与失败恢复"
+      ],
+      "completionEvidence": []
+    },
+    {
+      "id": "wp06",
+      "name": "装备、物品与成长",
+      "groupIds": [
+        "feature-019",
+        "feature-020",
+        "feature-021",
+        "feature-022",
+        "feature-023",
+        "feature-024",
+        "feature-025",
+        "feature-026",
+        "feature-027",
+        "feature-028",
+        "feature-029",
+        "feature-030",
+        "feature-031",
+        "feature-032",
+        "feature-037",
+        "feature-039",
+        "feature-040",
+        "feature-041"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "补齐继承、跨界、回收、镶嵌、成长和资源管理",
+        "沿用 QK、DP2、Frida 的原有执行职责",
+        "验证物品去向、余额、重复提交与中断结果"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp07",
+      "name": "活动与奖励",
+      "groupIds": [
+        "feature-033",
+        "feature-034",
+        "feature-035",
+        "feature-036",
+        "feature-038",
+        "feature-042",
+        "feature-044",
+        "feature-045",
+        "feature-049"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "泡点设置已有原生映射；继续接入奖池、签到、战令、排行与定时活动，并验证原生执行",
+        "不新增网页并行调度或奖励流程",
+        "验证领取并发、结算边界、失败及重启保留"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp08",
+      "name": "界面与客户端表现",
+      "groupIds": [
+        "feature-015",
+        "feature-050",
+        "feature-051",
+        "feature-052",
+        "feature-053",
+        "feature-054",
+        "feature-055",
+        "feature-056",
+        "feature-057",
+        "feature-058",
+        "feature-059",
+        "feature-060",
+        "feature-061"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "血槽15种、创建角色3种和132项自定义布局已接通保存；补齐其余 UI 分支和原生游戏效果证据",
+        "87 项基础/耳环参数及 69 项功能开关已接通；继续补齐颜色、闪光、快捷操作和客户端入口，耳环启用开关130保持阻塞",
+        "继续核对旧格式迁移、未知字段保留以及原生组件读取时机"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp09",
+      "name": "玩法与高级设置",
+      "groupIds": [
+        "feature-017",
+        "feature-018",
+        "feature-046",
+        "feature-047",
+        "feature-048",
+        "feature-063",
+        "feature-064",
+        "feature-065",
+        "feature-066",
+        "feature-067",
+        "feature-069",
+        "feature-071"
+      ],
+      "dependsOn": [
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "补齐高级开关、传送、职业、团本与快捷功能管理",
+        "保留现有玩法开关和执行组件归属",
+        "对启用与未启用组合分别做隔离验证"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp10",
+      "name": "范围与证据台账",
+      "groupIds": [],
+      "dependsOn": [],
+      "state": "in_progress",
+      "remaining": [
+        "核对全部原工具菜单、按钮、导入导出及默认值",
+        "维护至少 71 类 239 项的输入、编码、执行和失败证据；本轮补入注册政策、泡点及快捷装备操作设置",
+        "发现遗漏继续补录；旧台账关闭结论不计为通过"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp11",
+      "name": "隔离环境与容量",
+      "groupIds": [],
+      "dependsOn": [
+        "wp10"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "每次服务器操作核对 2 GiB 基础余量加峰值空间",
+        "仅使用专用测试数据库、网页入口和管理账号",
+        "保存备份、回退产物并核对正式容器未变"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp12",
+      "name": "写入、任务与恢复框架",
+      "groupIds": [],
+      "dependsOn": [
+        "wp10",
+        "wp11"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "复用管理员认证、实例绑定、版本冲突和持久化任务",
+        "跨 billing/config 表的 MyISAM 锁、快照、中断核对及定向恢复已通过合成库；继续覆盖所有业务操作与部署重建",
+        "业务结果不明不自动重试，区分写入与实际生效"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    },
+    {
+      "id": "wp13",
+      "name": "集成、故障与统一交付",
+      "groupIds": [],
+      "dependsOn": [
+        "wp01",
+        "wp02",
+        "wp03",
+        "wp04",
+        "wp05",
+        "wp06",
+        "wp07",
+        "wp08",
+        "wp09",
+        "wp10",
+        "wp11",
+        "wp12"
+      ],
+      "state": "in_progress",
+      "remaining": [
+        "逐项取得读取、修改、执行、失败恢复和重启保留证据",
+        "验证密钥错误、断网、数据库故障、空间不足和重建",
+        "全部内部检查通过后统一游戏验收与交付，正式切换另行安排"
+      ],
+      "completionEvidence": [],
+      "progressEvidence": []
+    }
+  ]
+}

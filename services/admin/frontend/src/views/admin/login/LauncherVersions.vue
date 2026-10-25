@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { Message, Modal } from '@arco-design/web-vue';
 import { LauncherApi } from '../../../api/launcher';
+import LauncherModeNotice from './LauncherModeNotice.vue';
 import type { LauncherVersion } from '../../../api/entitys/LauncherVersion';
 
 const loading = ref(false);
@@ -20,7 +21,7 @@ const form = ref<LauncherVersion>({
   version: '',
   downloadUrl: '',
   description: '',
-  enabled: 1,
+  enabled: 0,
   forceUpdate: 0
 });
 
@@ -43,7 +44,7 @@ const loadList = async () => {
 };
 
 const openCreate = () => {
-  form.value = { id: 0, version: '', downloadUrl: '', description: '', enabled: 1, forceUpdate: 0 };
+  form.value = { id: 0, version: '', downloadUrl: '', sha256: '', description: '', enabled: 0, forceUpdate: 0 };
   editVisible.value = true;
 };
 
@@ -94,6 +95,7 @@ onMounted(loadList);
 
 <template>
   <a-space direction="vertical" fill size="large">
+    <LauncherModeNotice />
     <a-alert style="margin: 24px 24px 0 24px; width: calc(100% - 48px);"
         ref="alertEl"
         type="warning"
@@ -195,6 +197,9 @@ onMounted(loadList);
         </a-form-item>
         <a-form-item label="启用">
           <a-switch v-model="form.enabled" :checked-value="1" :unchecked-value="0" />
+        </a-form-item>
+        <a-form-item label="更新包 SHA-256（启用时必填）">
+          <a-input v-model="form.sha256" placeholder="下载包的 64 位 SHA-256" />
         </a-form-item>
         <a-form-item label="强制更新">
           <a-switch v-model="form.forceUpdate" :checked-value="1" :unchecked-value="0" />

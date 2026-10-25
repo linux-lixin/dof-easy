@@ -25,6 +25,12 @@ public class ClientLauncherConfig extends PO {
     @FieldName(name = "MD5")
     private String md5;
 
+    @FieldName(name = "SHA256")
+    private String sha256;
+
+    public String getSha256() { return sha256; }
+    public void setSha256(String sha256) { this.sha256 = sha256; }
+
     @FieldName(name = "REMARK")
     private String remark;
 
