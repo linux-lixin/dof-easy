@@ -4,10 +4,12 @@ import json
 import os
 from pathlib import Path
 import shutil
+import struct
 import tempfile
 
 BASE = Path(__file__).resolve().parent
 LOCK = BASE / 'runtime.lock.json'
+GAME_ABI = BASE / 'game-abi.json'
 
 
 def templates():
@@ -88,12 +90,44 @@ def verify_config(root):
 
 
 def validate_game(path):
-    with Path(path).open('rb') as stream:
-        header = stream.read(20)
-        stream.seek(0x083F4024 - 0x08048000)
-        prologue = stream.read(16)
-    if header[:6] != b'\x7fELF\x01\x01' or prologue.hex() != '5589e55383ec44837d10007507c74510':
-        raise ValueError('Unsupported game MySQL_open ABI')
+    """Reject incompatible fixed-address calls before loading the adapters.
+
+    Map virtual addresses through executable PT_LOAD segments. Matching source
+    bytes is a preflight requirement, not proof of runtime or player behavior.
+    """
+    raw = Path(path).read_bytes()
+    if len(raw) < 52 or raw[:7] != b'\x7fELF\x01\x01\x01':
+        raise ValueError('Unsupported game ELF architecture')
+    kind, machine, version = struct.unpack_from('<HHI', raw, 16)
+    phoff = struct.unpack_from('<I', raw, 28)[0]
+    ehsize, phsize, phcount = struct.unpack_from('<HHH', raw, 40)
+    if (kind, machine, version, ehsize, phsize) != (2, 3, 1, 52, 32):
+        raise ValueError('Unsupported game ELF header')
+    if not phcount or phoff < ehsize or phoff + phcount * phsize > len(raw):
+        raise ValueError('Invalid game ELF program headers')
+    segments = []
+    for index in range(phcount):
+        kind, offset, address, _, size, memory_size, flags, _ = struct.unpack_from(
+            '<8I', raw, phoff + index * phsize)
+        if kind == 1:
+            if size > memory_size or offset + size > len(raw):
+                raise ValueError('Invalid game ELF load segment')
+            segments.append((offset, address, size, flags))
+    contract = json.loads(GAME_ABI.read_text())
+    if (contract.get('schema') != 1 or
+            contract.get('architecture') != 'elf32-i386-exec' or
+            not contract.get('functions')):
+        raise ValueError('Invalid game ABI contract')
+    for row in contract['functions']:
+        address, size = row['address'], row['bytes']
+        matches = [(offset + address - start, flags)
+                   for offset, start, length, flags in segments
+                   if size > 0 and start <= address and address + size <= start + length]
+        if len(matches) != 1 or not matches[0][1] & 1:
+            raise ValueError('Game ABI function is not uniquely executable: ' + row['symbols'][0])
+        offset = matches[0][0]
+        if hashlib.sha256(raw[offset:offset + size]).hexdigest() != row['sha256']:
+            raise ValueError('Unsupported game ABI function: ' + row['symbols'][0])
 
 
 def install(source, target, profile='native'):
