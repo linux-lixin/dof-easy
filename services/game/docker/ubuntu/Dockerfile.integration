@@ -14,9 +14,9 @@ COPY assets/home/template/ /home/template/
 COPY plugin-assets/ /opt/dnf/plugins/
 COPY docker/ubuntu/run-game /opt/dnf/ubuntu/run-game
 RUN python3 /opt/dnf/ubuntu/bridge_compat.py \
-      --source /home/template/neople/bridge/df_bridge_r --output /opt/dnf/audit/integration-bridge \
- && install -m 755 /opt/dnf/audit/integration-bridge/df_bridge_r /home/template/neople/bridge/df_bridge_r \
- && rm /opt/dnf/audit/integration-bridge/df_bridge_r \
+      --source /home/template/neople/bridge/df_bridge_r --output /opt/dnf/audit/integration-bridge-${MAIN_COMMIT} \
+ && install -m 755 /opt/dnf/audit/integration-bridge-${MAIN_COMMIT}/df_bridge_r /home/template/neople/bridge/df_bridge_r \
+ && rm /opt/dnf/audit/integration-bridge-${MAIN_COMMIT}/df_bridge_r \
  && find /home/template -type f -exec chmod u+x {} + \
  && python3 /opt/dnf/ubuntu/prepare_image.py \
  && python3 /opt/dnf/ubuntu/tss_config.py \
