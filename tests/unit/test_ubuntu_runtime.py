@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 import contextlib
 import io
+import os
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,6 +23,31 @@ def module(name, directory=ADAPTER):
     return result
 
 class UbuntuRuntime(unittest.TestCase):
+    def test_existing_database_mode_never_runs_legacy_initializers(self):
+        result = subprocess.run(['bash', str(ADAPTER / 'database_bootstrap.sh')],
+            env=dict(os.environ, DOF_DATABASE_MODE='existing'), capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('skipped', result.stdout)
+        invalid = subprocess.run(['bash', str(ADAPTER / 'database_bootstrap.sh')],
+            env=dict(os.environ, DOF_DATABASE_MODE='unexpected'), capture_output=True, text=True)
+        self.assertNotEqual(invalid.returncode, 0)
+
+    def test_existing_database_preflight_checks_game_access_without_grants(self):
+        preflight = module('database_preflight')
+        env = dict(SERVER_TYPE='ALL', DOF_DATABASE_MODE='existing', SERVER_GROUP_DB='cain',
+                   DNF_DB_GAME_PASSWORD='Demo1234', CUR_MAIN_DB_HOST='db', CUR_MAIN_DB_PORT='3306',
+                   CUR_SG_DB_HOST='db', CUR_SG_DB_PORT='3306')
+        with patch.dict(os.environ, env, clear=True), patch.object(preflight.subprocess, 'run') as run:
+            run.return_value.returncode = 0
+            preflight.check()
+            self.assertEqual(run.call_count, 2)
+            for call in run.call_args_list:
+                self.assertIn('-ugame', call.args[0])
+                self.assertTrue(call.args[0][-1].startswith('SELECT 1 FROM '))
+            run.return_value.returncode = 1
+            with self.assertRaisesRegex(ValueError, 'required schema'):
+                preflight.check()
+
     def test_startup_notice_requires_consecutive_ready_checks(self):
         notice=module('startup_notice')
         output=[]

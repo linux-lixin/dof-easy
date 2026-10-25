@@ -4,7 +4,10 @@ import subprocess
 import sys
 
 def check():
-    provisioning=os.environ['SERVER_TYPE'] in ('ALL','CORE')
+    mode=os.environ.get('DOF_DATABASE_MODE', 'provision')
+    if mode not in ('existing', 'provision'):
+        raise ValueError('Invalid DOF_DATABASE_MODE')
+    provisioning=mode == 'provision' and os.environ['SERVER_TYPE'] in ('ALL','CORE')
     for prefix in ('CUR_MAIN_DB','CUR_SG_DB'):
         env=dict(os.environ,MYSQL_PWD=os.environ[prefix+'_ROOT_PASSWORD'] if provisioning else os.environ['DNF_DB_GAME_PASSWORD'])
         args=['/usr/local/bin/mysql','-h',os.environ[prefix+'_HOST'],'-P',os.environ[prefix+'_PORT'],'-uroot' if provisioning else '-ugame','-N','-e']

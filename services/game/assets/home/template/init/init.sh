@@ -30,31 +30,7 @@ fi
 # 只有SERVER_TYPE为CORE/ALL时才初始化数据库
 if [ "$SERVER_TYPE" = "CORE" ] || [ "$SERVER_TYPE" = "ALL" ]; then
 
-  # 解压init_sql
-  if [ ! -d "/home/template/init/init_sql" ];then
-    mkdir -p /home/template/init/init_sql/
-    tar -zxvf /home/template/init/init_sql.tgz -C /home/template/init/init_sql/
-    echo "init init_sql success"
-  else
-    echo "init_sql have already inited, do nothing!"
-  fi
-  # Correct the known bundled log-query seed before any first import.
-  bash /home/template/init/prepare_login_seed.sh || exit 1
-
-  # 初始化主数据库
-  bash /home/template/init/init_main_db.sh
-  error_code=$?
-  if [ ! $error_code -eq 0 ]; then
-    echo "init main db failed!!!!!"
-    exit -1
-  fi
-  # 初始化大区数据库
-  bash /home/template/init/init_server_group_db.sh
-  error_code=$?
-  if [ ! $error_code -eq 0 ]; then
-    echo "init server group db failed!!!!!"
-    exit -1
-  fi
+  bash /opt/dnf/ubuntu/database_bootstrap.sh || exit 1
 
   # 判断每日脚本是否初始化
   if [ ! -f "/data/daily_job/user_daily_script.sh" ];then
