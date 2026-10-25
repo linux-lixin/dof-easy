@@ -41,6 +41,16 @@ class GameDeployment(unittest.TestCase):
                     deploy.validate_target(p,'sha256:'+'8'*64)
                 docker.assert_not_called()
 
+    def test_existing_cpu_memory_and_descriptor_limits_are_retained(self):
+        args=deploy.runtime_limits(dict(NanoCpus=1000000000, Memory=2147483648,
+            MemorySwap=6442450944, Ulimits=[dict(Name='nofile',Soft=65535,Hard=65535)]))
+        self.assertEqual(args[args.index('--cpus')+1], '1.000000000')
+        self.assertEqual(args[args.index('--memory')+1], '2147483648')
+        self.assertEqual(args[args.index('--memory-swap')+1], '6442450944')
+        self.assertEqual(args[args.index('--ulimit')+1], 'nofile=65535:65535')
+        with self.assertRaisesRegex(ValueError,'Conflicting CPU'):
+            deploy.runtime_limits(dict(NanoCpus=1000000000,CpuQuota=100000))
+
     def test_explicit_import_preserves_password_and_disables_legacy_init(self):
         original=dict(LAUNCHER_MODE='qingkong', QINGKONG_VARIANT='replacement',
                       DNF_DB_GAME_PASSWORD='Demo1234', PLUGIN_MODE='dp2-frida', OPEN_CHANNEL='15')

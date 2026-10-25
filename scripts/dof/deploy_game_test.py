@@ -109,7 +109,33 @@ def validate_target(p, image):
         raise ValueError('Replacement image must bind the exact main revision and base')
     layers = inspect(p['gameImage'])['RootFS']['Layers']
     if built['RootFS']['Layers'][:len(layers)] != layers: raise ValueError('Image base layers differ')
+    runtime_limits(game['HostConfig'])
     return game, env
+
+
+def runtime_limits(host):
+    args = []
+    for key, flag in (('Memory', '--memory'), ('MemorySwap', '--memory-swap'),
+                      ('PidsLimit', '--pids-limit'), ('CpuShares', '--cpu-shares'),
+                      ('CpuQuota', '--cpu-quota'), ('CpuPeriod', '--cpu-period')):
+        value = host.get(key)
+        if value:
+            if type(value) is not int: raise ValueError('Invalid resource limit: ' + key)
+            args += [flag, str(value)]
+    if host.get('NanoCpus'):
+        if host.get('CpuQuota') or host.get('CpuPeriod'):
+            raise ValueError('Conflicting CPU limit modes')
+        value = host['NanoCpus']
+        if type(value) is not int or value < 0: raise ValueError('Invalid CPU budget')
+        args += ['--cpus', str(value // 1000000000) + '.' + str(value % 1000000000).zfill(9)]
+    for key, flag in (('CpusetCpus', '--cpuset-cpus'), ('CpusetMems', '--cpuset-mems')):
+        if host.get(key): args += [flag, host[key]]
+    for limit in host.get('Ulimits') or []:
+        if (not re.fullmatch('[a-z]+', limit['Name']) or
+                any(type(limit[k]) is not int or limit[k] < -1 for k in ('Soft', 'Hard'))):
+            raise ValueError('Invalid ulimit')
+        args += ['--ulimit', '{}={}:{}'.format(limit['Name'], limit['Soft'], limit['Hard'])]
+    return args
 
 
 def imported_environment(env):
@@ -210,8 +236,7 @@ def main():
             if mount['Type'] != 'bind': raise ValueError('Only explicit bind mounts are supported')
             src = str(root / 'data') if mount['Destination'] == '/data' else mount['Source']
             command += ['--mount', 'type=bind,src=' + src + ',dst=' + mount['Destination'] + ('' if mount['RW'] else ',readonly')]
-        for key, flag in (('Memory', '--memory'), ('MemorySwap', '--memory-swap'), ('PidsLimit', '--pids-limit')):
-            if game['HostConfig'].get(key): command += [flag, str(game['HostConfig'][key])]
+        command += runtime_limits(game['HostConfig'])
         command.append(args.image); docker(*command)
         healthy = False
         for _ in range(120):
