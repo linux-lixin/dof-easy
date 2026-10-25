@@ -1,0 +1,168 @@
+{
+  "schema": 1,
+  "architecture": "elf32-i386-exec",
+  "functions": [
+    {
+      "address": 135051516,
+      "bytes": 35,
+      "sha256": "cf5c8923f434523ece0ed0170c4a9dca4e7705df3af876c70e932d567e447233",
+      "symbols": [
+        "_ZN18InterfacePacketBuf10put_headerEii"
+      ]
+    },
+    {
+      "address": 135051552,
+      "bytes": 28,
+      "sha256": "a6067ff82fe5c19a7cacd8b28ebce91523ad970f9ffe943e29777517a55678e5",
+      "symbols": [
+        "_ZN18InterfacePacketBuf8put_byteEi"
+      ]
+    },
+    {
+      "address": 135051580,
+      "bytes": 28,
+      "sha256": "b7e1317711fb335fbe455033070f81ac0b675e055f14602eac4da156d86aba84",
+      "symbols": [
+        "_ZN18InterfacePacketBuf7put_intEi"
+      ]
+    },
+    {
+      "address": 135051608,
+      "bytes": 35,
+      "sha256": "6948bde46847d3399dad6f072a55fd3c2475b078baa77a35d8017dc8fd2ba92a",
+      "symbols": [
+        "_ZN18InterfacePacketBuf8finalizeEb"
+      ]
+    },
+    {
+      "address": 135052366,
+      "bytes": 30,
+      "sha256": "ef1a474e52cd307bca46a51cf83a2a628dd9da6762fd28da924aca2b3be1188e",
+      "symbols": [
+        "_ZNK15CUserCharacInfo14getCurCharacNoEv"
+      ]
+    },
+    {
+      "address": 135053723,
+      "bytes": 13,
+      "sha256": "97a064e6296aacb6c65fd7b2d57d114bf990eacfc576294c6ae32a9750b7b1d7",
+      "symbols": [
+        "_Z14G_CDataManagerv"
+      ]
+    },
+    {
+      "address": 135110308,
+      "bytes": 28,
+      "sha256": "a7ffa436a9137db540d9bf99bce4252b52065bbbfc66c6af06df6bcf8506560e",
+      "symbols": [
+        "_ZN18InterfacePacketBuf9put_shortEi"
+      ]
+    },
+    {
+      "address": 135111591,
+      "bytes": 13,
+      "sha256": "3f0aa04d8b63bc809bdc66255c93ed7d5b6b71399f1dc86a0d74dbe4101cb1a2",
+      "symbols": [
+        "_Z11G_GameWorldv"
+      ]
+    },
+    {
+      "address": 135205590,
+      "bytes": 11,
+      "sha256": "772649f763257b5b9d5f7f764f6c60f97bbf1074d65977b2acc2a05d66a747c1",
+      "symbols": [
+        "_ZNK5CItem10get_rarityEv"
+      ]
+    },
+    {
+      "address": 135205626,
+      "bytes": 12,
+      "sha256": "17fe4636ad414199bb8ed0d8e40d9739b53f2c13c7226a4d1a524a43961fb79d",
+      "symbols": [
+        "_ZNK5CItem12is_stackableEv"
+      ]
+    },
+    {
+      "address": 135270440,
+      "bytes": 31,
+      "sha256": "80af8036b178da995a51b0b9066533744443e1ecbbbb91147cc8b6af6652e6d8",
+      "symbols": [
+        "_ZNK15CUserCharacInfo16getCurCharacNameEv"
+      ]
+    },
+    {
+      "address": 135388936,
+      "bytes": 35,
+      "sha256": "16b5533421ab0a4e6fddd10994cf2629bbe1e20cfc215a3e5d362a5ac676498c",
+      "symbols": [
+        "_ZN18InterfacePacketBuf10put_binaryEPci"
+      ]
+    },
+    {
+      "address": 135392642,
+      "bytes": 22,
+      "sha256": "b9a81292b98010dba37f745ecb657fd4f887ed99a60891e0199da6a7ed73e513",
+      "symbols": [
+        "_ZNK5CItem11GetItemNameEv"
+      ]
+    },
+    {
+      "address": 137755186,
+      "bytes": 54,
+      "sha256": "5bd748c89623ede89625e16fb12ded04db2a8364b7a2380e4e0ceacbc9a49930",
+      "symbols": [
+        "_ZNK12CDataManager9find_itemEi"
+      ]
+    },
+    {
+      "address": 138362916,
+      "bytes": 412,
+      "sha256": "ad4df3190bc6b9eca8608eed18e6228707f056ac724a29011072af4a7efd991d",
+      "symbols": [
+        "_ZN5MySQL4openEPcjS0_S0_S0_"
+      ]
+    },
+    {
+      "address": 140041548,
+      "bytes": 254,
+      "sha256": "eb10bfa4c685071c3c423f21407201604775e480d9e6fc1a43dd09d1264a06b2",
+      "symbols": [
+        "_ZN11PacketGuardC1Ev",
+        "_ZN11PacketGuardC2Ev"
+      ]
+    },
+    {
+      "address": 140041856,
+      "bytes": 176,
+      "sha256": "7b24eab0a391f44cabe6926b71d6d3aae6c198473ff49773ab4ae65e93a9a94f",
+      "symbols": [
+        "_ZN11PacketGuardD1Ev",
+        "_ZN11PacketGuardD2Ev"
+      ]
+    },
+    {
+      "address": 140219548,
+      "bytes": 250,
+      "sha256": "46a2f657b3a0f588bb4d1e8f9bc26b5cd9fd1de12df29f88b31a0b83177ae38b",
+      "symbols": [
+        "_ZN6CParty10_onGetItemEP5CUserjj"
+      ]
+    },
+    {
+      "address": 141312308,
+      "bytes": 1051,
+      "sha256": "46c1c33828c819a4ead2c6af88fe812cfb5ae9551cbc799a2367189e3186f9c2",
+      "symbols": [
+        "_ZN9GameWorld4initEv"
+      ]
+    },
+    {
+      "address": 141332868,
+      "bytes": 175,
+      "sha256": "383e8e4f2a5bf1811b8ad2a5594aa9c5b9b62dbbcd24e5448e5c0b7e2135673f",
+      "symbols": [
+        "_ZN9GameWorld19send_all_with_stateER11PacketGuardi"
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import os
 import json
 import shutil
 import subprocess
+import struct
 from pathlib import Path
 import tempfile
 import unittest
@@ -153,18 +154,53 @@ class RaidAssets(unittest.TestCase):
             self.assets.preflight()
             verify.assert_not_called()
 
-    def test_fixed_address_abi_is_checked(self):
+    def abi_fixture(self):
+        # Deliberately use a nonstandard file/VA delta to exercise PT_LOAD mapping.
         game = self.root / 'df_game_r'
-        with game.open('wb') as stream:
-            stream.write(b'\x7fELF\x01\x01' + b'\0' * 14)
-            stream.seek(0x083F4024 - 0x08048000)
-            stream.write(bytes.fromhex('5589e55383ec44837d10007507c74510'))
+        raw = bytearray(512)
+        raw[:7] = b'\x7fELF\x01\x01\x01'
+        struct.pack_into('<HHI', raw, 16, 2, 3, 1)
+        struct.pack_into('<I', raw, 28, 52)
+        struct.pack_into('<HHH', raw, 40, 52, 32, 1)
+        struct.pack_into('<8I', raw, 52, 1, 256, 0x8048000, 0, 256, 256, 5, 4096)
+        functions = []
+        for index, name in enumerate(('MySQL_open', 'pickup', 'packet_send')):
+            data = bytes([index + 1]) * 32
+            raw[256 + index * 32:288 + index * 32] = data
+            functions.append(dict(address=0x8048000 + index * 32, bytes=32,
+                                  symbols=[name], sha256=hashlib.sha256(data).hexdigest()))
+        game.write_bytes(raw)
+        contract = self.root / 'abi.json'
+        contract.write_text(json.dumps(dict(schema=1, architecture='elf32-i386-exec', functions=functions)))
+        self.assets.GAME_ABI = contract
+        return game
+
+    def test_full_abi_rejects_changed_pickup_or_packet_with_intact_mysql(self):
+        game = self.abi_fixture()
+        original = game.read_bytes()
         self.assets.validate_game(game)
-        with game.open('r+b') as stream:
-            stream.seek(-1, 2)
-            stream.write(b'\xff')
-        with self.assertRaises(ValueError):
-            self.assets.validate_game(game)
+        for offset, symbol in ((300, 'pickup'), (332, 'packet_send')):
+            changed = bytearray(original); changed[offset] ^= 1
+            game.write_bytes(changed)
+            with self.assertRaisesRegex(ValueError, symbol):
+                self.assets.validate_game(game)
+        self.assertEqual(game.read_bytes()[256:288], original[256:288])
+
+    def test_abi_rejects_truncated_nonexecutable_and_ambiguous_segments(self):
+        game = self.abi_fixture()
+        original = game.read_bytes()
+        invalid = [original[:100]]
+        changed = bytearray(original)
+        struct.pack_into('<I', changed, 52 + 24, 4)
+        invalid.append(changed)
+        changed = bytearray(original)
+        struct.pack_into('<H', changed, 44, 2)
+        changed[84:116] = changed[52:84]
+        invalid.append(changed)
+        for raw in invalid:
+            game.write_bytes(raw)
+            with self.assertRaises(ValueError):
+                self.assets.validate_game(game)
 
     def test_custom_overlap_is_reported_without_writes(self):
         runtime = module('vipai86')
