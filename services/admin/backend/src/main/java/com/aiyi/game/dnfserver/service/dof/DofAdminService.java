@@ -20,14 +20,14 @@ import java.util.*;
 public class DofAdminService {
     @Resource private DataSource dataSource;
     @Resource private AccountVODao accountVODao;
-    @Value("${QINGKONG_ADMIN_ENABLED:false}") private boolean enabled;
-    @Value("${QINGKONG_INSTANCE_ID:}") private String instanceId;
-    @Value("${QINGKONG_ENVIRONMENT:}") private String environment;
-    @Value("${QINGKONG_DATABASE_UUID:}") private String databaseUuid;
-    @Value("${QINGKONG_ADAPTER_VERSION:}") private String adapterVersion;
-    static final String VERSION = "qingkong-2.8-current-20261024";
-    private static final String TABLE = "`qk`.`qingkong_config`";
-    private static final String AUDIT = "`dnf_service`.`QINGKONG_CHANGE_AUDIT`";
+    @Value("${DOF_ADMIN_ENABLED:false}") private boolean enabled;
+    @Value("${DOF_INSTANCE_ID:}") private String instanceId;
+    @Value("${DOF_ENVIRONMENT:}") private String environment;
+    @Value("${DOF_DATABASE_UUID:}") private String databaseUuid;
+    @Value("${DOF_ADAPTER_VERSION:}") private String adapterVersion;
+    static final String VERSION = "dof-native-1";
+    private static final String TABLE = "`dof_native`.`config`";
+    private static final String AUDIT = "`dnf_service`.`DOF_CHANGE_AUDIT`";
     private final ObjectMapper json = new ObjectMapper();
     private final NativeUiProfiles profiles = new NativeUiProfiles();
     private final NativeUiPresetCatalog presetCatalog = new NativeUiPresetCatalog();
@@ -67,14 +67,14 @@ public class DofAdminService {
             if (!r.next() || !databaseUuid.equalsIgnoreCase(r.getString(1))) throw new DofFailure(409, "数据库身份与绑定的隔离实例不符，停止访问");
         }
         try (Statement s = c.createStatement(); ResultSet r = s.executeQuery(
-            "SELECT adapter_version,database_uuid FROM dnf_service.QINGKONG_INSTANCE_BINDING WHERE instance_id='" + instanceId + "' AND environment='isolated'")) {
+            "SELECT adapter_version,database_uuid FROM dnf_service.DOF_INSTANCE_BINDING WHERE instance_id='" + instanceId + "' AND environment='isolated'")) {
             if (!r.next() || !VERSION.equals(r.getString(1)) || !databaseUuid.equalsIgnoreCase(r.getString(2)) || r.next())
                 throw new DofFailure(409, "隔离实例绑定未完成或版本不匹配");
         }
     }
     private void schema(Connection c) throws SQLException {
         Map<String,String> types = new HashMap<>();
-        try (Statement s = c.createStatement(); ResultSet r = s.executeQuery("SELECT COLUMN_NAME,DATA_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='qk' AND TABLE_NAME='qingkong_config'")) {
+        try (Statement s = c.createStatement(); ResultSet r = s.executeQuery("SELECT COLUMN_NAME,DATA_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME='config'")) {
             while (r.next()) types.put(r.getString(1), r.getString(2));
         }
         if (!"int".equals(types.get("ID"))) throw new DofFailure(409, "晴空配置结构不兼容；不会初始化玩家库");

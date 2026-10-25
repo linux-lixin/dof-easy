@@ -64,7 +64,7 @@ public final class NativeScriptJobs implements AutoCloseable {
                 j.state="INTERRUPTED";j.error="生成中断，未应用任何服务器参数";j.finishedAt=now();save(tasks.resolve(j.requestId),j);
             }
         }catch(IOException|RuntimeException e){lock.release();lockChannel.close();throw e;}
-        worker=Executors.newSingleThreadExecutor(r->{Thread t=new Thread(r,"qingkong-script-build");t.setDaemon(true);return t;});
+        worker=Executors.newSingleThreadExecutor(r->{Thread t=new Thread(r,"dof-script-build");t.setDaemon(true);return t;});
     }
     private static DofFailure fail(int status,String msg){return new DofFailure(status,msg);}
     private static String now(){return Instant.now().toString();}

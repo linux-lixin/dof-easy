@@ -1,13 +1,13 @@
 -- Apply only to the dedicated isolated Dof database, after verifying its UUID.
--- Never initializes, truncates, or alters native qk/player tables.
-CREATE TABLE IF NOT EXISTS dnf_service.QINGKONG_INSTANCE_BINDING (
+-- Never initializes, truncates, or alters native dof_native/player tables.
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_INSTANCE_BINDING (
   instance_id VARCHAR(64) CHARACTER SET ascii NOT NULL PRIMARY KEY,
   environment VARCHAR(16) CHARACTER SET ascii NOT NULL,
   database_uuid CHAR(36) CHARACTER SET ascii NOT NULL,
   adapter_version VARCHAR(64) CHARACTER SET ascii NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS dnf_service.QINGKONG_CHANGE_AUDIT (
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_CHANGE_AUDIT (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   instance_id VARCHAR(64) CHARACTER SET ascii NOT NULL,
   request_id CHAR(36) CHARACTER SET ascii NOT NULL,
@@ -27,14 +27,14 @@ CREATE TABLE IF NOT EXISTS dnf_service.QINGKONG_CHANGE_AUDIT (
   KEY pending_operations (instance_id,state)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS dnf_service.QINGKONG_TEXT_AUDIT LIKE dnf_service.QINGKONG_CHANGE_AUDIT;
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_TEXT_AUDIT LIKE dnf_service.DOF_CHANGE_AUDIT;
 
 -- Separate snapshot format for native billing/config settings; preserves older UI/text audit history.
-CREATE TABLE IF NOT EXISTS dnf_service.QINGKONG_SETTINGS_AUDIT LIKE dnf_service.QINGKONG_CHANGE_AUDIT;
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_SETTINGS_AUDIT LIKE dnf_service.DOF_CHANGE_AUDIT;
 
 -- Manual encrypted-PVF bundle application, independent from native auto-updates.
 -- Before/after fields are private; HTTP never returns these JSON snapshots.
-CREATE TABLE IF NOT EXISTS dnf_service.QINGKONG_SCRIPT_RELEASE (
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_SCRIPT_RELEASE (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   instance_id VARCHAR(64) CHARACTER SET ascii NOT NULL,
   request_id CHAR(36) CHARACTER SET ascii NOT NULL,

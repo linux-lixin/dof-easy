@@ -92,7 +92,7 @@ public final class NativeUiState {
         out.put("nativeBytes", sizes);
         try {
             NativeHotkeys hotkeys = NativeHotkeys.decode(text("Hotkeys"));
-            out.put("hotkeysCodec", "qingkong-2.8-gbk-rc4-hex");
+            out.put("hotkeysCodec", "dof-gbk-rc4-hex-v1");
             out.put("hotkeysFields", hotkeys.size());
         } catch (IllegalArgumentException e) { out.put("hotkeysCodec", "unrecognized"); }
         out.put("coordinates", NativeUiCoordinates.inspect(this));

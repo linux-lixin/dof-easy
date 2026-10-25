@@ -11,8 +11,8 @@ import java.util.zip.*;
 
 public class NativeClientBundleTest {
     @Test public void pinnedClientBundleContainsExactlySixFilesAndNoPrivateParameter()throws Exception {
-        String dll=System.getProperty("qingkong.script.clientDll");Assume.assumeNotNull(dll);
-        Path root=Files.createTempDirectory("qk-script-bundle-");
+        String dll=System.getProperty("dof.script.clientDll");Assume.assumeNotNull(dll);
+        Path root=Files.createTempDirectory("dof_native-script-bundle-");
         try {
             Path inputs=Files.createDirectory(root.resolve("inputs")),scriptRoot=Files.createDirectory(root.resolve("script"));
             KeyPair identity=NativeClientPayloadTest.pair();Map<String,byte[]> files=new LinkedHashMap<>();
@@ -30,7 +30,7 @@ public class NativeClientBundleTest {
                 NativeClientJobs.Request pack=new NativeClientJobs.Request();pack.requestId=UUID.randomUUID().toString();pack.revision=revision;pack.endpoint="192.0.2.45";pack.scriptTaskId=r.requestId;client.submit(pack,42);
                 long until=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(45);NativeClientJobs.Job j;
                 do{j=client.read(pack.requestId);if(!Arrays.asList("QUEUED","RUNNING").contains(j.state))break;Thread.sleep(30);}while(System.nanoTime()<until);
-                assertEquals(j.error,"READY_FOR_TEST",j.state);assertEquals("isolated-qingkong-pvf-bundle",j.packageKind);
+                assertEquals(j.error,"READY_FOR_TEST",j.state);assertEquals("isolated-dof-pvf-bundle",j.packageKind);
                 try(ZipFile zip=new ZipFile(client.download(pack.requestId).toFile())) {
                     Set<String> names=new HashSet<>();zip.stream().forEach(e->names.add(e.getName()));
                     assertEquals(new HashSet<>(Arrays.asList("启动器.exe","ijl15.dll","qingkong.dll","Script.pvf","manifest.json","使用与恢复.txt")),names);

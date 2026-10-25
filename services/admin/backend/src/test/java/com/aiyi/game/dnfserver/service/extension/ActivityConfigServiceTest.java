@@ -40,7 +40,7 @@ public class ActivityConfigServiceTest {
         verifyZeroInteractions(db);
     }
     @Test public void unknownSectionCannotBecomeSqlIdentifier() {
-        fails(404,()->service.list("signin; DROP TABLE qk.battle_pass"));verifyZeroInteractions(db);
+        fails(404,()->service.list("signin; DROP TABLE dof_native.battle_pass"));verifyZeroInteractions(db);
     }
     @Test public void acceptsAllFourNativeConfigurationShapes() {
         for(ActivityConfigService.Section s:service.catalog()) if(Arrays.asList("signin","battle","rewards","collection","online").contains(s.key)) assertEquals(s.fields.size(),service.validate(s,values(s),null,true).size());

@@ -23,7 +23,7 @@ public class NativeScriptJobsTest {
         h.put(index).putInt(seed);return raw;
     }
     private static class Fixture implements AutoCloseable {
-        Path path=Files.createTempDirectory("qk-script-test-");
+        Path path=Files.createTempDirectory("dof_native-script-test-");
         Fixture()throws IOException{}
         NativeScriptJobs open()throws IOException{return new NativeScriptJobs(path,"isolated-test",p->Long.MAX_VALUE);}
         public void close()throws IOException{try(java.util.stream.Stream<Path>s=Files.walk(path)){for(Path p:(Iterable<Path>)s.sorted(Comparator.reverseOrder())::iterator)Files.delete(p);}}
@@ -106,12 +106,12 @@ public class NativeScriptJobsTest {
         }
     }
     @Test public void currentPairedSourceStructureWhenProvided()throws Exception {
-        String path=System.getProperty("qingkong.script.pairDirectory");Assume.assumeNotNull(path);
+        String path=System.getProperty("dof.script.pairDirectory");Assume.assumeNotNull(path);
         Path p=Paths.get(path).resolve("Script.pvf");
         try(InputStream in=Files.newInputStream(p)){NativePvfSource.Header h=NativePvfSource.validate(in,Files.size(p));assertEquals(894478,h.fileCount);}
     }
     @Test public void originalProducerVectorsMatchNewParameterAndWholeFileCandidate()throws Exception {
-        String path=System.getProperty("qingkong.script.uncompressedVectors");Assume.assumeNotNull(path);
+        String path=System.getProperty("dof.script.uncompressedVectors");Assume.assumeNotNull(path);
         JsonNode vectors=JSON.readTree(new File(path)).get("vectors");assertEquals(3,vectors.size());
         for(JsonNode v:vectors) {
             byte[] source=decode(v.get("sourceHex").asText()),expected=decode(v.get("nativeHex").asText());

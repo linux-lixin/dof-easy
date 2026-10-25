@@ -64,7 +64,7 @@ public class NativeClientPublicationTest {
         }
     }
     @Test public void actualTemplateKeepsFourClientRecordsAndStripsThreeToolRecords() throws Exception {
-        String path=System.getProperty("qingkong.native.current",""),identity=System.getProperty("qingkong.native.public","");
+        String path=System.getProperty("dof.native.current",""),identity=System.getProperty("dof.native.public","");
         org.junit.Assume.assumeFalse("Private fixtures absent",path.isEmpty()||identity.isEmpty());
         byte[] original=Files.readAllBytes(Paths.get(path));
         PublicKey server=KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Files.readAllBytes(Paths.get(identity))));

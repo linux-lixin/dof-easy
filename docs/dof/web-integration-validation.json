@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "releaseReady": false,
+  "serverAccessed": false,
+  "scope": "web database and runtime contract alignment",
+  "database": "dof_native",
+  "managementTablePrefix": "DOF_",
+  "adapter": "dof-native-1",
+  "launcherMode": "native",
+  "checks": {
+    "backendCompile": {
+      "sources": 152,
+      "passed": true
+    },
+    "frontendBuild": {
+      "passed": true
+    },
+    "pythonPublicationAndDeployment": {
+      "passed": 19,
+      "failed": 0
+    },
+    "javaWithFreshLocalMysql": {
+      "run": 197,
+      "passed": 177,
+      "assumptionSkipped": 20,
+      "ignored": 0,
+      "failed": 0,
+      "mysql": "5.6.51",
+      "isolation": "new user, pid and network namespaces; loopback only; fresh database"
+    }
+  },
+  "notVerified": [
+    "Windows renamed native reader",
+    "86-level server native ABI/load",
+    "web browser operation against target instance",
+    "web-generated new-protocol client package",
+    "login, character, town, dungeon, combat, return and relogin",
+    "equipment pickup/display and random-box inventory rewards",
+    "complete raid workflows"
+  ],
+  "privateEvidenceIncluded": false
+}

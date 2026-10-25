@@ -108,7 +108,7 @@ public class DofRecordsService {
         StringBuilder order=new StringBuilder("`"+v.order+"` DESC");
         // Tie-break on every projected value, rather than an unspecified physical row order.
         for(String column:v.columns) if(!column.equals(v.order)) order.append(",BINARY `").append(column).append("` DESC");
-        String query="SELECT `"+String.join("`,`",v.columns)+"` FROM `qk`.`"+v.table+"`"+where+" ORDER BY "+order+" LIMIT ? OFFSET ?";
+        String query="SELECT `"+String.join("`,`",v.columns)+"` FROM `dof_native`.`"+v.table+"`"+where+" ORDER BY "+order+" LIMIT ? OFFSET ?";
         try(Connection c=access.connection(); PreparedStatement p=c.prepareStatement(query)) {
             p.setQueryTimeout(10); int n=1; if(owner!=null)p.setLong(n++,owner);
             if(searching)p.setString(n++,"%"+searchText.replace("!","!!").replace("%","!%").replace("_","!_")+"%");

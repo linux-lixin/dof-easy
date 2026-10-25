@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import javax.annotation.Resource;
 
 @Component
-@ConditionalOnProperty(name = "QINGKONG_ADMIN_ENABLED", havingValue = "false", matchIfMissing = true)
+@ConditionalOnProperty(name = "DOF_ADMIN_ENABLED", havingValue = "false", matchIfMissing = true)
 public class MemberTask {
 
     @Resource

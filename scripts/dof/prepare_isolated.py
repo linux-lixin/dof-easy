@@ -24,7 +24,7 @@ DB = 'dof-isolated-db'
 DB_DIRECTORY = Path('/opt/dof-isolated/database')
 UUID = ''
 INSTANCE = 'dof-isolated'
-VERSION = 'qingkong-2.8-current-20261024'
+VERSION = 'dof-native-1'
 PROTECTED = (DB, 'dof-isolated-game')
 DB_USER = 'dof_adapter'
 ADMIN_ACCOUNT = 'isolated_admin'
@@ -103,7 +103,7 @@ def main():
     os.chmod(ROOT, 0o700)
     backup = ROOT / 'backups' / datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
     backup.mkdir(mode=0o700, parents=True)
-    for database, tables in [('qk', []), ('d_taiwan', ['accounts'])]:
+    for database, tables in [('dof_native', []), ('d_taiwan', ['accounts'])]:
         dest = backup / (database + '.sql')
         with dest.open('xb') as output:
             os.chmod(dest, 0o600)
@@ -113,7 +113,7 @@ def main():
             raise RuntimeError('Empty backup')
     # Player accounts/HUD are recorded before adding the dedicated management identity.
     sample_sql = ('SELECT UID,MD5(CONCAT(accountname,password)),COALESCE(admin,0) FROM d_taiwan.accounts ORDER BY UID;'
-                  'SELECT ID,MD5(Hotkeys),MD5(temp_2),MD5(temp_3) FROM qk.qingkong_config ORDER BY ID;'
+                  'SELECT ID,MD5(Hotkeys),MD5(temp_2),MD5(temp_3) FROM dof_native.config ORDER BY ID;'
                   'SELECT COUNT(*) FROM taiwan_cain.charac_info;')
     baseline = sql(sample_sql)
     private_json(backup / 'baseline.json', {'containers': before, 'databaseUuid': UUID, 'data': baseline,
@@ -127,12 +127,12 @@ def main():
     if not re.fullmatch(r'[0-9a-f]{48}', password) or credentials['databaseUser'] != DB_USER or credentials['adminAccount'] != ADMIN_ACCOUNT:
         raise RuntimeError('Unexpected saved credential identity')
     sql('CREATE DATABASE IF NOT EXISTS dnf_service CHARACTER SET utf8;\n' + ddl + '\n' + migration)
-    binding = sql("SELECT CONCAT(environment,'|',database_uuid,'|',adapter_version) FROM dnf_service.QINGKONG_INSTANCE_BINDING WHERE instance_id='" + INSTANCE + "';")
+    binding = sql("SELECT CONCAT(environment,'|',database_uuid,'|',adapter_version) FROM dnf_service.DOF_INSTANCE_BINDING WHERE instance_id='" + INSTANCE + "';")
     expected = 'isolated|' + UUID + '|' + VERSION
     if binding and binding != expected:
         raise RuntimeError('Existing management binding conflicts; refusing overwrite')
     if not binding:
-        sql("INSERT INTO dnf_service.QINGKONG_INSTANCE_BINDING VALUES ('" + INSTANCE + "','isolated','" + UUID + "','" + VERSION + "');")
+        sql("INSERT INTO dnf_service.DOF_INSTANCE_BINDING VALUES ('" + INSTANCE + "','isolated','" + UUID + "','" + VERSION + "');")
     native_password = hashlib.md5(credentials['adminPassword'].encode()).hexdigest()
     account = sql("SELECT CONCAT(password,'|',admin,'|',parent_uid) FROM d_taiwan.accounts WHERE accountname='__ADMIN_ACCOUNT__';")
     if account and account != native_password + '|1|0':
@@ -144,17 +144,17 @@ def main():
         sql("CREATE USER '__DB_USER__'@'__DB_HOST__' IDENTIFIED BY '" + password + "';")
     sql("GRANT SELECT ON d_taiwan.* TO '__DB_USER__'@'__DB_HOST__';"
         "GRANT SELECT ON taiwan_cain.* TO '__DB_USER__'@'__DB_HOST__';"
-        "GRANT SELECT,LOCK TABLES ON qk.* TO '__DB_USER__'@'__DB_HOST__';"
-        "GRANT UPDATE (Hotkeys,temp_2,temp_3,name,Notice,GameNotice,Rechar,crowd,Official,webreg,is_open_up_pwd,switch_regCdkey,`Switch`,pvfencryption) ON qk.qingkong_config TO '__DB_USER__'@'__DB_HOST__';"
-        "GRANT UPDATE (ip_reg_control,regnumber,regtype,bubbleCount,bubbleTime,bubbleType,decrypt) ON qk.billing TO '__DB_USER__'@'__DB_HOST__';"
+        "GRANT SELECT,LOCK TABLES ON dof_native.* TO '__DB_USER__'@'__DB_HOST__';"
+        "GRANT UPDATE (Hotkeys,temp_2,temp_3,name,Notice,GameNotice,Rechar,crowd,Official,webreg,is_open_up_pwd,switch_regCdkey,`Switch`,pvfencryption) ON dof_native.config TO '__DB_USER__'@'__DB_HOST__';"
+        "GRANT UPDATE (ip_reg_control,regnumber,regtype,bubbleCount,bubbleTime,bubbleType,decrypt) ON dof_native.billing TO '__DB_USER__'@'__DB_HOST__';"
         "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,LOCK TABLES ON dnf_service.* TO '__DB_USER__'@'__DB_HOST__';")
     data = ROOT / 'data'
     data.mkdir(mode=0o700, exist_ok=True)
-    marker = data / 'qingkong-isolated.json'
+    marker = data / 'dof-isolated.json'
     if not marker.exists():
         private_json(marker, {'instanceId': INSTANCE, 'databaseUuid': UUID, 'environment': 'isolated'})
-    variables = {'QINGKONG_ADMIN_ENABLED': 'true', 'QINGKONG_ENVIRONMENT': 'isolated', 'QINGKONG_INSTANCE_ID': INSTANCE,
-                 'QINGKONG_DATABASE_UUID': UUID, 'QINGKONG_ADAPTER_VERSION': VERSION, 'LAUNCHER_MODE': 'qingkong',
+    variables = {'DOF_ADMIN_ENABLED': 'true', 'DOF_ENVIRONMENT': 'isolated', 'DOF_INSTANCE_ID': INSTANCE,
+                 'DOF_DATABASE_UUID': UUID, 'DOF_ADAPTER_VERSION': VERSION, 'LAUNCHER_MODE': 'native',
                  'SPRING_DATASOURCE_URL': 'jdbc:mysql://' + DB + ':3306/dnf_service?useUnicode=true&characterEncoding=UTF-8&useSSL=false',
                  'SPRING_DATASOURCE_USERNAME': DB_USER, 'SPRING_DATASOURCE_PASSWORD': password,
                  'NGINX_PORT': '80', 'SERVER_PORT': '9001'}

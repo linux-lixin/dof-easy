@@ -87,7 +87,7 @@ public final class NativeClientJobs implements AutoCloseable {
                 }
             }
         } catch (IOException | RuntimeException e) { lock.release(); lockChannel.close(); throw e; }
-        worker = Executors.newSingleThreadExecutor(r -> { Thread thread = new Thread(r, "qingkong-client-package"); thread.setDaemon(true); return thread; });
+        worker = Executors.newSingleThreadExecutor(r -> { Thread thread = new Thread(r, "dof-client-package"); thread.setDaemon(true); return thread; });
     }
     private static Path directory(Path path) throws IOException {
         if (!Files.exists(path, LinkOption.NOFOLLOW_LINKS)) Files.createDirectory(path, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));
@@ -178,7 +178,7 @@ public final class NativeClientJobs implements AutoCloseable {
         }
         requireSpace(BUILD_PEAK+(script==null?0:script.job.bytes+1024*1024));
         Job job = new Job(); job.requestId = request.requestId; job.instanceId = instance; job.actor = actor;
-        if(script!=null){job.scriptTaskId=script.job.requestId;job.scriptSha256=script.job.sha256;job.scriptBytes=script.job.bytes;job.packageKind="isolated-qingkong-pvf-bundle";}
+        if(script!=null){job.scriptTaskId=script.job.requestId;job.scriptSha256=script.job.sha256;job.scriptBytes=script.job.bytes;job.packageKind="isolated-dof-pvf-bundle";}
         job.backgroundSha256 = backgroundHash;
         job.revision = request.revision; job.endpoint = request.endpoint; job.state = "QUEUED"; job.createdAt = Instant.now().toString();
         Path preparing = Files.createTempDirectory(jobs, ".prepare-", PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));

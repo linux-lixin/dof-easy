@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { LauncherApi } from '../../../api/launcher';
 
-const mode = ref<'dof' | 'qingkong' | 'unknown'>('unknown');
+const mode = ref<'dof' | 'native' | 'unknown'>('unknown');
 const failed = ref(false);
 onMounted(async () => {
   try {
@@ -15,9 +15,8 @@ onMounted(async () => {
 
 <template>
   <a-alert :type="failed ? 'warning' : 'info'" style="margin: 24px 24px 0">
-    <template v-if="mode === 'qingkong'">
-      当前玩家登录方式：dof-easy。dof-easy地址、公告和更新由配套工具配置；本页设置仅对备用自有登录器生效。
-      账号及角色仍由现有网页后台管理。
+    <template v-if="mode === 'native'">
+      当前玩家登录方式：原生登录器。请在网页的 Dof 管理页面保存配置、处理 PVF 并生成配套包；本页设置用于另一种 dof 登录模式。
     </template>
     <template v-else-if="mode === 'dof'">
       当前玩家登录方式：自有登录器。本页配置对自有登录器生效；切换登录方式请使用实例部署命令。

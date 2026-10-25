@@ -31,7 +31,7 @@ public class DofClientGuardTest {
     @Test public void misboundDatabaseBlocksStatusSubmissionReadAndDownload() throws Exception {
         DofAdminService guard=mock(DofAdminService.class);when(guard.admin()).thenReturn(42L);
         when(guard.connection()).thenThrow(new DofFailure(409,"wrong identity"));
-        Path base=Files.createTempDirectory("qk-client-guard-");Path workspace=base.resolve("must-not-exist");
+        Path base=Files.createTempDirectory("dof_native-client-guard-");Path workspace=base.resolve("must-not-exist");
         try {
             DofClientService service=service(guard,workspace.toString());
             for(int i=0;i<5;i++) {

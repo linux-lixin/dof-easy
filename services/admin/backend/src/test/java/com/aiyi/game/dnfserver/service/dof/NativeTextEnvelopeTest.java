@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class NativeTextEnvelopeTest {
     @Test public void nativeWriterVectorsWhenProvided() throws Exception {
-        String path = System.getProperty("qingkong.script.parameterVectors");
+        String path = System.getProperty("dof.script.parameterVectors");
         org.junit.Assume.assumeNotNull(path);
         JsonNode vectors = new ObjectMapper().readTree(new File(path)).get("vectors");
         assertEquals(12, vectors.size());
@@ -48,7 +48,7 @@ public class NativeTextEnvelopeTest {
     }
 
     @Test public void approvedRealSampleExplainsIndexMaskWhenProvided() throws Exception {
-        String path = System.getProperty("qingkong.script.privateParameters");
+        String path = System.getProperty("dof.script.privateParameters");
         org.junit.Assume.assumeNotNull(path);
         JsonNode v = new ObjectMapper().readTree(new File(path));
         assertEquals("e34592496e8d43679bb18beb4287d0c7c50a08b0cff9d088e16993981825db57",

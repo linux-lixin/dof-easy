@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "adapter": "qingkong-2.8-current-20261024",
+  "adapter": "dof-native-1",
   "completeReplacement": false,
   "unifiedAcceptanceStarted": false,
   "productionChangesAllowed": false,

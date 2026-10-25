@@ -61,7 +61,7 @@ public class NativeConfigContainerTest {
     }
     /** Optional private fixtures, required by the documented real-sample check command. */
     @Test public void suppliedNativeFixturesAreByteIdenticalAfterJavaRegeneration() throws Exception {
-        String paths = System.getProperty("qingkong.native.fixtures", "");
+        String paths = System.getProperty("dof.native.fixtures", "");
         org.junit.Assume.assumeFalse("Private native fixtures not configured", paths.isEmpty());
         for (String path : paths.split(java.io.File.pathSeparator)) {
             byte[] original = Files.readAllBytes(Paths.get(path));

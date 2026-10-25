@@ -27,18 +27,20 @@ public class LauncherRuntimeTest {
     }
 
     @Test public void reportsBothModesWithoutSecretsOrDatabaseWrites() {
-        for (String mode : new String[]{"dof", "qingkong"}) {
+        for (String mode : new String[]{"dof", "native"}) {
             Map<String, Object> result = controller(mode, true).runtime();
             assertEquals(mode, result.get("mode"));
-            assertEquals(new java.util.HashSet<>(java.util.Arrays.asList("mode", "configurationOwner", "qingkongDevelopment")), result.keySet());
-            assertEquals(false, result.get("qingkongDevelopment"));
-            assertEquals("qingkong".equals(mode) ? "qingkong-tool" : "web-admin", result.get("configurationOwner"));
+            assertEquals(new java.util.HashSet<>(java.util.Arrays.asList("mode", "configurationOwner", "nativeDevelopment")), result.keySet());
+            assertEquals(false, result.get("nativeDevelopment"));
+            assertEquals("web-admin", result.get("configurationOwner"));
         }
     }
 
     @Test(expected = ActivityConfigService.Failure.class)
-    public void rejectsNonAdmin() { controller("qingkong", false).runtime(); }
+    public void rejectsNonAdmin() { controller("native", false).runtime(); }
 
     @Test(expected = IllegalStateException.class)
     public void rejectsInvalidModeInsteadOfShowingDof() { controller("typo", true).runtime(); }
+    @Test(expected = IllegalStateException.class)
+    public void rejectsLegacyLauncherMode() { controller("qingkong", true).runtime(); }
 }

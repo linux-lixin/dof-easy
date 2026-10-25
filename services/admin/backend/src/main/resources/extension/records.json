@@ -465,7 +465,7 @@
       "Alpha",
       "item"
     ],
-    "database": "qk"
+    "database": "dof_native"
   },
   {
     "key": "skin-borders",
@@ -480,7 +480,7 @@
       "border_index",
       "create_time"
     ],
-    "database": "qk"
+    "database": "dof_native"
   },
   {
     "key": "skin-emoticons",
@@ -495,7 +495,7 @@
       "emoticon_index",
       "create_time"
     ],
-    "database": "qk"
+    "database": "dof_native"
   },
   {
     "key": "skin-selected",
@@ -509,7 +509,7 @@
       "border_index",
       "emoticon_indexs"
     ],
-    "database": "qk"
+    "database": "dof_native"
   },
   {
     "key": "chat-reports",

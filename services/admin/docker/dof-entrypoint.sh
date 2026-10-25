@@ -2,15 +2,19 @@
 set -eu
 
 # Dedicated development runtime: never runs init.sql or generates game keys.
-[ "${QINGKONG_ADMIN_ENABLED:-false}" = true ] || { echo 'Dof adapter must be explicitly enabled' >&2; exit 1; }
-[ "${QINGKONG_ENVIRONMENT:-}" = isolated ] || { echo 'Only isolated instances are supported' >&2; exit 1; }
-[ "${QINGKONG_ADAPTER_VERSION:-}" = qingkong-2.8-current-20261024 ] || { echo 'Unsupported adapter version' >&2; exit 1; }
-: "${QINGKONG_INSTANCE_ID:?Missing instance identity}"
-: "${QINGKONG_DATABASE_UUID:?Missing database identity}"
+[ "${LAUNCHER_MODE:-}" = native ] || { echo 'Native launcher mode is required' >&2; exit 1; }
+if env | cut -d= -f1 | grep -q '^QINGKONG_'; then
+  echo 'Legacy native environment is not supported' >&2; exit 1
+fi
+[ "${DOF_ADMIN_ENABLED:-false}" = true ] || { echo 'Dof adapter must be explicitly enabled' >&2; exit 1; }
+[ "${DOF_ENVIRONMENT:-}" = isolated ] || { echo 'Only isolated instances are supported' >&2; exit 1; }
+[ "${DOF_ADAPTER_VERSION:-}" = dof-native-1 ] || { echo 'Unsupported adapter version' >&2; exit 1; }
+: "${DOF_INSTANCE_ID:?Missing instance identity}"
+: "${DOF_DATABASE_UUID:?Missing database identity}"
 : "${SPRING_DATASOURCE_URL:?Missing dedicated database connection}"
 : "${SPRING_DATASOURCE_USERNAME:?Missing dedicated database account}"
 : "${SPRING_DATASOURCE_PASSWORD:?Missing database password}"
-[ -f /app/data/qingkong-isolated.json ] || { echo 'Missing isolated deployment marker' >&2; exit 1; }
+[ -f /app/data/dof-isolated.json ] || { echo 'Missing isolated deployment marker' >&2; exit 1; }
 
 export NGINX_PORT=${NGINX_PORT:-80} SERVER_PORT=${SERVER_PORT:-9001}
 envsubst '${NGINX_PORT} ${SERVER_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf

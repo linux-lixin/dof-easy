@@ -102,7 +102,8 @@
       "failed": 0,
       "skipped": 0
     },
-    "deterministicRuntimeMatchesLock": true
+    "deterministicRuntimeMatchesLock": true,
+    "localWebContract": "See web-integration-validation.json; not target-instance/browser acceptance"
   },
   "previousEvidence": {
     "scope": "70-level local server only; not evidence for the 86-level target",
@@ -112,11 +113,11 @@
   },
   "pending": [
     "86-level ABI and native load",
-    "web config read/save and client package generation",
     "Windows native consumer compatibility",
     "login, character, town, dungeon, combat, return and relogin",
     "equipment pickup/broadcast and random-box rewards",
-    "complete raid workflows"
+    "complete raid workflows",
+    "target web browser operation and new-protocol client package generation"
   ],
   "databaseMigration": "not applicable: project has not launched"
 }

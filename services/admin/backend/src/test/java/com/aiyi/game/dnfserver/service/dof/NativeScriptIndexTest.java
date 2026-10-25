@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 public class NativeScriptIndexTest {
     @Test public void completeRealIndexAndResourceDataWhenProvided() throws Exception {
-        String source=System.getProperty("qingkong.script.original"), nativeFile=System.getProperty("qingkong.script.native");
+        String source=System.getProperty("dof.script.original"), nativeFile=System.getProperty("dof.script.native");
         org.junit.Assume.assumeNotNull(source,nativeFile);
         assertEquals(565213337L,new File(source).length());assertEquals(565214617L,new File(nativeFile).length());
         try (InputStream original=new BufferedInputStream(new FileInputStream(source));
@@ -34,7 +34,7 @@ public class NativeScriptIndexTest {
         }
     }
     @Test public void capturedNativeArithmeticVectorsWhenProvided() throws Exception {
-        String path=System.getProperty("qingkong.script.nativeVectors");
+        String path=System.getProperty("dof.script.nativeVectors");
         org.junit.Assume.assumeNotNull(path);
         com.fasterxml.jackson.databind.JsonNode root=new com.fasterxml.jackson.databind.ObjectMapper().readTree(new File(path));
         assertEquals(18,root.get("vectors").size());

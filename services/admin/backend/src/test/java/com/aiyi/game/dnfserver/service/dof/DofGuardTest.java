@@ -48,4 +48,12 @@ public class DofGuardTest {
         ReflectionTestUtils.setField(service, "environment", "production");
         rejects(409, () -> service.verifyStartupBinding()); verifyZeroInteractions(database);
     }
+    @Test public void rejectsLegacyAdapterBeforeAnyDatabaseAccess() {
+        ReflectionTestUtils.setField(service, "enabled", true);
+        ReflectionTestUtils.setField(service, "environment", "isolated");
+        ReflectionTestUtils.setField(service, "instanceId", "dof-contract");
+        ReflectionTestUtils.setField(service, "databaseUuid", "12345678-1234-4234-8234-123456789abc");
+        ReflectionTestUtils.setField(service, "adapterVersion", "qingkong-2.8-current-20261024");
+        rejects(409, () -> service.verifyStartupBinding()); verifyZeroInteractions(database);
+    }
 }

@@ -14,8 +14,8 @@ import java.util.*;
 @Service
 public class DofTextService {
     @Resource private DofAdminService access;
-    private static final String TABLE = "`qk`.`qingkong_config`";
-    private static final String AUDIT = "`dnf_service`.`QINGKONG_TEXT_AUDIT`";
+    private static final String TABLE = "`dof_native`.`config`";
+    private static final String AUDIT = "`dnf_service`.`DOF_TEXT_AUDIT`";
     static final List<String> FIELDS = Collections.unmodifiableList(Arrays.asList("name", "Notice", "GameNotice", "Rechar", "crowd", "Official", "webreg"));
     private static final List<String> LABELS = Arrays.asList("服务器名称", "登录公告", "游戏公告", "充值入口", "交流群入口", "官方网站", "网页注册入口");
     private final ObjectMapper json = new ObjectMapper();
