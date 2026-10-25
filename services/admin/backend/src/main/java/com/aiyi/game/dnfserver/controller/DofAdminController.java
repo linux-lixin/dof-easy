@@ -30,6 +30,10 @@ public class DofAdminController {
         // Keep PVF bytes out of multipart buffering and JSON/base64 allocations.
         return clientService.uploadScript(id,revision,request.getContentLengthLong(),request.getInputStream());
     }
+    @PostMapping("script/uploads/paired")
+    public Object importPairedScript(@RequestBody DofClientService.PairedSourceRequest request)throws java.io.IOException {
+        return clientService.importPairedScript(request);
+    }
     @GetMapping("script/tasks") public Object scriptTasks()throws java.io.IOException{return clientService.scriptTasks();}
     @PostMapping("script/tasks") public Object createScriptTask(@RequestBody NativeScriptJobs.Request request)throws java.io.IOException{return clientService.submitScript(request);}
     @GetMapping("script/tasks/{id}") public Object scriptTask(@PathVariable("id") String id)throws java.io.IOException{return clientService.scriptTask(id);}

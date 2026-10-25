@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "releaseReady": false,
-  "serverAccessed": false,
-  "scope": "web database and runtime contract alignment",
+  "serverAccessed": true,
+  "scope": "local web contracts and target 86-level integration; player acceptance pending",
   "database": "dof_native",
   "managementTablePrefix": "DOF_",
   "adapter": "dof-native-1",
@@ -31,12 +31,29 @@
   },
   "notVerified": [
     "Windows renamed native reader",
-    "86-level server native ABI/load",
-    "web browser operation against target instance",
     "web-generated new-protocol client package",
     "login, character, town, dungeon, combat, return and relogin",
     "equipment pickup/display and random-box inventory rewards",
-    "complete raid workflows"
+    "complete raid workflows",
+    "all web record views: signin schema incompatible on target instance"
   ],
-  "privateEvidenceIncluded": false
+  "privateEvidenceIncluded": false,
+  "targetIntegration": {
+    "mainCommit": "175e06241c496877cc05496800db1991e2e9527d",
+    "gameImage": "sha256:df4c24c5ea7843f1ed5d942f7f947abb48e9c306c7fb3e6c6a2a299a1fa52876",
+    "webImage": "sha256:07b852ba1726eded3e304e0352941ade23f13b5d3217ad14f7e5e73f474131db",
+    "gameHealthy": true,
+    "actualGateway": "/opt/dof-easy/bin/dof-gateway",
+    "actualGameModules": [
+      "/opt/dof-easy/lib/libdof-plugin.so",
+      "/opt/dof-easy/lib/libdof-inline.so"
+    ],
+    "randomBoxTablesCreated": true,
+    "webBrowserLogin": true,
+    "homeSaveAndReadback": true,
+    "clientAndScriptStatusHttp": 200,
+    "signinRecordsHttp": 409,
+    "databaseRestarted": false,
+    "playerAcceptance": false
+  }
 }

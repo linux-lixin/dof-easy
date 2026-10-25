@@ -40,11 +40,19 @@ public class DofClientService {
         }
         return scripts;
     }
+    public static final class PairedSourceRequest {public String requestId,revision;}
+    public Object importPairedScript(PairedSourceRequest request)throws IOException {
+        long actor=guard();
+        if(request==null || !currentRevision().equals(request.revision))throw new DofFailure(409,"发布来源版本改变，请刷新后导入");
+        if(gamePvf==null || gamePvf.isEmpty())throw new DofFailure(409,"尚未绑定当前服务端 PVF");
+        return scripts().uploadPaired(request.requestId,request.revision,actor,Paths.get(gamePvf));
+    }
     private String currentRevision()throws IOException{return (String)jobs().status().get("revision");}
     public Object scriptStatus()throws IOException {
         guard();Map<String,Object> out=new LinkedHashMap<>();
         if(workspace==null||workspace.trim().isEmpty()){out.put("enabled",false);return out;}
         out.putAll(jobs().status());jobs().requireScriptVersion();out.put("enabled",true);
+        out.put("pairedSourceAvailable",gamePvf!=null&&!gamePvf.isEmpty());
         out.put("mode","uncompressed");out.put("maxSourceBytes",NativePvfSource.MAX_BYTES);
         out.put("nativeClientAcceptance",false);out.put("applicationEnabled",gamePvf!=null&&!gamePvf.isEmpty());
         out.put("applicationBlocker","尚未配置隔离游戏 PVF 的只读来源绑定");return out;

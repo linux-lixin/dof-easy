@@ -23,6 +23,14 @@ public class DofScriptHttpTest {
         MvcResult result=mvc(clients,null).perform(post("/api/v1/admin/dof/script/uploads").param("requestId",id).param("revision",NativeScriptJobsTest.REV).contentType("application/octet-stream").content(source)).andReturn();
         assertEquals(200,result.getResponse().getStatus());verify(clients).uploadScript(eq(id),eq(NativeScriptJobsTest.REV),eq((long)source.length),any(InputStream.class));
     }
+    @Test public void pairedImportBindsRequestWithoutAcceptingClientFilePaths()throws Exception {
+        DofClientService clients=mock(DofClientService.class);String id=UUID.randomUUID().toString();
+        when(clients.importPairedScript(any())).thenAnswer(call->{DofClientService.PairedSourceRequest r=call.getArgument(0);
+            assertEquals(id,r.requestId);assertEquals(NativeScriptJobsTest.REV,r.revision);return Collections.singletonMap("state","READY");});
+        MvcResult result=mvc(clients,null).perform(post("/api/v1/admin/dof/script/uploads/paired").contentType("application/json")
+            .content("{\"requestId\":\""+id+"\",\"revision\":\""+NativeScriptJobsTest.REV+"\"}")).andReturn();
+        assertEquals(200,result.getResponse().getStatus());verify(clients).importPairedScript(any());
+    }
     @Test public void capacityAndVersionRejectionsRemainHttpErrors()throws Exception {
         DofClientService clients=mock(DofClientService.class);when(clients.submitScript(any())).thenThrow(new DofFailure(507,"space"));
         assertEquals(507,mvc(clients,null).perform(post("/api/v1/admin/dof/script/tasks").contentType("application/json").content("{}" )).andReturn().getResponse().getStatus());
@@ -33,6 +41,7 @@ public class DofScriptHttpTest {
         DofAdminService guard=mock(DofAdminService.class);when(guard.admin()).thenReturn(42L);when(guard.connection()).thenThrow(new DofFailure(409,"wrong-instance"));
         DofClientService clients=new DofClientService();ReflectionTestUtils.setField(clients,"adminService",guard);ReflectionTestUtils.setField(clients,"workspace","/nonexistent/must-not-open");
         MockMvc mvc=mvc(clients,null);
+        assertEquals(409,mvc.perform(post("/api/v1/admin/dof/script/uploads/paired").contentType("application/json").content("{}")).andReturn().getResponse().getStatus());
         for(String path:Arrays.asList("script","script/uploads","script/tasks"))assertEquals(409,mvc.perform(get("/api/v1/admin/dof/"+path)).andReturn().getResponse().getStatus());
         assertEquals(409,mvc.perform(post("/api/v1/admin/dof/script/uploads").param("requestId",UUID.randomUUID().toString()).param("revision",NativeScriptJobsTest.REV).contentType("application/octet-stream").content(NativeScriptJobsTest.fixture(1))).andReturn().getResponse().getStatus());
     }
@@ -43,6 +52,7 @@ public class DofScriptHttpTest {
         MockMvc mvc=mvc(clients,releases);
         assertEquals(403,mvc.perform(get("/api/v1/admin/dof/client/releases")).andReturn().getResponse().getStatus());
         assertEquals(403,mvc.perform(post("/api/v1/admin/dof/script/uploads").param("requestId",UUID.randomUUID().toString()).param("revision",NativeScriptJobsTest.REV).contentType("application/octet-stream").content(NativeScriptJobsTest.fixture(1))).andReturn().getResponse().getStatus());
+        assertEquals(403,mvc.perform(post("/api/v1/admin/dof/script/uploads/paired").contentType("application/json").content("{}")).andReturn().getResponse().getStatus());
         verify(guard,never()).connection();
     }
 }
