@@ -29,3 +29,11 @@ This corrects fresh initialization; it does not validate reward delivery.
 Windows native consumer adaptation, client package publication and actual
 login/town/dungeon/relogin remain pending. Runtime file existence, a listening
 channel and a successful browser save are separate evidence.
+
+Subsequent deployments also support a source already using `LAUNCHER_MODE=native`.
+They obtain the old asset lock from a stopped probe of the pinned source image,
+verify the source assets, and replace assets only in the new staged data copy.
+Existing configurations and keys are preserved without legacy import or schema
+migration. Disk admission includes the persistent data copy, the actual PVF
+size, and 1 GiB for runtime files and startup overhead, in addition to the fixed
+2 GiB reserve. The currently running instance is not stopped if admission fails.

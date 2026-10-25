@@ -1,6 +1,7 @@
 """Bounded game replacement guards; these tests never invoke Docker."""
 import importlib.util
 import json
+import hashlib
 from pathlib import Path
 import sys
 import tempfile
@@ -50,6 +51,45 @@ class GameDeployment(unittest.TestCase):
         self.assertEqual(args[args.index('--ulimit')+1], 'nofile=65535:65535')
         with self.assertRaisesRegex(ValueError,'Conflicting CPU'):
             deploy.runtime_limits(dict(NanoCpus=1000000000,CpuQuota=100000))
+
+    def test_native_upgrade_replaces_only_staged_assets_and_keeps_private_state(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source, destination, runtime = root/'source', root/'next', root/'runtime'
+            state = source/'dof-easy'
+            (state/'assets/lib').mkdir(parents=True)
+            (state/'config').mkdir(); (state/'keys').mkdir()
+            (state/'config/plugin.ini').write_bytes(b'operator-config')
+            (state/'keys/privatekey.pem').write_bytes(b'private-test-key')
+            (state/'assets/lib/library.so').write_bytes(b'old')
+            def manifest(content):
+                return dict(artifact='dof-server-runtime', sourceEdition='replacement-only',
+                    files=[dict(path='lib/library.so', bytes=len(content), sha256=hashlib.sha256(content).hexdigest())])
+            previous, current = manifest(b'old'), manifest(b'new')
+            (state/'assets/manifest.json').write_text(json.dumps(previous))
+            lock = root/'previous.lock.json'; lock.write_text(json.dumps(previous))
+            (runtime/'lib').mkdir(parents=True)
+            (runtime/'lib/library.so').write_bytes(b'new')
+            (runtime/'manifest.json').write_text(json.dumps(current))
+            managed = root/'managed'; managed.mkdir()
+            before = {p.relative_to(source):p.read_bytes() for p in source.rglob('*') if p.is_file()}
+            with patch.object(deploy.assets, 'manifest', return_value=current['files']), \
+                    patch.object(deploy.assets, 'verify'), patch.object(deploy.assets, 'verify_config'):
+                deploy.stage_data(source, destination, runtime, managed, managed, lock)
+            self.assertEqual((destination/'dof-easy/assets/lib/library.so').read_bytes(), b'new')
+            for name in ('config/plugin.ini', 'keys/privatekey.pem'):
+                self.assertEqual((destination/'dof-easy'/name).read_bytes(), (state/name).read_bytes())
+            self.assertEqual(before, {p.relative_to(source):p.read_bytes() for p in source.rglob('*') if p.is_file()})
+            (state/'assets/lib/library.so').write_bytes(b'tampered')
+            with self.assertRaisesRegex(ValueError, 'modified'):
+                deploy.verify_previous_assets(state, lock)
+
+    def test_native_upgrade_requires_previous_image_lock(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory); (root/'source/dof-easy').mkdir(parents=True)
+            with self.assertRaisesRegex(ValueError, 'previous image lock'):
+                deploy.stage_data(root/'source', root/'output', root/'runtime', root/'managed', root/'managed')
+            self.assertFalse((root/'output').exists())
 
     def test_explicit_import_preserves_password_and_disables_legacy_init(self):
         original=dict(LAUNCHER_MODE='qingkong', QINGKONG_VARIANT='replacement',
