@@ -8,7 +8,7 @@ RUN dpkg --add-architecture i386 \
     ca-certificates tzdata python3 supervisor socat netcat-openbsd mariadb-client \
     bash coreutils findutils grep sed gawk perl procps psmisc binutils openssl curl iproute2 net-tools \
     libc6:i386 libstdc++6:i386 libgcc-s1:i386 zlib1g:i386 \
-    libstdc++6 libgcc-s1 zlib1g libcrypt1 \
+    libstdc++6 libgcc-s1 zlib1g libcrypt1 patchelf \
  && rm -rf /var/lib/apt/lists/* \
  && ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
@@ -40,7 +40,6 @@ RUN echo 'd8fb57b31d9b29ad576e0100d6fa67e71aa19c3e6d994e5e0a5957e41caec772  /tmp
 
 FROM runtime AS game
 COPY assets/home/template/ /home/template/
-COPY assets/root/ /root/
 COPY assets/TeaEncrypt /TeaEncrypt
 COPY assets/etc/supervisor/ /etc/supervisor/
 COPY assets/etc/supervisord.conf /etc/supervisord.conf
@@ -78,6 +77,15 @@ RUN mkdir -p /opt/dnf/compat/i386 \
 
 FROM game AS final
 COPY runtime/ubuntu/ /opt/dnf/ubuntu/
+RUN mkdir -p /opt/dof-easy/runtime && mv /opt/dnf/ubuntu/gateway /opt/dof-easy/runtime/gateway
+# Keep the repository input intact. Repair the image's fixed bridge template
+# before instance initialization copies it, and retain the derivation evidence.
+RUN python3 /opt/dnf/ubuntu/bridge_compat.py \
+      --source /home/template/neople/bridge/df_bridge_r \
+      --output /opt/dnf/audit/bridge-repair \
+ && install -m 755 /opt/dnf/audit/bridge-repair/df_bridge_r /home/template/neople/bridge/df_bridge_r \
+ && rm /opt/dnf/audit/bridge-repair/df_bridge_r \
+ && python3 /opt/dnf/audit/elf-audit.py /home/template/neople/bridge --output /opt/dnf/audit/bridge-elf.json
 COPY plugin-assets/ /opt/dnf/plugins/
 RUN python3 /opt/dnf/audit/elf-audit.py /opt/dnf/plugins --preload-i386 /opt/dnf/compat/i386/libfrida-compat.so --output /opt/dnf/audit/plugins-elf.json
 RUN --network=none python3 /opt/dnf/audit/frida-probe.py --gadget /opt/dnf/plugins/frida/frida.so --shim /opt/dnf/compat/i386/libfrida-compat.so --probe /opt/dnf/audit/frida-probe > /opt/dnf/audit/frida-start-proof.txt

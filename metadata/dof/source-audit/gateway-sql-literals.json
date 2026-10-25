@@ -1,0 +1,1550 @@
+{
+  "schema": 1,
+  "sourceSha256": "67553a3b45de80ebea5f767f6e3a51d577d2cbb6c6647bd4c97037cb50a41f9b",
+  "method": "Fixed SQL literals and decoded MOV ESI/EDX immediate references",
+  "literals": [
+    {
+      "address": 5022768,
+      "offset": 828464,
+      "text": "select Trade_item,price,item_number from qk.Robot_stall where function_type=%d and state=1 and (UID=%d  or UID=0) order by UID;",
+      "references": [
+        {
+          "address": 4489806,
+          "before": "ba30a44c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4ca430",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5023000,
+      "offset": 828696,
+      "text": "select Trade_item,price,item_number from qk.Robot_stall where function_type=%d and state=1 and  (UID=%d  or UID=0) order by UID;",
+      "references": [
+        {
+          "address": 4493985,
+          "before": "ba18a54c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4ca518",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5023136,
+      "offset": 828832,
+      "text": "select cfg_content from qk.Robot_stall_config where cfg_type=%d and function_type=%d and state=1 and (UID=%d  or UID=0) order by UID;",
+      "references": [
+        {
+          "address": 4494685,
+          "before": "baa0a54c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4ca5a0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5026176,
+      "offset": 831872,
+      "text": "select reDCdkeyOpt from qk.qingkong_config where switch_reCdkey=1",
+      "references": [
+        {
+          "address": 4595258,
+          "before": "ba80b14c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cb180",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5026248,
+      "offset": 831944,
+      "text": "select exchange from qk.cdk where CDK=?;",
+      "references": [
+        {
+          "address": 4595685,
+          "before": "bec8b14c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cb1c8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5026296,
+      "offset": 831992,
+      "text": "update qk.cdk set exchange=1,Redemptiontime=now(),uid=?,cid=?,rolename=? where CDK=?;",
+      "references": [
+        {
+          "address": 4595896,
+          "before": "bef8b14c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cb1f8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4606095,
+          "before": "bef8b14c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cb1f8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5027656,
+      "offset": 833352,
+      "text": "select CDK,Itemcode,itemName,number,species,Tickets,Tokens,strengthen,Increase,amplification,forge,pet,exchange,colour,type,limit_type,linmit_num,id from qk.cdk_copy where CDK=?;",
+      "references": [
+        {
+          "address": 4599033,
+          "before": "be48b74c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cb748",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5027880,
+      "offset": 833576,
+      "text": "select count(1) from qk.cdk_solid_stat where cdk_id=%d and m_id=%d;",
+      "references": [
+        {
+          "address": 4599632,
+          "before": "ba28b84c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cb828",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5027952,
+      "offset": 833648,
+      "text": "select count(1) from qk.cdk_solid_stat where cdk_id=%d and m_id=%d and cid=%d;",
+      "references": [
+        {
+          "address": 4603656,
+          "before": "ba70b84c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cb870",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5028032,
+      "offset": 833728,
+      "text": "insert into qk.cdk_solid_stat (cdk_id, m_id, cid) values (%d,%d,%d);",
+      "references": [
+        {
+          "address": 4599758,
+          "before": "bac0b84c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cb8c0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5028992,
+      "offset": 834688,
+      "text": "select CDK,Itemcode,itemName,number,species,Tickets,Tokens,strengthen,Increase,amplification,forge,pet,exchange,colour,type from qk.cdk where CDK=?;",
+      "references": [
+        {
+          "address": 4605498,
+          "before": "be80bc4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cbc80",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5029336,
+      "offset": 835032,
+      "text": "select CDK,Itemcode,itemName,number,species,Tickets,Tokens,strengthen,Increase,amplification,forge,pet,exchange,colour,type,sponsor from qk.cdk where CDK=?;",
+      "references": [
+        {
+          "address": 4611537,
+          "before": "bed8bd4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cbdd8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5029496,
+      "offset": 835192,
+      "text": "update qk.cdk set exchange=1,Redemptiontime=now(),Invitation=?,uid=?,cid=?,rolename=? where CDK=?;",
+      "references": [
+        {
+          "address": 4612143,
+          "before": "be78be4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cbe78",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5029968,
+      "offset": 835664,
+      "text": "SELECT Robot FROM qk.Robot where robot=1 LIMIT 1;",
+      "references": [
+        {
+          "address": 4616694,
+          "before": "be50c04c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cc050",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5030024,
+      "offset": 835720,
+      "text": "DELETE FROM qk.dataTmp;insert into qk.dataTmp (dataObj) values ('%s');",
+      "references": [
+        {
+          "address": 4616968,
+          "before": "ba88c04c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc088",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5030096,
+      "offset": 835792,
+      "text": "insert into qk.gift_user(cid,region,room)values(%d,%d,%d);",
+      "references": [
+        {
+          "address": 4617220,
+          "before": "bad0c04c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc0d0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4648932,
+          "before": "bad0c04c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc0d0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5030160,
+      "offset": 835856,
+      "text": "update qk.gift_user set region=%d, room=%d where  cid=%d;",
+      "references": [
+        {
+          "address": 4617357,
+          "before": "ba10c14c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc110",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4649069,
+          "before": "ba10c14c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc110",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5030320,
+      "offset": 836016,
+      "text": "delete from qk.qk_ai_user_temp;",
+      "references": [
+        {
+          "address": 4617886,
+          "before": "beb0c14c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cc1b0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5030352,
+      "offset": 836048,
+      "text": "INSERT INTO qk.v4_qk_user_temp (id, uid, x, y, ditu_id, fangjian_id, pingdao_id, state, login_time) VALUES ",
+      "references": [
+        {
+          "address": 4618020,
+          "before": "bed0c14c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cc1d0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5030464,
+      "offset": 836160,
+      "text": "insert into qk.dungeonCheck (uid,charactName,dungeonId,dungeonName,difficulty,mapCount,killMobCount,useCubepieceClearCount,hell,passingTime,clearInfo,success,leaveTime,num,namenum) values (%d,'%s',%d,'%s',%d,%d,%d,%d,%d,%d,%d,%d,now(),%d,'%s');",
+      "references": [
+        {
+          "address": 4622431,
+          "before": "ba40c24c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc240",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5030712,
+      "offset": 836408,
+      "text": "select task_id,reward_state,msg_state,msg_text,msg_single_text,is_steam_reward from qk.map_task where task_state=1 and map_name='%s';",
+      "references": [
+        {
+          "address": 4626714,
+          "before": "ba38c34c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc338",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4692062,
+          "before": "ba38c34c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc338",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5031248,
+      "offset": 836944,
+      "text": "select  code_id,code_name,code_num,code_odds from qk.map_code where code_state=1 and task_id=%s;",
+      "references": [
+        {
+          "address": 4629480,
+          "before": "ba50c54c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc550",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4694709,
+          "before": "ba50c54c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc550",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5031736,
+      "offset": 837432,
+      "text": "insert into qk.map_history (uid,charactName,dungeonId,dungeonName,difficulty,mapCount,killMobCount,useCubepieceClearCount,hell,passingTime,clearInfo,success,leaveTime,reward_state,is_captain,is_team,c_id,msg_text) values (%d,'%s',%d,'%s',%d,%d,%d,%d,%d,%d,%d,%d,now(),%d,%d,%d,%d,'%s');",
+      "references": [
+        {
+          "address": 4627658,
+          "before": "ba38c74c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc738",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4694256,
+          "before": "ba38c74c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cc738",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5032368,
+      "offset": 838064,
+      "text": "update qk.gift_task set task_last_time=unix_timestamp(now())/60 where  task_state = 1;",
+      "references": [
+        {
+          "address": 4648402,
+          "before": "beb0c94c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cc9b0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5032456,
+      "offset": 838152,
+      "text": "update qk.gift_task set task_last_time=unix_timestamp(now())/60 where  task_state = 1 and task_id='%s';",
+      "references": [
+        {
+          "address": 4648627,
+          "before": "ba08ca4c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cca08",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5032720,
+      "offset": 838416,
+      "text": "UPDATE qk.game_charts_config SET next_time = DATE_ADD(CURDATE(), INTERVAL jiangli_day DAY) + INTERVAL jiangli_hour HOUR WHERE status = 1;",
+      "references": [
+        {
+          "address": 4649739,
+          "before": "be10cb4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ccb10",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5032864,
+      "offset": 838560,
+      "text": "SELECT NAME, cid, price FROM qk.fightingcapacity WHERE price >= ",
+      "references": [
+        {
+          "address": 4649811,
+          "before": "baa0cb4c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4ccba0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5032992,
+      "offset": 838688,
+      "text": "select code_data,code_num,top_index from qk.game_charts_code where top_index > 0 order by top_index;",
+      "references": [
+        {
+          "address": 4649983,
+          "before": "be20cc4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ccc20",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4675598,
+          "before": "be20cc4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ccc20",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5033856,
+      "offset": 839552,
+      "text": "INSERT INTO qk.game_charts_logs (charts_day,logs) VALUES (NOW(),'",
+      "references": [
+        {
+          "address": 4652589,
+          "before": "be80cf4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ccf80",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4678212,
+          "before": "be80cf4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ccf80",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5033928,
+      "offset": 839624,
+      "text": "SELECT bubbleTime,bubbleCount,bubbleType FROM qk.billing;",
+      "references": [
+        {
+          "address": 4655261,
+          "before": "bec8cf4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ccfc8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5034560,
+      "offset": 840256,
+      "text": "select * from  ( SELECT task_id, task_name, task_type, region_id, room_id, user_num, code_num, gift_odds, gift_type, task_time, name2 FROM qk.gift_task WHERE task_state = 1 AND time_check_type!=1 AND task_last_time IS NOT NULL AND (task_last_time + task_time) < (unix_timestamp(now()) / 60) union all  SELECT task_id, task_name, task_type, region_id, room_id, user_num, code_num, gift_odds, gift_type, task_time, name2 FROM qk.gift_task WHERE task_state = 1 AND time_check_type=1  AND  concat(curdate(),' ',time_check) =  DATE_FORMAT(now(), '%Y-%m-%d %H:%i') and task_last_time IS NOT NULL  AND (task_last_time+1) < (unix_timestamp(now()) / 60)  ) b;",
+      "references": [
+        {
+          "address": 4658132,
+          "before": "be40d24c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cd240",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5035712,
+      "offset": 841408,
+      "text": "select cid,region,room from qk.gift_user;",
+      "references": [
+        {
+          "address": 4659677,
+          "before": "bec0d64c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cd6c0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5035760,
+      "offset": 841456,
+      "text": "select code_id,code_name,code_num,code_odds from qk.gift_code where  code_state = 1 and task_id='%s'  order by code_odds desc;",
+      "references": [
+        {
+          "address": 4661322,
+          "before": "baf0d64c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cd6f0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5035888,
+      "offset": 841584,
+      "text": "insert into qk.gift_history (task_id,create_time,content) values('",
+      "references": [
+        {
+          "address": 4661890,
+          "before": "be70d74c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cd770",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5036160,
+      "offset": 841856,
+      "text": "UPDATE qk.game_tongguan_config SET next_time = DATE_ADD(CURDATE(), INTERVAL jiangli_day DAY) + INTERVAL jiangli_hour HOUR WHERE status = 1;",
+      "references": [
+        {
+          "address": 4667851,
+          "before": "be80d84c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cd880",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5036304,
+      "offset": 842000,
+      "text": "select id,map_id,map_name,difficulty,num from qk.game_tonggguan_map where status=1;",
+      "references": [
+        {
+          "address": 4667879,
+          "before": "be10d94c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cd910",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5036392,
+      "offset": 842088,
+      "text": "select code_data,code_num,top_index from qk.game_tonggguan_code where top_index > 0 and tg_id='",
+      "references": [
+        {
+          "address": 4668210,
+          "before": "ba68d94c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cd968",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5036528,
+      "offset": 842224,
+      "text": "SELECT t2.charac_no, t1.* FROM ( SELECT MIN(dc1.passingTime) AS minPassingTime, dc1.charactName FROM qk.dungeonCheck dc1 LEFT JOIN ( SELECT charactName, MIN(passingTime) AS minTime FROM qk.dungeonCheck WHERE dungeonName = '",
+      "references": [
+        {
+          "address": 4668779,
+          "before": "baf0d94c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cd9f0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5037304,
+      "offset": 843000,
+      "text": "INSERT INTO qk.game_tongguan_logs (charts_day,logs) VALUES (NOW(),'",
+      "references": [
+        {
+          "address": 4667143,
+          "before": "bef8dc4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cdcf8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5037376,
+      "offset": 843072,
+      "text": "select min_zhanli,jiangli_day,jiangli_hour,min_baodi_zhanli from qk.fenghuo_charts_config where status = 1 and next_time is not null and DATE_FORMAT(next_time, '%Y-%m-%d %H') <= DATE_FORMAT(NOW(), '%Y-%m-%d %H') and (SELECT count(1) FROM qk.game_charts_logs WHERE DATE_FORMAT(charts_day, '%Y-%m-%d %H') = DATE_FORMAT(NOW(), '%Y-%m-%d %H')) =0;",
+      "references": [
+        {
+          "address": 4674745,
+          "before": "be40dd4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cdd40",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5037720,
+      "offset": 843416,
+      "text": "UPDATE qk.fenghuo_charts_config SET next_time = DATE_ADD(CURDATE(), INTERVAL jiangli_day DAY) + INTERVAL jiangli_hour HOUR WHERE status = 1;",
+      "references": [
+        {
+          "address": 4674940,
+          "before": "be98de4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cde98",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5037864,
+      "offset": 843560,
+      "text": "select CONVERT(unhex(hex(CONVERT(t3.charac_name USING latin1))) USING utf8) NAME,t1.cid,t1.zzs from (select aa.cid, sum(aa.sponsor) zzs from qk.cdk aa where to_days(aa.Redemptiontime) = to_days(now()) AND aa.exchange = 1 GROUP BY aa.cid) t1 left join qk.fightingcapacity AS t2 on t1.cid = t2.cid left join taiwan_cain.charac_info t3 on t3.charac_no = t1.cid where  t1.zzs>=",
+      "references": [
+        {
+          "address": 4675019,
+          "before": "ba28df4c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cdf28",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5038448,
+      "offset": 844144,
+      "text": "select code_data,code_num,top_index from qk.game_charts_code where top_index =0 order by top_index;",
+      "references": [
+        {
+          "address": 4678320,
+          "before": "be70e14c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce170",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5039105,
+      "offset": 844801,
+      "text": "delete from qk.dungeonCheck;",
+      "references": [
+        {
+          "address": 4667273,
+          "before": "be01e44c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce401",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5039608,
+      "offset": 845304,
+      "text": "Select speed From qk.robot limit 1;",
+      "references": [
+        {
+          "address": 4683956,
+          "before": "bef8e54c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce5f8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5039648,
+      "offset": 845344,
+      "text": "Select * From qk.qingkong_config limit 1",
+      "references": [
+        {
+          "address": 4685094,
+          "before": "be20e64c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce620",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5039696,
+      "offset": 845392,
+      "text": "Select * From qk.qingkong_config_v2 limit 1",
+      "references": [
+        {
+          "address": 4685814,
+          "before": "be50e64c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce650",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5039744,
+      "offset": 845440,
+      "text": "insert into qk.qfillegal (IUID,IUsername,IFile_md5,IMac_md5,MING,IKey_word,IIPAddress,ITime)  values (?,?,?,?,?,?,?,?);",
+      "references": [
+        {
+          "address": 4687284,
+          "before": "be80e64c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce680",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5039864,
+      "offset": 845560,
+      "text": "insert into qk.transaction (UID,accname,code,codenum,MING,ITime)  values (?,?,?,?,?,?);",
+      "references": [
+        {
+          "address": 4687838,
+          "before": "bef8e64c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce6f8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5040632,
+      "offset": 846328,
+      "text": "select msg_text,id from qk.map_history where reward_state=0;",
+      "references": [
+        {
+          "address": 4699599,
+          "before": "bef8e94c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4ce9f8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5040696,
+      "offset": 846392,
+      "text": "update qk.map_history set reward_state=1 where id=%s;",
+      "references": [
+        {
+          "address": 4699686,
+          "before": "ba38ea4c00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4cea38",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5040752,
+      "offset": 846448,
+      "text": "SELECT ax.uid, ax. PORT, ax.curvill, ax.curarea, ax.curx, ax.cury, ax.function_type, ax.ip, ax.discost FROM qk.Dummylist ax, taiwan_login.login_account_3 D WHERE D.login_status = 0 AND ax.uid = D.m_id;",
+      "references": [
+        {
+          "address": 4705510,
+          "before": "be70ea4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cea70",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5041224,
+      "offset": 846920,
+      "text": "select b.uid,IFNULL( b.msg_state, 0 ) msg_state_tmp, IFNULL( b.move_state, 0 ) move_state_tmp  from qk.qk_ai_user b;",
+      "references": [
+        {
+          "address": 4712843,
+          "before": "be48ec4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cec48",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5041344,
+      "offset": 847040,
+      "text": "select a.id,a.uid,IFNULL(b.msg_state,0) msg_state_tmp,IFNULL(b.move_state,0) move_state_tmp from qk.qk_ai_user_temp a left join qk.qk_ai_user b on a.uid=b.uid where a.id is not null and a.uid is not null and a.state=3;",
+      "references": [
+        {
+          "address": 4711988,
+          "before": "bec0ec4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cecc0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5041968,
+      "offset": 847664,
+      "text": "select ip_reg_control from qk.billing limit 1;",
+      "references": [
+        {
+          "address": 4736894,
+          "before": "be30ef4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cef30",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4740773,
+          "before": "be30ef4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cef30",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5042104,
+      "offset": 847800,
+      "text": "select ID from qk.regCdkey where cdkey=? and State=0;",
+      "references": [
+        {
+          "address": 4739286,
+          "before": "beb8ef4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cefb8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4743173,
+          "before": "beb8ef4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cefb8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5042248,
+      "offset": 847944,
+      "text": "update qk.regCdkey set State=1,accountname=? where cdkey=?;",
+      "references": [
+        {
+          "address": 4739955,
+          "before": "be48f04c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cf048",
+          "operandOffset": 1,
+          "operandBytes": 4
+        },
+        {
+          "address": 4743828,
+          "before": "be48f04c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cf048",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5044184,
+      "offset": 849880,
+      "text": "select is_open_up_pwd from qk.qingkong_config;",
+      "references": [
+        {
+          "address": 4746308,
+          "before": "bed8f74c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cf7d8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5045872,
+      "offset": 851568,
+      "text": "SELECT * FROM qk.fenghuo_newgonggao;",
+      "references": [
+        {
+          "address": 4763176,
+          "before": "be70fe4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cfe70",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5045912,
+      "offset": 851608,
+      "text": "SELECT t1.cid, CONVERT ( unhex( hex( CONVERT (t3.charac_name USING latin1))) USING utf8 ) NAME, IFNULL(t2.occupation, '\u672a\u83b7\u53d6\u804c\u4e1a'), t1.zzs FROM ( SELECT aa.cid, sum(aa.sponsor) zzs FROM qk.cdk aa WHERE to_days(aa.Redemptiontime) = to_days(now()) AND aa.exchange = 1 GROUP BY aa.cid ) t1 LEFT JOIN qk.fightingcapacity AS t2 ON t1.cid = t2.cid LEFT JOIN taiwan_cain.charac_info t3 ON t3.charac_no = t1.cid WHERE t1.zzs > ( SELECT t4.min_zhanli FROM qk.fenghuo_charts_config t4 WHERE t4. STATUS = 1 LIMIT 1 ) ORDER BY t1.ZZS DESC, t1.cid DESC LIMIT 15;",
+      "references": [
+        {
+          "address": 4763530,
+          "before": "be98fe4c00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4cfe98",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5046472,
+      "offset": 852168,
+      "text": "SELECT t1.cid, CONVERT ( unhex( hex( CONVERT (t3.charac_name USING latin1))) USING utf8 ) NAME, IFNULL(t2.occupation, '\u672a\u83b7\u53d6\u804c\u4e1a'), t1.zzs FROM ( SELECT aa.cid, sum(aa.sponsor) zzs FROM qk.cdk aa WHERE TO_DAYS(NOW()) - TO_DAYS(aa.Redemptiontime) = 1 AND aa.exchange = 1 GROUP BY aa.cid ) t1 LEFT JOIN qk.fightingcapacity AS t2 ON t1.cid = t2.cid LEFT JOIN taiwan_cain.charac_info t3 ON t3.charac_no = t1.cid WHERE t1.zzs > ( SELECT t4.min_zhanli FROM qk.fenghuo_charts_config t4 WHERE t4. STATUS = 1 LIMIT 1 ) ORDER BY t1.ZZS DESC, t1.cid DESC LIMIT 15;",
+      "references": [
+        {
+          "address": 4764106,
+          "before": "bec8004d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d00c8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5047032,
+      "offset": 852728,
+      "text": "SELECT min_zhanli FROM qk.game_charts_config WHERE STATUS = 1",
+      "references": [
+        {
+          "address": 4764727,
+          "before": "bef8024d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d02f8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5047344,
+      "offset": 853040,
+      "text": "SELECT DATE_FORMAT(next_time, '%Y-%m-%d %H:%i:%s') FROM qk.game_charts_config  where status = 1;",
+      "references": [
+        {
+          "address": 4766602,
+          "before": "be30044d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0430",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5047448,
+      "offset": 853144,
+      "text": "SELECT top_index,code_data,code_num FROM qk.game_charts_code;",
+      "references": [
+        {
+          "address": 4766781,
+          "before": "be98044d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0498",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5047816,
+      "offset": 853512,
+      "text": "SELECT * FROM qk.ui_channel_user WHERE uid = %d;",
+      "references": [
+        {
+          "address": 4767722,
+          "before": "ba08064d00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4d0608",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048008,
+      "offset": 853704,
+      "text": "select Name,blacklist from qk.fightingcapacity where CID=?;",
+      "references": [
+        {
+          "address": 4769138,
+          "before": "bec8064d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d06c8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048072,
+      "offset": 853768,
+      "text": "update qk.fightingcapacity set Lv=?,Name=?,price=?,blacklist=?,occupation=?,Equipment=? where CID=?;",
+      "references": [
+        {
+          "address": 4769262,
+          "before": "be08074d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0708",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048176,
+      "offset": 853872,
+      "text": "insert into qk.fightingcapacity (CID,Lv,Name,price,blacklist,occupation,equipment)  values (?,?,?,?,?,?,?);",
+      "references": [
+        {
+          "address": 4769534,
+          "before": "be70074d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0770",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048288,
+      "offset": 853984,
+      "text": "insert into qk.Listofcheats (UID,Name,QQ,behavior,Time) values (?,?,?,?,?);",
+      "references": [
+        {
+          "address": 4769950,
+          "before": "bee0074d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d07e0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048424,
+      "offset": 854120,
+      "text": "select netBarLink from qk.netBar where netBarID=%d and valid=1;",
+      "references": [
+        {
+          "address": 4770844,
+          "before": "be68084d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0868",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048488,
+      "offset": 854184,
+      "text": "select netBarLink from qk.netBar where netBarID=(select netBarID from d_taiwan.accounts A where A.UID=%d) and valid=1;",
+      "references": [
+        {
+          "address": 4771308,
+          "before": "bea8084d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d08a8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048608,
+      "offset": 854304,
+      "text": "select id,jiangli_day,jiangli_hour,next_time from qk.game_tongguan_config where status=1;",
+      "references": [
+        {
+          "address": 4772762,
+          "before": "be20094d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0920",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048704,
+      "offset": 854400,
+      "text": "select id,difficulty,map_name from qk.game_tonggguan_map where status=1;",
+      "references": [
+        {
+          "address": 4773338,
+          "before": "be80094d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0980",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5048784,
+      "offset": 854480,
+      "text": "select map_name,difficulty,num from qk.game_tonggguan_map c where status=1 and id=?;",
+      "references": [
+        {
+          "address": 4773959,
+          "before": "bed0094d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d09d0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5049488,
+      "offset": 855184,
+      "text": "SELECT top_index,code_data,code_num FROM qk.game_tonggguan_code WHERE tg_id =?;",
+      "references": [
+        {
+          "address": 4775829,
+          "before": "be900c4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0c90",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5049568,
+      "offset": 855264,
+      "text": "SELECT code_data, code_num FROM qk.game_charts_code, qk.game_charts_config WHERE top_index = 0 AND is_mobai = 1",
+      "references": [
+        {
+          "address": 4777265,
+          "before": "bee00c4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0ce0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5049680,
+      "offset": 855376,
+      "text": "select id from qk.game_charts_mobai where DATE_FORMAT(NOW(), '%Y-%m-%d')=DATE_FORMAT(mobai_time, '%Y-%m-%d') and cid=",
+      "references": [
+        {
+          "address": 4777311,
+          "before": "be500d4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0d50",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5049800,
+      "offset": 855496,
+      "text": "update qk.fightingcapacity set mobai_num=mobai_num+1 where cid=%d;",
+      "references": [
+        {
+          "address": 4777717,
+          "before": "bac80d4d00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4d0dc8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5049872,
+      "offset": 855568,
+      "text": "INSERT INTO qk.game_charts_mobai (cid,mobai_time,mobai_cid) VALUES (%d,NOW(),%d)",
+      "references": [
+        {
+          "address": 4777786,
+          "before": "ba100e4d00",
+          "mnemonic": "mov",
+          "operands": "edx, 0x4d0e10",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5050216,
+      "offset": 855912,
+      "text": "select cid from qk.fightingcapacity WHERE blacklist = '0'order by price desc limit 1;",
+      "references": [
+        {
+          "address": 4779127,
+          "before": "be680f4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d0f68",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5050448,
+      "offset": 856144,
+      "text": "SELECT cid FROM qk.fightingcapacity WHERE blacklist = '0'ORDER BY price DESC LIMIT 1 OFFSET 1;",
+      "references": [
+        {
+          "address": 4780647,
+          "before": "be50104d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d1050",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5050544,
+      "offset": 856240,
+      "text": "SELECT cid FROM qk.fightingcapacity WHERE blacklist = '0'ORDER BY price DESC LIMIT 1 OFFSET 2;",
+      "references": [
+        {
+          "address": 4782167,
+          "before": "beb0104d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d10b0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5073856,
+      "offset": 879552,
+      "text": "alter table qk.dungeonCheck add namenum varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '\u961f\u4f0d\u4fe1\u606f';",
+      "references": [
+        {
+          "address": 4816999,
+          "before": "bec06b4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d6bc0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5073992,
+      "offset": 879688,
+      "text": "alter table qk.fightingcapacity add occupation varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '\u804c\u4e1a';",
+      "references": [
+        {
+          "address": 4816463,
+          "before": "be486c4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d6c48",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5074128,
+      "offset": 879824,
+      "text": "alter table qk.fightingcapacity add Equipment varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '\u88c5\u5907';",
+      "references": [
+        {
+          "address": 4816399,
+          "before": "bed06c4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d6cd0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5080960,
+      "offset": 886656,
+      "text": "alter table qk.qingkong_config add column is_open_up_pwd  int(11) default NULL;",
+      "references": [
+        {
+          "address": 4812205,
+          "before": "be80874d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d8780",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081040,
+      "offset": 886736,
+      "text": "alter table qk.qingkong_config add column temp_1 mediumtext default NULL;",
+      "references": [
+        {
+          "address": 4812224,
+          "before": "bed0874d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d87d0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081120,
+      "offset": 886816,
+      "text": "alter table qk.qingkong_config add column temp_2 mediumtext default NULL;",
+      "references": [
+        {
+          "address": 4812243,
+          "before": "be20884d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d8820",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081200,
+      "offset": 886896,
+      "text": "alter table qk.qingkong_config add column temp_3 mediumtext default NULL;",
+      "references": [
+        {
+          "address": 4812262,
+          "before": "be70884d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d8870",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081280,
+      "offset": 886976,
+      "text": "alter table qk.qingkong_config add column temp_4 mediumtext default NULL;",
+      "references": [
+        {
+          "address": 4812281,
+          "before": "bec0884d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d88c0",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081360,
+      "offset": 887056,
+      "text": "alter table qk.qingkong_config add column temp_5 mediumtext default NULL;",
+      "references": [
+        {
+          "address": 4812300,
+          "before": "be10894d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d8910",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081440,
+      "offset": 887136,
+      "text": "update qk.qingkong_config set is_open_up_pwd=1,temp_1='0',temp_2='0',temp_3='0',temp_4='0',temp_5='0';",
+      "references": [
+        {
+          "address": 4812319,
+          "before": "be60894d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d8960",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081544,
+      "offset": 887240,
+      "text": "alter table qk.gift_task add column time_check_type int(11) not null;",
+      "references": [
+        {
+          "address": 4816345,
+          "before": "bec8894d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d89c8",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5081616,
+      "offset": 887312,
+      "text": "alter table qk.gift_task add column time_check  varchar(255) not null;",
+      "references": [
+        {
+          "address": 4816364,
+          "before": "be108a4d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4d8a10",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5095520,
+      "offset": 901216,
+      "text": "alter table qk.robot add column aiState int(11) UNSIGNED NOT NULL DEFAULT 1;alter table qk.robot add column speed int(11) UNSIGNED NOT NULL DEFAULT 200;",
+      "references": [
+        {
+          "address": 4815991,
+          "before": "be60c04d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4dc060",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5095680,
+      "offset": 901376,
+      "text": "alter table qk.Dummylist add column ip varchar(100)  default NULL;\t\t\t\t\t\t\t\t\t\talter table qk.Dummylist add column function_type int(11)  default NULL;\t\t\t\t\t\t\t\t\t\talter table qk.Dummylist add column discost int(11)  default NULL;",
+      "references": [
+        {
+          "address": 4818751,
+          "before": "be00c14d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4dc100",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    },
+    {
+      "address": 5096065,
+      "offset": 901761,
+      "text": "delete from qk.Dummylist;",
+      "references": [
+        {
+          "address": 4818801,
+          "before": "be81c24d00",
+          "mnemonic": "mov",
+          "operands": "esi, 0x4dc281",
+          "operandOffset": 1,
+          "operandBytes": 4
+        }
+      ]
+    }
+  ]
+}

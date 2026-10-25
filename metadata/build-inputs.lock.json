@@ -2089,8 +2089,9 @@
     },
     {
       "path": "services/game/plugin-assets/frida/frida.js",
-      "bytes": 284009,
-      "sha256": "3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d"
+      "bytes": 284624,
+      "sha256": "bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843",
+      "original_sha256": "3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d"
     },
     {
       "path": "services/game/plugin-assets/frida/frida.so",
@@ -2104,8 +2105,8 @@
     },
     {
       "path": "services/game/plugin-assets/manifest.json",
-      "bytes": 9248,
-      "sha256": "9917077954343dd1fd67b86b289225a91c1fbbf0d61cff615b954a283100bc87"
+      "bytes": 9568,
+      "sha256": "7dd557211de5ce63480879a157d6e132739e3f452943531ea5933c12cd6ef6e6"
     },
     {
       "path": "services/game/plugin-assets/seed/vipai.sql",

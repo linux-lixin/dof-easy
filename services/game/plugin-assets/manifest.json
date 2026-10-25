@@ -3,7 +3,9 @@
     "DP2 report.create/send/close replaced with no-network no-op",
     "DP2 SQL helpers validate numeric arguments and use runtime MYSQL_PWD",
     "Historical logs omitted; PVF ZIP kept as an unapplied archive",
-    "Frida database password removed from template; supplied per instance at runtime"
+    "Frida database password removed from template; supplied per instance at runtime",
+    "Combined DP2/Frida delegates items 2021458801 and 2021458802 to DP2; Frida-only keeps its handlers",
+    "Frida task 690000119 accepts numeric/string IDs; shared recycle item processes only the first eligible equipment/avatar/creature"
   ],
   "excluded": [
     {
@@ -13,7 +15,7 @@
   ],
   "files": [
     {
-      "member": "dp2/\u5bfc\u5165pvf\u7684\u6587\u4ef6.zip",
+      "member": "dp2/导入pvf的文件.zip",
       "mode": "0o644",
       "path": "archive/dp2-pvf-patch.zip",
       "sha256": "101e65b3f4e08e4567829b5bbd98568fca90ba4359721ed4b35b00a1bd14b4c1",
@@ -219,9 +221,10 @@
       "member": "home/neople/game/frida.js",
       "mode": "0o644",
       "path": "frida/frida.js",
-      "sha256": "3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d",
-      "size": 284009,
-      "source": "dp2frida__frida.tar.gz"
+      "sha256": "bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843",
+      "size": 284624,
+      "source": "dp2frida__frida.tar.gz",
+      "original_sha256": "3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d"
     },
     {
       "member": "home/neople/game/frida.so",

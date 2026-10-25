@@ -1,4 +1,4 @@
-// Run with node tests/unit/qk-scope.cjs; mocked Frida, no network or real credentials.
+// Run with node tests/unit/dof/adapter-scope.cjs; mocked Frida, no network or real credentials.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -8,7 +8,7 @@ let interceptor;
 const pointer = value => ({ isNull: () => false, readUtf8String: () => value });
 const secret = pointer('test-only-credential');
 vm.runInNewContext(fs.readFileSync(path.join(__dirname,
-  '../../services/game/runtime/ubuntu/qk-db-adapter.js'), 'utf8'), {
+  '../../../services/game/runtime/ubuntu/gateway/db_adapter.js'), 'utf8'), {
   Process: { arch: 'ia32', findModuleByAddress: address => address },
   Module: { getExportByName: () => 'getenv' },
   NativeFunction: function () { return () => secret; },

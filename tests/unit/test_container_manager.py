@@ -26,7 +26,9 @@ class ContainerManager(unittest.TestCase):
         context = ROOT / 'services/game'
         rules = (context / 'docker/ubuntu/Dockerfile.dockerignore').read_text().splitlines()
         for resource in ('vipai86-pvf', 'vipai86-assets', 'assets/home/template/init/Script.tgz',
-                         'assets/home/template/init/Script.pvf', 'assets/home/template/init/df_game_r'):
+                         'assets/home/template/init/Script.pvf', 'assets/home/template/init/df_game_r',
+                         'assets/root/QK', 'assets/root/qk_plugin.so', 'assets/root/qingkong',
+                         'assets/home/template/neople/game/libantisvrinline.so'):
             self.assertIn(resource, rules)
 
     def setUp(self):
@@ -67,6 +69,39 @@ class ContainerManager(unittest.TestCase):
         with self.assertRaises(OSError):
             manager.create_instance(instance, self.args, self.row, self.archive)
         self.assertEqual((instance / '.env').read_bytes(), before)
+
+    def test_raid_defaults_off_and_incompatible_enable_preserves_instance(self):
+        instance = self.root / 'main'
+        values = manager.create_instance(instance, self.args, self.row, self.archive)
+        self.assertEqual(values['RAID_EXTENSION'], 'off')
+        before = (instance / '.env').read_bytes()
+        with patch.object(manager, 'instance_path', return_value=instance), patch.object(manager, 'docker_check'), \
+             patch.object(manager, 'catalog', return_value={70: self.row}), \
+             patch.object(manager, 'start') as start:
+            with self.assertRaisesRegex(ValueError, 'DP2'):
+                manager.main(['config', '--raid-extension', 'on', '--plugins', 'frida'])
+            start.assert_not_called()
+        self.assertEqual((instance / '.env').read_bytes(), before)
+
+    def test_disabling_raid_can_recover_from_missing_optional_assets(self):
+        instance = self.root / 'main'
+        values = manager.create_instance(instance, self.args, self.row, self.archive)
+        values.update(PLUGIN_MODE='dp2', RAID_EXTENSION='on')
+        manager.write_env(instance / '.env', values)
+        with patch.object(manager, 'instance_path', return_value=instance), patch.object(manager, 'docker_check'), \
+             patch.object(manager, 'catalog', return_value={70: self.row}), \
+             patch.object(manager, 'start') as start:
+            manager.main(['config', '--raid-extension', 'off'])
+            start.assert_called_once_with(instance, recreate=True)
+        self.assertEqual(manager.read_env(instance)['RAID_EXTENSION'], 'off')
+
+    def test_raid_rejects_missing_resources_before_publishing_new_instance(self):
+        self.args.plugins = 'dp2'
+        self.args.raid_extension = 'on'
+        self.args.dof_assets = self.root / 'missing'
+        with self.assertRaises(ValueError):
+            manager.create_instance(self.root / 'main', self.args, self.row, self.archive)
+        self.assertFalse((self.root / 'main').exists())
 
     def test_tampered_game_rejected_and_separate_instances_have_separate_secrets(self):
         first = manager.create_instance(self.root / 'main', self.args, self.row, self.archive)
@@ -109,6 +144,21 @@ class ContainerManager(unittest.TestCase):
             for line in rules.splitlines():
                 if '--dports' in line:
                     self.assertLessEqual(len(line.split('--dports ')[1].split()[0].split(',')), 15)
+
+    def test_game_binding_and_explicit_client_sources(self):
+        values = manager.initial_values(self.args, self.row, self.root / 'main')
+        values['GAME_BIND_IP'] = '0.0.0.0'
+        self.assertTrue(all(p.startswith('0.0.0.0:') for p in manager.ports_override(values)['services']['netguard']['ports']))
+        self.assertEqual(values['BIND_IP'], '127.0.0.1')
+        with patch.dict('os.environ', {'NETGUARD_ALLOWED_CLIENTS': '192.0.2.17/32'}):
+            rules = guard.render_rules(['172.30.0.2'])
+            ingress = [line for line in rules.splitlines() if '--dports' in line]
+            self.assertTrue(ingress)
+            self.assertTrue(all('-s 192.0.2.17/32' in line for line in ingress))
+            self.assertNotIn('--dports', guard.render_rules(ipv6=True))
+            self.assertIn('-d 172.30.0.2/32 -p tcp --dport 3306', rules)
+        with patch.dict('os.environ', {'NETGUARD_ALLOWED_CLIENTS': 'invalid'}):
+            with self.assertRaises(ValueError): guard.render_rules(['172.30.0.2'])
 
     def test_executable_profile_checks_abi_and_selected_hash(self):
         path = self.root / 'df_game_r'
@@ -225,12 +275,16 @@ class ContainerManager(unittest.TestCase):
         settings = {'registry': 'ghcr.io/backup-owner', 'tag': 'v3'}
         manager.create_instance(instance, self.args, self.row, self.archive, settings)
         with patch.object(manager, 'STATE', self.root / 'state'), \
-             patch.object(manager, 'compose', return_value=subprocess.CompletedProcess([], 0, 'db\n')), \
+             patch.object(manager, 'compose', return_value=subprocess.CompletedProcess([], 0, 'db\n')) as compose, \
              patch.object(manager, 'run') as docker:
             manager.backup(instance)
             command = docker.call_args.args[0]
             self.assertIn('ghcr.io/backup-owner/dof-easy-game:v3', command)
             self.assertNotIn('dof-easy-game:local', command)
+            dump = next(call.args[-1] for call in compose.call_args_list if any('mysqldump' in str(arg) for arg in call.args))
+            self.assertIn('--all-databases', dump)
+            self.assertIn('--ignore-table=mysql.innodb_index_stats', dump)
+            self.assertIn('--ignore-table=mysql.innodb_table_stats', dump)
 
     def test_registry_settings_persist_without_touching_docker(self):
         with patch.object(manager, 'STATE', self.root / 'state'), patch.object(manager, 'docker_check') as docker:

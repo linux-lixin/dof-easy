@@ -2285,7 +2285,16 @@ function enable_createCreator(){
         cw.flush();
     });
 }
+// DOF_DP2_ITEM_OWNERSHIP_V1: DP2 owns these items only in the combined mode.
+function dp2_owns_item(item_id) {
+    if (String(item_id) !== '2021458801' && String(item_id) !== '2021458802') return false;
+    var getenv = new NativeFunction(Module.getExportByName(null, 'getenv'),
+        'pointer', ['pointer'], { abi: 'sysv' });
+    var mode = getenv(Memory.allocUtf8String('PLUGIN_MODE'));
+    return !mode.isNull() && mode.readUtf8String() === 'dp2-frida';
+}
 function use_item_handler(user, item_id){
+    if (dp2_owns_item(item_id)) return;
     // 任务清除券，  任务完成券 成就任务完成券 主线等
 
 
@@ -2302,7 +2311,7 @@ function use_item_handler(user, item_id){
         
     }
 
-    if('690000119' === item_id)
+    if('690000119' === String(item_id))
     {
         //以接任务完成券
         clear_doing_quest(user);
@@ -2330,21 +2339,11 @@ function use_item_handler(user, item_id){
     }
 
 
-    if('202145880' == item_id){
-        // 装备回收
-        zbhs(user)
+    // DOF_SINGLE_RECYCLE_V1: consume at most one matching object per use.
+    // Preserve the shared item ID; try equipment, then avatar, then creature.
+    if ('202145880' == item_id) {
+        if (!zbhs(user) && !szhs(user)) cwhs(user);
     }
-
-    if('202145880' == item_id){
-        // 时装回收
-        szhs(user)
-    }
-
-    if('202145880' == item_id){
-        // 宠物回收
-        cwhs(user)
-    }
-
 
     if ('7576' == item_id) {
 
@@ -2800,8 +2799,10 @@ for (var i=0 ;i<arr.length ;i++)
         CUser_SendUpdateItemList(user, 1, 0, 9); 
 	api_CUser_AddItem(user, 3285, 100); 
     api_GameWorld_SendNotiPacketMessage('装备回收成功！', 14);
+    return true;
 }
 
+    return false;
 }
 
 
@@ -2820,8 +2821,10 @@ for (var i=0 ;i<arr.length ;i++)
     CUser_send_itemspace(user,ENUM_ITEMSPACE_AVATAR);//更新时装栏
 	api_CUser_AddItem(user, 3285, 100); 
     api_GameWorld_SendNotiPacketMessage('时装回收成功！', 14);
+    return true;
 }
 
+    return false;
 }
 
 
@@ -2840,8 +2843,10 @@ for (var i=0 ;i<arr.length ;i++)
     CUser_send_itemspace(user,ENUM_ITEMSPACE_CREATURE);//更新宠物栏
 	api_CUser_AddItem(user, 3285, 100); 
     api_GameWorld_SendNotiPacketMessage('宠物回收成功！', 14);
+    return true;
 }
 
+    return false;
 }
 
 function randomNumber() {

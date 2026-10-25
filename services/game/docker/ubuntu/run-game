@@ -107,7 +107,7 @@ arch = 'i386' if head[4] == 1 else 'amd64'
 environment = dict(os.environ)
 environment.pop('LD_LIBRARY_PATH', None)
 if arch == 'i386':
-    environment['LD_LIBRARY_PATH'] = '/opt/dnf/compat/i386'
+    environment['LD_LIBRARY_PATH'] = '/opt/dof-easy/lib/i386:/opt/dnf/compat/i386'
 # The adapter passes preloads through a neutral name so Python itself never loads them.
 preload = environment.pop('DNF_GAME_PRELOAD', '')
 environment.pop('LD_PRELOAD', None)
@@ -119,8 +119,23 @@ if binary.name == 'df_game_r':
     entries = [name for name in preload.split(':') if name]
     selected = []
     if mode in ('dp2', 'dp2-frida'): selected.append('/dp2/libdp2pre.so')
-    if mode in ('frida', 'dp2-frida'):
+    raid = environment.get('RAID_EXTENSION', 'off')
+    launcher = environment.get('LAUNCHER_MODE', 'dof')
+    if launcher not in ('dof', 'native'):
+        raise SystemExit('invalid LAUNCHER_MODE')
+    native_required = raid == 'on' or launcher == 'native'
+    if raid not in ('on', 'off') or (raid == 'on' and mode not in ('dp2', 'dp2-frida')):
+        raise SystemExit('invalid raid extension / DP2 combination')
+    if mode in ('frida', 'dp2-frida') or native_required:
         selected.extend(['/opt/dnf/compat/i386/libfrida-compat.so', '/home/neople/game/frida.so'])
+    if native_required:
+        import time
+        deadline = time.monotonic() + 120
+        while not Path('/run/dof-easy/gateway-ready').is_file():
+            if time.monotonic() >= deadline:
+                raise SystemExit('Native gateway not ready')
+            time.sleep(0.5)
+        selected.append('/opt/dof-easy/lib/libdof-plugin.so')
     for loader in selected:
         if not Path(loader).is_file(): raise SystemExit('missing selected plugin: '+loader)
         if loader not in entries: entries.append(loader)

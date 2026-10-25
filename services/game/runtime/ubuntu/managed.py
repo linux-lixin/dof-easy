@@ -17,7 +17,7 @@ def synchronize(data, source, history):
     if data.is_symlink() or marker.is_symlink():
         raise ValueError('managed runtime must not be a symlink')
     if not marker.exists():
-        allowed={'publickey.pem','privatekey.pem','Script.pvf','df_game_r'}
+        allowed={'publickey.pem','privatekey.pem','Script.pvf','df_game_r','dof-easy'}
         unexpected=[p.name for p in data.iterdir() if p.name not in allowed] if data.exists() else []
         if unexpected:
             raise ValueError('unmarked runtime directory; use a new Ubuntu directory: '+', '.join(unexpected))

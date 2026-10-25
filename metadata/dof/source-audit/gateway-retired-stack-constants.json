@@ -1,0 +1,2430 @@
+{
+  "sourceSha256": "67553a3b45de80ebea5f767f6e3a51d577d2cbb6c6647bd4c97037cb50a41f9b",
+  "scope": "Obsolete stack SQL constants; adapter supplies complete new SQL; MOV instructions and writes retained",
+  "instructions": [
+    {
+      "address": 4464393,
+      "call": 4464670,
+      "before": "48be73656c6563742063",
+      "immediateOffset": 2,
+      "register": "rsi",
+      "after": "48be2020202020202020"
+    },
+    {
+      "address": 4464425,
+      "call": 4464670,
+      "before": "48be66675f636f6e7465",
+      "immediateOffset": 2,
+      "register": "rsi",
+      "after": "48be2020202020202020"
+    },
+    {
+      "address": 4464435,
+      "call": 4464670,
+      "before": "48b96e742c6366675f74",
+      "immediateOffset": 2,
+      "register": "rcx",
+      "after": "48b92020202020202020"
+    },
+    {
+      "address": 4464452,
+      "call": 4464670,
+      "before": "48be7970652c5549442c",
+      "immediateOffset": 2,
+      "register": "rsi",
+      "after": "48be2020202020202020"
+    },
+    {
+      "address": 4464476,
+      "call": 4464670,
+      "before": "48b966756e6374696f6e",
+      "immediateOffset": 2,
+      "register": "rcx",
+      "after": "48b92020202020202020"
+    },
+    {
+      "address": 4464486,
+      "call": 4464670,
+      "before": "48be5f74797065206672",
+      "immediateOffset": 2,
+      "register": "rsi",
+      "after": "48be2020202020202020"
+    },
+    {
+      "address": 4464510,
+      "call": 4464670,
+      "before": "48b96f6d20716b2e526f",
+      "immediateOffset": 2,
+      "register": "rcx",
+      "after": "48b92020202020202020"
+    },
+    {
+      "address": 4464520,
+      "call": 4464670,
+      "before": "48be626f745f7374616c",
+      "immediateOffset": 2,
+      "register": "rsi",
+      "after": "48be2020202020202020"
+    },
+    {
+      "address": 4464551,
+      "call": 4464670,
+      "before": "48b96c5f636f6e666967",
+      "immediateOffset": 2,
+      "register": "rcx",
+      "after": "48b92020202020202020"
+    },
+    {
+      "address": 4464561,
+      "call": 4464670,
+      "before": "48be2077686572652073",
+      "immediateOffset": 2,
+      "register": "rsi",
+      "after": "48be2020202020202020"
+    },
+    {
+      "address": 4464585,
+      "call": 4464670,
+      "before": "48b9746174653d312061",
+      "immediateOffset": 2,
+      "register": "rcx",
+      "after": "48b92020202020202020"
+    },
+    {
+      "address": 4464602,
+      "call": 4464670,
+      "before": "48be6e64206366675f74",
+      "immediateOffset": 2,
+      "register": "rsi",
+      "after": "48be2020202020202020"
+    },
+    {
+      "address": 4464626,
+      "call": 4464670,
+      "before": "48b979706520696e2831",
+      "immediateOffset": 2,
+      "register": "rcx",
+      "after": "48b92020202020202020"
+    },
+    {
+      "address": 4633043,
+      "call": 4633128,
+      "before": "48b853656c6563742073",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4633077,
+      "call": 4633128,
+      "before": "48b8706565642046726f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4633094,
+      "call": 4633128,
+      "before": "48b86d20716b2e526f62",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4633111,
+      "call": 4633128,
+      "before": "48b86f74206c696d6974",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4645148,
+      "call": 4645314,
+      "before": "48b873656c6563742069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4645179,
+      "call": 4645314,
+      "before": "48b8642c7569642c6169",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4645204,
+      "call": 4645314,
+      "before": "48b85f747970652c6169",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4645229,
+      "call": 4645314,
+      "before": "48b85f737065616b2066",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4645246,
+      "call": 4645314,
+      "before": "48b8726f6d20716b2e61",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4645263,
+      "call": 4645314,
+      "before": "48b8695f737973207768",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4645280,
+      "call": 4645314,
+      "before": "48b86572652061695f73",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4684241,
+      "call": 4684338,
+      "before": "48b853656c6563742061",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4684275,
+      "call": 4684338,
+      "before": "48b86953746174652046",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4684292,
+      "call": 4684338,
+      "before": "48b8726f6d20716b2e72",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4684309,
+      "call": 4684338,
+      "before": "48b86f626f74206c696d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686553,
+      "call": 4686757,
+      "before": "48b853656c6563742073",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686587,
+      "call": 4686757,
+      "before": "48b865616c5f69702c20",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686604,
+      "call": 4686757,
+      "before": "48b87365616c5f6d6163",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686621,
+      "call": 4686757,
+      "before": "48b82c207365616c5f75",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686638,
+      "call": 4686757,
+      "before": "48b869642c207365616c",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686655,
+      "call": 4686757,
+      "before": "48b85f616e6e6f756e63",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686672,
+      "call": 4686757,
+      "before": "48b8656d656e742c2073",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686689,
+      "call": 4686757,
+      "before": "48b865616c5f636f6e74",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686706,
+      "call": 4686757,
+      "before": "48b8656e742046726f6d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686723,
+      "call": 4686757,
+      "before": "48b820716b2e7469746c",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4686740,
+      "call": 4686757,
+      "before": "48b86573206c696d6974",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697437,
+      "call": 4697624,
+      "before": "48b873656c6563742069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697471,
+      "call": 4697624,
+      "before": "48b8642c61695f6d7367",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697488,
+      "call": 4697624,
+      "before": "48b82c61695f7a68616e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697505,
+      "call": 4697624,
+      "before": "48b86a69652c61695f79",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697522,
+      "call": 4697624,
+      "before": "48b86973752c61695f73",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697539,
+      "call": 4697624,
+      "before": "48b86c6565702066726f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697556,
+      "call": 4697624,
+      "before": "48b86d20716b2e716b5f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697573,
+      "call": 4697624,
+      "before": "48b86169207768657265",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697590,
+      "call": 4697624,
+      "before": "48b82061695f73746174",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4697607,
+      "call": 4697624,
+      "before": "48b8653d31206c696d69",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701195,
+      "call": 4701318,
+      "before": "48b853454c4543542068",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701226,
+      "call": 4701318,
+      "before": "48b8685f746578742046",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701250,
+      "call": 4701318,
+      "before": "48b8524f4d20716b2e71",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701267,
+      "call": 4701318,
+      "before": "48b86b5f61695f686820",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701284,
+      "call": 4701318,
+      "before": "48b87768657265206868",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701301,
+      "call": 4701318,
+      "before": "48b85f7374617465203d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701821,
+      "call": 4702063,
+      "before": "48b873656c6563742064",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701852,
+      "call": 4702063,
+      "before": "48b86974755f69642c66",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701876,
+      "call": 4702063,
+      "before": "48b8616e676a69616e5f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701893,
+      "call": 4702063,
+      "before": "48b869642c785f6d696e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701910,
+      "call": 4702063,
+      "before": "48b82c785f6d61782c79",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701927,
+      "call": 4702063,
+      "before": "48b85f6d696e2c795f6d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701944,
+      "call": 4702063,
+      "before": "48b861782c66616e676a",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701961,
+      "call": 4702063,
+      "before": "48b869616e5f6d61785f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701978,
+      "call": 4702063,
+      "before": "48b874696d652066726f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4701995,
+      "call": 4702063,
+      "before": "48b86d20716b2e716b5f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4702012,
+      "call": 4702063,
+      "before": "48b861695f6d61702077",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4702029,
+      "call": 4702063,
+      "before": "48b86865726520646974",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4702046,
+      "call": 4702063,
+      "before": "48b8755f73746174653d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4704132,
+      "call": 4704275,
+      "before": "48b873656c6563742069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4704156,
+      "call": 4704275,
+      "before": "48b8642c7569642c6169",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4704173,
+      "call": 4704275,
+      "before": "48b85f747970652c6169",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4704190,
+      "call": 4704275,
+      "before": "48b85f737065616b2066",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4704207,
+      "call": 4704275,
+      "before": "48b8726f6d20716b2e61",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4704224,
+      "call": 4704275,
+      "before": "48b8695f737973207768",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4704241,
+      "call": 4704275,
+      "before": "48b86572652061695f73",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737133,
+      "call": 4737327,
+      "before": "48b873656c6563742049",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737164,
+      "call": 4737327,
+      "before": "48b8442066726f6d2071",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737187,
+      "call": 4737327,
+      "before": "48b86b2e71696e676b6f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737207,
+      "call": 4737327,
+      "before": "48b86e675f636f6e6669",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737235,
+      "call": 4737327,
+      "before": "48b86720776865726520",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737263,
+      "call": 4737327,
+      "before": "48b87377697463685f72",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737291,
+      "call": 4737327,
+      "before": "48b8656743646b65793d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4737969,
+      "call": 4738176,
+      "before": "48b873656c6563742072",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4738000,
+      "call": 4738176,
+      "before": "48b86567747970652c72",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4738020,
+      "call": 4738176,
+      "before": "48b865676e756d626572",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4738048,
+      "call": 4738176,
+      "before": "48b82066726f6d20716b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4738076,
+      "call": 4738176,
+      "before": "48b82e62696c6c696e67",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4738104,
+      "call": 4738176,
+      "before": "48b8206c696d69742031",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741002,
+      "call": 4741196,
+      "before": "48b873656c6563742049",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741033,
+      "call": 4741196,
+      "before": "48b8442066726f6d2071",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741056,
+      "call": 4741196,
+      "before": "48b86b2e71696e676b6f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741076,
+      "call": 4741196,
+      "before": "48b86e675f636f6e6669",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741104,
+      "call": 4741196,
+      "before": "48b86720776865726520",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741132,
+      "call": 4741196,
+      "before": "48b87377697463685f72",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741160,
+      "call": 4741196,
+      "before": "48b8656743646b65793d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741815,
+      "call": 4742029,
+      "before": "48b873656c6563742072",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741846,
+      "call": 4742029,
+      "before": "48b86567747970652c72",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741866,
+      "call": 4742029,
+      "before": "48b865676e756d626572",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741894,
+      "call": 4742029,
+      "before": "48b82066726f6d20716b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741922,
+      "call": 4742029,
+      "before": "48b82e62696c6c696e67",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4741950,
+      "call": 4742029,
+      "before": "48b8206c696d69742031",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4745565,
+      "call": 4745679,
+      "before": "48b873656c6563742075",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4745596,
+      "call": 4745679,
+      "before": "48b86964736563757265",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4745616,
+      "call": 4745679,
+      "before": "48b82066726f6d20716b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4745633,
+      "call": 4745679,
+      "before": "48b82e62696c6c696e67",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4745650,
+      "call": 4745679,
+      "before": "48b8206c696d69742031",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4752819,
+      "call": 4752923,
+      "before": "48b873656c6563742075",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4752843,
+      "call": 4752923,
+      "before": "48b86964736563757265",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4752860,
+      "call": 4752923,
+      "before": "48b82066726f6d20716b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4752877,
+      "call": 4752923,
+      "before": "48b82e62696c6c696e67",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4752894,
+      "call": 4752923,
+      "before": "48b8206c696d69742031",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762293,
+      "call": 4762562,
+      "before": "48b853454c454354204e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762324,
+      "call": 4762562,
+      "before": "48b8414d452c20707269",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762348,
+      "call": 4762562,
+      "before": "48b863652c204c762c20",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762375,
+      "call": 4762562,
+      "before": "48b8626c61636b6c6973",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762392,
+      "call": 4762562,
+      "before": "48b8742046524f4d2071",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762409,
+      "call": 4762562,
+      "before": "48b86b2e666967687469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762426,
+      "call": 4762562,
+      "before": "48b86e67636170616369",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762443,
+      "call": 4762562,
+      "before": "48b87479207072696365",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762460,
+      "call": 4762562,
+      "before": "48b82057484552452062",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762477,
+      "call": 4762562,
+      "before": "48b86c61636b6c697374",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762494,
+      "call": 4762562,
+      "before": "48b8203d2030204f5244",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762511,
+      "call": 4762562,
+      "before": "48b84552204259207072",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762528,
+      "call": 4762562,
+      "before": "48b86963652044455343",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4762545,
+      "call": 4762562,
+      "before": "48b8204c494d49542030",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4771765,
+      "call": 4771857,
+      "before": "48b873656c6563742044",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4771789,
+      "call": 4771857,
+      "before": "48b858572066726f6d20",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4771806,
+      "call": 4771857,
+      "before": "48b8716b2e636f6e6669",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4771823,
+      "call": 4771857,
+      "before": "48b86720776865726520",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4771840,
+      "call": 4771857,
+      "before": "48b86c696d697420313b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4772277,
+      "call": 4772362,
+      "before": "48b873656c6563742044",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4772311,
+      "call": 4772362,
+      "before": "48b8474a5a2066726f6d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4772328,
+      "call": 4772362,
+      "before": "48b820716b2e636f6e66",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4772345,
+      "call": 4772362,
+      "before": "48b86967206c696d6974",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808838,
+      "call": 4809008,
+      "before": "48b873656c6563742063",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808869,
+      "call": 4809008,
+      "before": "48b86f756e7428312920",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808889,
+      "call": 4809008,
+      "before": "48b866726f6d20696e66",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808906,
+      "call": 4809008,
+      "before": "48b86f726d6174696f6e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808923,
+      "call": 4809008,
+      "before": "48b85f736368656d612e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808940,
+      "call": 4809008,
+      "before": "48b8534348454d415441",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808957,
+      "call": 4809008,
+      "before": "48b82077686572652053",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808974,
+      "call": 4809008,
+      "before": "48b84348454d415f4e41",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4808991,
+      "call": 4809008,
+      "before": "48b84d453d27716b273b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811018,
+      "call": 4811273,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811049,
+      "call": 4811273,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811069,
+      "call": 4811273,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811086,
+      "call": 4811273,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811103,
+      "call": 4811273,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811120,
+      "call": 4811273,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811137,
+      "call": 4811273,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811154,
+      "call": 4811273,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811171,
+      "call": 4811273,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811188,
+      "call": 4811273,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811205,
+      "call": 4811273,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811222,
+      "call": 4811273,
+      "before": "48b82767616d655f746f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811239,
+      "call": 4811273,
+      "before": "48b86e676775616e5f63",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811437,
+      "call": 4811685,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811468,
+      "call": 4811685,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811488,
+      "call": 4811685,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811515,
+      "call": 4811685,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811532,
+      "call": 4811685,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811549,
+      "call": 4811685,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811566,
+      "call": 4811685,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811583,
+      "call": 4811685,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811600,
+      "call": 4811685,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811617,
+      "call": 4811685,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811634,
+      "call": 4811685,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811651,
+      "call": 4811685,
+      "before": "48b82767616d655f6368",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811668,
+      "call": 4811685,
+      "before": "48b8617274735f6d6f62",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811897,
+      "call": 4812169,
+      "before": "48b873656c6563742054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811928,
+      "call": 4812169,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811948,
+      "call": 4812169,
+      "before": "48b8454d412066726f6d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811965,
+      "call": 4812169,
+      "before": "48b820696e666f726d61",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811982,
+      "call": 4812169,
+      "before": "48b874696f6e5f736368",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4811999,
+      "call": 4812169,
+      "before": "48b8656d612e434f4c55",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812016,
+      "call": 4812169,
+      "before": "48b84d4e532077686572",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812033,
+      "call": 4812169,
+      "before": "48b865205441424c455f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812050,
+      "call": 4812169,
+      "before": "48b84e414d453d277169",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812067,
+      "call": 4812169,
+      "before": "48b86e676b6f6e675f63",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812084,
+      "call": 4812169,
+      "before": "48b86f6e666967272061",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812101,
+      "call": 4812169,
+      "before": "48b86e6420434f4c554d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812118,
+      "call": 4812169,
+      "before": "48b84e5f4e414d453d27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812135,
+      "call": 4812169,
+      "before": "48b869735f6f70656e5f",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812152,
+      "call": 4812169,
+      "before": "48b875705f707764273b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812685,
+      "call": 4812906,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812716,
+      "call": 4812906,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812736,
+      "call": 4812906,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812753,
+      "call": 4812906,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812770,
+      "call": 4812906,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812787,
+      "call": 4812906,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812804,
+      "call": 4812906,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812821,
+      "call": 4812906,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812838,
+      "call": 4812906,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812855,
+      "call": 4812906,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812872,
+      "call": 4812906,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4812889,
+      "call": 4812906,
+      "before": "48b827716b5f6169273b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813096,
+      "call": 4813317,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813127,
+      "call": 4813317,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813147,
+      "call": 4813317,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813164,
+      "call": 4813317,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813181,
+      "call": 4813317,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813198,
+      "call": 4813317,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813215,
+      "call": 4813317,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813232,
+      "call": 4813317,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813249,
+      "call": 4813317,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813266,
+      "call": 4813317,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813283,
+      "call": 4813317,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813300,
+      "call": 4813317,
+      "before": "48b827726f626f74273b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813374,
+      "call": 4813617,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813405,
+      "call": 4813617,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813425,
+      "call": 4813617,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813452,
+      "call": 4813617,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813469,
+      "call": 4813617,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813486,
+      "call": 4813617,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813503,
+      "call": 4813617,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813520,
+      "call": 4813617,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813537,
+      "call": 4813617,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813554,
+      "call": 4813617,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813571,
+      "call": 4813617,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813588,
+      "call": 4813617,
+      "before": "48b827726f626f745f73",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813676,
+      "call": 4813938,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813707,
+      "call": 4813938,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813730,
+      "call": 4813938,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813750,
+      "call": 4813938,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813777,
+      "call": 4813938,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813802,
+      "call": 4813938,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813819,
+      "call": 4813938,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813836,
+      "call": 4813938,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813853,
+      "call": 4813938,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813870,
+      "call": 4813938,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813887,
+      "call": 4813938,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813904,
+      "call": 4813938,
+      "before": "48b827726f626f745f73",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813921,
+      "call": 4813938,
+      "before": "48b874616c6c5f636f6e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4813997,
+      "call": 4814232,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814028,
+      "call": 4814232,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814051,
+      "call": 4814232,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814071,
+      "call": 4814232,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814096,
+      "call": 4814232,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814113,
+      "call": 4814232,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814130,
+      "call": 4814232,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814147,
+      "call": 4814232,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814164,
+      "call": 4814232,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814181,
+      "call": 4814232,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814198,
+      "call": 4814232,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814215,
+      "call": 4814232,
+      "before": "48b8277469746c657327",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814291,
+      "call": 4814522,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814322,
+      "call": 4814522,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814342,
+      "call": 4814522,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814369,
+      "call": 4814522,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814386,
+      "call": 4814522,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814403,
+      "call": 4814522,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814420,
+      "call": 4814522,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814437,
+      "call": 4814522,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814454,
+      "call": 4814522,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814471,
+      "call": 4814522,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814488,
+      "call": 4814522,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814505,
+      "call": 4814522,
+      "before": "48b827676966745f7461",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814672,
+      "call": 4814903,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814703,
+      "call": 4814903,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814723,
+      "call": 4814903,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814750,
+      "call": 4814903,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814767,
+      "call": 4814903,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814784,
+      "call": 4814903,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814801,
+      "call": 4814903,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814818,
+      "call": 4814903,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814835,
+      "call": 4814903,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814852,
+      "call": 4814903,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814869,
+      "call": 4814903,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814886,
+      "call": 4814903,
+      "before": "48b82763646b5f636f70",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814960,
+      "call": 4815191,
+      "before": "48b853454c4543542054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4814991,
+      "call": 4815191,
+      "before": "48b841424c455f4e414d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815011,
+      "call": 4815191,
+      "before": "48b8452046524f4d2069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815038,
+      "call": 4815191,
+      "before": "48b86e666f726d617469",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815055,
+      "call": 4815191,
+      "before": "48b86f6e5f736368656d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815072,
+      "call": 4815191,
+      "before": "48b8612e5441424c4553",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815089,
+      "call": 4815191,
+      "before": "48b82077686572652054",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815106,
+      "call": 4815191,
+      "before": "48b841424c455f534348",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815123,
+      "call": 4815191,
+      "before": "48b8454d413d27716b27",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815140,
+      "call": 4815191,
+      "before": "48b820616e6420544142",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815157,
+      "call": 4815191,
+      "before": "48b84c455f4e414d453d",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4815174,
+      "call": 4815191,
+      "before": "48b8276d61705f746173",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816573,
+      "call": 4816794,
+      "before": "48b8616c746572207461",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816600,
+      "call": 4816794,
+      "before": "48b8626c6520716b2e66",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816624,
+      "call": 4816794,
+      "before": "48b869676874696e6763",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816641,
+      "call": 4816794,
+      "before": "48b86170616369747920",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816658,
+      "call": 4816794,
+      "before": "48b8616464206d6f6261",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816675,
+      "call": 4816794,
+      "before": "48b8695f6e756d20696e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816692,
+      "call": 4816794,
+      "before": "48b87428313029206465",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816709,
+      "call": 4816794,
+      "before": "48b86661756c74203020",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816726,
+      "call": 4816794,
+      "before": "48b86e6f74206e756c6c",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816823,
+      "call": 4816971,
+      "before": "48b8616c746572207461",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816849,
+      "call": 4816971,
+      "before": "48b8626c6520716b2e66",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816869,
+      "call": 4816971,
+      "before": "48b869676874696e6763",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816886,
+      "call": 4816971,
+      "before": "48b86170616369747920",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816903,
+      "call": 4816971,
+      "before": "48b861646420636f6c75",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816920,
+      "call": 4816971,
+      "before": "48b86d6e204349442069",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816937,
+      "call": 4816971,
+      "before": "48b86e7428313129206e",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4816954,
+      "call": 4816971,
+      "before": "48b86f74206e756c6c3b",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4817063,
+      "call": 4817170,
+      "before": "48b8616c746572207461",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4817089,
+      "call": 4817170,
+      "before": "48b8626c6520716b2e64",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4817109,
+      "call": 4817170,
+      "before": "48b8756e67656f6e4368",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4817136,
+      "call": 4817170,
+      "before": "48b865636b2061646420",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    },
+    {
+      "address": 4817153,
+      "call": 4817170,
+      "before": "48b86e756d20696e7428",
+      "immediateOffset": 2,
+      "register": "rax",
+      "after": "48b82020202020202020"
+    }
+  ]
+}

@@ -24,7 +24,13 @@ def selected_ports():
     channels = sorted({int(x) for x in raw.split(',')})
     if not set(channels) <= ({1, 6, 7} | set(range(11, 40)) | set(range(52, 57))):
         raise ValueError('Unsupported OPEN_CHANNEL')
-    return [7001, 7300] + [30000+c for c in channels], [7001, 7300, 2311, 2312, 2313] + [31000+c for c in channels]
+    launcher = os.environ.get('LAUNCHER_MODE', 'dof')
+    if launcher not in ('dof', 'native'):
+        raise ValueError('Invalid LAUNCHER_MODE')
+    tcp = [7001, 7300] + [30000+c for c in channels]
+    if launcher == 'native':
+        tcp.append(8887)
+    return tcp, [7001, 7300, 2311, 2312, 2313] + [31000+c for c in channels]
 
 
 def render_rules(db_addresses=(), ipv6=False):
@@ -32,6 +38,10 @@ def render_rules(db_addresses=(), ipv6=False):
     if not ipv6 and not addresses:
         raise ValueError("At least one database IPv4 address is required")
     tcp, udp = selected_ports()
+    raw_clients = os.environ.get('NETGUARD_ALLOWED_CLIENTS', '').strip()
+    clients = [ipaddress.ip_network(x.strip(), strict=False) for x in raw_clients.split(',')] if raw_clients else []
+    # An explicit IPv4 list must not accidentally allow all IPv6 clients.
+    sources = [str(x) for x in clients if x.version == (6 if ipv6 else 4)] if clients else [None]
     lines = ["*filter", ":INPUT DROP [0:0]", ":FORWARD DROP [0:0]", ":OUTPUT DROP [0:0]",
              "-A INPUT -i lo -j ACCEPT",
              "-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT",
@@ -40,8 +50,9 @@ def render_rules(db_addresses=(), ipv6=False):
     # xt_multiport permits at most 15 ports per rule.
     for protocol, ports in (('tcp', tcp), ('udp', udp)):
         for start in range(0, len(ports), 15):
-            lines.append('-A INPUT -p ' + protocol + ' -m multiport --dports '
-                         + ','.join(map(str, ports[start:start+15])) + ' -j ACCEPT')
+            for source in sources:
+                lines.append('-A INPUT ' + ('-s ' + source + ' ' if source else '') + '-p ' + protocol + ' -m multiport --dports '
+                             + ','.join(map(str, ports[start:start+15])) + ' -j ACCEPT')
     if not ipv6:
         for address in addresses:
             lines.append(f"-A OUTPUT -d {address}/32 -p tcp --dport 3306 -m conntrack --ctstate NEW -j ACCEPT")

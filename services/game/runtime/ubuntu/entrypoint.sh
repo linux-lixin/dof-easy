@@ -5,6 +5,7 @@ python3 /opt/dnf/ubuntu/config.py
 source /run/dnf/env.sh
 python3 /opt/dnf/ubuntu/pvf.py
 python3 /opt/dnf/ubuntu/game_profile.py
+python3 /opt/dof-easy/runtime/gateway/assets.py
 python3 /opt/dnf/ubuntu/managed.py
 source /opt/dnf/ubuntu/wait.sh
 if [ "$SERVER_TYPE" != P2P ]; then
