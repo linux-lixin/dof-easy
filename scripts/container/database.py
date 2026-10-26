@@ -69,7 +69,7 @@ def private_json(path, value):
     temporary.replace(path)
 
 
-def host_query(binary, defaults):
+def host_query(binary, defaults, timeout=900):
     binary = Path(binary or shutil.which('mysql') or next((p for p in ('/usr/local/mysql/bin/mysql', '/www/server/mysql/bin/mysql') if Path(p).is_file()), '/usr/bin/mysql'))
     defaults = Path(defaults)
     if not binary.is_absolute() or not binary.is_file():
@@ -79,7 +79,7 @@ def host_query(binary, defaults):
     def query(sql):
         result = subprocess.run([str(binary), '--defaults-file='+str(defaults.resolve()),
             '--batch', '--raw', '--skip-column-names', '--default-character-set=utf8'],
-            input=sql, text=True, capture_output=True, timeout=900)
+            input=sql, text=True, capture_output=True, timeout=timeout)
         if result.returncode:
             code = re.search(r'ERROR (\d+)', result.stderr)
             raise ValueError('MySQL 操作失败，错误号 '+(code[1] if code else 'unknown')+'；未输出 SQL 或凭据')

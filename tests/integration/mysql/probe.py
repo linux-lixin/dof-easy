@@ -7,6 +7,8 @@ base=Path('/tmp/output')
 cnf=base/'admin.cnf';cnf.write_text('[client]\nuser=root\nsocket=/tmp/output/run/mysql.sock\n');cnf.chmod(0o600)
 query=database.host_query('/tmp/mysql/usr/bin/mysql',cnf)
 identity=database.identity(query)
+from tests.integration.mysql.menu_probe import verify
+menu_result=verify(query)
 query('CREATE DATABASE unrelated_site; CREATE TABLE unrelated_site.sentinel (id int PRIMARY KEY, value varchar(20)); INSERT INTO unrelated_site.sentinel VALUES (1,\'keep\');')
 instance=base/'native86';instance.mkdir()
 assets=instance/'runtime/game/data/dof-easy/assets';assets.parent.mkdir(parents=True);assets.symlink_to('/tmp/runtime')
@@ -47,6 +49,7 @@ with out.open('wb') as stream:
 text=out.read_bytes();assert b'unrelated_site' not in text and b'CREATE DATABASE /*!32312 IF NOT EXISTS*/ `mysql`' not in text
 assert b'dof_native' in text and b'preserve-after-restart' in text
 result = dict(mysqlVersion=query('SELECT VERSION();'),freshNativeTables=23,secondInitializationPreserved=True,
+ menuConnection=menu_result,
  unrelatedSitePreserved=True,scopedGrants=True,wrongUuidRejected=True,existingSchemasRejected=True,
  gameConnectionConfigured=True,projectBackupBytes=len(text),systemAndUnrelatedExcluded=True)
 

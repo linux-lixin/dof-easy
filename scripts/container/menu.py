@@ -13,6 +13,7 @@ import tempfile
 import shutil
 import time
 import hashlib
+import shlex
 import urllib.request
 from datetime import datetime, timezone
 
@@ -107,15 +108,38 @@ def quoted_option(value):
 
 
 @contextmanager
-def mysql_connection(password, socket):
+def mysql_connection(user, password, host, port, socket=None):
     # Passwords never enter argv, exported environment, project files or logs.
     with tempfile.TemporaryDirectory(prefix='dof-mysql-') as temporary:
         path = Path(temporary) / 'client.cnf'
         with path.open('x', encoding='utf-8') as stream:
             os.chmod(path, 0o600)
-            stream.write('[client]\nuser=root\npassword=' + quoted_option(password)
-                         + '\nsocket=' + quoted_option(socket) + '\n')
+            stream.write('[client]\nuser=' + quoted_option(user) + '\npassword=' + quoted_option(password)
+                         + '\nconnect-timeout=5\n')
+            if socket:
+                stream.write('protocol=SOCKET\nsocket=' + quoted_option(socket) + '\n')
+            else:
+                stream.write('protocol=TCP\nhost=' + quoted_option(host) + '\nport=' + str(port) + '\n')
         yield path
+
+
+@contextmanager
+def automatic_mysql_connection(binary, user, password, host, port):
+    # Match each local socket to the requested TCP listener before using it.
+    for socket in [*mysql_sockets(binary), None]:
+        with mysql_connection(user, password, host, port, socket) as defaults:
+            query = manager.database.host_query(binary, defaults, timeout=10)
+            try:
+                bind, actual_port = query('SELECT @@global.bind_address,@@global.port;').split('\t')
+                if bind not in ('0.0.0.0', '*', '::', host) or int(actual_port) != port:
+                    continue
+            except (ValueError, OSError, subprocess.SubprocessError):
+                continue
+            print('MySQL 客户端已自动检测；初始化连接：' + ('本机 socket' if socket else 'TCP'))
+            yield defaults
+            return
+    raise ValueError('无法连接填写的 MySQL；请检查 IP、端口、账号密码和账号权限。'
+                     '已自动尝试本机 socket 与 TCP，未修改数据库。') from None
 
 
 def check_external(binary, defaults, host, port):
@@ -181,17 +205,25 @@ def plugin_selection(previous=None):
 
 
 def mysql_binary():
-    for name in (shutil.which('mysql'), '/usr/local/mysql/bin/mysql', '/www/server/mysql/bin/mysql'):
-        if name and Path(name).is_file():
+    for name in ('/www/server/mysql/bin/mysql', '/usr/local/mysql/bin/mysql', shutil.which('mysql')):
+        if name and Path(name).is_file() and os.access(name, os.X_OK):
             return str(Path(name).resolve())
-    return '/usr/bin/mysql'
+    raise ValueError('未检测到可执行的 MySQL 客户端；请先通过宝塔安装 MySQL 或安装系统 MySQL 客户端。')
 
 
-def mysql_socket():
-    for name in ('/run/mysqld/mysqld.sock','/var/lib/mysql/mysql.sock','/tmp/mysql.sock'):
-        if Path(name).exists():
-            return name
-    return '/run/mysqld/mysqld.sock'
+def mysql_sockets(binary):
+    candidates = []
+    try:
+        # Capture privately: --print-defaults can contain operator passwords.
+        result = subprocess.run([binary, '--print-defaults'], capture_output=True, text=True, timeout=5)
+        if result.returncode == 0:
+            candidates.extend(value.split('=',1)[1] for value in shlex.split(result.stdout)
+                              if value.startswith('--socket='))
+    except (ValueError, OSError, subprocess.SubprocessError):
+        pass
+    candidates.extend(('/tmp/mysql.sock', '/www/server/mysql/mysql.sock',
+                       '/www/server/data/mysql.sock', '/run/mysqld/mysqld.sock', '/var/lib/mysql/mysql.sock'))
+    return list(dict.fromkeys(name for name in candidates if Path(name).is_absolute() and Path(name).is_socket()))
 
 
 def ports(values):
@@ -285,15 +317,16 @@ def install(instance):
     admin_port = integer('网页端口',18080,1,65535)
     admin_bind = '0.0.0.0' if choose('网页：1 直接访问 / 2 仅本机供反代',('1','2'),'1') == '1' else '127.0.0.1'
     swap_gib = integer('目标总 Swap GiB，0 跳过；保留已有 Swap',recommended // host.GIB,0,64)
-    disable_firewall = choose('防火墙：1 关闭检测到的 UFW/firewalld / 2 保留',('1','2'),'1') == '1'
+    disable_firewall = choose('防火墙：1 关闭 UFW/firewalld（访问限制由云安全组负责） / 2 保留',('1','2'),'1') == '1'
     # Collect external parameters before any host mutation. Network allocation follows Docker setup.
     db = None
     if mode == 'external':
         db_host = str(ipaddress.IPv4Address(ask('MySQL 已配置的宿主机私网 IPv4（不能填回环地址）')))
         db_port = integer('MySQL 端口',3306,1,65535)
-        binary = str(Path(ask('MySQL 客户端完整路径',mysql_binary())).expanduser().resolve())
-        sock = ask('MySQL socket 路径',mysql_socket())
-        db = (db_host, db_port, binary, sock)
+        user = ask('MySQL 初始化账号（需建库及授权权限）', 'root')
+        quoted_option(user)
+        binary = mysql_binary()
+        db = (db_host, db_port, binary, user)
     missing = host.swap_missing(swap_gib * host.GIB, mem['SwapTotal'])
     docker_root = '/var/lib/docker'
     if shutil.which('docker'):
@@ -305,9 +338,9 @@ def install(instance):
     print(f'\n实例 {instance} / {level} 级 / native / 频道 {channels}')
     print(f'插件 {plugins} / 团本 {raid} / 数据库 {mode} / 网页 {admin_bind}:{admin_port}')
     if db:
-        print(f'外置 MySQL {db[0]}:{db[1]} / 客户端 {db[2]} / socket {db[3]}')
+        print(f'外置 MySQL {db[0]}:{db[1]} / 初始化账号 {db[3]} / 客户端与 socket 自动检测')
     print(f'磁盘预算 {sum(size for _,size in requests)/host.GIB:.1f} GiB；新增 Swap {missing/host.GIB:.2f} GiB')
-    print('补齐缺少依赖；防火墙：' + ('关闭已识别管理器并保留恢复记录' if disable_firewall else '保留'))
+    print('补齐缺少依赖；防火墙：' + ('关闭已识别管理器并保留恢复记录；访问限制由你的云安全组负责，未自动验证安全组' if disable_firewall else '保留'))
     if mem['MemTotal'] < 8 * host.GIB:
         print('内存少于 8 GiB，建议减少频道；Swap 不代表性能达标。')
     if not confirm():
@@ -315,16 +348,14 @@ def install(instance):
     arguments = ['install','--instance',instance,'--level',str(level),'--ip',public_ip,
         '--pvf',str(pvf),'--launcher','native','--plugins',plugins,'--raid-extension',raid,
         '--database',mode,'--channels',channels,'--admin-bind',admin_bind,'--admin-port',str(admin_port),*image_args]
-    def deploy(extra, bind=None):
-        if disable_firewall and bind in ('0.0.0.0','*','::'):
-            raise ValueError('外置 MySQL 监听所有接口；请改私网监听或重试并选择保留防火墙。')
+    def deploy(extra):
         with stage('正式资源哈希校验'):
             assets = assets_directory(supplied,instance)
         with stage('主机基础依赖'):
             host.prepare_dependencies(base_only=True)
         with stage('主机 Swap 与防火墙'):
             if disable_firewall:
-                host.firewall(extra_ports=[db[1]] if db else [])
+                host.firewall(extra_ports=[db[1]] if db else [], external_access_control=True)
             if swap_gib:
                 host.create_swap(swap_gib * host.GIB)
         # A fresh firewalld host must be handled BEFORE Docker creates its chains.
@@ -341,12 +372,15 @@ def install(instance):
             manager.main([*arguments,'--dof-assets',str(assets),*extra])
         web_instructions(instance)
     if db:
-        password = getpass.getpass('本机 MySQL root 密码（隐藏输入，仅用于此次初始化）：')
-        with mysql_connection(password,db[3]) as defaults:
+        hosts, _ = inspect_network()
+        if db[0] not in hosts:
+            raise ValueError('MySQL 地址不是本机已配置的私网 IPv4。')
+        password = getpass.getpass('MySQL 密码（隐藏输入，仅用于此次初始化）：')
+        with automatic_mysql_connection(db[2],db[3],password,db[0],db[1]) as defaults:
             del password
-            bind = check_external(db[2],defaults,db[0],db[1])
+            check_external(db[2],defaults,db[0],db[1])
             deploy(['--db-host',db[0],'--db-port',str(db[1]),'--mysql-bin',db[2],
-                    '--mysql-config',str(defaults)],bind)
+                    '--mysql-config',str(defaults)])
     else:
         deploy([])
 
@@ -472,10 +506,10 @@ def main(argv=None):
             elif choice == '8': swap_menu()
             elif choice == '9':
                 print(host.firewall_status())
-                action = choose('1 关闭检测到的防火墙 / 2 恢复本工具关闭前状态 / 0 返回',('0','1','2'),'0')
+                action = choose('1 关闭检测到的防火墙（访问限制由云安全组负责） / 2 恢复本工具关闭前状态 / 0 返回',('0','1','2'),'0')
                 if action != '0' and confirm():
                     db_ports = [manager.read_env(p).get('DOF_DB_PORT','3306') for p in (manager.STATE/'instances').glob('*') if (p/'.env').is_file()]
-                    with stage('防火墙'): host.firewall(action == '1',db_ports)
+                    with stage('防火墙'): host.firewall(action == '1',db_ports,external_access_control=action == '1')
             elif choice == '10': web_instructions(instance)
             elif choice == '11':
                 print('已有实例：' + ', '.join(sorted(p.name for p in (manager.STATE/'instances').glob('*') if (p/'instance.json').is_file())))

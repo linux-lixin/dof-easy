@@ -285,7 +285,7 @@ def restore_firewall_state(before):
             run(['systemctl','start','firewalld'])
 
 
-def firewall(disable=True, extra_ports=()):
+def firewall(disable=True, extra_ports=(), external_access_control=False):
     system_check()
     with locked():
         path = STATE / 'firewall.json'
@@ -304,7 +304,7 @@ def firewall(disable=True, extra_ports=()):
                     raise ValueError('防火墙开机状态未恢复，请检查 systemctl。')
             record['phase'] = 'restored'; save(path, record)
             print('已恢复关闭前的服务状态；其他自定义规则未重写。'); return
-        if public_database_listener(extra_ports):
+        if public_database_listener(extra_ports) and not external_access_control:
             raise ValueError('数据库监听公网或所有接口；请先改为私网监听，或选择保留防火墙。')
         before = firewall_status()
         if sum(item['active'] for item in before.values()) > 1:
