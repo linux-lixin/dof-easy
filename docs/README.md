@@ -12,7 +12,7 @@
 | 镜像配置和资源分配 | [镜像仓库](image-registry.md)、[资源布局](resource-layout.md) |
 | 网页后台开发与管理边界 | [后台文档](admin/README.md) |
 | 默认 WPF 登录器 | [客户端配置](launcher/deployment.md)、[工程说明](launcher/README.md) |
-| 手动 Ubuntu 单机／分角色部署 | [ALL](../deploy/ubuntu/all/README.md)、[CORE / GAME / P2P](../deploy/ubuntu/split/README.md) |
+| 手动 Ubuntu 单机／分角色部署 | [ALL](../deploy/manual/all/README.md)、[CORE / GAME / P2P](../deploy/manual/split/README.md) |
 | Ubuntu 依赖与端口 | [兼容说明](ubuntu/compatibility.md)、[端口表](ubuntu/ports.md) |
 | 源码和维护 | [项目结构](architecture.md)、[贡献说明](../CONTRIBUTING.md) |
 | 测试、工具和来源 | [tests](../tests/README.md)、[scripts](../scripts/README.md)、[metadata](../metadata/README.md) |

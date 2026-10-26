@@ -24,6 +24,18 @@ def config(folder, overrides=None):
     return json.loads(result.stdout)
 
 class DeploymentLayout(unittest.TestCase):
+    def test_image_entrypoints_match_runtime_consumers(self):
+        dockerfile=(DEPLOY/'network/netguard/Dockerfile').read_text()
+        destination='/usr/local/bin/dof-netguard.py'
+        self.assertIn('COPY entrypoint.py '+destination, dockerfile)
+        self.assertIn('"'+destination+'"]', dockerfile)
+        self.assertIn('"'+destination+'", "--healthcheck"]', dockerfile)
+        self.assertIn(destination, (ROOT/'scripts/container/manage.py').read_text())
+        runtime=ROOT/'services/game/runtime/ubuntu'
+        self.assertTrue((runtime/'plugins.py').is_file())
+        self.assertIn('python3 /opt/dnf/ubuntu/plugins.py || exit 1', (runtime/'bootstrap.sh').read_text())
+        self.assertFalse((runtime/'vipai86.py').exists())
+
     def test_all_leaf_composes_have_docs_and_resolve_local_mounts(self):
         files=list(DEPLOY.rglob('compose.yaml'))
         self.assertEqual(len(files),5)
@@ -50,7 +62,7 @@ class DeploymentLayout(unittest.TestCase):
             ('split/game','game','GAME','dnf-ubuntu-game'),
             ('split/p2p','p2p','P2P','dnf-ubuntu-p2p')):
             with self.subTest(role=role):
-                folder=DEPLOY/'ubuntu'/subdir
+                folder=DEPLOY/'manual'/subdir
                 model=config(folder)
                 self.assertEqual(model['name'],project)
                 spec=model['services'][service]
@@ -62,7 +74,7 @@ class DeploymentLayout(unittest.TestCase):
 
     def test_runtime_override_reuses_existing_data(self):
         with tempfile.TemporaryDirectory() as old:
-            for relative in ('ubuntu/all','ubuntu/split/game','ubuntu/split/core','ubuntu/split/p2p','ubuntu/split/admin'):
+            for relative in ('manual/all','manual/split/game','manual/split/core','manual/split/p2p','manual/split/admin'):
                 model=config(DEPLOY/relative,{'RUNTIME_ROOT':Path(old).as_posix()})
                 for service in model['services'].values():
                     for mount in service.get('volumes',[]):
@@ -70,7 +82,7 @@ class DeploymentLayout(unittest.TestCase):
                             self.assertEqual(os.path.commonpath((Path(old).resolve(),Path(mount['source']).resolve())),str(Path(old).resolve()))
 
     def test_independent_admin_requires_no_game_configuration(self):
-        for platform in ('ubuntu',):
+        for platform in ('manual',):
             model=config(DEPLOY/platform/'split/admin')
             self.assertEqual(set(model['services']),{'admin'})
             admin=model['services']['admin']

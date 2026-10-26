@@ -36,7 +36,7 @@ services:
       RAID_EXTENSION: ${RAID_EXTENSION:-off}
       LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
     volumes:
-    - ./deploy/vipai86/init-keys.sh:/init-keys.sh:ro
+    - ./deploy/bootstrap/init-keys.sh:/init-keys.sh:ro
     - ${RUNTIME_ROOT:-./runtime}/admin/data:/keys
     - ${RUNTIME_ROOT:-./runtime}/game/data:/game
     logging:
@@ -167,7 +167,7 @@ services:
     security_opt:
     - no-new-privileges:true
     volumes:
-    - ./deploy/vipai86/ingress.py:/ingress.py:ro
+    - ./deploy/network/ingress.py:/ingress.py:ro
     depends_on:
       game:
         condition: service_healthy

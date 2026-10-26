@@ -16,7 +16,7 @@ def load(name,path):
 db=load('db_choice','scripts/container/database.py')
 deploy=load('db_compose','scripts/container/deployment.py')
 manager=load('choice_manager','scripts/container/manage.py')
-guard=load('choice_guard','deploy/vipai86/netguard/entrypoint.py')
+guard=load('choice_guard','deploy/network/netguard/entrypoint.py')
 
 class DatabaseModes(unittest.TestCase):
     def options(self,**extra):

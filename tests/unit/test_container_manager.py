@@ -17,7 +17,7 @@ spec = importlib.util.spec_from_file_location('manager', ROOT / 'scripts/contain
 manager = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(manager)
 game_profile = manager.module('profile_check', 'services/game/runtime/ubuntu/game_profile.py')
-guard = manager.module('container_guard', 'deploy/vipai86/netguard/entrypoint.py')
+guard = manager.module('container_guard', 'deploy/network/netguard/entrypoint.py')
 
 
 class ContainerManager(unittest.TestCase):

@@ -1999,8 +1999,8 @@
     },
     {
       "path": "services/game/resources/plugins/dp2/lua/df/game/report.lua",
-      "bytes": 189,
-      "sha256": "b074b6bc9ed03cdbd80032c8785569b3cf51a6fd3342ddf5c9f4dbb0e80a8810"
+      "bytes": 190,
+      "sha256": "88489b0cb77e238f10bca0ce52f0252928a4671d6d6ed861f25dcdedbd2327b7"
     },
     {
       "path": "services/game/resources/plugins/dp2/lua/df/game/symbols.lua",
@@ -2099,12 +2099,12 @@
       "sha256": "89b1855ec9440f19cfb76b3eb5111586c4845e73247c53255e85f522400e697f"
     },
     {
-      "path": "deploy/vipai86/db/vipai.sql",
+      "path": "deploy/database/seed.sql",
       "bytes": 800750,
       "sha256": "e634a80f09968fd65891fb78f06ae60cb5288414f92020a3e40fdb60a9846312"
     },
     {
-      "path": "deploy/vipai86/db/compat-tables.sql",
+      "path": "deploy/database/compat-tables.sql",
       "bytes": 3914,
       "sha256": "9ad42e7171c7149691e35b0cc1585e046b32e849ab6af3bd66a7164f0a315aba"
     },

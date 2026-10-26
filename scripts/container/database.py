@@ -15,8 +15,8 @@ import tarfile
 import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
-SEED = ROOT / 'deploy/vipai86/db/vipai.sql'
-COMPAT = ROOT / 'deploy/vipai86/db/compat-tables.sql'
+SEED = ROOT / 'deploy/database/seed.sql'
+COMPAT = ROOT / 'deploy/database/compat-tables.sql'
 GAME_DATABASES = tuple(re.findall(r'CREATE DATABASE /\*!32312 IF NOT EXISTS\*/ `([a-z0-9_]+)`', SEED.read_text()))
 CHANNEL_SEED = ROOT / 'services/game/assets/home/template/init/init_sql.tgz'
 DATABASES = GAME_DATABASES + ('d_channel_cain', 'dof_native', 'dnf_service')

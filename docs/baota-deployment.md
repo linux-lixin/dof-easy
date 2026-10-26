@@ -168,7 +168,7 @@ sudo bash dof.sh install --instance native86 --level 86 \
 
 安装器不占用宿主机 80/443，网页入口默认为 `127.0.0.1:18080`。在宝塔新建自己的域名站点，配置 HTTPS 和访问来源限制，将站点反向代理到 `http://127.0.0.1:18080`。
 
-现成片段：[nginx-location.conf.example](../deploy/baota/nginx-location.conf.example)。把它放入该站点已有 `server {}` 内，替换冲突的 `location /`；不要整个覆盖宝塔全局 Nginx 配置。它保留完整 URI，并放宽 PVF 上传大小和长任务超时、关闭上传临时缓冲。若修改后台端口，同步修改 `proxy_pass`。
+现成片段：[nginx-location.conf.example](../deploy/nginx/nginx-location.conf.example)。把它放入该站点已有 `server {}` 内，替换冲突的 `location /`；不要整个覆盖宝塔全局 Nginx 配置。它保留完整 URI，并放宽 PVF 上传大小和长任务超时、关闭上传临时缓冲。若修改后台端口，同步修改 `proxy_pass`。
 
 使用宝塔的配置检查功能通过后重载 Nginx。外部访问 `https://你的域名/`，登录后进入 `/admin/dof`；API 为 `/api/v1/admin/dof`。账号 `admin`，初始密码仅在本机 `.dof-easy/instances/native86/.env` 的 `ADMIN_PASSWORD` 中查看，不贴到公开日志。
 

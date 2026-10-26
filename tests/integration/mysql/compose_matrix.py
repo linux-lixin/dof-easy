@@ -23,6 +23,17 @@ with tempfile.TemporaryDirectory() as tmp:
    assert result.returncode==0,result.stderr
    final=json.loads(result.stdout)
    assert ('db' in final['services'])==(kind=='internal')
+   assert final['services']['keys']['network_mode']=='none'
+   assert final['services']['game']['depends_on']['keys']['condition']=='service_completed_successfully'
+   expected={'game','admin','ingress','netguard','keys'} | ({'db'} if kind=='internal' else {'db-check'})
+   assert set(final['services'])==expected
+   if kind=='external':
+    assert final['services']['db-check']['command']==['serve']
+    assert model['services']['db-tools']['profiles']==['tools']
+   for service,filename in [('keys','deploy/bootstrap/init-keys.sh'),('ingress','deploy/network/ingress.py')]:
+    mounts=final['services'][service]['volumes']
+    assert any(mount.get('source')==str(ROOT/filename) and mount.get('read_only') for mount in mounts)
+    assert (ROOT/filename).is_file()
    if kind=='internal':assert '$MYSQL_ROOT_PASSWORD' in final['services']['db']['healthcheck']['test'][1]
    if launcher=='native':assert final['services']['admin']['environment']['DOF_DATABASE_UUID']==values['DOF_DATABASE_UUID']
    ports=final['services']['ingress']['ports'];assert all(x['host_ip']=='127.0.0.1' for x in ports)

@@ -98,10 +98,10 @@ def build(settings, database_mode='internal'):
     # Docker reuses unchanged layers; all levels share these four images.
     references = image_config.references(settings)
     for tag, context, dockerfile in (
-        ('db', 'deploy/vipai86/db', 'Dockerfile'),
+        ('db', 'deploy/database', 'Dockerfile'),
         ('admin', 'services/admin', 'docker/Dockerfile'),
         ('game', 'services/game', 'docker/ubuntu/Dockerfile'),
-        ('netguard', 'deploy/vipai86/netguard', 'Dockerfile'),
+        ('netguard', 'deploy/network/netguard', 'Dockerfile'),
     ):
         if database_mode == 'external' and tag == 'db':
             continue
@@ -415,7 +415,7 @@ def start(root, recreate=False):
                 "assert raid_assets.launcher_mode(os.environ)=='native'; "
                 "raid_assets.preflight(); health.check()")
         compose(root, 'exec', '-T', 'netguard', 'python3', '-c',
-                "import runpy; guard=runpy.run_path('/usr/local/bin/vipai86-netguard.py'); "
+                "import runpy; guard=runpy.run_path('/usr/local/bin/dof-netguard.py'); "
                 "assert 8887 in guard['selected_ports']()[0]")
     # Compose also waits for database/game/guard health. Probe the Java API,
     # not only Nginx's static page or the ingress TCP listening socket.

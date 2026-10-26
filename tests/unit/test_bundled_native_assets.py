@@ -84,7 +84,7 @@ class BundledNativeAssets(unittest.TestCase):
         self.assertEqual({p.split('/')[0] for p in actual},{'dp2','frida'})
 
     def test_real_plugin_files_prepare_all_combinations(self):
-        spec=importlib.util.spec_from_file_location('plugin_runtime',ROOT/'services/game/runtime/ubuntu/vipai86.py')
+        spec=importlib.util.spec_from_file_location('plugin_runtime',ROOT/'services/game/runtime/ubuntu/plugins.py')
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         source=ROOT/'services/game/resources/plugins'
         for mode in ('none','dp2','frida','dp2-frida'):

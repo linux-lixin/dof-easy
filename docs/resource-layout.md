@@ -53,7 +53,7 @@ python3 scripts/container/resources.py
 python3 scripts/dof/import_assets.py --source /local/private/native-inputs --output /tmp/dof-runtime-rebuilt
 ```
 
-原件哈希不匹配直接失败，没有授权版回退。重新派生和正式打包见 [原生资源说明](dof/launcher.md)。当前初始化 SQL 是 `deploy/vipai86/db/vipai.sql`，不再保存另一份原始 SQL。普通插件修改应更新构建锁。第三方版权说明仍随项目保留，不包含原始程序。
+原件哈希不匹配直接失败，没有授权版回退。重新派生和正式打包见 [原生资源说明](dof/launcher.md)。当前初始化 SQL 是 `deploy/database/seed.sql`，不再保存另一份原始 SQL。普通插件修改应更新构建锁。第三方版权说明仍随项目保留，不包含原始程序。
 
 **仍可能联网的部分**：首次获取源码、所选等级包（本仓库 Release 的 13 个等级之一）、Docker 镜像及源码构建时的系统/npm/Maven 依赖。原生、DP2、Frida 正式文件已在 Git，无需第三方下载站。PVF、客户端、密码与私钥由操作者保管。详见 [安装菜单](container-installer.md)、[宝塔部署](baota-deployment.md)。
 
