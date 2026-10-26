@@ -95,13 +95,12 @@ def prepare(resources, offline=False):
 
 
 def build(settings, database_mode='internal'):
-    # Docker reuses unchanged layers; all levels share these four images.
+    # Docker reuses unchanged layers; all levels share these three images.
     references = image_config.references(settings)
     for tag, context, dockerfile in (
         ('db', 'deploy/database', 'Dockerfile'),
         ('admin', 'services/admin', 'docker/Dockerfile'),
         ('game', 'services/game', 'docker/ubuntu/Dockerfile'),
-        ('netguard', 'deploy/network/netguard', 'Dockerfile'),
     ):
         if database_mode == 'external' and tag == 'db':
             continue
@@ -185,7 +184,7 @@ def ports_override(values):
         for base, protocol in ((30000, 'tcp'), (31000, 'udp')):
             port = base + channel
             ports.append(f"{values.get('GAME_BIND_IP', values['BIND_IP'])}:{port}:{port}/{protocol}")
-    return {'services': {'netguard': {'ports': ports}}}
+    return {'services': {'game': {'ports': ports}}}
 
 
 def published_ports(values):
@@ -345,6 +344,7 @@ def compose(root, *arguments, **kwargs):
     for name in list(env):
         if name.startswith('QINGKONG_'):
             del env[name]
+    write_json(root / 'channels.json', ports_override(values))
     base = ['docker','compose','--project-directory',ROOT,'-p','dof-'+root.name,
             '--env-file',root/'.env','-f',ROOT/'compose.yaml','-f',root/'channels.json']
     if database.kind(values) == 'external' or raid_assets.launcher_mode(values) == 'native':
@@ -388,9 +388,50 @@ def prepare_database(root,args):
     temporary.replace(root/'.env')
 
 
+def retire_legacy_helpers(root):
+    """Release old published ports only for this Compose project's helpers.
+
+    No volume/network removal and no host-wide orphan/prune operation. A
+    failed cutover leaves the instance files and database intact for retry.
+    """
+    project = 'dof-' + root.name
+    found = run(['docker', 'container', 'ls', '--all', '--filter',
+                 'label=com.docker.compose.project=' + project, '--format', '{{.ID}}'],
+                capture_output=True, text=True).stdout.split()
+    if not found:
+        return
+    containers = json.loads(run(['docker', 'container', 'inspect', *found],
+                                capture_output=True, text=True).stdout)
+    owned = []
+    for item in containers:
+        labels = item.get('Config', {}).get('Labels') or {}
+        if labels.get('com.docker.compose.project') != project:
+            raise ValueError('容器项目身份不匹配，拒绝拓扑切换')
+        owned.append((item, labels.get('com.docker.compose.service')))
+    helpers = [item for item, service in owned if service in ('netguard', 'ingress', 'db-check')]
+    if not helpers:
+        return
+    saved = root / 'config-backups' / ('topology-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S') + '-' + secrets.token_hex(3))
+    saved.mkdir(parents=True, mode=0o700)
+    for name in ('.env', 'channels.json', 'deployment.json'):
+        path = root / name
+        if path.is_file():
+            target = saved / name
+            target.write_bytes(path.read_bytes())
+            target.chmod(0o600)
+    database.private_json(saved / 'containers.json', [dict(id=item['Id'], service=service, image=item['Image'])
+                                                     for item, service in owned])
+    # Resolve and validate the new graph before interrupting the old services.
+    compose(root, 'config', '--quiet')
+    print('切换为直接端口映射：短暂停止当前实例 game/admin，移除旧辅助容器；恢复配置：' + str(saved))
+    writers = [item['Id'] for item, service in owned if service in ('game', 'admin') and item['State']['Running']]
+    if writers:
+        run(['docker', 'container', 'stop', '--time', '30', *writers])
+    run(['docker', 'container', 'rm', '--force', *[item['Id'] for item in helpers]])
+
+
 def start(root, recreate=False):
     values = check_instance(root)
-    write_json(root / 'channels.json', ports_override(values))
     args = ['up', '-d', '--wait', '--wait-timeout', '900', '--no-build', '--pull', 'never']
     if recreate:
         args.append('--force-recreate')
@@ -399,6 +440,10 @@ def start(root, recreate=False):
         saved=json.loads(marker.read_text()) if marker.exists() else {}
         if saved.get('state') != 'ready' or any(saved.get(k) != values.get(v) for k,v in [('databaseUuid','DOF_DATABASE_UUID'),('host','DOF_DB_HOST'),('port','DOF_DB_PORT'),('grantHost','DOF_DB_ALLOW_HOST')]):
             raise ValueError('外置数据库初始化未完成或绑定不符，拒绝启动')
+    retire_legacy_helpers(root)
+    write_json(root / 'channels.json', ports_override(values))
+    if values.get('ALLOWED_CLIENT_CIDRS'):
+        print('旧实例玩家来源规则不再由容器执行；当前访问范围由云安全组控制。')
     if raid_assets.launcher_mode(values) == 'native' and database.kind(values) == 'internal':
         # The web adapter is provisioned only after the actual native game is ready.
         compose(root, *args, 'game')
@@ -414,11 +459,7 @@ def start(root, recreate=False):
                 "from gateway import assets as raid_assets; import health; "
                 "assert raid_assets.launcher_mode(os.environ)=='native'; "
                 "raid_assets.preflight(); health.check()")
-        compose(root, 'exec', '-T', 'netguard', 'python3', '-c',
-                "import runpy; guard=runpy.run_path('/usr/local/bin/dof-netguard.py'); "
-                "assert 8887 in guard['selected_ports']()[0]")
-    # Compose also waits for database/game/guard health. Probe the Java API,
-    # not only Nginx's static page or the ingress TCP listening socket.
+    # Probe the actual Java API through the directly published admin port.
     admin_bind = values.get('ADMIN_BIND_IP', values['BIND_IP'])
     host = '127.0.0.1' if admin_bind == '0.0.0.0' else admin_bind
     url = f"http://{host}:{values['ADMIN_PORT']}/api/v1/admin/assist/config-text"
@@ -485,7 +526,7 @@ def backup(root):
         raise ValueError('请先启动数据库再备份。')
     if external:
         compose(root,'run','--rm','--no-deps','-T','db-tools','check')
-    stopped = [s for s in ('ingress', 'admin', 'game') if s in running]
+    stopped = [s for s in ('admin', 'game') if s in running]
     with tempfile.TemporaryDirectory(prefix='.backup-', dir=STATE) as directory:
         sql = Path(directory) / 'databases.sql'
         try:
@@ -645,10 +686,9 @@ def main(argv=None):
             p.add_argument('--game-bind', help='游戏监听 IPv4；与后台监听独立')
             p.add_argument('--admin-bind', help='后台监听 IPv4；联调建议 127.0.0.1')
             p.add_argument('--channels', help='替换频道列表，如 15,52；保留其他配置')
-            p.add_argument('--client-cidrs', help='游戏允许的来源网段，逗号分隔；空字符串恢复原有不限来源行为')
         if command == 'logs':
             p.add_argument('--follow', action='store_true')
-            p.add_argument('--service', choices=('db', 'game', 'admin', 'ingress', 'netguard'))
+            p.add_argument('--service', choices=('db', 'game', 'admin'))
     argv = list(sys.argv[1:] if argv is None else argv)
     if not argv:
         if not sys.stdin.isatty():
@@ -779,8 +819,6 @@ def main(argv=None):
                     values['ADMIN_BIND_IP'] = str(ipaddress.IPv4Address(args.admin_bind))
                 if args.channels is not None:
                     values['OPEN_CHANNEL'] = ','.join(map(str, runtime_config.channels(args.channels)))
-                if args.client_cidrs is not None:
-                    values['ALLOWED_CLIENT_CIDRS'] = ','.join(str(ipaddress.ip_network(x.strip(), strict=False)) for x in args.client_cidrs.split(',')) if args.client_cidrs.strip() else ''
                 if args.raid_extension is not None:
                     values['RAID_EXTENSION'] = args.raid_extension
                 raid_assets.validate_options(values['PLUGIN_MODE'], values.get('RAID_EXTENSION', 'off'))

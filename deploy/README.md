@@ -1,45 +1,51 @@
 # 部署目录与容器职责
 
-**新安装统一在仓库根目录运行 `bash install.sh`。项目不依赖宝塔。** 宝塔只是可选的 Docker、MySQL、Nginx 管理界面；也可以使用普通 Linux 安装的这些服务。
+新安装统一在仓库根目录运行 `bash install.sh`。项目不依赖宝塔；宝塔或普通 Nginx 均可作为可选管理／反向代理方式。
 
-## 目录规划
+## 当前运行方式
 
-| 目录 | 用途 | 谁使用 |
+**外置 MySQL：两个常驻容器 `game`、`admin`。内置 MySQL：再加一个 `db`。**
+
+| 服务 | 作用 | 生命周期 |
 |---|---|---|
-| `database/` | MySQL 镜像、`seed.sql`、兼容表和配置 | 内置数据库构建；外置数据库首次初始化复用 SQL |
-| `network/` | 网页入口转发 `ingress.py`、`netguard/` 网络守卫镜像 | 根 Compose 和一键安装器 |
-| `bootstrap/` | 实例登录密钥初始化 | `keys` 一次性容器 |
-| `nginx/` | 通用 Nginx 反向代理示例 | 可选宿主机 Nginx，普通安装和宝塔均可使用 |
-| `shared/` | 手动部署共享后台定义、初始化示例与日志模板 | 高级手动部署 |
-| `manual/` | 单机 ALL、拆分 CORE/GAME/P2P、独立后台模板 | 高级手动部署，按各子目录文档使用 |
+| `game` | 核心、频道、组队、原生网关及所选插件；直接发布游戏 TCP/UDP | 常驻 |
+| `admin` | 网页、Java API、容器内 Nginx；宿主机 18080（可配置）直接映射到容器 80 | 常驻 |
+| `db` | MySQL 5.6、实例独立数据卷，不向宿主机发布 3306 | 仅内置模式，常驻 |
+| `keys` | 生成／核验实例密钥，已有密钥保持不变 | 一次性任务，`Exited (0)` 正常 |
+| `db-tools` | 限定项目数据库的查询和备份 | 仅外置模式按需 `run --rm`，平时不存在 |
 
-历史固定 86 级离线方案保留在 [历史归档](../docs/history/offline86/README.md)，不参与当前安装器的构建或部署。当前等级从资源清单选择，回车默认 86，目录名不绑定等级。原始材料来源说明保持真实，数据库种子只移动和改文件名，内容与哈希不变。
+不再创建 `netguard`、`ingress`、`db-check`，不再构建或拉取网络守卫镜像。访问链为“客户端 → game 发布端口”和“浏览器 → admin 发布端口”；宿主机 Nginx 可选。网页默认仅监听 `127.0.0.1:18080`，已有实例保持自己的网页绑定地址。游戏端口随频道及登录模式生成，原生网关为 TCP 8887。
 
-## 容器分别做什么
+玩家来源及出站访问限制交给云安全组／操作者的网络策略，项目不再在游戏网络空间安装防火墙。旧 `ALLOWED_CLIENT_CIDRS` 不再生效；菜单改为配置游戏绑定地址。游戏仍检查进程和监听端口，但不轮询外置 MySQL。初始化、启动配置及数据库维护操作仍核验版本、UUID 和权限，防止操作错库；不管理外置 MySQL 的启停。
 
-| 服务名 | 作用 | 正常状态 |
-|---|---|---|
-| `game` | 游戏核心、频道、组队服务、原生网关与所选插件；内部由 Supervisor 管理多个进程 | 常驻、健康 |
-| `admin` | 网页前端、Java 管理 API、容器内 Nginx；提供配置、PVF 与客户端包相关功能 | 常驻 |
-| `ingress` | 将宿主机网页端口转发给内部 `admin:80`；不是游戏入口或另一套后台 | 常驻、健康 |
-| `netguard` | 与 game 共享网络空间，发布游戏 TCP/UDP 端口，管理容器内玩家来源及数据库出口规则 | 常驻、健康 |
-| `keys` | 首次生成并检查实例密钥，将公钥提供给游戏；已有密钥保持并核验 | 完成后 `Exited (0)` 正常；非零退出需排查 |
-| `db` | 项目独立的 MySQL 5.6，保存账号、角色和项目配置 | 仅内置模式存在，常驻、健康 |
-| `db-check` | 核对外置 MySQL 版本、身份和项目表访问，为游戏启动提供健康状态 | 仅外置模式存在，常驻、健康 |
-| `db-tools` | 使用项目受限账号执行数据库查询、导出等维护任务 | 仅外置模式，按需临时运行，平时不存在正常 |
+## 目录
 
-容器名通常带 `dof-实例名-` 前缀，如 `dof-main-game-1`。同一镜像可以运行多个不同用途的容器，镜像数量不等于容器数量。常规安装两种数据库模式都定义六个默认服务；`keys` 成功退出后通常留下五个常驻服务。外置模式不创建 `db`，也不会管理宿主机 MySQL 的启停。
+| 目录 | 用途 |
+|---|---|
+| `database/` | MySQL 镜像、种子 SQL、兼容表与配置 |
+| `bootstrap/` | 实例密钥初始化 |
+| `nginx/` | 可选宿主机 Nginx 反向代理示例 |
+| `shared/` | 手动部署共享定义与日志模板 |
+| `manual/` | 高级单机／拆分部署模板 |
 
-`netguard` 的规则只存在于游戏容器网络空间，关闭宿主机 UFW/firewalld 不等于删除它；它是当前游戏网络设计的一部分。网页访问链为“客户端 → 可选宿主机 Nginx → ingress → admin”，游戏流量走 netguard 发布的端口到 game。
+等级由资源清单选择，回车默认 86。早期固定等级方案在 [历史归档](../docs/history/offline86/README.md)，旧网络辅助实现在 [网络历史归档](../docs/history/network-helpers/README.md)，均不参与当前安装构建。
 
-## 安装与更新
+## 已有一键端更新
 
-- [一键安装菜单](../docs/container-installer.md)：推荐入口，内置／外置 MySQL、插件按需选择。
-- [同机外置 MySQL 与可选宝塔配置](../docs/baota-deployment.md)：宝塔不是前置依赖。
-- [高级手动部署](manual/README.md)：使用独立 `.env`、`runtime/` 或 `RUNTIME_ROOT`，不要混用一键端实例目录。
+在服务器自行执行（操作当前实例会短暂停服）：
 
-此次整理不迁移或清空实例数据。普通插件加载器改为 `plugins.py`，网络守卫镜像内入口改为 `/usr/local/bin/dof-netguard.py`，就绪模式使用 `native` 或原有 `dof`。因此源码更新后需用同一提交重建游戏及网络守卫镜像（或拉取对应新版镜像），旧缓存镜像不会因 `git pull` 自动改名。新安装选择本机构建会使用新入口。
+```bash
+cd /opt/dof-easy
+git pull --ff-only origin main
+bash dof.sh backup --instance main
+bash dof.sh install --instance main --build
+bash dof.sh status --instance main
+```
 
-旧手动实例更新前保留其私有 `.env`，在新模板中用 `RUNTIME_ROOT` 指向原运行目录；不要把新相对路径误当成原数据。归档方案同样必须显式沿用旧数据目录和原交付镜像，不能对旧卷执行全新初始化。
+已有实例的数据库模式、等级、端口、密码、PVF 和插件配置保持不变，无需重填数据库信息或重建库。若使用发布镜像，将 `--build` 换成对应新版的仓库／标签参数。仅 `git pull` 不会更新镜像里的健康检查代码。
 
-一键端每次调用 Compose 都从当前根 `compose.yaml` 重新生成模型，不直接沿用过期文件路径。请使用 `dof.sh` 管理实例，不手动启动私有目录里旧的 `deployment.json`。容器作用和健康状态不等于客户端进游戏验收，实际边界见 [当前状态](../docs/dof/status.md)。
+首次切换会按 Compose 项目标签核对容器身份，将配置快照写入实例的 `config-backups/topology-*`，停止该实例的 game/admin，再移除它自己的 netguard/ingress/db-check，释放旧端口后启动新拓扑。不会执行全局 prune、删除卷或停止其他实例／宿主机 MySQL。再次运行时没有旧辅助容器便跳过清理。
+
+若切换失败，先查看报错及 `bash dof.sh logs --instance main`，修复后重试安装／启动；已完成的库初始化不会重复执行。配置快照含秘密，勿提交。需要回到旧拓扑时，应使用更新前的代码和镜像，恢复快照中的实例配置后启动；不能只恢复旧 Compose 文件并混用新代码，也不需要回滚玩家数据库。
+
+手动部署实例仍按 [manual 说明](manual/README.md) 管理独立 `.env` 和 `RUNTIME_ROOT`，不要混用一键端数据目录。新安装步骤见 [菜单说明](../docs/container-installer.md)及[同机 MySQL 指南](../docs/baota-deployment.md)。本轮验证及未执行项目见 [直接端口映射验证](../docs/validation/direct-topology.md)。

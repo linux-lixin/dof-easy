@@ -1,11 +1,9 @@
 """Bound external MySQL health, connection setup and scoped backup helper."""
 import json
 import os
-from pathlib import Path
 import re
 import subprocess
 import sys
-import time
 
 
 def command(program='mysql'):
@@ -55,14 +53,7 @@ def dump():
 
 def main():
     action=sys.argv[1]
-    if action == 'serve':
-        while True:
-            try:
-                check(); Path('/tmp/database-ready').touch()
-            except Exception:
-                Path('/tmp/database-ready').unlink(missing_ok=True)
-            time.sleep(5)
-    elif action == 'query':
+    if action == 'query':
         check(); print(query(sys.stdin.read()))
     else:
         {'check':check, 'configure':configure, 'dump':dump}[action]()

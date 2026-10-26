@@ -12,7 +12,7 @@ import unittest
 from unittest.mock import AsyncMock, patch
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / "deploy/network/ingress.py"
+SCRIPT = ROOT / "docs/history/network-helpers/ingress.py"
 SPEC = importlib.util.spec_from_file_location("dof_ingress", SCRIPT)
 ingress = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = ingress

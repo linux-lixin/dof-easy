@@ -25,12 +25,6 @@ def config(folder, overrides=None):
 
 class DeploymentLayout(unittest.TestCase):
     def test_image_entrypoints_match_runtime_consumers(self):
-        dockerfile=(DEPLOY/'network/netguard/Dockerfile').read_text()
-        destination='/usr/local/bin/dof-netguard.py'
-        self.assertIn('COPY entrypoint.py '+destination, dockerfile)
-        self.assertIn('"'+destination+'"]', dockerfile)
-        self.assertIn('"'+destination+'", "--healthcheck"]', dockerfile)
-        self.assertIn(destination, (ROOT/'scripts/container/manage.py').read_text())
         runtime=ROOT/'services/game/runtime/ubuntu'
         self.assertTrue((runtime/'plugins.py').is_file())
         self.assertIn('python3 /opt/dnf/ubuntu/plugins.py || exit 1', (runtime/'bootstrap.sh').read_text())

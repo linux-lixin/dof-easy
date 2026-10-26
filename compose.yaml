@@ -58,9 +58,15 @@ services:
         condition: service_healthy
       keys:
         condition: service_completed_successfully
-      netguard:
-        condition: service_healthy
-    network_mode: service:netguard
+    ports:
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7001:7001/tcp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7001:7001/udp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7300:7300/tcp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7300:7300/udp
+    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:2311-2313:2311-2313/udp
+    networks:
+    - private
+    - public
     cap_drop:
     - NET_RAW
     environment:
@@ -143,91 +149,15 @@ services:
     - ${RUNTIME_ROOT:-./runtime}/game/data/Script.pvf:/app/game-resources/Script.pvf:ro
     networks:
     - private
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-  ingress:
-    image: ${DOF_GAME_IMAGE:-dof-easy-game:local}
-    pull_policy: never
-    restart: unless-stopped
-    entrypoint:
-    - python3
-    - -B
-    - /ingress.py
-    command:
-    - --no-udp
-    - --tcp
-    - 18080:admin:80
-    user: 65534:65534
-    read_only: true
-    cap_drop:
-    - ALL
-    security_opt:
-    - no-new-privileges:true
-    volumes:
-    - ./deploy/network/ingress.py:/ingress.py:ro
-    depends_on:
-      game:
-        condition: service_healthy
-      admin:
-        condition: service_started
-    healthcheck:
-      test:
-      - CMD
-      - python3
-      - -c
-      - import socket; socket.create_connection(("127.0.0.1",18080),2).close()
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    ports:
-    - ${ADMIN_BIND_IP:-${BIND_IP:-127.0.0.1}}:${ADMIN_PORT:-18080}:18080/tcp
-    networks:
-    - private
     - public
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-  netguard:
-    image: ${DOF_NETGUARD_IMAGE:-dof-easy-netguard:local}
-    pull_policy: never
-    restart: unless-stopped
-    read_only: true
-    cap_drop:
-    - ALL
-    cap_add:
-    - NET_ADMIN
-    security_opt:
-    - no-new-privileges:true
-    tmpfs:
-    - /run/netguard
-    environment:
-      NETGUARD_DB_HOST: db
-      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
-      NETGUARD_ALLOWED_CLIENTS: ${ALLOWED_CLIENT_CIDRS:-}
-      XTABLES_LOCKFILE: /run/netguard/xtables.lock
-      OPEN_CHANNEL: ${OPEN_CHANNEL:-15,52}
-    depends_on:
-      db:
-        condition: service_healthy
     ports:
-    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7001:7001/tcp
-    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7001:7001/udp
-    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7300:7300/tcp
-    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:7300:7300/udp
-    - ${GAME_BIND_IP:-${BIND_IP:-127.0.0.1}}:2311-2313:2311-2313/udp
-    networks:
-    - private
-    - public
+    - ${ADMIN_BIND_IP:-${BIND_IP:-127.0.0.1}}:${ADMIN_PORT:-18080}:80/tcp
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
+
 networks:
   private:
     internal: true

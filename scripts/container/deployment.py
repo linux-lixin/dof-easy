@@ -22,11 +22,6 @@ def configure(model, values, root, databases):
             environment=database_env, networks={'public':None},read_only=True,
             tmpfs=['/tmp'],cap_drop=['ALL'],security_opt=['no-new-privileges:true'])
         services['db-tools'] = dict(copy.deepcopy(helper),profiles=['tools'],command=['check'])
-        services['db-check'] = dict(copy.deepcopy(helper),command=['serve'],restart='unless-stopped',
-            healthcheck=dict(test=['CMD','python3','/opt/dnf/ubuntu/external_database.py','check'],
-                             interval='10s',timeout='30s',retries=6,start_period='15s'))
-        for name in ('game','netguard'):
-            services[name].setdefault('depends_on',{})['db-check']={'condition':'service_healthy'}
         env=services['game']['environment']
         env.update(database_env)
         env.update(DOF_DATABASE_MODE='existing', DOF_DATABASE_KIND='external',
@@ -34,7 +29,6 @@ def configure(model, values, root, databases):
                    MAIN_MYSQL_PORT=values['DOF_DB_PORT'],MYSQL_PORT=values['DOF_DB_PORT'],
                    MAIN_MYSQL_ROOT_PASSWORD='unused',DNF_DB_ROOT_PASSWORD='unused',
                    MAIN_MYSQL_GAME_ALLOW_IP=values['DOF_DB_ALLOW_HOST'],MYSQL_GAME_ALLOW_IP=values['DOF_DB_ALLOW_HOST'])
-        services['netguard']['environment'].update(NETGUARD_DB_HOST=values['DOF_DB_HOST'],NETGUARD_DB_PORT=values['DOF_DB_PORT'])
         services['admin']['networks']['public']=None
         services['admin']['environment'].update(
             SPRING_DATASOURCE_URL='jdbc:mysql://'+values['DOF_DB_HOST']+':'+values['DOF_DB_PORT']+'/dnf_service?useUnicode=true&characterEncoding=utf8&useSSL=false',

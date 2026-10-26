@@ -112,7 +112,7 @@ services:
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     volumes:
-      - ../../../deploy/network/ingress.py:/ingress.py:ro
+      - ../network-helpers/ingress.py:/ingress.py:ro
     depends_on:
       game: {condition: service_healthy}
       admin: {condition: service_started}

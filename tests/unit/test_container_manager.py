@@ -17,7 +17,6 @@ spec = importlib.util.spec_from_file_location('manager', ROOT / 'scripts/contain
 manager = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(manager)
 game_profile = manager.module('profile_check', 'services/game/runtime/ubuntu/game_profile.py')
-guard = manager.module('container_guard', 'deploy/network/netguard/entrypoint.py')
 
 
 class ContainerManager(unittest.TestCase):
@@ -158,39 +157,19 @@ class ContainerManager(unittest.TestCase):
         self.assertEqual(values['GAME_DB_PASSWORD'],previous['GAME_DB_PASSWORD'])
         self.assertEqual(values['DNF_MAX_LEVEL'],'70')
         ports=json.loads((instance/'channels.json').read_text())
-        self.assertIn('127.0.0.1:30015:30015/tcp',ports['services']['netguard']['ports'])
+        self.assertIn('127.0.0.1:30015:30015/tcp',ports['services']['game']['ports'])
         self.assertTrue(list((instance/'config-backups').glob('*/.env')))
 
-    def test_selected_channels_control_published_ports_and_guard(self):
+    def test_selected_channels_control_direct_published_ports(self):
         values = manager.initial_values(self.args, self.row, self.root / 'main')
-        ports = manager.ports_override(values)['services']['netguard']['ports']
+        ports = manager.ports_override(values)['services']['game']['ports']
         self.assertIn('127.0.0.1:30011:30011/tcp', ports)
         self.assertNotIn('127.0.0.1:30015:30015/tcp', ports)
-        with patch.dict('os.environ', {'OPEN_CHANNEL': '11,12,52'}):
-            rules = guard.render_rules(['172.30.0.2'])
-            self.assertIn('30011,30012,30052', rules)
-            self.assertNotIn('30015', rules)
-        with patch.dict('os.environ', {'OPEN_CHANNEL': ','.join(map(str, range(11, 40)))}):
-            rules = guard.render_rules(['172.30.0.2'])
-            for line in rules.splitlines():
-                if '--dports' in line:
-                    self.assertLessEqual(len(line.split('--dports ')[1].split()[0].split(',')), 15)
-
-    def test_game_binding_and_explicit_client_sources(self):
+    def test_game_binding_is_independent_of_admin(self):
         values = manager.initial_values(self.args, self.row, self.root / 'main')
         values['GAME_BIND_IP'] = '0.0.0.0'
-        self.assertTrue(all(p.startswith('0.0.0.0:') for p in manager.ports_override(values)['services']['netguard']['ports']))
+        self.assertTrue(all(p.startswith('0.0.0.0:') for p in manager.ports_override(values)['services']['game']['ports']))
         self.assertEqual(values['BIND_IP'], '127.0.0.1')
-        with patch.dict('os.environ', {'NETGUARD_ALLOWED_CLIENTS': '192.0.2.17/32'}):
-            rules = guard.render_rules(['172.30.0.2'])
-            ingress = [line for line in rules.splitlines() if '--dports' in line]
-            self.assertTrue(ingress)
-            self.assertTrue(all('-s 192.0.2.17/32' in line for line in ingress))
-            self.assertNotIn('--dports', guard.render_rules(ipv6=True))
-            self.assertIn('-d 172.30.0.2/32 -p tcp --dport 3306', rules)
-        with patch.dict('os.environ', {'NETGUARD_ALLOWED_CLIENTS': 'invalid'}):
-            with self.assertRaises(ValueError): guard.render_rules(['172.30.0.2'])
-
     def test_executable_profile_checks_abi_and_selected_hash(self):
         path = self.root / 'df_game_r'
         path.write_bytes(self.binary)

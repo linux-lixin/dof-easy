@@ -25,16 +25,21 @@ with tempfile.TemporaryDirectory() as tmp:
    assert ('db' in final['services'])==(kind=='internal')
    assert final['services']['keys']['network_mode']=='none'
    assert final['services']['game']['depends_on']['keys']['condition']=='service_completed_successfully'
-   expected={'game','admin','ingress','netguard','keys'} | ({'db'} if kind=='internal' else {'db-check'})
+   expected={'game','admin','keys'} | ({'db'} if kind=='internal' else set())
    assert set(final['services'])==expected
    if kind=='external':
-    assert final['services']['db-check']['command']==['serve']
     assert model['services']['db-tools']['profiles']==['tools']
-   for service,filename in [('keys','deploy/bootstrap/init-keys.sh'),('ingress','deploy/network/ingress.py')]:
+   for service,filename in [('keys','deploy/bootstrap/init-keys.sh')]:
     mounts=final['services'][service]['volumes']
     assert any(mount.get('source')==str(ROOT/filename) and mount.get('read_only') for mount in mounts)
     assert (ROOT/filename).is_file()
    if kind=='internal':assert '$MYSQL_ROOT_PASSWORD' in final['services']['db']['healthcheck']['test'][1]
    if launcher=='native':assert final['services']['admin']['environment']['DOF_DATABASE_UUID']==values['DOF_DATABASE_UUID']
-   ports=final['services']['ingress']['ports'];assert all(x['host_ip']=='127.0.0.1' for x in ports)
+   ports=final['services']['admin']['ports'];assert all(x['host_ip']=='127.0.0.1' and x['target']==80 for x in ports)
+   game=final['services']['game']
+   assert 'network_mode' not in game and not game.get('cap_add')
+   required={(7001,'tcp'),(7001,'udp'),(7300,'tcp'),(7300,'udp'),(2311,'udp'),(2312,'udp'),(2313,'udp'),(30015,'tcp'),(31015,'udp'),(30052,'tcp'),(31052,'udp')}
+   if launcher=='native': required.add((8887,'tcp'))
+   assert {(p['target'],p['protocol']) for p in game['ports']}==required
+   assert all(p['host_ip']=='0.0.0.0' for p in game['ports'])
    print(kind,launcher,plugins,raid,'valid; native binding and literal interpolation preserved')
