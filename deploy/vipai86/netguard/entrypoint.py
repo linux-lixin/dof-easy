@@ -33,6 +33,13 @@ def selected_ports():
     return tcp, [7001, 7300, 2311, 2312, 2313] + [31000+c for c in channels]
 
 
+def database_port():
+    value = os.environ.get('NETGUARD_DB_PORT', '3306')
+    if not value.isdigit() or not 1 <= int(value) <= 65535:
+        raise ValueError('Invalid database port')
+    return int(value)
+
+
 def render_rules(db_addresses=(), ipv6=False):
     addresses = sorted({str(ipaddress.IPv4Address(value)) for value in db_addresses})
     if not ipv6 and not addresses:
@@ -55,14 +62,14 @@ def render_rules(db_addresses=(), ipv6=False):
                              + ','.join(map(str, ports[start:start+15])) + ' -j ACCEPT')
     if not ipv6:
         for address in addresses:
-            lines.append(f"-A OUTPUT -d {address}/32 -p tcp --dport 3306 -m conntrack --ctstate NEW -j ACCEPT")
+            lines.append(f"-A OUTPUT -d {address}/32 -p tcp --dport {database_port()} -m conntrack --ctstate NEW -j ACCEPT")
     # Deterministic failure for blocked callers; policies remain DROP if a rule is removed.
     lines += ["-A OUTPUT -j REJECT", "COMMIT", ""]
     return "\n".join(lines)
 
 
 def resolve_database(host):
-    addresses = socket.getaddrinfo(host, 3306, socket.AF_INET, socket.SOCK_STREAM)
+    addresses = socket.getaddrinfo(host, database_port(), socket.AF_INET, socket.SOCK_STREAM)
     return sorted({str(ipaddress.IPv4Address(item[4][0])) for item in addresses})
 
 
@@ -122,7 +129,7 @@ def run(db_host, marker, resolve_timeout=60, dns_refresh_interval=30):
         temporary.write_text("ready\n", encoding="ascii")
         temporary.chmod(0o600)
         os.replace(temporary, ready)
-        LOG.info("Network guard ready: only loopback, database TCP/3306, and connection replies may leave")
+        LOG.info("Network guard ready: only loopback, selected database TCP port, and connection replies may leave")
         while not stopped.wait(dns_refresh_interval):
             try:
                 refreshed = resolve_database(db_host)

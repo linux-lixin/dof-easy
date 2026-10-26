@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+FROM mysql:5.6@sha256:20575ecebe6216036d25dab5903808211f1e9ba63dc7825ac20cb975e34cfcae AS mysql56_client
 # This manifest is pinned; build on an x86_64 Docker host using its default platform.
 FROM ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55 AS runtime
 ENV TZ=Asia/Shanghai
@@ -39,6 +40,12 @@ RUN echo 'd8fb57b31d9b29ad576e0100d6fa67e71aa19c3e6d994e5e0a5957e41caec772  /tmp
  && gcc -m32 -Wall -Wextra -Werror -o /tmp/shm-probe /tmp/shm-probe.c -lrt
 
 FROM runtime AS game
+# Modern mariadb-dump queries generated-column metadata absent in MySQL 5.6.
+# Use the matching pinned client without adding/running a database service.
+COPY --from=mysql56_client /usr/bin/mysqldump /usr/local/bin/dof-mysqldump56
+COPY --from=mysql56_client /usr/share/doc/mysql-community-client/copyright /opt/dnf/licenses/mysql56-client-copyright
+RUN echo '55aaf7412c4e46017dcf49f5c0c129ecea97f1c8fe4ed1e14634f0530f0ea65b  /usr/local/bin/dof-mysqldump56' | sha256sum -c - \
+ && /usr/local/bin/dof-mysqldump56 --version
 COPY assets/home/template/ /home/template/
 COPY assets/TeaEncrypt /TeaEncrypt
 COPY assets/etc/supervisor/ /etc/supervisor/

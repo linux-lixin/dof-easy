@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "78e34050553eb54e369878cfcc95816829498a76",
+  "serverContacted": false,
+  "unit": {
+    "tests": 123,
+    "passed": 120,
+    "skipped": [
+      {
+        "test": "test_scoped_firewall_preserves_player_source_and_blocks_other_egress (test_vipai86_netguard.NetguardDocker.test_scoped_firewall_preserves_player_source_and_blocks_other_egress)",
+        "reason": "Set VIPAI86_NETGUARD_DOCKER_TESTS=1 for isolated NET_ADMIN Docker tests"
+      },
+      {
+        "test": "test_mysql56_bootstrap_sql_creates_once_and_preserves_credentials (test_vipai86_admin.Vipai86Admin.test_mysql56_bootstrap_sql_creates_once_and_preserves_credentials)",
+        "reason": "requires isolated vipai86-audit MySQL 5.6"
+      },
+      {
+        "test": "test_actual_frida_item_handler_ownership (test_raid_extension.RaidAssets.test_actual_frida_item_handler_ownership)",
+        "reason": "Node.js required for real JavaScript handler test"
+      }
+    ],
+    "failures": 0,
+    "errors": 0,
+    "patterns": [
+      "test_database_modes.py",
+      "test_container_manager.py",
+      "test_ubuntu_runtime.py",
+      "test_vipai86_netguard.py",
+      "test_vipai86_admin.py",
+      "test_deployment_fixes.py",
+      "test_vipai86_sql_compat.py",
+      "test_raid_extension.py",
+      "test_vipai86_deployment.py",
+      "test_vipai86_source.py",
+      "test_vipai86_runtime.py",
+      "dof/test_web_deployment.py"
+    ]
+  },
+  "localMysql": {
+    "mysqlVersion": "5.6.51",
+    "freshNativeTables": 23,
+    "secondInitializationPreserved": true,
+    "unrelatedSitePreserved": true,
+    "scopedGrants": true,
+    "wrongUuidRejected": true,
+    "existingSchemasRejected": true,
+    "gameConnectionConfigured": true,
+    "projectBackupBytes": 819110,
+    "systemAndUnrelatedExcluded": true,
+    "logicalRestoreVerified": true,
+    "internalNativePreparationVerified": true,
+    "realWebLoginReadWriteAuditAndConflict": true
+  },
+  "compose": {
+    "version": "2.39.4",
+    "combinations": [
+      "internal/dof",
+      "internal/native",
+      "external/dof",
+      "external/native"
+    ],
+    "result": "passed",
+    "containersStarted": false
+  },
+  "javaBuild": {
+    "sources": 152,
+    "target": "Java 8",
+    "compiler": "OpenJDK 17",
+    "result": "passed"
+  },
+  "shellSyntax": "passed",
+  "sourceHashes": {
+    "scripts/container/database.py": "8bec4c3f2e0e4fe27a9bf710ed46bf4fd2e95d4ac9cc332cd9e88b4d5a56e6bd",
+    "scripts/container/deployment.py": "3aabb7d9757eca462570e25f6a7ce423d49835beb6437612ba6c43cc3f01a671",
+    "scripts/container/manage.py": "8aed5f2543c82aac99359aae9a9619bdd7c12995233be2f2a670b1f53ed15e22",
+    "services/game/runtime/ubuntu/external_database.py": "f506ace9d5c968db3c7106f0f84725a8303e06eff550088f3fb63166a5b393ae",
+    "services/game/runtime/ubuntu/health.py": "8012e1e247bde303d854d2c83b11251b9937ca8b0a77cde7c1c4e4f0afece294",
+    "services/game/runtime/ubuntu/database_bootstrap.sh": "0420c4cee588fd2e1a259122d18d4487b8341d6cef9b85e58c0a6e0640a17428",
+    "services/game/runtime/ubuntu/entrypoint.sh": "c412002c62132881f368813e3609956b6e14a4393b13007f925418bcdb5bfea6",
+    "services/game/docker/ubuntu/Dockerfile": "aa0497a6b8aff295adaa44f25a2e407be8ec5d785fbfb5a0b718e0a9601c3a99",
+    "services/game/docker/ubuntu/mysql56-client.lock.json": "fe273e640881c0ed02d4a76339d9a7dc763392511d5234464797a742498e5518",
+    "services/admin/docker/Dockerfile": "41d27bc5d527734c7f7b55068a014edc50d7335ca62cdf9ef660dddc81dac6cc",
+    "services/admin/docker/dof-entrypoint.sh": "4ae2544171ad9da4c77495226098995b90ccdfae184ad8d0177bc94fb1c39162",
+    "deploy/vipai86/netguard/entrypoint.py": "6eb1a3f09306e119e83241188d7fd854d778f6fd906e6710e7c087bb1c9a6f89"
+  },
+  "notRun": [
+    "Docker image build (no local Docker Engine)",
+    "Docker network namespace/firewall integration",
+    "Baota Nginx installation and config reload",
+    "Full native game startup against host MySQL",
+    "Player login, gameplay, equipment broadcast, random box and raids"
+  ],
+  "releaseReady": false
+}

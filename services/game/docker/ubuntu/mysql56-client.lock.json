@@ -1,0 +1,8 @@
+{
+  "image": "mysql:5.6@sha256:20575ecebe6216036d25dab5903808211f1e9ba63dc7825ac20cb975e34cfcae",
+  "architecture": "amd64",
+  "version": "5.6.51",
+  "source": "/usr/bin/mysqldump",
+  "destination": "/usr/local/bin/dof-mysqldump56",
+  "sha256": "55aaf7412c4e46017dcf49f5c0c129ecea97f1c8fe4ed1e14634f0530f0ea65b"
+}

@@ -17,6 +17,11 @@ fi
 [ -f /app/data/dof-isolated.json ] || { echo 'Missing isolated deployment marker' >&2; exit 1; }
 
 export NGINX_PORT=${NGINX_PORT:-80} SERVER_PORT=${SERVER_PORT:-9001}
+# Source-built images retain both proxy templates; prebuilt images already
+# install the native template at the generic path.
+if [ -f /etc/nginx/dof-nginx.conf.template ]; then
+  cp /etc/nginx/dof-nginx.conf.template /etc/nginx/nginx.conf.template
+fi
 envsubst '${NGINX_PORT} ${SERVER_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 nginx -t
 service nginx start

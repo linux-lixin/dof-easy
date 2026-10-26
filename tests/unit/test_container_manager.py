@@ -284,8 +284,12 @@ class ContainerManager(unittest.TestCase):
         instance = self.root / 'state/instances/main'
         settings = {'registry': 'ghcr.io/backup-owner', 'tag': 'v3'}
         manager.create_instance(instance, self.args, self.row, self.archive, settings)
+        def fixture_compose(*args, **kwargs):
+            if kwargs.get('stdout') is not None:
+                kwargs['stdout'].write(b'-- simulated database dump for archive routing test\n' * 4)
+            return subprocess.CompletedProcess([], 0, 'db\n')
         with patch.object(manager, 'STATE', self.root / 'state'), \
-             patch.object(manager, 'compose', return_value=subprocess.CompletedProcess([], 0, 'db\n')) as compose, \
+             patch.object(manager, 'compose', side_effect=fixture_compose) as compose, \
              patch.object(manager, 'run') as docker:
             manager.backup(instance)
             command = docker.call_args.args[0]

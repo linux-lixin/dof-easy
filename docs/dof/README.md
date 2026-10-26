@@ -4,6 +4,7 @@
 
 | 要做的事 | 入口 |
 |---|---|
+| 新装 86 级原生服务，选择内置／宝塔 MySQL | [完整部署步骤](../baota-deployment.md) |
 | 查看已合并代码、部署版本、通过项和未完成项 | [当前状态](status.md) |
 | 核对服务端证据和测试范围 | [服务端验收](server-runtime-validation.md)、[机器摘要](server-runtime-validation.json) |
 | 导入固定免授权材料、生成正式资源包 | [资源导入](launcher.md) |

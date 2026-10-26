@@ -4,6 +4,7 @@
 
 | 需求 | 文档 |
 |---|---|
+| 同机宝塔 Nginx、Docker，选择内置／外置 MySQL | [完整部署步骤](baota-deployment.md) |
 | 最新进度、部署版本与剩余工作 | [当前状态](dof/status.md) |
 | 默认模式一键安装及日常管理 | [根 README](../README.md) |
 | 原生模式、网页 PVF 与客户端联调 | [原生模式文档](dof/README.md) |

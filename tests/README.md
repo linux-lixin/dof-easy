@@ -57,3 +57,7 @@ python3 -m unittest discover -s tests/unit/dof -p 'test_server_runtime_report.py
 ```
 
 原生后台 Java 私有样本、隔离 MySQL 和编译要求见 [发布说明](../docs/dof/publication.txt)。各历史测试批次有重叠，不把计数相加。Windows 读取、实际登录、奖励入包及团本流程须有对应实际证据，不能由离线合成输入、网页任务状态或进程健康替代。
+
+## 内置／外置 MySQL
+
+数据库模式、初始化边界和备份失败恢复：`python3 -m unittest discover -s tests/unit -p test_database_modes.py`。真实 MySQL 5.6、网页 HTTP 和 Compose 四组合检查见 [本地隔离测试](integration/mysql/README.md)。

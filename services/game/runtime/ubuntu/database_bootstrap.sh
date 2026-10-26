@@ -3,6 +3,9 @@ set -e
 case "${DOF_DATABASE_MODE:-provision}" in
   existing)
     echo "Existing game database: legacy initialization and grant rewriting skipped."
+    if [ "${DOF_DATABASE_KIND:-internal}" = external ]; then
+      python3 /opt/dnf/ubuntu/external_database.py configure
+    fi
     exit 0
     ;;
   provision) ;;
