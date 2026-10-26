@@ -1,4 +1,4 @@
-# Managed by dof.sh / dof.ps1; levels and PVF are instance data.
+# Managed by dof.sh; levels and PVF are instance data.
 services:
   db:
     image: ${DOF_DB_IMAGE:-dof-easy-db:local}

@@ -1,6 +1,6 @@
 # 项目结构与维护边界
 
-根目录 `dof.sh` / `dof.ps1` 是通用安装入口，`scripts/container/` 负责实例和镜像管理。默认 `dof` 登录链与 `native` 原生链共用部分游戏和网页基础代码，但分别验证客户端协议。当前结果见 [状态页](dof/status.md)。
+根目录 `dof.sh` 是通用安装入口，`scripts/container/` 负责实例和镜像管理。默认 `dof` 登录链与 `native` 原生链共用部分游戏和网页基础代码，但分别验证客户端协议。当前结果见 [状态页](dof/status.md)。
 
 ```text
 dof-easy/

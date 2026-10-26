@@ -49,7 +49,7 @@ def run(command, **kwargs):
 def docker_check():
     result = run(['docker', 'info', '--format', '{{.OSType}}/{{.Architecture}}'], capture_output=True, text=True, timeout=30)
     if result.stdout.strip() not in ('linux/x86_64', 'linux/amd64'):
-        raise ValueError('需要 Linux amd64 Docker；Windows 请切换 Docker Desktop 到 Linux 容器。')
+        raise ValueError('服务端部署需要 Linux amd64 Docker Engine 与 Compose v2。')
     run(['docker', 'compose', 'version'], timeout=20)
 
 
@@ -483,6 +483,8 @@ def wizard():
 
 
 def main(argv=None):
+    if sys.platform != 'linux':
+        raise ValueError('服务端部署仅支持 Linux 主机，请在 Linux 上运行 bash dof.sh。')
     parser = argparse.ArgumentParser(description='通用一键容器端：默认拉取自有仓库镜像；源码构建必须显式选择。')
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('versions', help='列出原安装器支持的等级')
@@ -663,9 +665,6 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    if os.name == 'nt':
-        sys.stdout.reconfigure(encoding='utf-8')
-        sys.stderr.reconfigure(encoding='utf-8')
     try:
         raise SystemExit(main())
     except (ValueError, OSError, KeyError, subprocess.SubprocessError, tarfile.TarError) as error:
