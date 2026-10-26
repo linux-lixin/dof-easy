@@ -50,7 +50,7 @@ def save(path, value):
 @contextmanager
 def locked():
     if os.geteuid() != 0:
-        raise ValueError('主机准备需要 root，请使用 sudo bash install.sh。')
+        raise ValueError('主机准备需要 root，请使用 sudo bash dof.sh。')
     STATE.mkdir(parents=True, exist_ok=True, mode=0o700)
     with (STATE / 'operation.lock').open('a') as stream:
         try:

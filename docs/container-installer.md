@@ -5,15 +5,17 @@
 ## 三步安装
 
 1. 把项目代码和自己的完整 PVF 放到主机。正式免授权资源与普通插件已纳入 Git，无需另行上传。可上传源码归档，或在已有 Git 的主机运行 `git clone --depth 1 --branch main --single-branch https://github.com/linux-lixin/dof-easy.git`。
-2. 在项目目录执行 `sudo bash install.sh`，选 **1 安装服务端**。
+2. 在项目目录执行 `sudo bash dof.sh`，选 **1 安装服务端**。
 3. 按向导选择并核对最终确认页，输入 `y` 执行。成功后按输出地址登录网页，账号 `admin`，密码在该实例私有 `.env` 的 `ADMIN_PASSWORD`。
 
 ```sh
 cd /opt/dof-easy # 换成自己的项目目录
-sudo bash install.sh
+sudo bash dof.sh
 # 等价菜单入口
 sudo bash dof.sh
 ```
+
+安装与日常管理统一使用 `dof.sh`：无参数进入中文菜单，有参数执行 `status`、`start`、`backup` 等命令。入口会检查 Python 3.11+，缺少时询问是否补齐；安装失败或非交互输入结束时不会继续执行命令。不再提供独立 `install.sh`。
 
 缺少 Python 时先询问是否从系统源安装菜单运行依赖；其余主机变更集中到安装确认之后。脚本不会安装宝塔或宿主机 Nginx，不自动重启主机。缺少系统包从 APT 安装，Docker 使用官方签名源；已有引擎复用，同来源补齐缺少的 Compose/Buildx。若补齐需要升级或移除现有软件包，则停止并显示原因。
 

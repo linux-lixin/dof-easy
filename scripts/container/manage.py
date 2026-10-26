@@ -640,7 +640,7 @@ def wizard():
 def main(argv=None):
     if sys.platform != 'linux':
         raise ValueError('服务端部署仅支持 Linux 主机，请在 Linux 上运行 bash dof.sh。')
-    parser = argparse.ArgumentParser(description='通用一键容器端：默认拉取自有仓库镜像；源码构建必须显式选择。')
+    parser = argparse.ArgumentParser(prog='dof.sh', description='通用一键容器端：默认拉取自有仓库镜像；源码构建必须显式选择。')
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('versions', help='列出原安装器支持的等级')
     resources = sub.add_parser('resources', help='下载全部等级包并校验仓库内公共资源')
