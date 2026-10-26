@@ -1,0 +1,61 @@
+{
+  "serverAccessed": false,
+  "nativeProgramsExecuted": false,
+  "fullGameDeployment": "not-run",
+  "baseImage": "sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+  "profiles": [
+    {
+      "dockerfile": "Dockerfile",
+      "ignore": "services/game/docker/ubuntu/Dockerfile.dockerignore",
+      "pluginFiles": 28,
+      "image": "sha256:8ebe9056ea97b8749e9b795051427a1ae0ff62df3c3f91b41c1e4ad397e3f24a",
+      "passed": true
+    },
+    {
+      "dockerfile": "Dockerfile.integration",
+      "ignore": "services/game/.dockerignore",
+      "pluginFiles": 28,
+      "image": "sha256:d1d3de637aa0441951f20c950a9e56a8001a19144b3fcf311d838a705a83d5dc",
+      "passed": true
+    }
+  ],
+  "date": "2026-10-26",
+  "baseCommit": "17520ae135027bb988b60ee618e578b5c3af8fc0",
+  "releaseReady": false,
+  "unitTests": {
+    "general": {
+      "total": 284,
+      "passed": 274,
+      "skipped": 10
+    },
+    "native": {
+      "total": 88,
+      "passed": 86,
+      "skipped": 2
+    }
+  },
+  "cleanCheckout": {
+    "coreAutocrlf": true,
+    "originalsIncluded": false,
+    "total": 21,
+    "passed": 20,
+    "skipped": 1
+  },
+  "retainedPreviousSharedInputs": 421,
+  "addedCompanionPatch": 1,
+  "nativePayloadsUnchanged": 15,
+  "clientLogin": "not-run",
+  "inputs": {
+    "metadata/build-inputs.lock.json": "4f4f57288fe3fedbf01d6b8e9a3fb561fd549cad4886de3825ae48f36e3b1262",
+    "metadata/dof/native-name-contract.json": "a0804a24093082452a43c7d42ce3e092605525d66f078e088849f77f0e7a019b",
+    "services/game/resources/native/manifest.json": "b117ce61b0a0729f4714dd18145a38ae922f87b4de89350f3d057e6b94df7a3a",
+    "scripts/container/menu.py": "763d9766f39dfe5d296cceb43b9431c8be256fbe207fc80abd63f628cef65377",
+    "scripts/container/resources.py": "8ef1bf27ceeb399f50be05d080dd19dd73b801b0ab3195508c6df8391e3b304c",
+    "scripts/dof/native_name_contract.py": "a71613edb6e88396c00e5652d1f85a134fe2f1e9735d11c645463af0f716a2d9",
+    "scripts/dof/package_server.py": "8524e569edf875989c3b28fbb6f0e317f426807363165a375ddfa22aff0ab55a",
+    "scripts/dof/stage_server_probe.py": "3b8bc600e5f926ccc78faee46e7f8e3aa2bf2e494b42e18fca732565443d1a91",
+    "tests/unit/test_bundled_native_assets.py": "5edd942dce2a98110963d26efcb3a724c3ecc3d99521be2cfd7403a01fbc4610",
+    "tests/unit/test_container_menu.py": "6dc139b510772f023a071f0e52c43b1435b63d35350c8dc9ae50d480a1c4c5ba",
+    "tests/integration/resource_docker_probe.py": "a8c381d92e7ec963b38484295235cd1b0c79e30a369c35dbb05310aa50da601c"
+  }
+}

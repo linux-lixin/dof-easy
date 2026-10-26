@@ -19,7 +19,6 @@ class ContainerMenu(unittest.TestCase):
         self.pvf.write_bytes(b'p' * 2048)
         self.state = patch.object(menu.manager, 'STATE', self.root / 'state')
         self.state.start(); self.addCleanup(self.state.stop)
-        self.assets = self.root / 'assets'; self.assets.mkdir()
         for name in ('system_check','local_docker','prepare_dependencies','disk_check','create_swap','firewall'):
             mock = patch.object(menu.host, name); mock.start(); self.addCleanup(mock.stop)
         mock = patch.object(menu.host,'memory',return_value={'MemTotal':8*menu.host.GIB,'MemAvailable':5*menu.host.GIB,'SwapTotal':0})
@@ -28,7 +27,7 @@ class ContainerMenu(unittest.TestCase):
 
 
     def inputs(self, level='', database='1'):
-        return [level, '192.0.2.1', str(self.pvf), str(self.assets), '', '', '', database, '1', '', '', '0', '2']
+        return [level, '192.0.2.1', str(self.pvf), '', '', '', database, '1', '', '', '0', '2']
 
     def test_selected_level_and_empty_default_reach_install(self):
         for value, expected in [('', '86'), ('70', '70'), ('120', '120')]:
@@ -44,12 +43,13 @@ class ContainerMenu(unittest.TestCase):
                 self.assertIn('/verified assets', args)
                 self.assertIn('--build', args)
 
-    def test_empty_assets_selection_uses_checked_in_bundle(self):
-        answers=self.inputs();answers[3]=''
-        with patch('builtins.input',side_effect=answers+['y']), \
+    def test_no_assets_question_uses_checked_in_bundle(self):
+        answers=self.inputs()
+        with patch('builtins.input',side_effect=answers+['y']) as prompts, \
              patch.object(menu.manager,'docker_check'),patch.object(menu,'web_instructions'), \
              patch.object(menu.manager,'main') as run:
             menu.install('test')
+        self.assertFalse(any('资源目录' in str(call) for call in prompts.call_args_list))
         args=run.call_args.args[0]
         self.assertEqual(Path(args[args.index('--dof-assets')+1]),menu.manager.ROOT/'services/game/resources/native')
 

@@ -70,7 +70,7 @@ Thumbs.db
 
 # Committed shared build inputs; level binaries and PVF remain external.
 !/services/game/assets/home/template/init/init_sql.tgz
-!/metadata/dof/source-audit/plugins/dp2-pvf-patch.zip
+!/services/game/resources/plugins/dp2/pvf-patch.zip
 
 # Private admin deployment inputs, acceptance snapshots and generated client files
 *.private
@@ -90,3 +90,6 @@ Thumbs.db
 # Pinned derived native payload layout (not instance runtime data).
 !/services/game/resources/native/runtime/
 !/services/game/resources/native/runtime/**
+
+# Raw inputs and locally generated provenance are private maintainer materials.
+/metadata/dof/source-audit/

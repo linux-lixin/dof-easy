@@ -98,30 +98,16 @@ def verify_native_inputs():
     return len(runtime_lock['files'])
 
 
-def verify_source_audit():
-    """Explicit maintainer audit; originals are not deployment dependencies."""
-    prefix = 'metadata/dof/source-audit/'
-    source = json.loads(destination(prefix + 'server-inputs/replacement.lock.json').read_text())
-    archive = json.loads(destination(prefix + 'resources.lock.json').read_text())
-    for base, rows in ((prefix + 'server-inputs/files/', source['files']), (prefix, archive['files'])):
-        for row in rows:
-            verify(destination(base + row['path']), row)
-    return len(source['files']) + len(archive['files'])
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     # Accept old preparation flags for existing callers; they cause no download.
     parser.add_argument('--resources', help=argparse.SUPPRESS)
     parser.add_argument('--generic', action='store_true', help=argparse.SUPPRESS)
     parser.add_argument('--download', action='store_true', help=argparse.SUPPRESS)
-    parser.add_argument('--audit', action='store_true', help='Also verify archived originals and provenance (maintainers only)')
-    args = parser.parse_args()
+    parser.parse_args()
     count = verify_build_inputs()
     native_count = verify_native_inputs()
     print('Verified %d shared inputs and %d native payload files; no resource download required.' % (count, native_count))
-    if args.audit:
-        print('Verified %d archived source/evidence files.' % verify_source_audit())
 
 
 if __name__ == '__main__':

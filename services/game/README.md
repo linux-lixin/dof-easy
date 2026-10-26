@@ -44,4 +44,4 @@ docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 s
 
 DP2、Frida 和原生资源统一放在 `resources/`，完整的源码、镜像、持久化及加载路径见 [资源布局](../../docs/resource-layout.md)。安装菜单可选 DP2＋Frida、仅 DP2、仅 Frida 或关闭；团本独立开关且依赖 DP2。原生登录必需的凭据适配不随普通插件关闭。
 
-实例插件修改保存在 `/data/dp/` 与 `/data/plugins/frida/`；`/dp2` 保留上游加载约定。模板不带数据库密码，启动时按当前实例注入。原始材料集中在 `metadata/dof/source-audit/`，不进入镜像或实例。
+实例插件修改保存在 `/data/dp/` 与 `/data/plugins/frida/`；`/dp2` 保留上游加载约定。模板不带数据库密码，启动时按当前实例注入。原始材料由维护者本地保管，不再入库。安装菜单自动选择仓库正式资源；DP2 配套 PVF 补丁随 DP2 选装提供。

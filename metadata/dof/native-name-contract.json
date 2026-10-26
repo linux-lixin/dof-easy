@@ -1,0 +1,1463 @@
+{
+  "schema": 1,
+  "runtimeManifestSha256": "b117ce61b0a0729f4714dd18145a38ae922f87b4de89350f3d057e6b94df7a3a",
+  "modules": {
+    "bin/dof-gateway": {
+      "retiredLiterals": [
+        {
+          "address": 5022768,
+          "bytes": 127,
+          "allocationBytes": 127,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5023000,
+          "bytes": 128,
+          "allocationBytes": 128,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5023136,
+          "bytes": 133,
+          "allocationBytes": 133,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024113,
+          "bytes": 8,
+          "allocationBytes": 8,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024181,
+          "bytes": 12,
+          "allocationBytes": 12,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024206,
+          "bytes": 6,
+          "allocationBytes": 12,
+          "preservedSuffixReferences": [
+            {
+              "offset": 604507,
+              "address": 5024212
+            }
+          ],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024367,
+          "bytes": 6,
+          "allocationBytes": 6,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024567,
+          "bytes": 11,
+          "allocationBytes": 11,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024579,
+          "bytes": 15,
+          "allocationBytes": 15,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024600,
+          "bytes": 9,
+          "allocationBytes": 9,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024610,
+          "bytes": 11,
+          "allocationBytes": 11,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024622,
+          "bytes": 12,
+          "allocationBytes": 12,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024635,
+          "bytes": 12,
+          "allocationBytes": 12,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024648,
+          "bytes": 11,
+          "allocationBytes": 11,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024660,
+          "bytes": 12,
+          "allocationBytes": 12,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024673,
+          "bytes": 10,
+          "allocationBytes": 10,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5024684,
+          "bytes": 15,
+          "allocationBytes": 15,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5026248,
+          "bytes": 40,
+          "allocationBytes": 40,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5026296,
+          "bytes": 85,
+          "allocationBytes": 85,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5027656,
+          "bytes": 178,
+          "allocationBytes": 178,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5027880,
+          "bytes": 67,
+          "allocationBytes": 67,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5027952,
+          "bytes": 78,
+          "allocationBytes": 78,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5028032,
+          "bytes": 68,
+          "allocationBytes": 68,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5028992,
+          "bytes": 148,
+          "allocationBytes": 148,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5029336,
+          "bytes": 156,
+          "allocationBytes": 156,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5029496,
+          "bytes": 98,
+          "allocationBytes": 98,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5029968,
+          "bytes": 49,
+          "allocationBytes": 49,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5030024,
+          "bytes": 70,
+          "allocationBytes": 70,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5030096,
+          "bytes": 58,
+          "allocationBytes": 58,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5030160,
+          "bytes": 57,
+          "allocationBytes": 57,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5030320,
+          "bytes": 31,
+          "allocationBytes": 31,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5030352,
+          "bytes": 107,
+          "allocationBytes": 107,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5030464,
+          "bytes": 244,
+          "allocationBytes": 244,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5030712,
+          "bytes": 133,
+          "allocationBytes": 133,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5031248,
+          "bytes": 96,
+          "allocationBytes": 96,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5031736,
+          "bytes": 286,
+          "allocationBytes": 286,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5032368,
+          "bytes": 86,
+          "allocationBytes": 86,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5032456,
+          "bytes": 103,
+          "allocationBytes": 103,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5032720,
+          "bytes": 137,
+          "allocationBytes": 137,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5032864,
+          "bytes": 64,
+          "allocationBytes": 64,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5032992,
+          "bytes": 100,
+          "allocationBytes": 100,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5033856,
+          "bytes": 65,
+          "allocationBytes": 65,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5033928,
+          "bytes": 57,
+          "allocationBytes": 57,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5034560,
+          "bytes": 650,
+          "allocationBytes": 650,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5035712,
+          "bytes": 41,
+          "allocationBytes": 41,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5035760,
+          "bytes": 126,
+          "allocationBytes": 126,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5035888,
+          "bytes": 66,
+          "allocationBytes": 66,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5036160,
+          "bytes": 139,
+          "allocationBytes": 139,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5036304,
+          "bytes": 83,
+          "allocationBytes": 83,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5036392,
+          "bytes": 95,
+          "allocationBytes": 95,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5036528,
+          "bytes": 223,
+          "allocationBytes": 223,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5037304,
+          "bytes": 67,
+          "allocationBytes": 67,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5037376,
+          "bytes": 343,
+          "allocationBytes": 343,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5037720,
+          "bytes": 140,
+          "allocationBytes": 140,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5037864,
+          "bytes": 373,
+          "allocationBytes": 373,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5038448,
+          "bytes": 99,
+          "allocationBytes": 99,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5038791,
+          "bytes": 7,
+          "allocationBytes": 8,
+          "preservedSuffixReferences": [
+            {
+              "offset": 310467,
+              "address": 5038798
+            },
+            {
+              "offset": 357822,
+              "address": 5038798
+            },
+            {
+              "offset": 368523,
+              "address": 5038798
+            }
+          ],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5039105,
+          "bytes": 28,
+          "allocationBytes": 28,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5039608,
+          "bytes": 35,
+          "allocationBytes": 35,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5039744,
+          "bytes": 119,
+          "allocationBytes": 119,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5039864,
+          "bytes": 87,
+          "allocationBytes": 87,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5040632,
+          "bytes": 60,
+          "allocationBytes": 60,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5040696,
+          "bytes": 53,
+          "allocationBytes": 53,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5040752,
+          "bytes": 201,
+          "allocationBytes": 201,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5041224,
+          "bytes": 116,
+          "allocationBytes": 116,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5041344,
+          "bytes": 218,
+          "allocationBytes": 218,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5041968,
+          "bytes": 46,
+          "allocationBytes": 46,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5042104,
+          "bytes": 53,
+          "allocationBytes": 53,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5042248,
+          "bytes": 59,
+          "allocationBytes": 59,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5045872,
+          "bytes": 36,
+          "allocationBytes": 36,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5045912,
+          "bytes": 555,
+          "allocationBytes": 555,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5046472,
+          "bytes": 559,
+          "allocationBytes": 559,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5047032,
+          "bytes": 61,
+          "allocationBytes": 61,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5047096,
+          "bytes": 207,
+          "allocationBytes": 207,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5047344,
+          "bytes": 96,
+          "allocationBytes": 96,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5047448,
+          "bytes": 61,
+          "allocationBytes": 61,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5047816,
+          "bytes": 48,
+          "allocationBytes": 48,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048008,
+          "bytes": 59,
+          "allocationBytes": 59,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048072,
+          "bytes": 100,
+          "allocationBytes": 100,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048176,
+          "bytes": 107,
+          "allocationBytes": 107,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048288,
+          "bytes": 75,
+          "allocationBytes": 75,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048424,
+          "bytes": 63,
+          "allocationBytes": 63,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048488,
+          "bytes": 118,
+          "allocationBytes": 118,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048608,
+          "bytes": 89,
+          "allocationBytes": 89,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048704,
+          "bytes": 72,
+          "allocationBytes": 72,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048784,
+          "bytes": 84,
+          "allocationBytes": 84,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5048872,
+          "bytes": 151,
+          "allocationBytes": 151,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5049192,
+          "bytes": 295,
+          "allocationBytes": 295,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5049488,
+          "bytes": 79,
+          "allocationBytes": 79,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5049568,
+          "bytes": 111,
+          "allocationBytes": 111,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5049680,
+          "bytes": 117,
+          "allocationBytes": 117,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5049800,
+          "bytes": 66,
+          "allocationBytes": 66,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5049872,
+          "bytes": 80,
+          "allocationBytes": 80,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5050216,
+          "bytes": 85,
+          "allocationBytes": 85,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5050448,
+          "bytes": 94,
+          "allocationBytes": 94,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5050544,
+          "bytes": 94,
+          "allocationBytes": 94,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5073856,
+          "bytes": 128,
+          "allocationBytes": 128,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5073992,
+          "bytes": 129,
+          "allocationBytes": 129,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5074128,
+          "bytes": 128,
+          "allocationBytes": 128,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5081544,
+          "bytes": 69,
+          "allocationBytes": 69,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5081616,
+          "bytes": 70,
+          "allocationBytes": 70,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5081688,
+          "bytes": 241,
+          "allocationBytes": 969,
+          "preservedSuffixReferences": [
+            {
+              "offset": 182581,
+              "address": 5081929
+            },
+            {
+              "offset": 228773,
+              "address": 5081929
+            },
+            {
+              "offset": 309371,
+              "address": 5081929
+            },
+            {
+              "offset": 348612,
+              "address": 5081933
+            },
+            {
+              "offset": 400943,
+              "address": 5081929
+            },
+            {
+              "offset": 422248,
+              "address": 5081929
+            },
+            {
+              "offset": 488216,
+              "address": 5081929
+            },
+            {
+              "offset": 496565,
+              "address": 5081929
+            },
+            {
+              "offset": 550167,
+              "address": 5081929
+            },
+            {
+              "offset": 550656,
+              "address": 5081929
+            },
+            {
+              "offset": 589920,
+              "address": 5081929
+            }
+          ],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5082664,
+          "bytes": 417,
+          "allocationBytes": 417,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5083088,
+          "bytes": 914,
+          "allocationBytes": 914,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5084008,
+          "bytes": 373,
+          "allocationBytes": 373,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5084384,
+          "bytes": 711,
+          "allocationBytes": 711,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5086568,
+          "bytes": 417,
+          "allocationBytes": 417,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5086992,
+          "bytes": 226,
+          "allocationBytes": 226,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5088944,
+          "bytes": 567,
+          "allocationBytes": 567,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5089512,
+          "bytes": 773,
+          "allocationBytes": 773,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5091968,
+          "bytes": 325,
+          "allocationBytes": 325,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5095520,
+          "bytes": 152,
+          "allocationBytes": 152,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5095680,
+          "bytes": 224,
+          "allocationBytes": 224,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5096058,
+          "bytes": 6,
+          "allocationBytes": 6,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        },
+        {
+          "address": 5096065,
+          "bytes": 25,
+          "allocationBytes": 25,
+          "preservedSuffixReferences": [],
+          "remainingAbsoluteReferencesToRetiredBytes": 0
+        }
+      ]
+    },
+    "lib/libdof-plugin.so": {
+      "retiredLiterals": [
+        {
+          "address": 2578991,
+          "offset": 2578991,
+          "bytes": 26,
+          "kind": "redirected-literal"
+        },
+        {
+          "address": 2721825,
+          "offset": 2721825,
+          "bytes": 29,
+          "kind": "redirected-literal"
+        },
+        {
+          "address": 2722616,
+          "offset": 2722616,
+          "bytes": 28,
+          "kind": "redirected-literal"
+        },
+        {
+          "address": 2578918,
+          "offset": 2578918,
+          "bytes": 17,
+          "kind": "redirected-literal"
+        },
+        {
+          "address": 2578936,
+          "offset": 2578936,
+          "bytes": 14,
+          "kind": "redirected-literal"
+        },
+        {
+          "address": 2779425,
+          "offset": 2779425,
+          "bytes": 5,
+          "kind": "redirected-literal"
+        },
+        {
+          "address": 2587386,
+          "offset": 2587386,
+          "bytes": 2,
+          "kind": "redirected-literal"
+        },
+        {
+          "address": 7674783,
+          "offset": 7621535,
+          "bytes": 37,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7676036,
+          "offset": 7622788,
+          "bytes": 16,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7677095,
+          "offset": 7623847,
+          "bytes": 13,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7682985,
+          "offset": 7629737,
+          "bytes": 18,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7686809,
+          "offset": 7633561,
+          "bytes": 33,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7690519,
+          "offset": 7637271,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7691844,
+          "offset": 7638596,
+          "bytes": 24,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7695456,
+          "offset": 7642208,
+          "bytes": 32,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7698153,
+          "offset": 7644905,
+          "bytes": 16,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7702194,
+          "offset": 7648946,
+          "bytes": 26,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7703749,
+          "offset": 7650501,
+          "bytes": 23,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7704996,
+          "offset": 7651748,
+          "bytes": 34,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7705125,
+          "offset": 7651877,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7705145,
+          "offset": 7651897,
+          "bytes": 13,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7705586,
+          "offset": 7652338,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7706185,
+          "offset": 7652937,
+          "bytes": 34,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7706250,
+          "offset": 7653002,
+          "bytes": 25,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7711707,
+          "offset": 7658459,
+          "bytes": 50,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7715382,
+          "offset": 7662134,
+          "bytes": 40,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7715528,
+          "offset": 7662280,
+          "bytes": 13,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7717006,
+          "offset": 7663758,
+          "bytes": 25,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7718793,
+          "offset": 7665545,
+          "bytes": 16,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7718810,
+          "offset": 7665562,
+          "bytes": 26,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7721093,
+          "offset": 7667845,
+          "bytes": 52,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7724153,
+          "offset": 7670905,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7724382,
+          "offset": 7671134,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7730019,
+          "offset": 7676771,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7730362,
+          "offset": 7677114,
+          "bytes": 50,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 7730413,
+          "offset": 7677165,
+          "bytes": 28,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 8761107,
+          "offset": 8707859,
+          "bytes": 28,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 8762878,
+          "offset": 8709630,
+          "bytes": 29,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 8762908,
+          "offset": 8709660,
+          "bytes": 34,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 8772288,
+          "offset": 8719040,
+          "bytes": 12,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 8772708,
+          "offset": 8719460,
+          "bytes": 39,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9123955,
+          "offset": 9070707,
+          "bytes": 37,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9125276,
+          "offset": 9072028,
+          "bytes": 16,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9126368,
+          "offset": 9073120,
+          "bytes": 13,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9132406,
+          "offset": 9079158,
+          "bytes": 18,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9136483,
+          "offset": 9083235,
+          "bytes": 33,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9140314,
+          "offset": 9087066,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9141661,
+          "offset": 9088413,
+          "bytes": 24,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9145372,
+          "offset": 9092124,
+          "bytes": 32,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9148225,
+          "offset": 9094977,
+          "bytes": 16,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9152387,
+          "offset": 9099139,
+          "bytes": 26,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9153986,
+          "offset": 9100738,
+          "bytes": 23,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9155310,
+          "offset": 9102062,
+          "bytes": 34,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9155450,
+          "offset": 9102202,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9155470,
+          "offset": 9102222,
+          "bytes": 13,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9155911,
+          "offset": 9102663,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9156532,
+          "offset": 9103284,
+          "bytes": 34,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9156608,
+          "offset": 9103360,
+          "bytes": 25,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9162219,
+          "offset": 9108971,
+          "bytes": 50,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9165938,
+          "offset": 9112690,
+          "bytes": 40,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9166084,
+          "offset": 9112836,
+          "bytes": 13,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9167628,
+          "offset": 9114380,
+          "bytes": 25,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9169494,
+          "offset": 9116246,
+          "bytes": 16,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9169511,
+          "offset": 9116263,
+          "bytes": 26,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9171882,
+          "offset": 9118634,
+          "bytes": 52,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9175096,
+          "offset": 9121848,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9175360,
+          "offset": 9122112,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9181172,
+          "offset": 9127924,
+          "bytes": 19,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9181526,
+          "offset": 9128278,
+          "bytes": 50,
+          "kind": "obsolete-symbol-metadata"
+        },
+        {
+          "address": 9181577,
+          "offset": 9128329,
+          "bytes": 28,
+          "kind": "obsolete-symbol-metadata"
+        }
+      ],
+      "dynamicNames": [
+        {
+          "index": 28,
+          "old": "WongWork_function_QK_DungeonClearInfo",
+          "new": "WongWork_function_Dof_DungeonClearInfo"
+        },
+        {
+          "index": 52,
+          "old": "_ZN8qksocketD0Ev",
+          "new": "_ZN7DofSockD0Ev"
+        },
+        {
+          "index": 70,
+          "old": "_ZTS8qksocket",
+          "new": "_ZTS7DofSock"
+        },
+        {
+          "index": 197,
+          "old": "_ZN5DBMgr6GeQkDBEv",
+          "new": "_ZN5DBMgr7GeDofDBEv"
+        },
+        {
+          "index": 284,
+          "old": "_ZN8qksocket17process_tcp_tasksEv",
+          "new": "_ZN7DofSock17process_tcp_tasksEv"
+        },
+        {
+          "index": 347,
+          "old": "_ZN5DBMgr7GeQkDB7Ev",
+          "new": "_ZN5DBMgr8GeDofDB7Ev"
+        },
+        {
+          "index": 368,
+          "old": "_ZN8qksocket9qk_socketEv",
+          "new": "_ZN7DofSock9dofSocketEv"
+        },
+        {
+          "index": 436,
+          "old": "_ZN5DBMgr19GetDB_Qk_shikaimoheEv",
+          "new": "_ZN5DBMgr20GetDB_Dof_shikaimoheEv"
+        },
+        {
+          "index": 487,
+          "old": "_ZN8qksocketD1Ev",
+          "new": "_ZN7DofSockD1Ev"
+        },
+        {
+          "index": 572,
+          "old": "_ZN10Controller8qk_dinitEv",
+          "new": "_ZN10Controller8dof_initEv"
+        },
+        {
+          "index": 609,
+          "old": "_ZN5DBMgr10GeQkDB_CDKEv",
+          "new": "_ZN5DBMgr11GeDofDB_CDKEv"
+        },
+        {
+          "index": 639,
+          "old": "WongWork_function_qk_SetProgLogout",
+          "new": "WongWork_function_dof_SetProgLogout"
+        },
+        {
+          "index": 644,
+          "old": "_ZN5DBMgr7GeQkDB3Ev",
+          "new": "_ZN5DBMgr8GeDofDB3Ev"
+        },
+        {
+          "index": 645,
+          "old": "_ZTV8qksocket",
+          "new": "_ZTV7DofSock"
+        },
+        {
+          "index": 653,
+          "old": "_ZN5DBMgr7GeQkDB5Ev",
+          "new": "_ZN5DBMgr8GeDofDB5Ev"
+        },
+        {
+          "index": 667,
+          "old": "WongWork_function_QK_SetPlayResult",
+          "new": "WongWork_function_Dof_SetPlayResult"
+        },
+        {
+          "index": 670,
+          "old": "_ZTI9SingletonI8qksocketE",
+          "new": "_ZTI9SingletonI7DofSockE"
+        },
+        {
+          "index": 789,
+          "old": "_Z29qk_DisPatcher_SetArea_processiP5CUseriiiiiiiii",
+          "new": "_Z15dofDispatchAreaiP5CUseriiiiiiiii"
+        },
+        {
+          "index": 846,
+          "old": "_ZN5DBMgr21QK_CreateCharac_relayEP5CUser",
+          "new": "_ZN5DBMgr20DofCreateCharacRelayEP5CUser"
+        },
+        {
+          "index": 849,
+          "old": "_ZTI8qksocket",
+          "new": "_ZTI7DofSock"
+        },
+        {
+          "index": 882,
+          "old": "_ZTS9SingletonI8qksocketE",
+          "new": "_ZTS9SingletonI7DofSockE"
+        },
+        {
+          "index": 921,
+          "old": "_ZN8qksocketD2Ev",
+          "new": "_ZN7DofSockD2Ev"
+        },
+        {
+          "index": 922,
+          "old": "_ZN5DBMgr13GeQkDB_tuguanEv",
+          "new": "_ZN5DBMgr14GeDofDB_tuguanEv"
+        },
+        {
+          "index": 970,
+          "old": "_ZGVZN9SingletonI8qksocketE11GetInstanceEvE8instance",
+          "new": "_ZGVZN9SingletonI7DofSockE11GetInstanceEvE8instance"
+        },
+        {
+          "index": 1047,
+          "old": "_ZN5DBMgr7GeQkDB6Ev",
+          "new": "_ZN5DBMgr8GeDofDB6Ev"
+        },
+        {
+          "index": 1057,
+          "old": "_ZN5DBMgr7GeQkDB2Ev",
+          "new": "_ZN5DBMgr8GeDofDB2Ev"
+        },
+        {
+          "index": 1157,
+          "old": "_ZN5DBMgr7GeQkDB4Ev",
+          "new": "_ZN5DBMgr8GeDofDB4Ev"
+        },
+        {
+          "index": 1165,
+          "old": "_ZZN9SingletonI8qksocketE11GetInstanceEvE8instance",
+          "new": "_ZZN9SingletonI7DofSockE11GetInstanceEvE8instance"
+        },
+        {
+          "index": 1166,
+          "old": "_ZN5DBMgr15GeQkDB_shenyiwuEv",
+          "new": "_ZN5DBMgr16GeDofDB_shenyiwuEv"
+        }
+      ]
+    },
+    "lib/libdof-inline.so": {
+      "retiredLiterals": [
+        {
+          "address": 231592,
+          "bytes": 2,
+          "kind": "post-decoder-literal"
+        },
+        {
+          "address": 232269,
+          "bytes": 24,
+          "kind": "post-decoder-literal"
+        }
+      ]
+    }
+  }
+}

@@ -5,9 +5,9 @@ Run it only through local_environment.py's private network/PID namespace.
 """
 import argparse
 try:
-    from .runtime_evidence import derivation_path
+    from .native_name_contract import module_contract
 except ImportError:
-    from runtime_evidence import derivation_path
+    from native_name_contract import module_contract
 import hashlib
 import json
 import os
@@ -16,7 +16,7 @@ import shutil
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
-LOCK = ROOT / 'metadata/dof/source-audit/server-probe-inputs.lock.json'
+LOCK = ROOT / 'metadata/dof/server-probe.lock.json'
 FIXTURES = ROOT / 'tests/integration/dof/server_stack'
 
 
@@ -90,11 +90,11 @@ def stage(source, output, runtime=None, reuse_assets=False):
             from gateway.assets import verify
             runtime = verify(runtime)
             shutil.copytree(runtime, working / 'server-runtime')
-            derivation = json.loads(derivation_path(runtime).read_text())
-            abi = derivation['derivations']['lib/libdof-plugin.so'].get('dynamicNames', [])
+            derivation = module_contract(runtime)
+            abi = derivation['lib/libdof-plugin.so'].get('dynamicNames', [])
             probe = working / 'server_runtime_probe.js'
             probe.chmod(0o600)
-            retired={name:derivation['derivations']['lib/'+name].get('retiredLiterals',[])
+            retired={name:derivation['lib/'+name].get('retiredLiterals',[])
                      for name in ('libdof-plugin.so','libdof-inline.so')}
             probe.write_text('var dofExpectedAbiNames = ' + json.dumps(abi) + ';\n' +
                              'var dofExpectedRetiredLiterals = '+json.dumps(retired)+';\n'+probe.read_text())

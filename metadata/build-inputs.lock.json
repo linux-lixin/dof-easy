@@ -2107,6 +2107,11 @@
       "path": "deploy/vipai86/db/compat-tables.sql",
       "bytes": 3914,
       "sha256": "9ad42e7171c7149691e35b0cc1585e046b32e849ab6af3bd66a7164f0a315aba"
+    },
+    {
+      "path": "services/game/resources/plugins/dp2/pvf-patch.zip",
+      "bytes": 6634,
+      "sha256": "101e65b3f4e08e4567829b5bbd98568fca90ba4359721ed4b35b00a1bd14b4c1"
     }
   ]
 }

@@ -94,7 +94,7 @@ def audit(server, tool, client, game=None):
     server, client = Path(server), Path(client)
     replacements = json.loads((ROOT / 'metadata/dof/runtime.lock.json').read_text())['files']
     pins = {row['path']: row for row in replacements}
-    runtime = json.loads((ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json').read_text())['files']
+    runtime = json.loads((ROOT / 'metadata/dof/derivation/inputs.lock.json').read_text())['files']
     pins.update({row['path']: row for row in runtime})
     client_pins = json.loads((ROOT / 'metadata/dof/client.lock.json').read_text())['files']
     files = {
