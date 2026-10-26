@@ -106,24 +106,33 @@ def main():
         backend = subprocess.Popen([str(args.java.resolve()), '-Xmx256m', '-cp', classpath,
                                     'com.aiyi.game.dnfserver.DnfServerApplication', '--server.address=127.0.0.1', '--server.port=' + str(web_port)],
                                    cwd=args.work, env=java_env, stdout=java_log, stderr=subprocess.STDOUT)
-        ready = False
-        for _ in range(120):
-            try:
-                urllib.request.urlopen(f'http://127.0.0.1:{web_port}/api/v1/admin/activities', timeout=1)
-            except urllib.error.HTTPError as error:
-                ready = error.code in (401, 403)
-            except OSError:
-                pass
-            if ready: break
-            if backend.poll() is not None: raise RuntimeError('Synthetic backend failed; inspect private logs')
-            time.sleep(.5)
-        if not ready: raise RuntimeError('Synthetic backend startup timed out')
+        def wait_backend():
+            ready = False
+            for _ in range(120):
+                try:
+                    urllib.request.urlopen(f'http://127.0.0.1:{web_port}/api/v1/admin/activities', timeout=1)
+                except urllib.error.HTTPError as error:
+                    ready = error.code in (401, 403)
+                except OSError:
+                    pass
+                if ready: break
+                if backend.poll() is not None: raise RuntimeError('Synthetic backend failed; inspect private logs')
+                time.sleep(.5)
+            if not ready: raise RuntimeError('Synthetic backend startup timed out')
+        wait_backend()
         subprocess.run([str(args.node.resolve()), str(ROOT / 'tests/integration/admin/activity-page.cjs'), '--dist', str(args.dist.resolve()),
                         '--backend', f'http://127.0.0.1:{web_port}', '--credentials', str(credentials), '--output', str(args.work / 'browser')], check=True, env=os.environ)
         assert query('SELECT item_code1 FROM dof_native.list_of_warorder_rewards') == '1'
         assert query("SELECT COUNT(*) FROM dnf_service.DOF_OPERATION_JOURNAL WHERE state='PERSISTED'") == '4'
         assert query('SELECT maxHP FROM taiwan_cain.charac_info') == '100'
         assert query('SELECT HEX(unknown_setting) FROM taiwan_cain.charac_info') == '00FF'
+        backend.terminate(); backend.wait(timeout=15)
+        backend = subprocess.Popen([str(args.java.resolve()), '-Xmx256m', '-cp', classpath,
+                                    'com.aiyi.game.dnfserver.DnfServerApplication', '--server.address=127.0.0.1', '--server.port=' + str(web_port)],
+                                   cwd=args.work, env=java_env, stdout=java_log, stderr=subprocess.STDOUT)
+        wait_backend()
+        subprocess.run([str(args.node.resolve()), str(ROOT / 'tests/integration/admin/activity-page.cjs'), '--dist', str(args.dist.resolve()),
+                        '--backend', f'http://127.0.0.1:{web_port}', '--credentials', str(credentials), '--output', str(args.work / 'browser'), '--retained'], check=True, env=os.environ)
         print('Synthetic native configuration restored; no real game database was accessed')
     finally:
         for process in (backend, mysql):

@@ -9,6 +9,7 @@ const { values: args } = parseArgs({ options: {
   origin: { type: 'string' }, credentials: { type: 'string' }, instance: { type: 'string' }, output: { type: 'string' },
   'allow-config-edits': { type: 'boolean', default: false },
   'require-all-records': { type: 'boolean', default: false },
+  'inspect-management': { type: 'boolean', default: false },
 } });
 if (!args.origin || !args.credentials || !args.instance || !args.output) throw new Error('Required: --origin --credentials --instance --output; edits require --allow-config-edits');
 const origin = new URL(args.origin).origin;
@@ -99,6 +100,22 @@ const observe = promise => { promise.catch(() => {}); return promise; };
       assert.equal(result.instanceId, args.instance);assert.ok(Array.isArray(result.rows));queried++;
     }
     checks.push(`real read-only record projections: ${queried}/${recordCatalog.views.length}`);
+    if (args['inspect-management']) {
+      const get = async suffix => {
+        const response = await context.request.get(origin + '/api/v1/' + suffix, { headers: { Authorization: 'Bearer ' + token } });
+        assert.equal(response.status(), 200, 'management read ' + suffix);return response.json();
+      };
+      assert.ok(Array.isArray(await get('admin/activities')));
+      assert.ok(Array.isArray((await get('admin/activities/rewards')).rows));
+      assert.ok(Array.isArray(await get('admin/activities/rewards/history')));checks.push('deployed activity adapter and durable journal read');
+      const roles = await get('charac?page=1&pageSize=1');
+      if (roles.list.length) {
+        const state = await get(`charac/${roles.list[0].characNo}/edit`);assert.equal(state.fields.length, 12);
+        assert.equal(state.effectState, 'not_observed');assert.ok(['offline', 'online', 'unknown'].includes(state.onlineState));
+        assert.ok(Array.isArray(await get(`charac/${roles.list[0].characNo}/history`)));checks.push('deployed role attribute schema, online diagnosis and history read');
+      } else checks.push('role adapter sample unavailable: character list empty; no player data initialized');
+    }
+
     await page.locator('.arco-tabs-tab').filter({ hasText: '记录查询' }).click();
     await page.getByRole('button', { name: '核对表结构', exact: true }).click();
     await page.getByText(/查询所需字段齐全，实际读取及权限仍需验证/).waitFor();checks.push('browser schema diagnosis');

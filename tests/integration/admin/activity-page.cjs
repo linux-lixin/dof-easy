@@ -5,7 +5,7 @@ const { readFile, mkdir, writeFile } = require('node:fs/promises');
 const path = require('node:path');
 const { parseArgs } = require('node:util');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
-const { values: args } = parseArgs({ options: { dist: { type: 'string' }, backend: { type: 'string' }, credentials: { type: 'string' }, output: { type: 'string' } } });
+const { values: args } = parseArgs({ options: { dist: { type: 'string' }, backend: { type: 'string' }, credentials: { type: 'string' }, output: { type: 'string' }, retained: { type: 'boolean', default: false } } });
 if (!args.dist || !args.backend || !args.credentials || !args.output) throw new Error('Required: --dist --backend --credentials --output');
 const backend = new URL(args.backend), dist = path.resolve(args.dist), output = path.resolve(args.output);
 if (backend.hostname !== '127.0.0.1' || backend.protocol !== 'http:') throw new Error('Only an ephemeral loopback fixture backend is allowed');
@@ -45,6 +45,16 @@ const server = createServer(async (request, response) => {
       assert.equal(r.status(), status, method + ' ' + suffix);return r.json();
     };
     assert.equal((await api('GET', 'dof')).instanceId, 'dof-browser-fixture');checks.push('real authentication against synthetic accounts');
+    if (args.retained) {
+      const history = await api('GET', 'activities/rewards/history');assert.equal(history.filter(r => r.state === 'PERSISTED').length, 2);
+      assert.equal((await api('GET', 'activities/rewards')).rows[0].values.item_code1, 1);
+      const headers = { Authorization: 'Bearer ' + token };
+      const role = await context.request.get(origin + '/api/v1/charac/1/edit', { headers });assert.equal(role.status(), 200);assert.equal((await role.json()).values.maxHp, 100);
+      const roleHistory = await context.request.get(origin + '/api/v1/charac/1/history', { headers });assert.equal(roleHistory.status(), 200);assert.equal((await roleHistory.json()).filter(r => r.state === 'PERSISTED').length, 2);
+      assert.deepEqual(errors, []);
+      const result = { passed: true, backendProcessRestarted: true, database: 'same synthetic MySQL 5.6', actualGameDataAccessed: false, containerRecreationVerified: false, checks: ['fresh login after process restart', 'activity history and restored configuration retained', 'role history and restored attributes retained'], pageErrors: 0 };
+      await writeFile(path.join(output, 'result-retained.json'), JSON.stringify(result, null, 2) + '\n');console.log(JSON.stringify(result));return;
+    }
     const sections = await api('GET', 'activities'), rewards = sections.find(s => s.key === 'rewards');assert.ok(rewards);
     await page.locator('.arco-select').first().click();await page.locator('.arco-select-option').filter({ hasText: rewards.title }).click();
     const before = await api('GET', 'activities/rewards');assert.equal(before.rows[0].values.item_code1, 1);
