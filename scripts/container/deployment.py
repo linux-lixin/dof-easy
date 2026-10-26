@@ -33,18 +33,22 @@ def configure(model, values, root, databases):
         services['admin']['environment'].update(
             SPRING_DATASOURCE_URL='jdbc:mysql://'+values['DOF_DB_HOST']+':'+values['DOF_DB_PORT']+'/dnf_service?useUnicode=true&characterEncoding=utf8&useSSL=false',
             SPRING_DATASOURCE_USERNAME='game',SPRING_DATASOURCE_PASSWORD=values['GAME_DB_PASSWORD'])
-    if native:
+    managed = native or values.get('RAID_EXTENSION', 'off') == 'on' or values.get('DOF_ADMIN_ENABLED') == 'true'
+    if managed:
         admin=services['admin']
         admin['entrypoint']=['/app/dof-entrypoint.sh']
         env=admin['environment']
         env.update(DOF_ADMIN_ENABLED='true',DOF_ENVIRONMENT='isolated',
                    DOF_INSTANCE_ID='dof-'+root.name,DOF_DATABASE_UUID=values.get('DOF_DATABASE_UUID',''),
-                   DOF_ADAPTER_VERSION='dof-native-1',LAUNCHER_MODE='native',
+                   DOF_ADAPTER_VERSION='dof-native-1',LAUNCHER_MODE=values.get('LAUNCHER_MODE','dof'),
                    DOF_CLIENT_WORKSPACE='/app/data/dof-client-publication',DOF_GAME_PVF='/app/paired/Script.pvf',
+                   DOF_GAME_CONFIG_ROOT='/app/game-config',PLUGIN_MODE=values.get('PLUGIN_MODE','none'),
+                   RAID_EXTENSION=values.get('RAID_EXTENSION','off'),
                    SPRING_DATASOURCE_USERNAME='game',SPRING_DATASOURCE_PASSWORD=values['GAME_DB_PASSWORD'])
         for key in ('ADMIN_PASSWORD','ADMIN_TEMP_SECRET'):
             env.pop(key,None)
         admin['volumes'].append(dict(type='bind',source=str(root/'runtime/game/data/Script.pvf'),target='/app/paired/Script.pvf',read_only=True))
+        admin['volumes'].append(dict(type='bind',source=str(root/'runtime/game/data/dof-easy/config'),target='/app/game-config',read_only=False))
     return model
 
 

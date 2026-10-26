@@ -444,11 +444,12 @@ def start(root, recreate=False):
     write_json(root / 'channels.json', ports_override(values))
     if values.get('ALLOWED_CLIENT_CIDRS'):
         print('旧实例玩家来源规则不再由容器执行；当前访问范围由云安全组控制。')
-    if raid_assets.launcher_mode(values) == 'native' and database.kind(values) == 'internal':
+    if database.web_management_enabled(values):
         # The web adapter is provisioned only after the actual native game is ready.
         compose(root, *args, 'game')
         identity=database.prepare_web(root,values,lambda sql:database_query(root,sql))
         values['DOF_DATABASE_UUID']=identity
+        values['DOF_ADMIN_ENABLED']='true'
         write_env(root/'.env',values)
     compose(root, *args)
     if raid_assets.launcher_mode(values) == 'native':

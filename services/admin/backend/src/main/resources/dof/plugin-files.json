@@ -1,0 +1,537 @@
+{
+  "schema": 1,
+  "edition": "qingkong-2.8-replacement",
+  "modules": [
+    {
+      "id": "plugin",
+      "title": "基础插件",
+      "file": "plugin.ini",
+      "fields": [
+        {
+          "key": "Inlay_function",
+          "label": "装备镶嵌功能开关 1=开启 0=关闭",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "Equ_unlocked_instantly",
+          "label": "装备秒解锁功能开关 1=开启 0=关闭",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "Task_Completion_coupon",
+          "label": "主线任务完成券物品ID，0=禁用",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_WEAPON",
+          "label": "开放镶嵌打孔权限 1允许 0不允许；武器",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_TITLE",
+          "label": "称号",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_COAT",
+          "label": "上衣",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_SHOULDER",
+          "label": "头肩",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_PANTS",
+          "label": "下衣",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_SHOES",
+          "label": "鞋子",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_BELT",
+          "label": "腰带",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_NECKLACE",
+          "label": "项链",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_BRACELET",
+          "label": "手镯",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_RING",
+          "label": "戒指",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_SUB_EQUIP",
+          "label": "辅助装备",
+          "kind": "boolean",
+          "arity": 0
+        },
+        {
+          "key": "EQUIP_MAGIC_STONE",
+          "label": "魔法石",
+          "kind": "boolean",
+          "arity": 0
+        }
+      ]
+    },
+    {
+      "id": "anton",
+      "title": "安徒恩团本",
+      "file": "anton-raid.ini",
+      "fields": [
+        {
+          "key": "anton_GM_UID",
+          "label": "这里是控制权限的账号UID 此项修改需要五国",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_reload",
+          "label": "刷新安图恩配置命令【角色聊天输入】此项修改需要五国",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "anton_open",
+          "label": "开启团本",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "anton_close",
+          "label": "关闭团本",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "anton_name",
+          "label": "安徒恩名字定义",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "Surprise_Prize",
+          "label": "展示惊喜奖励 最大可设置6个",
+          "kind": "item-list",
+          "arity": 0
+        },
+        {
+          "key": "anton_create_npc",
+          "label": "创建攻坚队NPC id",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_Additional_itmeid",
+          "label": "翻牌次数追加道具 id",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_start_npc",
+          "label": "开始攻坚NPC id",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_item",
+          "label": "安徒恩入场材料",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_member_min",
+          "label": "最少开团人数",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "access_count",
+          "label": "需通关次数",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_reward_day",
+          "label": "翻盘奖励每天几次",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_reward_week",
+          "label": "翻盘奖励每周几次",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_open_time",
+          "label": "每天开放的时间段，默认全天开放",
+          "kind": "time-range",
+          "arity": 0
+        },
+        {
+          "key": "anton_open_day",
+          "label": "每周开放的时间段，默认周一到周天",
+          "kind": "weekdays",
+          "arity": 0
+        },
+        {
+          "key": "anton_area_info",
+          "label": "团本的城镇id  town/town.lst  副本接口id worldmap/worldmap.lst 第一个是城镇id 第二个是副本接口id；注意！.twn里的map 一定要设置多个map 用来区分所在团的城镇位置 [area]2 是第一个团，[area]3 第二个团，依次类推",
+          "kind": "tuple",
+          "arity": 2
+        },
+        {
+          "key": "anton_need_time",
+          "label": "一阶段时间 中场休息时间 二阶段时间(单位秒)",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "discon_max_time",
+          "label": "玩家掉线等待时间(单位秒)，超时自动被踢出",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "close_blacksmoke",
+          "label": "黑雾副本编号 通关次数(1-5次) 通关时间(单位秒) 重生时间(单位秒)",
+          "kind": "tuple",
+          "arity": 4
+        },
+        {
+          "key": "strongleg_lower_a",
+          "label": "擎天a副本编号 通关次数",
+          "kind": "tuple",
+          "arity": 2
+        },
+        {
+          "key": "strongleg_lower_b",
+          "label": "擎天b副本编号 通关次数",
+          "kind": "tuple",
+          "arity": 2
+        },
+        {
+          "key": "strongleg_high_a",
+          "label": "震颤a副本编号 通关时间 重生时间(单位秒)",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "strongleg_high_b",
+          "label": "震颤b副本编号 通关时间 重生时间(单位秒)",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "fleet_fire",
+          "label": "舰炮副本编号 通关时间 重生时间(单位秒)",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "energy_cut",
+          "label": "能量阻截副本编号 消耗火山能量百分比",
+          "kind": "tuple",
+          "arity": 2
+        },
+        {
+          "key": "black_volcano",
+          "label": "黑色火山副本编号",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "anton_heart",
+          "label": "安图恩心脏副本编号 通关次数",
+          "kind": "tuple",
+          "arity": 2
+        },
+        {
+          "key": "team_reward1",
+          "label": "一阶段小队翻牌，四个数为一组；总权重100000,-1代表默认权重,(道具index,数量,权重,0普通牌/1金牌)",
+          "kind": "rewards",
+          "arity": 4
+        },
+        {
+          "key": "raid_reward1",
+          "label": "一阶段团本翻牌",
+          "kind": "rewards",
+          "arity": 4
+        },
+        {
+          "key": "team_reward2",
+          "label": "二阶段小队翻牌",
+          "kind": "rewards",
+          "arity": 4
+        },
+        {
+          "key": "raid_reward2",
+          "label": "二阶段团本翻牌",
+          "kind": "rewards",
+          "arity": 4
+        }
+      ]
+    },
+    {
+      "id": "luke",
+      "title": "卢克团本",
+      "file": "luke-raid.ini",
+      "fields": [
+        {
+          "key": "luke_GM_UID",
+          "label": "这里是控制权限的账号UID 此项修改需要五国",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_reload",
+          "label": "刷新安图恩配置命令【角色聊天输入】此项修改需要五国",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "luke_open",
+          "label": "开启团本",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "luke_close",
+          "label": "关闭团本",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "luke_name",
+          "label": "卢克名字定义",
+          "kind": "text",
+          "arity": 0
+        },
+        {
+          "key": "luke_Surprise_Prize",
+          "label": "展示惊喜奖励 最大可设置6个",
+          "kind": "item-list",
+          "arity": 0
+        },
+        {
+          "key": "luke_create_npc",
+          "label": "创建/开始 攻坚队NPC id",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_Additional_itmeid",
+          "label": "翻牌次数追加道具 id",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_item",
+          "label": "卢克入场材料",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_member_min",
+          "label": "最少开团人数",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "access_count",
+          "label": "需通关次数",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_reward_day",
+          "label": "翻盘奖励每天几次",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_reward_week",
+          "label": "翻盘奖励每周几次",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_open_time",
+          "label": "每天开放的时间段，默认全天开放",
+          "kind": "time-range",
+          "arity": 0
+        },
+        {
+          "key": "luke_open_day",
+          "label": "每周开放的时间段，默认周一到周天",
+          "kind": "weekdays",
+          "arity": 0
+        },
+        {
+          "key": "luke_area_info",
+          "label": "团本的城镇id 区域id 副本接口id",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "luke_need_time",
+          "label": "一阶段时间 中场休息时间 二阶段时间(单位秒)",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "discon_max_time",
+          "label": "玩家掉线等待时间(单位秒)，超时自动被踢出",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "sanctum_of_birth",
+          "label": "誕生之圣所 通关三次的副本编号",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "sanctum_of_extinction",
+          "label": "湮滅之圣所 通关三次的副本编号",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "sanctum_of_spread",
+          "label": "蔓延之圣所 通关三次的副本编号",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "light_energy_enter",
+          "label": "光明之祭坛入口",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "dark_energy_enter",
+          "label": "黑暗之祭坛入口",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "light_energy",
+          "label": "光明之祭坛",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "dark_energy",
+          "label": "黑暗之祭坛",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "buff_strengthen",
+          "label": "力量之祭坛",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "pattern_strengthen",
+          "label": "智慧之祭坛",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "energy_control",
+          "label": "能源控制室编号 重生时间(单位秒) 每10秒增加障碍百分比",
+          "kind": "tuple",
+          "arity": 3
+        },
+        {
+          "key": "light_temple",
+          "label": "光明之圣殿",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "dark_temple",
+          "label": "暗之圣殿",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_light",
+          "label": "机械王座 : 明",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "luke_dark",
+          "label": "机械王座 : 暗",
+          "kind": "integer",
+          "arity": 0
+        },
+        {
+          "key": "energy_save",
+          "label": "能源储藏室 通关时间 重生时间(单位秒) 每10秒增加障碍百分比",
+          "kind": "tuple",
+          "arity": 4
+        },
+        {
+          "key": "team_reward1",
+          "label": "一阶段小队翻牌，四个数为一组，写法和土罐一样；总权重100000,-1代表默认权重,(道具index,数量,权重,0普通牌/1金牌)",
+          "kind": "rewards",
+          "arity": 4
+        },
+        {
+          "key": "raid_reward1",
+          "label": "一阶段团本翻牌",
+          "kind": "rewards",
+          "arity": 4
+        },
+        {
+          "key": "team_reward2",
+          "label": "二阶段小队翻牌",
+          "kind": "rewards",
+          "arity": 4
+        },
+        {
+          "key": "raid_reward2",
+          "label": "二阶段团本翻牌",
+          "kind": "rewards",
+          "arity": 4
+        },
+        {
+          "key": "append_reward",
+          "label": "金牌追加的道具 三个数为一组；总权重100000,-1代表默认权重,(道具index,数量,权重)",
+          "kind": "rewards",
+          "arity": 3
+        }
+      ]
+    }
+  ]
+}

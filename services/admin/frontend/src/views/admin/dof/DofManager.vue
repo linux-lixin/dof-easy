@@ -6,14 +6,16 @@ import NativeRecords from './NativeRecords.vue'
 import NativePresetPreview from './NativePresetPreview.vue'
 import ClientPublication from './ClientPublication.vue'
 import NativeSettings from './NativeSettings.vue'
+import NativePlugins from './NativePlugins.vue'
 
-type Operation = { id: string; name: string; status: string; included: boolean }
+type Operation = { id: string; name: string; status: string; included: boolean; managementImplementation?: { state: string } }
 type Group = { id: string; title: string; operations: Operation[] }
 const catalog = ref<any>(null)
 const ui = ref<any>(null)
 const history = ref<any[]>([])
 const busy = ref(false)
 const error = ref('')
+const uiError = ref('')
 const query = ref('')
 const preview = ref<any>(null)
 const selectedPreset = ref('native-100')
@@ -53,13 +55,17 @@ async function run(action: () => Promise<void>) {
   finally { busy.value = false }
 }
 async function reload() {
-  const [c, u, h] = await Promise.all([Request.get(root), Request.get(`${root}/ui`), Request.get(`${root}/ui/history`)])
-  catalog.value = c.data; ui.value = u.data; history.value = h.data
-  coordinateValues.value = Object.fromEntries((ui.value.coordinates || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
-  switchValues.value = Object.fromEntries((ui.value.switches || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
-  featureValues.value = Object.fromEntries((ui.value.featureSwitches || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
-  scalarValues.value = Object.fromEntries((ui.value.featureValues || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
-  layoutValues.value = Object.fromEntries((ui.value.layoutFields || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
+  catalog.value = (await Request.get(root)).data
+  const [u, h] = await Promise.allSettled([Request.get(`${root}/ui`), Request.get(`${root}/ui/history`)])
+  ui.value = u.status === 'fulfilled' ? u.value.data : null
+  history.value = h.status === 'fulfilled' ? h.value.data : []
+  const messages = [u, h].filter(r => r.status === 'rejected').map(r => r.status === 'rejected' ? r.reason.response?.data?.message || r.reason.message : '')
+  uiError.value = messages.join('；')
+  coordinateValues.value = Object.fromEntries((ui.value?.coordinates || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
+  switchValues.value = Object.fromEntries((ui.value?.switches || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
+  featureValues.value = Object.fromEntries((ui.value?.featureSwitches || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
+  scalarValues.value = Object.fromEntries((ui.value?.featureValues || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
+  layoutValues.value = Object.fromEntries((ui.value?.layoutFields || []).filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
   preview.value = null; edit.value = null
 }
 function prepare() { return run(async () => {
@@ -170,12 +176,14 @@ onMounted(() => run(reload))
     <a-alert v-if="catalog" type="warning">隔离测试 · {{ catalog.instanceId }} · 完整替代开发中，尚未进入统一验收</a-alert>
     <a-alert v-if="error" type="error" class="space">{{ error }}</a-alert>
     <a-button class="space" :loading="busy" @click="run(reload)">刷新实例与配置</a-button>
-    <template v-if="catalog && ui">
+    <a-alert v-if="uiError" type="warning" class="space">游戏 UI 配置或历史暂不可用：{{ uiError }}。其他管理模块可独立使用。</a-alert>
+    <template v-if="catalog">
       <a-tabs class="space">
         <a-tab-pane key="home" title="首页与公告"><HomepageSettings /></a-tab-pane>
+        <a-tab-pane key="plugins" title="团本与插件"><NativePlugins /></a-tab-pane>
         <a-tab-pane key="settings" title="注册、泡点与快捷操作"><NativeSettings /></a-tab-pane>
         <a-tab-pane key="records" title="记录查询"><NativeRecords /></a-tab-pane>
-        <a-tab-pane key="ui" title="游戏 UI 管理">
+        <a-tab-pane v-if="ui" key="ui" title="游戏 UI 管理">
           <a-descriptions title="当前血槽" :column="1" bordered>
             <a-descriptions-item label="当前布局">{{ ui.preset === 'native-100' ? '原生 100 血槽' : '其他原生配置' }}</a-descriptions-item>
             <a-descriptions-item label="血槽调整">{{ ui.switchFormatRecognized ? (ui.bloodLayoutEnabled ? '开启' : '关闭') : '待核对原生格式' }}</a-descriptions-item>
@@ -219,7 +227,7 @@ onMounted(() => run(reload))
             {{ result.persisted ? '已持久化，游戏效果待确认' : '操作尚未确认持久化，请核对历史' }} · {{ result.requestId }}
           </a-alert>
         </a-tab-pane>
-        <a-tab-pane key="layout" title="创建角色与自定义 UI">
+        <a-tab-pane v-if="ui" key="layout" title="创建角色与自定义 UI">
           <p>保存仅调整本次选中的布局数值；血槽和创建角色界面的启用开关请在“游戏 UI 管理”页查看。游戏显示效果仍需重登后核对。</p>
           <NativePresetPreview :presets="ui.creationPresets || []" initial-id="creation-100" title="原工具创建角色预览" selector-label="创建角色预设" @select="creationPresetChanged" />
           <a-button :disabled="busy" @click="prepareCreation">预览应用所选创建角色预设</a-button>
@@ -248,7 +256,7 @@ onMounted(() => run(reload))
           <p v-if="edit?.layout">本次操作编号：{{ edit.requestId }}。连接中断时请先核对操作历史。</p>
           <a-alert v-if="result" class="space" :type="result.persisted ? 'success' : 'warning'">{{ result.persisted ? '已持久化，游戏效果待确认' : '结果尚未确认，请核对操作历史' }} · {{ result.requestId }}</a-alert>
         </a-tab-pane>
-        <a-tab-pane key="features" title="基础与高级开关">
+        <a-tab-pane v-if="ui" key="features" title="基础与高级开关">
           <p>读取当前实例原值。保存只修改本次选中的配置，实际效果需由对应游戏组件执行并验证。</p>
           <a-input v-model="featureQuery" placeholder="搜索功能名称" allow-clear />
           <a-form :model="featureValues" class="space" layout="vertical">
@@ -269,7 +277,7 @@ onMounted(() => run(reload))
           <p v-if="edit?.features">本次操作编号：{{ edit.requestId }}。连接中断时请先核对操作历史。</p>
           <a-alert v-if="result" class="space" :type="result.persisted ? 'success' : 'warning'">{{ result.persisted ? '已持久化，组件效果待确认' : '结果尚未确认，请核对操作历史' }} · {{ result.requestId }}</a-alert>
         </a-tab-pane>
-        <a-tab-pane key="values" title="基础参数与耳环布局">
+        <a-tab-pane v-if="ui" key="values" title="基础参数与耳环布局">
           <p>保留原配置的文本、空格和格式。保存只修改本次预览的项目；组件执行效果仍需核对。</p>
           <a-radio-group v-model="scalarGroup" type="button"><a-radio v-for="group in scalarGroups" :key="group" :value="group">{{ group }}</a-radio></a-radio-group>
           <a-input v-model="scalarQuery" class="space" placeholder="搜索设置名称" allow-clear />
@@ -297,7 +305,7 @@ onMounted(() => run(reload))
         <a-tab-pane key="script" title="Script 加密与更新">
           <a-alert type="warning">尚未完成：需要确认当前客户端实际接受的加密和更新格式，并完成损坏更新的恢复验证。</a-alert>
         </a-tab-pane>
-        <a-tab-pane key="history" title="操作历史与恢复">
+        <a-tab-pane v-if="ui" key="history" title="操作历史与恢复">
           <a-table :data="history" :pagination="{ pageSize: 10 }" row-key="requestId" :scroll="{ x: 1000 }">
             <template #columns>
               <a-table-column title="时间" data-index="createdAt" />
@@ -318,6 +326,7 @@ onMounted(() => run(reload))
           <a-collapse v-if="catalog.executionPlan" class="space">
             <a-collapse-item v-for="pack in catalog.executionPlan.packages" :key="pack.id" :header="`${pack.id} · ${pack.name}`">
               <p>{{ pack.state === 'complete' ? '内部检查已完成' : '内部开发与验证中，尚未完成统一验收' }}</p>
+              <ul v-if="pack.progressEvidence?.length"><li v-for="step in pack.progressEvidence" :key="step">已接入：{{ step }}</li></ul>
               <ul><li v-for="step in pack.remaining" :key="step">{{ step }}</li></ul>
             </a-collapse-item>
           </a-collapse>
@@ -327,7 +336,7 @@ onMounted(() => run(reload))
           <a-input v-model="query" placeholder="搜索原工具功能" allow-clear />
           <a-collapse class="space">
             <a-collapse-item v-for="group in groups" :key="group.id" :header="group.title">
-              <div v-for="operation in group.operations" :key="operation.id" class="operation"><span>{{ operation.name }}</span><a-tag color="orange">待逐项等价验证</a-tag></div>
+              <div v-for="operation in group.operations" :key="operation.id" class="operation"><span>{{ operation.name }}</span><a-tag v-if="operation.managementImplementation?.state === 'configuration_implemented'" color="blue">配置管理已接入，游戏效果待验</a-tag><a-tag v-else color="orange">待逐项等价验证</a-tag></div>
             </a-collapse-item>
           </a-collapse>
         </a-tab-pane>

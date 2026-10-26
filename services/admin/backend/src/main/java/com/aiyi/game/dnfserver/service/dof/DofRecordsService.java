@@ -1,6 +1,8 @@
 package com.aiyi.game.dnfserver.service.dof;
 
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.annotation.Resource;
 import java.sql.*;
 import java.util.*;
@@ -13,6 +15,7 @@ public class DofRecordsService {
         final String key, title, table, owner, order;
         final String[] columns, labels;
         String date, ownerLabel="玩家编号";
+        String database="dof_native";
         final Set<String> search = new LinkedHashSet<>();
         View(String key, String title, String table, String owner, String order, String columns, String labels) {
             this.key=key; this.title=title; this.table=table; this.owner=owner; this.order=order;
@@ -25,11 +28,11 @@ public class DofRecordsService {
             return this;
         }
     }
-    private static final List<View> VIEWS = Arrays.asList(
+    private static final List<View> VIEWS = catalogViews(Arrays.asList(
         new View("signin-users", "签到进度", "sign_in_users", "user_id", "user_id",
             "user_id,current_checkins,end_date,last_checkin_date", "玩家编号,当前签到次数,活动截止日期,最近签到日期"),
         new View("signin-checkins", "签到记录", "sign_in_checkin_records", "user_id", "checkin_date",
-            "user_id,checkin_date,is_double", "玩家编号,签到日期,双倍标记"),
+            "user_id,checkin_date,is_double", "玩家编号,签到日期,双倍标记").filter("checkin_date","玩家编号"),
         new View("signin-storage", "签到奖励状态", "sign_in_storage", "UID", "UID",
             "UID,num,Cumulative_1,Cumulative_2,Cumulative_3,Cumulative_4,d_num",
             "玩家编号,签到次数,累计奖励一状态,累计奖励二状态,累计奖励三状态,累计奖励四状态,双倍次数"),
@@ -41,9 +44,9 @@ public class DofRecordsService {
         new View("transactions", "交易记录", "transaction", "UID", "ITime",
             "ID,UID,accname,code,codenum,MING,ITime", "记录编号,账号编号,账号名称,道具编号,道具数量,记录说明,交易时间")
             .filter("ITime","账号编号","accname","MING"),
-        new View("dungeon-runs", "刷图记录", "dungeonCheck", "uid", "leaveTime",
-            "ID,uid,charactName,dungeonId,dungeonName,difficulty,mapCount,killMobCount,useCubepieceClearCount,hell,passingTime,clearInfo,success,leaveTime,num,namenum",
-            "记录编号,账号编号,角色名称,地下城编号,地下城名称,难度,地图数量,击杀数量,无色消耗次数,深渊标记,通关用时原值,通关信息,通关状态,离开时间,原生计数,原生名称计数")
+        new View("dungeon-runs", "刷图与通关记录", "map_history", "uid", "leaveTime",
+            "ID,uid,charactName,dungeonId,dungeonName,difficulty,mapCount,killMobCount,useCubepieceClearCount,hell,passingTime,clearInfo,success,leaveTime,reward_state,is_captain,is_team,c_id",
+            "记录编号,账号编号,角色名称,地下城编号,地下城名称,难度,地图数量,击杀数量,无色消耗次数,深渊标记,通关用时原值,通关信息,通关状态,离开时间,原生公告状态,队长标记,原生队伍人数,角色编号")
             .filter("leaveTime","账号编号","charactName","dungeonName"),
         new View("power-settlements", "战力排行结算日志", "game_charts_logs", null, "id",
             "id,charts_day,logs", "记录编号,结算时间,结算记录").filter("charts_day",null,"logs"),
@@ -63,7 +66,34 @@ public class DofRecordsService {
             "CID,IUID,IUsername,IFile_md5,IMac_md5,MING,IKey_word,IIPAddress,ITime",
             "角色编号,账号编号,账号名称,文件校验值,设备校验值,名称,匹配关键词,连接地址,记录时间")
             .filter(null,"账号编号","IUsername","MING","IKey_word")
-    );
+    ));
+    /** Reuse audited, fixed read projections; HTTP never chooses a database or table. */
+    private static List<View> catalogViews(List<View> primary) {
+        List<View> result=new ArrayList<>(primary);Set<String> keys=new HashSet<>(),tables=new HashSet<>();
+        for(View v:primary){keys.add(v.key);tables.add(v.database+"."+v.table);}
+        try(java.io.InputStream in=DofRecordsService.class.getResourceAsStream("/extension/records.json")) {
+            List<Map<String,Object>> extra=new ObjectMapper().readValue(in,new TypeReference<List<Map<String,Object>>>(){});
+            for(Map<String,Object> row:extra) {
+                String key=(String)row.get("key"),table=(String)row.get("table"),database=(String)row.getOrDefault("database","dof_native");
+                String owner=(String)row.get("filter"),order=(String)row.get("order");
+                @SuppressWarnings("unchecked") List<String> columns=(List<String>)row.get("columns");
+                if(!Arrays.asList("dof_native","taiwan_cain_log").contains(database)
+                    || key==null || !key.matches("[a-z][a-z0-9-]*") || table==null || !table.matches("[A-Za-z_][A-Za-z0-9_]*")
+                    || order==null || columns==null || columns.isEmpty() || new HashSet<>(columns).size()!=columns.size()
+                    || !columns.contains(order) || owner!=null&&!columns.contains(owner)
+                    || columns.stream().anyMatch(c->c==null || !c.matches("[A-Za-z_][A-Za-z0-9_]*")))
+                    throw new IllegalArgumentException("Invalid fixed record projection");
+                if(keys.contains(key) || tables.contains(database+"."+table))continue;
+                View v=new View(key,(String)row.get("title"),table,owner,order,String.join(",",columns),String.join(",",columns));
+                v.database=database;
+                if(Arrays.asList("CID","cid","charac_no").contains(owner))v.ownerLabel="角色编号";
+                else if(owner!=null)v.ownerLabel="账号编号";
+                if(key.equals("chat-reports"))v.date="occ_time";
+                result.add(v);keys.add(key);tables.add(database+"."+table);
+            }
+        }catch(java.io.IOException | RuntimeException e){throw new IllegalStateException("原生记录固定清单无法加载",e);}
+        return Collections.unmodifiableList(result);
+    }
     private View view(String key) {
         return VIEWS.stream().filter(v -> v.key.equals(key)).findFirst()
             .orElseThrow(() -> new DofFailure(404, "未知原生记录分类"));
@@ -76,12 +106,46 @@ public class DofRecordsService {
         List<Object> searches=new ArrayList<>(); for(Map<String,String> f:columns)if(v.search.contains(f.get("key")))searches.add(f);
         out.put("searchFields",searches);out.put("columns",columns); out.put("nativeEquivalence", "pending"); return out;
     }
+    private Map<String,Map<String,String>> schema(Connection c)throws SQLException {
+        Map<String,Map<String,String>> tables=new HashMap<>();
+        try(PreparedStatement p=c.prepareStatement("SELECT TABLE_SCHEMA,TABLE_NAME,COLUMN_NAME,DATA_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA IN ('dof_native','taiwan_cain_log')")) {
+            p.setQueryTimeout(10);
+            try(ResultSet r=p.executeQuery()) {
+                while(r.next())tables.computeIfAbsent(r.getString(1)+"."+r.getString(2),k->new LinkedHashMap<>()).put(r.getString(3).toLowerCase(Locale.ROOT),r.getString(4));
+            }
+        }
+        return tables;
+    }
+    private Map<String,Object> description(View v,Map<String,Map<String,String>> schema) {
+        Map<String,Object> out=description(v);Map<String,String> actual=schema.get(v.database+"."+v.table);List<String> missing=new ArrayList<>();
+        for(String column:v.columns)if(actual==null || !actual.containsKey(column.toLowerCase(Locale.ROOT)))missing.add(column);
+        out.put("available",missing.isEmpty());out.put("missingColumns",missing);
+        if(!missing.isEmpty())out.put("reason",actual==null?"当前实例没有记录表 "+v.table:"记录表 "+v.table+" 缺少字段："+String.join("、",missing));
+        out.put("table",v.table);out.put("database",v.database);return out;
+    }
     public Object catalog() {
         access.admin();
-        try(Connection c=access.connection()) {
-            Map<String,Object> out=access.context(); List<Object> views=new ArrayList<>();
-            for(View v:VIEWS) views.add(description(v)); out.put("views", views); return out;
+        try(Connection c=access.boundConnection()) {
+            Map<String,Object> out=access.context(); List<Object> views=new ArrayList<>();Map<String,Map<String,String>> schema=schema(c);
+            for(View v:VIEWS) views.add(description(v,schema)); out.put("views", views); return out;
         } catch(SQLException e) { throw new DofFailure(503,"隔离数据库不可用，未读取记录"); }
+    }
+    public Object diagnose(String key) {
+        access.admin();View v=view(key);
+        try(Connection c=access.boundConnection()) {
+            Map<String,Map<String,String>> schema=schema(c);Map<String,Object> out=access.context();
+            out.put("view",description(v,schema));out.put("tablePresent",schema.containsKey(v.database+"."+v.table));
+            List<Map<String,Object>> fields=new ArrayList<>();Map<String,String> actual=schema.getOrDefault(v.database+"."+v.table,Collections.emptyMap());
+            for(String column:v.columns) {
+                Map<String,Object> field=new LinkedHashMap<>();field.put("key",column);field.put("present",actual.containsKey(column.toLowerCase(Locale.ROOT)));
+                field.put("dataType",actual.get(column.toLowerCase(Locale.ROOT)));fields.add(field);
+            }
+            out.put("fields",fields);out.put("observedAt",java.time.Instant.now().toString());
+            try(Statement s=c.createStatement()){s.setQueryTimeout(10);try(ResultSet r=s.executeQuery("SELECT NOW(),@@session.time_zone,@@system_time_zone")) {
+                if(r.next()){out.put("databaseNow",r.getString(1));out.put("databaseTimezone",r.getString(2));out.put("systemTimezone",r.getString(3));}
+            }}
+            out.put("notice","仅检查绑定实例的固定表结构及数据库时间；不读取玩家行，不初始化或修改任何表。字段齐全仍需核对查询权限及实际读取。");return out;
+        }catch(SQLException e){throw new DofFailure(503,"记录结构诊断暂不可用，请核对数据库连接、元数据读取权限或超时");}
     }
     public Object records(String key, Long owner, int page, int size) {
         return records(key,owner,page,size,"all",null,null);
@@ -108,8 +172,11 @@ public class DofRecordsService {
         StringBuilder order=new StringBuilder("`"+v.order+"` DESC");
         // Tie-break on every projected value, rather than an unspecified physical row order.
         for(String column:v.columns) if(!column.equals(v.order)) order.append(",BINARY `").append(column).append("` DESC");
-        String query="SELECT `"+String.join("`,`",v.columns)+"` FROM `dof_native`.`"+v.table+"`"+where+" ORDER BY "+order+" LIMIT ? OFFSET ?";
-        try(Connection c=access.connection(); PreparedStatement p=c.prepareStatement(query)) {
+        String query="SELECT `"+String.join("`,`",v.columns)+"` FROM `"+v.database+"`.`"+v.table+"`"+where+" ORDER BY "+order+" LIMIT ? OFFSET ?";
+        try(Connection c=access.boundConnection()) {
+            Map<String,Object> available=description(v,schema(c));
+            if(!Boolean.TRUE.equals(available.get("available")))throw new DofFailure(409,available.get("reason")+"。未创建或改写原生表；可查询其他已有记录分类。");
+            try(PreparedStatement p=c.prepareStatement(query)) {
             p.setQueryTimeout(10); int n=1; if(owner!=null)p.setLong(n++,owner);
             if(searching)p.setString(n++,"%"+searchText.replace("!","!!").replace("%","!%").replace("_","!_")+"%");
             p.setInt(n++,size+1); p.setLong(n,(long)(page-1)*size);
@@ -123,6 +190,7 @@ public class DofRecordsService {
             out.put("observedAt",java.time.Instant.now().toString()); out.put("consistency","live");
             out.put("notice","直接查询原生记录。日期按数据库服务器时区筛选，文字按字面内容包含匹配。游戏写入时翻页结果可能变化；这里不会补发奖励或改写领取状态。");
             return out;
+            }
         } catch(SQLException e) {
             if("42S02".equals(e.getSQLState()) || "42S22".equals(e.getSQLState()))
                 throw new DofFailure(409,"当前实例的记录结构不兼容，未初始化或覆盖原生表");

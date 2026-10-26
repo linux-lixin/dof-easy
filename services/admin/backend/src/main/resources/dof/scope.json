@@ -542,7 +542,16 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [],
+          "managementImplementation": {
+            "state": "read_only_implemented",
+            "api": "/api/v1/admin/dof/records/dungeon-runs",
+            "entry": "/admin/dof",
+            "executor": "bound_instance_read_only_sql",
+            "nativeLocation": "dof_native.map_history",
+            "effectState": "native_equivalence_pending",
+            "diagnosisApi": "/api/v1/admin/dof/records/dungeon-runs/schema"
+          }
         },
         {
           "id": "feature-012-02",
@@ -557,7 +566,16 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [],
+          "managementImplementation": {
+            "state": "read_only_implemented",
+            "api": "/api/v1/admin/dof/records/auction-transactions",
+            "entry": "/admin/dof",
+            "executor": "bound_instance_read_only_sql",
+            "nativeLocation": "dof_native.auction_house_log",
+            "effectState": "native_equivalence_pending",
+            "diagnosisApi": "/api/v1/admin/dof/records/auction-transactions/schema"
+          }
         },
         {
           "id": "feature-012-03",
@@ -572,7 +590,16 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [],
+          "managementImplementation": {
+            "state": "read_only_implemented",
+            "api": "/api/v1/admin/dof/records/chat-reports",
+            "entry": "/admin/dof",
+            "executor": "bound_instance_read_only_sql",
+            "nativeLocation": "taiwan_cain_log.log_police_chatting",
+            "effectState": "native_equivalence_pending",
+            "diagnosisApi": "/api/v1/admin/dof/records/chat-reports/schema"
+          }
         },
         {
           "id": "feature-012-04",
@@ -586,7 +613,7 @@
           "executor": null,
           "activation": null,
           "output": null,
-          "failureBehavior": null,
+          "failureBehavior": "当前固定视图只提供举报聊天元数据，不能替代全部聊天正文审计；完整来源与原工具行为未核实时保持待实现。",
           "evidence": []
         }
       ]
@@ -1157,7 +1184,16 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [],
+          "managementImplementation": {
+            "state": "configuration_implemented",
+            "api": "/api/v1/admin/dof/plugins/anton",
+            "entry": "/admin/dof",
+            "executor": "libdof-plugin.so + DP2",
+            "activation": "GM reload command or scheduled game restart; no runtime reload is claimed",
+            "persistence": "atomic_file_with_write_ahead_journal",
+            "effectState": "not_observed"
+          }
         }
       ]
     },
@@ -1178,7 +1214,16 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [],
+          "managementImplementation": {
+            "state": "configuration_implemented",
+            "api": "/api/v1/admin/dof/plugins/luke",
+            "entry": "/admin/dof",
+            "executor": "libdof-plugin.so + DP2",
+            "activation": "GM reload command or scheduled game restart; no runtime reload is claimed",
+            "persistence": "atomic_file_with_write_ahead_journal",
+            "effectState": "not_observed"
+          }
         }
       ]
     },
@@ -4212,5 +4257,6 @@
     }
   ],
   "discoveredClasses": 71,
-  "discoveredOperations": 239
+  "discoveredOperations": 239,
+  "sourceEdition": "qingkong-2.8-replacement"
 }

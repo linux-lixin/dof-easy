@@ -9,6 +9,14 @@ import java.util.*;
 @RestController
 @RequestMapping("api/v1/admin/dof")
 public class DofAdminController {
+    @Resource private DofPluginService plugins;
+    @GetMapping("plugins") public Object pluginCatalog(){return plugins.catalog();}
+    @GetMapping("plugins/{module}") public Object pluginRead(@PathVariable("module") String module){return plugins.read(module);}
+    @PostMapping("plugins/{module}/preview") public Object pluginPreview(@PathVariable("module") String module,@RequestBody NativePluginFiles.Edit edit){return plugins.preview(module,edit);}
+    @PutMapping("plugins/{module}") public Object pluginSave(@PathVariable("module") String module,@RequestBody NativePluginFiles.Edit edit){return plugins.save(module,edit,null);}
+    @GetMapping("plugins/{module}/history") public Object pluginHistory(@PathVariable("module") String module){return plugins.history(module);}
+    @PostMapping("plugins/{module}/history/{id}/restore") public Object pluginRestore(@PathVariable("module") String module,@PathVariable("id") String id,@RequestBody NativePluginFiles.Edit edit){return plugins.save(module,edit,id);}
+    @PostMapping("plugins/{module}/history/{id}/reconcile") public Object pluginReconcile(@PathVariable("module") String module,@PathVariable("id") String id){return plugins.reconcile(module,id);}
     @Resource private DofAdminService service;
     @Resource private DofTextService textService;
     @Resource private DofRecordsService recordsService;
@@ -64,6 +72,7 @@ public class DofAdminController {
             .contentLength(java.nio.file.Files.size(path)).body(new org.springframework.core.io.FileSystemResource(path.toFile()));
     }
     @GetMapping("records") public Object recordCatalog() { return recordsService.catalog(); }
+    @GetMapping("records/{key}/schema") public Object recordSchema(@PathVariable("key") String key) { return recordsService.diagnose(key); }
     @GetMapping("records/{key}") public Object records(@PathVariable("key") String key,
         @RequestParam(value="owner", required=false) Long owner,
         @RequestParam(value="page", defaultValue="1") int page,

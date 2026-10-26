@@ -3,19 +3,28 @@ import { computed, onMounted, ref } from 'vue'
 import Request from '../../../api/Request'
 const root='/api/v1/admin/dof/records'
 const views=ref<any[]>([]), key=ref(''), owner=ref<number>(), page=ref(1), data=ref<any>(null), error=ref(''), busy=ref(false)
+const diagnosis=ref<any>(null)
 const period=ref('all'), searchField=ref(''), searchText=ref('')
 const selected=computed(()=>views.value.find(v=>v.key===key.value))
 async function load(reset=false) {
   if(busy.value)return
+  if(selected.value?.available === false) { data.value=null;error.value=selected.value.reason;return }
   busy.value=true; error.value=''; if(reset)page.value=1
   try { data.value=(await Request.get(`${root}/${key.value}`,{params:{owner:owner.value,page:page.value,size:50,period:period.value,
     searchField:searchText.value?searchField.value:undefined,searchText:searchText.value||undefined}})).data }
   catch(e:any) { data.value=null; error.value=e.response?.data?.message||'查询失败，请重新连接' }
   finally { busy.value=false }
 }
-function changeView() { owner.value=undefined;period.value='all';searchField.value=selected.value?.searchFields?.[0]?.key||'';searchText.value='';load(true) }
+function changeView() { diagnosis.value=null;data.value=null;owner.value=undefined;period.value='all';searchField.value=selected.value?.searchFields?.[0]?.key||'';searchText.value='';load(true) }
+async function diagnose() {
+  if(busy.value||!key.value)return
+  busy.value=true;error.value='';diagnosis.value=null
+  try { diagnosis.value=(await Request.get(`${root}/${key.value}/schema`)).data }
+  catch(e:any) { error.value=e.response?.data?.message||'无法核对记录结构' }
+  finally { busy.value=false }
+}
 onMounted(async()=>{
-  try { views.value=(await Request.get(root)).data.views; key.value=views.value[0]?.key||''; if(key.value)await load(true) }
+  try { views.value=(await Request.get(root)).data.views; key.value=(views.value.find(v=>v.available !== false)||views.value[0])?.key||''; if(key.value)await load(true) }
   catch(e:any) { error.value=e.response?.data?.message||'无法读取记录分类' }
 })
 </script>
@@ -24,7 +33,7 @@ onMounted(async()=>{
   <a-alert v-if="error" type="error">{{ error }}</a-alert>
   <a-space class="controls" wrap>
     <a-select v-model="key" :disabled="busy" style="width:230px" @change="changeView">
-      <a-option v-for="v in views" :key="v.key" :value="v.key">{{v.title}}</a-option>
+      <a-option v-for="v in views" :key="v.key" :value="v.key">{{v.title}}{{v.available === false ? '（结构不匹配）' : ''}}</a-option>
     </a-select>
     <a-input-number v-if="selected?.ownerAvailable" v-model="owner" :min="1" :precision="0" :disabled="busy" :placeholder="selected?.ownerLabel+'（可选）'" />
     <a-select v-if="selected?.periodAvailable" v-model="period" :disabled="busy" style="width:150px">
@@ -36,7 +45,13 @@ onMounted(async()=>{
       <a-input v-model="searchText" :disabled="busy" :max-length="128" style="width:240px" placeholder="包含文字（可选）" @press-enter="load(true)" />
     </template>
     <a-button :loading="busy" @click="load(true)">查询</a-button>
+    <a-button :disabled="busy||!key" @click="diagnose">核对表结构</a-button>
   </a-space>
+  <template v-if="diagnosis">
+    <a-alert :type="diagnosis.view.available ? 'info' : 'warning'">{{diagnosis.view.database}}.{{diagnosis.view.table}}：{{diagnosis.view.available ? '查询所需字段齐全，实际读取及权限仍需验证' : diagnosis.view.reason}}。{{diagnosis.notice}}</a-alert>
+    <p>数据库时间：{{diagnosis.databaseNow}} · 会话时区：{{diagnosis.databaseTimezone}} · 系统时区：{{diagnosis.systemTimezone}}</p>
+    <a-table :data="diagnosis.fields" :pagination="false" :columns="[{title:'字段',dataIndex:'key'},{title:'存在',dataIndex:'present'},{title:'数据类型',dataIndex:'dataType'}]" />
+  </template>
   <template v-if="data">
     <p>{{data.notice}} 最近读取：{{new Date(data.observedAt).toLocaleString()}}</p>
     <a-table :data="data.rows" :loading="busy" :pagination="false" :scroll="{x:1000}">

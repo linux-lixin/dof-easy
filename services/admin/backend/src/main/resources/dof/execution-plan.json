@@ -86,7 +86,11 @@
         "补齐副本、交易、聊天及提示配置的查询和边界",
         "核对分页、筛选、编码、权限与原生记录完整性"
       ],
-      "completionEvidence": []
+      "completionEvidence": [],
+      "progressEvidence": [
+        "记录目录逐类检查实际表和字段，返回缺失原因；界面默认选择已有记录，不自动创建缺少的签到表。目标实例仍需重新检查。",
+        "绑定实例记录页复用既有固定投影，补入战令、收集箱、在线奖励、团本进度和举报聊天元数据；新增只读表结构诊断，真实完整查询仍逐类验收。"
+      ]
     },
     {
       "id": "wp05",
@@ -225,7 +229,10 @@
         "对启用与未启用组合分别做隔离验证"
       ],
       "completionEvidence": [],
-      "progressEvidence": []
+      "progressEvidence": [
+        "基础插件、安徒恩和卢克共85个文件配置字段已接通网页预览、保存、导入导出、历史及定向恢复；部署开关和游戏内实际刷新/团本流程仍待验收。",
+        "插件读取结果提供当前文件中的 GM 刷新命令、部署依赖与独立效果状态；网页未执行聊天或刷新。"
+      ]
     },
     {
       "id": "wp10",
@@ -239,7 +246,9 @@
         "发现遗漏继续补录；旧台账关闭结论不计为通过"
       ],
       "completionEvidence": [],
-      "progressEvidence": []
+      "progressEvidence": [
+        "新增免授权2.8原始材料锁与离线校验器；工具、服务端和客户端共16个固定输入在本地匹配。原工具完整菜单审计仍未完成。"
+      ]
     },
     {
       "id": "wp11",
@@ -272,7 +281,9 @@
         "业务结果不明不自动重试，区分写入与实际生效"
       ],
       "completionEvidence": [],
-      "progressEvidence": []
+      "progressEvidence": [
+        "文件配置新增持久化写前日志、重复请求核对、原文件编码保留、并发冲突和字段定向恢复；数据库绑定与UI结构检查解耦。"
+      ]
     },
     {
       "id": "wp13",
@@ -301,5 +312,21 @@
       "completionEvidence": [],
       "progressEvidence": []
     }
+  ],
+  "sourceEdition": "qingkong-2.8-replacement",
+  "baselineLock": "metadata/dof/admin-baseline.lock.json",
+  "implementationScope": "Full replacement-edition admin management; WPF launcher rewrite is a separate task.",
+  "phaseOrder": [
+    "P0",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9",
+    "P10"
   ]
 }

@@ -116,21 +116,50 @@ def native_schema(state, query):
         sys.path.remove(str(gateway))
 
 
+def web_management_enabled(values):
+    return (values.get('LAUNCHER_MODE', 'dof') == 'native'
+            or values.get('RAID_EXTENSION', 'off') == 'on'
+            or values.get('DOF_ADMIN_ENABLED') == 'true')
+
+
+def bind_plugin_files(instance, name, db_uuid):
+    root = instance / 'runtime/game/data/dof-easy/config'
+    if not root.is_dir() or root.resolve() != root.absolute():
+        raise ValueError('插件配置目录缺失或通过符号链接重定向')
+    marker = root / '.admin-instance.json'
+    expected = dict(instanceId=name, databaseUuid=db_uuid, environment='isolated')
+    if marker.is_symlink():
+        raise ValueError('插件配置实例标记不能是符号链接')
+    if marker.exists():
+        if json.loads(marker.read_text()) != expected:
+            raise ValueError('插件配置目录已绑定其他实例，拒绝覆盖')
+        return
+    fd = os.open(marker, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    with os.fdopen(fd, 'w') as stream:
+        json.dump(expected, stream); stream.write('\n'); stream.flush(); os.fsync(stream.fileno())
+
+
 def prepare_web(instance, values, query):
     """Shared native web preparation for internal and external MySQL."""
     db_uuid = identity(query)
-    native = values.get('LAUNCHER_MODE', 'dof') == 'native'
+    native = web_management_enabled(values)
     name = 'dof-' + instance.name
     marker = instance / 'database-web.json'
     if marker.exists():
         saved = json.loads(marker.read_text())
-        if saved != dict(databaseUuid=db_uuid, instanceId=name, native=native, state='ready'):
+        expected = dict(databaseUuid=db_uuid, instanceId=name, native=native, state='ready')
+        # Enabling plugin management is additive. An existing generic instance
+        # keeps its accounts, passwords and settings; only the binding is added.
+        upgrade = native and saved == dict(expected, native=False)
+        if saved != expected and not upgrade:
             raise ValueError('网页数据库身份或模式改变；拒绝覆盖绑定')
-        if native:
+        if native and not upgrade:
             binding = query("SELECT CONCAT(database_uuid,'|',adapter_version) FROM dnf_service.DOF_INSTANCE_BINDING WHERE instance_id='"+name+"';")
             if binding != db_uuid+'|dof-native-1':
                 raise ValueError('原生网页数据库绑定不符')
-        return db_uuid
+            bind_plugin_files(instance, name, db_uuid)
+        if not upgrade:
+            return db_uuid
     # Explicitly additive schema extraction, preserving previous UI and accounts.
     init = (ROOT / 'services/admin/database/init.sql').read_text()
     definitions = re.findall(r'CREATE TABLE `([A-Za-z_]+)` (\(.*?\) ENGINE=.*?);', init, re.S)
@@ -173,6 +202,7 @@ def prepare_web(instance, values, query):
     data = instance/'runtime/admin/data'; data.mkdir(parents=True, exist_ok=True, mode=0o700)
     if native:
         private_json(data/'dof-isolated.json', dict(instanceId=name,databaseUuid=db_uuid,environment='isolated'))
+        bind_plugin_files(instance, name, db_uuid)
     (data/'.db_initialized').touch(mode=0o600)
     private_json(marker, dict(databaseUuid=db_uuid,instanceId=name,native=native,state='ready'))
     return db_uuid

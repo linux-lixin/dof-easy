@@ -90,11 +90,41 @@ class DatabaseModes(unittest.TestCase):
         self.assertNotIn('db-check',model['services'])
         self.assertNotIn('netguard',model['services'])
 
+    def test_dof_login_keeps_independent_raid_management_and_fixed_file_mount(self):
+        values=dict(LAUNCHER_MODE='dof',RAID_EXTENSION='on',PLUGIN_MODE='dp2',
+                    GAME_DB_PASSWORD='test1234',DOF_DATABASE_UUID='11111111-1111-1111-1111-111111111111')
+        model=deploy.configure(self.model(),values,Path('/local/instance'),db.DATABASES)
+        env=model['services']['admin']['environment']
+        self.assertEqual(env['LAUNCHER_MODE'],'dof')
+        self.assertEqual(env['DOF_ADMIN_ENABLED'],'true')
+        self.assertEqual(env['DOF_GAME_CONFIG_ROOT'],'/app/game-config')
+        self.assertTrue(db.web_management_enabled(values))
+        mounts=[v for v in model['services']['admin']['volumes'] if isinstance(v,dict) and v['target']=='/app/game-config']
+        self.assertEqual(mounts,[dict(type='bind',source='/local/instance/runtime/game/data/dof-easy/config',target='/app/game-config',read_only=False)])
+        values.update(RAID_EXTENSION='off',DOF_ADMIN_ENABLED='true')
+        self.assertTrue(db.web_management_enabled(values))
+        self.assertEqual(deploy.configure(self.model(),values,Path('/local/instance'),db.DATABASES)['services']['admin']['environment']['DOF_ADMIN_ENABLED'],'true')
+
     def test_resolved_compose_dollar_is_literal_on_second_pass(self):
         source={'test':['CMD-SHELL','MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot']}
         self.assertEqual(deploy.literal_model(source)['test'][1],
                          'MYSQL_PWD="$$MYSQL_ROOT_PASSWORD" mysql -uroot')
         self.assertIn('$MYSQL_ROOT_PASSWORD',source['test'][1])
+
+    def test_plugin_file_binding_cannot_be_redirected_or_overwritten(self):
+        with tempfile.TemporaryDirectory() as folder:
+            instance=Path(folder)/'instance';root=instance/'runtime/game/data/dof-easy/config';root.mkdir(parents=True)
+            db.bind_plugin_files(instance,'dof-instance','test-uuid')
+            marker=root/'.admin-instance.json';saved=marker.read_bytes()
+            db.bind_plugin_files(instance,'dof-instance','test-uuid')
+            self.assertEqual(saved,marker.read_bytes())
+            with self.assertRaisesRegex(ValueError,'其他实例'):
+                db.bind_plugin_files(instance,'dof-other','test-uuid')
+            self.assertEqual(saved,marker.read_bytes())
+            marker.unlink();outside=Path(folder)/'outside';outside.write_text('{}');marker.symlink_to(outside)
+            with self.assertRaisesRegex(ValueError,'符号链接'):
+                db.bind_plugin_files(instance,'dof-instance','test-uuid')
+            self.assertEqual(outside.read_text(),'{}')
 
     def test_host_defaults_file_rejects_shared_permissions_and_symlinks(self):
         with tempfile.TemporaryDirectory() as folder:
