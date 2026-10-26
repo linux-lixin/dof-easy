@@ -61,4 +61,8 @@ public class LoginController {
         UserTokenCacheUtil.putUserCache(token, user);
         return token;
     }
+    @org.springframework.web.bind.annotation.ExceptionHandler(com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure.class)
+    public org.springframework.http.ResponseEntity<java.util.Map<String,String>> accountFailure(com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure e){
+        return org.springframework.http.ResponseEntity.status(e.status).body(java.util.Collections.singletonMap("message",e.getMessage()));
+    }
 }

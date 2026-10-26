@@ -64,8 +64,8 @@ def main():
         query("INSERT INTO dnf_service.DOF_INSTANCE_BINDING VALUES('dof-browser-fixture','isolated','" + identity + "','dof-native-1');"
               "CREATE TABLE dnf_service.DOF_CONTRACT_TEST_MARKER(purpose VARCHAR(64));"
               "INSERT INTO dnf_service.DOF_CONTRACT_TEST_MARKER VALUES('disposable-admin-browser');")
-        query("CREATE TABLE d_taiwan.accounts(UID BIGINT PRIMARY KEY,accountname VARCHAR(64),password VARCHAR(32),qq VARCHAR(64),VIP VARCHAR(64),admin INT,parent_uid BIGINT) ENGINE=InnoDB;"
-              "CREATE TABLE d_taiwan.member_punish_info(m_id BIGINT,punish_type INT,punish_value INT,apply_flag INT,start_time DATETIME,end_time DATETIME) ENGINE=MyISAM;")
+        query("CREATE TABLE d_taiwan.accounts(UID INT PRIMARY KEY,accountname VARCHAR(64),password VARCHAR(32),qq VARCHAR(64),VIP VARCHAR(64),admin INT,parent_uid BIGINT) ENGINE=InnoDB;"
+              "CREATE TABLE d_taiwan.member_punish_info(m_id INT NOT NULL,punish_type INT NOT NULL,occ_time DATETIME NOT NULL,punish_value INT NOT NULL,apply_flag TINYINT NOT NULL,start_time DATETIME NOT NULL,end_time DATETIME NOT NULL,admin_id VARCHAR(25) NOT NULL,reason VARCHAR(100) NOT NULL,PRIMARY KEY(m_id,punish_type)) ENGINE=MyISAM;")
         password = 'synthetic-admin-password-only'
         digest = hashlib.md5(password.encode()).hexdigest()
         query("INSERT INTO d_taiwan.accounts VALUES(999,'fixture-admin','" + digest + "','','',1,0);")
@@ -73,7 +73,7 @@ def main():
         for section in sections:
             if section['key'] not in ('signin', 'rewards'):
                 continue
-            definitions, values = [], []
+            definitions, values, native = [], [], {}
             for field in section['fields']:
                 assert re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', field['name'])
                 kind = field['type']
@@ -84,21 +84,30 @@ def main():
                 if field['name'] == 'd_Name': value = 'synthetic-signin'
                 if section['key'] == 'rewards' and field['name'] == 'item1': value = 100
                 if section['key'] == 'rewards' and field['name'] == 'item_code1': value = 1
+                native[field['name']] = value
                 values.append(str(value) if kind == 'int' else "'" + value.replace("'", "''") + "'")
             if section['primaryKey']:
                 definitions.append('PRIMARY KEY (`' + section['primaryKey'] + '`)')
             query('CREATE TABLE dof_native.`' + section['table'] + '`(' + ','.join(definitions) + ") ENGINE=MyISAM DEFAULT CHARSET=utf8;INSERT INTO dof_native.`" + section['table'] + '` VALUES(' + ','.join(values) + ');')
+            if section['key'] == 'signin':
+                after = dict(native, d_Name='synthetic-old-target')
+                query("CREATE TABLE dnf_service.EXTENSION_CONFIG_AUDIT(id BIGINT PRIMARY KEY,actor BIGINT,section_name VARCHAR(32),operation_name VARCHAR(16),before_json MEDIUMTEXT,after_json MEDIUMTEXT,state VARCHAR(16),created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB;")
+                before_hex = json.dumps(native).encode().hex()
+                after_hex = json.dumps(after).encode().hex()
+                query("INSERT INTO dnf_service.EXTENSION_CONFIG_AUDIT VALUES(1,999,'signin','update',CONVERT(0x" + before_hex + " USING utf8),CONVERT(0x" + after_hex + " USING utf8),'pending',NOW());")
         query("CREATE DATABASE taiwan_cain; CREATE DATABASE taiwan_login;"
               "CREATE TABLE taiwan_cain.charac_info(charac_no INT PRIMARY KEY,m_id INT,charac_name VARCHAR(32),village INT,job INT,lev INT,exp INT,grow_type INT,HP INT,maxHP SMALLINT UNSIGNED,maxMP SMALLINT UNSIGNED,phy_attack SMALLINT UNSIGNED,phy_defense SMALLINT UNSIGNED,mag_attack SMALLINT UNSIGNED,mag_defense SMALLINT UNSIGNED,attack_speed SMALLINT UNSIGNED,cast_speed SMALLINT UNSIGNED,move_speed SMALLINT UNSIGNED,hit_recovery SMALLINT,jump SMALLINT,fatigue SMALLINT,create_time DATETIME,unknown_setting VARBINARY(8)) ENGINE=MyISAM;"
               "CREATE TABLE taiwan_login.login_account_3(m_id INT,login_status TINYINT) ENGINE=MyISAM;"
-              "INSERT INTO d_taiwan.accounts VALUES(1000,'fixture-player','','','',0,0);"
+              "INSERT INTO d_taiwan.accounts VALUES(1000,'fixture-player','" + hashlib.md5(b'synthetic-player-before-reset').hexdigest() + "','','',0,0);"
               "INSERT INTO taiwan_cain.charac_info VALUES(1,1000,'SyntheticRole',1,0,86,0,0,100,100,100,10,10,10,10,10,10,10,0,0,156,NOW(),X'00FF');"
               "INSERT INTO taiwan_login.login_account_3 VALUES(1000,0);")
         credentials = args.work / 'credentials.json'
         credentials.write_text(json.dumps(dict(account='fixture-admin', password=password)))
         credentials.chmod(0o600)
         classpath = os.pathsep.join([str(args.classes.resolve()), str(ROOT / 'services/admin/backend/src/main/resources')] + [str(p) for p in sorted(args.dependencies.resolve().glob('*.jar'))])
-        java_env = dict(os.environ, DOF_ADMIN_ENABLED='true', DOF_ENVIRONMENT='isolated', DOF_INSTANCE_ID='dof-browser-fixture',
+        private_state_key = args.work / 'password-journal.key'
+        private_state_key.write_bytes(os.urandom(64)); private_state_key.chmod(0o600)
+        java_env = dict(os.environ, DOF_PASSWORD_JOURNAL_KEY_FILE=str(private_state_key), DOF_ADMIN_ENABLED='true', DOF_ENVIRONMENT='isolated', DOF_INSTANCE_ID='dof-browser-fixture',
                         DOF_ADAPTER_VERSION='dof-native-1', DOF_DATABASE_UUID=identity, LAUNCHER_MODE='native',
                         SPRING_DATASOURCE_URL=f'jdbc:mysql://127.0.0.1:{db_port}/dnf_service?useUnicode=true&characterEncoding=utf8&useSSL=false',
                         SPRING_DATASOURCE_USERNAME='root', SPRING_DATASOURCE_PASSWORD='')
@@ -123,9 +132,12 @@ def main():
         subprocess.run([str(args.node.resolve()), str(ROOT / 'tests/integration/admin/activity-page.cjs'), '--dist', str(args.dist.resolve()),
                         '--backend', f'http://127.0.0.1:{web_port}', '--credentials', str(credentials), '--output', str(args.work / 'browser')], check=True, env=os.environ)
         assert query('SELECT item_code1 FROM dof_native.list_of_warorder_rewards') == '1'
-        assert query("SELECT COUNT(*) FROM dnf_service.DOF_OPERATION_JOURNAL WHERE state='PERSISTED'") == '4'
+        assert query("SELECT COUNT(*) FROM dnf_service.DOF_OPERATION_JOURNAL WHERE state='PERSISTED'") == '9'
         assert query('SELECT maxHP FROM taiwan_cain.charac_info') == '100'
         assert query('SELECT HEX(unknown_setting) FROM taiwan_cain.charac_info') == '00FF'
+        assert query('SELECT COUNT(*) FROM d_taiwan.member_punish_info') == '0'
+        assert query('SELECT state FROM dnf_service.EXTENSION_CONFIG_AUDIT WHERE id=1') == 'pending'
+        assert query('SELECT password FROM d_taiwan.accounts WHERE UID=1000') == hashlib.md5(b'synthetic-player-after-reset').hexdigest()
         backend.terminate(); backend.wait(timeout=15)
         backend = subprocess.Popen([str(args.java.resolve()), '-Xmx256m', '-cp', classpath,
                                     'com.aiyi.game.dnfserver.DnfServerApplication', '--server.address=127.0.0.1', '--server.port=' + str(web_port)],
@@ -133,7 +145,9 @@ def main():
         wait_backend()
         subprocess.run([str(args.node.resolve()), str(ROOT / 'tests/integration/admin/activity-page.cjs'), '--dist', str(args.dist.resolve()),
                         '--backend', f'http://127.0.0.1:{web_port}', '--credentials', str(credentials), '--output', str(args.work / 'browser'), '--retained'], check=True, env=os.environ)
-        print('Synthetic native configuration restored; no real game database was accessed')
+        text = (args.work / 'backend.log').read_text(errors='replace')
+        assert not any(value in text for value in (password, 'synthetic-player-before-reset', 'synthetic-player-after-reset'))
+        print('Synthetic activity, role and penalty restored; player password reset verified; no real game database was accessed or password logged')
     finally:
         for process in (backend, mysql):
             if process is not None:
@@ -141,6 +155,7 @@ def main():
                 try: process.wait(timeout=15)
                 except subprocess.TimeoutExpired: process.kill(); process.wait()
         (args.work / 'credentials.json').unlink(missing_ok=True)
+        (args.work / 'password-journal.key').unlink(missing_ok=True)
 
 
 if __name__ == '__main__':

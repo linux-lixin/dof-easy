@@ -21,6 +21,7 @@ public class ManagedOperationJournal {
     public long admin(){return access.admin();}
     public Connection connection()throws SQLException{
         access.admin();Connection c=access.boundConnection();
+        if(!c.getAutoCommit()){c.close();throw new DofFailure(409,"管理写入连接必须启用自动提交以持久化写前记录；停止操作");}
         try(Statement s=c.createStatement()){s.execute("SET SESSION sql_mode=CONCAT_WS(',',NULLIF(@@SESSION.sql_mode,''),'STRICT_ALL_TABLES')");return c;}
         catch(SQLException | RuntimeException e){c.close();throw e;}
     }

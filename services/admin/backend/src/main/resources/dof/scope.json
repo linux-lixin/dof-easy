@@ -394,14 +394,26 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "账号编号、requestId、revision、操作类型、原因；封禁天数在预览时固定为服务器时间区间",
+          "nativeLocation": "d_taiwan.member_punish_info，主键(m_id,punish_type)；账号身份来自 accounts",
+          "encoding": "固定9列86级处罚结构，精确匹配 dof-easy 来源及 punish_value=101",
+          "executor": "ManagedBanService 管理SQL；登录服务读取处罚，游戏端读取仍待验",
+          "activation": "限制后续登录；不保证踢出在线角色，原生效果待验",
+          "output": "预览差异、持久化状态、操作历史、核对与定向恢复",
+          "failureBehavior": "错实例、未知结构、管理员/自身、其他来源占键、版本冲突均拒绝；PREPARED先核对，不换编号重做",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedBanContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-s2-2026-10-27.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "web_login_verified_synthetic; native_game_pending",
+            "actualEffect": "native_game_pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "passed_backend_process; container_pending"
+          }
         },
         {
           "id": "feature-010-02",
@@ -409,14 +421,26 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "账号编号、requestId、revision、操作类型、原因；封禁天数在预览时固定为服务器时间区间",
+          "nativeLocation": "d_taiwan.member_punish_info，主键(m_id,punish_type)；账号身份来自 accounts",
+          "encoding": "固定9列86级处罚结构，精确匹配 dof-easy 来源及 punish_value=101",
+          "executor": "ManagedBanService 管理SQL；登录服务读取处罚，游戏端读取仍待验",
+          "activation": "限制后续登录；不保证踢出在线角色，原生效果待验",
+          "output": "预览差异、持久化状态、操作历史、核对与定向恢复",
+          "failureBehavior": "错实例、未知结构、管理员/自身、其他来源占键、版本冲突均拒绝；PREPARED先核对，不换编号重做",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedBanContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-s2-2026-10-27.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "web_login_verified_synthetic; native_game_pending",
+            "actualEffect": "native_game_pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "passed_backend_process; container_pending"
+          }
         },
         {
           "id": "feature-010-03",
@@ -467,14 +491,18 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedPasswordContractTest.java",
+            "docs/validation/admin-management-s2-2026-10-27.json"
+          ],
           "implementationSubsets": [
             {
               "location": "dof_native.config.is_open_up_pwd",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
-          ]
+          ],
+          "managementImplementation": "管理员重置普通玩家密码已接通；玩家自助保留旧密码+一次性验证码；原生入口/原工具对照仍待验，不将管理员重置替代游戏内改密。"
         },
         {
           "id": "feature-011-02",

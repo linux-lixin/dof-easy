@@ -241,10 +241,86 @@ public class ActivityConfigService {
     private void noLegacyPending(Connection c,Section s)throws SQLException {
         if(!legacyExists(c))return;
         List<String> related=sections.stream().filter(x->x.table.equals(s.table)).map(x->x.key).collect(Collectors.toList());
-        try(PreparedStatement p=c.prepareStatement("SELECT id FROM "+AUDIT+" WHERE section_name IN ("+String.join(",",Collections.nCopies(related.size(),"?"))+") AND state='pending' LIMIT 1")) {
+        try(PreparedStatement p=c.prepareStatement("SELECT id FROM "+AUDIT+" WHERE section_name IN ("+String.join(",",Collections.nCopies(related.size(),"?"))+") AND state='pending'")) {
             for(int i=0;i<related.size();i++)p.setString(i+1,related.get(i));
-            try(ResultSet r=p.executeQuery()){if(r.next())throw new Failure(409,"存在旧格式 pending 操作，请先对照旧快照核实结果；没有自动重试或覆盖旧审计");}
+            try(ResultSet r=p.executeQuery()){while(r.next())if(legacyResolution(c,sectionForLegacy(c,r.getLong(1)),r.getLong(1),true)==null)throw new Failure(409,"存在旧格式 pending 操作，请先预览并确认旧日志核对；没有自动重试或覆盖旧审计");}
         }
+    }
+    public static class LegacyEdit {public String requestId,revision,reason;}
+    private String legacyNamespace(String key){return "activity-legacy."+key;}
+    private Section sectionForLegacy(Connection c,long id)throws SQLException {
+        try(PreparedStatement p=c.prepareStatement("SELECT section_name FROM "+AUDIT+" WHERE id=?")){p.setLong(1,id);try(ResultSet r=p.executeQuery()){if(!r.next())throw new Failure(404,"旧日志不存在");return section(r.getString(1));}}
+    }
+    private Map<String,Object> legacy(Connection c,Section s,long id)throws SQLException {
+        if(id<1||!legacyExists(c))throw new Failure(404,"旧日志不存在");Map<String,Object> out=new LinkedHashMap<>();
+        try(PreparedStatement p=c.prepareStatement("SELECT id,actor,section_name,operation_name,before_json,after_json,state,created_at FROM "+AUDIT+" WHERE id=? AND section_name=?")) {
+            p.setLong(1,id);p.setString(2,s.key);try(ResultSet r=p.executeQuery()){
+                if(!r.next())throw new Failure(404,"未找到本模块旧日志");
+                for(String k:Arrays.asList("id","actor","section_name","operation_name","before_json","after_json","state","created_at"))out.put(k,r.getString(k));
+                if(r.next())throw new Failure(409,"旧日志编号不唯一");
+            }
+        }
+        return out;
+    }
+    private Map<String,Object> legacyProof(Connection c,Section s,long id)throws SQLException {
+        Map<String,Object> log=legacy(c,s,id);
+        if(!"pending".equals(log.get("state")))throw new Failure(409,"旧日志已经不是 pending，停止核对");
+        String op=String.valueOf(log.get("operation_name"));if(!Arrays.asList("create","update","delete").contains(op))throw new Failure(409,"未知旧操作类型，不能确认");
+        Map<String,Object> before=snapshot(s,(String)log.get("before_json")),after=snapshot(s,(String)log.get("after_json"));
+        if(before==null&&after==null||op.equals("create")&&before!=null||op.equals("delete")&&(before==null||after!=null)||op.equals("update")&&(before==null||after==null))throw new Failure(409,"旧日志快照与操作不匹配，停止核对");
+        Long target=null;boolean known=true;
+        if(s.primaryKey!=null) {
+            if(op.equals("create")&&s.autoId)known=false; // Old code never recorded the assigned native ID.
+            else {target=rowId(s,before==null?after:before);if(after!=null&&!target.equals(rowId(s,after)))throw new Failure(409,"旧日志前后编号不一致");}
+        }
+        List<Map<String,Object>> current=rows(c,s,known?target:null);
+        String assessment="UNKNOWN";
+        if(known) {Map<String,Object> now=current.isEmpty()?null:current.get(0);if(current.size()>1)throw new Failure(409,"配置编号不唯一");
+            String h=journal.hash(now);assessment=h.equals(journal.hash(after))?"MATCHES_AFTER":h.equals(journal.hash(before))?"MATCHES_BEFORE":"CONFLICT";
+        }
+        Map<String,Object> proof=new LinkedHashMap<>();proof.put("legacyHash",journal.hash(log));proof.put("assessment",assessment);proof.put("targetKnown",known);proof.put("targetKey",known?(target==null?"singleton":target.toString()):"unknown");proof.put("currentRows",current);return proof;
+    }
+    @SuppressWarnings("unchecked") private Map<String,Object> legacySnapshot(ManagedOperationJournal.Entry e,Section s,long id) {
+        try {
+            if(!legacyNamespace(s.key).equals(e.namespace)||!resource(s).equals(e.resource)||!Long.toString(id).equals(e.target)||!"legacy-check".equals(e.operation)||!e.beforeHash.equals(e.afterHash))throw new IllegalArgumentException();
+            Map<String,Object> proof=json.readValue(e.afterJson,new TypeReference<Map<String,Object>>(){});
+            if(!proof.keySet().equals(new HashSet<>(Arrays.asList("legacyHash","assessment","targetKnown","targetKey","currentRows")))||!String.valueOf(proof.get("legacyHash")).matches("[0-9a-f]{64}")||!(proof.get("currentRows") instanceof List)||e.reason==null||e.reason.trim().isEmpty())throw new IllegalArgumentException();return proof;
+        }catch(Exception ex){throw new Failure(409,"旧日志核对证据损坏，停止解除阻塞");}
+    }
+    private ManagedOperationJournal.Entry legacyResolution(Connection c,Section s,long id,boolean confirmedOnly)throws SQLException {
+        String hash=journal.hash(legacy(c,s,id));
+        try(PreparedStatement p=c.prepareStatement("SELECT request_id FROM "+ManagedOperationJournal.TABLE+" WHERE instance_id=? AND namespace=? AND target_key=?"+(confirmedOnly?" AND state='NO_CHANGE'":"")+" ORDER BY (state='PREPARED') DESC,created_at DESC,request_id DESC")) {
+            p.setString(1,journal.instance());p.setString(2,legacyNamespace(s.key));p.setString(3,Long.toString(id));
+            try(ResultSet r=p.executeQuery()){while(r.next()){ManagedOperationJournal.Entry e=journal.require(c,legacyNamespace(s.key),r.getString(1));if(hash.equals(legacySnapshot(e,s,id).get("legacyHash")))return e;}}
+        }return null;
+    }
+    private void legacyEdit(LegacyEdit e){if(e==null||e.revision==null||!e.revision.matches("[0-9a-f]{64}"))throw new Failure(400,"缺少旧日志核对版本");ManagedOperationJournal.id(e.requestId);if(e.reason==null||e.reason.trim().isEmpty()||e.reason.length()>128||e.reason.codePoints().anyMatch(x->x<32||x>65535||Character.isSurrogate((char)x)))throw new Failure(400,"请填写 1–128 字核对原因");}
+    private String legacyFingerprint(long id,LegacyEdit e){Map<String,Object> out=new LinkedHashMap<>();out.put("legacyId",id);out.put("revision",e.revision);out.put("reason",e.reason);return journal.hash(out);}
+    public Map<String,Object> legacyCurrent(String key,long id) {
+        admin();Section s=section(key);try(Connection c=journal.connection()){lock(c,s);try{
+            Map<String,Object> proof=legacyProof(c,s,id);Map<String,Object> out=new LinkedHashMap<>(proof);out.put("revision",journal.hash(proof));out.put("legacyId",Long.toString(id));return out;
+        }finally{journal.unlock(c);}}catch(SQLException e){throw unavailable();}
+    }
+    public Map<String,Object> legacyReview(String key,long id,LegacyEdit edit,boolean commit) {
+        long actor=admin();Section s=section(key);legacyEdit(edit);
+        try(Connection c=journal.connection()){lock(c,s);try {
+            ManagedOperationJournal.Entry e=journal.find(c,edit.requestId);
+            if(e!=null){journal.same(e,legacyNamespace(key),actor,legacyFingerprint(id,edit));legacySnapshot(e,s,id);if(!e.state.equals("PREVIEWED")||!commit)return journal.result(e);}
+            else if(commit)throw new Failure(409,"请先预览旧日志核对");
+            journal.noPending(c,resource(s),null);
+            if(legacyResolution(c,s,id,true)!=null)throw new Failure(409,"此版本旧日志已有确认记录");
+            Map<String,Object> proof=legacyProof(c,s,id);if(!journal.hash(proof).equals(edit.revision))throw new Failure(409,"旧日志或当前配置改变，请重新读取并预览");
+            if(!commit)return journal.result(journal.preview(c,edit.requestId,actor,legacyNamespace(key),resource(s),Long.toString(id),"legacy-check",null,legacyFingerprint(id,edit),edit.reason,proof,proof));
+            e=journal.prepare(c,e,Long.toString(id),proof,proof);return journal.result(journal.finish(c,e,"NO_CHANGE",actor));
+        }finally{journal.unlock(c);}}catch(SQLException e){throw new Failure(503,"核对记录结果未确认；未改写原生配置或旧审计，请保留编号核对");}
+    }
+    public Map<String,Object> legacyReconcile(String key,long id,String requestId) {
+        long actor=admin();Section s=section(key);try(Connection c=journal.connection()){lock(c,s);try {
+            ManagedOperationJournal.Entry e=journal.require(c,legacyNamespace(key),requestId);legacySnapshot(e,s,id);if(!e.state.equals("PREPARED"))return journal.result(e);
+            boolean matches=false;
+            try{matches=journal.hash(legacyProof(c,s,id)).equals(e.afterHash);}catch(Failure changed){/* This review never writes native data; changed/deleted legacy evidence cannot confirm it. */}
+            return journal.result(journal.finish(c,e,matches?"NO_CHANGE":"NOT_APPLIED",actor));
+        }finally{journal.unlock(c);}}catch(SQLException e){throw unavailable();}
     }
     private Long rowId(Section s,Map<String,Object> values) {
         if(s.primaryKey==null)return null;
@@ -427,15 +503,16 @@ public class ActivityConfigService {
             schema(c,s);return envelope(current(c,s,s.primaryKey==null?null:Long.valueOf(e.target)));
         }catch(SQLException e){throw unavailable();}
     }
-    public List<Map<String,Object>> history(String key) {
-        admin();Section s=section(key);
+    public List<Map<String,Object>> history(String key){return history(key,1);}
+    public List<Map<String,Object>> history(String key,int legacyPage) {
+        admin();Section s=section(key);if(legacyPage<1||legacyPage>10000)throw new Failure(400,"旧日志页码无效");
         try(Connection c=journal.connection()) {
             List<Map<String,Object>> out=new ArrayList<>();
             for(ManagedOperationJournal.Entry e:journal.history(c,namespace(key))) {
                 Map<String,Object> row=result(e,s);row.put("id",e.requestId);row.put("created_at",e.createdAt);row.put("operation_name",e.operation);row.put("before_json",e.beforeJson);row.put("after_json",e.afterJson);row.put("legacy",false);out.add(row);
             }
-            if(legacyExists(c))try(PreparedStatement p=c.prepareStatement("SELECT id,actor,operation_name,state,created_at,before_json,after_json FROM "+AUDIT+" WHERE section_name=? ORDER BY id DESC LIMIT 30")) {
-                p.setString(1,key);try(ResultSet r=p.executeQuery()){while(r.next()){Map<String,Object> row=new LinkedHashMap<>();for(String n:Arrays.asList("id","actor","operation_name","state","created_at","before_json","after_json"))row.put(n,r.getString(n));row.put("legacy",true);out.add(row);}}
+            if(legacyExists(c))try(PreparedStatement p=c.prepareStatement("SELECT id,actor,operation_name,state,created_at,before_json,after_json FROM "+AUDIT+" WHERE section_name=? ORDER BY (state='pending') DESC,id DESC LIMIT 100 OFFSET ?")) {
+                p.setString(1,key);p.setInt(2,(legacyPage-1)*100);try(ResultSet r=p.executeQuery()){while(r.next()){Map<String,Object> row=new LinkedHashMap<>();for(String n:Arrays.asList("id","actor","operation_name","state","created_at","before_json","after_json"))row.put(n,r.getString(n));row.put("legacy",true);ManagedOperationJournal.Entry resolution=legacyResolution(c,section(key),Long.parseLong(r.getString("id")),false);row.put("resolution",resolution==null?null:journal.result(resolution));out.add(row);}}
             }
             return out;
         }catch(SQLException e){throw unavailable();}

@@ -10,6 +10,30 @@ const sections = ref<Section[]>([]), active = ref('signin'), rows = ref<Row[]>([
 const loading = ref(false), saving = ref(false), error = ref(''), notice = ref('');
 const edit = ref<Edit | null>(null), history = ref<any[]>([]), showHistory = ref(false), prepared = ref<any>(null), pending = ref<Edit | null>(null);
 const imported = ref('');
+const legacyPage = ref(1), legacyEdit = ref<any>(null), legacyReason = ref(''), legacyPrepared = ref<any>(null), legacyPending = ref<any>(null), legacyRequestId = ref('');
+const assessments: Record<string,string> = { MATCHES_AFTER: '当前值等于写后快照；不代表实际业务效果已经通过', MATCHES_BEFORE: '当前值等于写前快照；不据此推断历史操作从未执行', CONFLICT: '当前值与前后快照均不同，原结果未知', UNKNOWN: '旧自动编号未记录，无法确定新增目标或原结果' };
+watch(legacyReason, () => { legacyRequestId.value = uuid();legacyPrepared.value = null;legacyPending.value = null; });
+async function openLegacy(row: any) {
+  if (saving.value) return;saving.value = true;error.value = '';
+  try { legacyEdit.value = (await Request.get<any>(`${endpoint()}/legacy/${row.id}`)).data;legacyReason.value = '';legacyRequestId.value = uuid();legacyPrepared.value = null;legacyPending.value = null; }
+  catch(e) { error.value = message(e); } finally { saving.value = false; }
+}
+async function reviewLegacy(confirm = false) {
+  if (saving.value || !legacyEdit.value || confirm && legacyPrepared.value?.state !== 'PREVIEWED') return;
+  saving.value = true;error.value = '';
+  try {
+    if (!confirm) legacyPending.value = { requestId: legacyRequestId.value, revision: legacyEdit.value.revision, reason: legacyReason.value };
+    const result = (await Request.post<any>(`${endpoint()}/legacy/${legacyEdit.value.legacyId}/${confirm ? 'confirm' : 'preview'}`, legacyPending.value)).data;
+    legacyPrepared.value = result;
+    if (confirm && result.state === 'NO_CHANGE') { Message.success('已记录核对结论并保留当前配置；没有执行旧操作');legacyEdit.value = null;await openHistory(false); }
+  } catch(e) { error.value = message(e); } finally { saving.value = false; }
+}
+async function reconcileLegacy(row: any) {
+  if (saving.value) return;saving.value = true;
+  try { const r = (await Request.post<any>(`${endpoint()}/legacy/${row.id}/operations/${row.resolution.requestId}/reconcile`)).data;Message.info(labels[r.state] || r.state);await openHistory(false); }
+  catch(e) { error.value = message(e); } finally { saving.value = false; }
+}
+
 const section = computed(() => sections.value.find(s => s.key === active.value));
 const groups = computed(() => [...new Set(section.value?.fields.map(f => f.group) || [])]);
 const fields = (group: string) => section.value?.fields.filter(f => f.group === group) || [];
@@ -96,8 +120,9 @@ function previewImport() {
     Message.info('已填入表单，请预览核对后保存');
   } catch (e) { Message.error(message(e)); }
 }
-async function openHistory() {
-  try { history.value = (await Request.get<any[]>(endpoint() + '/history')).data;showHistory.value = true; }
+async function openHistory(reset = true) {
+  if (reset) legacyPage.value = 1;
+  try { history.value = (await Request.get<any[]>(endpoint() + '/history?legacyPage=' + legacyPage.value)).data;showHistory.value = true; }
   catch (e) { error.value = message(e); }
 }
 onMounted(async () => {
@@ -117,7 +142,7 @@ onMounted(async () => {
       <a-button @click="load" :loading="loading" :disabled="saving">刷新</a-button>
       <a-button type="primary" v-if="section && section.writable !== false && !error && (section.primaryKey || !rows.length)" :disabled="loading || saving" @click="begin()">新增配置</a-button>
       <a-button :disabled="loading || !!error" @click="download(`${active}-config.json`, { section: active, rows })">导出配置</a-button>
-      <a-button :disabled="loading || !!error" @click="openHistory">修改记录与快照</a-button>
+      <a-button :disabled="loading || !!error" @click="openHistory()">修改记录与快照</a-button>
     </a-space>
     <a-table :data="rows" :loading="loading" :pagination="{ pageSize: 10 }" :scroll="{ x: 1000 }" row-key="revision">
       <template #columns>
@@ -169,16 +194,18 @@ onMounted(async () => {
     </template>
   </a-modal>
   <a-modal v-model:visible="showHistory" title="操作历史与旧版快照" :width="900" :footer="false">
-    <a-alert>预览不写原生数据。结果待核对时不要更换编号重试；恢复只处理原操作字段。旧版 pending 保留现场，不自动重试。</a-alert>
+    <a-alert>预览不写原生数据。结果待核对时不要更换编号重试；恢复只处理原操作字段。旧版 pending 保留原日志。核对只记录当前值及原因，不重试旧操作；无法判定的原结果保持未知。</a-alert>
     <a-table :data="history" :pagination="{ pageSize: 10 }" row-key="id">
       <template #columns>
         <a-table-column title="时间" data-index="created_at" />
         <a-table-column title="管理员" data-index="actor" />
         <a-table-column title="操作" data-index="operation_name" />
-        <a-table-column title="状态"><template #cell="{record}">{{labels[record.state] || record.state}}{{record.legacy ? '（旧版）' : ''}}</template></a-table-column>
-        <a-table-column title="操作编号" data-index="requestId" />
+        <a-table-column title="状态"><template #cell="{record}">{{labels[record.state] || record.state}}{{record.legacy ? (record.resolution?.state === 'NO_CHANGE' ? '（旧版已核对，原记录保留）' : '（旧版）') : ''}}</template></a-table-column>
+        <a-table-column title="操作编号"><template #cell="{record}">{{record.legacy ? record.resolution?.requestId : record.requestId}}</template></a-table-column>
         <a-table-column title="原因" data-index="reason" />
         <a-table-column title="核对与恢复"><template #cell="{record}">
+          <a-button v-if="record.legacy && record.state === 'pending' && record.resolution?.state !== 'NO_CHANGE' && record.resolution?.state !== 'PREPARED'" :disabled="saving" @click="openLegacy(record)">核对旧日志</a-button>
+          <a-button v-if="record.legacy && record.resolution?.state === 'PREPARED'" :disabled="saving" @click="reconcileLegacy(record)">核对确认记录</a-button>
           <a-button v-if="!record.legacy && record.state === 'PREPARED'" :disabled="saving" @click="reconcile(record)">核对结果</a-button>
           <a-button v-if="!record.legacy && record.state === 'PERSISTED'" :disabled="saving" @click="historyAction(record, 'restore')">预览恢复</a-button>
           <a-button v-if="!record.legacy && record.state === 'CONFLICT'" :disabled="saving" @click="historyAction(record, 'accept-current')">保留当前值并关闭冲突</a-button>
@@ -189,5 +216,16 @@ onMounted(async () => {
         </template></a-table-column>
       </template>
     </a-table>
+    <a-space><a-button :disabled="saving || legacyPage === 1" @click="legacyPage--;openHistory(false)">上一页旧日志</a-button><span>旧日志第 {{legacyPage}} 页（每页100条）</span><a-button :disabled="saving || history.filter(r => r.legacy).length < 100" @click="legacyPage++;openHistory(false)">下一页旧日志</a-button></a-space>
+  </a-modal>
+  <a-modal :visible="!!legacyEdit" title="核对旧版未决日志" :width="1000" :footer="false" :mask-closable="false" :closable="!saving" @cancel="legacyEdit = null">
+    <template v-if="legacyEdit">
+      <a-alert v-if="error" type="error">{{error}}</a-alert>
+      <a-alert type="warning">{{assessments[legacyEdit.assessment]}}。确认将解除这份旧日志对后续配置管理的阻塞；不会改写原日志或原生配置。</a-alert>
+      <p>旧日志：{{legacyEdit.legacyId}}；目标：{{legacyEdit.targetKey}}；核对编号：{{legacyRequestId}}</p>
+      <a-table :data="legacyEdit.currentRows" :pagination="{pageSize:5}" :scroll="{x:1600}"><template #columns><a-table-column v-for="field in section?.fields || []" :key="field.name" :title="field.label" :data-index="field.name" /></template></a-table>
+      <a-textarea v-model="legacyReason" placeholder="填写核对依据及保留当前配置的原因" :max-length="128" :disabled="saving" />
+      <a-space style="margin-top:16px"><a-button :disabled="saving" @click="reviewLegacy(false)">预览旧日志核对</a-button><a-button type="primary" :disabled="saving || legacyPrepared?.state !== 'PREVIEWED'" @click="reviewLegacy(true)">确认保留当前配置</a-button></a-space>
+    </template>
   </a-modal>
 </template>

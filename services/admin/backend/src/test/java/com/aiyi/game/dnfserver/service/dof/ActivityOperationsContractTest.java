@@ -37,8 +37,8 @@ public class ActivityOperationsContractTest {
         service=new ActivityConfigService();ManagedOperationJournal journal=new ManagedOperationJournal();ReflectionTestUtils.setField(journal,"access",access);
         ReflectionTestUtils.setField(service,"journal",journal);ReflectionTestUtils.setField(service,"dataSource",ds);ReflectionTestUtils.setField(service,"accountVODao",ReflectionTestUtils.getField(access,"accountVODao"));
     }
-    private Map<?,?> row(String key)throws Exception {return (Map<?,?>)((List<?>)service.list(key).get("rows")).get(0);}
-    @SuppressWarnings("unchecked") private ActivityConfigService.Edit update(int amount)throws Exception {
+    private Map<?,?> row(String key) {return (Map<?,?>)((List<?>)service.list(key).get("rows")).get(0);}
+    @SuppressWarnings("unchecked") private ActivityConfigService.Edit update(int amount) {
         Map<?,?> row=row("rewards");ActivityConfigService.Edit e=new ActivityConfigService.Edit();e.requestId=UUID.randomUUID().toString();e.revision=(String)row.get("revision");e.operation="upsert";
         e.values=new LinkedHashMap<>((Map<String,Object>)row.get("values"));e.values.put("item_code1",amount);return e;
     }
@@ -117,6 +117,47 @@ public class ActivityOperationsContractTest {
         assertEquals(true,service.history("rewards").get(0).get("legacy"));
         ReflectionTestUtils.setField(access,"databaseUuid","00000000-0000-0000-0000-000000000000");rejects(409,()->service.list("rewards"));
         assertEquals("1",scalar("SELECT item_code1 FROM dof_native.list_of_warorder_rewards"));
+    }
+    private void legacy(long id,String operation,Object before,Object after)throws Exception {
+        sql("CREATE TABLE IF NOT EXISTS dnf_service.EXTENSION_CONFIG_AUDIT(id BIGINT PRIMARY KEY,actor BIGINT,section_name VARCHAR(32),operation_name VARCHAR(16),before_json MEDIUMTEXT,after_json MEDIUMTEXT,state VARCHAR(16),created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB");
+        try(Connection c=ds.getConnection();PreparedStatement p=c.prepareStatement("INSERT INTO dnf_service.EXTENSION_CONFIG_AUDIT VALUES(?,1,'rewards',?,?,?,'pending',NOW())")){p.setLong(1,id);p.setString(2,operation);p.setString(3,new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(before));p.setString(4,new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(after));p.executeUpdate();}
+    }
+    private ActivityConfigService.LegacyEdit legacyEdit(long id) {
+        ActivityConfigService.LegacyEdit e=new ActivityConfigService.LegacyEdit();e.requestId=UUID.randomUUID().toString();e.reason="synthetic operator verified current rules";e.revision=(String)service.legacyCurrent("rewards",id).get("revision");return e;
+    }
+    @Test public void legacyReviewPreservesOriginalLogAndDoesNotRepeatNativeWrite()throws Exception {
+        Map<?,?> before=(Map<?,?>)row("rewards").get("values");Map<String,Object> after=new LinkedHashMap<>();before.forEach((k,v)->after.put(k.toString(),v));after.put("item_code1",2);legacy(1,"update",before,after);
+        assertEquals("MATCHES_BEFORE",service.legacyCurrent("rewards",1).get("assessment"));ActivityConfigService.LegacyEdit e=legacyEdit(1);
+        rejects(409,()->service.legacyReview("rewards",1,e,true));service.legacyReview("rewards",1,e,false);assertEquals("1",scalar("SELECT item_code1 FROM dof_native.list_of_warorder_rewards"));
+        assertEquals("NO_CHANGE",service.legacyReview("rewards",1,e,true).get("state"));assertEquals("NO_CHANGE",service.legacyReview("rewards",1,e,true).get("state"));
+        assertEquals("pending",scalar("SELECT state FROM dnf_service.EXTENSION_CONFIG_AUDIT WHERE id=1"));assertEquals("1",scalar("SELECT item_code1 FROM dof_native.list_of_warorder_rewards"));
+        ActivityConfigService.Edit next=update(3);service.preview("rewards",next);service.save("rewards",next,false);
+        e.reason="changed content";rejects(409,()->service.legacyReview("rewards",1,e,true));
+    }
+    @Test public void oneResolvedLegacyRowDoesNotHideAnotherPendingRow()throws Exception {
+        Map<?,?> before=(Map<?,?>)row("rewards").get("values");Map<String,Object> after=new LinkedHashMap<>();before.forEach((k,v)->after.put(k.toString(),v));after.put("item_code1",2);legacy(1,"update",before,after);legacy(2,"update",before,after);
+        ActivityConfigService.LegacyEdit e=legacyEdit(1);service.legacyReview("rewards",1,e,false);service.legacyReview("rewards",1,e,true);rejects(409,()->service.preview("rewards",update(3)));
+        ActivityConfigService.LegacyEdit two=legacyEdit(2);service.legacyReview("rewards",2,two,false);service.legacyReview("rewards",2,two,true);service.preview("rewards",update(3));
+    }
+    @Test public void changedCurrentAndChangedLegacyEvidenceInvalidateConfirmation()throws Exception {
+        Map<?,?> before=(Map<?,?>)row("rewards").get("values");Map<String,Object> after=new LinkedHashMap<>();before.forEach((k,v)->after.put(k.toString(),v));after.put("item_code1",2);legacy(1,"update",before,after);
+        ActivityConfigService.LegacyEdit e=legacyEdit(1);service.legacyReview("rewards",1,e,false);sql("UPDATE dof_native.list_of_warorder_rewards SET item_code1=4");rejects(409,()->service.legacyReview("rewards",1,e,true));
+        ActivityConfigService.LegacyEdit n=legacyEdit(1);assertEquals("CONFLICT",service.legacyCurrent("rewards",1).get("assessment"));service.legacyReview("rewards",1,n,false);service.legacyReview("rewards",1,n,true);
+        sql("UPDATE dnf_service.EXTENSION_CONFIG_AUDIT SET actor=99 WHERE id=1");rejects(409,()->service.preview("rewards",update(3)));
+    }
+    @Test public void interruptedLegacyConfirmationIsReconciledWithoutNativeWrites()throws Exception {
+        Map<?,?> before=(Map<?,?>)row("rewards").get("values");Map<String,Object> after=new LinkedHashMap<>();before.forEach((k,v)->after.put(k.toString(),v));after.put("item_code1",2);legacy(1,"update",before,after);
+        ActivityConfigService.LegacyEdit e=legacyEdit(1);service.legacyReview("rewards",1,e,false);faultOnce("UPDATE `dnf_service`.`DOF_OPERATION_JOURNAL` SET state=?");rejects(503,()->service.legacyReview("rewards",1,e,true));
+        rejects(409,()->service.preview("rewards",update(3)));assertEquals("NO_CHANGE",service.legacyReconcile("rewards",1,e.requestId).get("state"));assertEquals("1",scalar("SELECT item_code1 FROM dof_native.list_of_warorder_rewards"));
+    }
+    @Test public void changedLegacyStateDoesNotLeaveReviewPermanentlyPrepared()throws Exception {
+        Map<?,?> before=(Map<?,?>)row("rewards").get("values");Map<String,Object> after=new LinkedHashMap<>();before.forEach((k,v)->after.put(k.toString(),v));after.put("item_code1",2);legacy(1,"update",before,after);
+        ActivityConfigService.LegacyEdit e=legacyEdit(1);service.legacyReview("rewards",1,e,false);faultOnce("UPDATE `dnf_service`.`DOF_OPERATION_JOURNAL` SET state=?");rejects(503,()->service.legacyReview("rewards",1,e,true));sql("UPDATE dnf_service.EXTENSION_CONFIG_AUDIT SET state='applied' WHERE id=1");assertEquals("NOT_APPLIED",service.legacyReconcile("rewards",1,e.requestId).get("state"));service.preview("rewards",update(3));
+    }
+    @Test public void oldAutoIdIsExplicitlyUnknownAndMalformedSnapshotsStayBlocked()throws Exception {
+        ActivityConfigService.Section section=service.catalog().stream().filter(x->x.key.equals("collection")).findFirst().get();Map<String,Object> row=new LinkedHashMap<>();for(ActivityConfigService.Field f:section.fields)row.put(f.name,f.initial);row.put("id",0);
+        legacy(1,"create",null,row);sql("UPDATE dnf_service.EXTENSION_CONFIG_AUDIT SET section_name='collection' WHERE id=1");
+        assertEquals("UNKNOWN",service.legacyCurrent("collection",1).get("assessment"));sql("UPDATE dnf_service.EXTENSION_CONFIG_AUDIT SET after_json='{}' WHERE id=1");rejects(409,()->service.legacyCurrent("collection",1));
     }
     @Test public void concurrentVersionsYieldOneWriteAndOneExplicitConflict()throws Exception {
         ActivityConfigService.Edit a=update(2),b=update(3);service.preview("rewards",a);service.preview("rewards",b);

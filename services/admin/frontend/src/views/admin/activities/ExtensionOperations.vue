@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import Request from '../../../api/Request';
+import PasswordManager from './PasswordManager.vue';
+import BanManager from './BanManager.vue';
 import RegistrationCodes from './RegistrationCodes.vue';
 import CompanionPreview from './CompanionPreview.vue';
 import FeatureLedger from './FeatureLedger.vue';
 import EconomyEntries from './EconomyEntries.vue';
 type View = {key:string;title:string;columns:string[];filter:string|null};
 const tab=ref('features'),features=ref<any[]>([]),views=ref<View[]>([]),key=ref(''),rows=ref<any[]>([]),owner=ref<number>(),page=ref(1),more=ref(false),error=ref(''),loading=ref(false),clock=ref<any>({});
-const banUid=ref<number>(),banDays=ref(1),banReason=ref(''),banStatus=ref<any[]>([]),banHistory=ref<any[]>([]),banPage=ref(1);
-async function loadAccountHistory(){try{banHistory.value=(await Request.get<any[]>(`/api/v1/admin/accounts/${banUid.value}/history?page=${banPage.value}`)).data;}catch(e){error.value=failure(e);}}
-async function accountAction(action:string){error.value='';loading.value=true;try{const url=`/api/v1/admin/accounts/${banUid.value}/ban`;if(action==='ban')await Request.put(url,{days:banDays.value,reason:banReason.value});if(action==='unban')await Request.delete(url,{data:{days:0,reason:banReason.value}});banStatus.value=(await Request.get<any[]>(url)).data;banPage.value=1;await loadAccountHistory();}catch(e){error.value=failure(e);}finally{loading.value=false;}}
 const kind=ref('item'),ids=ref(''),checks=ref<any[]>([]);
 const failure=(e:any)=> e?.response?.data?.message || e?.message || '请求失败';
 async function load(){loading.value=true;error.value='';try{const r=await Request.get<any>(`/api/v1/admin/extension/records/${key.value}`,{params:{owner:owner.value,page:page.value,size:50}});rows.value=r.data.rows;more.value=r.data.hasMore;}catch(e){rows.value=[];error.value=failure(e);}finally{loading.value=false;}}
@@ -34,7 +33,8 @@ onMounted(async()=>{try{features.value=(await Request.get<any[]>('/api/v1/admin/
 <p>found：列表存在；missing：可读取列表中不存在；unverified：资源未挂载或未能解析。存在不代表游戏使用效果已验证。</p>
 <a-table :data="checks" :columns="[{title:'编号',dataIndex:'id'},{title:'状态',dataIndex:'status'}]"/>
 </a-tab-pane>
-<a-tab-pane key="accounts" title="封禁管理"><a-alert>仅管理员可操作。解除只移除本后台创建的处罚，不清除其他来源处罚；封禁限制后续登录，不承诺踢出在线角色。</a-alert><a-space wrap><a-input-number v-model="banUid" :min="1" :precision="0" placeholder="账号编号"/><a-input-number v-model="banDays" :min="1" :max="3650" :precision="0" placeholder="封禁天数"/><a-input v-model="banReason" placeholder="操作原因" :max-length="100"/><a-button @click="accountAction('query')" :disabled="loading">查询</a-button><a-popconfirm content="确认限制该玩家后续登录？" @ok="accountAction('ban')"><a-button status="danger" :disabled="loading">封禁</a-button></a-popconfirm><a-popconfirm content="解除本后台创建的处罚？" @ok="accountAction('unban')"><a-button :disabled="loading">解除本后台处罚</a-button></a-popconfirm></a-space><pre>{{JSON.stringify(banStatus,null,2)}}</pre><a-table :data="banHistory" :pagination="false" :columns="[{title:'操作人',dataIndex:'actor'},{title:'操作',dataIndex:'operation'},{title:'原因',dataIndex:'detail'},{title:'时间',dataIndex:'created_at'}]"/><a-space><a-button :disabled="banPage===1||loading" @click="banPage--;loadAccountHistory()">上一页</a-button><span>第 {{banPage}} 页</span><a-button :disabled="banHistory.length<50||loading" @click="banPage++;loadAccountHistory()">下一页</a-button></a-space><a-link href="/account-security" target="_blank">玩家自助改密</a-link></a-tab-pane>
+<a-tab-pane key="accounts" title="封禁管理"><BanManager /></a-tab-pane>
+<a-tab-pane key="passwords" title="管理员改密"><PasswordManager /></a-tab-pane>
 <a-tab-pane key="companion" title="CDK、商店与奖池配套预览"><CompanionPreview /></a-tab-pane>
 <a-tab-pane key="economy-entries" title="商店调度与土罐入口"><EconomyEntries /></a-tab-pane>
 <a-tab-pane key="registration" title="注册激活码"><RegistrationCodes /></a-tab-pane>
