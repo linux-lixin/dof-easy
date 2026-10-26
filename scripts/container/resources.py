@@ -91,10 +91,17 @@ def verify_native_inputs():
                 header = stream.read(5)
             if header != b'\x7fELF' + bytes([row['elf_class']]):
                 raise ValueError('Native architecture mismatch: ' + row['path'])
-    for name in ('plugin.ini', 'anton-raid.ini', 'luke-raid.ini', 'dungeon.lst', 'equipment.json'):
+    for name in ('plugin.ini', 'dungeon.lst', 'equipment.json'):
         bundled = destination(prefix + 'config/' + name)
         default = destination('services/game/runtime/ubuntu/gateway/defaults/' + name)
         verify(bundled, dict(bytes=default.stat().st_size, sha256=digest(default)))
+    build_lock = json.loads((ROOT / 'metadata/build-inputs.lock.json').read_text())
+    for name in ('anton-raid.ini', 'luke-raid.ini'):
+        path = 'services/game/resources/plugins/raid/config/' + name
+        rows = [row for row in build_lock['files'] if row['path'] == path]
+        if len(rows) != 1:
+            raise ValueError('Missing/duplicate raid input lock: ' + path)
+        verify(destination(path), rows[0])
     return len(runtime_lock['files'])
 
 
