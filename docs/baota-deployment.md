@@ -121,7 +121,7 @@ cd /opt/dof-easy
 bash dof.sh install --instance native86 --level 86 \
   --ip 你的服务器公网IPv4 --pvf /opt/dof-inputs/86/Script.pvf \
   --launcher native \
-  --plugins dp2-frida --raid-extension on --channels '15,52' \
+  --plugins dp2-frida --raid-extension off --channels '15,52' \
   --database internal --admin-bind 127.0.0.1 --admin-port 18080 --build
 ```
 
@@ -132,14 +132,14 @@ cd /opt/dof-easy
 sudo bash dof.sh install --instance native86 --level 86 \
   --ip 你的服务器公网IPv4 --pvf /opt/dof-inputs/86/Script.pvf \
   --launcher native \
-  --plugins dp2-frida --raid-extension on --channels '15,52' \
+  --plugins dp2-frida --raid-extension off --channels '15,52' \
   --database external --db-host 172.17.0.1 --db-port 3306 \
   --db-allow-host 172.29.86.0/255.255.255.0 \
   --mysql-config /root/dof-mysql.cnf --mysql-bin /www/server/mysql/bin/mysql \
   --admin-bind 127.0.0.1 --admin-port 18080 --build
 ```
 
-上述两条只执行所选的一条。地址、网段经过第 4 步核实后再填；如宝塔端口不是 3306，同步填写 `--db-port`。`--raid-extension on` 保留 DP2 团本扩展；完整团本玩法仍需客户端实际验收。
+上述两条只执行所选的一条。地址、网段经过第 4 步核实后再填；如宝塔端口不是 3306，同步填写 `--db-port`。示例默认关闭团本；需要时改为 `--raid-extension on`，且必须包含 DP2。完整团本玩法仍需客户端实际验收。
 
 默认模式仍是 `dof`，默认数据库仍是 `internal`。选择外置数据库不意味着自动启用原生登录，故原生示例明确带 `--launcher native`。已有实例不能通过重跑安装改数据库模式、地址或授权网段；需要另一种模式时创建新的空实例，同时避免游戏端口冲突。
 

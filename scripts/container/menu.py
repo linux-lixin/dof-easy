@@ -133,7 +133,7 @@ def confirm(label='确认执行以上操作？'):
 
 
 def plugin_selection(previous=None):
-    previous = previous or {'PLUGIN_MODE':'dp2-frida', 'RAID_EXTENSION':'on'}
+    previous = previous or {'PLUGIN_MODE':'dp2-frida', 'RAID_EXTENSION':'off'}
     choices = {'1':'dp2-frida','2':'dp2','3':'frida','4':'none'}
     if previous['PLUGIN_MODE'] not in manager.MODES:
         raise ValueError('已有插件配置无效，请先检查实例配置。')
