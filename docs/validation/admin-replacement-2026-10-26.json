@@ -121,7 +121,7 @@
   "releaseReady": false,
   "baseCommit": "a9d1511",
   "branch": "codex/admin-replacement",
-  "codeChangesUncommitted": true,
+  "codeChangesUncommitted": false,
   "date": "2026-10-26",
   "checks": {
     "sourceInputs": {
@@ -342,7 +342,9 @@
     "keysUnchanged": true,
     "databaseReinitialized": false,
     "rollbackImageAndPrivateBackupRetained": true,
-    "installerSourceOnServerUpdated": false
+    "installerSourceOnServerUpdated": false,
+    "candidateRemovedAfterAcceptance": true,
+    "temporaryBrowserCredentialsRemoved": true
   },
   "records": {
     "views": 30,
@@ -355,5 +357,6 @@
     "playerRecordCompletenessComparedToOriginalTool": false
   },
   "adminImplementationComplete": false,
-  "completeReplacement": false
+  "completeReplacement": false,
+  "sourceCommit": "29cc3c7c87d48ac3387015b58eec8f3231e52dce"
 }

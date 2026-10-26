@@ -4,7 +4,7 @@
 
 ## 当前交付范围
 
-本批基于 `a9d1511`，在 `codex/admin-replacement` 分支实现，已在绑定的 86 级 `dof-main` 隔离实例部署新版 admin。完整替代状态仍为未完成。
+本批基于 `a9d1511`，实现提交为 `29cc3c7c87d48ac3387015b58eec8f3231e52dce`，在 `codex/admin-replacement` 分支实现，已在绑定的 86 级 `dof-main` 隔离实例部署新版 admin。完整替代状态仍为未完成。
 
 | 阶段 | 本批实现 | 仍需完成 |
 |---|---|---|
