@@ -13,6 +13,7 @@ import tempfile
 import shutil
 import time
 import hashlib
+import urllib.request
 from datetime import datetime, timezone
 
 from scripts.container import host
@@ -23,6 +24,38 @@ from scripts.container import manage as manager
 def ask(label, default=''):
     value = input(label + (' [' + str(default) + ']' if default != '' else '') + '：').strip()
     return value or str(default)
+
+
+def detect_public_ipv4():
+    """Bounded HTTPS discovery; ignore proxy settings and never execute responses."""
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    for url in ('https://api4.ipify.org', 'https://ipv4.icanhazip.com'):
+        try:
+            request = urllib.request.Request(url, headers={'User-Agent': 'dof-easy-installer'})
+            with opener.open(request, timeout=3) as response:
+                data = response.read(65)
+            if len(data) > 64:
+                continue
+            address = ipaddress.IPv4Address(data.decode('ascii').strip())
+            if address.is_global and not address.is_multicast:
+                return str(address)
+        except (OSError, ValueError, UnicodeError):
+            continue
+    return ''
+
+
+def public_ipv4():
+    print('正在自动获取公网 IPv4…')
+    detected = detect_public_ipv4()
+    if detected:
+        print('自动获取：' + detected + '；如使用游戏盾或其他映射地址，请修改。')
+    else:
+        print('未能获取公网 IPv4，请手动填写客户端可访问的地址。')
+    while True:
+        try:
+            return str(ipaddress.IPv4Address(ask('客户端可访问的服务器 IPv4（回车使用检测值）', detected)))
+        except ValueError:
+            print('请输入有效的 IPv4 地址。')
 
 
 def selected_level(value):
@@ -232,7 +265,7 @@ def install(instance):
             level = selected_level(ask('选择等级', '86')); break
         except ValueError as error:
             print(error)
-    public_ip = str(ipaddress.IPv4Address(ask('客户端可访问的服务器 IPv4')))
+    public_ip = public_ipv4()
     pvf = Path(ask('配套 Script.pvf 完整路径', f'/opt/dof-inputs/{level}/Script.pvf')).expanduser().resolve(strict=True)
     if not pvf.is_file() or pvf.suffix.lower() != '.pvf' or pvf.stat().st_size < 1024:
         raise ValueError('请准备完整的配套 PVF 文件。')
@@ -243,7 +276,7 @@ def install(instance):
     image_choice = choose('镜像：1 本机源码构建 / 2 自己的仓库拉取', ('1','2'), '1')
     if image_choice == '1':
         if mem['MemTotal'] < 4 * host.GIB:
-            raise ValueError('内存不足 4 GiB，请选择拉取已构建镜像。')
+            print(f"系统可见物理内存 {mem['MemTotal']/host.GIB:.2f} GiB、可用 {mem['MemAvailable']/host.GIB:.2f} GiB；允许本机构建，建议保留后续 Swap 默认值。低内存构建可能较慢或因内存不足失败。")
         image_args = ['--build', '--registry=', '--tag', 'local']
     else:
         registry, tag = ask('镜像仓库/命名空间'), ask('镜像版本标签', 'latest')
