@@ -34,7 +34,7 @@ public class DofClientReadinessTest {
             for (Object value : Arrays.asList(service.status(), service.scriptStatus())) {
                 Map<?,?> status = (Map<?,?>)value;
                 assertEquals(false, status.get("enabled")); assertEquals("dof-main", status.get("instanceId"));
-                assertNotNull(status.get("blocker"));
+                assertEquals(2, status.get("clientFormatVersion")); assertNotNull(status.get("blocker"));
             }
             try { service.submit(new NativeClientJobs.Request()); fail(); }
             catch (DofFailure expected) { assertEquals(409, expected.status); }

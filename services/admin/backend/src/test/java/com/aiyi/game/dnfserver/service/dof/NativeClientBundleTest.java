@@ -17,8 +17,9 @@ public class NativeClientBundleTest {
             Path inputs=Files.createDirectory(root.resolve("inputs")),scriptRoot=Files.createDirectory(root.resolve("script"));
             KeyPair identity=NativeClientPayloadTest.pair();Map<String,byte[]> files=new LinkedHashMap<>();
             files.put("template.dll",NativeConfigContainer.encode(NativeClientPublicationTest.fixture(NativeClientPayloadTest.pair()),new byte[0]));
-            files.put("game-public.der",identity.getPublic().getEncoded());files.put("启动器.exe",new byte[]{1,2,3});files.put("ijl15.dll",Files.readAllBytes(Paths.get(dll)));
-            NativeClientJobs.Binding b=new NativeClientJobs.Binding();b.instanceId="isolated-bundle-test";b.environment="isolated";b.adapterVersion=DofAdminService.VERSION;b.sha256=new LinkedHashMap<>();
+            files.put("game-public.der",identity.getPublic().getEncoded());files.put("dof-launcher.exe",new byte[]{1,2,3});files.put("ijl15.dll",Files.readAllBytes(Paths.get(dll)));
+            NativeClientJobs.Binding b=new NativeClientJobs.Binding();b.instanceId="isolated-bundle-test";b.environment="isolated";b.adapterVersion=DofAdminService.VERSION;b.clientFormatVersion=NativeClientFormat.VERSION;b.sha256=new LinkedHashMap<>();
+            b.databaseUuid="00000000-0000-4000-8000-000000000001";b.readerRecipe="dof-launcher-reader-2.1";
             for(Map.Entry<String,byte[]> f:files.entrySet()){Files.write(inputs.resolve(f.getKey()),f.getValue());b.sha256.put(f.getKey(),NativeUiState.sha256(f.getValue()));}
             files.clear();new ObjectMapper().writeValue(inputs.resolve("binding.json").toFile(),b);
             try(NativeScriptJobs scripts=new NativeScriptJobs(scriptRoot,b.instanceId,p->Long.MAX_VALUE);
@@ -33,7 +34,7 @@ public class NativeClientBundleTest {
                 assertEquals(j.error,"READY_FOR_TEST",j.state);assertEquals("isolated-dof-pvf-bundle",j.packageKind);
                 try(ZipFile zip=new ZipFile(client.download(pack.requestId).toFile())) {
                     Set<String> names=new HashSet<>();zip.stream().forEach(e->names.add(e.getName()));
-                    assertEquals(new HashSet<>(Arrays.asList("启动器.exe","ijl15.dll","qingkong.dll","Script.pvf","manifest.json","使用与恢复.txt")),names);
+                    assertEquals(new HashSet<>(Arrays.asList("dof-launcher.exe","ijl15.dll","dof-client.dll","Script.pvf","manifest.json","使用与恢复.txt")),names);
                     byte[] manifest=new byte[(int)zip.getEntry("manifest.json").getSize()];try(InputStream in=zip.getInputStream(zip.getEntry("manifest.json"))){new DataInputStream(in).readFully(manifest);}
                     String text=new String(manifest,java.nio.charset.StandardCharsets.UTF_8);assertFalse(text.contains(scripts.parameters(r.requestId)));assertFalse(text.contains("TEST-DB-SECRET"));assertTrue(text.contains(j.scriptSha256));
                     assertEquals(raw.length+1280,zip.getEntry("Script.pvf").getSize());

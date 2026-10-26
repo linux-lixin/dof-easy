@@ -17,11 +17,12 @@ public class NativeClientPayloadTest {
         byte[] pkcs1 = PrivateKeyInfo.getInstance(client.getPrivate().getEncoded()).parsePrivateKey().toASN1Primitive().getEncoded();
         String pem = "-----BEGIN RSA PRIVATE KEY-----\n" + Base64.getMimeEncoder(64,b("\n")).encodeToString(pkcs1) + "\n-----END RSA PRIVATE KEY-----\n";
         Cipher c = Cipher.getInstance("RSA/ECB/PKCS1Padding"); c.init(Cipher.ENCRYPT_MODE,client.getPublic());
-        byte[] data = c.doFinal(b("127.0.0.1*&qingkong.dll*&opaque-1*&opaque-2*&opaque-3*&opaque-4*&opaque-5*&opaque-6*&"));
+        byte[] data = c.doFinal(b("127.0.0.1*&dof-client.dll*&opaque-1*&opaque-2*&opaque-3*&opaque-4*&opaque-5*&opaque-6*&"));
         return new NativeConfigContainer.Document(Arrays.asList(
             new NativeConfigContainer.Entry(b("unknown"),new byte[]{0,1,2},b("BINARY")),
-            new NativeConfigContainer.Entry(b("token_qingkong+"), Base64.getEncoder().encode(b(pem)), b("TXT")),
-            new NativeConfigContainer.Entry(b("token_qingkong+((((("),Base64.getEncoder().encode(data),b("TXT"))),true,false);
+            new NativeConfigContainer.Entry(b("token_dof+"), Base64.getEncoder().encode(b(pem)), b("TXT")),
+            new NativeConfigContainer.Entry(b("token_dof+((((("),Base64.getEncoder().encode(data),b("TXT")),
+            new NativeConfigContainer.Entry(b("token_dof_version"),b("2"),b("TXT"))),true,false);
     }
     private static void rejects(Runnable action) { try { action.run(); fail("Must reject invalid native payload"); } catch (IllegalArgumentException expected) { assertFalse(expected.getMessage().contains("PRIVATE KEY")); } }
     @Test public void endpointChangesPreserveClientIdentityAndUnknownRecords() throws Exception {
@@ -42,6 +43,16 @@ public class NativeClientPayloadTest {
         rejects(() -> NativeClientPayload.decode(doc,null));
         List<NativeConfigContainer.Entry> duplicate = new ArrayList<>(doc.entries); duplicate.add(doc.entries.get(1));
         rejects(() -> NativeClientPayload.decode(new NativeConfigContainer.Document(duplicate,true,false),server.getPublic()));
+    }
+    @Test public void formatVersionMustBePresentUniqueAndCurrent() throws Exception {
+        KeyPair server=pair();NativeConfigContainer.Document source=fixture(pair());
+        List<NativeConfigContainer.Entry> missing=new ArrayList<>(source.entries);missing.remove(missing.size()-1);
+        rejects(()->NativeClientPayload.decode(new NativeConfigContainer.Document(missing,true,false),server.getPublic()));
+        List<NativeConfigContainer.Entry> wrong=new ArrayList<>(missing);
+        wrong.add(new NativeConfigContainer.Entry(b("token_dof_version"),b("1"),b("TXT")));
+        rejects(()->NativeClientPayload.decode(new NativeConfigContainer.Document(wrong,true,false),server.getPublic()));
+        List<NativeConfigContainer.Entry> duplicate=new ArrayList<>(source.entries);duplicate.add(source.entries.get(source.entries.size()-1));
+        rejects(()->NativeClientPayload.decode(new NativeConfigContainer.Document(duplicate,true,false),server.getPublic()));
     }
     @Test public void privateNativeFixtureCanBeReencodedWithoutChangingExistingKey() throws Exception {
         String fixture = System.getProperty("dof.native.current", ""), identity = System.getProperty("dof.native.public", "");

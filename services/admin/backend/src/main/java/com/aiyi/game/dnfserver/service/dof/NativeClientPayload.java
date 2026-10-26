@@ -12,8 +12,8 @@ import javax.crypto.Cipher;
 
 /** Offline inner-payload adapter. No key generation, database writes or package publication. */
 public final class NativeClientPayload {
-    private static final byte[] KEY_NAME = ascii("token_qingkong+");
-    private static final byte[] PAYLOAD_NAME = ascii("token_qingkong+(((((");
+    private static final byte[] KEY_NAME = ascii("token_dof+");
+    private static final byte[] PAYLOAD_NAME = ascii("token_dof+(((((");
     private static final int MAX_KEY_BYTES = 4096;
     private NativeClientPayload() {}
 
@@ -34,7 +34,7 @@ public final class NativeClientPayload {
         private byte[] wire() { return ascii(String.join("*&", fields) + "*&"); }
     }
     private static IllegalArgumentException invalid() {
-        return new IllegalArgumentException("晴空客户端内层配置或密钥不兼容；未生成下载包");
+        return new IllegalArgumentException("dof-easy 客户端内层配置或密钥不兼容；未生成下载包");
     }
     private static NativeConfigContainer.Entry unique(NativeConfigContainer.Document doc, byte[] name) {
         NativeConfigContainer.Entry found = null;
@@ -68,6 +68,7 @@ public final class NativeClientPayload {
     }
     public static Payload decode(NativeConfigContainer.Document doc, PublicKey serverIdentity) {
         try {
+            NativeClientFormat.require(doc);
             RSAPrivateCrtKey key = checkedKey(doc, serverIdentity);
             byte[] encoded = unique(doc, PAYLOAD_NAME).value();
             if (encoded.length != 344) throw invalid();
@@ -77,7 +78,7 @@ public final class NativeClientPayload {
             byte[] raw = cipher.doFinal(encrypted);
             for (byte c : raw) if (c < 32 || c > 126) throw invalid();
             String[] fields = new String(raw, StandardCharsets.US_ASCII).split("\\*&", -1);
-            if (fields.length != 9 || !fields[8].isEmpty() || !"qingkong.dll".equals(fields[1])) throw invalid();
+            if (fields.length != 9 || !fields[8].isEmpty() || !NativeClientFormat.CONFIG_FILE.equals(fields[1])) throw invalid();
             return new Payload(Arrays.asList(Arrays.copyOf(fields, 8)));
         } catch (Exception e) { throw invalid(); }
     }

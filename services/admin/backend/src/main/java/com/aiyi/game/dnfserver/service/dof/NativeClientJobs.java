@@ -18,7 +18,7 @@ import java.util.zip.*;
  */
 public final class NativeClientJobs implements AutoCloseable {
     private static final List<String> INPUTS = Collections.unmodifiableList(Arrays.asList(
-        "template.dll", "game-public.der", "启动器.exe", "ijl15.dll"));
+        "template.dll", "game-public.der", "dof-launcher.exe", "ijl15.dll"));
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final long MAX_INPUT = 64L * 1024 * 1024;
     static final long BASE_RESERVE = 2L * 1024 * 1024 * 1024;
@@ -35,7 +35,8 @@ public final class NativeClientJobs implements AutoCloseable {
     private final ScriptResolver scriptResolver;
 
     public static final class Binding {
-        public String instanceId, environment, adapterVersion;
+        public String instanceId, environment, adapterVersion, databaseUuid, readerRecipe;
+        public int clientFormatVersion;
         public Map<String,String> sha256;
     }
     public static final class Request {
@@ -44,7 +45,7 @@ public final class NativeClientJobs implements AutoCloseable {
     public static final class Job {
         public String requestId, instanceId, revision, endpoint, backgroundSha256, state, createdAt, finishedAt, error, sha256;
         public long actor, bytes;
-        public int progress;
+        public int progress, clientFormatVersion;
         public boolean nativeClientAcceptance = false;
         public String packageKind = "isolated-launcher-update-candidate";
         public String scriptTaskId,scriptSha256;
@@ -109,15 +110,22 @@ public final class NativeClientJobs implements AutoCloseable {
     private Binding source() throws IOException {
         Binding binding = JSON.readValue(bounded(inputs.resolve("binding.json"), 16384), Binding.class);
         if (!instance.equals(binding.instanceId) || !"isolated".equals(binding.environment)
-            || !DofAdminService.VERSION.equals(binding.adapterVersion) || binding.sha256 == null
+            || !DofAdminService.VERSION.equals(binding.adapterVersion)
+            || binding.clientFormatVersion != NativeClientFormat.VERSION || binding.sha256 == null
+            || !validId(binding.databaseUuid) || !"dof-launcher-reader-2.1".equals(binding.readerRecipe)
             || !binding.sha256.keySet().equals(new HashSet<>(INPUTS))) throw failure(409, "发布来源未绑定当前隔离实例或版本");
         for (String key : INPUTS) if (binding.sha256.get(key) == null || !binding.sha256.get(key).matches("[0-9a-f]{64}")) throw failure(409, "发布来源校验值缺失");
         return binding;
     }
     private String revision(Binding binding) {
-        StringBuilder wire = new StringBuilder(instance).append('\n').append(DofAdminService.VERSION);
+        StringBuilder wire = new StringBuilder(instance).append('\n').append(DofAdminService.VERSION).append('\n').append(NativeClientFormat.VERSION);
+        wire.append('\n').append(binding.databaseUuid).append('\n').append(binding.readerRecipe);
         for (String key : INPUTS) wire.append('\n').append(key).append(':').append(binding.sha256.get(key));
         return NativeUiState.sha256(wire.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+    synchronized void requireDatabase(String databaseUuid) throws IOException {
+        if (databaseUuid == null || !databaseUuid.equals(source().databaseUuid))
+            throw failure(409, "客户端发布材料与当前数据库实例不匹配");
     }
     private void requireSpace(long additionalPeak) throws IOException {
         long usable = spaceProbe.usable(root), required = BASE_RESERVE + additionalPeak;
@@ -136,9 +144,10 @@ public final class NativeClientJobs implements AutoCloseable {
             PublicKey identity = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(verified(binding, "game-public.der")));
             out.put("endpoint", NativeClientPayload.decode(NativeConfigContainer.decode(verified(binding, "template.dll"), new byte[0]), identity).endpoint());
         } catch (GeneralSecurityException e) { throw failure(409, "实例公钥格式不兼容"); }
+        out.put("clientFormatVersion", NativeClientFormat.VERSION);
         out.put("revision", revision(binding)); out.put("instanceId", instance); out.put("environment", "isolated");
         out.put("packageKind", "isolated-launcher-update-candidate"); out.put("nativeClientAcceptance", false);
-        out.put("files", Arrays.asList("启动器.exe", "ijl15.dll", "qingkong.dll", "manifest.json", "使用与恢复.txt"));
+        out.put("files", Arrays.asList("dof-launcher.exe", "ijl15.dll", "dof-client.dll", "manifest.json", "使用与恢复.txt"));
         return out;
     }
     synchronized void requireScriptVersion() throws IOException {
@@ -160,6 +169,8 @@ public final class NativeClientJobs implements AutoCloseable {
         Path path = jobs.resolve(request.requestId);
         if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
             Job old = read(request.requestId);
+            if (old.clientFormatVersion != NativeClientFormat.VERSION)
+                throw failure(409, "此客户端任务使用旧配置格式，请创建新任务");
             if (old.actor != actor || !old.revision.equals(request.revision) || !old.endpoint.equals(request.endpoint)
                 || !Objects.equals(old.backgroundSha256, backgroundHash)
                 || !Objects.equals(old.scriptTaskId,request.scriptTaskId)) throw failure(409, "操作编号已经用于其他客户端任务");
@@ -178,6 +189,7 @@ public final class NativeClientJobs implements AutoCloseable {
         }
         requireSpace(BUILD_PEAK+(script==null?0:script.job.bytes+1024*1024));
         Job job = new Job(); job.requestId = request.requestId; job.instanceId = instance; job.actor = actor;
+        job.clientFormatVersion = NativeClientFormat.VERSION;
         if(script!=null){job.scriptTaskId=script.job.requestId;job.scriptSha256=script.job.sha256;job.scriptBytes=script.job.bytes;job.packageKind="isolated-dof-pvf-bundle";}
         job.backgroundSha256 = backgroundHash;
         job.revision = request.revision; job.endpoint = request.endpoint; job.state = "QUEUED"; job.createdAt = Instant.now().toString();
@@ -254,30 +266,30 @@ public final class NativeClientJobs implements AutoCloseable {
             requireSpace(peak);
             job.progress = 35; write(job);
             Path part = jobs.resolve(id).resolve("candidate.zip.part");
-            Map<String,Object> manifest = new LinkedHashMap<>(); manifest.put("instanceId", instance); manifest.put("environment", "isolated");
+            Map<String,Object> manifest = new LinkedHashMap<>(); manifest.put("clientFormatVersion", NativeClientFormat.VERSION); manifest.put("instanceId", instance); manifest.put("environment", "isolated");
             manifest.put("adapterVersion", DofAdminService.VERSION); manifest.put("requestId", id); manifest.put("sourceRevision", job.revision);
             manifest.put("packageKind", job.packageKind); manifest.put("nativeClientAcceptance", false);
             if(script!=null){manifest.put("scriptTaskId",job.scriptTaskId);manifest.put("scriptSourceSha256",script.job.sourceSha256);manifest.put("nativeChecksum",script.job.nativeChecksum);manifest.put("applicationState","NOT_APPLIED");}
             Map<String,String> hashes = new LinkedHashMap<>(); manifest.put("sha256", hashes);
             Map<String,Long> sizes = new LinkedHashMap<>(); manifest.put("bytes", sizes);
             try (OutputStream file = Files.newOutputStream(part, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE); ZipOutputStream zip = new ZipOutputStream(file)) {
-                for (String name : Arrays.asList("启动器.exe", "ijl15.dll")) {
+                for (String name : Arrays.asList("dof-launcher.exe", "ijl15.dll")) {
                     copyVerified(zip, inputs.resolve(name), name, binding.sha256.get(name)); hashes.put(name, binding.sha256.get(name));
                     sizes.put(name, Files.size(inputs.resolve(name)));
                 }
-                put(zip, "qingkong.dll", config); hashes.put("qingkong.dll", NativeUiState.sha256(config));
-                sizes.put("qingkong.dll", (long)config.length);
+                put(zip, "dof-client.dll", config); hashes.put("dof-client.dll", NativeUiState.sha256(config));
+                sizes.put("dof-client.dll", (long)config.length);
                 if(script!=null){copyVerified(zip,script.path,"Script.pvf",job.scriptSha256,job.scriptBytes);hashes.put("Script.pvf",job.scriptSha256);}
                 if(script!=null)sizes.put("Script.pvf",job.scriptBytes);
-                String instructions=script==null ? ("仅供当前隔离客户端测试；不是完整游戏客户端，也不是晴空原生自动更新包。\r\n"
+                String instructions=script==null ? ("仅供当前隔离客户端测试；不是完整游戏客户端，也不包含自动更新功能。\r\n"
                     + "关闭游戏及登录器后，备份独立客户端中的同名三个文件，再解压到该独立目录。不要覆盖正式客户端。\r\n"
                     + "失败时关闭客户端，恢复刚才备份的三个文件。此包不含服务端私钥、数据库连接信息、PVF或玩家数据。\r\n"
                     + "运行效果尚未统一验收。请保留 manifest.json 与本次任务编号用于核对。\r\n")
-                    : ("当前隔离服的晴空登录器与不压缩加密 PVF 配套包；实际游戏消费尚待验证。\r\n"
+                    : ("当前测试实例的 dof-easy 登录器与不压缩加密 PVF 配套包；实际游戏消费尚待验证。\r\n"
                     + "必须先核对并应用此批次对应的隔离服参数，未应用时请勿启动。此包不会自动修改服务器。\r\n"
-                    + "完全关闭游戏及登录器，备份独立客户端的启动器.exe、ijl15.dll、qingkong.dll、Script.pvf，再解压本包。\r\n"
+                    + "完全关闭游戏及登录器，备份独立客户端的dof-launcher.exe、ijl15.dll、dof-client.dll、Script.pvf，再解压本包。\r\n"
                     + "不能混用其他批次的 PVF 或配置，不覆盖正式客户端。失败时恢复这四个文件及本次隔离参数，不回滚玩家数据库。\r\n"
-                    + "使用晴空启动器.exe 登录。保留 manifest.json 核对批次和 SHA-256。此包没有数据库凭据或服务端身份私钥。\r\n");
+                    + "使用 dof-launcher.exe 登录。保留 manifest.json 核对批次和 SHA-256。此包没有数据库凭据或服务端身份私钥。\r\n");
                 byte[] guide=instructions.getBytes(java.nio.charset.StandardCharsets.UTF_8);
                 put(zip, "使用与恢复.txt",guide); hashes.put("使用与恢复.txt",NativeUiState.sha256(guide));sizes.put("使用与恢复.txt",(long)guide.length);
                 put(zip, "manifest.json", JSON.writerWithDefaultPrettyPrinter().writeValueAsBytes(manifest));
@@ -356,6 +368,8 @@ public final class NativeClientJobs implements AutoCloseable {
     public synchronized Path download(String id) throws IOException {
         Job job = read(id);
         if (!"READY_FOR_TEST".equals(job.state)) throw failure(409, "此任务没有可下载的完整测试包");
+        if (job.clientFormatVersion != NativeClientFormat.VERSION || !job.revision.equals(revision(source())))
+            throw failure(409, "客户端任务格式或来源版本不匹配，请重新生成");
         Path path = jobs.resolve(id).resolve("candidate.zip");
         if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) || Files.size(path) != job.bytes || !hashFile(path).equals(job.sha256)) throw failure(409, "客户端包损坏或缺失，停止下载");
         return path;

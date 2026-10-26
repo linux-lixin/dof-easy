@@ -41,6 +41,7 @@ public class DofClientService {
                 if(store==null)throw new DofFailure(409,"Script 任务服务尚未初始化");
                 return store.artifact(id,revision);
             });
+        jobs.requireDatabase(adminService.boundDatabaseUuid());
         return jobs;
     }
     private synchronized NativeScriptJobs scripts() throws IOException {
@@ -63,6 +64,7 @@ public class DofClientService {
         guard();Map<String,Object> out=new LinkedHashMap<>();
         if(!configured()){
             out.putAll(adminService.context());out.put("enabled",false);
+            out.put("clientFormatVersion",NativeClientFormat.VERSION);
             out.put("blocker","当前实例尚未导入客户端发布材料");return out;
         }
         out.putAll(jobs().status());jobs().requireScriptVersion();out.put("enabled",true);
@@ -98,6 +100,7 @@ public class DofClientService {
         guard();
         if (!configured()) {
             Map<String,Object> out = new LinkedHashMap<>(adminService.context()); out.put("enabled", false);
+            out.put("clientFormatVersion",NativeClientFormat.VERSION);
             out.put("blocker","当前实例尚未导入客户端发布材料");return out;
         }
         Map<String,Object> out = new LinkedHashMap<>(jobs().status()); out.put("enabled", true); return out;

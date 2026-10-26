@@ -4,7 +4,7 @@ import Request from '../../../api/Request'
 import NativeScriptFlow from './NativeScriptFlow.vue'
 import NativeScriptRelease from './NativeScriptRelease.vue'
 
-type Job = { requestId: string; state: string; progress: number; createdAt: string; error?: string; sha256?: string; bytes: number; endpoint: string; scriptTaskId?: string }
+type Job = { requestId: string; state: string; progress: number; createdAt: string; error?: string; sha256?: string; bytes: number; endpoint: string; scriptTaskId?: string; clientFormatVersion: number }
 const root = '/api/v1/admin/dof/client'
 const status = ref<any>(null)
 const jobs = ref<Job[]>([])
@@ -84,14 +84,15 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
 </script>
 
 <template>
-  <a-alert type="warning">这里生成当前隔离实例的晴空登录器配套包。选择加密批次后包含对应 Script.pvf；不包含完整游戏素材，也不执行自动更新。生成成功不代表游戏登录验收通过。</a-alert>
+  <a-alert type="warning">这里生成当前测试实例的 dof-easy 登录器配套包。选择加密批次后包含对应 Script.pvf；不包含完整游戏素材，也不执行自动更新。生成成功不代表游戏登录验收通过。</a-alert>
   <NativeScriptFlow @select="id => { if (!busy && !pending) scriptTaskId = id }" />
   <a-alert v-if="error" class="space" type="error">{{ error }}</a-alert>
   <a-button class="space" :loading="busy" @click="run(reload)">刷新发布来源与任务</a-button>
-  <a-alert v-if="status && !status.enabled" class="space">当前隔离后台尚未部署配套发布来源。</a-alert>
+  <a-alert v-if="status && !status.enabled" class="space">{{ status.blocker || '当前实例尚未导入客户端发布材料。' }}</a-alert>
   <template v-if="status?.enabled">
     <a-form class="space" :model="{ endpoint }" layout="vertical">
-      <p>2. 生成晴空登录器{{ scriptTaskId ? '与加密 PVF 配套包' : '配置包' }}</p>
+      <p>2. 生成 dof-easy 登录器{{ scriptTaskId ? '与加密 PVF 配套包' : '配置包' }} · 格式 v{{ status.clientFormatVersion }}</p>
+      <p>配套文件：dof-launcher.exe、dof-client.dll、ijl15.dll。使用同一批次的文件安装。</p>
       <p v-if="scriptTaskId">已选择加密批次：{{ scriptTaskId }} <a-button :disabled="busy || !!pending" @click="scriptTaskId = undefined">改为仅生成登录器配置</a-button></p>
       <a-form-item label="隔离客户端连接地址"><a-input v-model="endpoint" :max-length="253" :disabled="busy || !!pending" /></a-form-item>
       <a-form-item label="登录器背景（可选）">
@@ -99,7 +100,7 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
         <p v-if="backgroundName">{{ backgroundName }} <a-button :disabled="busy || !!pending" @click="background = undefined; backgroundName = ''">保留原背景</a-button></p>
       </a-form-item>
       <p>不选择图片时保留原背景。新图片须为 PNG 或 GIF，最大 2 MiB、4096×4096，实际显示效果待客户端核对。</p>
-      <a-button type="primary" :disabled="busy || !endpoint || jobs.some(j => ['QUEUED','RUNNING'].includes(j.state))" @click="create">{{ pending ? '用原操作编号核对或重试' : '生成晴空配套测试包' }}</a-button>
+      <a-button type="primary" :disabled="busy || !endpoint || jobs.some(j => ['QUEUED','RUNNING'].includes(j.state))" @click="create">{{ pending ? '用原操作编号核对或重试' : '生成 dof-easy 配套测试包' }}</a-button>
     </a-form>
     <p v-if="pending">连接结果尚待核对，操作编号 {{ pending.requestId }}。请刷新任务记录，勿重复创建。</p>
     <a-table class="space" :data="jobs" row-key="requestId" :pagination="{ pageSize: 10 }" :scroll="{ x: 1000 }">
@@ -109,7 +110,7 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
         <a-table-column title="连接地址" data-index="endpoint" />
         <a-table-column title="加密 PVF 批次"><template #cell="{record}">{{ record.scriptTaskId || '仅登录器配置' }}</template></a-table-column>
         <a-table-column title="状态"><template #cell="{record}">{{ labels[record.state] || record.state }}<p v-if="record.error">{{ record.error }}</p><p v-if="record.state === 'RUNNING'">{{ record.progress }}%</p></template></a-table-column>
-        <a-table-column title="产物"><template #cell="{record}"><template v-if="record.state === 'READY_FOR_TEST'"><a-button v-if="record.scriptTaskId" :disabled="busy" @click="releaseBundleId = record.requestId">选择并配置隔离参数</a-button><a-button :disabled="busy" @click="download(record)">下载测试包</a-button><p>{{ (record.bytes / 1024 / 1024).toFixed(2) }} MiB</p><code class="hash">SHA-256 {{ record.sha256 }}</code></template></template></a-table-column>
+        <a-table-column title="产物"><template #cell="{record}"><template v-if="record.state === 'READY_FOR_TEST' && record.clientFormatVersion === status.clientFormatVersion"><a-button v-if="record.scriptTaskId" :disabled="busy" @click="releaseBundleId = record.requestId">选择并配置隔离参数</a-button><a-button :disabled="busy" @click="download(record)">下载测试包</a-button><p>{{ (record.bytes / 1024 / 1024).toFixed(2) }} MiB</p><code class="hash">SHA-256 {{ record.sha256 }}</code></template><p v-else-if="record.state === 'READY_FOR_TEST'">配套格式版本已改变，请重新生成。</p></template></a-table-column>
       </template>
     </a-table>
     <NativeScriptRelease :bundle-id="releaseBundleId" />

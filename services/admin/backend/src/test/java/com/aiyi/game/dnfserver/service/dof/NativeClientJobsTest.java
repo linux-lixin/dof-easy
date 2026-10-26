@@ -21,10 +21,11 @@ public class NativeClientJobsTest {
             Map<String,byte[]> files = new LinkedHashMap<>();
             files.put("template.dll", NativeConfigContainer.encode(NativeClientPublicationTest.fixture(NativeClientPayloadTest.pair()), new byte[0]));
             files.put("game-public.der", identity.getPublic().getEncoded());
-            files.put("启动器.exe", "fixture-launcher".getBytes(StandardCharsets.US_ASCII));
+            files.put("dof-launcher.exe", "fixture-launcher".getBytes(StandardCharsets.US_ASCII));
             files.put("ijl15.dll", "fixture-client-library".getBytes(StandardCharsets.US_ASCII));
             NativeClientJobs.Binding binding = new NativeClientJobs.Binding(); binding.instanceId=INSTANCE; binding.environment="isolated";
-            binding.adapterVersion=DofAdminService.VERSION; binding.sha256=new LinkedHashMap<>();
+            binding.adapterVersion=DofAdminService.VERSION;binding.clientFormatVersion=NativeClientFormat.VERSION; binding.sha256=new LinkedHashMap<>();
+            binding.databaseUuid="00000000-0000-4000-8000-000000000001";binding.readerRecipe="dof-launcher-reader-2.1";
             for(Map.Entry<String,byte[]> file:files.entrySet()) { Files.write(inputs.resolve(file.getKey()),file.getValue()); binding.sha256.put(file.getKey(),NativeUiState.sha256(file.getValue())); }
             JSON.writeValue(inputs.resolve("binding.json").toFile(),binding);
             // Must never be traversed or included, despite being next to allowed inputs.
@@ -37,6 +38,15 @@ public class NativeClientJobsTest {
     private static NativeClientJobs.Request request(NativeClientJobs jobs) throws IOException {
         NativeClientJobs.Request request=new NativeClientJobs.Request(); request.requestId=UUID.randomUUID().toString();
         request.endpoint="192.0.2.44"; request.revision=(String)jobs.status().get("revision"); return request;
+    }
+    @Test public void sameInstanceNameCannotReuseInputsFromAnotherDatabase() throws Exception {
+        try(Fixture f=new Fixture();NativeClientJobs jobs=f.open()) {
+            jobs.requireDatabase("00000000-0000-4000-8000-000000000001");
+            try { jobs.requireDatabase("00000000-0000-4000-8000-000000000002"); fail(); }
+            catch(DofFailure e) { assertEquals(409,e.status); }
+            try { jobs.requireDatabase(null); fail(); }
+            catch(DofFailure e) { assertEquals(409,e.status); }
+        }
     }
     private static NativeClientJobs.Job finished(NativeClientJobs jobs, String id) throws Exception {
         long end=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(15);
@@ -60,13 +70,13 @@ public class NativeClientJobsTest {
                         ByteArrayOutputStream data=new ByteArrayOutputStream();try(InputStream in=zip.getInputStream(entry)){byte[] b=new byte[4096];int n;while((n=in.read(b))!=-1)data.write(b,0,n);}
                         String plain=new String(data.toByteArray(),StandardCharsets.ISO_8859_1);
                         assertFalse(plain.contains("FORBIDDEN-SERVER-PRIVATE-KEY")); assertFalse(plain.contains("TEST-DB-SECRET-NEVER-PUBLISH"));
-                        if(entry.getName().equals("qingkong.dll")) {
-                            NativeConfigContainer.Document config=NativeConfigContainer.decode(data.toByteArray(),new byte[0]); assertEquals(4,config.entries.size());
+                        if(entry.getName().equals("dof-client.dll")) {
+                            NativeConfigContainer.Document config=NativeConfigContainer.decode(data.toByteArray(),new byte[0]); assertEquals(5,config.entries.size());
                             assertEquals(request.endpoint,NativeClientPayload.decode(config,f.identity.getPublic()).endpoint());
                         }
                     }
                 }
-                assertEquals(new HashSet<>(Arrays.asList("启动器.exe","ijl15.dll","qingkong.dll","manifest.json","使用与恢复.txt")),names);
+                assertEquals(new HashSet<>(Arrays.asList("dof-launcher.exe","ijl15.dll","dof-client.dll","manifest.json","使用与恢复.txt")),names);
                 request.endpoint="192.0.2.45";
                 try{jobs.submit(request,42);fail();}catch(DofFailure e){assertEquals(409,e.status);}
             }
@@ -81,6 +91,16 @@ public class NativeClientJobsTest {
             assertEquals("FAILED",jobs.submit(request,42).state);
             try{jobs.download(request.requestId);fail();}catch(DofFailure e){assertEquals(409,e.status);}
             assertFalse(Files.exists(f.root.resolve("jobs").resolve(request.requestId).resolve("candidate.zip")));
+        }
+    }
+    @Test public void oldFormatJobCannotBeDownloadedOrReused() throws Exception {
+        try(Fixture f=new Fixture();NativeClientJobs jobs=f.open()) {
+            NativeClientJobs.Request request=request(jobs);jobs.submit(request,42);
+            NativeClientJobs.Job job=finished(jobs,request.requestId);assertEquals("READY_FOR_TEST",job.state);
+            job.clientFormatVersion=0;
+            JSON.writeValue(f.root.resolve("jobs").resolve(job.requestId).resolve("job.json").toFile(),job);
+            try{jobs.download(job.requestId);fail();}catch(DofFailure e){assertEquals(409,e.status);}
+            try{jobs.submit(request,42);fail();}catch(DofFailure e){assertEquals(409,e.status);}
         }
     }
     @Test public void corruptPackageIsRejectedAndInterruptedStateIsRecovered() throws Exception {
@@ -113,7 +133,7 @@ public class NativeClientJobsTest {
             NativeClientJobs.Request request=request(jobs); request.backgroundBase64=Base64.getEncoder().encodeToString(image.toByteArray());
             jobs.submit(request,42); NativeClientJobs.Job job=finished(jobs,request.requestId);
             assertEquals("READY_FOR_TEST",job.state); assertEquals(NativeUiState.sha256(image.toByteArray()),job.backgroundSha256);
-            try(ZipFile zip=new ZipFile(jobs.download(job.requestId).toFile());InputStream in=zip.getInputStream(zip.getEntry("qingkong.dll"))) {
+            try(ZipFile zip=new ZipFile(jobs.download(job.requestId).toFile());InputStream in=zip.getInputStream(zip.getEntry("dof-client.dll"))) {
                 ByteArrayOutputStream buffer=new ByteArrayOutputStream();byte[] part=new byte[4096];int n;while((n=in.read(part))!=-1)buffer.write(part,0,n);
                 NativeConfigContainer.Document config=NativeConfigContainer.decode(buffer.toByteArray(),new byte[0]);
                 assertArrayEquals(image.toByteArray(),config.entries.get(0).value());

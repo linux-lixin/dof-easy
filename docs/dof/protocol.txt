@@ -17,7 +17,7 @@ ijl15.dll SHA-256：d2b207e32f1d366c29f43d080366b7880d87659aaeb93a9bd8e36f44bf54
 1. 确认页面显示 私有配置中的隔离实例ID 隔离实例。
 2. 进入客户端生成功能，上传原始 Script.pvf，或导入当前实例只读绑定的 PVF；两种入口共用结构、哈希和容量检查。
 3. 对上传编号创建不压缩加密任务。完成后选择该任务作为配套来源。
-4. 待读取端和生成端成套适配后生成配套包；不改变正在使用的服务器参数。当前旧格式生成能力仅作对照，不作为新服务端验收入口。
+4. 使用已导入的格式 2 来源生成配套包；生成操作不改变正在使用的服务器参数。完整游戏读取仍按 client-reader-validation.md 单独验收。
 5. 选择该配套包，预览应用。后端检查原始 PVF 与隔离游戏只读挂载的来源 SHA-256 一致。
 6. 单独应用参数，再下载配套包；保留任务编号和 manifest.json。
 7. 彻底退出独立客户端和启动器，按清单备份将被替换的运行文件，再安装配套包。
@@ -43,8 +43,10 @@ POST client/releases/{id}/reconcile：遇断连先核对实际结果，不重新
 POST client/releases/{id}/restore：新的 requestId、当前 revision；只恢复本次两处参数。
 
 配套包现状与目标
-现有五文件生成器输出 启动器.exe、ijl15.dll、qingkong.dll、manifest.json、使用与恢复.txt；绑定 Script 任务时增加 Script.pvf，共六个文件。这是仍待改造的旧协议接口，不是运行时旧名回退承诺。
-目标输出为 dof-launcher.exe、dof-client.dll 和必要的 ijl15.dll，字段为 token_dof 系列；必须与 Windows 消费点、长度、资源引用和 dofRobotc 控制交互一起适配验证。dof-client.dll 是配置容器，不是可执行 DLL。
+格式 2 的五文件生成器输出 dof-launcher.exe、ijl15.dll、dof-client.dll、manifest.json、使用与恢复.txt；绑定 Script 任务时增加 Script.pvf，共六个文件。
+配置使用 token_dof 系列及 TXT 类型的 token_dof_version=2，保留原容器格式。dof-client.dll 是配置容器，不是可执行 DLL。
+来源绑定包含 clientFormatVersion、readerRecipe、当前数据库 UUID、公钥及所有输入哈希；数据库适配器仍为 dof-native-1。旧格式任务必须重新生成，不能作为新格式下载或参数应用来源。
+登录器的新文件名与字段读取、错误／缺失版本拒绝已有真实进程检查；游戏 DLL 完整消费、资源引用和 dofRobotc 控制交互仍须单独通过。详见 client-reader-validation.md。
 manifest 记录实例、适配器、来源修订、任务编号、原始 PVF 哈希及其余文件大小和 SHA-256。
 manifest 自身由整个 ZIP 的 SHA-256 保护。
 内容参数不另行下载，数据库凭据、服务端身份私钥、后台工具不进入配套包。
