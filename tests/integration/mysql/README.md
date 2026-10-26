@@ -1,6 +1,6 @@
 # 本地数据库模式验证
 
-`compose_matrix.py` 使用真实 Compose CLI 解析内置／外置 × dof／native 四种模型，不调用 Docker Engine、不启动容器。
+`compose_matrix.py` 使用真实 Compose CLI 解析内置／外置 × dof／native × 六种有效插件/团本组合，共 24 种模型，不调用 Docker Engine、不启动容器。
 
 ```sh
 python3 tests/integration/mysql/compose_matrix.py --compose /absolute/path/docker-compose

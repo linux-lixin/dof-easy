@@ -140,6 +140,27 @@ class ContainerManager(unittest.TestCase):
             with self.assertRaises(ValueError):
                 manager.instance_path(name)
 
+    def test_conflicting_web_game_port_is_rejected_before_bind(self):
+        values = manager.initial_values(self.args,self.row,self.root/'main')
+        values['ADMIN_PORT'] = '7001'
+        with patch.object(manager.socket,'socket') as socket_mock,self.assertRaisesRegex(ValueError,'互相冲突'):
+            manager.check_ports(values)
+        socket_mock.assert_not_called()
+
+    def test_channel_config_updates_ports_and_preserves_other_values(self):
+        instance=self.root/'main'
+        previous=manager.create_instance(instance,self.args,self.row,self.archive)
+        with patch.object(manager,'instance_path',return_value=instance),patch.object(manager,'docker_check'), \
+             patch.object(manager,'catalog',return_value={70:self.row}),patch.object(manager,'start'),patch.object(manager,'check_ports'):
+            manager.main(['config','--channels','15,52'])
+        values=manager.read_env(instance)
+        self.assertEqual(values['OPEN_CHANNEL'],'15,52')
+        self.assertEqual(values['GAME_DB_PASSWORD'],previous['GAME_DB_PASSWORD'])
+        self.assertEqual(values['DNF_MAX_LEVEL'],'70')
+        ports=json.loads((instance/'channels.json').read_text())
+        self.assertIn('127.0.0.1:30015:30015/tcp',ports['services']['netguard']['ports'])
+        self.assertTrue(list((instance/'config-backups').glob('*/.env')))
+
     def test_selected_channels_control_published_ports_and_guard(self):
         values = manager.initial_values(self.args, self.row, self.root / 'main')
         ports = manager.ports_override(values)['services']['netguard']['ports']
@@ -180,18 +201,18 @@ class ContainerManager(unittest.TestCase):
         with self.assertRaises(ValueError):
             game_profile.validate(path)
 
-    def test_default_install_uses_70_and_drives_all_steps(self):
+    def test_default_install_uses_86_and_drives_all_steps(self):
         settings = {'registry': 'ghcr.io/test-owner', 'tag': 'v1'}
         manager.image_config.save(self.root / 'state', settings)
         with patch.object(manager, 'STATE', self.root / 'state'), \
-             patch.object(manager, 'docker_check'), patch.object(manager, 'catalog', return_value={70: self.row}), \
+             patch.object(manager, 'docker_check'), patch.object(manager, 'catalog', return_value={86: dict(self.row, level=86)}), \
              patch.object(manager, 'fetch', return_value=self.archive), \
              patch.object(manager, 'prepare') as prepare, patch.object(manager, 'build') as build, \
              patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker, \
              patch.object(manager, 'start') as start:
             manager.main(['install', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
             record = json.loads((self.root / 'state/instances/main/instance.json').read_text())
-            self.assertEqual(record['level'], 70)
+            self.assertEqual(record['level'], 86)
             prepare.assert_not_called()
             build.assert_not_called()
             pulls = [call.args[0] for call in docker.call_args_list if call.args[0][1] == 'pull']
@@ -212,7 +233,7 @@ class ContainerManager(unittest.TestCase):
              patch.object(manager, 'prepare') as prepare, patch.object(manager, 'build') as build, \
              patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker, \
              patch.object(manager, 'start'), patch.object(manager.urllib.request, 'urlopen') as network:
-            manager.main(['install', '--ip', '127.0.0.1', '--pvf', str(self.pvf), '--resources', str(cache), '--offline'])
+            manager.main(['install', '--level', '70', '--ip', '127.0.0.1', '--pvf', str(self.pvf), '--resources', str(cache), '--offline'])
             prepare.assert_not_called()
             build.assert_not_called()
             network.assert_not_called()
@@ -223,7 +244,7 @@ class ContainerManager(unittest.TestCase):
              patch.object(manager, 'catalog', return_value={70: self.row}), \
              patch.object(manager, 'fetch') as fetch, patch.object(manager, 'build') as build:
             with self.assertRaisesRegex(ValueError, '尚未配置镜像仓库'):
-                manager.main(['install', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
+                manager.main(['install', '--level', '70', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
             fetch.assert_not_called()
             build.assert_not_called()
             self.assertFalse((self.root / 'state/instances/main').exists())

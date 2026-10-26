@@ -1,34 +1,42 @@
 # dof-easy · 通用一键容器端
 
-对照原 `pianai` 安装脚本的菜单，使用同一套镜像部署 **55 / 60 / 65 / 70 / 75 / 80 / 85 / 86 / 90 / 95 / 100 / 110 / 120** 级服务端，默认 **70**。等级程序和自己的 PVF 放在实例数据目录，换新服无需修改 Dockerfile 或重新烘焙 PVF。
+对照原 `pianai` 安装脚本的菜单，使用同一套镜像部署 **55 / 60 / 65 / 70 / 75 / 80 / 85 / 86 / 90 / 95 / 100 / 110 / 120** 级服务端。**新安装菜单可选择等级，直接回车默认 86**。等级程序和自己的 PVF 放在实例数据目录，换新服无需修改 Dockerfile 或重新烘焙 PVF。
 
 普通插件可选 **DP2 + Frida / DP2 / Frida / 不启用**。当前有两条独立登录链，不能混用客户端或把一条链的验收结果套用到另一条：
 
 | 模式 | 配套与入口 | 当前边界 |
 |---|---|---|
-| `dof`（默认） | 网页后台与 [WPF 登录器](clients/launcher/README.md)，按下文一键部署 | 按所选等级另行验证实际客户端 |
-| `native` | 固定免授权输入派生的网关、插件与网页原生管理，见 [原生模式文档](docs/dof/README.md) | 86 级服务端加载、网页配置和 PVF 处理已有记录；Windows 读取端与完整游戏流程尚未完成 |
+| `dof`（高级命令默认） | 网页后台与 [WPF 登录器](clients/launcher/README.md)，按下文一键部署 | 按所选等级另行验证实际客户端 |
+| `native`（新菜单默认） | 固定免授权输入派生的网关、插件与网页原生管理，见 [原生模式文档](docs/dof/README.md) | 86 级服务端加载、网页配置和 PVF 处理已有记录；Windows 读取端与完整游戏流程尚未完成 |
 
-**最新状态和剩余工作统一见 [当前状态](docs/dof/status.md)**。代码已合入 main 不等于完整游戏链路已验收；默认安装示例不自动启用原生网关。
+**最新状态和剩余工作统一见 [当前状态](docs/dof/status.md)**。代码已合入 main 不等于完整游戏链路已验收；下方新菜单默认启用原生网关；高级命令示例明确区分登录模式。
 
-## 一键部署
+## 菜单式一键端
 
-数据库可选：`--database internal`（默认，独立容器）或 `--database external`（同机宝塔 MySQL 5.6）。**86 级免授权原生服务 + 网页后台 + 宝塔 Nginx 的完整新装命令见 [宝塔部署指南](docs/baota-deployment.md)**。外置模式不启动数据库容器；已有实例的选择保持不变。
-
-服务端仅支持 Linux x86_64 主机，需要 Python 3.9+、Linux amd64 Docker 和 Compose v2。两个频道建议先分配至少 8 GB 内存。准备与自己客户端配套、已经下载完成的 PVF。
+在 Linux amd64 Ubuntu 24.04／26.04 或 Debian 12／13 上准备项目代码、配套 PVF 和固定免授权材料，然后运行：
 
 ```sh
-git clone https://github.com/linux-lixin/dof-easy.git
 cd dof-easy
-bash dof.sh images --registry registry.example.com/your-project --tag v1
-bash dof.sh
+sudo bash install.sh
 ```
 
-先将示例仓库替换为你上传镜像的地址及命名空间。私有仓库先执行 `docker login 仓库域名`，凭据由 Docker 管理。配置保存在本机 `.dof-easy/images.json`，不会提交 Git。
+脚本按需补齐 Python、Docker、Compose 和 Buildx。菜单包含安装、启停、日志、地址与频道、插件和团本开关、备份、Swap、防火墙、网页入口和实例切换。宝塔与宿主机 Nginx 均为可选；网页自带容器 Nginx。
 
-在菜单输入等级、服务器 IPv4 和 PVF 路径，安装器会连续完成：**拉取所选模式的镜像（内置四个／外置三个）、下载所选等级包 → 初始化数据库 → 生成独立密码和 RSA 密钥 → 安装所选插件 → 启动并等待游戏及后台就绪**。默认不从源码构建；仓库未配置或拉取失败会报错，不自动回退构建。
+安装选择等级（**回车默认 86**）、插件组合、团本扩展、内置或同机外置 MySQL 5.6。默认本机构建，也可拉取自己的镜像。确认页展示磁盘预算、Swap 和防火墙操作；确认前不创建实例。Python 缺失时，入口先单独询问是否安装菜单所需的 Python。
 
-无需交互的例子（省略 `--level` 即为 70）：
+默认网页直接通过 `http://服务器IP:18080` 访问，也可选择仅本机监听供反向代理。密码隐藏输入，临时 MySQL 管理员配置在结束或异常后删除。已有实例沿用配置，初始化中断不会自动重新灌库。普通插件关闭时保留原生登录必需组件。
+
+默认尝试关闭识别到的 UFW／firewalld并记录恢复状态；已有 Docker/自定义规则可能被 firewalld 清除时，提前拦截并提示保留防火墙。云安全组需按最终端口清单设置。外置 MySQL 监听所有接口时，先改私网绑定或选择保留防火墙。Swap 只补足缺少部分，不删除已有 Swap。
+
+完整说明见 [容器一键端指南](docs/container-installer.md)，宝塔用户另见 [可选宝塔部署](docs/baota-deployment.md)。两个频道建议至少 8 GiB 内存；增加 Swap 不等于性能已达标。
+
+## 高级命令部署
+
+所有新建入口默认 86 级；已有实例保留原等级。高级命令默认 `dof` 模式，菜单入口默认 `native`。数据库都默认内置，外置使用 `--database external`。
+
+高级命令默认拉取自己的镜像，先运行 `bash dof.sh images --registry 你的仓库/命名空间 --tag 版本`；本机源码构建显式加 `--build`。不自动从拉取失败回退构建。
+
+无需交互的例子（省略 `--level` 即为 86）：
 
 ```sh
 bash dof.sh install --level 70 --ip 192.168.1.100 --pvf /data/Script.pvf --plugins dp2-frida
@@ -52,7 +60,7 @@ bash dof.sh logs --service game --follow
 bash dof.sh stop
 bash dof.sh start
 bash dof.sh restart
-bash dof.sh config --plugins frida
+bash dof.sh config --plugins frida --raid-extension off
 bash dof.sh config --ip 192.168.1.101
 bash dof.sh backup
 bash dof.sh versions

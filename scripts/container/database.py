@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import shutil
 import tarfile
 import uuid
 
@@ -69,7 +70,7 @@ def private_json(path, value):
 
 
 def host_query(binary, defaults):
-    binary = Path(binary or '/www/server/mysql/bin/mysql')
+    binary = Path(binary or shutil.which('mysql') or next((p for p in ('/usr/local/mysql/bin/mysql', '/www/server/mysql/bin/mysql') if Path(p).is_file()), '/usr/bin/mysql'))
     defaults = Path(defaults)
     if not binary.is_absolute() or not binary.is_file():
         raise ValueError('请指定宿主机 MySQL 客户端的完整路径')

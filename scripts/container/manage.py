@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """One-command installation and local lifecycle management for dof-easy."""
 import argparse
+import hashlib
 from contextlib import contextmanager
 from datetime import datetime, timezone
 import importlib.util
@@ -49,6 +50,8 @@ def run(command, **kwargs):
 
 
 def docker_check():
+    local_host = module("dof_host", "scripts/container/host.py")
+    local_host.local_docker()
     result = run(['docker', 'info', '--format', '{{.OSType}}/{{.Architecture}}'], capture_output=True, text=True, timeout=30)
     if result.stdout.strip() not in ('linux/x86_64', 'linux/amd64'):
         raise ValueError('服务端部署需要 Linux amd64 Docker Engine 与 Compose v2。')
@@ -183,6 +186,39 @@ def ports_override(values):
             port = base + channel
             ports.append(f"{values.get('GAME_BIND_IP', values['BIND_IP'])}:{port}:{port}/{protocol}")
     return {'services': {'netguard': {'ports': ports}}}
+
+
+def published_ports(values):
+    game = values.get('GAME_BIND_IP', values['BIND_IP'])
+    items = [(game, port, protocol) for port, protocol in
+             ((7001,'tcp'),(7001,'udp'),(7300,'tcp'),(7300,'udp'),(2311,'udp'),(2312,'udp'),(2313,'udp'))]
+    items.append((values.get('ADMIN_BIND_IP','127.0.0.1'),int(values['ADMIN_PORT']),'tcp'))
+    if raid_assets.launcher_mode(values) == 'native':
+        items.append((game,8887,'tcp'))
+    for channel in runtime_config.channels(values['OPEN_CHANNEL']):
+        items += [(game,30000+channel,'tcp'),(game,31000+channel,'udp')]
+    return items
+
+
+def check_ports(values, previous=None):
+    items = published_ports(values)
+    for index,(address,port,protocol) in enumerate(items):
+        for other in items[:index]:
+            if other[1:] == (port,protocol) and (address == other[0] or '0.0.0.0' in (address,other[0])):
+                raise ValueError(f'实例端口配置互相冲突：{port}/{protocol}')
+    existing = set(published_ports(previous)) if previous else set()
+    for address,port,protocol in items:
+        if (address,port,protocol) in existing:
+            continue
+        # A bind-only change of this instance is checked by Docker during recreation;
+        # the old container still owns its socket until then.
+        if any(old[1:] == (port,protocol) for old in existing):
+            continue
+        try:
+            with socket.socket(socket.AF_INET,socket.SOCK_STREAM if protocol == 'tcp' else socket.SOCK_DGRAM) as probe:
+                probe.bind((address,port))
+        except OSError as error:
+            raise ValueError(f'监听地址/端口不可用：{address}:{port}/{protocol}；请先解决占用。') from error
 
 
 def check_gateway_port(values, previous=None):
@@ -478,6 +514,11 @@ def backup(root):
                      '-C', '/payload', 'instance'], stdout=stream)
             partial.chmod(0o600)
             partial.rename(output)
+            with output.open('rb') as stream:
+                digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+            checksum = output.with_name(output.name + '.sha256')
+            checksum.write_text(digest + '  ' + output.name + '\n')
+            checksum.chmod(0o600)
         finally:
             if stopped:
                 compose(root, 'start', *stopped)
@@ -510,7 +551,7 @@ def wizard():
     arguments = [command, '--instance', name]
     if command == 'install' and not instance_path(name).exists():
         print('可选等级：' + ', '.join(map(str, catalog())))
-        arguments += ['--level', input('等级 [70]：').strip() or '70',
+        arguments += ['--level', input('等级 [86]：').strip() or '86',
                       '--ip', input('客户端可访问的服务器 IPv4：').strip(),
                       '--pvf', input('配套 PVF 文件路径：').strip().strip('"'),
                       '--plugins', input('插件 dp2-frida / dp2 / frida / none [dp2-frida]：').strip() or 'dp2-frida',
@@ -582,8 +623,8 @@ def main(argv=None):
             p.add_argument('--db-port',type=int,help='外置 MySQL 端口，默认 3306')
             p.add_argument('--db-allow-host',help='专用 Docker 网段/点分掩码，如 172.29.86.0/255.255.255.0')
             p.add_argument('--mysql-config',type=Path,help='首次初始化使用的本机 MySQL 管理员客户端配置，权限 0600')
-            p.add_argument('--mysql-bin',help='本机 mysql 客户端，默认 /www/server/mysql/bin/mysql')
-            p.add_argument('--admin-bind',help='网页监听 IPv4，默认 127.0.0.1，供宝塔 Nginx 反代')
+            p.add_argument('--mysql-bin',help='本机 mysql 客户端，默认探测系统及宝塔安装位置')
+            p.add_argument('--admin-bind',help='网页监听 IPv4，默认 127.0.0.1，供 Nginx 反代')
             p.add_argument('--level', type=int, choices=list(catalog()))
             p.add_argument('--ip')
             p.add_argument('--pvf', type=Path)
@@ -603,6 +644,7 @@ def main(argv=None):
             p.add_argument('--plugins', choices=MODES)
             p.add_argument('--game-bind', help='游戏监听 IPv4；与后台监听独立')
             p.add_argument('--admin-bind', help='后台监听 IPv4；联调建议 127.0.0.1')
+            p.add_argument('--channels', help='替换频道列表，如 15,52；保留其他配置')
             p.add_argument('--client-cidrs', help='游戏允许的来源网段，逗号分隔；空字符串恢复原有不限来源行为')
         if command == 'logs':
             p.add_argument('--follow', action='store_true')
@@ -617,7 +659,7 @@ def main(argv=None):
             return 0
     args = parser.parse_args(argv)
     if args.command == 'versions':
-        print('默认 70；可选：' + ', '.join(map(str, catalog())))
+        print('默认 86；可选：' + ', '.join(map(str, catalog())))
         return 0
     if args.command == 'images':
         settings = image_config.load(STATE)
@@ -669,11 +711,12 @@ def main(argv=None):
                     raise ValueError('已有实例改 IP 请使用 config --ip；install 保留现有配置。')
             else:
                 values = None
-                args.level = args.level or 70
+                args.level = args.level or 86
                 if not args.ip or not args.pvf:
                     raise ValueError('新服需要 --ip 和 --pvf；不带参数运行可使用交互菜单。')
                 row = catalog()[args.level]
                 initial = initial_values(args, row, root)  # Validate all inputs before downloading.
+                check_ports(initial)
                 check_gateway_port(initial)
                 if raid_assets.required(initial):
                     raid_assets.verify(args.dof_assets or default_dof_assets(initial))
@@ -715,7 +758,7 @@ def main(argv=None):
                 compose(root, 'ps', '-a')
             elif args.command == 'logs':
                 if args.service == 'db' and database.kind(values) == 'external':
-                    raise ValueError('外置 MySQL 日志请在宝塔查看；项目不管理该服务')
+                    raise ValueError('外置 MySQL 日志请在宿主机查看；项目不管理该服务')
                 compose(root, 'logs', '--tail', '150', *(['-f'] if args.follow else []), *([args.service] if args.service else []))
             elif args.command == 'backup':
                 backup(root)
@@ -734,11 +777,14 @@ def main(argv=None):
                     values['GAME_BIND_IP'] = str(ipaddress.IPv4Address(args.game_bind))
                 if args.admin_bind is not None:
                     values['ADMIN_BIND_IP'] = str(ipaddress.IPv4Address(args.admin_bind))
+                if args.channels is not None:
+                    values['OPEN_CHANNEL'] = ','.join(map(str, runtime_config.channels(args.channels)))
                 if args.client_cidrs is not None:
                     values['ALLOWED_CLIENT_CIDRS'] = ','.join(str(ipaddress.ip_network(x.strip(), strict=False)) for x in args.client_cidrs.split(',')) if args.client_cidrs.strip() else ''
                 if args.raid_extension is not None:
                     values['RAID_EXTENSION'] = args.raid_extension
                 raid_assets.validate_options(values['PLUGIN_MODE'], values.get('RAID_EXTENSION', 'off'))
+                check_ports(values, previous)
                 check_gateway_port(values, previous)
                 profile = raid_assets.profile_for(values)
                 if args.dof_assets and not raid_assets.required(values):
