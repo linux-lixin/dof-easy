@@ -129,6 +129,12 @@ const observe = promise => { promise.catch(() => {}); return promise; };
     await page.getByText(/查询所需字段齐全，实际读取及权限仍需验证/).waitFor();checks.push('browser schema diagnosis');
     await page.locator('.arco-tabs-tab').filter({ hasText: '团本与插件' }).click();
     await page.screenshot({ path: path.join(output, 'plugin-live.png'), fullPage: true });
+    if (args['inspect-management']) {
+      await page.goto(origin + '/admin/extension-operations');await page.getByText(/统一清单：71 类、239 项/).waitFor();
+      await page.getByPlaceholder('搜索编号、功能或缺口').fill('feature-010-01');
+      const feature = page.getByRole('row').filter({ hasText: 'feature-010-01' });await feature.getByText('管理协议已有证据，原生效果待验', { exact: true }).waitFor();
+      checks.push('feature ledger uses canonical 71 classes / 239 operations and current management evidence');
+    }
     assert.deepEqual(errors, []);
     const result = { passed: true, backend: 'real', instanceId: args.instance, configEdits: args['allow-config-edits'], actualGameplayVerified: false, checks, pageErrors: 0 };
     await writeFile(path.join(output, 'result.json'), JSON.stringify(result, null, 2) + '\n');console.log(JSON.stringify(result));

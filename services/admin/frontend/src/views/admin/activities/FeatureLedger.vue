@@ -9,7 +9,7 @@ const statuses=computed(()=>[...new Set(all.value.map(x=>x.disposition))]);
 const rows=computed(()=>all.value.filter(x=>(!status.value||x.disposition===status.value)&&(!query.value||`${x.id} ${x.parent} ${x.name} ${x.missing}`.includes(query.value.trim()))));
 </script>
 <template>
-<a-alert>原始 {{features.length}} 项已拆为 {{all.length}} 个独立子项。状态为核对快照；管理完成、只读查询和实际游戏可用分别记录，缺资料不提供开关。</a-alert>
+<a-alert>统一清单：{{features.length}} 类、{{all.length}} 项，直接使用当前部署的 scope.json。管理实现与实际游戏效果分别记录；尚无证据的项目保持待核实。</a-alert>
 <a-space wrap style="margin:16px 0"><a-input v-model="query" placeholder="搜索编号、功能或缺口" allow-clear style="width:300px"/><a-select v-model="status" placeholder="全部处理结果" allow-clear style="width:200px"><a-option v-for="s in statuses" :key="s" :value="s">{{s}}</a-option></a-select></a-space>
 <a-table :data="rows" row-key="id" :pagination="{pageSize:15}" :scroll="{x:1100}"><template #columns>
 <a-table-column title="原始功能" data-index="parent"/><a-table-column title="子项" data-index="name"/><a-table-column title="处理结果" data-index="disposition"/><a-table-column title="交付" data-index="delivery"/><a-table-column title="编号" data-index="id"/>

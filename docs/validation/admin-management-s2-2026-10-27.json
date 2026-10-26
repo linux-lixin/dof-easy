@@ -147,6 +147,7 @@
         "role browser commit, replay and changed-body refusal",
         "role browser targeted restore",
         "legacy pending reviewed without native write or old-log rewrite; later preview unblocked",
+        "canonical feature ledger 71 classes / 239 operations",
         "browser ban preview, persistence, replay and unchanged expiry",
         "browser unban, login rejection/reenabling and targeted penalty restores",
         "browser admin password reset, credential verification, session revocation and secret-free history"
@@ -173,6 +174,14 @@
       "passed": true,
       "case": "older PREPARED operation is visible ahead of 51 newer previews",
       "contract": "ManagedBanContractTest.unresolvedOlderOperationCannotBeHiddenByNewerPreviews"
+    },
+    "canonicalFeatureLedger": {
+      "passed": true,
+      "source": "/api/v1/admin/dof -> scope.json",
+      "classes": 71,
+      "operations": 239,
+      "historicalFeatureSnapshotUsedForProgress": false,
+      "moduleFailuresIsolated": true
     }
   },
   "runtime": {

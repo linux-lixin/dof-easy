@@ -126,7 +126,7 @@ const server = createServer(async (request, response) => {
     await legacyConfirm.click();assert.equal((await (await legacySaved).json()).state, 'NO_CHANGE');await legacyModal.waitFor({ state: 'hidden' });
     assert.deepEqual((await api('GET', 'activities/signin')).rows[0].values, signin.values);
     assert.equal((await api('POST', 'activities/signin/validate', blocked)).state, 'PREVIEWED');checks.push('legacy pending reviewed without native write or old-log rewrite; later preview unblocked');
-    await page.goto(origin + '/admin/extension-operations');
+    await page.goto(origin + '/admin/extension-operations');await page.getByText(/统一清单：71 类、239 项/).waitFor();checks.push('canonical feature ledger 71 classes / 239 operations');
     await page.locator('.arco-tabs-tab').filter({ hasText: '封禁管理' }).click();await page.getByPlaceholder('账号编号', { exact: true }).fill('1000');
     await page.getByRole('button', { name: '读取处罚', exact: true }).click();await page.getByPlaceholder('操作原因', { exact: true }).fill('synthetic browser ban');
     const banPreview = observe(page.waitForRequest(r => r.url().endsWith('/accounts/1000/ban/preview') && r.method() === 'POST'));
