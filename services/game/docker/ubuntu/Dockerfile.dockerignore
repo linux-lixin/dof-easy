@@ -14,7 +14,7 @@ assets/home/template/init/Script.tgz
 assets/home/template/init/Script.pvf
 assets/home/template/init/df_game_r
 
-# Optional raid resources belong to instance data, never shared image layers.
+# Legacy native binaries must never enter shared image layers.
 assets/root/QK
 assets/root/qk_plugin.so
 assets/root/qingkong

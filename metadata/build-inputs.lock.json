@@ -2112,6 +2112,16 @@
       "path": "services/game/resources/plugins/dp2/pvf-patch.zip",
       "bytes": 6634,
       "sha256": "101e65b3f4e08e4567829b5bbd98568fca90ba4359721ed4b35b00a1bd14b4c1"
+    },
+    {
+      "path": "services/game/resources/plugins/raid/config/anton-raid.ini",
+      "bytes": 3332,
+      "sha256": "be633776b971f983ff277abb98d084e7f99b78861c13831a58eae07a73b94b58"
+    },
+    {
+      "path": "services/game/resources/plugins/raid/config/luke-raid.ini",
+      "bytes": 3196,
+      "sha256": "0a3dc69163c7d12618cb38e52ded7aff4f2dc6517b166eb0027076eefa98bdcd"
     }
   ]
 }

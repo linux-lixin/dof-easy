@@ -10,10 +10,19 @@ import tempfile
 BASE = Path(__file__).resolve().parent
 LOCK = BASE / 'runtime.lock.json'
 GAME_ABI = BASE / 'game-abi.json'
+RAID_CONFIGS = ('anton-raid.ini', 'luke-raid.ini')
+RESOURCE_ROOT = BASE.parents[2] / 'resources'
+RAID_DEFAULTS = (RESOURCE_ROOT / 'plugins/raid/config' if RESOURCE_ROOT.is_dir()
+                 else Path('/opt/dnf/plugins/raid/config'))
+
+
+def template_path(name):
+    """Resource/package location; the native ABI still reads state/config/*.ini."""
+    return Path('plugins/raid/config' if name in RAID_CONFIGS else 'config') / name
 
 
 def templates():
-    return [(name, BASE / 'defaults' / name) for name in
+    return [(name, (RAID_DEFAULTS if name in RAID_CONFIGS else BASE / 'defaults') / name) for name in
             ('plugin.ini', 'anton-raid.ini', 'luke-raid.ini', 'dungeon.lst', 'equipment.json')]
 
 
@@ -149,8 +158,12 @@ def install(source, target, profile='native'):
         shutil.copyfile(source / 'manifest.json', assets / 'manifest.json')
         (stage / 'config').mkdir(mode=0o700)
         for name, default in templates():
-            custom = source / 'config' / name
-            data = (regular(custom, source) if custom.exists() else default).read_text(encoding='utf-8-sig')
+            custom = source / template_path(name)
+            previous = source / 'config' / name
+            if name in RAID_CONFIGS and (previous.exists() or previous.is_symlink()):
+                raise ValueError('Move raid bundle configuration to plugins/raid/config/: ' + name)
+            data = (regular(custom, source) if custom.exists() or custom.is_symlink()
+                    else regular(default, default.parent)).read_text(encoding='utf-8-sig')
             if name == 'plugin.ini':
                 import re
                 for key in ('Inlay_function', 'Equ_unlocked_instantly', 'Task_Completion_coupon'):

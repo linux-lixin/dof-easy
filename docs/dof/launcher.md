@@ -11,6 +11,8 @@ python3 scripts/dof/package_server.py --runtime /local/build/dof-runtime --valid
 
 派生后资源必须与 `services/game/runtime/ubuntu/gateway/runtime.lock.json` 完全一致；输入不匹配会拒绝构建。包内保留第三方来源和版权说明，不包含私钥、数据库、Windows 客户端或原管理工具。此包为资源包；游戏镜像仍须从同一 main 提交构建。
 
+团本模板的仓库位置为 `services/game/resources/plugins/raid/config/`，派生／打包后位于包内 `plugins/raid/config/`。安装时生成下表中的实例运行配置，已有实例配置不会覆盖。团本实现共用 `libdof-plugin.so`，没有另一套团本二进制；团本默认关闭，需要 DP2 才能开启。
+
 安装器使用 `--launcher native --dof-assets /local/build/dof-runtime`，现有 `dof` 登录模式保持原意。新部署前先阅读 [当前状态](status.md)。86 级真实加载和网页 PVF 处理已有记录；Windows 读取端与生成端仍需成套适配，完整联调通过前不能宣布发布就绪。更新现有绑定测试实例使用 [限定目标部署入口](game-test-deployment.md)，不要重跑新实例初始化。
 
 

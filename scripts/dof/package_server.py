@@ -22,7 +22,7 @@ def package(runtime,validation,output):
     if output.exists() or output.is_symlink():raise ValueError('Package output must be new')
     files={row['path']:(runtime/row['path']).read_bytes() for row in assets.manifest()}
     files['manifest.json']=(runtime/'manifest.json').read_bytes()
-    for name,default in assets.templates():files['config/'+name]=default.read_bytes()
+    for name,default in assets.templates():files[assets.template_path(name).as_posix()]=default.read_bytes()
     files['validation.json']=(json.dumps(report,ensure_ascii=False,indent=2)+'\n').encode()
     files['NOTICES.txt']=(
         '本包由用户提供的固定哈希晴空免授权材料派生，保留第三方来源与作者归属。\n'

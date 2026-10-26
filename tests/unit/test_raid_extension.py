@@ -73,6 +73,28 @@ class RaidAssets(unittest.TestCase):
             self.assets.install(self.source, target)
         self.assertFalse(target.exists())
 
+    def test_raid_bundle_override_and_link_rejection(self):
+        config = self.source / 'plugins/raid/config/anton-raid.ini'
+        config.parent.mkdir(parents=True)
+        config.write_text('; custom raid parameters\n')
+        self.assets.install(self.source, self.root / 'configured')
+        self.assertEqual((self.root / 'configured/config/anton-raid.ini').read_text(),
+                         '; custom raid parameters\n')
+        config.unlink()
+        config.symlink_to(self.root / 'absent')
+        with self.assertRaisesRegex(ValueError, 'must not contain links'):
+            self.assets.install(self.source, self.root / 'rejected')
+        self.assertFalse((self.root / 'rejected').exists())
+
+    def test_old_bundle_raid_config_is_not_silently_discarded(self):
+        config = self.source / 'config/anton-raid.ini'
+        config.parent.mkdir()
+        config.write_text('; existing custom raid parameters\n')
+        with self.assertRaisesRegex(ValueError, 'plugins/raid/config'):
+            self.assets.install(self.source, self.root / 'rejected')
+        self.assertFalse((self.root / 'rejected').exists())
+        self.assertEqual(config.read_text(), '; existing custom raid parameters\n')
+
     def test_missing_mutable_config_is_not_silently_replaced(self):
         target = self.root / 'installed'
         self.assets.install(self.source, target)

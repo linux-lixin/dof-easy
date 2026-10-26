@@ -95,6 +95,7 @@ RUN python3 /opt/dnf/ubuntu/bridge_compat.py \
  && python3 /opt/dnf/audit/elf-audit.py /home/template/neople/bridge --output /opt/dnf/audit/bridge-elf.json
 COPY resources/plugins/dp2/ /opt/dnf/plugins/dp2/
 COPY resources/plugins/frida/ /opt/dnf/plugins/frida/
+COPY resources/plugins/raid/ /opt/dnf/plugins/raid/
 RUN python3 /opt/dnf/audit/elf-audit.py /opt/dnf/plugins --preload-i386 /opt/dnf/compat/i386/libfrida-compat.so --output /opt/dnf/audit/plugins-elf.json
 RUN --network=none python3 /opt/dnf/audit/frida-probe.py --gadget /opt/dnf/plugins/frida/frida.so --shim /opt/dnf/compat/i386/libfrida-compat.so --probe /opt/dnf/audit/frida-probe > /opt/dnf/audit/frida-start-proof.txt
 RUN python3 /opt/dnf/ubuntu/prepare_image.py \

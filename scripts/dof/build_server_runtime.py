@@ -17,9 +17,9 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from scripts.dof.native_candidates import (Elf, replacement_source, gateway_candidate,
     plugin_candidate, inline_candidate, GATEWAY_PIN, PLUGIN_PIN, INLINE_PIN)
+from services.game.runtime.ubuntu.gateway import assets
 
 INPUTS = ROOT / 'metadata/dof/derivation/inputs.lock.json'
-DEFAULTS = ROOT / 'services/game/runtime/ubuntu/gateway/defaults'
 BASE_SCHEMA_PIN = '440604c1e7e786012abab3e69efac077a48da9d7ceae1ab43394a8eed4bc504b'
 
 
@@ -115,10 +115,11 @@ def build(source, output):
         for name, raw in payload.items():
             path = stage / name; path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(raw); path.chmod(0o700 if name.startswith('bin/') else 0o600)
-        config = stage / 'config'; config.mkdir(mode=0o700)
-        for name in ['plugin.ini', 'anton-raid.ini', 'luke-raid.ini', 'dungeon.lst', 'equipment.json']:
-            (config / name).write_bytes((DEFAULTS / name).read_bytes())
-            (config / name).chmod(0o600)
+        for name, default in assets.templates():
+            path = stage / assets.template_path(name)
+            path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+            path.write_bytes(default.read_bytes())
+            path.chmod(0o600)
         (stage / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
         audit = stage / 'source-audit'; audit.mkdir()
         (audit / 'derivation.json').write_text(json.dumps(dict(

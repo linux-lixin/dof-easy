@@ -42,18 +42,27 @@ class BundledNativeAssets(unittest.TestCase):
             committed=ROOT/'services/game/resources/native'
             for row in manage.raid_assets.manifest():
                 self.assertEqual((output/row['path']).read_bytes(),(committed/row['path']).read_bytes())
-            for name,_ in manage.raid_assets.templates():
-                self.assertEqual((output/'config'/name).read_bytes(),(committed/'config'/name).read_bytes())
+            for name,default in manage.raid_assets.templates():
+                self.assertEqual((output/manage.raid_assets.template_path(name)).read_bytes(),default.read_bytes())
         for path,sha in original.items():
             self.assertEqual(hashlib.sha256((source/path).read_bytes()).hexdigest(),sha)
 
     def test_deployment_does_not_need_raw_inputs_or_audit_records(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
-            for name in ('services/game/resources/native', 'services/game/runtime/ubuntu/gateway'):
+            for name in ('services/game/resources/native', 'services/game/runtime/ubuntu/gateway',
+                         'services/game/resources/plugins/raid'):
                 shutil.copytree(ROOT/name,root/name)
+            (root/'metadata').mkdir()
+            shutil.copyfile(ROOT/'metadata/build-inputs.lock.json',root/'metadata/build-inputs.lock.json')
             with patch.object(resources,'ROOT',root):
                 self.assertEqual(resources.verify_native_inputs(),15)
+            raid=root/'services/game/resources/plugins/raid/config/anton-raid.ini'
+            saved=raid.read_bytes()
+            raid.write_bytes(b'corrupt')
+            with patch.object(resources,'ROOT',root),self.assertRaisesRegex(ValueError,'Hash/size mismatch'):
+                resources.verify_native_inputs()
+            raid.write_bytes(saved)
             self.assertEqual(menu.assets_directory(root/'services/game/resources/native','test'),root/'services/game/resources/native')
             (root/'services/game/resources/native/lib/libdof-plugin.so').write_bytes(b'corrupt')
             with patch.object(resources,'ROOT',root),self.assertRaisesRegex(ValueError,'Hash/size mismatch'):
@@ -81,7 +90,23 @@ class BundledNativeAssets(unittest.TestCase):
         locked={row['path'].removeprefix('services/game/resources/plugins/') for row in rows
                 if row['path'].startswith('services/game/resources/plugins/')}
         self.assertEqual(actual,locked)
-        self.assertEqual({p.split('/')[0] for p in actual},{'dp2','frida'})
+        self.assertEqual({p.split('/')[0] for p in actual},{'dp2','frida','raid'})
+
+    def test_raid_templates_have_one_source_and_preserve_existing_configuration(self):
+        assets=manage.raid_assets
+        with tempfile.TemporaryDirectory() as temp:
+            target=Path(temp)/'state'
+            assets.install(manage.default_dof_assets({'LAUNCHER_MODE':'native'}),target)
+            for name in assets.RAID_CONFIGS:
+                source=ROOT/'services/game/resources/plugins/raid/config'/name
+                self.assertFalse((ROOT/'services/game/resources/native/config'/name).exists())
+                self.assertFalse((assets.BASE/'defaults'/name).exists())
+                runtime=target/'config'/name
+                self.assertEqual(runtime.read_text(),source.read_text(encoding='utf-8-sig'))
+                runtime.write_text('; operator custom configuration\n')
+            assets.install(manage.default_dof_assets({'LAUNCHER_MODE':'native'}),target)
+            for name in assets.RAID_CONFIGS:
+                self.assertEqual((target/'config'/name).read_text(),'; operator custom configuration\n')
 
     def test_real_plugin_files_prepare_all_combinations(self):
         spec=importlib.util.spec_from_file_location('plugin_runtime',ROOT/'services/game/runtime/ubuntu/plugins.py')
@@ -124,6 +149,18 @@ class BundledNativeAssets(unittest.TestCase):
                 self.assertFalse(any('/qingkong/' in n or n.endswith(('/QK','/qk_plugin.so','/libantisvrinline.so')) for n in names))
                 self.assertFalse(any('/source-audit/' in n for n in names))
                 self.assertIn('dof-server-runtime/NOTICES.txt',names)
+                for name in manage.raid_assets.RAID_CONFIGS:
+                    self.assertIn('dof-server-runtime/plugins/raid/config/'+name,names)
+                    self.assertNotIn('dof-server-runtime/config/'+name,names)
+                tar.extractall(root/'extracted',filter='data')
+            # A standalone archive must work without the repository's templates.
+            assets=manage.raid_assets
+            with patch.object(assets,'RAID_DEFAULTS',root/'missing-templates'):
+                assets.install(root/'extracted/dof-server-runtime',root/'installed')
+                assets.verify_config(root/'installed')
+            for name in assets.RAID_CONFIGS:
+                self.assertEqual((root/'installed/config'/name).read_text(),
+                                 (assets.RAID_DEFAULTS/name).read_text(encoding='utf-8-sig'))
             self.assertIn('lib/libdof-plugin.so',native_name_contract.module_contract(bundle))
             alien=root/'unrelated';alien.mkdir();(alien/'manifest.json').write_text('{}')
             with self.assertRaisesRegex(ValueError,'does not match'):
