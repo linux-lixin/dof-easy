@@ -11,10 +11,11 @@ public class AccountOperationsServiceTest {
  static Object defaultValue(Class<?> t){if(t==boolean.class)return false;if(t==int.class)return 0;if(t==long.class)return 0L;return null;}
  @SuppressWarnings("unchecked") static <T>T proxy(Class<T> type,InvocationHandler handler){return (T)Proxy.newProxyInstance(type.getClassLoader(),new Class[]{type},handler);}
  static class Database {
-  boolean committed,rolledBack,failAudit;String passwordHash;List<String> auditStrings=new ArrayList<>();int connections;
+  boolean committed,rolledBack,failAudit,failCommit,failRollback;String passwordHash,accountEngine="InnoDB";List<String> auditStrings=new ArrayList<>();int connections,autoCommitEnabled;
   Connection connection(){return proxy(Connection.class,(p,m,a)->{
-   if(m.getName().equals("commit")){committed=true;return null;}
-   if(m.getName().equals("rollback")){rolledBack=true;return null;}
+   if(m.getName().equals("commit")){committed=true;if(failCommit)throw new SQLException("synthetic commit reply lost");return null;}
+   if(m.getName().equals("rollback")){rolledBack=true;if(failRollback)throw new SQLException("synthetic rollback failed");return null;}
+   if(m.getName().equals("setAutoCommit")&&Boolean.TRUE.equals(a[0])){autoCommitEnabled++;return null;}
    if(m.getName().equals("createStatement"))return proxy(Statement.class,(q,n,b)->defaultValue(n.getReturnType()));
    if(m.getName().equals("prepareStatement")){
     String sql=(String)a[0];Map<Integer,Object> params=new HashMap<>();
@@ -23,6 +24,7 @@ public class AccountOperationsServiceTest {
      if(n.getName().equals("executeQuery")){AtomicBoolean first=new AtomicBoolean(true);return proxy(ResultSet.class,(r,k,c)->{
       if(k.getName().equals("next"))return first.getAndSet(false);
       if(k.getName().equals("getLong"))return 22L;
+      if(k.getName().equals("getString")&&sql.startsWith("SELECT ENGINE"))return "accounts".equals(params.get(2))?accountEngine:"InnoDB";
       return defaultValue(k.getReturnType());});}
      if(n.getName().equals("executeUpdate")){
       if(sql.startsWith("UPDATE d_taiwan.accounts"))passwordHash=(String)params.get(1);
@@ -48,5 +50,23 @@ public class AccountOperationsServiceTest {
   AccountOperationsService.Password r=request();s.issuePasswordChallenge(r.validationIndex,r.valicode);
   try{s.password(r);fail("audit failure accepted");}catch(ActivityConfigService.Failure expected){assertEquals(503,expected.status);}
   assertFalse(db.committed);assertTrue(db.rolledBack);
+ }
+ @Test public void unsupportedAccountEngineIsRejectedBeforePasswordWrite(){
+  Database db=new Database();db.accountEngine="MyISAM";AccountOperationsService s=new AccountOperationsService();ReflectionTestUtils.setField(s,"dataSource",db.source());
+  AccountOperationsService.Password r=request();s.issuePasswordChallenge(r.validationIndex,r.valicode);
+  try{s.password(r);fail();}catch(ActivityConfigService.Failure expected){assertEquals(409,expected.status);}
+  assertNull(db.passwordHash);assertFalse(db.committed);
+ }
+ @Test public void lostCommitReplyNeverClaimsThatThePasswordWasRolledBack(){
+  Database db=new Database();db.failCommit=true;AccountOperationsService s=new AccountOperationsService();ReflectionTestUtils.setField(s,"dataSource",db.source());
+  AccountOperationsService.Password r=request();s.issuePasswordChallenge(r.validationIndex,r.valicode);
+  try{s.password(r);fail();}catch(ActivityConfigService.Failure expected){assertEquals(503,expected.status);assertFalse(expected.getMessage().contains("已回滚"));}
+  assertTrue(db.committed);assertNotNull(db.passwordHash);
+ }
+ @Test public void rollbackFailureDoesNotEnableAutocommitAndAccidentallyCommit(){
+  Database db=new Database();db.failAudit=true;db.failRollback=true;AccountOperationsService s=new AccountOperationsService();ReflectionTestUtils.setField(s,"dataSource",db.source());
+  AccountOperationsService.Password r=request();s.issuePasswordChallenge(r.validationIndex,r.valicode);
+  try{s.password(r);fail();}catch(ActivityConfigService.Failure expected){assertEquals(503,expected.status);}
+  assertEquals(0,db.autoCommitEnabled);assertFalse(db.committed);
  }
 }

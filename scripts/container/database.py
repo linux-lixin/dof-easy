@@ -139,6 +139,17 @@ def bind_plugin_files(instance, name, db_uuid):
         json.dump(expected, stream); stream.write('\n'); stream.flush(); os.fsync(stream.fileno())
 
 
+def management_migrations(query):
+    """Only additive management DDL; safe to rerun after identity/binding checks."""
+    source = (ROOT / 'services/admin/database/dof-admin.sql').read_text()
+    statements = [s.strip() for s in re.sub(r'(?m)^\s*--.*$', '', source).split(';') if s.strip()]
+    for sql in statements:
+        if (not re.match(r'^CREATE TABLE IF NOT EXISTS dnf_service\.DOF_[A-Z0-9_]+\b', sql)
+                or re.search(r'\b(?:DROP|TRUNCATE|INSERT|UPDATE|DELETE|ALTER|REPLACE)\b', sql, re.I)):
+            raise ValueError('管理迁移包含非追加式语句，停止执行')
+    query(';\n'.join(statements) + ';')
+
+
 def prepare_web(instance, values, query):
     """Shared native web preparation for internal and external MySQL."""
     db_uuid = identity(query)
@@ -158,6 +169,7 @@ def prepare_web(instance, values, query):
             if binding != db_uuid+'|dof-native-1':
                 raise ValueError('原生网页数据库绑定不符')
             bind_plugin_files(instance, name, db_uuid)
+            management_migrations(query)
         if not upgrade:
             return db_uuid
     # Explicitly additive schema extraction, preserving previous UI and accounts.
@@ -188,8 +200,7 @@ def prepare_web(instance, values, query):
     query('INSERT INTO dnf_service.ADMIN_TEMP_PASSWORD (id,PASSWORD) SELECT 1,CONVERT(0x'+values['ADMIN_TEMP_SECRET'].encode().hex()+' USING utf8) FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM dnf_service.ADMIN_TEMP_PASSWORD WHERE id=1);')
     if native:
         native_schema(instance / 'runtime/game/data/dof-easy', query)
-        migration = (ROOT/'services/admin/database/dof-admin.sql').read_text()
-        query(migration)
+        management_migrations(query)
         other = query("SELECT instance_id FROM dnf_service.DOF_INSTANCE_BINDING WHERE instance_id <> '"+name+"';")
         if other:
             raise ValueError('数据库已绑定其他原生实例')

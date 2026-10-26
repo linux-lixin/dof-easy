@@ -3,9 +3,14 @@ import copy
 import json
 
 
-def configure(model, values, root, databases):
+def configure(model, values, root, databases, previous=None):
     model = copy.deepcopy(model)
     services = model['services']
+    # Updating admin must not silently rerun key initialization with another image.
+    # Existing key material and the init service's image have an independent lifecycle.
+    previous_keys = (previous or {}).get('services', {}).get('keys', {})
+    if 'keys' in services and (values.get('DOF_KEYS_IMAGE') or previous_keys.get('image')):
+        services['keys']['image'] = values.get('DOF_KEYS_IMAGE') or previous_keys['image']
     external = values.get('DOF_DATABASE_KIND', 'internal') == 'external'
     native = values.get('LAUNCHER_MODE', 'dof') == 'native'
     if external:

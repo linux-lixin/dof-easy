@@ -2,6 +2,7 @@
 import {onMounted, ref, reactive} from "vue";
 import {Message, Modal} from "@arco-design/web-vue";
 import Request from "../../../api/Request";
+import RoleAttributesEditor from "./RoleAttributesEditor.vue";
 import ItemPicker from "../../../components/ItemPicker.vue";
 
 const loading = ref(false);
@@ -190,21 +191,6 @@ const openEdit = (record: any) => {
 	editOption.value.open = true;
 };
 
-const submitEdit = async () => {
-	if (!editOption.value.form?.characNo) return;
-	const payload = {...editOption.value.form};
-	delete payload.job;
-	delete payload.growType;
-	try {
-		await Request.put("api/v1/charac", payload);
-		Message.success("修改成功，请上游戏查看");
-		editOption.value.open = false;
-		search(false);
-	} catch (e: any) {
-		Message.error(e?.message || "修改失败");
-	}
-};
-
 const openSendMail = (record: any) => {
 	sendMailOption.value.receiveCharacNo = record?.characNo ?? 0;
 	sendMailOption.value.receiveCharacName = record?.characName ?? "";
@@ -368,98 +354,8 @@ onMounted(() => {
 			/>
 		</div>
 
-		<a-modal
-			v-model:visible="editOption.open"
-			title="编辑角色属性"
-			:width="820"
-			:mask-closable="false"
-			@ok="submitEdit"
-			@cancel="editOption.open = false"
-		>
-			<div style="margin-bottom: 16px; font-size: 12px; color: #999;">
-				PS: 修改角色属性时，请确保当前角色已退出登录，否则修改无效。
-			</div>
-			<a-form :model="editOption.form" layout="vertical" size="small" class="edit-form">
-				<a-row :gutter="16">
-					<a-col :span="12">
-						<a-form-item label="昵称">
-							<a-input v-model="editOption.form.characName" disabled />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="等级">
-							<a-input v-model="editOption.form.lev" disabled />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="职业">
-							<a-input v-model="editOption.form.job" disabled />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="转职">
-							<a-input v-model="editOption.form.growType" disabled />
-						</a-form-item>
-					</a-col>
-
-					<a-col :span="12">
-						<a-form-item label="HP">
-							<a-slider v-model="editOption.form.maxHp" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="MP">
-							<a-slider v-model="editOption.form.maxMp" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="物攻">
-							<a-slider v-model="editOption.form.phyAttack" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="物防">
-							<a-slider v-model="editOption.form.phyDefense" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="魔攻">
-							<a-slider v-model="editOption.form.magAttack" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="魔防">
-							<a-slider v-model="editOption.form.magDefense" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="跳跃">
-							<a-slider v-model="editOption.form.jump" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="硬直">
-							<a-slider v-model="editOption.form.hitRecovery" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="移速">
-							<a-slider v-model="editOption.form.moveSpeed" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="攻速">
-							<a-slider v-model="editOption.form.attackSpeed" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="施速">
-							<a-slider v-model="editOption.form.castSpeed" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-				</a-row>
-			</a-form>
-		</a-modal>
+        <RoleAttributesEditor v-if="editOption.open" :charac-no="editOption.form.characNo"
+            :name="editOption.form.characName" @close="editOption.open = false" @saved="search(false)" />
 
 		<a-modal
 			v-model:visible="sendMailOption.open"

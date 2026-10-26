@@ -43,7 +43,7 @@ const observe = promise => { promise.catch(() => {}); return promise; };
     const login = observe(page.waitForResponse(r => r.url().endsWith('/api/v1/login') && r.request().method() === 'POST'));
     await page.getByRole('button', { name: '登录', exact: true }).click();
     assert.equal((await login).status(), 200);
-    await page.waitForURL('**/admin/dof');
+    await page.waitForURL(url => url.pathname === '/admin/dof');
     token = await page.evaluate(() => localStorage.getItem('token'));
     assert.ok(token);checks.push('real browser administrator login');
     const catalog = await api('GET', '');assert.equal(catalog.instanceId, args.instance);

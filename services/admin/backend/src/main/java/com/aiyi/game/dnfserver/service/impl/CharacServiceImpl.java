@@ -120,37 +120,6 @@ public class CharacServiceImpl implements CharacService {
     }
 
     @Override
-    public void update(CharacInfo info) {
-        CharacInfo characInfo = characInfoDao.get(info.getCharacNo());
-        if (null == characInfo){
-            return;
-        }
-        // 三速
-        characInfo.setAttackSpeed(info.getAttackSpeed());
-        characInfo.setCastSpeed(info.getCastSpeed());
-        characInfo.setMoveSpeed(info.getMoveSpeed());
-
-        // 疲劳
-        characInfo.setFatigue(info.getFatigue());
-
-        // 红蓝
-        characInfo.setMaxHp(info.getMaxHp());
-        characInfo.setMaxMp(info.getMaxMp());
-
-        // 伤害
-        characInfo.setMagAttack(info.getMagAttack());
-        characInfo.setMagDefense(info.getMagDefense());
-        characInfo.setPhyAttack(info.getPhyAttack());
-        characInfo.setPhyDefense(info.getPhyDefense());
-
-        // 硬直、跳跃
-        characInfo.setHitRecovery(info.getHitRecovery());
-        characInfo.setJump(info.getJump());
-
-        characInfoDao.update(characInfo);
-    }
-
-    @Override
     public void overTasks(Long characId) {
         List<TaskVO> tasks = listNoOverTasks(characId);
         tasks.forEach(task -> {

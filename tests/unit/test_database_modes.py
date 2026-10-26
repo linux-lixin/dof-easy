@@ -41,6 +41,33 @@ class DatabaseModes(unittest.TestCase):
         for answer in ('8.0.32\t11111111-1111-1111-1111-111111111111','5.6.51\tbad'):
             with self.assertRaises(ValueError):db.identity(lambda _:answer)
 
+    def test_existing_managed_instance_applies_only_additive_management_migrations(self):
+        with tempfile.TemporaryDirectory() as folder:
+            instance=Path(folder)/'instance';(instance/'runtime/game/data/dof-easy/config').mkdir(parents=True)
+            identity='11111111-1111-1111-1111-111111111111'
+            db.private_json(instance/'database-web.json',dict(databaseUuid=identity,instanceId='dof-instance',native=True,state='ready'))
+            calls=[]
+            def query(sql):
+                calls.append(sql)
+                if sql=='SELECT VERSION(),@@server_uuid;':return '5.6.51\t'+identity
+                if sql.startswith('SELECT CONCAT(database_uuid'):return identity+'|dof-native-1'
+                self.assertTrue(sql.startswith('CREATE TABLE IF NOT EXISTS dnf_service.DOF_'))
+                self.assertIn('DOF_OPERATION_JOURNAL',sql)
+                self.assertNotRegex(sql,r'\b(?:DROP|TRUNCATE|INSERT|UPDATE|DELETE|ALTER)\b')
+                return ''
+            self.assertEqual(db.prepare_web(instance,{'LAUNCHER_MODE':'native'},query),identity)
+            self.assertEqual(len(calls),3)
+            self.assertEqual(json.loads((instance/'database-web.json').read_text())['state'],'ready')
+
+    def test_management_migration_rejects_player_writes_before_any_statement(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);path=root/'services/admin/database';path.mkdir(parents=True)
+            (path/'dof-admin.sql').write_text('CREATE TABLE IF NOT EXISTS dnf_service.DOF_TEST(id INT);DELETE FROM d_taiwan.accounts;')
+            query=Mock()
+            with patch.object(db,'ROOT',root),self.assertRaisesRegex(ValueError,'非追加式'):
+                db.management_migrations(query)
+            query.assert_not_called()
+
     def test_existing_schema_rejected_before_any_write(self):
         answers=iter(['5.6.51\t11111111-1111-1111-1111-111111111111','mysql\nd_taiwan'])
         query=Mock(side_effect=lambda _:next(answers))
@@ -98,12 +125,38 @@ class DatabaseModes(unittest.TestCase):
         self.assertEqual(env['LAUNCHER_MODE'],'dof')
         self.assertEqual(env['DOF_ADMIN_ENABLED'],'true')
         self.assertEqual(env['DOF_GAME_CONFIG_ROOT'],'/app/game-config')
+
         self.assertTrue(db.web_management_enabled(values))
         mounts=[v for v in model['services']['admin']['volumes'] if isinstance(v,dict) and v['target']=='/app/game-config']
         self.assertEqual(mounts,[dict(type='bind',source='/local/instance/runtime/game/data/dof-easy/config',target='/app/game-config',read_only=False)])
         values.update(RAID_EXTENSION='off',DOF_ADMIN_ENABLED='true')
         self.assertTrue(db.web_management_enabled(values))
         self.assertEqual(deploy.configure(self.model(),values,Path('/local/instance'),db.DATABASES)['services']['admin']['environment']['DOF_ADMIN_ENABLED'],'true')
+
+    def test_internal_dof_compose_actually_uses_managed_model_when_raid_is_enabled(self):
+        import subprocess
+        values=dict(LAUNCHER_MODE='dof',RAID_EXTENSION='on',PLUGIN_MODE='dp2',GAME_DB_PASSWORD='synthetic',DOF_DATABASE_UUID='11111111-1111-1111-1111-111111111111')
+        def run(command,**kwargs):
+            if '--format' in command:return subprocess.CompletedProcess(command,0,json.dumps(self.model()),'')
+            return subprocess.CompletedProcess(command,0,'','')
+        with patch.object(manager,'read_env',return_value=values),patch.object(manager,'ports_override',return_value={}),patch.object(manager,'write_json'),patch.object(manager,'run',side_effect=run) as called,patch.object(manager.database,'private_json') as saved:
+            manager.compose(Path('/local/instance'),'config','--quiet')
+        self.assertEqual(called.call_count,2)
+        model=saved.call_args.args[1]
+        self.assertEqual(model['services']['admin']['environment']['LAUNCHER_MODE'],'dof')
+        self.assertEqual(model['services']['admin']['environment']['DOF_ADMIN_ENABLED'],'true')
+        self.assertEqual([v['target'] for v in model['services']['admin']['volumes']].count('/app/game-config'),1)
+
+    def test_admin_upgrade_preserves_existing_key_initializer_image(self):
+        model = {'services': {'keys': {'image': 'new-admin'}, 'admin': {'image': 'new-admin'}}}
+        values = {'LAUNCHER_MODE': 'dof'}
+        previous = {'services': {'keys': {'image': 'verified-key-image'}}}
+        result = deploy.configure(model, values, Path('/tmp/main'), [], previous)
+        self.assertEqual(result['services']['keys']['image'], 'verified-key-image')
+        self.assertEqual(result['services']['admin']['image'], 'new-admin')
+        self.assertEqual(model['services']['keys']['image'], 'new-admin')
+        values['DOF_KEYS_IMAGE'] = 'explicit-key-upgrade'
+        self.assertEqual(deploy.configure(model, values, Path('/tmp/main'), [], previous)['services']['keys']['image'], 'explicit-key-upgrade')
 
     def test_resolved_compose_dollar_is_literal_on_second_pass(self):
         source={'test':['CMD-SHELL','MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot']}

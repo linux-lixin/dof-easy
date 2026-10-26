@@ -347,10 +347,11 @@ def compose(root, *arguments, **kwargs):
     write_json(root / 'channels.json', ports_override(values))
     base = ['docker','compose','--project-directory',ROOT,'-p','dof-'+root.name,
             '--env-file',root/'.env','-f',ROOT/'compose.yaml','-f',root/'channels.json']
-    if database.kind(values) == 'external' or raid_assets.launcher_mode(values) == 'native':
+    if database.kind(values) == 'external' or database.web_management_enabled(values):
         result = run(base+['config','--format','json'],env=env,capture_output=True,text=True)
-        model = deployment.configure(json.loads(result.stdout),values,root,database.DATABASES)
         target = root/'deployment.json'
+        previous = json.loads(target.read_text()) if target.exists() else None
+        model = deployment.configure(json.loads(result.stdout),values,root,database.DATABASES,previous)
         database.private_json(target,deployment.literal_model(model))
         return run(['docker','compose','--project-directory',ROOT,'-p','dof-'+root.name,
                     '-f',target,*arguments],env=env,**kwargs)

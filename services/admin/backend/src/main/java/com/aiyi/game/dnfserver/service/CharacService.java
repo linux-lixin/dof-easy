@@ -35,13 +35,6 @@ public interface CharacService {
     List<CharacInfo> list(String account);
 
     /**
-     * 更新角色信息
-     * @param info
-     *      角色信息
-     */
-    void update(CharacInfo info);
-
-    /**
      * 角色完成已接受的所有任务
      * @param characId
      *      角色ID

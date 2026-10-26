@@ -211,14 +211,26 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "固定属性补丁、characNo、requestId、revision；先预览后提交",
+          "nativeLocation": "taiwan_cain.charac_info；taiwan_login.login_account_3 用于离线复核",
+          "encoding": "整数；无符号 smallint 0–65535，有符号写入 0–32767；旧有符号值恢复按原快照",
+          "executor": "ManagedRoleService（离线 SQL）；实际读取与效果由原生游戏组件承担",
+          "activation": "持久化后重登；实际客户端读取与效果待验证",
+          "output": "操作编号、持久化状态、差异及历史；effectState=not_observed",
+          "failureBehavior": "在线/未知在线状态、未知结构、错实例、版本冲突拒绝；PREPARED 先核对；恢复只修改原操作涉及字段",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedRoleContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-r1-2026-10-26.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "pending"
+          }
         },
         {
           "id": "feature-006-03",
@@ -226,14 +238,26 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "固定属性补丁、characNo、requestId、revision；先预览后提交",
+          "nativeLocation": "taiwan_cain.charac_info；taiwan_login.login_account_3 用于离线复核",
+          "encoding": "整数；无符号 smallint 0–65535，有符号写入 0–32767；旧有符号值恢复按原快照",
+          "executor": "ManagedRoleService（离线 SQL）；实际读取与效果由原生游戏组件承担",
+          "activation": "持久化后重登；实际客户端读取与效果待验证",
+          "output": "操作编号、持久化状态、差异及历史；effectState=not_observed",
+          "failureBehavior": "在线/未知在线状态、未知结构、错实例、版本冲突拒绝；PREPARED 先核对；恢复只修改原操作涉及字段",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedRoleContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-r1-2026-10-26.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "pending"
+          }
         }
       ]
     },

@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-26",
+  "baseline": {
+    "implementation": "29cc3c7",
+    "documentation": "dac5d3c",
+    "edition": "晴空免授权 2.8",
+    "classes": 71,
+    "operations": 239
+  },
+  "completeReplacement": false,
+  "adminImplementationComplete": false,
+  "batch": "R0/R1/R2 partial implementation",
+  "checks": {
+    "maven": {
+      "tests": 251,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 20,
+      "command": "mvn -Dmaven.test.skip=false test",
+      "database": "guarded disposable MySQL 5.6"
+    },
+    "frontend": {
+      "command": "npm run build",
+      "passed": true
+    },
+    "databaseModes": {
+      "tests": 18,
+      "passed": true
+    },
+    "containerManager": {
+      "tests": 25,
+      "passed": true
+    },
+    "browser": {
+      "passed": true,
+      "backend": "real Spring HTTP",
+      "database": "fresh synthetic MySQL 5.6 fixture",
+      "actualGameDataAccessed": false,
+      "gameEffectVerified": false,
+      "checks": [
+        "real authentication against synthetic accounts",
+        "durable preview without native write",
+        "browser commit and readback",
+        "real duplicate replay",
+        "missing identity and changed-body rejection",
+        "browser targeted restore",
+        "anonymous access rejected",
+        "role browser preview without native write",
+        "role browser commit, replay and changed-body refusal",
+        "role browser targeted restore"
+      ],
+      "pageErrors": 0
+    }
+  },
+  "installer": {
+    "sourceSynchronized": true,
+    "modelPreserved": true,
+    "containersOperated": false,
+    "managementMigrationExecuted": false,
+    "recoveryDirectory": "/opt/dof-easy/.dof-easy/admin-replacement/20261026-r1b/source-before"
+  },
+  "runtime": {
+    "newAdminDeployed": false,
+    "previousSource": "29cc3c7",
+    "previousImage": "sha256:4d265d325bbc30be83123e72260c9432bbc8dc091243edec23a99534dbd26d40",
+    "hostAdminPort": 18080
+  },
+  "implemented": [
+    "shared persistent management journal for typed activity and role operations",
+    "activity preview/replay/reconciliation/targeted restore/explicit conflict acknowledgment",
+    "offline fixed role patches with version and online recheck, reconciliation and restore",
+    "account engine pinning and honest uncertain password/ban failure messages",
+    "additive management migration for existing bound instances and preserved key-init image"
+  ],
+  "remaining": [
+    "R0: original tool complete menu/default/import/export audit and per-operation mapping",
+    "R1: legacy activity pending reconciliation; account bans and other management writes not yet on shared protocol",
+    "R2: admin player password reset, registration/activation/gifts, real dedicated account login/ban/unban and character effects",
+    "R2: nonempty record pagination/filter/encoding completeness and chat-body source",
+    "R3-R8: runtime plugin/raid flows, mail/economy/items/rewards/UI/PVF consumption, fault injection and complete delivery",
+    "20 skipped tests retain their integration/private-sample requirements; no synthetic sample claimed as native comparison"
+  ]
+}
