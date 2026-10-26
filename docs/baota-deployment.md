@@ -11,7 +11,7 @@ Nginx 始终可以由宝塔提供 HTTPS 入口。游戏和网页运行在 Docker
 
 ## 可选宝塔接入与菜单用法
 
-一键端不要求宝塔，完整菜单和主机准备说明见 [容器一键端指南](container-installer.md)。在项目目录运行 `sudo bash install.sh`：可选等级，回车默认 86；可选内置 MySQL 或同机 MySQL 5.6，后者可以由宝塔安装。
+一键端不要求宝塔，完整菜单和主机准备说明见 [容器一键端指南](container-installer.md)。在项目目录运行 `sudo bash dof.sh`：可选等级，回车默认 86；可选内置 MySQL 或同机 MySQL 5.6，后者可以由宝塔安装。
 
 使用宝塔反代时，在向导选择“网页仅本机访问”，把域名反代到 `http://127.0.0.1:18080` 并启用 HTTPS。独立反代片段输出为实例目录中的 `nginx-location.conf.example`，不会覆盖已有站点。
 
@@ -87,7 +87,7 @@ docker network ls
 
 ### 菜单安装只填写四项
 
-运行 `bash install.sh` → 安装服务端 → 数据库选择 `2 同机 MySQL 5.6`：
+运行 `bash dof.sh` → 安装服务端 → 数据库选择 `2 同机 MySQL 5.6`：
 
 | 输入 | 填写方式 |
 |---|---|

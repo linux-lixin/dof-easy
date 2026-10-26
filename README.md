@@ -17,7 +17,7 @@
 
 ```sh
 cd dof-easy
-sudo bash install.sh
+sudo bash dof.sh
 ```
 
 脚本按需补齐 Python、Docker、Compose 和 Buildx。菜单包含安装、启停、日志、地址与频道、插件和团本开关、备份、Swap、防火墙、网页入口和实例切换。宝塔与宿主机 Nginx 均为可选；网页自带容器 Nginx。
@@ -95,7 +95,7 @@ bash dof.sh resources --resources /data/dof-resources
 - 游戏 TCP/UDP 直接由 game 发布，网页端口直接映射到 admin:80。玩家来源及网络访问范围由云安全组控制，不再运行 netguard、ingress 或外置 db-check；没有 host 网络模式，内置数据库不发布 3306。
 - 初次建库将后台等级设置为所选版本；改 IP 同步修改后台客户端配置。后台已有其他设置和插件 Lua/JS 保留。
 
-Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。通用部署组件按职责放在 `deploy/database`、`bootstrap`、`nginx`、`shared`、`manual`；项目不依赖宝塔。旧固定 86 级部署方案仅保留在 `docs/history/offline86`，早期显式导入工具位于 `scripts/imports`，均不是当前安装入口。**新安装从根目录运行 `bash install.sh`**；各容器作用见 [部署说明](deploy/README.md)。
+Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。通用部署组件按职责放在 `deploy/database`、`bootstrap`、`nginx`、`shared`、`manual`；项目不依赖宝塔。旧固定 86 级部署方案仅保留在 `docs/history/offline86`，早期显式导入工具位于 `scripts/imports`，均不是当前安装入口。**新安装从根目录运行 `bash dof.sh`**；各容器作用见 [部署说明](deploy/README.md)。
 
 ## 验证与来源
 

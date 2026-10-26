@@ -62,13 +62,13 @@ python3 -m unittest discover -s tests/unit/dof -p 'test_server_runtime_report.py
 
 数据库模式、初始化边界和备份失败恢复：`python3 -m unittest discover -s tests/unit -p test_database_modes.py`。真实 MySQL 5.6、网页 HTTP 和 Compose 四组合检查见 [本地隔离测试](integration/mysql/README.md)。
 
-菜单式 Shell 入口：`bash install.sh --help`；交互路由、等级默认／选择、外置密码清理和实例保护测试：`python3 -m unittest discover -s tests/unit -p test_container_menu.py`。这些菜单测试不启动 Docker，也不连接数据库或服务器。
+菜单式 Shell 入口：`bash dof.sh --help`；交互路由、等级默认／选择、外置密码清理和实例保护测试：`python3 -m unittest discover -s tests/unit -p test_container_menu.py`。这些菜单测试不启动 Docker，也不连接数据库或服务器。
 
 ## 容器一键端
 
 ```sh
 python3 -m unittest tests.unit.test_container_menu tests.unit.test_container_host tests.unit.test_container_manager tests.unit.test_database_modes
-bash -n install.sh dof.sh scripts/container/bootstrap.sh
+bash -n dof.sh scripts/container/bootstrap.sh
 ```
 
 主机单元测试使用临时目录和模拟命令，绝不修改实际 Swap、防火墙或系统软件。真实主机测试只能在专用可丢弃虚拟机中执行，见 [隔离验收说明](integration/installer/README.md)。

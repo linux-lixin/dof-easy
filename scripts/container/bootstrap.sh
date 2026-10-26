@@ -4,7 +4,7 @@ set +x
 set -euo pipefail
 export LC_ALL=C
 fail() { echo "$*" >&2; exit 1; }
-[[ $EUID == 0 ]] || fail '请使用 sudo bash install.sh。'
+[[ $EUID == 0 ]] || fail '请使用 sudo bash dof.sh。'
 [[ $(uname -m) == x86_64 && -d /run/systemd/system ]] || fail '需要 amd64 / systemd Linux。'
 source /etc/os-release
 case "$ID:$VERSION_ID" in ubuntu:24.04|ubuntu:26.04|debian:12|debian:13) ;; *) fail '支持 Ubuntu 24.04/26.04、Debian 12/13。';; esac
