@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "5a5f6c5ad764944a318b75ca128ecfe2578985dc",
+  "releaseReady": false,
+  "existingServerContacted": false,
+  "developerHostSystemConfigurationModified": false,
+  "unit": {
+    "run": 276,
+    "passed": 258,
+    "skipped": 18,
+    "failed": 0
+  },
+  "compose": {
+    "version": "2.39.4",
+    "models": 24,
+    "passed": 24
+  },
+  "guest": {
+    "os": "Debian 12 amd64",
+    "virtualization": "QEMU 10.2.1 TCG, dedicated disposable guest",
+    "ramMiB": 2560,
+    "docker": "29.9.2",
+    "compose": "5.6.1",
+    "buildx": "0.38.1",
+    "baseImageSha512": "9f181877006e8d9ca4f4554eba8729a829936f0f7d1db5e77f69b1ef0f6bc372b4d46f3dae39b10d84f9131496c2cc1d449264f26577fe934a79de5a5512a3dd",
+    "results": {
+      "dependencies": "29.9.2",
+      "dependenciesRepeat": true,
+      "testImage": "sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+      "dockerHttpBefore": true,
+      "swapCreateRepeatForeignPreserved": true,
+      "ufwDisableDockerPreserved": true,
+      "ufwRestoreDockerPreserved": true,
+      "firstPhasePassed": true,
+      "rebootSwapFirewallDockerPersisted": true,
+      "managedSwapRemovalForeignPreserved": true,
+      "guestAcceptancePassed": true,
+      "firewalldForeignRulesRejectedBeforeChange": true,
+      "firewalldEmptyHostDisable": true,
+      "firewalldEmptyHostRestore": true
+    }
+  },
+  "mysql": {
+    "mysqlVersion": "5.6.51",
+    "freshNativeTables": 23,
+    "secondInitializationPreserved": true,
+    "unrelatedSitePreserved": true,
+    "scopedGrants": true,
+    "wrongUuidRejected": true,
+    "existingSchemasRejected": true,
+    "gameConnectionConfigured": true,
+    "projectBackupBytes": 819110,
+    "systemAndUnrelatedExcluded": true,
+    "logicalRestoreVerified": true,
+    "internalNativePreparationVerified": true,
+    "realWebLoginReadWriteAuditAndConflict": true
+  },
+  "netguard": {
+    "build": "passed",
+    "tests": 8,
+    "passed": 8,
+    "liveDockerNetworkTest": 1,
+    "ruleUnitTests": 7,
+    "manifestDigest": "sha256:4fb5e6c96d7101dc88fe3c5b574b56bef3e62090d1d50edf2c696e92cc20df87",
+    "gameImageIsResponderFixture": true,
+    "checks": [
+      "TCP/UDP original source",
+      "database-only egress",
+      "IPv6 blocked",
+      "no game capabilities",
+      "DNS replacement allowlist",
+      "unlisted inbound blocked",
+      "shutdown fail-closed"
+    ]
+  },
+  "unverified": [
+    "complete fresh native game Compose deployment",
+    "client login and gameplay",
+    "Ubuntu 24.04/26.04 and Debian 13 host mutation matrix",
+    "XFS swap allocation",
+    "Baota site application"
+  ],
+  "knownBaselineFailure": "Legacy deploy structure test expects 5 leaves; repository has 6. Legacy deploy/ubuntu .env.example files absent from baseline. Not changed or masked.",
+  "sourceSha256": {
+    "install.sh": "3b313c37fb25909462354924da00305dfd1914bd6944b008b44846a7bf819564",
+    "dof.sh": "c3ac92a58ff09485e2c81fc4365471b05c4689402a428526c5dedb5b94d0b88f",
+    "scripts/container/menu.py": "b6b7b33685ca4df53453a334d5f312a6e92e103a0fc5a5a883b0008541954ca2",
+    "scripts/container/host.py": "0b7aaaea9fda29c507fbddaab938edbfba6dced4bcec1984a52721440e84c82b",
+    "scripts/container/bootstrap.sh": "8b715a8eeebd0fe35970f9bea973649b8506a8119d9c2f474c97a01aab3086c4",
+    "scripts/container/manage.py": "1cda2193990a057693a86de4e3104116dc63d60d3fdd5e989f807c4c100bc506",
+    "scripts/container/database.py": "b9c8a659b499c6fba81a1d7d537682cc9cafe848af3df4c71eef44f61352fa0d",
+    "metadata/levels.lock.json": "6da172adbe7dd15ba709e84cde4453b1bc35f66ca785b731b908f4a6ca74e5f2",
+    "tests/integration/installer/guest_probe.py": "e5d0f5ff829f5e1f103bbc546618ebea39753ca9a9f8e3c8beb71a196a38ceb7",
+    "tests/integration/mysql/compose_matrix.py": "d628dcf7456aac38f3a1fa7627b5b476207894f4126b68467ee6e49c6f5043d4"
+  },
+  "checks": {
+    "bashSyntax": "passed",
+    "menuEntry": "passed",
+    "documentLinks": "passed",
+    "diffWhitespace": "passed"
+  },
+  "privateEvidenceSha256": {
+    "unit": "97fd816b36ff4836e4ddb25632352f7a0338e5bf1490f967863c64a5665ea3df",
+    "mysql": "381f69934ff3668fe60ba6383da1fc0df0a66b6fdc25fd18c5f798245f26f29e",
+    "host": "04c11b8a4ae042872936ec46696d7387c1fb3310945c79f285fb300d4d563f84",
+    "firewalld": "744c0f8a46bafec7f8eeb813e5291980cba2e9b997e98cebc33d9af9550ddb5a",
+    "netguard": "016793db78cf931789c323ed7331f1599385a88475755a5def3edb21f1f8d2bf"
+  }
+}

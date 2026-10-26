@@ -8,7 +8,7 @@
 
 | 原 `pianai` 流程 | 通用容器实现 |
 | --- | --- |
-| 选择 df_game_r 等级，默认 70 | `dof.sh install --level`；13 个等级对应独立的摘要锁定资源 |
+| 选择 df_game_r 等级，新实例默认 86 | `dof.sh install --level`；13 个等级对应独立的摘要锁定资源 |
 | 下载 Server、SQL、等级包 | 公共资源随 Git 检出；只下载所选等级并写入实例数据目录 |
 | 安装 MySQL 和修改账号 | 独立数据库容器、首次初始化、每实例随机凭据 |
 | 输入服务器 IP、生成服务配置 | `--ip`、`--channels`；后台 IP、游戏端口及 netguard 同步配置 |
