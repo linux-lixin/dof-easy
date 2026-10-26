@@ -78,26 +78,35 @@ def verify_build_inputs():
 
 
 def verify_native_inputs():
-    """Verify committed originals and derived payloads without downloads/execution."""
-    source_lock = json.loads((ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json').read_text())
+    """Verify deployable payloads without consulting or executing raw inputs."""
     runtime_lock = json.loads((ROOT / 'services/game/runtime/ubuntu/gateway/runtime.lock.json').read_text())
-    if json.loads(destination('services/game/native-assets/manifest.json').read_text()) != runtime_lock:
+    prefix = 'services/game/resources/native/'
+    if json.loads(destination(prefix + 'manifest.json').read_text()) != runtime_lock:
         raise ValueError('Bundled native manifest differs from runtime lock')
-    count = 0
-    for prefix, rows in (
-        ('metadata/dof/source-audit/server-inputs/files/', source_lock['files']),
-        ('services/game/native-assets/', runtime_lock['files']),
-    ):
+    for row in runtime_lock['files']:
+        path = destination(prefix + row['path'])
+        verify(path, row)
+        if 'elf_class' in row:
+            with path.open('rb') as stream:
+                header = stream.read(5)
+            if header != b'\x7fELF' + bytes([row['elf_class']]):
+                raise ValueError('Native architecture mismatch: ' + row['path'])
+    for name in ('plugin.ini', 'anton-raid.ini', 'luke-raid.ini', 'dungeon.lst', 'equipment.json'):
+        bundled = destination(prefix + 'config/' + name)
+        default = destination('services/game/runtime/ubuntu/gateway/defaults/' + name)
+        verify(bundled, dict(bytes=default.stat().st_size, sha256=digest(default)))
+    return len(runtime_lock['files'])
+
+
+def verify_source_audit():
+    """Explicit maintainer audit; originals are not deployment dependencies."""
+    prefix = 'metadata/dof/source-audit/'
+    source = json.loads(destination(prefix + 'server-inputs/replacement.lock.json').read_text())
+    archive = json.loads(destination(prefix + 'resources.lock.json').read_text())
+    for base, rows in ((prefix + 'server-inputs/files/', source['files']), (prefix, archive['files'])):
         for row in rows:
-            path = destination(prefix + row['path'])
-            verify(path, row)
-            if 'elf_class' in row:
-                with path.open('rb') as stream:
-                    header = stream.read(5)
-                if header != b'\x7fELF' + bytes([row['elf_class']]):
-                    raise ValueError('Native architecture mismatch: ' + row['path'])
-            count += 1
-    return count
+            verify(destination(base + row['path']), row)
+    return len(source['files']) + len(archive['files'])
 
 
 def main():
@@ -106,10 +115,13 @@ def main():
     parser.add_argument('--resources', help=argparse.SUPPRESS)
     parser.add_argument('--generic', action='store_true', help=argparse.SUPPRESS)
     parser.add_argument('--download', action='store_true', help=argparse.SUPPRESS)
-    parser.parse_args()
+    parser.add_argument('--audit', action='store_true', help='Also verify archived originals and provenance (maintainers only)')
+    args = parser.parse_args()
     count = verify_build_inputs()
     native_count = verify_native_inputs()
-    print('Verified %d shared inputs and %d native source/payload files; no resource download required.' % (count, native_count))
+    print('Verified %d shared inputs and %d native payload files; no resource download required.' % (count, native_count))
+    if args.audit:
+        print('Verified %d archived source/evidence files.' % verify_source_audit())
 
 
 if __name__ == '__main__':

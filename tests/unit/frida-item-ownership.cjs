@@ -2,7 +2,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const source = fs.readFileSync('services/game/plugin-assets/frida/frida.js', 'utf8');
+const source = fs.readFileSync('services/game/resources/plugins/frida/frida.js', 'utf8');
 const begin = source.indexOf('function dp2_owns_item(');
 const end = source.indexOf('//增加魔法封印装备的魔法封印等级', begin);
 for (const mode of ['dp2-frida', 'frida', 'dp2', 'none']) {

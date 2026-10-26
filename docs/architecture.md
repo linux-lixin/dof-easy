@@ -8,7 +8,7 @@ dof-easy/
 │   ├── game/
 │   │   ├── docker/ubuntu/       镜像、兼容库源码与许可证
 │   │   ├── assets/              公共模板、初始化 SQL 和共享游戏资源
-│   │   ├── plugin-assets/       普通 DP2 / Frida 输入及清单
+│   │   ├── resources/           正式资源：plugins/dp2、plugins/frida、native
 │   │   └── runtime/ubuntu/
 │   │       └── gateway/         原生服务、适配器、默认配置与正式资源锁
 │   └── admin/

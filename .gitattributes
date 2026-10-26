@@ -413,15 +413,18 @@ Dockerfile text eol=lf
 "/services/game/assets/home/template/neople/stun/df_stun_r" binary
 
 # Keep imported plugin data and legacy encodings byte-exact on Windows.
-/services/game/plugin-assets/** -text -whitespace
-/services/game/plugin-assets/**/*.so binary
-/services/game/plugin-assets/dp2/lua/df/game/symbols.lua binary
+/services/game/resources/plugins/** -text -whitespace
+/services/game/resources/plugins/**/*.so binary
+/services/game/resources/plugins/dp2/lua/df/game/symbols.lua binary
 
 # Fixed native inputs and derived payloads must survive checkout byte-for-byte.
 /metadata/dof/source-audit/server-inputs/files/** binary
-/services/game/native-assets/** -text -whitespace
-/services/game/native-assets/bin/** binary
-/services/game/native-assets/lib/** binary
+/services/game/resources/native/** -text -whitespace
+/services/game/resources/native/bin/** binary
+/services/game/resources/native/lib/** binary
 # These source files are read byte-for-byte by the deterministic runtime builder.
 /services/game/runtime/ubuntu/gateway/equipment.js -text
 /services/game/runtime/ubuntu/gateway/defaults/** -text -whitespace
+
+/metadata/dof/source-audit/plugins/** -text -whitespace
+/metadata/dof/source-audit/server-derived/** -text -whitespace

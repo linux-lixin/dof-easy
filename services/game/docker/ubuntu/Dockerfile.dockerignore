@@ -20,3 +20,11 @@ assets/root/qk_plugin.so
 assets/root/qingkong
 assets/root/dungeon.lst
 assets/home/template/neople/game/libantisvrinline.so
+
+# Native payloads are verified and mounted per instance.
+resources/native
+
+# Never send provenance or unprocessed imports to the image builder.
+**/source-audit
+**/archive
+**/seed

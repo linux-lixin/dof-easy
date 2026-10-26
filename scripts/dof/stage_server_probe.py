@@ -4,6 +4,10 @@ This produces an offline integration fixture, never an installable release.
 Run it only through local_environment.py's private network/PID namespace.
 """
 import argparse
+try:
+    from .runtime_evidence import derivation_path
+except ImportError:
+    from runtime_evidence import derivation_path
 import hashlib
 import json
 import os
@@ -86,7 +90,7 @@ def stage(source, output, runtime=None, reuse_assets=False):
             from gateway.assets import verify
             runtime = verify(runtime)
             shutil.copytree(runtime, working / 'server-runtime')
-            derivation = json.loads((runtime / 'source-audit/derivation.json').read_text())
+            derivation = json.loads(derivation_path(runtime).read_text())
             abi = derivation['derivations']['lib/libdof-plugin.so'].get('dynamicNames', [])
             probe = working / 'server_runtime_probe.js'
             probe.chmod(0o600)

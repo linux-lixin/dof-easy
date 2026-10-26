@@ -1,5 +1,9 @@
 """Package the fixed server runtime and explicit validation status, locally only."""
 import argparse
+try:
+    from .runtime_evidence import derivation_path
+except ImportError:
+    from runtime_evidence import derivation_path
 import gzip
 import hashlib
 import io
@@ -23,7 +27,7 @@ def package(runtime,validation,output):
     files={row['path']:(runtime/row['path']).read_bytes() for row in assets.manifest()}
     files['manifest.json']=(runtime/'manifest.json').read_bytes()
     for name,default in assets.templates():files['config/'+name]=default.read_bytes()
-    files['source-audit/derivation.json']=(runtime/'source-audit/derivation.json').read_bytes()
+    files['source-audit/derivation.json']=derivation_path(runtime).read_bytes()
     files['validation.json']=(json.dumps(report,ensure_ascii=False,indent=2)+'\n').encode()
     files['source-audit/NOTICES.txt']=(
         '本包由用户提供的固定哈希晴空免授权材料派生，保留第三方来源与作者归属。\n'

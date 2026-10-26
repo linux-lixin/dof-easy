@@ -151,7 +151,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--runtime', type=Path, default=ROOT / '.dof-easy/server-runtime/current')
+    parser.add_argument('--runtime', type=Path, default=ROOT / 'services/game/resources/native')
     parser.add_argument('--dry-run', action='store_true')
     args = parser.parse_args()
     report = migrate(args.source, args.output, args.runtime, args.dry_run)

@@ -1,0 +1,64 @@
+{
+  "serverAccessed": false,
+  "nativeProgramsExecuted": false,
+  "fullGameDeployment": "not-run",
+  "baseImage": "sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662",
+  "profiles": [
+    {
+      "dockerfile": "Dockerfile",
+      "ignore": "services/game/docker/ubuntu/Dockerfile.dockerignore",
+      "pluginFiles": 27,
+      "image": "sha256:3f0edc43a98252acbf245ac87d58fdbe19098b7932d3fc9b86af697f1c2d633e",
+      "passed": true
+    },
+    {
+      "dockerfile": "Dockerfile.integration",
+      "ignore": "services/game/.dockerignore",
+      "pluginFiles": 27,
+      "image": "sha256:d47d97df2e7331b4e2b75ce53d7c68104c3e8dfc1e3588d92e3103add8986959",
+      "passed": true
+    }
+  ],
+  "date": "2026-10-26",
+  "baseCommit": "3dd959fe393f283f178acd49a8dc6fad9f0be033",
+  "releaseReady": false,
+  "unitTests": {
+    "general": {
+      "total": 284,
+      "passed": 266,
+      "skipped": 18
+    },
+    "native": {
+      "total": 88,
+      "passed": 78,
+      "skipped": 10
+    }
+  },
+  "checkout": {
+    "coreAutocrlf": true,
+    "tests": 21,
+    "passed": true
+  },
+  "documentationLinks": "passed",
+  "shellSyntax": "passed",
+  "clientLogin": "not-run",
+  "vm": "local disposable Debian 12; shutdown after validation",
+  "inputs": {
+    "metadata/build-inputs.lock.json": "96ef6875202b51f35754ee8dd340aa8421b701340435797d6dd5560bf1acb07c",
+    "metadata/dof/source-audit/resources.lock.json": "4e770518dabf65c093ae735587668d8380f8734722132214e3b4637863a65a0c",
+    "services/game/runtime/ubuntu/gateway/runtime.lock.json": "b117ce61b0a0729f4714dd18145a38ae922f87b4de89350f3d057e6b94df7a3a",
+    "services/game/resources/native/manifest.json": "b117ce61b0a0729f4714dd18145a38ae922f87b4de89350f3d057e6b94df7a3a",
+    "services/game/.dockerignore": "bbc82b3df9f1a5c778f1c78b34d49013bf92f53b3b424ad2687698654abf0b6e",
+    "services/game/docker/ubuntu/Dockerfile": "f330c88c63d5735571c6aa74c0696fc8124ee4be4731cabfc45522b1b97639fe",
+    "services/game/docker/ubuntu/Dockerfile.dockerignore": "f3342694b220c31f85af17bdeb62368d424e686091a5d0a151cfc5cd21b2522b",
+    "services/game/docker/ubuntu/Dockerfile.integration": "39cacdc4999ef9477eeeac2901a0cb1d4bb6510208a8038d6afbe870e3bb857e",
+    "scripts/container/resources.py": "403d914ec9e1303c1e31db3a7976d0bd7aa3068b0ef290edea6ae1ac1c76e761",
+    "scripts/container/manage.py": "8df60eb2d6bb61342c42473ba0a7c960c26e72eda69d71fd42e39d51e5e7e1ad",
+    "scripts/container/menu.py": "8138bd72ecbc8e9532b8dba215d3198228960092a74a0770d75e63f35e1ba371",
+    "scripts/dof/runtime_evidence.py": "bcafd19d60c88c3670d5ca1080bd50a6698e6a66a92a62cc3c2521cb5005176d",
+    "scripts/dof/package_server.py": "70c3a2a52bd8585b8501415761f9d403fca58d8f17cb5329c6b0215856287b3e",
+    "scripts/dof/stage_server_probe.py": "2ddf9b887898f26970c0bf9c6a601f7abef95269ab4c6e71c7c4bfef2159ce11",
+    "tests/integration/resource_docker_probe.py": "a8c381d92e7ec963b38484295235cd1b0c79e30a369c35dbb05310aa50da601c",
+    "tests/unit/test_bundled_native_assets.py": "f9f6ba7e305faa32229ce341c520532699beb1caf73445644369f0cfb23211fa"
+  }
+}

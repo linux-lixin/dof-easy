@@ -14,4 +14,9 @@ assets/home/template/init/Script.pvf
 assets/home/template/init/df_game_r
 
 # Installed by the host manager into each instance, not baked into the image.
-native-assets
+resources/native
+
+# Never send provenance or unprocessed imports to the image builder.
+**/source-audit
+**/archive
+**/seed

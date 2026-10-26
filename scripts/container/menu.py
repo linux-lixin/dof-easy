@@ -103,19 +103,10 @@ def check_external(binary, defaults, host, port):
 
 def assets_directory(value, instance):
     source = Path(value).expanduser().resolve(strict=True)
-    if (source / 'manifest.json').is_file():
-        manager.raid_assets.verify(source)
-        return source
-    destination = manager.STATE / 'quick-runtime' / instance
-    if destination.exists():
-        # Existing exact-hash output can be reused; never replace it.
-        manager.raid_assets.verify(destination)
-        return destination
-    from scripts.dof.build_server_runtime import build
-    destination.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
-    build(source, destination)
-    manager.raid_assets.verify(destination)
-    return destination
+    if not (source / 'manifest.json').is_file():
+        raise ValueError('请选择正式原生资源目录；原始材料只允许通过 scripts/dof/import_assets.py 显式导入')
+    manager.raid_assets.verify(source)
+    return source
 
 
 def choose(label, options, default):
@@ -245,7 +236,7 @@ def install(instance):
     pvf = Path(ask('配套 Script.pvf 完整路径', f'/opt/dof-inputs/{level}/Script.pvf')).expanduser().resolve(strict=True)
     if not pvf.is_file() or pvf.suffix.lower() != '.pvf' or pvf.stat().st_size < 1024:
         raise ValueError('请准备完整的配套 PVF 文件。')
-    supplied = Path(ask('原生资源目录（回车使用仓库内置；也可指定原始材料）', str(manager.default_dof_assets({'LAUNCHER_MODE':'native'})))).expanduser().resolve(strict=True)
+    supplied = Path(ask('正式原生资源目录（回车使用仓库内置）', str(manager.default_dof_assets({'LAUNCHER_MODE':'native'})))).expanduser().resolve(strict=True)
     plugins, raid = plugin_selection()
     channels = ','.join(map(str, manager.runtime_config.channels(ask('频道，逗号分隔', '15,52'))))
     mode = {'1':'internal','2':'external'}[choose('数据库：1 内置容器 / 2 同机 MySQL 5.6', ('1','2'), '1')]
@@ -294,7 +285,7 @@ def install(instance):
     def deploy(extra, bind=None):
         if disable_firewall and bind in ('0.0.0.0','*','::'):
             raise ValueError('外置 MySQL 监听所有接口；请改私网监听或重试并选择保留防火墙。')
-        with stage('资源派生与哈希校验'):
+        with stage('正式资源哈希校验'):
             assets = assets_directory(supplied,instance)
         with stage('主机基础依赖'):
             host.prepare_dependencies(base_only=True)
