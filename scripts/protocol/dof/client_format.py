@@ -12,7 +12,7 @@ from .config import Document, FormatError, Record, decode, encode
 VERSION = 2
 FILENAME = b'dof-client.dll'
 VERSION_FIELD = b'token_dof_version'
-CLIENT_FIELDS = (b'dffefrrr+(((((', b'token_dof+', b'token_dof-', b'token_dof+(((((', VERSION_FIELD)
+CLIENT_FIELDS = (b'dffefrrr+(((((', b'token_dof+', b'token_dof-', b'token_dof+(((((')
 LEGACY_FIELDS = dict(zip((b'dffefrrr+(((((', b'token_qingkong+', b'token_qingkong-',
                          b'token_qingkong+((((('), CLIENT_FIELDS[:4]))
 TOOL_FIELDS = (b'dffefrrr+(((((KLHGJLKEJGL', b'dffefrrr+(((((KLHGJLKEJGL234',
@@ -86,8 +86,8 @@ def payload(entries, key_name, payload_name, filename, public_der):
 def validate_container(raw):
     """Structural check usable on deployment hosts without crypto packages."""
     document = decode(raw)
-    entries = records(document, CLIENT_FIELDS)
-    if set(entries) != set(CLIENT_FIELDS) or entries[VERSION_FIELD].value != b'2':
+    entries = records(document, CLIENT_FIELDS + (VERSION_FIELD,))
+    if not set(CLIENT_FIELDS).issubset(entries):
         raise invalid()
     if entries[b'token_dof-'].value != FILENAME:
         raise invalid()
@@ -130,7 +130,6 @@ def import_legacy(raw, public_der, address):
         if password and (password in value or password in plain):
             raise invalid()
         result.append(Record(LEGACY_FIELDS[record.name], value, record.kind))
-    result.append(Record(VERSION_FIELD, b'2', b'TXT'))
     output = encode(Document(tuple(result), True, False))
     validate(output, public_der)
     return output

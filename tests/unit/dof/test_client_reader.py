@@ -71,8 +71,7 @@ class ConsumerAbiTest(unittest.TestCase):
             self.uc.mem_write(self.base + row['targetRva'], LITERALS[index][2] + b'\0')
         self.marker = self.data_rva + 0xa00
         self.uc.mem_write(self.base + self.marker, b'token_dof_version\0')
-        code, self.labels = make_code(self.code_rva, self.data_rva, self.rows,
-                                      self.marker, self.marker + 0x40, self.marker + 0xc0)
+        code, self.labels = make_code(self.code_rva, self.data_rva, self.rows)
         self.uc.mem_write(self.base + self.code_rva, code)
         self.sentinel = self.base + 0x72000
         self.uc.reg_write(UC_X86_REG_ESP, self.stack)
@@ -126,47 +125,23 @@ class ConsumerAbiTest(unittest.TestCase):
         self.assertEqual(self.read(slot - 4), new)
         self.assertEqual(self.uc.reg_read(UC_X86_REG_ESI), slot)
 
-    def test_version_guard_uses_native_getter_and_restores_registers(self):
-        obj, keyref, binary = self.base + 0x100000, self.base + 0x100100, self.base + 0x100200
-        self.write(keyref, self.base + self.rows[6]['sourceRva'])
-        self.write(self.stack + 4, obj)
-        self.write(self.stack + 8, keyref)
-        self.uc.mem_write(binary, struct.pack('<II', 1, 1) + b'2')
-        saved = {UC_X86_REG_EBX: 111, UC_X86_REG_ESI: 222, UC_X86_REG_EDI: 333, UC_X86_REG_EBP: 444}
-        for reg, value in saved.items():
-            self.uc.reg_write(reg, value)
-        calls = []
-
-        def hook(uc, address, size, data):
-            if address == self.base + self.labels['getter-trampoline']:
-                sp = uc.reg_read(UC_X86_REG_ESP)
-                self.assertEqual(self.read(sp + 4), obj)
-                query = self.read(self.read(sp + 8))
-                if query == self.base + self.marker:
-                    calls.append('version')
-                    for reg in saved:
-                        if reg != UC_X86_REG_EBP:
-                            uc.reg_write(reg, 0xdeadbeef)
-                    uc.reg_write(UC_X86_REG_EAX, binary)
-                    uc.reg_write(UC_X86_REG_EIP, self.read(sp))
-                    uc.reg_write(UC_X86_REG_ESP, sp + 12)
-                else:
-                    calls.append('field')
-                    for reg, value in saved.items():
-                        self.assertEqual(uc.reg_read(reg), value)
-                    self.assertEqual(sp, self.stack)
-                    uc.emu_stop()
-            elif address == self.base + 0x35660:
-                sp = uc.reg_read(UC_X86_REG_ESP)
-                self.assertEqual(self.read(sp + 4), binary)
-                calls.append('free')
-                uc.reg_write(UC_X86_REG_EIP, self.read(sp))
-                uc.reg_write(UC_X86_REG_ESP, sp + 4)
-
-        self.uc.hook_add(UC_HOOK_CODE, hook)
-        self.uc.emu_start(self.base + self.labels['get-field'], self.sentinel, count=20000)
-        self.assertEqual(calls, ['version', 'free', 'field'])
+    def test_getter_has_no_version_query_and_preserves_arguments(self):
+        from scripts.dof.client_reader import LAUNCHER_ABI, DLL_ABI
+        for abi in (LAUNCHER_ABI, DLL_ABI):
+            self.setUp()
+            code, labels = make_code(self.code_rva, self.data_rva, self.rows, abi)
+            self.uc.mem_write(self.base + self.code_rva, code)
+            self.uc.reg_write(UC_X86_REG_ESP, self.stack)
+            self.uc.reg_write(UC_X86_REG_EBP, 444)
+            self.uc.reg_write(UC_X86_REG_EBX, 111)
+            self.write(self.stack + 4, 123)
+            self.write(self.stack + 8, 456)
+            self.uc.emu_start(self.base + labels['get-field'], self.base + abi['getter'] + 9, count=100)
+            self.assertEqual(self.uc.reg_read(UC_X86_REG_EBX), 111)
+            self.assertEqual(self.read(self.stack + 4), 123)
+            self.assertEqual(self.read(self.stack + 8), 456)
+            self.assertEqual(self.uc.reg_read(UC_X86_REG_EBP), self.stack - 4)
+            self.assertEqual(self.uc.reg_read(UC_X86_REG_ESP), self.stack - 4 - 12)
 
 
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == '__main__': unittest.main()

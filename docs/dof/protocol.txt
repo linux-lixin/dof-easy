@@ -44,9 +44,9 @@ POST client/releases/{id}/restore：新的 requestId、当前 revision；只恢�
 
 配套包现状与目标
 格式 2 的五文件生成器输出 dof-launcher.exe、ijl15.dll、dof-client.dll、manifest.json、使用与恢复.txt；绑定 Script 任务时增加 Script.pvf，共六个文件。
-配置使用 token_dof 系列及 TXT 类型的 token_dof_version=2，保留原容器格式。dof-client.dll 是配置容器，不是可执行 DLL。
+配置使用 token_dof 系列，保留原容器格式；不生成或强制要求 token_dof_version=2。历史版本字段可作为可选 TXT 元数据读取，发布时移除。dof-client.dll 是配置容器，不是可执行 DLL。
 来源绑定包含 clientFormatVersion、readerRecipe、当前数据库 UUID、公钥及所有输入哈希；数据库适配器仍为 dof-native-1。旧格式任务必须重新生成，不能作为新格式下载或参数应用来源。
-登录器的新文件名与字段读取、错误／缺失版本拒绝已有真实进程检查；游戏 DLL 完整消费、资源引用和 dofRobotc 控制交互仍须单独通过。详见 client-reader-validation.md。
+配方 2.1 的新文件名与字段读取有历史真实进程检查；2.2 移除版本拒绝后需重新验证；游戏 DLL 完整消费、资源引用和 dofRobotc 控制交互仍须单独通过。详见 client-reader-validation.md。
 manifest 记录实例、适配器、来源修订、任务编号、原始 PVF 哈希及其余文件大小和 SHA-256。
 manifest 自身由整个 ZIP 的 SHA-256 保护。
 内容参数不另行下载，数据库凭据、服务端身份私钥、后台工具不进入配套包。

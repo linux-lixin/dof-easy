@@ -68,7 +68,6 @@ public final class NativeClientPayload {
     }
     public static Payload decode(NativeConfigContainer.Document doc, PublicKey serverIdentity) {
         try {
-            NativeClientFormat.require(doc);
             RSAPrivateCrtKey key = checkedKey(doc, serverIdentity);
             byte[] encoded = unique(doc, PAYLOAD_NAME).value();
             if (encoded.length != 344) throw invalid();

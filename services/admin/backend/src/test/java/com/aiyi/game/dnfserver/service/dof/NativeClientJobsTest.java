@@ -25,7 +25,7 @@ public class NativeClientJobsTest {
             files.put("ijl15.dll", "fixture-client-library".getBytes(StandardCharsets.US_ASCII));
             NativeClientJobs.Binding binding = new NativeClientJobs.Binding(); binding.instanceId=INSTANCE; binding.environment="isolated";
             binding.adapterVersion=DofAdminService.VERSION;binding.clientFormatVersion=NativeClientFormat.VERSION; binding.sha256=new LinkedHashMap<>();
-            binding.databaseUuid="00000000-0000-4000-8000-000000000001";binding.readerRecipe="dof-launcher-reader-2.1";
+            binding.databaseUuid="00000000-0000-4000-8000-000000000001";binding.readerRecipe="dof-launcher-reader-2.2";
             for(Map.Entry<String,byte[]> file:files.entrySet()) { Files.write(inputs.resolve(file.getKey()),file.getValue()); binding.sha256.put(file.getKey(),NativeUiState.sha256(file.getValue())); }
             JSON.writeValue(inputs.resolve("binding.json").toFile(),binding);
             // Must never be traversed or included, despite being next to allowed inputs.
@@ -71,7 +71,7 @@ public class NativeClientJobsTest {
                         String plain=new String(data.toByteArray(),StandardCharsets.ISO_8859_1);
                         assertFalse(plain.contains("FORBIDDEN-SERVER-PRIVATE-KEY")); assertFalse(plain.contains("TEST-DB-SECRET-NEVER-PUBLISH"));
                         if(entry.getName().equals("dof-client.dll")) {
-                            NativeConfigContainer.Document config=NativeConfigContainer.decode(data.toByteArray(),new byte[0]); assertEquals(5,config.entries.size());
+                            NativeConfigContainer.Document config=NativeConfigContainer.decode(data.toByteArray(),new byte[0]); assertEquals(4,config.entries.size());
                             assertEquals(request.endpoint,NativeClientPayload.decode(config,f.identity.getPublic()).endpoint());
                         }
                     }

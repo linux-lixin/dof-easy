@@ -19,7 +19,7 @@ public class NativeClientBundleTest {
             files.put("template.dll",NativeConfigContainer.encode(NativeClientPublicationTest.fixture(NativeClientPayloadTest.pair()),new byte[0]));
             files.put("game-public.der",identity.getPublic().getEncoded());files.put("dof-launcher.exe",new byte[]{1,2,3});files.put("ijl15.dll",Files.readAllBytes(Paths.get(dll)));
             NativeClientJobs.Binding b=new NativeClientJobs.Binding();b.instanceId="isolated-bundle-test";b.environment="isolated";b.adapterVersion=DofAdminService.VERSION;b.clientFormatVersion=NativeClientFormat.VERSION;b.sha256=new LinkedHashMap<>();
-            b.databaseUuid="00000000-0000-4000-8000-000000000001";b.readerRecipe="dof-launcher-reader-2.1";
+            b.databaseUuid="00000000-0000-4000-8000-000000000001";b.readerRecipe="dof-launcher-reader-2.2";
             for(Map.Entry<String,byte[]> f:files.entrySet()){Files.write(inputs.resolve(f.getKey()),f.getValue());b.sha256.put(f.getKey(),NativeUiState.sha256(f.getValue()));}
             files.clear();new ObjectMapper().writeValue(inputs.resolve("binding.json").toFile(),b);
             try(NativeScriptJobs scripts=new NativeScriptJobs(scriptRoot,b.instanceId,p->Long.MAX_VALUE);

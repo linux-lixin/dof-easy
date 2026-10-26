@@ -32,7 +32,7 @@ class ClientFormatTests(unittest.TestCase):
         upgraded = client.import_legacy(original, self.public, '192.0.2.10')
         result = client.validate(upgraded, self.public)
         self.assertEqual(result, dict(clientFormatVersion=2, endpoint='192.0.2.10',
-                                      records=5, nativeClientAcceptance=False))
+                                      records=4, nativeClientAcceptance=False))
         entries = {r.name:r for r in decode(upgraded).records}
         self.assertEqual(set(entries), set(client.CLIENT_FIELDS))
         self.assertEqual(entries[b'token_dof+'].value, decode(original).records[1].value)
@@ -41,11 +41,13 @@ class ClientFormatTests(unittest.TestCase):
         self.assertEqual(fields, [b'192.0.2.10', b'dof-client.dll', *[f'opaque-{i}'.encode() for i in range(1,7)], b''])
         with self.assertRaises(FormatError): client.validate(original, self.public)
 
-    def test_missing_wrong_and_duplicate_versions_are_rejected(self):
+    def test_version_is_optional_but_required_fields_and_identity_are_checked(self):
         raw = client.import_legacy(self.fixture(), self.public, '127.0.0.1')
         doc = decode(raw)
-        for records in (doc.records[:-1], doc.records[:-1]+(Record(client.VERSION_FIELD,b'1',b'TXT'),),
-                        doc.records+(doc.records[-1],)):
+        for value in (b'1', b'2', b'anything'):
+            marked = doc.records + (Record(client.VERSION_FIELD, value, b'TXT'),)
+            client.validate(encode(Document(marked, True, False)), self.public)
+        for records in (doc.records[:-1], doc.records+(doc.records[-1],)):
             with self.assertRaises(FormatError):
                 client.validate(encode(Document(records, True, False)), self.public)
         same = self.key.public_key().public_bytes(serialization.Encoding.DER,

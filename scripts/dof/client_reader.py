@@ -12,7 +12,7 @@ import struct
 
 SOURCE_SHA256 = '5b0c5195c58e1583cb5456e2b7139acf02f6ebb34ff86e4445468c91184be733'
 DLL_SHA256 = 'd2b207e32f1d366c29f43d080366b7880d87659aaeb93a9bd8e36f44bf54b678'
-RECIPE = 'dof-launcher-reader-2.1'
+RECIPE = 'dof-launcher-reader-2.2'
 LAUNCHER_ABI = dict(file_exists=0x53330, compare=0x11ca, length=0x1267,
                     concat_return=0x12f6, getter=0x2da1a, empty=0xf22c3,
                     free=0x35660, message_box=0x165e4f4, exit_process=0x165e1bc)
@@ -119,7 +119,7 @@ DLL_LITERALS = (
 )
 
 
-def make_code(code_rva, data_rva, rows, marker_rva, error_rva, title_rva, abi=LAUNCHER_ABI):
+def make_code(code_rva, data_rva, rows, abi=LAUNCHER_ABI):
     c = Code(code_rva)
     # map(EAX) -> EAX; return literal kind in ECX (0=file, 1=client field,
     # -1=unmapped). Outer wrappers save every register and the flags.
@@ -170,51 +170,11 @@ def make_code(code_rva, data_rva, rows, marker_rva, error_rva, title_rva, abi=LA
     c.branch('0f85', abi['length'] + 7)
     c.emit('33c0c3')
 
-    # The native E-language getter takes references to object and key, pops
-    # eight argument bytes, and clobbers EBX/ESI/EDI. Keep state on our stack.
+    # Preserve the native getter without an additional wire-version query.
     c.label('get-field')
-    c.emit('9c608b44242c8b00')
-    c.branch('e8', 'map')
-    c.emit('83f901')
-    c.branch('0f85', 'get-field-original')
-    c.base_in_edx()
-    c.emit('8d82'); c.u32(marker_rva)
-    c.emit('5089e151ff742430')
-    c.branch('e8', 'getter-trampoline')
-    c.emit('83c40485c0')
-    c.branch('0f84', 'invalid-format')
-    # The native missing-field result is a global empty array, never free it.
-    c.base_in_edx()
-    c.emit('81c2'); c.u32(abi['empty'])
-    c.emit('39d0')
-    c.branch('0f84', 'invalid-format')
-    c.emit('833801')
-    c.branch('0f85', 'invalid-format-free')
-    c.emit('83780401')
-    c.branch('0f85', 'invalid-format-free')
-    c.emit('80780832')
-    c.branch('0f85', 'invalid-format-free')
-    c.emit('50')
-    c.branch('e8', abi['free'])
-    c.emit('83c404')
-    c.label('get-field-original')
-    c.emit('619d')
     c.label('getter-trampoline')
     c.emit('558bec81ec0c000000')
     c.branch('e9', abi['getter'] + 9)
-
-    c.label('invalid-format-free')
-    c.emit('50')
-    c.branch('e8', abi['free'])
-    c.emit('83c404')
-    c.label('invalid-format')
-    c.base_in_edx()
-    c.emit('6a108d82'); c.u32(title_rva)
-    c.emit('508d82'); c.u32(error_rva)
-    c.emit('506a00ff92'); c.u32(abi['message_box'])
-    c.base_in_edx()
-    c.emit('6a56ff92'); c.u32(abi['exit_process'])  # fail closed
-    c.emit('0f0b')  # unreachable if ExitProcess fulfills its contract
     return c.finish(), c.labels
 
 
@@ -249,13 +209,7 @@ def derive(source):
         pool.extend(new + b'\0')
         struct.pack_into('<III', pool, index * 12, old, target, kind)
         rows.append(dict(sourceRva=old, targetRva=target, value=new.decode('ascii'), kind=kind))
-    marker_rva = data_rva + len(pool)
-    pool.extend(b'token_dof_version\0')
-    error_rva = data_rva + len(pool)
-    pool.extend(b'Unsupported client configuration. Generate a version 2 package in the web admin.\0')
-    title_rva = data_rva + len(pool)
-    pool.extend(b'dof-easy\0')
-    code, labels = make_code(code_rva, data_rva, rows, marker_rva, error_rva, title_rva, abi)
+    code, labels = make_code(code_rva, data_rva, rows, abi)
     if len(code) > pe.section_alignment or len(pool) > pe.section_alignment:
         raise ValueError('Native adaptation exceeds its reserved section layout')
     result = bytearray(source)
