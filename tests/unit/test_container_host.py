@@ -89,6 +89,20 @@ class HostPreparation(unittest.TestCase):
         with patch.object(host,'public_database_listener',return_value=True),self.assertRaises(ValueError):host.firewall()
         self.assertFalse((host.STATE/'firewall.json').exists())
 
+    def test_cloud_access_control_allows_wildcard_database_firewall_close(self):
+        state={'ufw':{'active':True}}
+        def command(args,**kwargs):
+            self.commands.append(args)
+            if args==['ufw','disable']:state['ufw']['active']=False
+            return ''
+        with patch.object(host,'public_database_listener',return_value=True), \
+             patch.object(host,'firewall_status',side_effect=lambda:json.loads(json.dumps(state))), \
+             patch.object(host,'docker_rules',return_value={'iptables-save':[':DOCKER']}), \
+             patch.object(host,'run',side_effect=command),patch.object(host.shutil,'copytree'):
+            host.firewall(extra_ports=[3306],external_access_control=True)
+        self.assertIn(['ufw','disable'],self.commands)
+        self.assertFalse(state['ufw']['active'])
+
     def test_firewall_close_and_restore_records_before_state(self):
         state={'ufw':{'active':True}}
         def command(args,**kwargs):

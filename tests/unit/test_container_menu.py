@@ -25,6 +25,9 @@ class ContainerMenu(unittest.TestCase):
         mock.start(); self.addCleanup(mock.stop)
         mock = patch.object(menu.shutil,'which',return_value=None);mock.start();self.addCleanup(mock.stop)
         mock = patch.object(menu,'detect_public_ipv4',return_value='8.8.4.4');mock.start();self.addCleanup(mock.stop)
+        for target, name, value in ((menu,'mysql_binary','/mysql'),(menu,'mysql_sockets',[]),
+                                    (menu.host,'public_database_listener',False)):
+            mock = patch.object(target,name,return_value=value);mock.start();self.addCleanup(mock.stop)
 
 
     def inputs(self, level='', database='1'):
@@ -130,10 +133,14 @@ class ContainerMenu(unittest.TestCase):
                 self.assertEqual(args[args.index('--database')+1], 'external')
                 path=Path(args[args.index('--mysql-config')+1]); paths.append(path)
                 self.assertEqual(path.stat().st_mode & 0o777, 0o600)
-                self.assertIn('password='+menu.quoted_option(secret),path.read_text())
+                content = path.read_text()
+                self.assertIn('password='+menu.quoted_option(secret),content)
+                self.assertIn('user="bootstrap_admin"',content)
+                self.assertIn('protocol=TCP',content)
                 if fail:raise ValueError('simulated deploy failure')
-            with patch('builtins.input',side_effect=self.inputs(database='2')+['172.17.0.1','','','','y']), \
+            with patch('builtins.input',side_effect=self.inputs(database='2')+['172.17.0.1','','bootstrap_admin','y']) as prompts, \
                  patch.object(menu.manager,'docker_check'), patch.object(menu,'inspect_network',return_value=(['172.17.0.1'],[])), \
+                 patch.object(menu.manager.database,'host_query',return_value=Mock(return_value='0.0.0.0\t3306')), \
                  patch.object(menu.getpass,'getpass',return_value=secret), patch.object(menu,'check_external',return_value='172.17.0.1'), \
                  patch.object(menu,'assets_directory',return_value=Path('/verified')),patch.object(menu,'web_instructions'), \
                  patch.object(menu.manager,'main',side_effect=run):
@@ -142,6 +149,27 @@ class ContainerMenu(unittest.TestCase):
                 else:menu.install('test')
             self.assertEqual(len(paths),1)
             self.assertFalse(paths[0].exists());self.assertFalse(paths[0].parent.exists())
+            self.assertFalse(any('socket' in str(call) or '客户端完整路径' in str(call) for call in prompts.call_args_list))
+
+    def test_wildcard_mysql_respects_firewall_choice_and_deploys(self):
+        for firewall_choice in ('1','2'):
+            menu.host.firewall.reset_mock()
+            answers=self.inputs(database='2'); answers[-1]=firewall_choice
+            with self.subTest(firewall=firewall_choice), \
+                 patch('builtins.input',side_effect=answers+['172.17.0.1','','','y']), \
+                 patch.object(menu.getpass,'getpass',return_value='private'), \
+                 patch.object(menu.manager.database,'host_query',return_value=Mock(return_value='0.0.0.0\t3306')), \
+                 patch.object(menu,'check_external',return_value='0.0.0.0'), \
+                 patch.object(menu,'inspect_network',return_value=(['172.17.0.1'],[])), \
+                 patch.object(menu.manager,'docker_check'), \
+                 patch.object(menu,'assets_directory',return_value=Path('/verified')), \
+                 patch.object(menu,'web_instructions'),patch.object(menu.manager,'main') as deploy:
+                menu.install('test')
+            deploy.assert_called_once()
+            if firewall_choice == '1':
+                menu.host.firewall.assert_called_once_with(extra_ports=[3306],external_access_control=True)
+            else:
+                menu.host.firewall.assert_not_called()
 
     def test_option_file_rejects_newline_injection(self):
         with self.assertRaises(ValueError):menu.quoted_option('password\nuser=someone')
@@ -204,6 +232,89 @@ class ContainerMenu(unittest.TestCase):
             path.write_text('operator config')
             menu.web_instructions('test')
             self.assertEqual(path.read_text(),'operator config')
+
+
+class AutomaticMySQL(unittest.TestCase):
+    def test_binary_discovery_checks_baota_custom_and_path(self):
+        for chosen in ('/www/server/mysql/bin/mysql','/usr/local/mysql/bin/mysql','/usr/bin/mysql'):
+            with patch.object(menu.shutil,'which',return_value='/usr/bin/mysql'), \
+                 patch.object(Path,'is_file',lambda path: str(path)==chosen), \
+                 patch.object(menu.os,'access',return_value=True):
+                self.assertEqual(menu.mysql_binary(),chosen)
+        with patch.object(Path,'is_file',return_value=False), self.assertRaisesRegex(ValueError,'未检测到'):
+            menu.mysql_binary()
+
+    def test_socket_discovery_reads_config_without_exposing_password(self):
+        result=Mock(returncode=0,stdout='mysql --socket="/private db/mysql.sock" --password=SECRET --socket=/tmp/mysql.sock')
+        with patch.object(menu.subprocess,'run',return_value=result), \
+             patch.object(Path,'is_socket',lambda path: str(path) in ('/private db/mysql.sock','/tmp/mysql.sock')), \
+             contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(menu.mysql_sockets('/mysql'),['/private db/mysql.sock','/tmp/mysql.sock'])
+        self.assertNotIn('SECRET',output.getvalue())
+
+    def test_socket_discovery_failure_keeps_common_candidates(self):
+        with patch.object(menu.subprocess,'run',side_effect=OSError('unavailable')), \
+             patch.object(Path,'is_socket',lambda path: str(path)=='/tmp/mysql.sock'):
+            self.assertEqual(menu.mysql_sockets('/mysql'),['/tmp/mysql.sock'])
+
+    def test_auto_connection_filters_other_servers_and_uses_custom_account(self):
+        paths=[]
+        def make_query(binary,defaults,timeout):
+            paths.append(defaults)
+            content=defaults.read_text()
+            self.assertEqual(defaults.stat().st_mode & 0o777,0o600)
+            self.assertIn('user="installer"',content)
+            self.assertEqual(timeout,10)
+            if '/wrong-port.sock' in content:return Mock(return_value='0.0.0.0\t3307')
+            if '/wrong-bind.sock' in content:return Mock(return_value='127.0.0.1\t3306')
+            self.assertIn('socket="/right.sock"',content)
+            return Mock(return_value='0.0.0.0\t3306')
+        with patch.object(menu,'mysql_sockets',return_value=['/wrong-port.sock','/wrong-bind.sock','/right.sock']), \
+             patch.object(menu.manager.database,'host_query',side_effect=make_query):
+            with menu.automatic_mysql_connection('/mysql','installer','secret','172.17.0.1',3306) as defaults:
+                self.assertEqual(defaults,paths[-1])
+                self.assertTrue(defaults.exists())
+                self.assertFalse(any(path.exists() for path in paths[:-1]))
+        self.assertEqual(len(paths),3)
+        self.assertFalse(any(path.exists() for path in paths))
+
+    def test_socket_failure_falls_back_to_explicit_tcp(self):
+        paths=[]
+        def make_query(binary,defaults,timeout):
+            paths.append(defaults)
+            content=defaults.read_text()
+            if 'protocol=SOCKET' in content:return Mock(side_effect=ValueError('ERROR 1045'))
+            self.assertIn('protocol=TCP\nhost="172.17.0.1"\nport=3306',content)
+            return Mock(return_value='0.0.0.0\t3306')
+        with patch.object(menu,'mysql_sockets',return_value=['/mysql.sock']), \
+             patch.object(menu.manager.database,'host_query',side_effect=make_query):
+            with menu.automatic_mysql_connection('/mysql','installer','secret','172.17.0.1',3306):pass
+        self.assertEqual(len(paths),2)
+        self.assertFalse(any(path.exists() for path in paths))
+
+    def test_failed_initialization_does_not_retry_another_connection(self):
+        with patch.object(menu,'mysql_sockets',return_value=['/mysql.sock','/other.sock']), \
+             patch.object(menu.manager.database,'host_query',return_value=Mock(return_value='0.0.0.0\t3306')) as query:
+            with self.assertRaisesRegex(ValueError,'initialization failed'):
+                with menu.automatic_mysql_connection('/mysql','installer','secret','172.17.0.1',3306) as defaults:
+                    raise ValueError('initialization failed')
+        query.assert_called_once()
+        self.assertFalse(defaults.exists())
+
+    def test_credentials_invalid_and_unreachable_fail_without_leaking(self):
+        paths=[]
+        def make_query(binary,defaults,timeout):
+            paths.append(defaults)
+            return Mock(side_effect=ValueError('do not expose SECRET'))
+        with patch.object(menu,'mysql_sockets',return_value=[]), \
+             patch.object(menu.manager.database,'host_query',side_effect=make_query):
+            with self.assertRaises(ValueError) as caught:
+                with menu.automatic_mysql_connection('/mysql','installer','SECRET','172.17.0.1',3306):
+                    self.fail('must not connect')
+        self.assertNotIn('SECRET',str(caught.exception))
+        self.assertFalse(any(path.exists() for path in paths))
+        with self.assertRaises(ValueError):
+            with menu.mysql_connection('root\nprotocol=SOCKET','secret','172.17.0.1',3306):pass
 
 
 class PublicIPDiscovery(unittest.TestCase):
