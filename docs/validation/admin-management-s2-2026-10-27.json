@@ -16,7 +16,7 @@
   ],
   "checks": {
     "maven": {
-      "tests": 272,
+      "tests": 273,
       "failures": 0,
       "errors": 0,
       "skipped": 20,
@@ -168,6 +168,11 @@
         "password reset metadata retained without plaintext"
       ],
       "pageErrors": 0
+    },
+    "unresolvedHistoryPriority": {
+      "passed": true,
+      "case": "older PREPARED operation is visible ahead of 51 newer previews",
+      "contract": "ManagedBanContractTest.unresolvedOlderOperationCannotBeHiddenByNewerPreviews"
     }
   },
   "runtime": {

@@ -119,7 +119,7 @@ public class ManagedOperationJournal {
     }
     public List<Entry> history(Connection c,String namespace)throws SQLException {
         schema(c);List<Entry> result=new ArrayList<>();
-        try(PreparedStatement p=c.prepareStatement("SELECT * FROM "+TABLE+" WHERE instance_id=? AND namespace=? ORDER BY created_at DESC,request_id DESC LIMIT 50")) {
+        try(PreparedStatement p=c.prepareStatement("SELECT * FROM "+TABLE+" WHERE instance_id=? AND namespace=? ORDER BY (state IN ('PREPARED','CONFLICT')) DESC,created_at DESC,request_id DESC LIMIT 50")) {
             p.setString(1,instance());p.setString(2,namespace);try(ResultSet r=p.executeQuery()){while(r.next())result.add(entry(r));}
         }
         return result;

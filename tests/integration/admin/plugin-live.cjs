@@ -108,6 +108,14 @@ const observe = promise => { promise.catch(() => {}); return promise; };
       assert.ok(Array.isArray(await get('admin/activities')));
       assert.ok(Array.isArray((await get('admin/activities/rewards')).rows));
       assert.ok(Array.isArray(await get('admin/activities/rewards/history')));checks.push('deployed activity adapter and durable journal read');
+      if (Number.isSafeInteger(credentials.uid) && credentials.uid > 0) {
+        const ban = await get(`admin/accounts/${credentials.uid}/ban`);assert.equal(Number(ban.uid), credentials.uid);
+        assert.ok(Array.isArray(await get(`admin/accounts/${credentials.uid}/ban/history`)));
+        const passwordState = await get(`admin/accounts/${credentials.uid}/password-state`);assert.equal(passwordState.resetAllowed, false);
+        const history = await get(`admin/accounts/${credentials.uid}/password/history`);assert.ok(Array.isArray(history));assert.ok(!JSON.stringify(history).includes('passwordTag'));
+        checks.push('deployed penalty schema and protected-admin password-state/journal read without writes');
+      }
+
       const roles = await get('charac?page=1&pageSize=1');
       if (roles.list.length) {
         const state = await get(`charac/${roles.list[0].characNo}/edit`);assert.equal(state.fields.length, 12);

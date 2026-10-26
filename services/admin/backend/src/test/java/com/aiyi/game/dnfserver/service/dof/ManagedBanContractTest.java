@@ -64,6 +64,12 @@ public class ManagedBanContractTest {
         ManagedBanService.Edit days=edit(22,"unban");days.days=1;reject(400,()->service.preview(22,days));sql("ALTER TABLE d_taiwan.member_punish_info ADD unknown_setting INT DEFAULT 7");reject(409,()->service.preview(22,edit(22,"ban")));
         ThreadUtil.setUserId(99L);reject(403,()->service.status(22));assertEquals("0",scalar("SELECT COUNT(*) FROM d_taiwan.member_punish_info"));
     }
+    @Test public void unresolvedOlderOperationCannotBeHiddenByNewerPreviews()throws Exception {
+        ManagedBanService.Edit old=edit(22,"ban");service.preview(22,old);
+        sql("UPDATE dnf_service.DOF_OPERATION_JOURNAL SET created_at='2026-01-01 00:00:00' WHERE request_id='"+old.requestId+"'");
+        for(int i=0;i<51;i++)service.preview(22,edit(22,"ban"));fault("INSERT INTO `d_taiwan`.`member_punish_info`");reject(503,()->service.save(22,old,"ban"));
+        List<?> rows=(List<?>)service.history(22);assertEquals(50,rows.size());assertEquals(old.requestId,map(rows.get(0)).get("requestId"));assertEquals("PREPARED",map(rows.get(0)).get("state"));
+    }
     @Test public void accountIdentityChangeInvalidatesOutstandingPreview()throws Exception {
         ManagedBanService.Edit e=edit(22,"ban");service.preview(22,e);sql("UPDATE d_taiwan.accounts SET accountname='replacement-account' WHERE UID=22");reject(409,()->service.save(22,e,"ban"));assertEquals("0",scalar("SELECT COUNT(*) FROM d_taiwan.member_punish_info"));
     }
