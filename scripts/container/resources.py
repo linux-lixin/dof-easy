@@ -77,6 +77,29 @@ def verify_build_inputs():
     return len(seen)
 
 
+def verify_native_inputs():
+    """Verify committed originals and derived payloads without downloads/execution."""
+    source_lock = json.loads((ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json').read_text())
+    runtime_lock = json.loads((ROOT / 'services/game/runtime/ubuntu/gateway/runtime.lock.json').read_text())
+    if json.loads(destination('services/game/native-assets/manifest.json').read_text()) != runtime_lock:
+        raise ValueError('Bundled native manifest differs from runtime lock')
+    count = 0
+    for prefix, rows in (
+        ('metadata/dof/source-audit/server-inputs/files/', source_lock['files']),
+        ('services/game/native-assets/', runtime_lock['files']),
+    ):
+        for row in rows:
+            path = destination(prefix + row['path'])
+            verify(path, row)
+            if 'elf_class' in row:
+                with path.open('rb') as stream:
+                    header = stream.read(5)
+                if header != b'\x7fELF' + bytes([row['elf_class']]):
+                    raise ValueError('Native architecture mismatch: ' + row['path'])
+            count += 1
+    return count
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     # Accept old preparation flags for existing callers; they cause no download.
@@ -85,7 +108,8 @@ def main():
     parser.add_argument('--download', action='store_true', help=argparse.SUPPRESS)
     parser.parse_args()
     count = verify_build_inputs()
-    print('Verified %d checked-in build inputs; no external resource download required.' % count)
+    native_count = verify_native_inputs()
+    print('Verified %d shared inputs and %d native source/payload files; no resource download required.' % (count, native_count))
 
 
 if __name__ == '__main__':

@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "scope": "channel",
+  "rarities": [4],
+  "itemIds": [],
+  "cooldownMs": 3000,
+  "duplicateMs": 1000,
+  "maxPerMinute": 20
+}

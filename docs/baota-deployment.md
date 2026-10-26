@@ -21,7 +21,7 @@ Nginx 始终可以由宝塔提供 HTTPS 入口。游戏和网页运行在 Docker
 
 ## 1. 重装前保留材料
 
-系统重装会丢失系统盘文件。先保存自己的完整 PVF、配套客户端、已校验的免授权服务端输入或正式派生资源；若要保留账号、角色或已有密钥，还应另行保存实例目录和数据库备份。项目尚未上线、准备全新建服时，不需要迁移旧库。
+系统重装会丢失系统盘文件。先保存自己的完整 PVF、配套客户端；若要保留账号、角色或已有密钥，还应另行保存实例目录和数据库备份。项目尚未上线、准备全新建服时，不需要迁移旧库。
 
 本文命令在**重装完成后**执行。本次代码适配没有连接或修改现有服务器。新的部署方式与实际玩家进游戏是不同验收项，详见 [本次本地验证](validation/mysql-deployment.md) 和 [整体状态](dof/status.md)。
 
@@ -54,16 +54,9 @@ sudo git pull --ff-only
 
 ## 3. 准备固定免授权原生资源
 
-已有与当前锁文件匹配的正式 `dof-runtime` 目录可直接复用。否则按 [原生资源导入](dof/launcher.md) 从本地免授权材料生成：
+仓库已包含固定免授权原件与正式派生资源。菜单的原生资源目录直接回车；下面高级安装命令省略 `--dof-assets` 即使用仓库的 `services/game/native-assets`。
 
-```sh
-cd /opt/dof-easy
-python3 scripts/dof/import_assets.py \
-  --source /opt/dof-inputs/replacement-server \
-  --output /opt/dof-inputs/dof-runtime
-```
-
-输入必须符合 `metadata/dof/source-audit/server-inputs/replacement.lock.json`；输出须符合正式运行锁。安装器也会再次验证，不接受授权版回退或仅改文件名的产物。输入和输出使用不同目录。第三方来源与版权保留在审计材料中。
+无需从旧系统单独复制原生二进制。安装仍检查正式锁，不接受任意同名文件。需要复现派生时，见 [原生资源导入](dof/launcher.md)；第三方来源与版权保留在审计目录。PVF 仍需自己提供。
 
 ## 4. 外置模式才做：准备宝塔 MySQL
 
@@ -127,7 +120,7 @@ sudo /www/server/mysql/bin/mysql --defaults-file=/root/dof-mysql.cnf \
 cd /opt/dof-easy
 bash dof.sh install --instance native86 --level 86 \
   --ip 你的服务器公网IPv4 --pvf /opt/dof-inputs/86/Script.pvf \
-  --launcher native --dof-assets /opt/dof-inputs/dof-runtime \
+  --launcher native \
   --plugins dp2-frida --raid-extension on --channels '15,52' \
   --database internal --admin-bind 127.0.0.1 --admin-port 18080 --build
 ```
@@ -138,7 +131,7 @@ bash dof.sh install --instance native86 --level 86 \
 cd /opt/dof-easy
 sudo bash dof.sh install --instance native86 --level 86 \
   --ip 你的服务器公网IPv4 --pvf /opt/dof-inputs/86/Script.pvf \
-  --launcher native --dof-assets /opt/dof-inputs/dof-runtime \
+  --launcher native \
   --plugins dp2-frida --raid-extension on --channels '15,52' \
   --database external --db-host 172.17.0.1 --db-port 3306 \
   --db-allow-host 172.29.86.0/255.255.255.0 \

@@ -12,3 +12,6 @@ vipai86-pvf
 assets/home/template/init/Script.tgz
 assets/home/template/init/Script.pvf
 assets/home/template/init/df_game_r
+
+# Installed by the host manager into each instance, not baked into the image.
+native-assets

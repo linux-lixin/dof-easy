@@ -301,7 +301,7 @@ def create_instance(root, args, row, archive, image_settings=None):
 
 def default_dof_assets(values):
     raid_assets.profile_for(values)
-    return STATE / 'server-runtime/current'
+    return ROOT / 'services/game/native-assets'
 
 
 def validate_raid(root, values):
