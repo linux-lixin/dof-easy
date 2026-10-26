@@ -13,6 +13,8 @@ import tempfile
 import time
 
 GIB = 1024 ** 3
+# Allow kernel/hypervisor reservations on nominal 1 GiB hosts, without rounding 512 MiB up.
+MIN_RAM = GIB * 9 // 10
 STATE = Path('/var/lib/dof-easy/host')
 SWAP = Path('/var/lib/dof-easy/swap')
 FSTAB = Path('/etc/fstab')
@@ -74,8 +76,8 @@ def memory():
 
 
 def recommended_swap(ram):
-    if ram < 2 * GIB:
-        raise ValueError('物理内存不足 2 GiB，不能部署游戏服务。')
+    if ram < MIN_RAM:
+        raise ValueError(f'系统可见物理内存 {ram/GIB:.2f} GiB，低于标称 1 GiB 安装门槛（预留 10% 系统占用容差）；不能部署游戏服务。')
     return (8 if ram < 4 * GIB else 4 if ram < 8 * GIB else 2) * GIB
 
 

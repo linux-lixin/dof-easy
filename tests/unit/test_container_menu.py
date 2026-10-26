@@ -24,10 +24,51 @@ class ContainerMenu(unittest.TestCase):
         mock = patch.object(menu.host,'memory',return_value={'MemTotal':8*menu.host.GIB,'MemAvailable':5*menu.host.GIB,'SwapTotal':0})
         mock.start(); self.addCleanup(mock.stop)
         mock = patch.object(menu.shutil,'which',return_value=None);mock.start();self.addCleanup(mock.stop)
+        mock = patch.object(menu,'detect_public_ipv4',return_value='8.8.4.4');mock.start();self.addCleanup(mock.stop)
 
 
     def inputs(self, level='', database='1'):
         return [level, '192.0.2.1', str(self.pvf), '', '', '', database, '1', '', '', '0', '2']
+
+    def test_public_ip_default_override_and_failure_reprompt(self):
+        for detected, answers, expected in [
+            ('8.8.4.4', [''], '8.8.4.4'),
+            ('8.8.4.4', ['192.0.2.1'], '192.0.2.1'),
+            ('', ['', '::1', 'bad', '192.0.2.1'], '192.0.2.1'),
+        ]:
+            with self.subTest(detected=detected, answers=answers), \
+                 patch.object(menu,'detect_public_ipv4',return_value=detected), \
+                 patch('builtins.input',side_effect=answers):
+                self.assertEqual(menu.public_ipv4(), expected)
+
+    def test_low_memory_build_continues_and_swap_precedes_build(self):
+        for ram in (menu.host.MIN_RAM, menu.host.GIB, 2*menu.host.GIB, int(3.8*menu.host.GIB)):
+            answers = self.inputs()
+            answers[1] = ''  # Accept detected IP.
+            answers[-2] = ''  # Accept recommended total Swap.
+            events = []
+            with self.subTest(ram=ram), patch.object(menu.host,'memory',return_value={
+                    'MemTotal':ram,'MemAvailable':ram//2,'SwapTotal':0}), \
+                 patch('builtins.input',side_effect=answers+['y']), \
+                 patch.object(menu.host,'create_swap',side_effect=lambda total:events.append(('swap',total))), \
+                 patch.object(menu.manager,'docker_check'), \
+                 patch.object(menu,'assets_directory',return_value=Path('/verified')), \
+                 patch.object(menu,'web_instructions'), \
+                 patch.object(menu.manager,'main',side_effect=lambda args:events.append(('deploy',args))):
+                menu.install('test')
+            self.assertEqual(events[0],('swap',8*menu.host.GIB))
+            self.assertIn('--build', events[1][1])
+            args = events[1][1]
+            self.assertEqual(args[args.index('--ip')+1], '8.8.4.4')
+
+    def test_below_minimum_rejected_before_prompts_or_mutations(self):
+        with patch.object(menu.host,'memory',return_value={
+                'MemTotal':512*1024**2,'MemAvailable':256*1024**2,'SwapTotal':8*menu.host.GIB}), \
+             patch('builtins.input') as prompts, patch.object(menu.manager,'main') as deploy:
+            with self.assertRaisesRegex(ValueError,'1 GiB'):
+                menu.install('test')
+        prompts.assert_not_called(); deploy.assert_not_called()
+        menu.host.prepare_dependencies.assert_not_called()
 
     def test_selected_level_and_empty_default_reach_install(self):
         for value, expected in [('', '86'), ('70', '70'), ('120', '120')]:
@@ -163,6 +204,34 @@ class ContainerMenu(unittest.TestCase):
             path.write_text('operator config')
             menu.web_instructions('test')
             self.assertEqual(path.read_text(),'operator config')
+
+
+class PublicIPDiscovery(unittest.TestCase):
+    def test_fallback_validation_and_timeouts(self):
+        for first in (OSError('timeout'), b'not an IP', b'127.0.0.1', b'10.0.0.1',
+                      b'::1', b'224.0.0.1', b'x'*65, b'\xff'):
+            opener = Mock()
+            good = Mock()
+            good.__enter__ = Mock(return_value=good)
+            good.__exit__ = Mock(return_value=False)
+            good.read.return_value = b'8.8.4.4\n'
+            bad = Mock()
+            bad.__enter__ = Mock(return_value=bad)
+            bad.__exit__ = Mock(return_value=False)
+            bad.read.return_value = first
+            opener.open.side_effect = [first if isinstance(first, Exception) else bad, good]
+            with self.subTest(first=first), patch.object(menu.urllib.request,'build_opener',return_value=opener):
+                self.assertEqual(menu.detect_public_ipv4(),'8.8.4.4')
+            self.assertEqual(opener.open.call_count,2)
+            self.assertTrue(all(call.kwargs['timeout']==3 for call in opener.open.call_args_list))
+            good.read.assert_called_once_with(65)
+
+    def test_unavailable_services_return_manual_fallback(self):
+        opener = Mock()
+        opener.open.side_effect = OSError('offline')
+        with patch.object(menu.urllib.request,'build_opener',return_value=opener):
+            self.assertEqual(menu.detect_public_ipv4(),'')
+        self.assertEqual(opener.open.call_count,2)
 
 
 if __name__ == '__main__':unittest.main()

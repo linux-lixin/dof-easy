@@ -40,6 +40,10 @@ docker compose version
 
 应分别为 `x86_64`、Python 3.11+、可工作的 Linux amd64 Docker Engine 和 Compose v2。两个频道建议至少 8 GB 内存，另为镜像构建、PVF 的原始／加密／下载副本和备份留足磁盘；至少保留 2 GiB 余量。
 
+菜单安装最低允许标称 1 GiB（系统可见内存预留 10% 容差），不再以不足 4 GiB 拒绝本机构建。低于 4 GiB 默认建议补足总 Swap 至 8 GiB，并在构建前启用；这只是安装策略，1 GiB 主机完整构建及游戏性能尚未验证。
+
+公网 IPv4 在安装向导中自动获取，回车采用，也可改成游戏盾／映射地址；检测失败时手动输入。外置 MySQL 的宿主机私网地址仍须按下文核对填写，不能用检测出的公网地址替代。
+
 ```sh
 sudo mkdir -p /opt/dof-inputs
 sudo chmod 700 /opt/dof-inputs

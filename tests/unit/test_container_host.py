@@ -30,9 +30,11 @@ class HostPreparation(unittest.TestCase):
         return ''
 
     def test_memory_policy_and_existing_swap(self):
-        for gib,target in [(2,8),(3,8),(4,4),(7,4),(8,2),(16,2)]:
+        for gib,target in [(1,8),(2,8),(3,8),(4,4),(7,4),(8,2),(16,2)]:
             self.assertEqual(host.recommended_swap(gib*host.GIB),target*host.GIB)
-        with self.assertRaises(ValueError):host.recommended_swap(host.GIB)
+        self.assertEqual(host.recommended_swap(host.MIN_RAM),8*host.GIB)
+        with self.assertRaises(ValueError):host.recommended_swap(host.MIN_RAM-1)
+        with self.assertRaises(ValueError):host.recommended_swap(host.GIB//2)
         self.assertEqual(host.swap_missing(2*host.GIB,3*host.GIB),0)
         self.assertEqual(host.disk_budget(False,100,200),12*host.GIB+500)
 
