@@ -17,13 +17,24 @@ public class DofClientService {
     @Value("${DOF_GAME_PVF:}") private String gamePvf;
     private NativeClientJobs jobs;
     private volatile NativeScriptJobs scripts;
+    private boolean configured() {
+        if (workspace == null || workspace.trim().isEmpty()) return false;
+        Path root = Paths.get(workspace).toAbsolutePath().normalize();
+        Path inputs = root.resolve("inputs"), binding = inputs.resolve("binding.json");
+        if (Files.isSymbolicLink(root) || Files.isSymbolicLink(inputs) || Files.isSymbolicLink(binding))
+            throw new DofFailure(409, "客户端发布来源不能通过符号链接访问");
+        if (!Files.exists(binding, LinkOption.NOFOLLOW_LINKS)) return false;
+        if (!Files.isRegularFile(binding, LinkOption.NOFOLLOW_LINKS))
+            throw new DofFailure(409, "客户端发布来源绑定文件异常");
+        return true;
+    }
     private long guard() {
         long actor = adminService.admin();
         try (Connection ignored = adminService.connection()) { return actor; }
         catch (SQLException e) { throw new DofFailure(503, "隔离数据库不可用，停止客户端发布操作"); }
     }
     private synchronized NativeClientJobs jobs() throws IOException {
-        if (workspace == null || workspace.trim().isEmpty()) throw new DofFailure(409, "当前隔离实例尚未配置客户端发布来源");
+        if (!configured()) throw new DofFailure(409, "当前实例尚未导入客户端发布材料");
         if (jobs == null) jobs = new NativeClientJobs(Paths.get(workspace), (String)adminService.context().get("instanceId"),
             p -> Files.getFileStore(p).getUsableSpace(), (id,revision) -> {
                 NativeScriptJobs store=scripts;
@@ -50,7 +61,10 @@ public class DofClientService {
     private String currentRevision()throws IOException{return (String)jobs().status().get("revision");}
     public Object scriptStatus()throws IOException {
         guard();Map<String,Object> out=new LinkedHashMap<>();
-        if(workspace==null||workspace.trim().isEmpty()){out.put("enabled",false);return out;}
+        if(!configured()){
+            out.putAll(adminService.context());out.put("enabled",false);
+            out.put("blocker","当前实例尚未导入客户端发布材料");return out;
+        }
         out.putAll(jobs().status());jobs().requireScriptVersion();out.put("enabled",true);
         out.put("pairedSourceAvailable",gamePvf!=null&&!gamePvf.isEmpty());
         out.put("mode","uncompressed");out.put("maxSourceBytes",NativePvfSource.MAX_BYTES);
@@ -82,8 +96,9 @@ public class DofClientService {
     }
     public Object status() throws IOException {
         guard();
-        if (workspace == null || workspace.trim().isEmpty()) {
-            Map<String,Object> out = adminService.context(); out.put("enabled", false); return out;
+        if (!configured()) {
+            Map<String,Object> out = new LinkedHashMap<>(adminService.context()); out.put("enabled", false);
+            out.put("blocker","当前实例尚未导入客户端发布材料");return out;
         }
         Map<String,Object> out = new LinkedHashMap<>(jobs().status()); out.put("enabled", true); return out;
     }
