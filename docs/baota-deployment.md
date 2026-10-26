@@ -54,7 +54,7 @@ sudo git pull --ff-only
 
 ## 3. 准备固定免授权原生资源
 
-仓库已包含固定免授权原件与正式派生资源。菜单的原生资源目录直接回车；下面高级安装命令省略 `--dof-assets` 即使用仓库的 `services/game/native-assets`。
+仓库已包含固定免授权原件与正式派生资源。菜单的原生资源目录直接回车；下面高级安装命令省略 `--dof-assets` 即使用仓库的 `services/game/resources/native`。
 
 无需从旧系统单独复制原生二进制。安装仍检查正式锁，不接受任意同名文件。需要复现派生时，见 [原生资源导入](dof/launcher.md)；第三方来源与版权保留在审计目录。PVF 仍需自己提供。
 

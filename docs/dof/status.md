@@ -28,7 +28,7 @@
 
 ## 原生资源随 Git 提供
 
-固定免授权原件和正式派生资源已纳入 Git，菜单默认使用 `services/game/native-assets`，不再要求另行上传原生材料。运行锁与载荷未变；PVF、实例秘密和客户端仍由操作者保管。见 [资源入库验证](../validation/bundled-native-assets.md)。本轮仅改资源交付和默认路径，没有重新部署服务器或验证客户端。
+固定免授权原件和正式派生资源已纳入 Git，菜单默认使用 `services/game/resources/native`，不再要求另行上传原生材料。运行锁与载荷未变；PVF、实例秘密和客户端仍由操作者保管。首次入库见 [资源入库验证](../validation/bundled-native-assets.md)。现在 DP2、Frida 与原生载荷统一在 `services/game/resources/`；原件及证据集中归档，正常部署不读取。见 [目录与加载位置](../resource-layout.md) 和 [本轮整理验证](../validation/unified-server-resources.md)。没有重新部署服务器或验证客户端。
 
 ## 已验证的范围
 

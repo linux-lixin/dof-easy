@@ -11,7 +11,8 @@ RUN rm -rf /opt/dnf/ubuntu /opt/dof-easy/runtime/gateway
 COPY runtime/ubuntu/ /opt/dnf/ubuntu/
 RUN mkdir -p /opt/dof-easy/runtime && mv /opt/dnf/ubuntu/gateway /opt/dof-easy/runtime/gateway
 COPY assets/home/template/ /home/template/
-COPY plugin-assets/ /opt/dnf/plugins/
+COPY resources/plugins/dp2/ /opt/dnf/plugins/dp2/
+COPY resources/plugins/frida/ /opt/dnf/plugins/frida/
 COPY docker/ubuntu/run-game /opt/dnf/ubuntu/run-game
 RUN python3 /opt/dnf/ubuntu/bridge_compat.py \
       --source /home/template/neople/bridge/df_bridge_r --output /opt/dnf/audit/integration-bridge-${MAIN_COMMIT} \

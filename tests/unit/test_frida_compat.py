@@ -26,7 +26,7 @@ class FridaCompatibility(unittest.TestCase):
             subprocess.run(['gcc', '-m32', '-shared', '-fPIC',
                             '-Wl,--version-script=' + str(SOURCE / 'frida-compat.map'),
                             '-o', str(shim), str(SOURCE / 'frida-compat.c'), '-ldl'], check=True)
-            shutil.copyfile(ROOT / 'services/game/plugin-assets/frida/frida.so', assets / 'gadget.so')
+            shutil.copyfile(ROOT / 'services/game/resources/plugins/frida/frida.so', assets / 'gadget.so')
             fixture = root / 'fixture.c'
             fixture.write_text('extern int missing_probe_symbol(void); int test(void) { return missing_probe_symbol(); }')
             subprocess.run(['gcc', '-m32', '-shared', '-fPIC', '-o', str(assets / 'broken.so'), str(fixture)], check=True)
@@ -54,7 +54,7 @@ class FridaCompatibility(unittest.TestCase):
                             '-o', str(shim), str(SOURCE / 'frida-compat.c'), '-ldl'], check=True)
             subprocess.run(['gcc', '-m32', '-Wall', '-Wextra', '-Werror', '-rdynamic',
                             '-o', str(probe), str(SOURCE / 'audit/frida-probe.c'), '-ldl'], check=True)
-            result = module.exercise(ROOT / 'services/game/plugin-assets/frida/frida.so', shim, probe)
+            result = module.exercise(ROOT / 'services/game/resources/plugins/frida/frida.so', shim, probe)
             self.assertEqual(result['pointerSize'], 4)
             self.assertTrue(result['nativeCall'])
 

@@ -1,33 +1,63 @@
-# 资源布局
+# 服务端资源布局
 
-本页统计公共构建输入。原生免授权输入及正式派生资源也已纳入 Git，按 [专用锁和导入流程](dof/launcher.md) 管理，单独统计；客户端、PVF 和实例秘密仍留在私有目录。
+部署只使用 `services/game/resources/` 下的正式插件和原生文件。原始材料与来源证据在 `metadata/dof/source-audit/`；正常安装不从那里读取程序，不自动派生，也不创建旧品牌兼容链接。
 
-目标是让源码检出直接具有公共构建输入，只下载当前实例需要的等级程序。按用途、重复程度和实际大小划分，不把所有资源机械地放进 Release。
+## 仓库位置
 
-| 内容 | 存放位置 | 理由 |
-| --- | --- | --- |
-| Dockerfile、运行脚本、后台/登录器源码、SQL、Lua/JS、配置 | Git 原目录 | 可审阅、可维护，与代码一起版本管理 |
-| 392 个公共游戏文件、DP2/Frida 库及插件数据 | Git 的 `services/game/assets`、`services/game/plugin-assets` | 每次构建都需要，固定且可直接检出；无需重复解包 |
-| 12 个原生原件、15 个正式载荷及默认配置/审计说明 | Git 的 `metadata/dof/source-audit/server-inputs/files`、`services/game/native-assets` | 固定哈希，检出即用，不需额外提供原生材料 |
-| 13 个等级程序 | 本仓库 Release，安装只下载所选等级 | 解压合计约 473 MB，每个实例只用一个；保持通用镜像与等级分离 |
-| PVF、实例密钥、密码、运行数据 | 操作者本地实例目录 | 随实际客户端和实例变化 |
-| 容器镜像 | 操作者自己的镜像仓库 | 由操作者上传，不纳入源码或资源 Release |
+```text
+services/game/
+├── assets/                       公共游戏模板、初始化资源
+├── resources/
+│   ├── plugins/
+│   │   ├── dp2/                  DP2 库、Lua、SQL 辅助脚本
+│   │   └── frida/                Gadget、JS、无密码配置模板
+│   └── native/
+│       ├── bin/dof-gateway
+│       ├── lib/                  libdof-plugin.so、libdof-inline.so 及上游依赖
+│       ├── config/               默认配置，不包含实例密钥
+│       ├── runtime/gateway/      schema.sql、equipment.js、equipment-abi.json
+│       └── manifest.json
+└── runtime/ubuntu/gateway/        服务代码、正式锁和配置模板的维护入口
+metadata/dof/source-audit/
+├── server-inputs/files/           12 个免授权原件，保留原名
+├── server-derived/               派生证据、来源和版权说明
+├── plugins/                      原始补丁、原始 SQL、历史导入记录
+└── resources.lock.json           已归档证据的哈希
+```
 
-`build-inputs.lock.json` 覆盖 424 个文件，合计 245,903,754 字节，最大文件 31,904,293 字节；该数值是解压后的输入总量，Git 还会压缩及复用重复内容。文件均低于 GitHub 的 50 MiB 警告线和 100 MiB 单文件限制，符合当前直接入库的体量。后续新增资源仍需按实际变化频率、是否每次都使用及体积复核，不把限制当成需要填满的目标。[GitHub 文件大小说明](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)
+`metadata/build-inputs.lock.json` 固定 421 个公共构建输入，共 245,087,623 字节；原生清单另固定 15 个正式载荷。归档不计入部署输入。依赖库保留上游名称，DP2、Frida 名称也保留各自项目身份。
 
-## 构建和安装
+## 镜像与实例运行路径
 
-1. Git 检出得到公共二进制、已禁用上报的插件、SQL 与配置模板。
-2. 菜单默认本机构建，也可选择自己的镜像仓库；高级命令默认拉取（内置数据库四个镜像，外置三个）。构建时 `python scripts/container/resources.py` 校验 424 个公共输入、12 个原生原件与 15 个正式载荷；缺文件或内容变化时直接报错，不联网补齐、不覆盖。
-3. 安装器按 `levels.lock.json` 下载所选等级，通常约 10.6 MB；旧缓存文件名和哈希保持兼容。
-4. 使用准备好的四个镜像按所选等级初始化实例。只有显式源码构建才获取 Docker 基础镜像、系统软件和 npm/Maven 依赖。镜像仓库配置见 [镜像部署](image-registry.md)。
+| 组件 | 镜像／运行位置 | 开关与用途 |
+|---|---|---|
+| DP2 | 镜像 `/opt/dnf/plugins/dp2/`；持久化 `/data/dp/`，通过 `/dp2` 加载 | `PLUGIN_MODE=dp2` 或 `dp2-frida` |
+| 普通 Frida | 镜像 `/opt/dnf/plugins/frida/`；脚本 `/data/plugins/frida/`；Gadget `/home/neople/game/frida.so` | `PLUGIN_MODE=frida` 或 `dp2-frida` |
+| 原生网关 | `/opt/dof-easy/bin/dof-gateway` | `LAUNCHER_MODE=native` |
+| 原生插件与内联库 | `/opt/dof-easy/lib/libdof-plugin.so`、`libdof-inline.so` | 原生链及团本按运行配置加载 |
+| 团本扩展 | 同一原生资源包，配置 `/data/dof-easy/config/anton-raid.ini`、`luke-raid.ini` | `RAID_EXTENSION=on`，要求 DP2 |
+| 网关代码与配置 | `/opt/dof-easy/runtime/gateway/`、`/data/dof-easy/config/` | `gateway.ini` 由运行时生成 |
+| 密钥与日志 | `/data/dof-easy/keys/`、`/var/log/dof-easy/` | 每实例私有，不入库 |
 
-公共构建不再下载 217 MB dof 源码归档，也不下载重复 Server、DP2、Frida 和 SQL 附件。以 70 级首次安装为例（新实例默认 86 级），额外业务资源下载量由 300,334,123 字节降到 10,593,791 字节（不含 Git 检出和系统构建依赖）。模板 `Script.tgz` 和固定 `init/df_game_r` 不提交也不进入通用镜像。
+`/dp2` 是上游 DP2 的加载约定，不是旧品牌兼容目录。`PLUGIN_MODE=none` 关闭普通玩法插件；原生登录所需的 Frida 凭据适配仍由原生链准备，不能随普通插件一起移除。修改插件组合时按实例配置管理，不手工删除库。
 
-## 内容与兼容性
+Dockerfile 只复制普通插件的两个明确子目录。原生资源不进入共享游戏镜像上下文；安装器仅复制锁定载荷、清单和配置到实例 `/data/dof-easy/`，启动时再次核验。归档文件、原件、原始 SQL 和未应用 PVF 补丁不进入运行目录。
 
-DP2 上报模块及 SQL 辅助脚本的改动直接在仓库中审阅；Frida 数据库密码模板为空，实际密码在启动时注入。旧编码和二进制通过 `.gitattributes` 保持字节一致，避免 Windows 换行转换破坏校验。
+## 安装、维护与校验
 
-`scripts/vipai86/prepare_source.py` 保留为兼容入口，转发至新的本地校验器。历史原始归档导入工具仍可用于维护者比对，不进入默认安装流程。
+正常在仓库根目录运行 `bash install.sh`，选择安装、等级（默认 86）、插件及内置／外置数据库。正式原生资源目录直接回车即可。高级命令省略 `--dof-assets` 使用同一默认目录；指定目录时必须是相同运行锁校验通过的正式资源。
 
-`resources-v1` 的五个旧公共归档及旧清单保留，避免破坏已发布提交的下载地址；当前安装器只引用其中的 13 个等级包。没有覆盖旧标签、修改已发布资源的内容或重新上传镜像。
+```bash
+# 部署资源校验，不需要原件或联网
+python3 scripts/container/resources.py
+# 维护者核验归档
+python3 scripts/container/resources.py --audit
+# 维护者显式重新派生，输出必须是新的本地目录
+python3 scripts/dof/import_assets.py --source metadata/dof/source-audit/server-inputs/files --output /tmp/dof-runtime-rebuilt
+```
+
+原件哈希不匹配直接失败，没有授权版回退。重新派生和正式打包见 [原生资源说明](dof/launcher.md)。当前初始化 SQL 是 `deploy/vipai86/db/vipai.sql`，归档原始 SQL 不参与初始化。普通插件修改应更新构建锁；不要改写历史导入清单来冒充当前记录。
+
+**仍可能联网的部分**：首次获取源码、所选等级包（本仓库 Release 的 13 个等级之一）、Docker 镜像及源码构建时的系统/npm/Maven 依赖。原生、DP2、Frida 正式文件已在 Git，无需第三方下载站。PVF、客户端、密码与私钥由操作者保管。详见 [安装菜单](container-installer.md)、[宝塔部署](baota-deployment.md)。
+
+整理资源不代表重新验证进游戏。历史证据保留原路径与日期；本轮结果见 [资源整理验证](validation/unified-server-resources.md)。

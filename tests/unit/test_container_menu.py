@@ -51,7 +51,7 @@ class ContainerMenu(unittest.TestCase):
              patch.object(menu.manager,'main') as run:
             menu.install('test')
         args=run.call_args.args[0]
-        self.assertEqual(Path(args[args.index('--dof-assets')+1]),menu.manager.ROOT/'services/game/native-assets')
+        self.assertEqual(Path(args[args.index('--dof-assets')+1]),menu.manager.ROOT/'services/game/resources/native')
 
     def test_invalid_level_reprompt_and_cancel_leave_host_unchanged(self):
         with patch('builtins.input',side_effect=['88']+self.inputs('86')+['n']), \

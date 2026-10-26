@@ -6,6 +6,8 @@
 |---|---|
 | `docker/ubuntu` | Dockerfile、必要兼容源码和许可证 |
 | `assets` | 公共游戏资源、模板和初始化 SQL；不含 PVF 与所选等级程序 |
+| `resources/plugins` | 固定 DP2、Frida 正式输入 |
+| `resources/native` | 已改名原生载荷，安装器校验后写入实例 |
 | `runtime/ubuntu` | Ubuntu 入口、校验、健康检查和启动完成提示 |
 
 在仓库根目录构建：
@@ -38,17 +40,8 @@ docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 s
 
 当前固定资源可确定性派生，受影响的 101 项本地检查通过；86 级实际网关、模块加载和初始化已有证据。网页配置及 PVF 处理已有通过记录，签到记录查询尚有结构不兼容问题；Windows 读取端和实际游戏流程仍待完成（`releaseReady=false`）。详情见 [验收报告](../../docs/dof/server-runtime-validation.md) 和 [资源导入](../../docs/dof/launcher.md)。
 
-## 可选 DP2 加载
+## 普通插件与团本
 
-有配套 DP2 时，将包内 `dp2/` 的内容放到已有运行目录 `runtime/game/data/dp/`，
-使容器中存在 `/dp2/libdp2pre.so`、`/dp2/libdp2.so`、`/dp2/libdp2.xml` 及配套库和脚本。
-启动器仅为 `df_game_r` 自动追加 `/dp2/libdp2pre.so`，保留原来的 `/dp2/libhook.so`；
-其他服务不会自动加载 DP2。未安装这个文件时沿用原启动方式。
+DP2、Frida 和原生资源统一放在 `resources/`，完整的源码、镜像、持久化及加载路径见 [资源布局](../../docs/resource-layout.md)。安装菜单可选 DP2＋Frida、仅 DP2、仅 Frida 或关闭；团本独立开关且依赖 DP2。原生登录必需的凭据适配不随普通插件关闭。
 
-插件文件使用项目已有的 `/data` 持久化目录。普通 DP2 / Frida 公共构建输入随 Git 固定；原生私有输入、运行日志和数据库密码不提交。脚本所用的游戏版本、数据库地址和凭据须与当前部署匹配。
-尤其不能直接使用插件包附带的旧数据库密码；修改服务器上的 Frida 配置，
-Lua 中的数据库连接可使用进程已有的 `os.getenv("DNF_DB_GAME_PASSWORD")`。
-插件脚本可能在首次启动时创建自己的数据库和表，接入前保留旧镜像及插件目录备份。
-
-安装或更新后重建游戏容器，并检查游戏健康、实际加载模块和插件日志。
-DP2 加载成功不代表它实现了上述原生插件配置 的解析或团本功能，两者需要分别验证。
+实例插件修改保存在 `/data/dp/` 与 `/data/plugins/frida/`；`/dp2` 保留上游加载约定。模板不带数据库密码，启动时按当前实例注入。原始材料集中在 `metadata/dof/source-audit/`，不进入镜像或实例。
