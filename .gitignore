@@ -86,3 +86,7 @@ Thumbs.db
 # Local integration snapshots, launcher checks and generated release assets
 /tests/unit/launcher/bin/
 /tests/unit/launcher/obj/
+
+# Pinned derived native payload layout (not instance runtime data).
+!/services/game/native-assets/runtime/
+!/services/game/native-assets/runtime/**

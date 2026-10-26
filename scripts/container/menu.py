@@ -245,7 +245,7 @@ def install(instance):
     pvf = Path(ask('配套 Script.pvf 完整路径', f'/opt/dof-inputs/{level}/Script.pvf')).expanduser().resolve(strict=True)
     if not pvf.is_file() or pvf.suffix.lower() != '.pvf' or pvf.stat().st_size < 1024:
         raise ValueError('请准备完整的配套 PVF 文件。')
-    supplied = Path(ask('免授权原始材料或正式资源目录', '/opt/dof-inputs/dof-runtime')).expanduser().resolve(strict=True)
+    supplied = Path(ask('原生资源目录（回车使用仓库内置；也可指定原始材料）', str(manager.default_dof_assets({'LAUNCHER_MODE':'native'})))).expanduser().resolve(strict=True)
     plugins, raid = plugin_selection()
     channels = ','.join(map(str, manager.runtime_config.channels(ask('频道，逗号分隔', '15,52'))))
     mode = {'1':'internal','2':'external'}[choose('数据库：1 内置容器 / 2 同机 MySQL 5.6', ('1','2'), '1')]

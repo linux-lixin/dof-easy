@@ -1,9 +1,11 @@
-# 原生服务端资源导入
+# 原生服务端内置资源与重新派生
 
-导入与打包工具使用 Python 3.11+。仅接受 `metadata/dof/source-audit/server-inputs/replacement.lock.json` 锁定的免授权源文件。旧名称只用于识别显式导入材料，不会作为运行时回退路径。输入与输出必须是不同的真实本地目录。
+正常部署直接使用仓库的 `services/game/native-assets`，无需另行准备免授权原件。菜单资源目录直接回车；高级安装命令指定 `--launcher native`、省略 `--dof-assets` 即使用此目录。原始 12 个文件保存在 `metadata/dof/source-audit/server-inputs/files`，不会进入实例运行目录。
+
+以下仅供重新派生和打包使用。工具使用 Python 3.11+。仅接受 `metadata/dof/source-audit/server-inputs/replacement.lock.json` 锁定的免授权源文件。旧名称只用于识别显式导入材料，不会作为运行时回退路径。输入与输出必须是不同的真实本地目录。
 
 ```bash
-python3 scripts/dof/import_assets.py --source /local/source/server --output /local/build/dof-runtime
+python3 scripts/dof/import_assets.py --source metadata/dof/source-audit/server-inputs/files --output /local/build/dof-runtime
 python3 scripts/dof/package_server.py --runtime /local/build/dof-runtime --validation docs/dof/server-runtime-validation.json --output /local/build/dof-server-runtime.tar.gz
 ```
 

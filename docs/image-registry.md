@@ -1,6 +1,6 @@
 # 使用自己的镜像仓库
 
-本页是通用四镜像安装器流程，示例默认 `dof` 模式。原生资源需另行 [固定输入导入](dof/launcher.md)，现有 86 级游戏和网页使用 [各自限定部署入口](../deploy/README.md)。已记录的私有联调镜像不等于公开镜像仓库发布；版本见 [状态页](dof/status.md)。
+本页是通用四镜像安装器流程，示例默认 `dof` 模式。原生固定输入和正式资源已随 Git 提供，见 [内置原生资源](dof/launcher.md)，现有 86 级游戏和网页使用 [各自限定部署入口](../deploy/README.md)。已记录的私有联调镜像不等于公开镜像仓库发布；版本见 [状态页](dof/status.md)。
 
 镜像仓库参数包含域名、可选端口和命名空间，不包含 `https://`、账号密码或具体镜像名。例如 `ghcr.io/your-name`、`docker.io/your-name`、`harbor.example.com:5000/dnf`。标签默认 `latest`，发布时建议使用明确的版本号，如 `v1`。
 
@@ -15,7 +15,7 @@ bash dof.sh images --registry ghcr.io/your-name --tag v1
 bash dof.sh install --level 70 --ip 192.168.1.100 --pvf /data/Script.pvf
 ```
 
-在 Linux 主机执行上述命令。也可将 `--registry`、`--tag` 直接放到 `install` 命令中，不需要提前保存默认配置。交互菜单首次安装可直接输入镜像地址，菜单 10 可保存默认地址。
+在 Linux 主机执行上述命令。也可将 `--registry`、`--tag` 直接放到 `install` 命令中，不需要提前保存默认配置。交互菜单首次安装可直接输入镜像地址，高级 `images` 命令可保存默认地址。
 
 默认安装拉取以下四个 Linux amd64 镜像；缺少任何一个或架构不匹配时停止，不执行源码构建、不改写已有实例的镜像配置：
 

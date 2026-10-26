@@ -1,0 +1,1 @@
+{"addedMappingPermissions": "R-X", "code": "50e800000000588b80faefffff85c07404870424c30f0b", "dispatchSlot": 9241408, "entry": 9245504, "implementation": "runtime/gateway/equipment.js", "sectionIndex": 28, "symbol": "_ZN5DBMgr19Equipment_BroadcastEP5CUserii", "symbolIndex": 839, "unregisteredBehavior": "ud2"}

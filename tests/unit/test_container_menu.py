@@ -44,6 +44,15 @@ class ContainerMenu(unittest.TestCase):
                 self.assertIn('/verified assets', args)
                 self.assertIn('--build', args)
 
+    def test_empty_assets_selection_uses_checked_in_bundle(self):
+        answers=self.inputs();answers[3]=''
+        with patch('builtins.input',side_effect=answers+['y']), \
+             patch.object(menu.manager,'docker_check'),patch.object(menu,'web_instructions'), \
+             patch.object(menu.manager,'main') as run:
+            menu.install('test')
+        args=run.call_args.args[0]
+        self.assertEqual(Path(args[args.index('--dof-assets')+1]),menu.manager.ROOT/'services/game/native-assets')
+
     def test_invalid_level_reprompt_and_cancel_leave_host_unchanged(self):
         with patch('builtins.input',side_effect=['88']+self.inputs('86')+['n']), \
              patch.object(menu.manager,'main') as deploy,patch.object(menu,'assets_directory') as assets:
