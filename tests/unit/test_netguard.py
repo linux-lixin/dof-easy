@@ -12,7 +12,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 TEMP_ROOT = ROOT / "tests/unit" if os.name == "nt" else None
-SCRIPT = ROOT / "deploy/network/netguard/entrypoint.py"
+SCRIPT = ROOT / "docs/history/network-helpers/netguard/entrypoint.py"
 SPEC = importlib.util.spec_from_file_location("dof_netguard", SCRIPT)
 netguard = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(netguard)

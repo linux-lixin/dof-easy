@@ -4,8 +4,8 @@
 
 | 选择 | 安装参数 | 数据库由谁管理 | 项目镜像 |
 |---|---|---|---|
-| 内置（默认） | `--database internal` 或省略 | 独立 MySQL 5.6 容器与卷 | db、game、admin、netguard 四个 |
-| 外置 | `--database external` | 同一台宿主机的宝塔 MySQL 5.6.x | game、admin、netguard 三个；无项目数据库容器 |
+| 内置（默认） | `--database internal` 或省略 | 独立 MySQL 5.6 容器与卷 | db、game、admin 三个 |
+| 外置 | `--database external` | 同一台宿主机的宝塔 MySQL 5.6.x | game、admin 两个；无项目数据库容器 |
 
 Nginx 始终可以由宝塔提供 HTTPS 入口。游戏和网页运行在 Docker；内置数据库不映射宿主机 3306，因此可以与宝塔 MySQL 共存。外置模式不会停止、重启或修改宝塔 MySQL 的配置文件，也不操作其他宝塔站点的库。
 
@@ -162,11 +162,11 @@ sudo bash dof.sh install --instance native86 --level 86 \
 
 默认模式仍是 `dof`，默认数据库仍是 `internal`。选择外置数据库不意味着自动启用原生登录，故原生示例明确带 `--launcher native`。已有实例不能通过重跑安装改数据库模式、地址或授权网段；需要另一种模式时创建新的空实例，同时避免游戏端口冲突。
 
-若在另一台构建机准备镜像，可运行 `bash dof.sh build --database external --registry 你的仓库/命名空间 --tag 新标签`，上传 game/admin/netguard 三个镜像，再把安装命令的 `--build` 换成真实 `--registry ... --tag ...`。内置模式还需要 db 镜像，见 [镜像配置](image-registry.md)。
+若在另一台构建机准备镜像，可运行 `bash dof.sh build --database external --registry 你的仓库/命名空间 --tag 新标签`，上传 game/admin 两个镜像，再把安装命令的 `--build` 换成真实 `--registry ... --tag ...`。内置模式还需要 db 镜像，见 [镜像配置](image-registry.md)。
 
 ## 6. 用宝塔 Nginx 接网页
 
-安装器不占用宿主机 80/443，网页入口默认为 `127.0.0.1:18080`。在宝塔新建自己的域名站点，配置 HTTPS 和访问来源限制，将站点反向代理到 `http://127.0.0.1:18080`。
+安装器不占用宿主机 80/443，网页端口直接映射到 `admin:80`，默认绑定 `127.0.0.1:18080`。在宝塔新建自己的域名站点，配置 HTTPS 和访问来源限制，将站点反向代理到 `http://127.0.0.1:18080`。
 
 现成片段：[nginx-location.conf.example](../deploy/nginx/nginx-location.conf.example)。把它放入该站点已有 `server {}` 内，替换冲突的 `location /`；不要整个覆盖宝塔全局 Nginx 配置。它保留完整 URI，并放宽 PVF 上传大小和长任务超时、关闭上传临时缓冲。若修改后台端口，同步修改 `proxy_pass`。
 
@@ -183,7 +183,7 @@ bash dof.sh logs --instance native86 --service admin --follow
 curl --fail http://127.0.0.1:18080/api/v1/admin/assist/config-text
 ```
 
-状态会显示所选数据库模式。外置模式的 `db-check` 核对版本、UUID 与业务表访问，游戏启动跳过旧 root 初始化和授权脚本，只使用实例账号；游戏健康检查同样验证数据库身份。宝塔 MySQL 日志由宝塔查看，`logs --service db` 只适用于内置模式。
+状态会显示所选数据库模式。外置模式没有常驻 `db-check`，游戏健康检查不轮询外置 MySQL。首次初始化、启动配置及备份时仍校验目标数据库，游戏跳过旧 root 初始化和授权脚本，只使用实例账号。宝塔 MySQL 日志由宝塔查看，`logs --service db` 只适用于内置模式。
 
 原生程序继续使用 `/opt/dof-easy/`，原生配置在容器 `/data/dof-easy/config/`，原生库表为 `dof_native.config/config_v2`，管理表为 `dnf_service.DOF_*`。宿主机持久数据在 `.dof-easy/instances/native86/runtime/`。
 

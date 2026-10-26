@@ -16,7 +16,6 @@ def load(name,path):
 db=load('db_choice','scripts/container/database.py')
 deploy=load('db_compose','scripts/container/deployment.py')
 manager=load('choice_manager','scripts/container/manage.py')
-guard=load('choice_guard','deploy/network/netguard/entrypoint.py')
 
 class DatabaseModes(unittest.TestCase):
     def options(self,**extra):
@@ -71,8 +70,7 @@ class DatabaseModes(unittest.TestCase):
         return dict(services={
             'db':{'image':'db'},'keys':{'image':'web'},
             'game':{'image':'game','environment':{},'depends_on':{'db':{'condition':'service_healthy'}}},
-            'admin':{'image':'web','environment':{},'networks':{'private':None},'volumes':[]},
-            'netguard':{'environment':{},'depends_on':{'db':{'condition':'service_healthy'}}}},
+            'admin':{'image':'web','environment':{},'networks':{'private':None},'volumes':[]}},
             networks={'private':{'internal':True},'public':{'driver':'bridge'}},volumes={'database':{}})
 
     def test_external_model_removes_database_and_keeps_native_web(self):
@@ -89,7 +87,8 @@ class DatabaseModes(unittest.TestCase):
         self.assertEqual(model['services']['db-tools']['profiles'],['tools'])
         self.assertEqual(model['services']['game']['environment']['MAIN_MYSQL_ROOT_PASSWORD'],'unused')
         self.assertNotIn('MYSQL_ROOT_PASSWORD',model['services']['db-tools']['environment'])
-        self.assertEqual(model['services']['netguard']['environment']['NETGUARD_DB_HOST'],'172.17.0.1')
+        self.assertNotIn('db-check',model['services'])
+        self.assertNotIn('netguard',model['services'])
 
     def test_resolved_compose_dollar_is_literal_on_second_pass(self):
         source={'test':['CMD-SHELL','MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot']}
@@ -125,27 +124,19 @@ class DatabaseModes(unittest.TestCase):
                 return subprocess.CompletedProcess([],0,'game\nadmin\ningress\n')
             with patch.object(manager,'read_env',return_value={'DOF_DATABASE_KIND':'external'}),patch.object(manager,'STATE',Path(folder)),patch.object(manager,'compose',side_effect=compose):
                 with self.assertRaises(subprocess.CalledProcessError):manager.backup(root)
-            self.assertEqual(commands[-1],('start','ingress','admin','game'))
+            self.assertEqual(commands[-1],('start','admin','game'))
             self.assertEqual(list((Path(folder)/'backups').glob('*.tar.gz')),[])
 
     def test_internal_default_graph_preserved(self):
         model=self.model()
         self.assertEqual(deploy.configure(model,{},Path('/local/instance'),db.DATABASES),model)
 
-    def test_nondefault_database_port_does_not_allow_other_outbound(self):
-        with patch.dict('os.environ',{'NETGUARD_DB_PORT':'3307'}):
-            rules=guard.render_rules(['172.17.0.1'])
-            self.assertIn('-d 172.17.0.1/32 -p tcp --dport 3307',rules)
-            self.assertNotIn('--dport 3306',rules)
-            self.assertIn(':OUTPUT DROP',rules)
-        with patch.dict('os.environ',{'NETGUARD_DB_PORT':'0'}),self.assertRaises(ValueError):guard.render_rules(['172.17.0.1'])
-
     def test_external_image_acquisition_never_pulls_db(self):
         import subprocess
         with patch.object(manager,'run',return_value=subprocess.CompletedProcess([],0,'linux/amd64\n')) as run:
             manager.acquire_images({'registry':'ghcr.io/example','tag':'test'},'pull',database_mode='external')
         commands=[c.args[0] for c in run.call_args_list]
-        self.assertEqual(len([c for c in commands if c[1]=='pull']),3)
+        self.assertEqual(len([c for c in commands if c[1]=='pull']),2)
         self.assertFalse(any('dof-easy-db:' in str(c) for c in commands))
 
     def test_external_backup_stops_only_project_writers_and_uses_scoped_dump(self):
@@ -161,8 +152,8 @@ class DatabaseModes(unittest.TestCase):
             with patch.object(manager,'read_env',return_value=values),patch.object(manager,'STATE',Path(folder)),patch.object(manager,'compose',side_effect=compose),patch.object(manager,'run'):
                 manager.backup(instance)
             self.assertIn(('run','--rm','--no-deps','-T','db-tools','dump'),commands)
-            self.assertIn(('stop','ingress','admin','game'),commands)
+            self.assertIn(('stop','admin','game'),commands)
             self.assertFalse(any('db' in c for c in commands))
-            self.assertEqual(commands[-1],('start','ingress','admin','game'))
+            self.assertEqual(commands[-1],('start','admin','game'))
 
 if __name__=='__main__':unittest.main()

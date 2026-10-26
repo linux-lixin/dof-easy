@@ -388,7 +388,7 @@ def install(instance):
 def configure(instance, plugins_only=False):
     previous = manager.read_env(manager.instance_path(instance))
     arguments = ['config','--instance',instance]
-    choice = 'plugins' if plugins_only else choose('1 修改 IP / 2 修改频道 / 3 玩家来源 / 4 网页绑定 / 0 返回',('0','1','2','3','4'),'0')
+    choice = 'plugins' if plugins_only else choose('1 修改 IP / 2 修改频道 / 3 游戏绑定 / 4 网页绑定 / 0 返回',('0','1','2','3','4'),'0')
     if choice == 'plugins':
         plugins,raid = plugin_selection(previous)
         arguments += ['--plugins',plugins,'--raid-extension',raid]
@@ -398,7 +398,7 @@ def configure(instance, plugins_only=False):
         channels = manager.runtime_config.channels(ask('频道，逗号分隔',previous['OPEN_CHANNEL']))
         arguments += ['--channels',','.join(map(str,channels))]
     elif choice == '3':
-        arguments += ['--client-cidrs',ask('允许的玩家 IP/CIDR，逗号分隔；留空不限来源')]
+        arguments += ['--game-bind',str(ipaddress.IPv4Address(ask('游戏绑定地址；玩家来源在云安全组设置',previous.get('GAME_BIND_IP',previous['BIND_IP']))))]
     elif choice == '4':
         arguments += ['--admin-bind',str(ipaddress.IPv4Address(ask('网页绑定地址',previous.get('ADMIN_BIND_IP','127.0.0.1'))))]
     else:

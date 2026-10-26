@@ -28,7 +28,7 @@ python -m unittest discover -s tests/structure -p "test_*.py"
 python tests/integration/test_registry_images.py
 ```
 
-该检查仅在 Docker 主机网络的回环地址创建临时只读 Registry V2 服务，真实拉取四个空测试镜像并检查 Compose，结束后删除测试容器和测试标签。不上传、构建或启动生产镜像，不改变生产 Compose 的网络或 TLS 配置。
+该检查仅在 Docker 主机网络的回环地址创建临时只读 Registry V2 服务，真实拉取三个空测试镜像并检查 Compose，结束后删除测试容器和测试标签。不上传、构建或启动生产镜像，不改变生产 Compose 的网络或 TLS 配置。
 
 ```sh
 python tests/integration/test_mysql56_fixes.py

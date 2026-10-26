@@ -23,7 +23,7 @@ dof-easy/
 │   ├── protocol/dof/           配套格式与私有客户端输入准备
 │   ├── diagnostics/            只读诊断
 │   └── release/                镜像发布工具
-├── deploy/                     database、network、bootstrap、nginx、shared、manual
+├── deploy/                     database、bootstrap、nginx、shared、manual
 ├── metadata/                   公共输入、等级和来源锁
 │   └── dof/                    原生改名规则、哈希锁与加载测试断言
 ├── tests/                      单元、结构及独立集成入口

@@ -1,6 +1,6 @@
 """Exercise real Docker pulls and Compose resolution against a loopback fixture.
 
-Creates four empty test images through a temporary, read-only Registry V2 HTTP
+Creates three empty test images through a temporary, read-only Registry V2 HTTP
 fixture. No production images are uploaded, built, started or changed.
 Run explicitly: python tests/integration/test_registry_images.py
 """
@@ -127,12 +127,12 @@ def main():
             manager.write_env(instance / '.env', values)
             manager.write_json(instance / 'channels.json', manager.ports_override(values))
             model = json.loads(manager.compose(instance, 'config', '--format', 'json', capture_output=True, text=True).stdout)
-            expected = dict(db='db', admin='admin', keys='admin', game='game', ingress='game', netguard='netguard')
+            expected = dict(db='db', admin='admin', keys='admin', game='game')
             for service, role in expected.items():
                 assert model['services'][service]['image'] == references[role], service
                 assert 'build' not in model['services'][service], service
                 assert model['services'][service]['pull_policy'] == 'never', service
-        print('PASS: real Docker pulled all four loopback images; every Compose role uses configured images with no build definitions')
+        print('PASS: real Docker pulled all three loopback images; every Compose role uses configured images with no build definitions')
     finally:
         subprocess.run(['docker', 'rm', '-f', name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         if references:

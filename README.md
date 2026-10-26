@@ -50,7 +50,7 @@ bash dof.sh install --level 70 --ip 192.168.1.100 --pvf /data/Script.pvf --plugi
 
 安装结束会显示后台地址和密码文件位置。管理员账号 `admin`，密码在 `.dof-easy/instances/main/.env` 的 `ADMIN_PASSWORD`。登录器公钥和地址配置示例自动导出到该实例的 `client/`。将 [dof 登录器](clients/launcher/README.md) 放进配套客户端目录，使用自己的后台地址；公网部署使用自己的 HTTPS 入口。
 
-四个镜像名固定为 `仓库/命名空间/dof-easy-db:标签`、`dof-easy-admin:标签`、`dof-easy-game:标签`、`dof-easy-netguard:标签`，均为 Linux amd64，使用同一版本标签。源码构建及上传命名示例见 [镜像仓库配置](docs/image-registry.md)。
+内置模式三个镜像名固定为 `仓库/命名空间/dof-easy-db:标签`、`dof-easy-admin:标签`、`dof-easy-game:标签`，均为 Linux amd64，使用同一版本标签。源码构建及上传命名示例见 [镜像仓库配置](docs/image-registry.md)。
 
 ## 日常管理
 
@@ -92,10 +92,10 @@ bash dof.sh resources --resources /data/dof-resources
 
 - 数据库使用每个 Compose 项目独立的命名卷；PVF、等级程序、插件、密钥和游戏日志放在 `.dof-easy/instances/<名称>/runtime/`。
 - 原脚本的联网授权、外部统计 SQL、第三方备份、上报和清日志流程不进入启动链。DP2 上报模块已替换为无网络实现；保留历史日志。
-- 游戏只能连接内部数据库并回复客户端，其他主动外联由独立 netguard 容器阻止。没有宿主机网络模式，不改宿主机防火墙，不公开数据库 3306。
+- 游戏 TCP/UDP 直接由 game 发布，网页端口直接映射到 admin:80。玩家来源及网络访问范围由云安全组控制，不再运行 netguard、ingress 或外置 db-check；没有 host 网络模式，内置数据库不发布 3306。
 - 初次建库将后台等级设置为所选版本；改 IP 同步修改后台客户端配置。后台已有其他设置和插件 Lua/JS 保留。
 
-Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。通用部署组件按职责放在 `deploy/database`、`network`、`bootstrap`、`nginx`、`shared`、`manual`；项目不依赖宝塔。旧固定 86 级部署方案仅保留在 `docs/history/offline86`，早期显式导入工具位于 `scripts/imports`，均不是当前安装入口。**新安装从根目录运行 `bash install.sh`**；各容器作用见 [部署说明](deploy/README.md)。
+Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。通用部署组件按职责放在 `deploy/database`、`bootstrap`、`nginx`、`shared`、`manual`；项目不依赖宝塔。旧固定 86 级部署方案仅保留在 `docs/history/offline86`，早期显式导入工具位于 `scripts/imports`，均不是当前安装入口。**新安装从根目录运行 `bash install.sh`**；各容器作用见 [部署说明](deploy/README.md)。
 
 ## 验证与来源
 
