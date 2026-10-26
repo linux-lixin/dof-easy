@@ -95,7 +95,7 @@ bash dof.sh resources --resources /data/dof-resources
 - 游戏只能连接内部数据库并回复客户端，其他主动外联由独立 netguard 容器阻止。没有宿主机网络模式，不改宿主机防火墙，不公开数据库 3306。
 - 初次建库将后台等级设置为所选版本；改 IP 同步修改后台客户端配置。后台已有其他设置和插件 Lua/JS 保留。
 
-Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。部分共享实现仍保留在 `deploy/vipai86`、`scripts/vipai86` 下以兼容早期代码；**当前入口是根目录 `dof.sh`，不是旧的手动 86 级部署步骤**。
+Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。通用部署组件按职责放在 `deploy/database`、`network`、`bootstrap`、`nginx`、`shared`、`manual`；项目不依赖宝塔。旧固定 86 级部署方案仅保留在 `docs/history/offline86`，早期显式导入工具位于 `scripts/imports`，均不是当前安装入口。**新安装从根目录运行 `bash install.sh`**；各容器作用见 [部署说明](deploy/README.md)。
 
 ## 验证与来源
 

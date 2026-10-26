@@ -21,7 +21,7 @@ docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/ad
 Docker 构建包含前端和后端，不要求宿主机另装 Java/Node。不要只把 `docker/` 作为构建上下文。
 容器中的 `/app/data`、初始化标记和密钥路径保持不变。
 
-默认入口：[一键安装](../../README.md)；手动模板：[整体部署](../../deploy/ubuntu/all/README.md)、[独立后台](../../deploy/ubuntu/split/admin/README.md)。
+默认入口：[一键安装](../../README.md)；手动模板：[整体部署](../../deploy/manual/all/README.md)、[独立后台](../../deploy/manual/split/admin/README.md)。
 
 开发操作及原上游使用说明见 [后台文档](../../docs/admin/README.md)。
 

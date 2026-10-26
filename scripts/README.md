@@ -1,11 +1,13 @@
 # 仓库工具
 
-服务端安装和镜像发布仅提供 Linux Shell 入口。通用安装器要求 Python 3.9+；原生打包、探针和游戏部署脚本使用 `hashlib.file_digest`，须使用 Python 3.11+。从仓库根目录运行下表中的 Python 入口；参数以各脚本 `--help` 为准。实际凭据、profile、运行状态、二进制和归档留在私有目录。
+服务端安装和镜像发布仅提供 Linux Shell 入口，使用 Python 3.11+。从仓库根目录运行下表中的 Python 入口；参数以各脚本 `--help` 为准。实际凭据、profile、运行状态和原始归档留在私有目录，正式插件资源位于 `services/game/resources/`。
 
 | 路径 | 用途 |
 |---|---|
 | `container/manage.py` | 根目录 dof.sh 调用的通用安装和管理入口 |
 | `container/resources.py` | 公共构建输入及等级资源校验 |
+| `imports/prepare_assets.py` | 维护者显式导入本地普通插件归档；默认输出私有 `.dof-easy/imported-assets`，正常安装无需执行 |
+| `imports/prepare_source.py` | 公共资源校验的早期命令入口，转交 `container/resources.py` |
 | `dof/import_assets.py`、`dof/build_server_runtime.py` | 固定免授权输入导入和确定性 ELF 派生 |
 | `dof/package_server.py` | 校验正式资源锁、验收摘要并打包服务端资源 |
 | `dof/compile_admin.py`、`dof/package_admin.py` | 编译和打包原生网页后台 |
@@ -17,6 +19,7 @@
 | `dof/audit_native_names.py`、`dof/stage_server_probe.py`、`dof/local_environment.py` | 原生名称审计和本地隔离探测准备 |
 | `dof/migrate_local.py` | 显式导入历史本地副本；当前未上线项目不需要数据库迁移 |
 | `diagnostics/ubuntu_ports.py` | 从模板生成端口表 |
+| `operations/` | 管理维护脚本；按脚本参数限定目标 |
 | `release/admin-image.sh` | 交互构建并推送通用后台镜像 |
 
 ```bash
@@ -25,5 +28,7 @@ python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52
 ```
 
 原生操作先读 [文档入口](../docs/dof/README.md)。游戏部署与网页部署各有独立保护范围，不能把网页脚本改成通用容器操作入口。部署须使用已合入 main 的版本，不能依赖服务器临时改文件。
+
+脚本按用途分类，目录不绑定等级或面板。原 `scripts/vipai86/` 已整理为 `imports/`；游戏内普通插件加载器为 `services/game/runtime/ubuntu/plugins.py`，原生网关适配仍在同级 `gateway/`。安装时由统一菜单选择等级、DP2、Frida 和团本扩展。
 
 release 脚本提示目标仓库并确认推送；只做本地构建时使用 [组件构建说明](../services/admin/README.md)。资源来源见 [metadata](../metadata/README.md)，检查方法见 [tests](../tests/README.md)。

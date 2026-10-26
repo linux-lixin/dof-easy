@@ -48,6 +48,8 @@ MySQL 监听 `0.0.0.0` / `::` 可以正常安装。选择关闭 UFW/firewalld �
 
 网页有容器内 Nginx。直接访问 `http://服务器IP:18080`；需要域名/HTTPS 时使用自己的反代。菜单 10 生成 `nginx-location.conf.example`，可用于普通 Nginx 或宝塔，不覆盖已有文件。配置保存、PVF 处理、配套包生成从网页进行。
 
+项目不依赖宝塔；部署目录与 `game`、`admin`、`ingress`、`netguard`、`keys`、数据库辅助容器的职责见 [部署说明](../deploy/README.md)。`keys` 成功后退出正常，外置模式的 `db-check` 应常驻健康。
+
 ## 主机准备与恢复
 
 | 物理内存 | 推荐总 Swap |

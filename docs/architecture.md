@@ -23,7 +23,7 @@ dof-easy/
 │   ├── protocol/dof/           配套格式与私有客户端输入准备
 │   ├── diagnostics/            只读诊断
 │   └── release/                镜像发布工具
-├── deploy/                     手动 Ubuntu 模板与共享部署定义
+├── deploy/                     database、network、bootstrap、nginx、shared、manual
 ├── metadata/                   公共输入、等级和来源锁
 │   └── dof/                    原生改名规则、哈希锁与加载测试断言
 ├── tests/                      单元、结构及独立集成入口
@@ -32,7 +32,7 @@ dof-easy/
 
 ## 运行数据和控制关系
 
-通用安装器将实例环境和数据放在 `.dof-easy/instances/<名称>/`；数据库使用独立容器卷。手动 `deploy/ubuntu` 模板使用所选目录的 `.env`、`runtime/` 或 `RUNTIME_ROOT`，连接操作者独立管理的 MySQL。两种目录布局不能混用。
+通用安装器将实例环境和数据放在 `.dof-easy/instances/<名称>/`；数据库使用独立容器卷。手动 `deploy/manual` 模板使用所选目录的 `.env`、`runtime/` 或 `RUNTIME_ROOT`，连接操作者独立管理的 MySQL。两种目录布局不能混用。
 
 原生运行程序安装在 `/opt/dof-easy/`，配置和密钥在 `/data/dof-easy/`；就绪标记在 `/run/dof-easy/`，日志在 `/var/log/dof-easy/`。具体对象见 [游戏组件](../services/game/README.md)。原生网页数据在 `/app/data/`，客户端发布工作区默认 `/app/data/dof-client-publication`；绑定游戏 PVF 使用只读 `/app/paired/Script.pvf`。宿主机实际路径由私有 profile 明确指定。
 

@@ -1,6 +1,6 @@
 """Report stable service readiness using the explicitly selected binary profile.
 
-Legacy dof requires fresh GeoIP log markers. The unmodified vipai86 executable
+Legacy dof requires fresh GeoIP log markers. The unmodified native executable
 does not emit those markers, so its profile requires stable native processes
 and the same real process/port/database health checks. Neither proves gameplay.
 """
@@ -45,8 +45,8 @@ def output(message):
 
 def make_check(health,env,log_root='/home/neople/game/log'):
     profile=env.get('DNF_READINESS_PROFILE','dof')
-    if profile not in ('dof','vipai86','native'):
-        raise ValueError('DNF_READINESS_PROFILE must be dof, native or vipai86 (legacy alias)')
+    if profile not in ('dof','native'):
+        raise ValueError('DNF_READINESS_PROFILE must be dof or native')
 
     def check():
         health.check()
@@ -98,7 +98,7 @@ def main():
     role=os.environ.get('SERVER_TYPE','ALL')
     names=channel_names(os.environ)
     detail=role+('；频道：'+'、'.join(names) if names else '')
-    if os.environ.get('DNF_READINESS_PROFILE','dof') in ('native','vipai86'):
+    if os.environ.get('DNF_READINESS_PROFILE','dof') == 'native':
         message=f'[启动完成] 服务健康检查已连续稳定通过（{detail}）；尚未验证客户端实玩流程'
     else:
         message=f'[启动完成] 游戏服务已全部就绪（{detail}）'

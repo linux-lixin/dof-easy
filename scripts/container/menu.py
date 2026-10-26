@@ -241,7 +241,7 @@ def web_instructions(instance):
     values = manager.read_env(root)
     port = int(values['ADMIN_PORT'])
     target = root / 'nginx-location.conf.example'
-    template = (manager.ROOT / 'deploy/baota/nginx-location.conf.example').read_text()
+    template = (manager.ROOT / 'deploy/nginx/nginx-location.conf.example').read_text()
     if not target.exists():
         with target.open('x') as stream:
             os.chmod(target, 0o600)

@@ -2,7 +2,7 @@
 
 适用范围：`LAUNCHER_MODE=dof` 的 WPF 登录器与默认后台。原生模式的配置容器、PVF 加密和读取端另见 [原生文档](../dof/README.md)。下表采用手动模板频道 11、52；通用安装器默认 15、52，以实际生成配置为准。
 
-先完成 [Ubuntu 游戏和后台部署](../../deploy/ubuntu/all/README.md)，再按本文配置玩家端。拆分部署的端口以各节点 Compose 和端口表为准。
+先完成 [Ubuntu 游戏和后台部署](../../deploy/manual/all/README.md)，再按本文配置玩家端。拆分部署的端口以各节点 Compose 和端口表为准。
 
 ## 1. 开放端口并配置后台
 
@@ -86,7 +86,7 @@ Get-FileHash "D:\你的客户端目录\Script.pvf" -Algorithm SHA256
 在 Linux 检查服务端 PVF：
 
 ```bash
-sha256sum /opt/dof-easy/deploy/ubuntu/all/runtime/game/data/Script.pvf
+sha256sum /opt/dof-easy/deploy/manual/all/runtime/game/data/Script.pvf
 ```
 
 两边需要使用配套资源，这里的 PVF 内容应一致。服务端能启动不代表任意客户端都能登录；客户端还需要完整的 EXE、DLL、ImagePacks2 等文件。
@@ -109,7 +109,7 @@ sha256sum /opt/dof-easy/deploy/ubuntu/all/runtime/game/data/Script.pvf
 先完成正常进游戏测试，再单独启动静态下载容器（首次需要拉取 Nginx 镜像）：
 
 ```bash
-cd /opt/dof-easy/deploy/ubuntu/all
+cd /opt/dof-easy/deploy/manual/all
 mkdir -p packages
 docker run -d --name dnf-download --restart unless-stopped \
   -p 18081:80 \
@@ -135,7 +135,7 @@ client-1.0.0.zip
 上传到：
 
 ```text
-/opt/dof-easy/deploy/ubuntu/all/packages/client-1.0.0.zip
+/opt/dof-easy/deploy/manual/all/packages/client-1.0.0.zip
 ```
 
 确保文件服务可读：公开下载目录通常为 755、ZIP 文件为 644，不要递归放宽 `runtime` 私钥目录的权限。

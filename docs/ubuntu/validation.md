@@ -135,4 +135,4 @@ CentOS 基线的初始化/API/后台重启、两个实际频道进程和端口�
 - 旧 OpenSSL/MySQL 客户端库是原程序 ABI 依赖；换基础系统不会消除闭源程序自身的问题。
 - 性能数据为并行测试的资源快照，CentOS 还使用不同 CPU 限额，不能据此宣称性能提升。
 
-完整操作与回退步骤见 [Ubuntu 部署指南](../../deploy/ubuntu/all/README.md)。
+完整操作与回退步骤见 [Ubuntu 部署指南](../../deploy/manual/all/README.md)。

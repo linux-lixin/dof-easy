@@ -1,16 +1,45 @@
-# 部署导航
+# 部署目录与容器职责
 
-游戏运行使用 Linux amd64 Ubuntu 镜像。先选择入口和登录模式，不混用不同入口的初始化脚本。
+**新安装统一在仓库根目录运行 `bash install.sh`。项目不依赖宝塔。** 宝塔只是可选的 Docker、MySQL、Nginx 管理界面；也可以使用普通 Linux 安装的这些服务。
 
-| 场景 | 入口 | 数据及数据库 |
+## 目录规划
+
+| 目录 | 用途 | 谁使用 |
 |---|---|---|
-| 新实例，默认 `dof` 模式 | [根目录一键部署](../README.md) | `.dof-easy/instances/<名称>/`；默认独立数据库容器卷；可选外置 MySQL |
-| 同机宝塔 Nginx、Docker，86 级原生新服 | [完整部署指南](../docs/baota-deployment.md) | `--database internal` 或 `external`，首次选择后固定 |
-| 新实例的 `native` 资源准备 | [原生资源导入](../docs/dof/launcher.md) | 固定免授权输入及正式锁；Windows 链尚待完成 |
-| 当前绑定的 86 级测试游戏更新 | [限定目标部署](../docs/dof/game-test-deployment.md) | 私有 profile、保留恢复点，不重置游戏业务库 |
-| 原生网页准备与升级 | [网页部署与恢复](../docs/dof/deployment.txt) | 仅操作指定网页容器；与游戏部署入口分离 |
-| 高级手动部署、外置 MySQL | [ALL](ubuntu/all/README.md)、[拆分](ubuntu/split/README.md)、[独立后台](ubuntu/split/admin/README.md) | 所选目录 `.env`、`runtime/` 或 `RUNTIME_ROOT` |
+| `database/` | MySQL 镜像、`seed.sql`、兼容表和配置 | 内置数据库构建；外置数据库首次初始化复用 SQL |
+| `network/` | 网页入口转发 `ingress.py`、`netguard/` 网络守卫镜像 | 根 Compose 和一键安装器 |
+| `bootstrap/` | 实例登录密钥初始化 | `keys` 一次性容器 |
+| `nginx/` | 通用 Nginx 反向代理示例 | 可选宿主机 Nginx，普通安装和宝塔均可使用 |
+| `shared/` | 手动部署共享后台定义、初始化示例与日志模板 | 高级手动部署 |
+| `manual/` | 单机 ALL、拆分 CORE/GAME/P2P、独立后台模板 | 高级手动部署，按各子目录文档使用 |
 
-手动 Ubuntu 模板采用默认 `dof` 登录链，保留 CORE/GAME/P2P 分角色方案。`build` 和 `shared` 不是独立运行入口；模板相对引用公共定义，应保留仓库层级。Relay/STUN 是游戏联机服务。
+历史固定 86 级离线方案保留在 [历史归档](../docs/history/offline86/README.md)，不参与当前安装器的构建或部署。当前等级从资源清单选择，回车默认 86，目录名不绑定等级。原始材料来源说明保持真实，数据库种子只移动和改文件名，内容与哈希不变。
 
-当前运行版本和验收边界以 [状态页](../docs/dof/status.md) 为准。历史 `vipai86` 文档不再是通用安装入口，一键安装的外置数据库应使用上述宝塔指南，不混用手动模板的初始化方式。
+## 容器分别做什么
+
+| 服务名 | 作用 | 正常状态 |
+|---|---|---|
+| `game` | 游戏核心、频道、组队服务、原生网关与所选插件；内部由 Supervisor 管理多个进程 | 常驻、健康 |
+| `admin` | 网页前端、Java 管理 API、容器内 Nginx；提供配置、PVF 与客户端包相关功能 | 常驻 |
+| `ingress` | 将宿主机网页端口转发给内部 `admin:80`；不是游戏入口或另一套后台 | 常驻、健康 |
+| `netguard` | 与 game 共享网络空间，发布游戏 TCP/UDP 端口，管理容器内玩家来源及数据库出口规则 | 常驻、健康 |
+| `keys` | 首次生成并检查实例密钥，将公钥提供给游戏；已有密钥保持并核验 | 完成后 `Exited (0)` 正常；非零退出需排查 |
+| `db` | 项目独立的 MySQL 5.6，保存账号、角色和项目配置 | 仅内置模式存在，常驻、健康 |
+| `db-check` | 核对外置 MySQL 版本、身份和项目表访问，为游戏启动提供健康状态 | 仅外置模式存在，常驻、健康 |
+| `db-tools` | 使用项目受限账号执行数据库查询、导出等维护任务 | 仅外置模式，按需临时运行，平时不存在正常 |
+
+容器名通常带 `dof-实例名-` 前缀，如 `dof-main-game-1`。同一镜像可以运行多个不同用途的容器，镜像数量不等于容器数量。常规安装两种数据库模式都定义六个默认服务；`keys` 成功退出后通常留下五个常驻服务。外置模式不创建 `db`，也不会管理宿主机 MySQL 的启停。
+
+`netguard` 的规则只存在于游戏容器网络空间，关闭宿主机 UFW/firewalld 不等于删除它；它是当前游戏网络设计的一部分。网页访问链为“客户端 → 可选宿主机 Nginx → ingress → admin”，游戏流量走 netguard 发布的端口到 game。
+
+## 安装与更新
+
+- [一键安装菜单](../docs/container-installer.md)：推荐入口，内置／外置 MySQL、插件按需选择。
+- [同机外置 MySQL 与可选宝塔配置](../docs/baota-deployment.md)：宝塔不是前置依赖。
+- [高级手动部署](manual/README.md)：使用独立 `.env`、`runtime/` 或 `RUNTIME_ROOT`，不要混用一键端实例目录。
+
+此次整理不迁移或清空实例数据。普通插件加载器改为 `plugins.py`，网络守卫镜像内入口改为 `/usr/local/bin/dof-netguard.py`，就绪模式使用 `native` 或原有 `dof`。因此源码更新后需用同一提交重建游戏及网络守卫镜像（或拉取对应新版镜像），旧缓存镜像不会因 `git pull` 自动改名。新安装选择本机构建会使用新入口。
+
+旧手动实例更新前保留其私有 `.env`，在新模板中用 `RUNTIME_ROOT` 指向原运行目录；不要把新相对路径误当成原数据。归档方案同样必须显式沿用旧数据目录和原交付镜像，不能对旧卷执行全新初始化。
+
+一键端每次调用 Compose 都从当前根 `compose.yaml` 重新生成模型，不直接沿用过期文件路径。请使用 `dof.sh` 管理实例，不手动启动私有目录里旧的 `deployment.json`。容器作用和健康状态不等于客户端进游戏验收，实际边界见 [当前状态](../docs/dof/status.md)。

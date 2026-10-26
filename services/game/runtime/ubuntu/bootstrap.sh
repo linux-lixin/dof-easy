@@ -73,7 +73,7 @@ fi
 # Limit persistent plugin permissions to the container owner.
 chmod 700 -R /data/dp
 # Install the explicitly selected ordinary plugins.
-python3 /opt/dnf/ubuntu/vipai86.py || exit 1
+python3 /opt/dnf/ubuntu/plugins.py || exit 1
 python3 /opt/dof-easy/runtime/gateway/service.py prepare || exit 1
 # 重设supervisor web网页密码
 sed -i "s/^username=.*/username=$WEB_USER/" /etc/supervisord.conf

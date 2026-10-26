@@ -203,7 +203,7 @@ class RaidAssets(unittest.TestCase):
                 self.assets.validate_game(game)
 
     def test_custom_overlap_is_reported_without_writes(self):
-        runtime = module('vipai86')
+        runtime = module('plugins')
         target = self.root / 'frida.js'
         content = b'operator code 2021458801 2021458802\xff'
         target.write_bytes(content)
