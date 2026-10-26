@@ -207,3 +207,13 @@ sudo docker compose -p dof-main \
 管理历史优先列出 PREPARED、CONFLICT，避免旧未决操作被较新的预览挤出最近 50 条。新增了“旧操作之后已有 51 个预览”的真实 MySQL 契约检查，未决编号仍能从页面找到并核对。
 
 扩展运营的功能台账现直接读取 `/api/v1/admin/dof` 返回的统一 `scope.json`，显示同一份 71 类、239 项及当前证据。旧 `features.json` 保留为历史审计材料，不再作为页面当前进度来源；不将旧快照中的“待客户端”状态当成管理已完成。功能清单、记录目录和时钟独立加载，一个模块失败不会阻断其他模块。标准前端构建及真实后端浏览器已验证统一计数和账号流程。
+
+### 本批最终隔离部署
+
+最终源码为 `1e28894abdfa94e9ee6d10783dc25d23e9aabbec`（包含 `cd8966b` 账号协议及 `2d57f93` 历史展示修复）。当前镜像为 `sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc`，标签 `dof-admin-replacement:20261027-s2-ledger`；JAR SHA-256 为 `d07f45a75d526aebcd4d9722c981616980c19161a373ee2cbf9775bdfd83ce2b`。本地交付目录 `.dof-easy/admin-replacement-delivery-20261027-s2-ledger` 含完整镜像构建输入与逐文件清单。
+
+真实部署浏览器通过管理员登录、匿名拒绝、插件与签到读取、30/30 类记录、新处罚结构适配、受保护管理员的改密状态/历史读取，以及统一 71 类239项台账和当前管理证据展示。该验证没有对现有玩家执行封禁、改密或属性操作；角色列表仍为空。端口18080、游戏容器启动时间、配置及密钥哈希保持不变。本批没有执行数据库迁移或原生业务写入。
+
+最近恢复点为 `/opt/dof-easy/.dof-easy/admin-replacement/20261027-s2-ledger/before-upgrade`，对应镜像 `dof-admin-rollback:20261027-77f85e86268d`。本批开始前的恢复点另保存在 `/opt/dof-easy/.dof-easy/admin-replacement/20261027-s2/before-upgrade`，对应 `dof-admin-rollback:20261027-a83f46b672d4`。两处均保留部署模型、环境、admin数据、配置和管理日志现场；权限受限，不能上传GitHub。
+
+恢复遵循前述步骤：先核对 PREPARED/CONFLICT，再只恢复 admin 镜像和部署模型，不回滚玩家库或旧密码，不清除新增操作历史。私密核对材料必须一并保留。正式服切换、多等级、真实玩家及游戏效果仍不计为通过。

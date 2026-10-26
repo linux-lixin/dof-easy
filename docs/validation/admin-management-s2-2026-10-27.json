@@ -182,12 +182,51 @@
       "operations": 239,
       "historicalFeatureSnapshotUsedForProgress": false,
       "moduleFailuresIsolated": true
+    },
+    "deployedBrowser": {
+      "passed": true,
+      "backend": "real",
+      "instanceId": "dof-main",
+      "configEdits": false,
+      "actualGameplayVerified": false,
+      "checks": [
+        "real browser administrator login",
+        "anonymous access rejected",
+        "real plugin read and application guidance",
+        "real signin schema and queries",
+        "real read-only record projections: 30/30",
+        "deployed activity adapter and durable journal read",
+        "deployed penalty schema and protected-admin password-state/journal read without writes",
+        "role adapter sample unavailable: character list empty; no player data initialized",
+        "browser schema diagnosis",
+        "feature ledger uses canonical 71 classes / 239 operations and current management evidence"
+      ],
+      "pageErrors": 0
     }
   },
   "runtime": {
-    "deployed": false,
-    "previousImage": "sha256:a83f46b672d49b55eebd7cd188730ab4b7ff62b61990da852e4ad60b9a58224f",
-    "hostPort": 18080
+    "deployed": true,
+    "sourceCommit": "1e28894abdfa94e9ee6d10783dc25d23e9aabbec",
+    "image": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+    "previousImage": "sha256:77f85e86268dd5846d31993e517cc752d2b2e4032b62dd35d1847c4ba5f35125",
+    "jarSHA256": "d07f45a75d526aebcd4d9722c981616980c19161a373ee2cbf9775bdfd83ce2b",
+    "hostPort": 18080,
+    "portsUnchanged": true,
+    "gameNotRestarted": true,
+    "gameConfigurationUnchanged": true,
+    "keyMaterialUnchanged": true,
+    "instanceId": "dof-main",
+    "level": 86,
+    "databaseMigrationsExecuted": false,
+    "nativeBusinessWrites": false,
+    "authenticatedBrowserVerified": true,
+    "actualGameplayVerified": false,
+    "peakSpaceBudgetBytes": 537298180,
+    "recoveryDirectory": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s2-ledger/before-upgrade",
+    "rollbackImage": "dof-admin-rollback:20261027-77f85e86268d",
+    "realCharacterSampleAvailable": false,
+    "preBatchImage": "sha256:a83f46b672d49b55eebd7cd188730ab4b7ff62b61990da852e4ad60b9a58224f",
+    "preBatchRecoveryDirectory": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s2/before-upgrade"
   },
   "nativeSchemaReadOnlyCheck": {
     "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
@@ -215,6 +254,17 @@
     "Real isolated instance has no character samples; no player account or character was initialized by this batch",
     "Original-tool complete menu/default/import/export audit and per-operation comparison remain pending",
     "Other management writes, raid runtime actions, economy/mail/items/UI/PVF publication, fault injection and container acceptance remain pending",
-    "20 skipped tests keep their original private-sample/integration requirements"
-  ]
+    "20 skipped tests keep their original private-sample/integration requirements",
+    "Nonempty record pagination/filter/encoding and chat-body collection chain still need verification"
+  ],
+  "artifact": {
+    "sourceCommit": "1e28894abdfa94e9ee6d10783dc25d23e9aabbec",
+    "directory": ".dof-easy/admin-replacement-delivery-20261027-s2-ledger",
+    "jarSHA256": "d07f45a75d526aebcd4d9722c981616980c19161a373ee2cbf9775bdfd83ce2b",
+    "manifest": "build-manifest.json",
+    "image": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+    "imageTag": "dof-admin-replacement:20261027-s2-ledger",
+    "runtimeBase": "dof-admin-runtime-20261026:a75316ec509c",
+    "networkUsedDuringDockerBuild": false
+  }
 }
