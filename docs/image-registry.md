@@ -4,6 +4,8 @@
 
 镜像仓库参数包含域名、可选端口和命名空间，不包含 `https://`、账号密码或具体镜像名。例如 `ghcr.io/your-name`、`docker.io/your-name`、`harbor.example.com:5000/dnf`。标签默认 `latest`，发布时建议使用明确的版本号，如 `v1`。
 
+外置 MySQL 模式只需要 game、admin、netguard 三个镜像。`build --database external` 跳过 db 镜像，`install --database external` 也不拉取或要求 db 镜像；其他资源和版本一致性要求不变。完整参数见 [宝塔部署指南](baota-deployment.md)。
+
 ## 配置与一键安装
 
 ```sh

@@ -36,6 +36,8 @@ source = module('dof_source', 'scripts/container/resources.py')
 runtime_config = module('dof_config', 'services/game/runtime/ubuntu/config.py')
 image_config = module('dof_images', 'scripts/container/image_config.py')
 raid_assets = module('dof_raid_assets', 'services/game/runtime/ubuntu/gateway/assets.py')
+database = module('dof_database', 'scripts/container/database.py')
+deployment = module('dof_deployment', 'scripts/container/deployment.py')
 
 
 def catalog():
@@ -89,7 +91,7 @@ def prepare(resources, offline=False):
     run([sys.executable, ROOT / 'scripts/container/resources.py'])
 
 
-def build(settings):
+def build(settings, database_mode='internal'):
     # Docker reuses unchanged layers; all levels share these four images.
     references = image_config.references(settings)
     for tag, context, dockerfile in (
@@ -98,15 +100,22 @@ def build(settings):
         ('game', 'services/game', 'docker/ubuntu/Dockerfile'),
         ('netguard', 'deploy/vipai86/netguard', 'Dockerfile'),
     ):
+        if database_mode == 'external' and tag == 'db':
+            continue
         print('构建共享镜像：' + tag, flush=True)
         run(['docker', 'build', '-t', references[tag], '-f', ROOT / context / dockerfile, ROOT / context])
 
 
-def acquire_images(settings, mode, archive=None):
+def acquire_images(settings, mode, archive=None, database_mode='internal'):
     references = image_config.references(settings)
+    if database_mode == 'external':
+        references.pop('db')
     if mode == 'build':
         prepare(None)
-        build(settings)
+        if database_mode == 'external':
+            build(settings, database_mode)
+        else:
+            build(settings)
     elif mode == 'pull':
         for reference in references.values():
             print('拉取镜像：' + reference, flush=True)
@@ -142,6 +151,7 @@ def write_env(path, values):
 def read_env(root):
     values = dict(line.split('=', 1) for line in (root / '.env').read_text(encoding='utf-8').splitlines() if line and not line.startswith('#'))
     raid_assets.profile_for(values)
+    database.kind(values)
     return values
 
 
@@ -153,7 +163,9 @@ def initial_values(args, row, root):
     channels = runtime_config.channels(args.channels)
     if not 1 <= args.admin_port <= 65535:
         raise ValueError('后台端口必须在 1..65535 范围内。')
-    return dict(PUBLIC_IP=str(ipaddress.IPv4Address(args.ip)), BIND_IP=str(ipaddress.IPv4Address(args.bind)),
+    return dict(**database.external_options(args),
+                ADMIN_BIND_IP=str(ipaddress.IPv4Address(getattr(args,'admin_bind',None) or '127.0.0.1')),
+                PUBLIC_IP=str(ipaddress.IPv4Address(args.ip)), BIND_IP=str(ipaddress.IPv4Address(args.bind)),
                 ADMIN_PORT=str(args.admin_port), OPEN_CHANNEL=','.join(map(str, channels)),
                 DNF_MAX_LEVEL=str(row['level']), DNF_GAME_SHA256=row['game']['sha256'],
                 PLUGIN_MODE=args.plugins, RAID_EXTENSION=raid, LAUNCHER_MODE=launcher, RUNTIME_ROOT=(root / 'runtime').as_posix(),
@@ -289,6 +301,7 @@ def compose(root, *arguments, **kwargs):
     # instance's image choices authoritative, including old local instances.
     env = dict(kwargs.pop('env', os.environ))
     values = read_env(root)
+    env.update(values)
     env.update({key: image_config.instance_reference(values, role) for role, key in image_config.KEYS.items()})
     env['RAID_EXTENSION'] = values.get('RAID_EXTENSION', 'off')
     env['LAUNCHER_MODE'] = values.get('LAUNCHER_MODE', 'dof')
@@ -296,8 +309,47 @@ def compose(root, *arguments, **kwargs):
     for name in list(env):
         if name.startswith('QINGKONG_'):
             del env[name]
-    return run(['docker', 'compose', '--project-directory', ROOT, '-p', 'dof-' + root.name,
-                '--env-file', root / '.env', '-f', ROOT / 'compose.yaml', '-f', root / 'channels.json', *arguments], env=env, **kwargs)
+    base = ['docker','compose','--project-directory',ROOT,'-p','dof-'+root.name,
+            '--env-file',root/'.env','-f',ROOT/'compose.yaml','-f',root/'channels.json']
+    if database.kind(values) == 'external' or raid_assets.launcher_mode(values) == 'native':
+        result = run(base+['config','--format','json'],env=env,capture_output=True,text=True)
+        model = deployment.configure(json.loads(result.stdout),values,root,database.DATABASES)
+        target = root/'deployment.json'
+        database.private_json(target,deployment.literal_model(model))
+        return run(['docker','compose','--project-directory',ROOT,'-p','dof-'+root.name,
+                    '-f',target,*arguments],env=env,**kwargs)
+    return run(base+list(arguments),env=env,**kwargs)
+
+
+def database_query(root, sql):
+    values = read_env(root)
+    if database.kind(values) == 'external':
+        command=['run','--rm','--no-deps','-T','db-tools','query']
+    else:
+        command=['exec','-T','db','sh','-c',
+                 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot --default-character-set=utf8 -N -B -r']
+    result = compose(root,*command,input=sql,text=True,capture_output=True)
+    return result.stdout.strip()
+
+
+def prepare_database(root,args):
+    values=read_env(root)
+    if database.kind(values) != 'external':
+        return
+    marker=root/'external-database.json'
+    if marker.exists() and json.loads(marker.read_text()).get('state') == 'ready':
+        saved=json.loads(marker.read_text())
+        if saved['databaseUuid'] != values.get('DOF_DATABASE_UUID') or saved['host'] != values['DOF_DB_HOST'] or saved['port'] != values['DOF_DB_PORT'] or saved['grantHost'] != values['DOF_DB_ALLOW_HOST']:
+            raise ValueError('外置数据库绑定改变')
+        return
+    if not args.mysql_config:
+        raise ValueError('外置首次初始化未完成，需要原 --mysql-config；不会重新生成密码')
+    query=database.host_query(args.mysql_bin,args.mysql_config)
+    identity=database.initialize_external(root,values,query)
+    values['DOF_DATABASE_UUID']=identity
+    temporary=root/'.env.new'
+    write_env(temporary,values)
+    temporary.replace(root/'.env')
 
 
 def start(root, recreate=False):
@@ -306,6 +358,17 @@ def start(root, recreate=False):
     args = ['up', '-d', '--wait', '--wait-timeout', '900', '--no-build', '--pull', 'never']
     if recreate:
         args.append('--force-recreate')
+    if database.kind(values) == 'external':
+        marker=root/'external-database.json'
+        saved=json.loads(marker.read_text()) if marker.exists() else {}
+        if saved.get('state') != 'ready' or any(saved.get(k) != values.get(v) for k,v in [('databaseUuid','DOF_DATABASE_UUID'),('host','DOF_DB_HOST'),('port','DOF_DB_PORT'),('grantHost','DOF_DB_ALLOW_HOST')]):
+            raise ValueError('外置数据库初始化未完成或绑定不符，拒绝启动')
+    if raid_assets.launcher_mode(values) == 'native' and database.kind(values) == 'internal':
+        # The web adapter is provisioned only after the actual native game is ready.
+        compose(root, *args, 'game')
+        identity=database.prepare_web(root,values,lambda sql:database_query(root,sql))
+        values['DOF_DATABASE_UUID']=identity
+        write_env(root/'.env',values)
     compose(root, *args)
     if raid_assets.launcher_mode(values) == 'native':
         # Older cached images ignore LAUNCHER_MODE. Do not accept their generic
@@ -356,7 +419,7 @@ def start(root, recreate=False):
     print(f"后台：http://{admin_host}:{values['ADMIN_PORT']}；账号：admin")
     print('登录方式：' + raid_assets.launcher_mode(values))
     if ipaddress.ip_address(admin_bind).is_loopback:
-        print('后台仅本机访问；远程登录器和管理页面需要 SSH 本地端口转发。')
+        print('后台仅本机访问；通过宝塔 Nginx HTTPS 反向代理或 SSH 转发访问。')
     print('密码保存在 ' + str(root / '.env') + ' 的 ADMIN_PASSWORD；公钥在 ' + str(client))
 
 
@@ -381,8 +444,11 @@ def backup(root):
     output.parent.mkdir(parents=True, exist_ok=True)
     output.parent.chmod(0o700)
     running = compose(root, 'ps', '--status', 'running', '--services', capture_output=True, text=True).stdout.split()
-    if 'db' not in running:
+    external = database.kind(values) == 'external'
+    if not external and 'db' not in running:
         raise ValueError('请先启动数据库再备份。')
+    if external:
+        compose(root,'run','--rm','--no-deps','-T','db-tools','check')
     stopped = [s for s in ('ingress', 'admin', 'game') if s in running]
     with tempfile.TemporaryDirectory(prefix='.backup-', dir=STATE) as directory:
         sql = Path(directory) / 'databases.sql'
@@ -390,8 +456,13 @@ def backup(root):
             if stopped:
                 compose(root, 'stop', *stopped)
             with sql.open('wb') as stream:
-                compose(root, 'exec', '-T', 'db', 'sh', '-c',
+                if external:
+                    compose(root,'run','--rm','--no-deps','-T','db-tools','dump',stdout=stream)
+                else:
+                    compose(root, 'exec', '-T', 'db', 'sh', '-c',
                         'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysqldump -uroot --all-databases --single-transaction --routines --events --ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats', stdout=stream)
+            if sql.stat().st_size < 100:
+                raise ValueError('数据库备份为空；不发布归档')
             partial = output.with_suffix('.partial')
             with partial.open('xb'):
                 pass
@@ -414,15 +485,10 @@ def backup(root):
 
 
 def update_admin_address(root, address):
-    command = ['exec', '-T', 'db', 'sh', '-c',
-               'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot --default-character-set=utf8 -N -r']
-    result = compose(root, *command, input='SELECT CONFIG_JSON FROM dnf_service.ASSIST_CONFIG WHERE ID=1;\n',
-                     text=True, encoding='utf-8', capture_output=True)
-    config = json.loads(result.stdout)
-    config['服务器地址'] = address
-    encoded = json.dumps(config, ensure_ascii=False).encode('utf-8').hex()
-    compose(root, *command, input='UPDATE dnf_service.ASSIST_CONFIG SET CONFIG_JSON=CONVERT(0x'
-            + encoded + ' USING utf8), UPDATE_TIME=NOW() WHERE ID=1;\n', text=True, encoding='utf-8', capture_output=True)
+    config=json.loads(database_query(root,'SELECT CONFIG_JSON FROM dnf_service.ASSIST_CONFIG WHERE ID=1;'))
+    config['服务器地址']=address
+    encoded=json.dumps(config,ensure_ascii=False).encode().hex()
+    database_query(root,'UPDATE dnf_service.ASSIST_CONFIG SET CONFIG_JSON=CONVERT(0x'+encoded+' USING utf8),UPDATE_TIME=NOW() WHERE ID=1;')
 
 
 def wizard():
@@ -449,7 +515,14 @@ def wizard():
                       '--pvf', input('配套 PVF 文件路径：').strip().strip('"'),
                       '--plugins', input('插件 dp2-frida / dp2 / frida / none [dp2-frida]：').strip() or 'dp2-frida',
                       '--raid-extension', input('团本扩展 on / off [off]：').strip() or 'off']
-        if arguments[-1] == 'on':
+        database_mode=input('数据库 internal 内置 / external 宝塔 [internal]：').strip() or 'internal'
+        arguments += ['--database',database_mode]
+        if database_mode == 'external':
+            arguments += ['--db-host',input('容器可达的宿主机私网 IPv4：').strip(),
+                          '--db-port',input('MySQL 端口 [3306]：').strip() or '3306',
+                          '--db-allow-host',input('专用 Docker 网段/点分掩码：').strip(),
+                          '--mysql-config',input('本机管理员 MySQL 配置文件路径：').strip()]
+        if arguments[arguments.index('--raid-extension')+1] == 'on':
             supplied = input('团本扩展已导入资源目录 [默认本地缓存]：').strip().strip('\"')
             if supplied:
                 arguments += ['--dof-assets', supplied]
@@ -491,9 +564,11 @@ def main(argv=None):
     resources = sub.add_parser('resources', help='下载全部等级包并校验仓库内公共资源')
     resources.add_argument('--resources', type=Path, default=STATE / 'resources')
     for command in ('images', 'build'):
-        p = sub.add_parser(command, help='配置/查看默认镜像仓库' if command == 'images' else '显式从源码构建四个镜像，不上传')
+        p = sub.add_parser(command, help='配置/查看默认镜像仓库' if command == 'images' else '显式构建所选数据库模式的镜像，不上传')
         p.add_argument('--registry', help='仓库地址及命名空间，例如 ghcr.io/用户名')
-        p.add_argument('--tag', help='四个镜像使用的版本标签')
+        p.add_argument('--tag', help='镜像使用的版本标签')
+        if command == 'build':
+            p.add_argument('--database', choices=('internal','external'), default='internal', help='external 不构建数据库镜像')
     for command in ('install', 'start', 'stop', 'restart', 'status', 'logs', 'backup', 'config'):
         p = sub.add_parser(command)
         p.add_argument('--instance', default='main')
@@ -502,6 +577,13 @@ def main(argv=None):
             p.add_argument('--dof-assets', type=Path, help='已派生并校验的正式服务端资源目录')
             p.add_argument('--raid-extension', choices=('on', 'off'), help='团本扩展，默认关闭；启用需要 DP2')
         if command == 'install':
+            p.add_argument('--database',choices=('internal','external'),help='数据库模式；新实例默认 internal，已有实例不可切换')
+            p.add_argument('--db-host',help='外置 MySQL 的宿主机私网 IPv4，不是容器内 127.0.0.1')
+            p.add_argument('--db-port',type=int,help='外置 MySQL 端口，默认 3306')
+            p.add_argument('--db-allow-host',help='专用 Docker 网段/点分掩码，如 172.29.86.0/255.255.255.0')
+            p.add_argument('--mysql-config',type=Path,help='首次初始化使用的本机 MySQL 管理员客户端配置，权限 0600')
+            p.add_argument('--mysql-bin',help='本机 mysql 客户端，默认 /www/server/mysql/bin/mysql')
+            p.add_argument('--admin-bind',help='网页监听 IPv4，默认 127.0.0.1，供宝塔 Nginx 反代')
             p.add_argument('--level', type=int, choices=list(catalog()))
             p.add_argument('--ip')
             p.add_argument('--pvf', type=Path)
@@ -552,8 +634,8 @@ def main(argv=None):
     if args.command == 'build':
         settings = image_config.resolve(args, image_config.load(STATE), allow_local=True)
         docker_check()
-        acquire_images(settings, 'build')
-        print('四个镜像已构建；未上传。使用 docker push 发布到你自己的仓库。')
+        acquire_images(settings, 'build', database_mode=args.database)
+        print('所选数据库模式的镜像已构建；未上传。使用 docker push 发布到你自己的仓库。')
         return 0
     if args.command == 'resources':
         prepare(args.resources)
@@ -571,6 +653,12 @@ def main(argv=None):
                 raise ValueError('--images 需要配合 --offline，并提供已完成的镜像归档文件。')
             if root.exists():
                 values = check_instance(root, args.level, args.pvf)
+                if args.database and args.database != database.kind(values):
+                    raise ValueError('已有实例不能切换数据库模式；请创建新的空实例')
+                for argument,key in [('db_host','DOF_DB_HOST'),('db_port','DOF_DB_PORT'),('db_allow_host','DOF_DB_ALLOW_HOST')]:
+                    requested=getattr(args,argument,None)
+                    if requested is not None and str(requested) != values.get(key):
+                        raise ValueError('已有实例不能改数据库连接身份')
                 if args.launcher is not None and args.launcher != values.get('LAUNCHER_MODE', 'dof'):
                     raise ValueError('已有实例切换登录方式请使用 config --launcher。')
                 if args.dof_assets:
@@ -594,7 +682,12 @@ def main(argv=None):
                 if args.pvf.is_symlink() or not args.pvf.is_file() or args.pvf.suffix.lower() != '.pvf' or args.pvf.stat().st_size < 1024:
                     raise ValueError('找不到完整的 .pvf 文件：' + str(args.pvf))
             settings = image_config.resolve(args, image_config.load(STATE), values, allow_local=args.build or args.offline)
-            acquire_images(settings, 'offline' if args.offline else 'build' if args.build else 'pull', args.images)
+            selected_mode=database.kind(values or initial)
+            image_args=(settings,'offline' if args.offline else 'build' if args.build else 'pull',args.images)
+            if selected_mode == 'external':
+                acquire_images(*image_args,database_mode='external')
+            else:
+                acquire_images(*image_args)
             if values is None:
                 archive = fetch(row, args.resources, args.offline)
                 create_instance(root, args, row, archive, settings)
@@ -605,6 +698,7 @@ def main(argv=None):
                 temporary = root / '.env.new'
                 write_env(temporary, values)
                 temporary.replace(root / '.env')
+            prepare_database(root,args)
             start(root)
         else:
             values = read_env(root)
@@ -617,8 +711,11 @@ def main(argv=None):
             elif args.command == 'status':
                 print('登录方式：' + raid_assets.launcher_mode(values))
                 print(f"实例 {root.name}：{values['DNF_MAX_LEVEL']} 级，{values['PLUGIN_MODE']}，团本扩展 {values.get('RAID_EXTENSION', 'off')}，频道 {values['OPEN_CHANNEL']}")
+                print('数据库模式：'+database.kind(values))
                 compose(root, 'ps', '-a')
             elif args.command == 'logs':
+                if args.service == 'db' and database.kind(values) == 'external':
+                    raise ValueError('外置 MySQL 日志请在宝塔查看；项目不管理该服务')
                 compose(root, 'logs', '--tail', '150', *(['-f'] if args.follow else []), *([args.service] if args.service else []))
             elif args.command == 'backup':
                 backup(root)
@@ -626,6 +723,8 @@ def main(argv=None):
                 check_instance(root, validate_extension=False)
                 previous = dict(values)
                 if args.launcher is not None:
+                    if database.kind(values) == 'external' and args.launcher != values.get('LAUNCHER_MODE','dof'):
+                        raise ValueError('外置数据库实例不自动切换登录协议；请使用新实例')
                     values['LAUNCHER_MODE'] = args.launcher
                 if args.ip:
                     values['PUBLIC_IP'] = str(ipaddress.IPv4Address(args.ip))

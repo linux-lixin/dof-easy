@@ -65,6 +65,9 @@ def check():
         missing=expected-ports[protocol]
         if missing: raise ValueError(protocol+' ports missing: '+str(sorted(missing)))
     if role!='P2P':
+        if os.environ.get('DOF_DATABASE_KIND') == 'external':
+            from external_database import check as check_external
+            check_external()
         for prefix in ('MAIN_MYSQL','MYSQL'):
             env=dict(os.environ,MYSQL_PWD=os.environ['DNF_DB_GAME_PASSWORD'])
             result=subprocess.run(['/usr/local/bin/mysql','-h',os.environ[prefix+'_HOST'],'-P',os.environ[prefix+'_PORT'],

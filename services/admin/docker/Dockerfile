@@ -42,8 +42,10 @@ COPY --from=backend /app/target/*.jar app.jar
 # Copy Nginx Config & Entrypoint & Init SQL
 COPY docker/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY docker/entrypoint.sh /app/entrypoint.sh
+COPY docker/dof-entrypoint.sh /app/dof-entrypoint.sh
+COPY docker/dof-nginx.conf.template /etc/nginx/dof-nginx.conf.template
 COPY database/init.sql /app/init.sql.template
-RUN chmod +x /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh /app/dof-entrypoint.sh
 
 # Environment Variables
 ENV NGINX_PORT=80
