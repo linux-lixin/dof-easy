@@ -13,7 +13,7 @@ bash dof.sh images --registry ghcr.io/your-name --tag v1
 bash dof.sh install --level 70 --ip 192.168.1.100 --pvf /data/Script.pvf
 ```
 
-Windows 将 `bash dof.sh` 换成 `.\dof.ps1`。也可将 `--registry`、`--tag` 直接放到 `install` 命令中，不需要提前保存默认配置。交互菜单首次安装可直接输入镜像地址，菜单 10 可保存默认地址。
+在 Linux 主机执行上述命令。也可将 `--registry`、`--tag` 直接放到 `install` 命令中，不需要提前保存默认配置。交互菜单首次安装可直接输入镜像地址，菜单 10 可保存默认地址。
 
 默认安装拉取以下四个 Linux amd64 镜像；缺少任何一个或架构不匹配时停止，不执行源码构建、不改写已有实例的镜像配置：
 

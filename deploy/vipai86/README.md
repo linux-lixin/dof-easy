@@ -1,12 +1,12 @@
 # 历史 86 级离线交付说明
 
-**下面描述的是最初的 `vipai86-*:local` 离线镜像交付，仅用于维护已有旧实例。当前通用版本请使用仓库根目录 `bash dof.sh` 或 `dof.ps1`；选择 86 级也使用同一入口，见 [当前 README](../../README.md)。新的共享镜像不再内置固定等级程序或 PVF。**
+**下面描述的是最初的 `vipai86-*:local` 离线镜像交付，仅用于维护已有旧实例。当前通用版本请使用仓库根目录 `bash dof.sh`；选择 86 级也使用同一入口，见 [当前 README](../../README.md)。新的共享镜像不再内置固定等级程序或 PVF。**
 
 本方案使用 vipai 的 86 级 `df_game_r`、数据库种子、普通 DP2 与 Frida，以及修改后的 linux-lixin/dof 后台和 Windows 登录器。不包含花枝专用插件。只适用于**全新数据库**，不要把既有生产数据卷接到首次初始化流程。
 
 ## 离线启动
 
-需要 Linux amd64 Docker Engine 与 Compose v2，或 Windows Docker Desktop 的 Linux 容器模式。两个频道建议先预留 8 GB 内存；实际容量以客户端实测为准。
+当前仅在 Linux x86_64 主机维护，使用 Linux amd64 Docker Engine 与 Compose v2。两个频道建议先预留 8 GB 内存；实际容量以客户端实测为准。
 
 1. 导入交付目录中的镜像：`docker load -i vipai86-images.tar`。
 2. 进入此目录，执行 `python configure.py --public-ip 你的服务器IPv4`。该命令生成 `.env` 中的随机数据库、后台和管理密码，不向终端打印。管理员用户名为 `admin`。

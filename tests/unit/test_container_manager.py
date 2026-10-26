@@ -21,6 +21,16 @@ guard = manager.module('container_guard', 'deploy/vipai86/netguard/entrypoint.py
 
 
 class ContainerManager(unittest.TestCase):
+    def test_non_linux_host_rejected_before_state_or_docker_access(self):
+        state = self.root / 'state'
+        for platform in ('win32', 'darwin'):
+            with self.subTest(platform=platform), patch.object(manager.sys, 'platform', platform), \
+                 patch.object(manager, 'STATE', state), patch.object(manager, 'run') as run:
+                with self.assertRaisesRegex(ValueError, '仅支持 Linux'):
+                    manager.main(['images', '--registry', 'ghcr.io/example', '--tag', 'v1'])
+                self.assertFalse(state.exists())
+                run.assert_not_called()
+
     def test_effective_docker_context_excludes_instance_resources(self):
         # Dockerfile-specific ignores take precedence over the context root.
         context = ROOT / 'services/game'

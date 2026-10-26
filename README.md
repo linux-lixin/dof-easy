@@ -13,7 +13,7 @@
 
 ## 一键部署
 
-需要 Python 3.9+、Linux amd64 Docker 和 Compose v2；Windows 使用 Docker Desktop 的 Linux 容器模式。两个频道建议先分配至少 8 GB 内存。准备与自己客户端配套、已经下载完成的 PVF。
+服务端仅支持 Linux x86_64 主机，需要 Python 3.9+、Linux amd64 Docker 和 Compose v2。两个频道建议先分配至少 8 GB 内存。准备与自己客户端配套、已经下载完成的 PVF。
 
 ```sh
 git clone https://github.com/linux-lixin/dof-easy.git
@@ -26,13 +26,6 @@ bash dof.sh
 
 在菜单输入等级、服务器 IPv4 和 PVF 路径，安装器会连续完成：**拉取四个镜像、下载所选等级包 → 初始化数据库 → 生成独立密码和 RSA 密钥 → 安装所选插件 → 启动并等待游戏及后台就绪**。默认不从源码构建；仓库未配置或拉取失败会报错，不自动回退构建。
 
-Windows 对应入口：
-
-```powershell
-.\dof.ps1 images --registry registry.example.com/your-project --tag v1
-.\dof.ps1
-```
-
 无需交互的例子（省略 `--level` 即为 70）：
 
 ```sh
@@ -43,7 +36,7 @@ bash dof.sh install --level 70 --ip 192.168.1.100 --pvf /data/Script.pvf --plugi
 # bash dof.sh install --instance my86 --level 86 --ip 192.168.1.100 --pvf /data/86/Script.pvf
 ```
 
-默认频道 `15,52`，可以用 `--channels "11,12,52"` 指定（PowerShell 中须保留引号）；端口映射和容器防火墙同步生成。默认监听 `0.0.0.0`，本机测试可加 `--bind 127.0.0.1`。`--admin-port` 默认 `18080`。`--ip` 填客户端实际能访问的服务器 IPv4。
+默认频道 `15,52`，可以用 `--channels "11,12,52"` 指定（保留引号）；端口映射和容器防火墙同步生成。默认监听 `0.0.0.0`，本机测试可加 `--bind 127.0.0.1`。`--admin-port` 默认 `18080`。`--ip` 填客户端实际能访问的服务器 IPv4。
 
 安装结束会显示后台地址和密码文件位置。管理员账号 `admin`，密码在 `.dof-easy/instances/main/.env` 的 `ADMIN_PASSWORD`。登录器公钥和地址配置示例自动导出到该实例的 `client/`。将 [dof 登录器](clients/launcher/README.md) 放进配套客户端目录，使用自己的后台地址；公网部署使用自己的 HTTPS 入口。
 
@@ -92,7 +85,7 @@ bash dof.sh resources --resources /data/dof-resources
 - 游戏只能连接内部数据库并回复客户端，其他主动外联由独立 netguard 容器阻止。没有宿主机网络模式，不改宿主机防火墙，不公开数据库 3306。
 - 初次建库将后台等级设置为所选版本；改 IP 同步修改后台客户端配置。后台已有其他设置和插件 Lua/JS 保留。
 
-Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。部分共享实现仍保留在 `deploy/vipai86`、`scripts/vipai86` 下以兼容早期代码；**当前入口是根目录 `dof.sh` / `dof.ps1`，不是旧的手动 86 级部署步骤**。
+Git 包含公共服务端和插件构建输入，不包含 PVF、所选等级程序、实例运行数据、实例密码或私钥。部分共享实现仍保留在 `deploy/vipai86`、`scripts/vipai86` 下以兼容早期代码；**当前入口是根目录 `dof.sh`，不是旧的手动 86 级部署步骤**。
 
 ## 验证与来源
 

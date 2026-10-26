@@ -1,10 +1,10 @@
 # 开发与维护
 
-先读 [项目结构](docs/architecture.md) 和 [当前状态](docs/dof/status.md)。默认部署入口是根目录 `dof.sh` / `dof.ps1`；手动模板在 `deploy`，应用源码在 `services` 和 `clients`。游戏运行要求 Linux x86_64；原生链另需固定免授权输入，默认 WPF 与原生客户端分别验收。
+先读 [项目结构](docs/architecture.md) 和 [当前状态](docs/dof/status.md)。默认部署入口是根目录 `dof.sh`；手动模板在 `deploy`，应用源码在 `services` 和 `clients`。游戏运行要求 Linux x86_64；原生链另需固定免授权输入，默认 WPF 与原生客户端分别验收。
 
 ## 本地检查
 
-在仓库根目录，通用检查使用 Python 3.9+，原生检查使用 Python 3.11+；离线部署修复测试还需 Bash（Windows 使用 Git for Windows）：
+在仓库根目录，通用检查使用 Python 3.9+，原生检查使用 Python 3.11+；离线部署修复测试在 Linux 上使用 Bash：
 
 ```bash
 python -m unittest discover -s tests/unit -p "test_*.py"

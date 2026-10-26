@@ -8,7 +8,7 @@
 
 | 目录 | 范围 | 环境 |
 |---|---|---|
-| `unit/` | 启动、配置、SQL 修复的离线回归 | Python、Bash；Windows 可用 Git for Windows |
+| `unit/` | 启动、配置、SQL 修复的离线回归 | Linux、Python、Bash |
 | `structure/` | 资源哈希、构建输入、文档链接、5 个部署模板 | Python、Git、Docker Compose；不启动服务 |
 | `integration/` | 真实数据库及镜像启动验收 | Docker、被测镜像和固定 MySQL 测试镜像 |
 
