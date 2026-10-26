@@ -34,7 +34,7 @@ metadata/dof/
 | 普通 Frida | 镜像 `/opt/dnf/plugins/frida/`；脚本 `/data/plugins/frida/`；Gadget `/home/neople/game/frida.so` | `PLUGIN_MODE=frida` 或 `dp2-frida` |
 | 原生网关 | `/opt/dof-easy/bin/dof-gateway` | `LAUNCHER_MODE=native` |
 | 原生插件与内联库 | `/opt/dof-easy/lib/libdof-plugin.so`、`libdof-inline.so` | 原生链及团本按运行配置加载 |
-| 团本扩展 | 同一原生资源包，配置 `/data/dof-easy/config/anton-raid.ini`、`luke-raid.ini` | `RAID_EXTENSION=on`，要求 DP2 |
+| 团本扩展 | 同一原生资源包，配置 `/data/dof-easy/config/anton-raid.ini`、`luke-raid.ini` | 默认 `RAID_EXTENSION=off`；按需改为 `on`，要求 DP2 |
 | 网关代码与配置 | `/opt/dof-easy/runtime/gateway/`、`/data/dof-easy/config/` | `gateway.ini` 由运行时生成 |
 | 密钥与日志 | `/data/dof-easy/keys/`、`/var/log/dof-easy/` | 每实例私有，不入库 |
 

@@ -38,6 +38,7 @@ class ContainerMenu(unittest.TestCase):
                 args=run.call_args.args[0]
                 self.assertEqual(args[args.index('--level')+1], expected)
                 self.assertEqual(args[args.index('--launcher')+1], 'native')
+                self.assertEqual(args[args.index('--raid-extension')+1], 'off')
                 self.assertEqual(args[args.index('--database')+1], 'internal')
                 self.assertIn(str(self.pvf), args)
                 self.assertIn('/verified assets', args)
@@ -66,6 +67,12 @@ class ContainerMenu(unittest.TestCase):
                 self.assertEqual(menu.plugin_selection(),(plugin,'off'))
         with patch('builtins.input',side_effect=['','']):
             self.assertEqual(menu.plugin_selection({'PLUGIN_MODE':'dp2','RAID_EXTENSION':'off'}),('dp2','off'))
+        with patch('builtins.input',side_effect=['','']):
+            self.assertEqual(menu.plugin_selection(),('dp2-frida','off'))
+        with patch('builtins.input',side_effect=['','']):
+            self.assertEqual(menu.plugin_selection({'PLUGIN_MODE':'dp2','RAID_EXTENSION':'on'}),('dp2','on'))
+        with patch('builtins.input',side_effect=['','1']):
+            self.assertEqual(menu.plugin_selection(),('dp2-frida','on'))
 
     def test_existing_instance_only_starts_without_install_prompts(self):
         (menu.manager.STATE/'instances/test').mkdir(parents=True)
