@@ -95,7 +95,7 @@
     ]
   },
   "releaseReady": false,
-  "scope": "Server binary hashes unchanged; schema changed after 33238aa 86-level load evidence",
+  "scope": "Fixed replacement runtime; local checks plus recorded 86-level deployment; player acceptance pending",
   "checks": {
     "affectedUnitTests": {
       "passed": 101,
@@ -103,7 +103,7 @@
       "skipped": 0
     },
     "deterministicRuntimeMatchesLock": true,
-    "localWebContract": "See web-integration-validation.json; not target-instance/browser acceptance",
+    "localWebContract": "See web-integration-validation.json for separate local and target-browser evidence",
     "featureSchema": {
       "mysqlVersion": "5.6.51",
       "freshTables": 23,
@@ -124,13 +124,35 @@
     "randomBox": "native query verified; inventory rewards pending"
   },
   "pending": [
-    "86-level ABI and native load",
-    "Windows native consumer compatibility",
+    "Windows renamed native reader and matching new-protocol client package",
+    "signin record schema compatibility on target instance",
     "login, character, town, dungeon, combat, return and relogin",
-    "equipment pickup/broadcast and random-box rewards",
+    "equipment pickup/broadcast and random-box inventory rewards",
     "complete raid workflows",
-    "target web browser operation and new-protocol client package generation",
-    "deploy and verify new schema on the 86-level target"
+    "client installation, native consumption and parameter application acceptance"
   ],
-  "databaseMigration": "not applicable: project has not launched"
+  "databaseMigration": "not applicable: project has not launched",
+  "updatedOn": "2026-10-26",
+  "statusDocument": "status.md",
+  "targetIntegration": {
+    "evidenceDate": "2026-10-26",
+    "gameMainCommit": "175e06241c496877cc05496800db1991e2e9527d",
+    "gameImage": "sha256:df4c24c5ea7843f1ed5d942f7f947abb48e9c306c7fb3e6c6a2a299a1fa52876",
+    "gameHealthy": true,
+    "actualGateway": "/opt/dof-easy/bin/dof-gateway",
+    "actualGameModules": [
+      "/opt/dof-easy/lib/libdof-plugin.so",
+      "/opt/dof-easy/lib/libdof-inline.so"
+    ],
+    "database": "dof_native",
+    "randomBoxTables": [
+      "randombox",
+      "randombox_config",
+      "randombox_user"
+    ],
+    "gamePvfUnchanged": true,
+    "databaseRestarted": false,
+    "playerAcceptance": false,
+    "liveRecheckDuringDocumentationUpdate": false
+  }
 }

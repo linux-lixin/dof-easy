@@ -1,14 +1,14 @@
 # 开发与维护
 
-先读 [项目结构](docs/architecture.md)。部署入口在 `deploy`，实际应用源码在 `services` 和 `clients`。
-本项目游戏运行要求 x86_64；不在此次整理中改变协议、数据库版本、业务功能或镜像标签。
+先读 [项目结构](docs/architecture.md) 和 [当前状态](docs/dof/status.md)。默认部署入口是根目录 `dof.sh` / `dof.ps1`；手动模板在 `deploy`，应用源码在 `services` 和 `clients`。游戏运行要求 Linux x86_64；原生链另需固定免授权输入，默认 WPF 与原生客户端分别验收。
 
 ## 本地检查
 
-在仓库根目录，使用 Python 3.9+；离线部署修复测试还需 Bash（Windows 使用 Git for Windows）：
+在仓库根目录，通用检查使用 Python 3.9+，原生检查使用 Python 3.11+；离线部署修复测试还需 Bash（Windows 使用 Git for Windows）：
 
 ```bash
 python -m unittest discover -s tests/unit -p "test_*.py"
+python -m unittest discover -s tests/unit/dof -p "test_*.py"
 python -m unittest discover -s tests/structure -p "test_*.py"
 ```
 
@@ -30,3 +30,11 @@ SQL 初始化改动需跑 MySQL 5.6 集成测试，平台运行脚本改动需�
 `.env`、部署 `runtime/`、后台私钥、数据库数据、原始运行日志、客户端发行包、镜像 tar 和测试状态文件不提交。
 `services/game/runtime/ubuntu` 是源码，必须提交；它不是部署生成目录。
 对外报告区分构建、离线测试、容器验收和真实 Windows 客户端验收，不用其中一项代替其他项。
+
+## 合并与验收记录
+
+从最新 main 建立短期分支，保留其他工作区未提交改动。完成受影响检查后通过 PR 合并，再按 main 提交构建部署。确认分支提交已进入 main 后删除远端短期分支，不删除未合并提交或本地恢复记录。
+
+变更正式派生规则或二进制后，相应原生加载和功能证据失效，必须回归；未受影响的结果不为改文档而重复执行。当前目标为 86 级测试实例，不把通用安装器列出的等级扩写为全部原生配套已验收。迁移工具与历史记录保留，但当前未上线项目不要求数据库迁移。
+
+更新状态时同时维护 [统一状态页](docs/dof/status.md)、相关 Markdown 和机器可读摘要。记录证据日期、提交、镜像及适用范围，区分实际通过、跳过、待验证和不适用；不将文档更新时间写成运行测试时间。

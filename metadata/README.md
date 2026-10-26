@@ -1,5 +1,13 @@
 # 来源与资源清单
 
+原生输入与公共构建输入分开管理。当前版本和验收边界见 [状态页](../docs/dof/status.md)。
+
+- 原生免授权输入锁：[replacement.lock.json](dof/source-audit/server-inputs/replacement.lock.json)。原始名称仅用于显式导入及来源审计。
+- 正式派生资源锁：[runtime.lock.json](../services/game/runtime/ubuntu/gateway/runtime.lock.json)。正式导入、安装和打包均需匹配它，不消费实验副本。
+- 验收绑定：[server-runtime-validation.json](../docs/dof/server-runtime-validation.json)。摘要更新会改变包含它的资源归档哈希；历史归档摘要不能充当新包的摘要。
+
+私有原生程序、客户端工具和 PVF 不因清单入库而进入 Git；来源、版权和历史证据保持真实。
+
 - `source-lock.json`：三个上游仓库的固定源码基线和当前组件目录；本地修复与目录调整由本仓库 Git 历史记录。
 - `game-assets.lock.json`：392 个随 Git 提供的公共游戏资源，记录路径、原始来源和摘要。已去掉不用的模板 PVF 归档及固定等级程序。来源 URL 不作为下载入口。
 - `build-inputs.lock.json`：424 个仓库内构建输入的大小与 SHA-256，包括公共资源、已处理的插件和数据库初始化文件。

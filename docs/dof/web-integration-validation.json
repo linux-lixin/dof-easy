@@ -27,21 +27,27 @@
       "failed": 0,
       "mysql": "5.6.51",
       "isolation": "new user, pid and network namespaces; loopback only; fresh database"
+    },
+    "pairedPvfImportRegression": {
+      "run": 36,
+      "passed": 29,
+      "assumptionSkipped": 7,
+      "ignored": 0,
+      "failed": 0,
+      "scope": "paired source import, guards, HTTP and related codecs; overlaps earlier batches"
     }
   },
   "notVerified": [
     "Windows renamed native reader",
-    "web-generated new-protocol client package",
+    "web-generated new-protocol client package and parameter consumption",
     "login, character, town, dungeon, combat, return and relogin",
     "equipment pickup/display and random-box inventory rewards",
-    "complete raid workflows",
-    "all web record views: signin schema incompatible on target instance"
+    "complete raid workflows"
   ],
   "privateEvidenceIncluded": false,
   "targetIntegration": {
-    "mainCommit": "175e06241c496877cc05496800db1991e2e9527d",
     "gameImage": "sha256:df4c24c5ea7843f1ed5d942f7f947abb48e9c306c7fb3e6c6a2a299a1fa52876",
-    "webImage": "sha256:07b852ba1726eded3e304e0352941ade23f13b5d3217ad14f7e5e73f474131db",
+    "webImage": "sha256:cd1ec39af8fa2bba51e37390970e3b056af1c06484b0ca5ce962134df0436480",
     "gameHealthy": true,
     "actualGateway": "/opt/dof-easy/bin/dof-gateway",
     "actualGameModules": [
@@ -54,6 +60,37 @@
     "clientAndScriptStatusHttp": 200,
     "signinRecordsHttp": 409,
     "databaseRestarted": false,
-    "playerAcceptance": false
-  }
+    "playerAcceptance": false,
+    "evidenceDate": "2026-10-26",
+    "gameMainCommit": "175e06241c496877cc05496800db1991e2e9527d",
+    "webMainCommit": "1fd1b6c3df3b0139900795e2e74b51d7dbed9ca6",
+    "serverCodeUnchangedBetweenCommits": true,
+    "clientFilesChanged": false,
+    "liveRecheckDuringDocumentationUpdate": false,
+    "pairedPvfImport": {
+      "http": 200,
+      "state": "READY",
+      "bytes": 565213337,
+      "fileCount": 894478,
+      "indexBytes": 82583080,
+      "sha256": "2e65c17d075afec73203ba8f2bc9f5508f3b44706300f4ae7f9c13b5e0687fc5",
+      "sourceUnchanged": true
+    },
+    "pvfEncryption": {
+      "state": "READY_FOR_TEST",
+      "bytes": 565214617,
+      "sha256": "a661bb6c0506dae5d734943f63b805dce9fc4689867233b496f1e9ccc3c494f6",
+      "applicationState": "NOT_APPLIED",
+      "nativeClientAcceptance": false
+    }
+  },
+  "updatedOn": "2026-10-26",
+  "statusDocument": "status.md",
+  "knownFailures": [
+    {
+      "area": "signin-users records",
+      "http": 409,
+      "reason": "target schema incompatible"
+    }
+  ]
 }

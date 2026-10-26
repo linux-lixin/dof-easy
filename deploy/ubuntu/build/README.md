@@ -1,10 +1,12 @@
 # Ubuntu 镜像构建
 
+适用范围：高级手动 Ubuntu 模板、默认 `dof` 登录链与外置 MySQL。默认一键安装及原生 86 级联调另见 [部署导航](../../README.md)；不要把本页首次初始化步骤用于现有原生测试实例升级。
+
 在 Linux x86_64 服务器执行。源码、游戏资源和兼容依赖由同一 Git 仓库提供；构建仍需访问软件源。
 
 ```bash
-git clone https://github.com/linux-lixin/dof.git /opt/dof
-cd /opt/dof
+git clone https://github.com/linux-lixin/dof-easy.git /opt/dof-easy
+cd /opt/dof-easy
 docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 services/game
 docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/admin
 ```

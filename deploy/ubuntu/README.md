@@ -1,6 +1,8 @@
 # Ubuntu 24.04 部署目录
 
-Ubuntu 镜像仅连接自建外部 MySQL，使用 onlyGuo 后台；不含内置 MySQL、NetBird/Tailscale 或旧统一登录器网关。
+适用范围：高级手动 Ubuntu 模板、默认 `dof` 登录链与外置 MySQL。默认一键安装及原生 86 级联调另见 [部署导航](../README.md)；不要把本页首次初始化步骤用于现有原生测试实例升级。
+
+本目录模板连接自建外部 MySQL，使用默认 dof 网页后台；不含内置 MySQL、NetBird/Tailscale 或旧统一登录器网关。
 本目录是导航入口，执行 Compose 时先进入具体部署目录。
 
 | 目录 | 用途 |
@@ -68,7 +70,7 @@ ALL 模板的 `P2P_PUBLIC_IP` 当前也引用必填 `PUBLIC_IP`，启用发现�
 
 ## 首次初始化与运行目录
 
-全新部署使用所选目录下的 `runtime/`。ALL/GAME 首次启动前只需手动准备配套 `Script.pvf`，
+全新部署使用所选目录下的 `runtime/`。ALL/GAME 首次启动前需准备配套 `Script.pvf` 和所选等级 `df_game_r`，
 后台首次启动自动创建 RSA 密钥对，再按[整体部署第 3 节](all/README.md#3-启动后台初始化管理员配对密钥)将公钥同步给游戏端。
 不要提前创建受管 `run/` 脚本或未知配置；启动程序会生成本版运行文件及 `/data/.dnf-ubuntu.json` 状态标记。
 

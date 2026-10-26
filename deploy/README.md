@@ -1,24 +1,15 @@
 # 部署导航
 
-只维护 Ubuntu 24.04 游戏镜像；宿主机使用支持 Docker 的 Linux x86_64。MySQL 始终由你独立管理。
+游戏运行使用 Linux amd64 Ubuntu 镜像。先选择入口和登录模式，不混用不同入口的初始化脚本。
 
-```text
-deploy/
-├── ubuntu/
-│   ├── build/          在服务器构建两个镜像
-│   ├── all/            游戏 ALL + 后台
-│   ├── split/
-│   │   ├── core/       核心服务，可选同机后台
-│   │   ├── game/       游戏频道
-│   │   ├── p2p/        游戏 relay / STUN
-│   │   └── admin/      独立后台
-│   └── shared/         游戏公共配置
-└── shared/             后台公共配置、管理员 SQL 示例
-```
+| 场景 | 入口 | 数据及数据库 |
+|---|---|---|
+| 新实例，默认 `dof` 模式 | [根目录一键部署](../README.md) | `.dof-easy/instances/<名称>/`；独立数据库容器卷 |
+| 新实例的 `native` 资源准备 | [原生资源导入](../docs/dof/launcher.md) | 固定免授权输入及正式锁；Windows 链尚待完成 |
+| 当前绑定的 86 级测试游戏更新 | [限定目标部署](../docs/dof/game-test-deployment.md) | 私有 profile、保留恢复点，不重置游戏业务库 |
+| 原生网页准备与升级 | [网页部署与恢复](../docs/dof/deployment.txt) | 仅操作指定网页容器；与游戏部署入口分离 |
+| 高级手动部署、外置 MySQL | [ALL](ubuntu/all/README.md)、[拆分](ubuntu/split/README.md)、[独立后台](ubuntu/split/admin/README.md) | 所选目录 `.env`、`runtime/` 或 `RUNTIME_ROOT` |
 
-从 [整体部署](ubuntu/all/README.md)、[拆分部署](ubuntu/split/README.md) 或 [独立后台](ubuntu/split/admin/README.md) 中选一种。
-每个可执行目录均有 `compose.yaml`、`.env.example`、`README.md`；在所选目录运行 Compose，实际数据写入该目录 `runtime/` 或指定的 `RUNTIME_ROOT`。
-`build` 和 `shared` 不是独立运行入口。模板通过相对路径复用公共文件，应保留完整仓库层级。
+手动 Ubuntu 模板采用默认 `dof` 登录链，保留 CORE/GAME/P2P 分角色方案。`build` 和 `shared` 不是独立运行入口；模板相对引用公共定义，应保留仓库层级。Relay/STUN 是游戏联机服务。
 
-源码、后台和登录器各维护一份；CORE/GAME/P2P 使用同一个游戏镜像。Relay/STUN 用于游戏联机，不是 VPN 隧道。
-默认从全新服务器、专用数据库和空运行目录开始，按所选入口完成首次部署。
+当前运行版本和验收边界以 [状态页](../docs/dof/status.md) 为准。历史 `vipai86` 文档不再是通用安装入口，手动模板的外置数据库要求也不适用于默认四容器安装方案。

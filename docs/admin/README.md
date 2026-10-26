@@ -1,6 +1,6 @@
 # 后台开发与使用
 
-源码入口：[services/admin](../../services/admin/README.md)。日常部署按 [Ubuntu 完整流程](../../deploy/ubuntu/all/README.md) 操作；后台生成密钥、初始化标记和现有数据库保护规则不变。
+源码入口：[services/admin](../../services/admin/README.md)。默认模式按 [一键部署](../../README.md)，原生网页按 [专用部署说明](../dof/deployment.txt)。手动 Ubuntu 模板是高级默认模式入口，不能用其首次建库步骤升级已绑定的原生实例。最新结果见 [当前状态](../dof/status.md)。
 
 | 内容 | 位置 |
 |---|---|
@@ -27,7 +27,7 @@ mvn package -DskipTests
 ```
 
 前端 `npm run build` 包含项目自身的类型检查；现有 Dockerfile 则按原流程直接调用 Vite。
-两者的检查范围不同，不因此次目录整理修改构建策略。Maven 包装脚本虽从上游保留，但仓库没有完整 `.mvn/wrapper`，
+两者的检查范围不同，应记录实际执行的入口。Maven 包装脚本虽从上游保留，但仓库没有完整 `.mvn/wrapper`，
 不要依赖 `mvnw`；使用 Docker 构建或已安装的 Maven。
 
 页面、管理员、RSA 和客户端版本管理的图文说明保留在 [上游说明存档](upstream/README.md)。
@@ -35,4 +35,4 @@ mvn package -DskipTests
 
 活动配置入口与验收边界见[签到、战令与收集箱管理](activities.md)。
 
-晴空网页适配的发布范围、私有输入及验收限制见 [源码发布说明](../dof/publication.txt)，隔离部署见 [部署与恢复](../dof/deployment.txt)，PVF 与配套包接口见 [协议与操作说明](../dof/protocol.txt)。
+原生网页适配的发布范围、私有输入及验收限制见 [源码发布说明](../dof/publication.txt)，隔离部署见 [部署与恢复](../dof/deployment.txt)，PVF 与配套包接口见 [协议与操作说明](../dof/protocol.txt)。

@@ -1,5 +1,7 @@
 # 使用自己的镜像仓库
 
+本页是通用四镜像安装器流程，示例默认 `dof` 模式。原生资源需另行 [固定输入导入](dof/launcher.md)，现有 86 级游戏和网页使用 [各自限定部署入口](../deploy/README.md)。已记录的私有联调镜像不等于公开镜像仓库发布；版本见 [状态页](dof/status.md)。
+
 镜像仓库参数包含域名、可选端口和命名空间，不包含 `https://`、账号密码或具体镜像名。例如 `ghcr.io/your-name`、`docker.io/your-name`、`harbor.example.com:5000/dnf`。标签默认 `latest`，发布时建议使用明确的版本号，如 `v1`。
 
 ## 配置与一键安装

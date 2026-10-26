@@ -1,5 +1,7 @@
 # Windows 登录器
 
+此工程用于 `LAUNCHER_MODE=dof` 默认模式，产物为 `DNFLogin.exe`。它不是 `native` 原生登录器的新名读取端；原生配套状态见 [当前状态](../../docs/dof/status.md)。
+
 本目录保留 WPF 工程 `DNFLogin.slnx` / `DNFLogin.csproj`，命名空间、资源名称和业务逻辑不因目录整理改变。
 `DNFLogin/LoginConfig.cs` 处理本地登录器配置，UI 在各 `*Window.xaml` 及其 C# 文件中。
 项目当前目标为 `net10.0-windows7.0`，需要匹配的 .NET 10 SDK 和 Windows 桌面构建环境。

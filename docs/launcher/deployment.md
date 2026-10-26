@@ -1,5 +1,7 @@
 # 后台配置、客户端与自动更新
 
+适用范围：`LAUNCHER_MODE=dof` 的 WPF 登录器与默认后台。原生模式的配置容器、PVF 加密和读取端另见 [原生文档](../dof/README.md)。下表采用手动模板频道 11、52；通用安装器默认 15、52，以实际生成配置为准。
+
 先完成 [Ubuntu 游戏和后台部署](../../deploy/ubuntu/all/README.md)，再按本文配置玩家端。拆分部署的端口以各节点 Compose 和端口表为准。
 
 ## 1. 开放端口并配置后台
@@ -35,16 +37,16 @@ curl --fail http://127.0.0.1:18080/api/v1/admin/assist/config-text
 
 WPF 登录器在 Windows 编译。安装 **.NET 10 SDK**，仅安装 Runtime 不够，参见 [微软安装说明](https://learn.microsoft.com/en-us/dotnet/core/install/windows)。
 
-以下假设 Windows 已将同一仓库克隆到 `D:\VScodeProjects\dof`；如果没有，先在 PowerShell 执行 `git clone https://github.com/linux-lixin/dof.git D:\VScodeProjects\dof`。已有目录不要重复克隆。
+以下假设 Windows 已将同一仓库克隆到 `D:\VScodeProjects\dof-easy`；如果没有，先在 PowerShell 执行 `git clone https://github.com/linux-lixin/dof-easy.git D:\VScodeProjects\dof-easy`。已有目录不要重复克隆。
 
 ```powershell
 dotnet --list-sdks
-dotnet publish "D:\VScodeProjects\dof\clients\launcher\DNFLogin.csproj" `
+dotnet publish "D:\VScodeProjects\dof-easy\clients\launcher\DNFLogin.csproj" `
   -c Release `
   -r win-x64 `
   --self-contained true `
   -p:PublishSingleFile=true `
-  -o "D:\VScodeProjects\dof\artifacts\launcher"
+  -o "D:\VScodeProjects\dof-easy\artifacts\launcher"
 ```
 
 将发布目录内的全部发行文件放进配套游戏客户端根目录：
@@ -84,7 +86,7 @@ Get-FileHash "D:\你的客户端目录\Script.pvf" -Algorithm SHA256
 在 Linux 检查服务端 PVF：
 
 ```bash
-sha256sum /opt/dof/deploy/ubuntu/all/runtime/game/data/Script.pvf
+sha256sum /opt/dof-easy/deploy/ubuntu/all/runtime/game/data/Script.pvf
 ```
 
 两边需要使用配套资源，这里的 PVF 内容应一致。服务端能启动不代表任意客户端都能登录；客户端还需要完整的 EXE、DLL、ImagePacks2 等文件。
@@ -107,7 +109,7 @@ sha256sum /opt/dof/deploy/ubuntu/all/runtime/game/data/Script.pvf
 先完成正常进游戏测试，再单独启动静态下载容器（首次需要拉取 Nginx 镜像）：
 
 ```bash
-cd /opt/dof/deploy/ubuntu/all
+cd /opt/dof-easy/deploy/ubuntu/all
 mkdir -p packages
 docker run -d --name dnf-download --restart unless-stopped \
   -p 18081:80 \
@@ -133,7 +135,7 @@ client-1.0.0.zip
 上传到：
 
 ```text
-/opt/dof/deploy/ubuntu/all/packages/client-1.0.0.zip
+/opt/dof-easy/deploy/ubuntu/all/packages/client-1.0.0.zip
 ```
 
 确保文件服务可读：公开下载目录通常为 755、ZIP 文件为 644，不要递归放宽 `runtime` 私钥目录的权限。
@@ -155,4 +157,4 @@ http://服务器公网IP:18081/patch-1.0.1.zip
 
 重启登录器，检查下载、文件落盘和 `GameVersion` 更新。首次不要直接用大型 PVF 或 DNF.exe 验证更新器。
 
-当前更新器的版本排序、完整性校验、失败恢复及登录器自更新仍有待完善。更新接口可用不代表整个下载更新流程已经验收。
+网页后台已增加数字版本比较及 SHA-256 元数据管理；当前 WPF 下载器仍按字符串排序补丁，未读取并校验 SHA-256。这两端尚未完成一致的更新链路，版本排序、下载完整性、失败恢复和登录器自身更新需继续实现并实际验收。不能因后台接口可用就宣称 Windows 更新流程已通过。

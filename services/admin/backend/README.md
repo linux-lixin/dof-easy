@@ -1,6 +1,6 @@
 # Java 后端
 
-此目录是 Maven 工程根目录。`src/main/java` 保存 API 和业务代码，`src/main/resources` 保存运行配置与模板。本轮整理不更改 Java 包名、依赖或业务逻辑。
+此目录是 Maven 工程根目录。`src/main/java` 保存 API 和业务代码，`src/main/resources` 保存运行配置与模板。原生管理实现位于 `com.aiyi.game.dnfserver.service.dof`，管理 API 为 `/api/v1/admin/dof`；发布边界见 [当前状态](../../../docs/dof/status.md)。
 
 完整后台镜像从仓库根目录构建，包含前端和后端：
 
