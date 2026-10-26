@@ -61,7 +61,7 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
 
 <template>
   <a-card title="1. 上传并加密原始 Script.pvf" class="space">
-    <a-alert>生成当前配套晴空的不压缩加密文件，随后可选择任务生成含 PVF 的登录器配套包。生成不会修改隔离服参数。</a-alert>
+    <a-alert>生成当前 dof-easy 配套的不压缩加密文件，随后可选择任务生成含 PVF 的登录器配套包。生成不会修改隔离服参数。</a-alert>
     <a-alert v-if="error" type="error" class="space">{{ error }}</a-alert>
     <a-button class="space" :loading="busy" @click="run(load)">刷新来源和任务</a-button>
     <template v-if="status?.enabled">
@@ -92,7 +92,7 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
         </template>
       </a-table>
     </template>
-    <p v-else-if="status">隔离后台尚未配置配套文件来源。</p>
+    <p v-else-if="status">{{ status.blocker || '当前实例尚未导入客户端发布材料。' }}</p>
   </a-card>
 </template>
 <style scoped>.space { margin-top: 18px; }</style>
