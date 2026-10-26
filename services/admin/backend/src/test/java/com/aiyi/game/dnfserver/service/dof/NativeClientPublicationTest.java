@@ -30,8 +30,8 @@ public class NativeClientPublicationTest {
         NativeConfigContainer.Document source=fixture(client);byte[] original=NativeConfigContainer.encode(source,new byte[0]);byte[] before=original.clone();
         NativeClientPublication.Candidate candidate=NativeClientPublication.prepare(original,server.getPublic());
         NativeConfigContainer.Document clean=NativeConfigContainer.decode(candidate.bytesForValidation(),new byte[0]);
-        assertEquals(5,clean.entries.size());assertArrayEquals(before,original);
-        for(int i=0;i<5;i++)assertEquals(source.entries.get(i),clean.entries.get(i));
+        assertEquals(4,clean.entries.size());assertArrayEquals(before,original);
+        for(int i=0;i<4;i++)assertEquals(source.entries.get(i),clean.entries.get(i));
         assertEquals(3,candidate.metadata().get("removedToolRecords"));assertEquals(false,candidate.metadata().get("publishable"));
         assertFalse(candidate.metadata().toString().contains("TEST-DB-SECRET"));
         NativeClientPublication.Candidate again=NativeClientPublication.prepare(candidate.bytesForValidation(),server.getPublic());
@@ -70,7 +70,7 @@ public class NativeClientPublicationTest {
         PublicKey server=KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Files.readAllBytes(Paths.get(identity))));
         NativeClientPublication.Candidate candidate=NativeClientPublication.prepare(original,server);
         NativeConfigContainer.Document originalDoc=NativeConfigContainer.decode(original,new byte[0]),clean=NativeConfigContainer.decode(candidate.bytesForValidation(),new byte[0]);
-        assertEquals(5,clean.entries.size());for(int i=0;i<5;i++)assertEquals(originalDoc.entries.get(i),clean.entries.get(i));
+        assertEquals(4,clean.entries.size());for(int i=0;i<4;i++)assertEquals(originalDoc.entries.get(i),clean.entries.get(i));
         assertEquals(NativeClientPayload.decode(originalDoc,server).endpoint(),NativeClientPayload.decode(clean,server).endpoint());
         assertEquals(originalDoc.entries.size()-5,candidate.metadata().get("removedToolRecords"));
     }

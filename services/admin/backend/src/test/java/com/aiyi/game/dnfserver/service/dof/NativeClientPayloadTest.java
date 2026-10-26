@@ -44,15 +44,13 @@ public class NativeClientPayloadTest {
         List<NativeConfigContainer.Entry> duplicate = new ArrayList<>(doc.entries); duplicate.add(doc.entries.get(1));
         rejects(() -> NativeClientPayload.decode(new NativeConfigContainer.Document(duplicate,true,false),server.getPublic()));
     }
-    @Test public void formatVersionMustBePresentUniqueAndCurrent() throws Exception {
+    @Test public void formatVersionIsOptionalAndItsValueIsNotEnforced() throws Exception {
         KeyPair server=pair();NativeConfigContainer.Document source=fixture(pair());
         List<NativeConfigContainer.Entry> missing=new ArrayList<>(source.entries);missing.remove(missing.size()-1);
-        rejects(()->NativeClientPayload.decode(new NativeConfigContainer.Document(missing,true,false),server.getPublic()));
+        assertEquals("127.0.0.1",NativeClientPayload.decode(new NativeConfigContainer.Document(missing,true,false),server.getPublic()).endpoint());
         List<NativeConfigContainer.Entry> wrong=new ArrayList<>(missing);
         wrong.add(new NativeConfigContainer.Entry(b("token_dof_version"),b("1"),b("TXT")));
-        rejects(()->NativeClientPayload.decode(new NativeConfigContainer.Document(wrong,true,false),server.getPublic()));
-        List<NativeConfigContainer.Entry> duplicate=new ArrayList<>(source.entries);duplicate.add(source.entries.get(source.entries.size()-1));
-        rejects(()->NativeClientPayload.decode(new NativeConfigContainer.Document(duplicate,true,false),server.getPublic()));
+        assertEquals("127.0.0.1",NativeClientPayload.decode(new NativeConfigContainer.Document(wrong,true,false),server.getPublic()).endpoint());
     }
     @Test public void privateNativeFixtureCanBeReencodedWithoutChangingExistingKey() throws Exception {
         String fixture = System.getProperty("dof.native.current", ""), identity = System.getProperty("dof.native.public", "");

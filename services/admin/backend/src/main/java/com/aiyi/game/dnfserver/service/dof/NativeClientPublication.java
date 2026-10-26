@@ -11,7 +11,7 @@ import java.util.*;
 public final class NativeClientPublication {
     private NativeClientPublication() {}
     private static final List<String> CLIENT_FIELDS = Collections.unmodifiableList(Arrays.asList(
-        "dffefrrr+(((((", "token_dof+", "token_dof-", "token_dof+(((((", NativeClientFormat.VERSION_FIELD));
+        "dffefrrr+(((((", "token_dof+", "token_dof-", "token_dof+((((("));
     private static final List<String> TOOL_FIELDS = Collections.unmodifiableList(Arrays.asList(
         "dffefrrr+(((((KLHGJLKEJGL", "dffefrrr+(((((KLHGJLKEJGL234", "dffefrrr+(((((KLHGJLKEJGL5"));
     private static final String PASSWORD_FIELD = TOOL_FIELDS.get(1);
@@ -45,7 +45,7 @@ public final class NativeClientPublication {
         for (NativeConfigContainer.Entry e : source.entries) {
             String name = new String(e.name(),StandardCharsets.US_ASCII);
             if (!Arrays.equals(name.getBytes(StandardCharsets.US_ASCII),e.name())
-                || (!CLIENT_FIELDS.contains(name) && !TOOL_FIELDS.contains(name)) || entries.put(name,e) != null) throw invalid();
+                || (!CLIENT_FIELDS.contains(name) && !TOOL_FIELDS.contains(name) && !NativeClientFormat.VERSION_FIELD.equals(name)) || entries.put(name,e) != null) throw invalid();
             String expectedKind = CLIENT_FIELDS.get(0).equals(name) ? "PNG" : "TXT";
             if (!Arrays.equals(e.kind(),expectedKind.getBytes(StandardCharsets.US_ASCII))) throw invalid();
             if (TOOL_FIELDS.contains(name)) removed++;

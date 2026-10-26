@@ -112,7 +112,7 @@ public final class NativeClientJobs implements AutoCloseable {
         if (!instance.equals(binding.instanceId) || !"isolated".equals(binding.environment)
             || !DofAdminService.VERSION.equals(binding.adapterVersion)
             || binding.clientFormatVersion != NativeClientFormat.VERSION || binding.sha256 == null
-            || !validId(binding.databaseUuid) || !"dof-launcher-reader-2.1".equals(binding.readerRecipe)
+            || !validId(binding.databaseUuid) || !"dof-launcher-reader-2.2".equals(binding.readerRecipe)
             || !binding.sha256.keySet().equals(new HashSet<>(INPUTS))) throw failure(409, "发布来源未绑定当前隔离实例或版本");
         for (String key : INPUTS) if (binding.sha256.get(key) == null || !binding.sha256.get(key).matches("[0-9a-f]{64}")) throw failure(409, "发布来源校验值缺失");
         return binding;

@@ -19,8 +19,8 @@ from scripts.dof.client_reader import derive, SOURCE_SHA256, DLL_SHA256, RECIPE
 from scripts.protocol.dof.client_format import import_legacy, VERSION
 
 PINNED_BINARIES = {
-    'dof-launcher.exe': '91aaec7a480ffd90d0feebb8aad9c82d0199f0599c6660125d053e2dbda19cd6',
-    'ijl15.dll': '0f7f022f38f2dd4e7d2f4f0805c2ab8cb9b8a76303ffec2cbffa102e5d2f308e',
+    'dof-launcher.exe': 'da078f1883a83c64438fdaf96d7147770254d7b63310f74a5c31d5bd512b2554',
+    'ijl15.dll': 'dd5b3a9be419b910fb82f01d432fdf9a12d374d491c554e10103ba345942f66b',
 }
 SOURCE_BINARIES = {'dof-launcher.exe': ('启动器.exe', SOURCE_SHA256), 'ijl15.dll': ('ijl15.dll', DLL_SHA256)}
 

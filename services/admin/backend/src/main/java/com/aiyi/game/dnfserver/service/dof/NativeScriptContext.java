@@ -8,7 +8,7 @@ package com.aiyi.game.dnfserver.service.dof;
  */
 public final class NativeScriptContext {
     public static final String CLIENT_DLL_SHA256 =
-            "0f7f022f38f2dd4e7d2f4f0805c2ab8cb9b8a76303ffec2cbffa102e5d2f308e";
+            "dd5b3a9be419b910fb82f01d432fdf9a12d374d491c554e10103ba345942f66b";
     private static final byte[] CONTEXT = {
         'J', 'K', 'G', 'E', 'F', '*', '^', '^', '&', '%', '^', '&', '%', '^', '^',
         (byte)0xb0, (byte)0xa1, (byte)0xce, (byte)0xf7, (byte)0xb0, (byte)0xd1,
