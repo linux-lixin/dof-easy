@@ -1,0 +1,2 @@
+# Explicit offline template import only; deployment-host installation uses stdlib.
+cryptography==46.0.5

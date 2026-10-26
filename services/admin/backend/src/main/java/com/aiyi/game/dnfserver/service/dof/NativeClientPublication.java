@@ -11,7 +11,7 @@ import java.util.*;
 public final class NativeClientPublication {
     private NativeClientPublication() {}
     private static final List<String> CLIENT_FIELDS = Collections.unmodifiableList(Arrays.asList(
-        "dffefrrr+(((((", "token_qingkong+", "token_qingkong-", "token_qingkong+((((("));
+        "dffefrrr+(((((", "token_dof+", "token_dof-", "token_dof+(((((", NativeClientFormat.VERSION_FIELD));
     private static final List<String> TOOL_FIELDS = Collections.unmodifiableList(Arrays.asList(
         "dffefrrr+(((((KLHGJLKEJGL", "dffefrrr+(((((KLHGJLKEJGL234", "dffefrrr+(((((KLHGJLKEJGL5"));
     private static final String PASSWORD_FIELD = TOOL_FIELDS.get(1);
@@ -27,7 +27,8 @@ public final class NativeClientPublication {
         byte[] bytesForValidation() { return bytes.clone(); }
         public Map<String,Object> metadata() {
             Map<String,Object> out = new LinkedHashMap<>();
-            out.put("sha256", sha256); out.put("bytes",bytes.length); out.put("clientRecords",4);
+            out.put("sha256", sha256); out.put("bytes",bytes.length); out.put("clientRecords",CLIENT_FIELDS.size());
+            out.put("clientFormatVersion",NativeClientFormat.VERSION);
             out.put("removedToolRecords",removedRecords); out.put("credentialsFiltered",true);
             out.put("nativeClientAcceptance",false); out.put("publishable",false);
             return Collections.unmodifiableMap(out);
@@ -50,7 +51,7 @@ public final class NativeClientPublication {
             if (TOOL_FIELDS.contains(name)) removed++;
         }
         if (!entries.keySet().containsAll(CLIENT_FIELDS) || (removed != 0 && removed != 3)) throw invalid();
-        if (!Arrays.equals(entries.get("token_qingkong-").value(),"qingkong.dll".getBytes(StandardCharsets.US_ASCII))) throw invalid();
+        if (!Arrays.equals(entries.get("token_dof-").value(),NativeClientFormat.CONFIG_FILE.getBytes(StandardCharsets.US_ASCII))) throw invalid();
         validateBackground(entries.get(CLIENT_FIELDS.get(0)).value());
         NativeClientPayload.Payload payload = NativeClientPayload.decode(source,boundGameIdentity);
         byte[] password = entries.containsKey(PASSWORD_FIELD) ? entries.get(PASSWORD_FIELD).value() : new byte[0];

@@ -26,6 +26,7 @@ public class DofAdminService {
     @Value("${DOF_DATABASE_UUID:}") private String databaseUuid;
     @Value("${DOF_ADAPTER_VERSION:}") private String adapterVersion;
     static final String VERSION = "dof-native-1";
+    String boundDatabaseUuid() { return databaseUuid; }
     private static final String TABLE = "`dof_native`.`config`";
     private static final String AUDIT = "`dnf_service`.`DOF_CHANGE_AUDIT`";
     private final ObjectMapper json = new ObjectMapper();
