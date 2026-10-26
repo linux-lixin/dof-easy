@@ -1,5 +1,7 @@
 # Ubuntu 单平台清理验收
 
+> 历史单平台清理记录：下文的“本轮”指当时的手动模板清理，不表示当前通用安装器没有数据库容器或原生网关。最新状态见 [统一状态页](../dof/status.md)，现行入口见 [部署导航](../../deploy/README.md)。
+
 本轮删除 CentOS 构建和部署、内置数据库初始化、NetBird/Tailscale、旧登录网关、未启用的 forward 代理及网关专用 OpenSSL 0.9.8/MySQL 5.0 兼容库。
 游戏继续使用 socat 数据库代理，Relay/STUN 联机服务保留；MySQL 由用户自行部署。
 

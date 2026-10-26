@@ -1,77 +1,59 @@
 # 项目结构与维护边界
 
-本仓库把游戏服务、管理后台和 Windows 登录器放在一起维护。按职责分目录，游戏统一使用 Ubuntu 构建入口，
-按实际节点分部署目录；共享资源和后台只维护一份。目录重组不修改游戏协议、数据库表结构或 Java/C# 业务逻辑。
+根目录 `dof.sh` / `dof.ps1` 是通用安装入口，`scripts/container/` 负责实例和镜像管理。默认 `dof` 登录链与 `native` 原生链共用部分游戏和网页基础代码，但分别验证客户端协议。当前结果见 [状态页](dof/status.md)。
 
 ```text
-dof/
-├── README.md
-├── CONTRIBUTING.md
+dof-easy/
 ├── services/
 │   ├── game/
-│   │   ├── docker/ubuntu/       Ubuntu Dockerfile、兼容库源码、来源与许可证
-│   │   ├── assets/              共享游戏程序、模板、种子 SQL、Script.tgz
-│   │   ├── runtime/ubuntu/      Ubuntu 启动适配、健康检查、启动完成提示
-│   │   └── LICENSE
+│   │   ├── docker/ubuntu/       镜像、兼容库源码与许可证
+│   │   ├── assets/              公共模板、初始化 SQL 和共享游戏资源
+│   │   ├── plugin-assets/       普通 DP2 / Frida 输入及清单
+│   │   └── runtime/ubuntu/
+│   │       └── gateway/         原生服务、适配器、默认配置与正式资源锁
 │   └── admin/
-│       ├── backend/            Maven pom.xml、Java src、Maven 包装脚本
-│       ├── frontend/           Vue/Vite 前端与 npm 锁文件
-│       ├── docker/             Dockerfile、入口脚本、Nginx 模板
-│       └── database/           后台初始化 SQL
-├── clients/launcher/            Windows WPF 工程、源码和编译资源
-├── deploy/
-│   ├── ubuntu/                 build、all、split、shared
-│   └── shared/                 后台公共定义、管理员 SQL 示例
+│       ├── backend/             Java API 与 dof 原生管理服务
+│       ├── frontend/            Vue 门户与 /admin/dof 页面
+│       ├── database/            通用种子及 dof-admin.sql 管理表定义
+│       └── docker/              通用镜像与 dof 预构建镜像入口
+├── clients/launcher/            默认 dof 模式 WPF 工程
 ├── scripts/
-│   ├── diagnostics/            端口表生成等只读诊断
-│   └── release/                显式确认后构建并推送后台镜像
-├── tests/
-│   ├── unit/                   不连接数据库的离线回归
-│   ├── structure/              目录、链接、资源、Compose 检查
-│   └── integration/            临时数据库与实际镜像验收
-├── metadata/                   上游提交、资源路径和哈希清单
-└── docs/
-    ├── ubuntu/                 Ubuntu 运维、兼容性与历史验收
-    ├── admin/                  后台开发、上游说明和配图
-    ├── launcher/               登录器使用说明和配图
-    └── history/                早期分析与修复记录
+│   ├── container/              通用安装、资源与镜像管理
+│   ├── dof/                    原生派生、打包、隔离部署及审计
+│   ├── protocol/dof/           配套格式与私有客户端输入准备
+│   ├── diagnostics/            只读诊断
+│   └── release/                镜像发布工具
+├── deploy/                     手动 Ubuntu 模板与共享部署定义
+├── metadata/                   公共输入、等级和来源锁
+│   └── dof/source-audit/       原生输入与历史来源审计
+├── tests/                      单元、结构及独立集成入口
+└── docs/                       操作说明、当前状态与历史证据
 ```
 
-## 数据和控制关系
+## 运行数据和控制关系
 
-登录器调用后台 HTTP API 获取配置、注册/登录及更新信息；后台访问自建 MySQL 并保存自己的 RSA 私钥。
-游戏服务读取对应公钥、PVF、配置并访问同一部署所用的 MySQL。玩家游戏连接和 P2P 流量不经过后台 HTTP 服务。
-Ubuntu 可运行 ALL，也可拆成 CORE/GAME/P2P；所有角色复用同一后台镜像。
+通用安装器将实例环境和数据放在 `.dof-easy/instances/<名称>/`；数据库使用独立容器卷。手动 `deploy/ubuntu` 模板使用所选目录的 `.env`、`runtime/` 或 `RUNTIME_ROOT`，连接操作者独立管理的 MySQL。两种目录布局不能混用。
 
-`services/game/assets` 是构建输入，不能把这里直接当在线运行目录。实际部署配置和数据位于
-所选 `deploy/...` 目录的 `.env`、`runtime/` 中，或者 `.env` 指定的 `RUNTIME_ROOT`。
-`services/game/runtime/ubuntu` 则是**受版本管理的源代码**，与被忽略的部署运行数据不同。
+原生运行程序安装在 `/opt/dof-easy/`，配置和密钥在 `/data/dof-easy/`；就绪标记在 `/run/dof-easy/`，日志在 `/var/log/dof-easy/`。具体对象见 [游戏组件](../services/game/README.md)。原生网页数据在 `/app/data/`，客户端发布工作区默认 `/app/data/dof-client-publication`；绑定游戏 PVF 使用只读 `/app/paired/Script.pvf`。宿主机实际路径由私有 profile 明确指定。
 
-## 修改位置
+网页保存配置、审计与发布任务，游戏网关和插件执行对应玩法。`PERSISTED` 证明写入及回读，`READY_FOR_TEST` 证明文件检查通过；两者都不证明玩家已消费。网页 HTTP 服务不代理游戏和 P2P 流量。默认 WPF 配套与原生配置容器使用不同协议。
 
-| 要改什么 | 应修改的目录 |
+## 修改位置与构建
+
+| 内容 | 源码入口 |
 |---|---|
-| Ubuntu 参数、启动、健康检查 | `services/game/runtime/ubuntu` |
-| 初始化/月份表修复 | `services/game/assets/home/template/init` |
-| Ubuntu ABI 兼容与镜像依赖 | `services/game/docker/ubuntu` |
-| 管理后台 API、注册和更新业务 | `services/admin/backend/src` |
-| 后台和门户页面 | `services/admin/frontend/src` |
-| 后台容器初始化、SSL、密钥保护 | `services/admin/docker/entrypoint.sh` |
-| 登录器 UI 和客户端更新逻辑 | `clients/launcher` |
-| 部署节点、端口、数据挂载 | `deploy/<系统>/<方式>` |
-| 来源与资源校验 | `metadata`，Ubuntu 兼容来源另见 `services/game/docker/ubuntu/compat-lock.json` |
+| 实例、资源、网络和镜像配置 | `scripts/container/` |
+| 游戏启动、健康检查及原生网关 | `services/game/runtime/ubuntu/` |
+| ELF 正式派生与来源校验 | `scripts/dof/build_server_runtime.py`、`import_assets.py` |
+| 原生数据库定义／访问适配 | `services/game/runtime/ubuntu/gateway/schema.py`、`db_adapter.js` |
+| Ubuntu ABI 与依赖 | `services/game/docker/ubuntu/` |
+| 网页 API 和页面 | `services/admin/backend/src/`、`services/admin/frontend/src/` |
+| 通用／原生网页容器 | `services/admin/docker/entrypoint.sh`、`dof-entrypoint.sh` |
+| 默认 Windows 登录器 | `clients/launcher/` |
+| 私有部署约束与恢复 | `scripts/dof/deployment_profile.py`、`deploy_game_test.py`、`run_isolated.py` |
 
-启动脚本直接以 Ubuntu 版本维护，不再维护旧平台生成或补丁覆盖流程。
-发行版本的托管脚本升级规则仍由 `services/game/runtime/ubuntu/releases.json` 管理，目录重排不能绕过用户脚本冲突检查。
+普通游戏和后台构建上下文分别为 `services/game` 和 `services/admin`，不能只传 Dockerfile 所在子目录。原生网页通过 `compile_admin.py`、`package_admin.py` 准备独立上下文，现有测试游戏使用限定目标的集成镜像入口；具体见 [部署导航](../deploy/README.md)。
 
-## 入口与输出
+`services/game/runtime/ubuntu` 是受版本管理的源码，不能因为名称含 runtime 就排除提交。托管脚本升级仍遵守 `releases.json` 的冲突保护。公共资源和原生私有输入各自按锁校验，不把客户端、PVF 或实例秘密放进源码目录。
 
-游戏构建上下文固定为 `services/game`；后台构建上下文固定为 `services/admin`，分别使用其中的 Dockerfile。
-不能把 `docker/ubuntu` 或 `admin/docker` 当成完整构建上下文，资源在它们的上级组件目录中。
-构建命令见 [游戏组件](../services/game/README.md) 与 [后台组件](../services/admin/README.md)。
-
-前端产物为 `services/admin/frontend/dist/`，后端为 `services/admin/backend/target/`，登录器为自身 `bin/`、`obj/`。
-临时镜像验收记录与含临时密码的状态文件统一放根目录 `dist/`，均不提交。
-正式整理过的验收摘要放在 `docs`；不得复制原始日志、实际 `.env`、生产密钥或镜像 tar 进 Git。
-
-来源和许可证见 [metadata](../metadata/README.md)。真实 Windows 客户端进服、组队与自动更新仍需独立验收。
+前端生成 `dist/`，后端生成 `target/`，WPF 生成 `bin/`、`obj/`；私有原生输入、部署状态及原始证据留在被忽略的私有目录。公开验收摘要只保留脱敏版本和结果，来源与版权见 [metadata](../metadata/README.md)。

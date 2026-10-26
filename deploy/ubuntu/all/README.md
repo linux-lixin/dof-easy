@@ -1,8 +1,10 @@
 # Ubuntu 24.04 整体部署（ALL + 后台）
 
+适用范围：高级手动 Ubuntu 模板、默认 `dof` 登录链与外置 MySQL。默认一键安装及原生 86 级联调另见 [部署导航](../../README.md)；不要把本页首次初始化步骤用于现有原生测试实例升级。
+
 本文默认是全新服务器首次部署：新建运行目录、初始化专用数据库、创建 `admin` 管理员。
 本项目仅提供 Ubuntu 游戏镜像。
-仅支持 amd64 和外部 MySQL；本轮验收基线为 MySQL 5.6.51。后台与登录器沿用现有版本。
+本手动方案支持 amd64 和外部 MySQL；历史验收基线为 MySQL 5.6.51，使用默认 dof 后台与 WPF 登录器。
 实际测试范围和未验收项见 [Ubuntu 验收报告](../../../docs/ubuntu/validation.md)，
 依赖来源见 [兼容库审计](../../../docs/ubuntu/compatibility.md)。
 
@@ -13,19 +15,19 @@ Docker 管理容器生命周期；本版保留 Supervisor 管理角色内部的�
 
 ## 1. 从 Git 获取源码，在服务器构建
 
-以下单机流程以 root 用户、仓库路径 `/opt/dof` 为例，MySQL 由你自行部署。
-执行顺序：构建两个镜像 → 填写环境变量 → 手动放置 PVF → 启动游戏并检查健康 → 启动后台 → 初始化管理员 → 同步公钥。
+以下单机流程以 root 用户、仓库路径 `/opt/dof-easy` 为例，MySQL 由你自行部署。
+执行顺序：构建两个镜像 → 填写环境变量 → 手动放置配套 PVF 和等级程序 → 启动游戏并检查健康 → 启动后台 → 初始化管理员 → 同步公钥。
 自建 MySQL 不代表游戏节点拆分；同一台服务器运行 game/admin 使用第 1–3 节即可。
 
 准备已安装 Docker Engine/Compose 的 Linux amd64 服务器，以及独立管理的 MySQL 5.6 实例。
 构建及 Compose 使用 Docker 默认平台，不再显式指定 `--platform` 或 `platform:`；以下流程用于 x86_64 服务器。
 构建需要访问 Docker 镜像仓库、Ubuntu APT、Maven/npm 源；游戏资源与兼容依赖源码已在 Git 内。
-不需要单独下载游戏资源、运行资源下载脚本或下载源码 ZIP。
+公共构建输入已随 Git 提供；所选等级程序和配套 PVF 仍须显式准备，通用镜像不包含这两项。
 
 ```bash
 cd /opt
-git clone https://github.com/linux-lixin/dof.git
-cd dof
+git clone https://github.com/linux-lixin/dof-easy.git
+cd dof-easy
 docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 services/game
 docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/admin
 cd deploy/ubuntu/all
@@ -36,14 +38,14 @@ nano .env
 
 游戏镜像统一为 `dnf-game:ubuntu24.04`，后台为 `dnf-admin:latest`；两个标签与 `.env.example`、Compose 默认值一致。
 `ubuntu24.04` 标识游戏基础系统，`latest` 表示本次源码构建的后台镜像；Compose 禁止自动拉取同名远端镜像。
-以下全部 Compose 命令都在 `/opt/dof/deploy/ubuntu/all` 执行。默认数据写入该目录的 `runtime/`，全新部署不需要设置 `RUNTIME_ROOT`。
+以下全部 Compose 命令都在 `/opt/dof-easy/deploy/ubuntu/all` 执行。默认数据写入该目录的 `runtime/`，全新部署不需要设置 `RUNTIME_ROOT`。
 
 填写真实 `PUBLIC_IP`、`DB_HOST`、`DB_PORT` 和各密码。`203.0.113.*` 仅是文档示例。
 `GAME_DB_PASSWORD` 恰好 8 位字母/数字，可用 `openssl rand -hex 4` 生成。
 其余密码使用独立随机字母/数字值，例如 `openssl rand -hex 16`。
 本套旧 SQL/配置模板不支持任意标点密码，入口会明确拒绝不符合要求的值，不会静默截断。
 `DB_ROOT_PASSWORD` 填数据库现有 root 密码，不能随意另填一个随机值；`SUPERVISOR_PASSWORD` 设置独立值。
-Ubuntu 使用 onlyGuo 后台登录流程，已移除旧统一登录器网关 `tongyi_gate` / `DnfGateServer`，无需 `GATE_PASSWORD` 或 `GM_*` 参数。
+本手动方案使用默认 dof 后台登录流程，已移除旧统一登录器网关 `tongyi_gate` / `DnfGateServer`，无需 `GATE_PASSWORD` 或 `GM_*` 参数。
 本目录的 `.env.example` 只包含整体部署参数；拆分节点地址在各自的 `split/` 目录配置。
 
 数据库必须是专用测试实例，或专用测试副本；初始化会管理多个 schema 和 `game` 用户。
@@ -55,7 +57,7 @@ MySQL 监听、防火墙、用户 host 授权必须允许所有游戏节点与�
 `MYSQL_INIT_SSL_MODE=disabled` 为旧数据库 CLI 关闭 TLS；`auto` 保留 MariaDB 客户端默认行为。
 后台 JDBC 的 `useSSL=false` 是独立选项。这里使用 MariaDB **客户端**连接外部 MySQL，镜像中没有数据库服务端。
 
-在 `/opt/dof/deploy/ubuntu/all` 检查配置及数据库连接（输入数据库 root 密码）：
+在 `/opt/dof-easy/deploy/ubuntu/all` 检查配置及数据库连接（输入数据库 root 密码）：
 
 ```bash
 docker compose config --quiet
@@ -72,22 +74,18 @@ ALL/GAME 首次启动前必须手动放置与客户端匹配的 `Script.pvf`，�
 镜像不会自动解压 PVF；缺少文件、文件为空或误建成目录时，会在连接和修改数据库之前退出。
 CORE/P2P 不需要该文件。启动过程不会覆盖你放置的 PVF。
 
-**先测试仓库自带版本：直接使用下面的手动解压命令。** 仓库已经包含
-`/opt/dof/services/game/assets/home/template/init/Script.tgz`，里面就是 `Script.pvf`，无需额外下载。
-“手动放置”指启动脚本不会自动解压，并不要求你必须另找一个文件。
+仓库不再包含 `Script.tgz` 或固定等级程序。准备与客户端对应的原始 PVF，以及按 `metadata/levels.lock.json` 校验的所选等级 `df_game_r`。下面 `/private/matched/` 是你已准备并校验的本地目录，不是下载地址：
 
 ```bash
-cd /opt/dof/deploy/ubuntu/all
+cd /opt/dof-easy/deploy/ubuntu/all
 mkdir -p runtime/game/data
-tar -xzkf ../../../services/game/assets/home/template/init/Script.tgz \
-  -C runtime/game/data Script.pvf
-ls -lh runtime/game/data/Script.pvf
+cp -n /private/matched/Script.pvf runtime/game/data/Script.pvf
+cp -n /private/matched/df_game_r runtime/game/data/df_game_r
+chmod 700 runtime/game/data/df_game_r
+ls -lh runtime/game/data/Script.pvf runtime/game/data/df_game_r
 ```
 
-`-k` 防止覆盖已有文件；如果提示文件已存在，保留它并核对版本，不要直接删掉。
-**如果使用自己的版本，则跳过解压命令**，通过 SFTP/宝塔上传到
-`/opt/dof/deploy/ubuntu/all/runtime/game/data/Script.pvf`。两种方式选一种即可。
-确认 `ls` 显示文件且大小不为 0；如果提示 `No such file or directory`，尚未准备好，不能继续启动。
+`cp -n` 保留已有文件；已有文件仍需核对版本和哈希，不要因为复制未报错就认为已更新。PVF 和程序缺失、为空或类型错误时停止准备，不继续启动。需要自动获取并校验等级程序时，优先使用根目录通用安装器创建新实例。
 
 默认挂载关系为 `./runtime/game/data:/data`，无需另外增加单文件挂载。公钥在后台首次启动后按第 3 节同步。
 文件检查只能确认存在且非空，版本是否匹配仍需实际启动和客户端验证。

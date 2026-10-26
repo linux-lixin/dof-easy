@@ -1,10 +1,12 @@
 # 独立 onlyGuo 后台
 
+适用范围：高级手动 Ubuntu 模板、默认 `dof` 登录链与外置 MySQL。默认一键安装及原生 86 级联调另见 [部署导航](../../../README.md)；不要把本页首次初始化步骤用于现有原生测试实例升级。
+
 本目录只启动后台，可放在单独主机。与整体部署或 CORE 目录内的 admin 二选一；不能同时启动两个后台写同一数据库。
 先完成游戏数据库初始化，再从仓库根构建 `docker build -f services/admin/docker/Dockerfile -t dnf-admin:latest services/admin`。
 
 ```bash
-cd /opt/dof/deploy/ubuntu/split/admin
+cd /opt/dof-easy/deploy/ubuntu/split/admin
 cp -n .env.example .env
 chmod 600 .env
 nano .env

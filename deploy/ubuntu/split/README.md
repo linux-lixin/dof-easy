@@ -1,5 +1,7 @@
 # Ubuntu 跨主机拆分部署
 
+适用范围：高级手动 Ubuntu 模板、默认 `dof` 登录链与外置 MySQL。默认一键安装及原生 86 级联调另见 [部署导航](../../README.md)；不要把本页首次初始化步骤用于现有原生测试实例升级。
+
 每个角色有独立 `compose.yaml`、`.env.example` 和 `runtime/`。先按 [构建说明](../build/README.md)在对应主机构建。
 
 
@@ -55,7 +57,7 @@ P2P 的 Compose 文件不读取或传入数据库凭据；只需 GAME_IMAGE、PU
 先在 CORE 主机准备 `core/.env`（复制其 `.env.example` 并填写），然后执行：
 
 ```bash
-cd /opt/dof/deploy/ubuntu/split/core
+cd /opt/dof-easy/deploy/ubuntu/split/core
 cp -n .env.example .env
 chmod 600 .env
 nano .env
@@ -68,7 +70,7 @@ docker compose exec core python3 /opt/dnf/ubuntu/health.py
 CORE 完成数据库初始化后，在 P2P 主机执行：
 
 ```bash
-cd /opt/dof/deploy/ubuntu/split/p2p
+cd /opt/dof-easy/deploy/ubuntu/split/p2p
 cp -n .env.example .env
 chmod 600 .env
 nano .env
@@ -80,12 +82,15 @@ docker compose exec p2p python3 /opt/dnf/ubuntu/health.py
 等待注册完成，再在 GAME 主机执行：
 
 ```bash
-cd /opt/dof/deploy/ubuntu/split/game
+cd /opt/dof-easy/deploy/ubuntu/split/game
 cp -n .env.example .env
 chmod 600 .env
 nano .env
 mkdir -p runtime/game/data
-tar -xzkf ../../../../services/game/assets/home/template/init/Script.tgz -C runtime/game/data Script.pvf
+# /private/matched 是已校验的所选等级程序及配套 PVF，仓库不提供 PVF
+cp -n /private/matched/Script.pvf runtime/game/data/Script.pvf
+cp -n /private/matched/df_game_r runtime/game/data/df_game_r
+chmod 700 runtime/game/data/df_game_r
 docker compose config --quiet
 docker compose up -d game
 docker compose exec game python3 /opt/dnf/ubuntu/health.py
@@ -94,7 +99,7 @@ docker compose exec game python3 /opt/dnf/ubuntu/health.py
 最后回 CORE 主机启动后台并按[整体部署第 3 节](../all/README.md#3-启动后台初始化管理员配对密钥)初始化：
 
 ```bash
-cd /opt/dof/deploy/ubuntu/split/core
+cd /opt/dof-easy/deploy/ubuntu/split/core
 docker compose up -d admin
 ```
 
@@ -103,7 +108,7 @@ CORE 和 P2P 互通使用内网实际 IP；Docker 服务名不能用于不同主
 网关注册内部消息保持 `ip,index,port` 格式，Ubuntu relay 适配层使用有超时的 TCP 收发及确认，避免旧 nc 的 EOF 等待差异。
 
 
-GAME 的 PVF 也可以手动上传到 `split/game/runtime/game/data/Script.pvf`，与解压示例二选一。
+GAME 的 PVF 与所选等级 `df_game_r` 必须匹配；已有文件保留并核对摘要，不能使用旧 `Script.tgz` 解压步骤。等级摘要以 `metadata/levels.lock.json` 为准。
 CORE 数据位于 `split/core/runtime/core/data`；P2P 数据位于 `split/p2p/runtime/p2p/data`。
 后台跟随 CORE 时，RSA 密钥位于 `split/core/runtime/admin/data`；独立后台时位于 `split/admin/runtime/admin/data`。
 将后台公钥复制到每台 GAME 主机的 `split/game/runtime/game/data/publickey.pem`，然后重启 GAME；私钥仅留后台。

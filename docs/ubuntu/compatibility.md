@@ -10,9 +10,10 @@
 | libGeoIP.so.1 | 固定 GeoIP 1.6.12 源码编译的 i386 库及历史国家数据库 |
 | liblegacy-shm.so | 本仓库源码构建，仅兼容游戏使用的旧目录式共享内存名称 |
 | amd64 密码工具、STUN | Ubuntu 原生系统库；不加载旧 amd64 兼容库 |
-| 数据库代理和客户端 | Ubuntu socat、MariaDB 客户端，连接你自建的 MySQL |
+| 原生 dof-gateway（amd64） | 正式锁固定的私有依赖，RPATH 为 `$ORIGIN/../lib`；与 i386 游戏依赖分开 |
+| 数据库代理和客户端 | Ubuntu socat、MariaDB 客户端，连接独立 MySQL |
 
-已移除旧网关以及它专用的 OpenSSL 0.9.8、MySQL 5.0 `.15` 库；系统 OpenSSL 和 MariaDB 客户端仍是必要组件。Relay/STUN 用于游戏连接，仍保留。
+已移除旧统一登录器网关以及它专用的 OpenSSL 0.9.8、MySQL 5.0 `.15` 库；系统 OpenSSL 和 MariaDB 客户端仍是必要组件。Relay/STUN 用于游戏连接，仍保留。
 
 ## 构建检查
 
@@ -22,7 +23,7 @@
 docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 services/game
 ```
 
-构建执行 ELF 重定位检查、GeoIP 数据加载和共享内存探针。当前清理后检查覆盖 27 个游戏/模板/工具 ELF 和 3 个私有兼容库，均无未解析依赖。
+构建执行 ELF 重定位检查、GeoIP 数据加载和共享内存探针。历史单平台清理检查覆盖 27 个游戏/模板/工具 ELF 和 3 个私有兼容库，均无未解析依赖。
 游戏资源原始哈希见 [资源锁](../../metadata/game-assets.lock.json)。构建镜像内 `/opt/dnf/audit/` 保存当次 ELF、兼容库和系统包清单。
 
 `runtime/ubuntu/prepare_image.py` 现在只安装 Ubuntu 工具、准备受管脚本以及移除镜像内自动 PVF 资源，不再剪裁 CentOS/VPN/旧网关源码。
@@ -38,4 +39,4 @@ docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 s
 
 GeoIP 数据保留 MaxMind 来源与许可证说明；兼容库许可证随镜像保存在 `/opt/dnf/licenses/`。上游游戏资产未因此获得新的授权。
 
-历史 `image-*`、`ubuntu-*`、`native-*` 审计快照已移至 [历史审计目录](../history/ubuntu-abi/README.md)，不参与构建，不能作为当前镜像清单。当前结果以镜像内生成报告和 [验收记录](validation.md) 为准。真实客户端进服不由 ELF 检查代替。
+历史 `image-*`、`ubuntu-*`、`native-*` 审计快照已移至 [历史审计目录](../history/ubuntu-abi/README.md)，不参与构建，不能作为当前镜像清单。实际依赖以对应镜像生成报告为准，最新原生结果见 [状态页](../dof/status.md)，早期通用记录见 [历史验收](validation.md)。真实客户端进服不由 ELF 检查代替。

@@ -1,4 +1,4 @@
-> 历史记录：本页对应 1ded8a2 的双平台目录整理。当前仅支持 Ubuntu，原 CentOS 文件可从该提交查看。当前验证见 [Ubuntu 验收](ubuntu/validation.md)。
+> 历史记录：本页对应 1ded8a2 的双平台目录整理。当前仅支持 Ubuntu，原 CentOS 文件可从该提交查看。最新原生联调见 [统一状态页](dof/status.md)，早期 Ubuntu 验收另见 [历史记录](ubuntu/validation.md)。
 
 # 全项目目录整理验收（2026-10-16）
 

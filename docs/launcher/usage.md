@@ -1,5 +1,7 @@
 ﻿# DOF 下载更新一体化登陆器
 
+> 上游使用说明存档：保留原始介绍、链接与配图，不代表当前部署默认值或已验收功能。当前默认 WPF 配置见 [部署说明](deployment.md)，原生模式见 [状态页](../dof/status.md)。
+
 > 🚀 一款集下载、更新、远程配置于一体的 DOF（Dungeon of Fantasy）游戏启动器。需搭配 [DOF 后台系统](https://github.com/onlyGuo/dnf-server-public)共同使用。
 
 ## 推广
