@@ -70,7 +70,7 @@ def migrate(source, output, runtime, dry_run=False):
     if any(p.is_symlink() for p in source.rglob('*')) or any(not p.is_file() for p in files):
         raise ValueError('Source must contain only local regular files and directories')
     before = {p.relative_to(source).as_posix(): digest(p) for p in files}
-    rows = json.loads((ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json').read_text())['files']
+    rows = json.loads((ROOT / 'metadata/dof/derivation/inputs.lock.json').read_text())['files']
     for row in rows:
         if before.get(row['path']) != row['sha256']:
             raise ValueError('Migration requires the pinned replacement input: ' + row['path'])

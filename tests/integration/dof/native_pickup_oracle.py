@@ -11,7 +11,7 @@ from unicorn import Uc,UC_ARCH_X86,UC_MODE_32,UC_HOOK_CODE
 from unicorn.x86_const import UC_X86_REG_EBP,UC_X86_REG_ESP,UC_X86_REG_EAX,UC_X86_REG_EIP
 
 def verify(path):
-    raw=path.read_bytes();pin=json.loads((ROOT/'metadata/dof/source-audit/server-probe-inputs.lock.json').read_text())['files']['df_game_r']['sha256']
+    raw=path.read_bytes();pin=json.loads((ROOT/'metadata/dof/server-probe.lock.json').read_text())['files']['df_game_r']['sha256']
     assert hashlib.sha256(raw).hexdigest()==pin
     cases=[];elf=Elf(raw)
     for inserted,pickup,expected in [(-1,0,False),(0,1,False),(0,0,True)]:

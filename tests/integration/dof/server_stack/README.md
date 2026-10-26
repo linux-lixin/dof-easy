@@ -6,7 +6,7 @@
 
 ## 输入与执行
 
-先按 `metadata/dof/source-audit/server-probe-inputs.lock.json` 准备本地材料。
+先按 `metadata/dof/server-probe.lock.json` 准备本地材料。
 该清单锁定 542 个文件，包含真实游戏、PVF、文本资源、依赖库、SQL 种子、历史诊断输入及固定桥接材料。实际运行的网关／插件／内联库从 `--runtime` 正式清单取得，并通过生产 `assets.install`、`service.prepare/run` 和 `run-game` 加载。
 每次派生改变都必须更新正式清单并重新执行相关验收，不能沿用旧报告。
 执行入口不会下载材料，也不接受服务器地址。

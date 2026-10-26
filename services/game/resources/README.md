@@ -6,4 +6,4 @@
 
 普通插件由 Dockerfile 明确复制 DP2、Frida 两个子目录。原生载荷通过安装器逐文件校验并复制到实例数据，再由容器装入 `/opt/dof-easy/`；不直接烘入共享游戏镜像。
 
-原始材料和来源记录在 [来源审计](../../../metadata/dof/source-audit/README.md)，不得从那里部署。详细的仓库、镜像和运行路径对应见 [资源布局](../../../docs/resource-layout.md)。
+安装自动使用本目录，无需原始材料或资源目录输入。DP2 的配套 PVF 补丁也包含在 `plugins/dp2/pvf-patch.zip`，仅选装 DP2 时复制到实例；应用到 PVF 仍需按实际版本处理。详细的仓库、镜像和运行路径对应见 [资源布局](../../../docs/resource-layout.md)。

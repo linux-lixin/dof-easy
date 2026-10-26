@@ -36,7 +36,7 @@ def sql_names(text):
 
 def gateway_sql_calls():
     """Reviewed call sites, including SQL assembled as instruction immediates."""
-    path = Path(__file__).resolve().parents[2] / 'metadata/dof/source-audit/gateway-sql-calls.json'
+    path = Path(__file__).resolve().parents[2] / 'metadata/dof/derivation/gateway-sql-calls.json'
     raw = path.read_bytes()
     if digest(raw) != SQL_CALLS_PIN:
         raise ValueError('Gateway SQL call-site evidence has changed')
@@ -47,7 +47,7 @@ def gateway_sql_calls():
 
 
 def gateway_sql_literals():
-    path = Path(__file__).resolve().parents[2] / 'metadata/dof/source-audit/gateway-sql-literals.json'
+    path = Path(__file__).resolve().parents[2] / 'metadata/dof/derivation/gateway-sql-literals.json'
     raw = path.read_bytes()
     if digest(raw) != SQL_LITERALS_PIN:
         raise ValueError('Gateway SQL literal evidence has changed')

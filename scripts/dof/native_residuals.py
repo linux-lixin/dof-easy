@@ -110,7 +110,7 @@ def retire_gateway_stack_constants(source,data,elf,patches,change):
     import json
     from pathlib import Path
     from scripts.dof.native_candidates import GATEWAY_PIN,gateway_sql_calls
-    path=Path(__file__).resolve().parents[2]/'metadata/dof/source-audit/gateway-retired-stack-constants.json'
+    path=Path(__file__).resolve().parents[2]/'metadata/dof/derivation/gateway-retired-stack-constants.json'
     raw=path.read_bytes()
     if hashlib.sha256(raw).hexdigest()!='048a40e9b039f5b64a389936a94b3666afcf98fca5d793910e02b8d9e10b756e':
         raise ValueError('Retired SQL immediate evidence changed')

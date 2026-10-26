@@ -196,7 +196,7 @@ def stage_data(source, destination, runtime, old_managed, new_managed, previous_
     else:
         # Retired names are accepted only at this explicit legacy import boundary.
         old = source / 'qingkong-extension'
-        inputs = json.loads((ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json').read_text())['files']
+        inputs = json.loads((ROOT / 'metadata/dof/derivation/inputs.lock.json').read_text())['files']
         for row in inputs:
             if digest(old / row['path']) != row['sha256']: raise ValueError('Source replacement pin mismatch')
         shutil.copytree(source, destination, ignore=lambda folder, names:

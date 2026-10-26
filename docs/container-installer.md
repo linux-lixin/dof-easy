@@ -4,7 +4,7 @@
 
 ## 三步安装
 
-1. 把项目代码和自己的完整 PVF 放到主机。固定免授权原件与正式资源已纳入 Git，无需另行上传。可上传源码归档，或在已有 Git 的主机运行 `git clone https://github.com/linux-lixin/dof-easy.git`。
+1. 把项目代码和自己的完整 PVF 放到主机。正式免授权资源与普通插件已纳入 Git，无需另行上传。可上传源码归档，或在已有 Git 的主机运行 `git clone --depth 1 --branch main --single-branch https://github.com/linux-lixin/dof-easy.git`。
 2. 在项目目录执行 `sudo bash install.sh`，选 **1 安装服务端**。
 3. 按向导选择并核对最终确认页，输入 `y` 执行。成功后按输出地址登录网页，账号 `admin`，密码在该实例私有 `.env` 的 `ADMIN_PASSWORD`。
 
@@ -35,7 +35,7 @@ sudo bash dof.sh
 
 提供客户端实际可达的 IPv4，NAT 主机可填写公网映射地址。选择的等级仍需与 PVF、客户端匹配；原生 ABI 不匹配会拒绝部署，等级列表不是全玩法通过清单。
 
-资源目录默认 `services/game/resources/native`，直接回车使用仓库内置正式资源。也可指定显式导入后生成的正式派生结果；安装菜单不接收原件，不自动派生，不接受授权版回退。原件复现入口和所有插件位置见 [资源布局](resource-layout.md)。既有实例再次“安装”仅沿用配置启动，不覆盖数据。
+菜单自动使用 `services/game/resources/native`，不再询问原始材料或正式资源目录。高级命令可显式指定正式派生结果；不接受原件或授权版回退。维护者复现入口和所有插件位置见 [资源布局](resource-layout.md)。既有实例再次“安装”仅沿用配置启动，不覆盖数据。
 
 ## MySQL 与网页
 

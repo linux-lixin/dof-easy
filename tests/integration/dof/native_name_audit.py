@@ -14,6 +14,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
+from scripts.dof.native_name_contract import module_contract
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64
 from capstone.x86 import X86_OP_IMM, X86_OP_MEM, X86_REG_RIP
 from scripts.dof.native_candidates import Elf, GATEWAY_PIN, PLUGIN_PIN, INLINE_PIN, replacement_source
@@ -34,7 +35,7 @@ def sections(raw):
 
 
 def verify(server, runtime):
-    audit = json.loads((runtime/'source-audit/derivation.json').read_text())['derivations']
+    audit = module_contract(runtime)
     raw = (runtime/'bin/dof-gateway').read_bytes()
     ranges = [(r['address'], r['address']+r['bytes']) for r in audit['bin/dof-gateway']['retiredLiterals']]
     elf = Elf(raw)

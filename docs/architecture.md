@@ -25,7 +25,7 @@ dof-easy/
 │   └── release/                镜像发布工具
 ├── deploy/                     手动 Ubuntu 模板与共享部署定义
 ├── metadata/                   公共输入、等级和来源锁
-│   └── dof/source-audit/       原生输入与历史来源审计
+│   └── dof/                    原生改名规则、哈希锁与加载测试断言
 ├── tests/                      单元、结构及独立集成入口
 └── docs/                       操作说明、当前状态与历史证据
 ```

@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.dof.native_candidates import (Elf, replacement_source, gateway_candidate,
     plugin_candidate, inline_candidate, GATEWAY_PIN, PLUGIN_PIN, INLINE_PIN)
 
-INPUTS = ROOT / 'metadata/dof/source-audit/server-inputs/replacement.lock.json'
+INPUTS = ROOT / 'metadata/dof/derivation/inputs.lock.json'
 DEFAULTS = ROOT / 'services/game/runtime/ubuntu/gateway/defaults'
 BASE_SCHEMA_PIN = '440604c1e7e786012abab3e69efac077a48da9d7ceae1ab43394a8eed4bc504b'
 
@@ -126,7 +126,7 @@ def build(source, output):
             recipeSha256=sha((ROOT / 'scripts/dof/native_candidates.py').read_bytes()),
             recipeDependencies={name:sha((ROOT / 'scripts/dof' / name).read_bytes())
                                 for name in ('native_symbols.py', 'native_sql.py', 'native_equipment.py', 'native_residuals.py')},
-            retirementEvidenceSha256=sha((ROOT/'metadata/dof/source-audit/gateway-retired-stack-constants.json').read_bytes()),
+            retirementEvidenceSha256=sha((ROOT/'metadata/dof/derivation/gateway-retired-stack-constants.json').read_bytes()),
             builderSha256=sha(Path(__file__).read_bytes()), derivations=derivations,
             functionalAcceptance='requires local verification of these exact hashes'), indent=2) + '\n')
         if output.exists() or output.is_symlink():
