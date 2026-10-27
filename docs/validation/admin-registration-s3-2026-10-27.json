@@ -6,24 +6,27 @@
   "adminImplementationComplete": false,
   "completeReplacement": false,
   "deployment": {
+    "deployed": true,
+    "imageId": "sha256:025985c5940e04e3176d128867690cbcfe6ff11cb1b8399f684082bf01d45669",
+    "tag": "dof-admin-replacement:20261027-s3-final",
+    "sourceCommit": "43945b44e52a9544b3c18b1c11927aebcaf14a38",
+    "appSHA256": "f01fdc59691664117e762ffacfcea2ed6c90f757050ccecc5b151c13abe1509c",
+    "hostPort": 18080,
+    "previousImage": "sha256:7c812e558d72822e239e8310cca685271e09680c45d42bbbd1687828d1e3048d",
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s3-registration/before-ledger",
+    "firstUpgradeBackup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s3-registration/before-upgrade",
+    "gameUnchanged": true,
+    "keysUnchanged": true,
+    "testPointsRetained": 37,
+    "canonicalLedgerUpdated": true,
+    "completeReplacement": false,
     "performed": true,
     "adminHostPort": 18080,
-    "gameDataWritten": true,
-    "gameContainerRestarted": false,
     "schemaMigrationApplied": true,
-    "reason": "User explicitly authorized direct test-server replacement; only dedicated new test accounts and temporary registration settings were written; settings restored",
-    "deployed": true,
-    "imageId": "sha256:7c812e558d72822e239e8310cca685271e09680c45d42bbbd1687828d1e3048d",
-    "sourceCommit": "29497fdf81420fcb6ff16007226a92a24b446865",
-    "hostPort": 18080,
-    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s3-registration/before-upgrade",
-    "gameUnchanged": true,
-    "configurationAndKeysUnchanged": true,
+    "testOnlyAccountWrites": true,
     "existingAccountsUnchanged": true,
-    "managementMigrationApplied": true,
-    "nativeGameEffectsVerified": false,
-    "retainedRollbackImage": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
-    "testOnlyAccountWrites": true
+    "gameContainerRestarted": false,
+    "nativeGameEffectsVerified": false
   },
   "targetReadOnlyChecks": {
     "hostFingerprintConfirmedByUser": true,
@@ -757,7 +760,9 @@
           "reason": "got: <false>, expected: is <true>"
         }
       ],
-      "limitation": "Previous temporary DB configuration and private native comparison inputs were not restored. These skips do not count as passed; native snapshots were not fabricated."
+      "limitation": "Previous temporary DB configuration and private native comparison inputs were not restored. These skips do not count as passed; native snapshots were not fabricated.",
+      "sourceCommit": "43945b44e52a9544b3c18b1c11927aebcaf14a38",
+      "finalStandardRunPassed": true
     },
     "registration": {
       "junitTests": 1,
@@ -967,6 +972,27 @@
       "registrationReplayDoesNotUndoPasswordChange": true,
       "noOldPasswordRestoreFeature": true,
       "newPasswordRetainedAfterRecreation": true
+    },
+    "finalRegistrationBrowser": {
+      "passed": true,
+      "backend": "real deployment after container recreation",
+      "instanceId": "dof-main",
+      "actualGameplayVerified": false,
+      "pageErrors": 0,
+      "checks": [
+        "real administrator login and registration navigation",
+        "persisted registration receipt visible",
+        "original registration policy and gift settings restored",
+        "historical registration IP gap explicitly displayed",
+        "no empty-success fallback"
+      ]
+    },
+    "finalImageRegistrationAndNewPasswordVerified": true,
+    "finalJarByteIdentityVerified": true,
+    "finalCanonicalLedgerCounts": {
+      "groups": 71,
+      "operations": 239,
+      "completeReplacement": false
     }
   },
   "remaining": [
@@ -982,7 +1008,8 @@
     "plaintextPasswordsInReport": false,
     "playerPlaintextLongTermSavePerformed": false,
     "optionalPlayerPasswordExportRejectedByAutoReview": true,
-    "safeAlternative": "Keep only the normal native password hash; use admin reset for future testing; remove local temporary secrets after checks"
+    "safeAlternative": "Keep only the normal native password hash; use admin reset for future testing; remove local temporary secrets after checks",
+    "temporaryLocalSecretsDeleted": true
   },
   "testAccounts": [
     {
@@ -995,5 +1022,26 @@
       "account": "codex_s3_player_20261027",
       "purpose": "dedicated registration/login/penalty/password acceptance player"
     }
-  ]
+  ],
+  "initialDeployment": {
+    "performed": true,
+    "adminHostPort": 18080,
+    "gameDataWritten": true,
+    "gameContainerRestarted": false,
+    "schemaMigrationApplied": true,
+    "reason": "User explicitly authorized direct test-server replacement; only dedicated new test accounts and temporary registration settings were written; settings restored",
+    "deployed": true,
+    "imageId": "sha256:7c812e558d72822e239e8310cca685271e09680c45d42bbbd1687828d1e3048d",
+    "sourceCommit": "29497fdf81420fcb6ff16007226a92a24b446865",
+    "hostPort": 18080,
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s3-registration/before-upgrade",
+    "gameUnchanged": true,
+    "configurationAndKeysUnchanged": true,
+    "existingAccountsUnchanged": true,
+    "managementMigrationApplied": true,
+    "nativeGameEffectsVerified": false,
+    "retainedRollbackImage": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+    "testOnlyAccountWrites": true
+  },
+  "runtimeSourceCommit": "43945b44e52a9544b3c18b1c11927aebcaf14a38"
 }
