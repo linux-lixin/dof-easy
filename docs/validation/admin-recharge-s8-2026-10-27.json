@@ -1055,8 +1055,60 @@
     "imageUpgradeDidNotRecreateOrRestartGame": true
   },
   "finalLedgerDeployment": {
-    "status": "pending resource-only final image and rebuild verification",
-    "businessClassesAndTestedFrontendWillRemainUnchanged": true
+    "status": "verified",
+    "result": {
+      "passed": true,
+      "sourceCommit": "3baf0f3278c59279cd043e5786c600717afb8800",
+      "businessImplementationCommit": "f5cb788acfbfbcc51d926f0cd92995805c5a3aaa",
+      "adminImage": "sha256:56d8afa1341fb76185b84388bc05c9a9df32003fec7de975d252234cc0ebf83e",
+      "adminTag": "dof-admin-replacement:20261027-s8-final",
+      "appSHA256": "990cfc40dd8c21b2b34ac67b5c2b0911618daeeefddd9b3c604c7cd3ce1a17a1",
+      "adminPort": 18080,
+      "onlyChangedJarMembers": [
+        "BOOT-INF/classes/dof/execution-plan.json",
+        "BOOT-INF/classes/dof/scope.json"
+      ],
+      "businessClassesAndVerifiedFrontendUnchanged": true,
+      "adminContainerRecreated": true,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedOrRestartedDuringAdminUpdates": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "gameHealthy": true,
+      "testUid6CeraAfterRebuild": 37,
+      "originalCreditAndCompensationReplayedWithoutNewMoneyWrites": true,
+      "originalNativeTasksReplayedWithoutNewInvocations": [
+        {
+          "module": "anton",
+          "requestId": "ccd8f120-80fa-43ff-a0e5-b84bc9f84261",
+          "originalResultPreserved": true
+        },
+        {
+          "module": "luke",
+          "requestId": "67413b00-bcf5-4bb3-ac9b-2e710ab43268",
+          "originalResultPreserved": true
+        }
+      ],
+      "nativeInvocationCountsBeforeAndAfter": {
+        "siroco52": {
+          "anton": 1,
+          "luke": 1
+        },
+        "siroco15": {
+          "anton": 1,
+          "luke": 1
+        }
+      },
+      "sameChannelBoots": true,
+      "adminPersistentKeysUnchanged": true,
+      "canonicalLedgerUpdated": true,
+      "scopeMinimum": 239,
+      "completeReplacement": false,
+      "actualGameplayVerified": false,
+      "actualPlayerReceiptVerified": false,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s8-recharge/before-final"
+    },
+    "localArtifact": ".dof-easy/admin-replacement-delivery-20261027-s8-final",
+    "resourceOnlyChangeVerified": true
   },
   "evidenceLimits": [
     "Controlled browser reply interception is not a physical network/database outage.",
