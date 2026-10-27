@@ -97,7 +97,9 @@
         "验证凭据过滤、损坏更新、断网与任务恢复"
       ],
       "completionEvidence": [],
-      "progressEvidence": []
+      "progressEvidence": [
+        "S18本地：Script生成任务在原子发布前重新读取落盘私有参数，对完整候选执行反向还原哈希、产物SHA-256、尾部MD5和严格边界核对；结果独立持久化roundTripVerified，旧记录默认未核对，nativeClientAcceptance仍为false。压缩文件编解码可单独核对，但压缩私有参数生成/匹配消费仍缺证据，未开放压缩任务。原Windows界面对照按用户要求留待手动；本批不部署，不改变测试服参数。测试结果见docs/validation/admin-script-roundtrip-s18-2026-10-28.json。"
+      ]
     },
     {
       "id": "wp04",

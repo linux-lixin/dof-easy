@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import Request from '../../../api/Request'
 const emit = defineEmits<{ (event: 'select', taskId: string): void }>()
 type Upload = { uploadId: string; state: string; bytes: number; sha256?: string; createdAt: string; error?: string }
-type Task = { requestId: string; uploadId: string; revision: string; state: string; progress: number; error?: string; sha256?: string; bytes: number }
+type Task = { requestId: string; uploadId: string; revision: string; state: string; progress: number; error?: string; sha256?: string; bytes: number; roundTripVerified?: boolean }
 const root = '/api/v1/admin/dof/script'
 const status = ref<any>(null), uploads = ref<Upload[]>([]), tasks = ref<Task[]>([])
 const busy = ref(false), error = ref(''), file = ref<File | null>(null), uploaded = ref(0)
@@ -88,6 +88,7 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
         <template #columns>
           <a-table-column title="加密批次" data-index="requestId" />
           <a-table-column title="状态"><template #cell="{record}">{{ labels[record.state] || record.state }}<span v-if="record.state === 'RUNNING'"> · {{ record.progress }}%</span><p v-if="record.error">{{ record.error }}</p></template></a-table-column>
+          <a-table-column title="整文件核对"><template #cell="{record}">{{ record.roundTripVerified === true ? '已还原核对原 PVF；组件读取及游戏效果待验' : '尚无整文件反向校验证据' }}</template></a-table-column>
           <a-table-column title="配套包"><template #cell="{record}"><a-button v-if="record.state === 'READY_FOR_TEST'" :disabled="busy" @click="emit('select', record.requestId)">选择此批次生成登录器配套包</a-button></template></a-table-column>
         </template>
       </a-table>

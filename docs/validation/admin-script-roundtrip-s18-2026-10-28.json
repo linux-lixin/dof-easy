@@ -1,0 +1,71 @@
+{
+  "stage": "S18",
+  "date": "2026-10-28",
+  "purpose": "verify a persisted Script candidate against its locked complete PVF source before READY_FOR_TEST",
+  "completeReplacement": false,
+  "originalToolEquivalenceVerified": false,
+  "originalWindowsToolStarted": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "realDeploymentVerified": false,
+  "serverAccessed": false,
+  "implementation": {
+    "verification": "stream header and reversed index plus unchanged resources into source SHA-256; check candidate SHA-256, native trailer checksum, trailer structure, declared lengths and EOF",
+    "parameterSource": "re-read hash-checked persisted private envelope before reverse verification; no private key in HTTP or evidence",
+    "publication": "verify .part before atomic rename; failed partial output discarded; no plaintext temporary PVF",
+    "state": "roundTripVerified persisted separately from nativeClientAcceptance; older records default false",
+    "compression": "codec verifier handles both formats; admin generator remains uncompressed because compressed private parameter generation is not verified"
+  },
+  "standardMaven": {
+    "passed": true,
+    "total": 427,
+    "passedTests": 185,
+    "skippedTests": 242,
+    "failures": 0,
+    "errors": 0,
+    "log": "/tmp/dof-admin-s18-maven.log",
+    "privateFixtureOptIn": "-Ddof.script.pairDirectory=<local private directory>",
+    "skipMeaning": "Missing private samples or integration conditions remain unverified; not counted as passes"
+  },
+  "frontend": {
+    "buildPassed": true,
+    "log": "/tmp/dof-admin-s18-frontend.log",
+    "browserVerified": false
+  },
+  "privateOriginalFixtures": [
+    {
+      "mode": "source",
+      "sha256": "2e65c17d075afec73203ba8f2bc9f5508f3b44706300f4ae7f9c13b5e0687fc5"
+    },
+    {
+      "mode": "uncompressed",
+      "sha256": "e34592496e8d43679bb18beb4287d0c7c50a08b0cff9d088e16993981825db57"
+    },
+    {
+      "mode": "compressed",
+      "sha256": "4f0357a87d1d5dee3a020c1bbd22f37d4614f878c98ab263ceef3ec742f3e515"
+    }
+  ],
+  "remaining": [
+    "Compressed private marker derivation and matched parameter consumer",
+    "Current implementation image build/deployment and real browser verification",
+    "Matched component consumption, actual game effect and publication interruption/recovery",
+    "Original Windows menus/defaults/import-export comparison deferred for user manual operation"
+  ],
+  "targetedSuites": [
+    {
+      "suite": "NativeScriptFileCodecTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "NativeScriptJobsTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    }
+  ],
+  "originalWholeFileComparisonAndReverseVerificationPassed": true
+}
