@@ -98,7 +98,8 @@
       ],
       "completionEvidence": [],
       "progressEvidence": [
-        "S18本地：Script生成任务在原子发布前重新读取落盘私有参数，对完整候选执行反向还原哈希、产物SHA-256、尾部MD5和严格边界核对；结果独立持久化roundTripVerified，旧记录默认未核对，nativeClientAcceptance仍为false。压缩文件编解码可单独核对，但压缩私有参数生成/匹配消费仍缺证据，未开放压缩任务。原Windows界面对照按用户要求留待手动；本批不部署，不改变测试服参数。测试结果见docs/validation/admin-script-roundtrip-s18-2026-10-28.json。"
+        "S18本地：Script生成任务在原子发布前重新读取落盘私有参数，对完整候选执行反向还原哈希、产物SHA-256、尾部MD5和严格边界核对；结果独立持久化roundTripVerified，旧记录默认未核对，nativeClientAcceptance仍为false。压缩文件编解码可单独核对，但压缩私有参数生成/匹配消费仍缺证据，未开放压缩任务。原Windows界面对照按用户要求留待手动；本批不部署，不改变测试服参数。测试结果见docs/validation/admin-script-roundtrip-s18-2026-10-28.json。",
+        "S18真实86级：源码23d5669（实现a668b53）部署18080，镜像4612b0b1；锁定派生配套与当前游戏公钥/数据库UUID绑定后，真实浏览器完成绑定PVF导入、生成实际接受后截断回包并按原号核对、完整反向校验、流式下载及同批次ZIP生成/各项哈希检查。专门任务在实际SIGKILL及admin容器重建后恢复INTERRUPTED，拒绝下载且同号不重启，旧产物保留；既有14项读取/拒绝回归通过。游戏PVF/配置、钱包、奖励、密钥及game启动身份保留；两份状态文件仅updatedAt变化，经原SHA-256精确复现。未应用参数，客户端消费、压缩私有参数、实际游戏与原工具对照仍待验，不关闭工作包。docs/validation/admin-script-roundtrip-s18-2026-10-28.json"
       ]
     },
     {

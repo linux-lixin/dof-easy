@@ -6,8 +6,8 @@
   "originalToolEquivalenceVerified": false,
   "originalWindowsToolStarted": false,
   "nativeConsumerAcceptanceVerified": false,
-  "realDeploymentVerified": false,
-  "serverAccessed": false,
+  "realDeploymentVerified": true,
+  "serverAccessed": true,
   "implementation": {
     "verification": "stream header and reversed index plus unchanged resources into source SHA-256; check candidate SHA-256, native trailer checksum, trailer structure, declared lengths and EOF",
     "parameterSource": "re-read hash-checked persisted private envelope before reverse verification; no private key in HTTP or evidence",
@@ -29,7 +29,7 @@
   "frontend": {
     "buildPassed": true,
     "log": "/tmp/dof-admin-s18-frontend.log",
-    "browserVerified": false
+    "browserVerified": true
   },
   "privateOriginalFixtures": [
     {
@@ -47,8 +47,9 @@
   ],
   "remaining": [
     "Compressed private marker derivation and matched parameter consumer",
-    "Current implementation image build/deployment and real browser verification",
-    "Matched component consumption, actual game effect and publication interruption/recovery",
+    "Explicit database UUID and component/source-batch provenance in every published manifest",
+    "Parameter application and targeted recovery on the current bound instance",
+    "Matched component consumption, actual game effect, damaged update, database outage and update interruption recovery",
     "Original Windows menus/defaults/import-export comparison deferred for user manual operation"
   ],
   "targetedSuites": [
@@ -67,5 +68,204 @@
       "skipped": 1
     }
   ],
-  "originalWholeFileComparisonAndReverseVerificationPassed": true
+  "originalWholeFileComparisonAndReverseVerificationPassed": true,
+  "deployedEvidence": {
+    "deployment": {
+      "sourceCommit": "23d5669c3ac2d697217da8ceef03a9a390052987",
+      "adminImage": "sha256:4612b0b11164ab2397e5cd262deaf4a07592935cf2bb53daa9006c5bf6123752",
+      "adminTag": "dof-admin-replacement:20261028-s18-candidate",
+      "appSHA256": "0804a815e45c47e036245a06ee872d456bf6e4175ad389f534c291c2c3036dce",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s18-script/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": true,
+      "acceptanceScope": "real bound PVF import, generation reply reconciliation, reverse verification, streamed download and same-batch ZIP verification; no native consumer or parameter apply claim",
+      "completeReplacement": false
+    },
+    "finalVerification": {
+      "passed": true,
+      "boundDatabaseUuidVerified": true,
+      "nativeRewardConfigEntireDataUnchanged": true,
+      "pairedGamePvfAndConfigurationBytesUnchanged": true,
+      "runtimeStatusOnlyHeartbeatTimestampChanged": true,
+      "heartbeatProof": "locked before SHA-256 reproduced by changing only updatedAt; all other status bytes unchanged",
+      "sameBatchArchiveAllEntryHashesVerified": true,
+      "actualAdminTaskExitAndContainerRecreationVerified": true,
+      "interruptedTaskDidNotAutoRetry": true,
+      "completeScriptDownloadVerified": true,
+      "roundTripVerified": true,
+      "serverParametersApplied": false,
+      "entireCouponWalletRowUnchanged": true,
+      "entireCeraWalletRowUnchanged": true,
+      "priorTestCdkStillPausedWithoutConsumption": true,
+      "adminPersistentKeysUnchanged": true,
+      "gameImageAndStartIdentityUnchanged": true,
+      "gameHealthy": true,
+      "baseDiskReserve2GiBMaintained": true,
+      "privateCredentialsAndDownloadsStayedOnServer": true,
+      "nativeClientAcceptance": false,
+      "completeReplacement": false
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": false,
+      "serverParametersApplied": false,
+      "nativeClientAcceptance": false,
+      "originalWindowsToolStarted": false,
+      "originalToolEquivalenceVerified": false,
+      "uploadId": "53a4d0ba-049a-41cf-98cc-2624f9b95c8d",
+      "scriptTaskId": "f9492783-a020-49e6-8bf5-010c5c304035",
+      "scriptSha256": "696aa5bdbc0e0b16a330605611698ad37957c39cd280ca367b2d4c9299ee137c",
+      "scriptSourceSha256": "2e65c17d075afec73203ba8f2bc9f5508f3b44706300f4ae7f9c13b5e0687fc5",
+      "scriptBytes": 565214617,
+      "roundTripVerified": true,
+      "bundleTaskId": "1c9d7de5-a1de-4225-a599-b286560a5cd9",
+      "bundleSha256": "e0cdddc4da66e50ff9df137d354ef6850b7a83d6ad611be7999cd94a5cc60cab",
+      "bundleBytes": 285563663,
+      "checks": [
+        "bound isolated database, native source and anonymous refusal",
+        "real browser generation reply withheld; original ID reconciled and replayed without a second build",
+        "complete candidate download streamed and matched task length/SHA-256",
+        "same-batch native candidate package built and full ZIP download SHA-256 verified",
+        "no server apply, rewards or wallet writes; no browser page errors"
+      ],
+      "pageErrors": 0,
+      "responseLoss": "actual generation accepted; reply withheld by browser route, not a physical network fault"
+    },
+    "readRegression": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "interruption": {
+      "passed": true,
+      "interruptedRequestId": "edd12ee1-34ad-4e4f-941d-112bdd8b7814",
+      "recoveredState": "INTERRUPTED",
+      "interruptedDownloadRefused": true,
+      "sameIdReplayDidNotRestart": true,
+      "priorScriptAndBundlePreserved": true,
+      "adminContainerRecreated": true,
+      "gameContainerNotRecreated": true,
+      "serverParametersApplied": false,
+      "nativeClientAcceptance": false,
+      "fault": "actual SIGKILL of isolated admin followed by container recreation; not database/game interruption"
+    },
+    "inputInstallation": {
+      "installed": true,
+      "instanceId": "dof-main",
+      "inputs": 5,
+      "webRestarted": false,
+      "databaseModified": false,
+      "clientModified": false
+    },
+    "heartbeatProof": {
+      "passed": true,
+      "proof": "Exact locked before SHA-256 reproduced by changing only updatedAt in current producer output",
+      "files": [
+        {
+          "path": "/opt/dof-easy/.dof-easy/instances/main/runtime/game/data/dof-easy/config/.runtime-apply/status-siroco15.json",
+          "beforeSHA256": "c404b6d3d8975c100fe246327101d68d37d21d5d512cf902cd87ccc414db0573",
+          "beforeUpdatedAt": 1793128664755,
+          "observedUpdatedAt": 1793128959615,
+          "onlyUpdatedAtChanged": true
+        },
+        {
+          "path": "/opt/dof-easy/.dof-easy/instances/main/runtime/game/data/dof-easy/config/.runtime-apply/status-siroco52.json",
+          "beforeSHA256": "1c834069a29cded20841c556b0854af46e84cf10e562e1ac09ef018766bb324b",
+          "beforeUpdatedAt": 1793128666761,
+          "observedUpdatedAt": 1793128959824,
+          "onlyUpdatedAtChanged": true
+        }
+      ]
+    },
+    "phase": {
+      "phase": "DEPLOYED_SCRIPT_ROUNDTRIP_AND_BUNDLE_VERIFIED_CONSUMER_PENDING",
+      "sourceCommit": "23d5669c3ac2d697217da8ceef03a9a390052987",
+      "updatedAt": 1793129006.23238,
+      "image": "sha256:4612b0b11164ab2397e5cd262deaf4a07592935cf2bb53daa9006c5bf6123752",
+      "completeReplacement": false
+    },
+    "processes": {
+      "deploy": {
+        "pid": 152621,
+        "processState": "exited"
+      },
+      "script-browser": {
+        "pid": 153444,
+        "processState": "exited"
+      },
+      "interruption": {
+        "pid": 154009,
+        "processState": "exited"
+      },
+      "read-browser": {
+        "pid": 154452,
+        "processState": "exited"
+      }
+    }
+  },
+  "privateInputInstallerChecks": {
+    "passed": true,
+    "tests": 3,
+    "log": "/tmp/dof-admin-s18-inputs-tests.log",
+    "scope": "installer path/archive/identity unit checks plus separately recorded real input installation"
+  },
+  "sourceBinding": {
+    "instanceId": "dof-main",
+    "environment": "isolated",
+    "adapterVersion": "dof-native-1",
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "clientFormatVersion": 2,
+    "readerRecipe": "dof-launcher-reader-2.2",
+    "sha256": {
+      "template.dll": "402f8bccfd9c96db7b965a72b5d5d4cbb682ee07add6bf220dbdc65781bb1914",
+      "game-public.der": "8fe26f9f151da601dd9474910327eb2b3fe05c7e37c756f854bbdf80ea5515a1",
+      "dof-launcher.exe": "da078f1883a83c64438fdaf96d7147770254d7b63310f74a5c31d5bd512b2554",
+      "ijl15.dll": "dd5b3a9be419b910fb82f01d432fdf9a12d374d491c554e10103ba345942f66b"
+    }
+  },
+  "buildIdentity": {
+    "sourceCommit": "23d5669c3ac2d697217da8ceef03a9a390052987",
+    "appSHA256": "0804a815e45c47e036245a06ee872d456bf6e4175ad389f534c291c2c3036dce",
+    "transferBytes": 45052735,
+    "transferSHA256": "672ba5d671a1fb763d419792756ef31135444ba022ef56d9c5d91ce69f707b21",
+    "helperSHA256": "eec89be3c834a55de834c9079a989bef706fb345f0e15a36e7451013381d5cc7",
+    "privateInputInstallationTests": 3
+  }
 }
