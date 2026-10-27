@@ -24,10 +24,20 @@ def copy_missing(source, target):
 def check_frida_ownership(source, target, mode):
     """Upgrade only the exact previous shipped script; report custom overlap."""
     previous = {'3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d',
-                '6ca2de364e9b94405a1f433ad3fcda627b5fb68f6ead7774d2f6af93f37e2afa'}
+                '6ca2de364e9b94405a1f433ad3fcda627b5fb68f6ead7774d2f6af93f37e2afa',
+                'bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843'}
     original = target.read_bytes()
     if hashlib.sha256(original).hexdigest() in previous:
+        backup = target.with_name(target.name + '.previous-' + hashlib.sha256(original).hexdigest()[:12])
+        if backup.is_symlink() or (backup.exists() and backup.read_bytes() != original):
+            raise ValueError('Shipped Frida recovery copy conflicts; original script retained')
+        if not backup.exists():
+            fd = os.open(backup, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+            with os.fdopen(fd, 'wb') as stream:
+                stream.write(original); stream.flush(); os.fsync(stream.fileno())
         temporary = target.with_name(target.name + '.new')
+        if temporary.is_symlink():
+            raise ValueError('Frida upgrade staging file must not be a symlink')
         shutil.copyfile(source, temporary)
         temporary.chmod(0o600)
         temporary.replace(target)

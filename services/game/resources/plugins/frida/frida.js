@@ -792,6 +792,7 @@ var mysql_taiwan_cain = null;
 var mysql_taiwan_cain_2nd = null;
 var mysql_taiwan_billing = null;
 var mysql_frida = null;
+var mysql_frida_ready = false;
 
 //打开数据库
 function api_MYSQL_open(db_name, db_ip, db_port, db_account, db_password)
@@ -820,6 +821,11 @@ function api_MYSQL_open(db_name, db_ip, db_port, db_account, db_password)
 //mysql查询(返回mysql句柄)(注意线程安全)
 function api_MySQL_exec(mysql, sql)
 {
+    if(mysql == null || mysql.isNull())
+    {
+        log('[Frida DB] connection unavailable; query was not executed');
+        return 0;
+    }
     var sql_ptr = Memory.allocUtf8String(sql);
 
     MySQL_set_query_2(mysql, sql_ptr);
@@ -892,6 +898,7 @@ function api_MySQL_get_binary(mysql, field_index)
 //初始化数据库(打开数据库/建库建表/数据库字段扩展)
 function init_db()
 {
+    mysql_frida_ready = false;
     //配置文件
     var config = global_config['db_config'];
 
@@ -909,6 +916,11 @@ function init_db()
     {
         mysql_taiwan_billing = api_MYSQL_open('taiwan_billing', '127.0.0.1', 3306, config['account'], config['password']);
     }
+    if(mysql_taiwan_cain == null || mysql_taiwan_cain_2nd == null || mysql_taiwan_billing == null)
+    {
+        log('[Frida DB] game database connection failed; activity initialization stopped');
+        return false;
+    }
 
     //建库frida
     api_MySQL_exec(mysql_taiwan_cain, 'create database if not exists frida default charset utf8;');
@@ -916,15 +928,31 @@ function init_db()
     {
         mysql_frida = api_MYSQL_open('frida', '127.0.0.1', 3306, config['account'], config['password']);
     }
+    if(mysql_frida == null)
+    {
+        log('[Frida DB] frida database unavailable; check instance plugin-db provisioning and scoped grants');
+        return false;
+    }
 
     //建表frida.game_event
-    api_MySQL_exec(mysql_frida, 'CREATE TABLE game_event (\
+    if(!api_MySQL_exec(mysql_frida, 'CREATE TABLE IF NOT EXISTS game_event (\
         event_id varchar(30) NOT NULL, event_info mediumtext NULL,\
         PRIMARY KEY  (event_id)\
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;');
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;'))
+    {
+        log('[Frida DB] game_event schema could not be prepared; activity initialization stopped');
+        return false;
+    }
 
     //载入活动数据
-    event_villageattack_load_from_db();
+    if(!event_villageattack_load_from_db())
+    {
+        log('[Frida DB] activity data could not be loaded; existing progress retained');
+        return false;
+    }
+    mysql_frida_ready = true;
+    log('[Frida DB] activity storage ready');
+    return true;
 }
 
 //关闭数据库（卸载插件前调用）
@@ -3290,16 +3318,28 @@ function event_villageattack_load_from_db()
             MySQL_fetch(mysql_frida);
 
             var info = api_MySQL_get_str(mysql_frida, 0);
-
-            villageAttackEventInfo = JSON.parse(info);
+            try
+            {
+                var decoded = JSON.parse(info);
+                if(decoded == null || typeof decoded !== 'object' || Array.isArray(decoded)) return false;
+                villageAttackEventInfo = decoded;
+            }
+            catch(error)
+            {
+                return false;
+            }
+            return true;
         }
+        return MySQL_get_n_rows(mysql_frida) === 0;
     }
+    return false;
 }
 
 //怪物攻城活动数据存档
 function event_villageattack_save_to_db()
 {
-    api_MySQL_exec(mysql_frida, "replace into game_event (event_id, event_info) values ('villageattack', '" + JSON.stringify(villageAttackEventInfo) + "');");
+    if(!mysql_frida_ready) return false;
+    return api_MySQL_exec(mysql_frida, "replace into game_event (event_id, event_info) values ('villageattack', '" + JSON.stringify(villageAttackEventInfo) + "');");
 }
 
 //世界广播怪物攻城活动当前进度/难度

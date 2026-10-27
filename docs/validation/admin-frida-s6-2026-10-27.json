@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "phase": "S6 default Frida storage dependency",
+  "adminImplementationComplete": false,
+  "completeReplacement": false,
+  "baseCommit": "d868865",
+  "baselineScriptSHA256": "bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843",
+  "patchedScriptSHA256": "395ba7db685ccd1e3942b5b24a54611fcdbbae71fa5b8693322ddb9762d560e5",
+  "sourceClassification": "Observed server script exactly matches the previously shipped default, not an operator customization.",
+  "rootCause": "External installer omitted frida from provisioning, grants and backup scope. A failed frida connection was passed to a native query.",
+  "changes": [
+    "Fixed frida.game_event schema adapter; reject incompatible columns, engine, primary/unique indexes, triggers and foreign keys before writes.",
+    "Installer migration journal binds actual UUID, instance, host, scope, schema hash and operation ID; additive retry preserves progress.",
+    "Grant only SELECT/INSERT/UPDATE/DELETE/CREATE/LOCK TABLES on frida.* to the existing dedicated subnet game account; no password reset or global grant.",
+    "Explicit plugin-db CLI; startup refuses a missing managed dependency before starting game. Disabled-plugin progress remains in backup scope.",
+    "Known shipped script upgrade retains private recovery copy; operator edits remain untouched.",
+    "Null handles fail without native calls; failed/malformed loads cannot overwrite activity progress at shutdown; unknown JSON object fields preserved."
+  ],
+  "checks": {
+    "python": {
+      "total": 60,
+      "passed": 58,
+      "failed": 0,
+      "skipped": [
+        {
+          "test": "FridaCompatibility.test_scoped_audit_resolves_gadget_but_keeps_other_missing_symbols_fatal",
+          "reason": "requires Linux ELF loader and gcc-multilib"
+        },
+        {
+          "test": "FridaCompatibility.test_archived_gadget_executes_minimal_script_with_versioned_shim",
+          "reason": "requires Linux ELF loader and gcc-multilib"
+        }
+      ]
+    },
+    "mockedJavaScript": {
+      "connectionScenarios": 9,
+      "activityLoadScenarios": 9,
+      "nativeCallsMocked": true,
+      "existingItemOwnershipAndRecyclingRegressionPassed": true
+    },
+    "isolatedMySQL56": {
+      "passed": true,
+      "databaseVersion": "5.6.51",
+      "freshTableAndScopedGrant": true,
+      "existingUtf8ProgressBytePreserved": true,
+      "repeatOperationIdPreserved": true,
+      "scopedLockTablesDumpPassed": true,
+      "dumpSHA256": "7de2a6c8c10b35a967a8408ec0f9e062b9236771ea26426250c39d873b70c938",
+      "unknownSchemaRefusals": [
+        "unknown-column",
+        "extra-unique-index",
+        "unknown-trigger",
+        "unknown-foreign-key"
+      ],
+      "nativeFridaOrGameVerified": false,
+      "targetSubnetRoutingVerified": false
+    },
+    "namespace": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "8d3a4e8668cd0e65a570ac8c2e15314baeca61ba61c0127fda232abb653374cb",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "initialAttempt": {
+      "path": "/home/lixin/.cache/dof-easy/local-validation/runs/admin-frida-s6-db-1",
+      "failed": true,
+      "reason": "Missing mysqldump executable; no native/component pass claimed."
+    }
+  },
+  "credentialDiagnosis": {
+    "dotenvRootFieldEncrypted": false,
+    "dotenvRootFieldMatchesGenerator48Hex": true,
+    "composeParsingPreservesRawValue": true,
+    "dotenvValueAuthenticatesHostRoot": false,
+    "panelRootStorageEncrypted": true,
+    "officialPanelReaderAuthenticated": true,
+    "mysqlVersion": "5.6.50-log",
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "credentialsExported": false
+  },
+  "deployment": {
+    "performed": false,
+    "grade": 86,
+    "instanceId": "dof-main",
+    "nativeConsumptionVerified": false,
+    "activityEnabledByThisWork": false
+  },
+  "remaining": [
+    "Actual server migration, startup consumption and controlled recovery verification.",
+    "Activity ownership across multiple channels, scheduling, rewards, full original-tool mapping and webpages remain pending.",
+    "Original game and admin full replacement gates remain open."
+  ]
+}

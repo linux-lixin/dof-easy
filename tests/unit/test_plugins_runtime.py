@@ -88,4 +88,32 @@ class RuntimeTests(unittest.TestCase):
             self.assertFalse(stale.exists())
 
 
+class ShippedFridaUpgrade(unittest.TestCase):
+    def test_known_script_upgrade_keeps_private_recovery_copy(self):
+        module=RuntimeTests().module(); real_hash=module.hashlib.sha256
+        old=b'synthetic previous shipped script'; old_hash='bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843'
+        def digest(value): return mock.Mock(hexdigest=lambda:old_hash) if value==old else real_hash(value)
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);source=root/'source.js';target=root/'frida.js'
+            source.write_bytes(b'synthetic new script');target.write_bytes(old)
+            with mock.patch.object(module.hashlib,'sha256',side_effect=digest):module.check_frida_ownership(source,target,'frida')
+            backup=root/('frida.js.previous-'+old_hash[:12]);self.assertEqual(backup.read_bytes(),old)
+            self.assertEqual(backup.stat().st_mode & 0o777,0o600);self.assertEqual(target.read_bytes(),source.read_bytes())
+            module.check_frida_ownership(source,target,'frida');self.assertEqual(backup.read_bytes(),old)
+
+    def test_conflicting_recovery_or_symlink_stops_before_script_replace(self):
+        module=RuntimeTests().module();real_hash=module.hashlib.sha256
+        old=b'synthetic previous shipped script';old_hash='bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843'
+        def digest(value):return mock.Mock(hexdigest=lambda:old_hash) if value==old else real_hash(value)
+        for problem in ('wrong-backup','backup-link','staging-link'):
+            with self.subTest(problem=problem),tempfile.TemporaryDirectory() as folder:
+                root=Path(folder);source=root/'source.js';target=root/'frida.js';source.write_bytes(b'new');target.write_bytes(old)
+                backup=root/('frida.js.previous-'+old_hash[:12]);other=root/'other';other.write_bytes(b'keep')
+                if problem=='wrong-backup':backup.write_bytes(b'foreign backup')
+                elif problem=='backup-link':backup.symlink_to(other)
+                else:(root/'frida.js.new').symlink_to(other)
+                with mock.patch.object(module.hashlib,'sha256',side_effect=digest),self.assertRaises(ValueError):module.check_frida_ownership(source,target,'frida')
+                self.assertEqual(target.read_bytes(),old);self.assertEqual(other.read_bytes(),b'keep')
+
+
 if __name__ == '__main__': unittest.main()

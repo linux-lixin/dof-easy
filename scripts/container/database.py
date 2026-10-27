@@ -22,6 +22,92 @@ CHANNEL_SEED = ROOT / 'services/game/assets/home/template/init/init_sql.tgz'
 DATABASES = GAME_DATABASES + ('d_channel_cain', 'dof_native', 'dnf_service')
 
 
+def required_databases(values):
+    return DATABASES + (('frida',) if values.get('PLUGIN_MODE') in ('frida', 'dp2-frida') else ())
+
+
+def backup_databases(instance, values):
+    selected = required_databases(values)
+    marker = instance / 'external-database.json'
+    if marker.is_symlink():
+        raise ValueError('数据库备份绑定不能是符号链接')
+    if marker.exists():
+        saved = json.loads(marker.read_text())
+        if saved.get('databaseUuid') != values.get('DOF_DATABASE_UUID') or saved.get('instanceId') != 'dof-'+instance.name:
+            raise ValueError('数据库备份实例身份不匹配')
+        if 'frida' in saved.get('databases', []) and 'frida' not in selected:
+            selected += ('frida',)  # Disabled plugins still own progress that must be backed up.
+    return selected
+
+
+FRIDA_TABLE = ('CREATE TABLE frida.game_event (event_id varchar(30) NOT NULL, '
+               'event_info mediumtext NULL, PRIMARY KEY (event_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;')
+
+
+def frida_table_exists(query):
+    """Validate the shipped script's exact storage contract before any DDL."""
+    row = query("SELECT CONCAT(TABLE_TYPE,'|',COALESCE(ENGINE,''),'|',COALESCE(TABLE_COLLATION,'')) FROM information_schema.TABLES WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event';")
+    if not row:
+        return False
+    if not re.fullmatch(r'BASE TABLE\|InnoDB\|utf8_[a-z0-9_]+', row):
+        raise ValueError('frida.game_event 引擎或字符集不兼容，未修改原表')
+    columns = query("SELECT CONCAT(COLUMN_NAME,'|',COLUMN_TYPE,'|',IS_NULLABLE,'|',COALESCE(COLUMN_DEFAULT,'<NULL>'),'|',EXTRA,'|',COALESCE(CHARACTER_SET_NAME,'')) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' ORDER BY ORDINAL_POSITION;")
+    expected = 'event_id|varchar(30)|NO|<NULL>||utf8\nevent_info|mediumtext|YES|<NULL>||utf8'
+    primary = query("SELECT CONCAT(COLUMN_NAME,'|',COALESCE(SUB_PART,'<NULL>')) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' AND INDEX_NAME='PRIMARY' ORDER BY SEQ_IN_INDEX;")
+    unique = query("SELECT DISTINCT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' AND NON_UNIQUE=0 ORDER BY INDEX_NAME;")
+    if columns != expected or primary != 'event_id|<NULL>' or unique != 'PRIMARY':
+        raise ValueError('frida.game_event 字段或主键不兼容，未修改原表或活动进度')
+    triggers = query("SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE EVENT_OBJECT_SCHEMA='frida' AND EVENT_OBJECT_TABLE='game_event';")
+    references = query("SELECT COUNT(*) FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' AND REFERENCED_TABLE_NAME IS NOT NULL;")
+    if triggers != '0' or references != '0':
+        raise ValueError('frida.game_event 存在未知触发器或外键，未修改原表或活动进度')
+    return True
+
+
+def prepare_frida(instance, values, query, db_uuid):
+    """Explicit installer migration, never game-side privilege escalation."""
+    if 'frida' not in required_databases(values):
+        return False
+    if identity(query) != db_uuid or (values.get('DOF_DATABASE_UUID') and values['DOF_DATABASE_UUID'] != db_uuid):
+        raise ValueError('Frida 数据库 UUID 不匹配')
+    external = instance / 'external-database.json'
+    if external.is_symlink() or not external.is_file():
+        raise ValueError('缺少外置数据库实例身份，拒绝插件库写入')
+    ownership = json.loads(external.read_text())
+    expected = dict(databaseUuid=db_uuid, instanceId='dof-'+instance.name,
+                    host=values['DOF_DB_HOST'], port=values['DOF_DB_PORT'], grantHost=values['DOF_DB_ALLOW_HOST'])
+    if any(ownership.get(k) != v for k,v in expected.items()) or ownership.get('state') not in ('ready','initializing'):
+        raise ValueError('Frida 数据库实例绑定不匹配')
+    host = values['DOF_DB_ALLOW_HOST']
+    net = ipaddress.IPv4Network(host, strict=True)
+    private_ranges = [ipaddress.IPv4Network(n) for n in ('10.0.0.0/8','172.16.0.0/12','192.168.0.0/16')]
+    if not any(net.subnet_of(n) for n in private_ranges) or not 16 <= net.prefixlen <= 28:
+        raise ValueError('Frida 授权仅限实例专用私网')
+    account = account_sql('game', 'unusedpass', host)
+    if query("SELECT COUNT(*) FROM mysql.user WHERE User='game' AND Host='"+host+"';") != '1':
+        raise ValueError('实例 game 数据库账号不存在，未创建或重置账号')
+    marker = instance / 'plugin-databases.json'
+    if marker.is_symlink() or marker.with_suffix('.new').is_symlink():
+        raise ValueError('插件数据库记录不能为符号链接')
+    version = hashlib.sha256(FRIDA_TABLE.encode()).hexdigest()
+    saved = json.loads(marker.read_text()) if marker.exists() else {}
+    if saved and (any(saved.get(k) != v for k,v in expected.items()) or saved.get('schemaSHA256') != version
+                  or saved.get('state') not in ('applying','ready') or not isinstance(saved.get('operationId'), str)):
+        raise ValueError('插件数据库记录绑定或版本冲突')
+    exists = frida_table_exists(query)
+    record = dict(expected, schemaSHA256=version, operationId=saved.get('operationId',str(uuid.uuid4())), state='applying')
+    private_json(marker, record)
+    query('CREATE DATABASE IF NOT EXISTS frida CHARACTER SET utf8;')
+    if not exists:
+        query(FRIDA_TABLE)
+    if not frida_table_exists(query):
+        raise ValueError('Frida 表创建结果未确认；保留 applying 记录')
+    # Exactly the operations used by the pinned script; no global grants or DDL removal.
+    query('GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, LOCK TABLES ON frida.* TO '+account+';')
+    private_json(marker, dict(record, state='ready'))
+    return True
+
+
 def kind(values):
     result = values.get('DOF_DATABASE_KIND', 'internal')
     if result not in ('internal', 'external'):
@@ -231,9 +317,11 @@ def initialize_external(instance, values, query):
             raise ValueError('外置数据库身份改变；拒绝继续初始化')
         if saved.get('state') != 'ready':
             raise ValueError('上次初始化中断；保留现场，禁止自动重放种子。请按恢复文档处理')
+        if prepare_frida(instance, values, query, db_uuid):
+            private_json(marker, dict(saved, databases=list(dict.fromkeys(saved.get('databases', []) + list(required_databases(values))))))
         return db_uuid
     existing = set(query('SHOW DATABASES;').splitlines())
-    if existing.intersection(DATABASES):
+    if existing.intersection(required_databases(values)):
         raise ValueError('外置数据库已有项目库；新安装拒绝覆盖或接管')
     host = values['DOF_DB_ALLOW_HOST']
     if query("SELECT COUNT(*) FROM mysql.user WHERE User='game';") != '0':
@@ -247,7 +335,7 @@ def initialize_external(instance, values, query):
     for source in (SEED, COMPAT, CHANNEL_SEED):
         if hashlib.sha256(source.read_bytes()).hexdigest() != locked.get(source.relative_to(ROOT).as_posix()):
             raise ValueError('Database seed hash mismatch')
-    private_json(marker, dict(expected,state='initializing',databases=DATABASES))
+    private_json(marker, dict(expected,state='initializing',databases=required_databases(values)))
     # An exclusive CREATE arbitrates concurrent first installs before any dump
     # can run. No IF NOT EXISTS: only the installer that claims it may seed.
     query('CREATE DATABASE d_channel CHARACTER SET utf8;')
@@ -262,8 +350,9 @@ def initialize_external(instance, values, query):
     query('CREATE USER '+game+" IDENTIFIED BY '"+values['GAME_DB_PASSWORD']+"';")
     for schema in DATABASES:
         query('GRANT ALL PRIVILEGES ON `'+schema.replace('_', r'\_')+'`.* TO '+game+';')
+    prepare_frida(instance, values, query, db_uuid)
     db_uuid = prepare_web(instance,values,query)
     # Update encrypted game connection credentials in the game container at
     # startup; no legacy init/grant script is allowed on this external DB.
-    private_json(marker,dict(expected,state='ready',databases=DATABASES))
+    private_json(marker,dict(expected,state='ready',databases=required_databases(values)))
     return db_uuid

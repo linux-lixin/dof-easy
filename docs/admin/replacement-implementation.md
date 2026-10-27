@@ -117,6 +117,18 @@ python3 scripts/dof/verify_admin_baseline.py \
 
 可复用验收入口为 `tests/integration/admin/runtime-live.py`（真实配置变更、刷新、恢复；必须指定 loopback 地址、实例、私有凭据、邮箱目录与全新输出目录），以及 `tests/integration/admin/plugin-live.cjs --expect-native-runtime`（真实网页；同样限定 loopback 地址）。前者中断后应先按 `live-state.json` 核对原任务，不覆盖状态文件重跑。后者不改配置，显示原生回读与游戏效果的区别；两者均不替代完整团本验收。
 
+### S6 默认 Frida 活动存储依赖
+
+S5 中标为“自定义 Frida”的报错，经过运行文件哈希对照，实际来自仓库此前配套的默认脚本（SHA-256 `bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843`）。它使用 `frida.game_event` 保存攻城活动状态；外置数据库安装器只授权既有游戏、原生和网页库，漏掉了这个依赖。连接失败后原脚本继续向空句柄提交查询，引发 `init_db` 的 native 参数异常。
+
+新增 `dof.sh plugin-db --instance main --mysql-config /服务器本地/管理员.cnf`，在已绑定的外置实例上显式核对 UUID、账号网段、原表字段、主键、唯一索引、引擎、字符集、触发器和外键。只补缺少的已知表，给现有 game 账号增加 `frida.*` 的读写、CREATE 和 LOCK TABLES 权限，不改账号密码或授予全局权限。迁移前落盘 `plugin-databases.json`，中断后在同操作编号下核对和续行；不重建原表或清空进度。安装器初次安装也接入同一适配。启用但缺少已记录依赖时，启动前报错；关闭 Frida 后仍保留活动库的备份范围。
+
+默认脚本遇到空连接时不再调用 native 查询；活动加载成功才允许存档，损坏 JSON、非对象数据或读取失败不会用默认值覆盖原进度。旧版默认脚本按精确哈希升级，保留私有 `.previous-<hash>` 副本；用户编辑脚本不覆盖。迁移不启用怪物攻城、首次登录奖励或其他调度，多个频道的活动执行归属仍须另外验证。
+
+真实隔离 MySQL 5.6.51 已验证建表/定向授权、重复操作编号、UTF-8 活动数据逐字节保留、备份，以及未知结构拒绝；目标 Docker 网段连接和原生 Frida 尚不计为通过。58 项 Python 检查通过，2 项 ELF/gcc-multilib 检查因本地工具缺少而跳过；18 项 JS 场景明确采用 native mock。首次隔离运行因缺少 mysqldump 失败，补齐同 Dockerfile 固定哈希的 5.6 客户端后第二次通过。
+
+服务器 `.env` 的 `DB_ROOT_PASSWORD` 是安装器生成的 48 位十六进制明文，当前外置模式不使用它设置宿主 MySQL root。`TeaEncrypt` 用于游戏账号密码的 `DEC_GAME_PWD` 派生值。宝塔实际保存的 root 配置另有字段加密，须通过宝塔自身读取器在服务器内解密和使用；本批通过该连接核对到 MySQL 5.6.50 和目标 UUID，没有导出凭据。真实测试服应用结果继续写入 `docs/validation/admin-frida-s6-2026-10-27.json`，未取得原生及玩法证据前保持未完成。
+
 ## 测试与未完成项
 
 机器摘要见 `docs/validation/admin-replacement-2026-10-26.json`。既有记录继续按来源日期和适用范围保留，不能用这次代码修改扩写为生产部署通过。
