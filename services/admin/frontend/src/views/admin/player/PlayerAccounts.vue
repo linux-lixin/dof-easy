@@ -3,7 +3,7 @@
 import {onMounted, ref} from "vue";
 import type {AccountSearchForm} from "../../../api/entitys/AccountSearchForm";
 import type {PageResult} from "../../../api/entitys/PageResult";
-import type {RechargeOption} from "../../../api/entitys/RechargeOption";
+import ManagedRecharge from "../../../components/ManagedRecharge.vue";
 import Request from "../../../api/Request";
 import {Message} from "@arco-design/web-vue";
 
@@ -19,13 +19,8 @@ const pageResult = ref<PageResult>({
   totalSize: 0,
   list: []
 });
-const rechargeOption = ref<RechargeOption>({
-  uid: 0,
-  accountname: "",
-  open: false,
-  cera: 0,
-  thisCera: 0,
-});
+const rechargeVisible = ref(false);
+const rechargeTarget = ref<{uid:number;accountname:string}>();
 const windowHeight = ref(window.innerHeight - 250)
 
 
@@ -68,48 +63,11 @@ const onPageSizeChange = (pageSize: number) => {
   search(true);
 };
 
-/**
- * 充值：打开弹窗并拉取当前余额
- * 说明：沿用旧版接口语义：GET account/{uid} 返回包含 cera 字段
- * 若你后端已统一到 api/v1，请自行替换 URL
- */
-const openRecharge = async (uid: number, accountname: string) => {
-  rechargeOption.value.uid = uid;
-  rechargeOption.value.accountname = accountname;
-  rechargeOption.value.cera = 0;
-  rechargeOption.value.thisCera = 0;
-  rechargeOption.value.open = true;
-
-  try {
-    const res = await Request.get(`api/v1/account/${uid}`);
-    rechargeOption.value.thisCera = Number(res.data?.cera ?? 0);
-  } catch {
-    // 拉余额失败也允许继续输入充值
-  }
-};
-
-/**
- * 充值：提交
- * 说明：沿用旧版接口语义：POST recharge，body=RechargeOption
- * 若你后端已统一到 api/v1，请自行替换 URL
- */
-const submitRecharge = async () => {
-  if (!rechargeOption.value.uid) return;
-
-  const amount = Number(rechargeOption.value.cera ?? 0);
-  if (!Number.isFinite(amount) || amount <= 0) {
-    Message.error("请输入大于 0 的充值数额");
-    return;
-  }
-
-  try {
-    await Request.post(`api/v1/recharge`, rechargeOption.value);
-    Message.success("充值成功");
-    rechargeOption.value.open = false;
-    search(false);
-  } catch (e: any) {
-    Message.error(e?.message || "充值失败");
-  }
+const openRecharge = (uid: number | string, accountname: string) => {
+  const value = Number(uid);
+  if (!Number.isSafeInteger(value) || value < 1) { Message.error('账号编号无效'); return; }
+  rechargeTarget.value = {uid:value,accountname};
+  rechargeVisible.value = true;
 };
 
 
@@ -213,23 +171,7 @@ onMounted(() => {
       />
     </div>
 
-    <!-- 充值窗口 -->
-    <a-modal
-        v-model:visible="rechargeOption.open"
-        :title="`为：${rechargeOption.accountname} 充值`"
-        :mask-closable="false"
-        @ok="submitRecharge"
-        @cancel="rechargeOption.open = false"
-    >
-      <a-form :model="rechargeOption" layout="vertical">
-        <a-form-item label="当前余额">
-          <a-input :model-value="String(rechargeOption.thisCera)" disabled />
-        </a-form-item>
-        <a-form-item label="充值数额">
-          <a-input-number v-model="rechargeOption.cera" :min="1" :max="9999999" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
+    <ManagedRecharge v-if="rechargeTarget" :key="rechargeTarget.uid" v-model:visible="rechargeVisible" :uid="rechargeTarget.uid" :account-name="rechargeTarget.accountname" @changed="search(false)" />
   </div>
 </template>
 

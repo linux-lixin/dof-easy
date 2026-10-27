@@ -341,7 +341,28 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [],
+          "managementImplementation": {
+            "state": "implemented_locally",
+            "entry": "/admin/player/accounts",
+            "api": "/api/v1/recharge",
+            "executor": "explicit_web_admin_billing_patch",
+            "writeProtocol": [
+              "credit",
+              "compensate",
+              "accept-current"
+            ],
+            "supportedEngines": [
+              "InnoDB",
+              "MyISAM"
+            ],
+            "unknownResultRule": "Never infer execution from balance equality; MyISAM acknowledgment keeps original outcome unknown.",
+            "receiptAtomicWithBalance": "InnoDB only",
+            "evidence": "docs/validation/admin-recharge-s8-2026-10-27.json",
+            "realDeploymentVerified": false,
+            "nativeToolEquivalenceVerified": false,
+            "actualPlayerReceiptVerified": false
+          }
         }
       ]
     },

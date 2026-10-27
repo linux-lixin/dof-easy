@@ -46,15 +46,6 @@ public interface AccountService {
                                Date lastLoginDate, Date laseLoginDateEnd, int page, int pageSize);
 
     /**
-     * chong zhi
-     * @param uid
-     *      user id
-     * @param face
-     *      mian zhi
-     */
-    void recharge(long uid, int face);
-
-    /**
      * 获得用户详情
      * @param uid
      *      用户ID
