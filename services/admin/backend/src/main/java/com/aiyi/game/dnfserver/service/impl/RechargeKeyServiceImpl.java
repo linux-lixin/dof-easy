@@ -5,18 +5,9 @@ import com.aiyi.core.beans.ResultPage;
 import com.aiyi.core.beans.WherePrams;
 import com.aiyi.core.exception.ValidationException;
 import com.aiyi.core.sql.where.C;
-import com.aiyi.game.dnfserver.conf.CommonAttr;
-import com.aiyi.game.dnfserver.dao.AccountVODao;
-import com.aiyi.game.dnfserver.dao.CharacInfoDao;
 import com.aiyi.game.dnfserver.dao.RechargeKeyDao;
-import com.aiyi.game.dnfserver.entity.AccountVO;
-import com.aiyi.game.dnfserver.entity.CharacInfo;
-import com.aiyi.game.dnfserver.entity.Postal;
 import com.aiyi.game.dnfserver.entity.RechargeKey;
-import com.aiyi.game.dnfserver.service.PostalService;
 import com.aiyi.game.dnfserver.service.RechargeKeyService;
-import com.aiyi.game.dnfserver.utils.cache.CacheUtil;
-import com.aiyi.game.dnfserver.utils.cache.Key;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,23 +19,20 @@ import java.util.UUID;
 
 @Service
 public class RechargeKeyServiceImpl implements RechargeKeyService {
+    @Resource private com.aiyi.game.dnfserver.service.dof.ManagedCdkService managedCdk;
 
     @Resource
     private RechargeKeyDao rechargeKeyDao;
 
-    @Resource
-    private AccountVODao accountVODao;
 
-    @Resource
-    private CharacInfoDao characInfoDao;
 
-    @Resource
-    private PostalService postalService;
 
     @Override
     public ResultPage<RechargeKey> list(Integer type, Integer status,
                                         int page, int pageSize,
                                         String content) {
+        managedCdk.requireAdmin();
+        if(page<1||page>10000||pageSize<1||pageSize>100)throw new ValidationException("页码或每页数量无效");
         WherePrams where = Method.createDefault();
         if (null != type){
             where.and(RechargeKey::getType, C.EQ, type);
@@ -70,6 +58,8 @@ public class RechargeKeyServiceImpl implements RechargeKeyService {
 
     @Override
     public void create(RechargeKey rechargeKey) {
+        managedCdk.requireAdmin();
+        if(rechargeKey==null||rechargeKey.getType()<0||rechargeKey.getType()>1||rechargeKey.getCount()<1||rechargeKey.getCount()>1000||rechargeKey.getFace()<1||rechargeKey.getType()==0&&rechargeKey.getFace()>9999999||rechargeKey.getFaceName()==null||rechargeKey.getFaceName().length()>150)throw new ValidationException("卡密类型、面值、名称或数量无效（最多1000张）");
         if (rechargeKey.getType() == 0){
             if (rechargeKey.getFace() < 1){
                 throw new ValidationException("面值无效");
@@ -98,62 +88,9 @@ public class RechargeKeyServiceImpl implements RechargeKeyService {
     }
 
     @Override
-    public void use(RechargeKey rechargeKey) {
-        CacheUtil.lock(Key.as("RECHARGE", rechargeKey.getContent()),
-        () -> {
-            String valicode = rechargeKey.getValicode();
-            String cacheValiCode = CacheUtil.get(Key.as(
-                    CommonAttr.CACHE.VALIDATION_CODE,
-                    rechargeKey.getValiId()
-            ), String.class);
-            if (null == valicode || !valicode.equals(cacheValiCode)){
-                throw new ValidationException("验证码不正确或已过期");
-            }
-            RechargeKey key = rechargeKeyDao.get(Method
-                    .where(RechargeKey::getContent, C.EQ,
-                            rechargeKey.getContent()));
-            if (null == key){
-                throw new ValidationException("卡密不存在");
-            }
-            if (key.getStatus() == 1){
-                throw new ValidationException("该卡密已被使用");
-            }
-
-            AccountVO accountVO = accountVODao.get(Method
-                    .where(AccountVO::getAccountname,
-                            C.EQ, rechargeKey.getUseAccount()));
-            if (key.getType() == 0){
-                // 充值点券
-                accountVODao.execute("update taiwan_billing." +
-                        "cash_cera set " +
-                        "cera = cera + ? where account=?",
-                        key.getFace(), accountVO.getUid());
-            }else{
-                // 充值装备
-                CharacInfo info = characInfoDao.get(rechargeKey
-                        .getCharach());
-                Postal postal = new Postal();
-                postal.setAddInfo(1);
-                postal.setItemId(rechargeKey.getFace());
-                postal.setOccTime(new Date());
-                postal.setSendCharacName("DNF Manager");
-                postal.setReceiveCharacNo(info.getCharacNo() + "");
-                postalService.sendMail(postal);
-            }
-
-            // 销毁验证码
-            CacheUtil.expire(Key.as(
-                    CommonAttr.CACHE.VALIDATION_CODE,
-                    rechargeKey.getValiId()
-            ));
-
-            // 置卡密状态
-            key.setStatus(1);
-            key.setUseUid(accountVO.getUid());
-            key.setUseAccount(accountVO.getAccountname());
-            key.setUseTime(new Date());
-            rechargeKeyDao.update(key);
-            return null;
-        });
+    public void use(RechargeKey key) {
+        com.aiyi.game.dnfserver.service.dof.ManagedCdkService.Claim request=new com.aiyi.game.dnfserver.service.dof.ManagedCdkService.Claim();
+        request.requestId=key.getRequestId();request.content=key.getContent();request.useAccount=key.getUseAccount();request.charach=new com.fasterxml.jackson.databind.ObjectMapper().valueToTree(key.getCharach());request.valiId=key.getValiId();request.valicode=key.getValicode();
+        managedCdk.claim(request);
     }
 }

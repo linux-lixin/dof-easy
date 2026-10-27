@@ -609,7 +609,29 @@
           "failureBehavior": null,
           "evidence": []
         }
-      ]
+      ],
+      "websiteRedemption": {
+        "protocol": "cdk-use-v1",
+        "codeImplemented": true,
+        "localContractVerified": true,
+        "realDeploymentVerified": false,
+        "actualClientConsumptionVerified": false,
+        "nativeCompanionParityVerified": false,
+        "codePool": "existing website recharge_key",
+        "rewardSource": "stored key definition only",
+        "usesExistingMailAndCurrencyWriter": true,
+        "durableRequestIdRequired": true,
+        "unknownCodeQuarantinedAfterAcknowledgment": true,
+        "confirmedCurrencyCompensation": "existing managed recharge service, one-time linked debit",
+        "report": "docs/validation/admin-cdk-redemption-s14-2026-10-28.json",
+        "remaining": [
+          "管理制码、导出、停用等流程接入统一预览/持久化协议",
+          "晴空14列配套及固定口令码的真实消费和执行归属核对",
+          "真实点券CDK受控兑换与补偿",
+          "真实物品CDK/客户端领取及特殊邮件标记",
+          "真实网络、进程和磁盘故障"
+        ]
+      }
     },
     {
       "id": "feature-010",

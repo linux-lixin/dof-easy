@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import Request from '../api/Request'
-const props = defineProps<{visible:boolean;uid:number;accountName:string}>()
+const props = defineProps<{visible:boolean;uid:number;accountName:string;sourceCredit?:{requestId:string;delta:number}}>()
 const emit = defineEmits<{(e:'update:visible',value:boolean):void;(e:'changed'):void}>()
 const busy=ref(false), error=ref(''), current=ref<any>(null), history=ref<any[]>([])
 const operation=ref('credit'), amount=ref<number>(), reason=ref(''), target=ref<string>()
@@ -19,7 +19,7 @@ async function reload(){
 }
 async function refresh(){if(busy.value)return;busy.value=true;error.value='';try{await reload()}finally{busy.value=false}}
 function reset(){frozen.value=null;receipt.value=null;operation.value='credit';amount.value=undefined;reason.value='';target.value=undefined}
-watch(()=>[props.visible,props.uid],async()=>{if(props.visible){reset();current.value=null;history.value=[];await refresh()}},{immediate:true})
+watch(()=>[props.visible,props.uid,props.sourceCredit?.requestId],async()=>{if(props.visible){reset();current.value=null;history.value=[];await refresh();if(current.value&&props.sourceCredit){operation.value='compensate';target.value=props.sourceCredit.requestId;amount.value=-props.sourceCredit.delta}}},{immediate:true})
 function request(){
   if(!current.value)throw new Error('请先读取当前余额')
   if(!reason.value.trim())throw new Error('请填写操作原因')

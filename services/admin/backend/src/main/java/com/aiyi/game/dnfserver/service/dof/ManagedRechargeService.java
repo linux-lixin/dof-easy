@@ -65,7 +65,7 @@ public class ManagedRechargeService {
             }
         }
     }
-    private Map<String,Object> schema(Connection c)throws SQLException{
+    Map<String,Object> schema(Connection c)throws SQLException{
         triggerVisibility(c);
         Map<String,Object> descriptor=new TreeMap<>();String engine=null;
         try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='taiwan_billing' AND TABLE_NAME='cash_cera'")){
@@ -115,7 +115,7 @@ public class ManagedRechargeService {
             if(!r.next()||r.getInt(1)==0||r.wasNull()||r.next())throw new DofFailure(403,"管理员权限已改变，停止点券操作");
         }}
     }
-    private Map<String,Object> read(Connection c,long uid)throws SQLException{
+    Map<String,Object> read(Connection c,long uid)throws SQLException{
         Map<String,Object> descriptor=schema(c),state=new LinkedHashMap<>();state.put("protocol",PROTOCOL);state.put("uid",uid);state.put("engine",descriptor.get("engine"));state.put("schemaRevision",journal.hash(descriptor));
         try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT @@server_uuid")){if(!r.next()||r.getString(1)==null)throw incompatible();state.put("databaseUuid",r.getString(1));}
         try(PreparedStatement p=c.prepareStatement("SELECT accountname FROM "+ACCOUNTS+" WHERE UID=?")){p.setLong(1,uid);try(ResultSet r=p.executeQuery()){
@@ -140,6 +140,18 @@ public class ManagedRechargeService {
     }
     private boolean whole(Object value){return value instanceof Integer||value instanceof Long;}
     private long balance(Map<String,Object> state){return ((Number)state.get("balance")).longValue();}
+    Map<String,Object> creditPlan(Map<String,Object> before,long delta){
+        if(delta<1||delta>MAX_DELTA||balance(before)>LIMIT-delta)throw new DofFailure(409,"卡密面值无效或余额将触发原生点券上限，未兑换");
+        Map<String,Object> after=new LinkedHashMap<>(before);after.put("balance",balance(before)+delta);return after;
+    }
+    /** Shared typed native writer; caller owns locks, durable intent and transaction. */
+    void applyBalance(Connection c,long uid,Map<String,Object> before,Map<String,Object> after)throws SQLException{
+        if(c.getAutoCommit())throw new DofFailure(409,"点券写入须与业务回执在同一事务执行");
+        try(PreparedStatement p=c.prepareStatement("UPDATE "+WALLET+" SET cera=? WHERE BINARY account=? AND cera=?")){
+            p.setLong(1,balance(after));p.setString(2,Long.toString(uid));p.setLong(3,balance(before));if(p.executeUpdate()!=1)throw new SQLException("Wallet update count mismatch");
+        }
+        if(!journal.hash(read(c,uid)).equals(journal.hash(after)))throw new SQLException("Wallet readback mismatch");
+    }
     private ManagedOperationJournal.Entry source(Connection c,long uid,String id)throws SQLException{
         ManagedOperationJournal.Entry e=journal.require(c,namespace(uid),id);
         if(!resource(uid).equals(e.resource)||!Long.toString(uid).equals(e.target)||!Arrays.asList("credit","compensate","accept-current").contains(e.operation))throw incompatible();
@@ -154,18 +166,36 @@ public class ManagedRechargeService {
             p.setString(1,journal.instance());p.setString(2,namespace(uid));p.setString(3,ManagedOperationJournal.id(original));try(ResultSet r=p.executeQuery()){if(r.next())throw new DofFailure(409,"原充值已有扣回或结果待核对的补偿，不能再次扣款");}
         }
     }
+    private Map<String,Object> cdkObject(Object value){if(!(value instanceof Map))throw incompatible();return (Map<String,Object>)value;}
+    /** Read-only adapter for the pinned CDK receipt; all debit execution stays here. */
+    private Map<String,Object>[] originalCredit(Connection c,long uid,String id)throws SQLException{
+        ManagedOperationJournal.Entry e=journal.find(c,id);if(e==null)throw new DofFailure(404,"未找到原充值或CDK兑换回执");
+        if(!e.state.equals("PERSISTED"))throw new DofFailure(409,"只能对已确认写入的点券奖励执行补偿，未知结果不能扣回");
+        Map<String,Object> a,b;
+        if(e.namespace.equals(namespace(uid))){e=source(c,uid,id);if(!e.operation.equals("credit"))throw incompatible();a=snapshot(uid,e.beforeJson);b=snapshot(uid,e.afterJson);}
+        else if(e.namespace.equals("cdk.use")){
+            try{
+                Map<String,Object> before=json.readValue(e.beforeJson,new TypeReference<Map<String,Object>>(){}),outcome=json.readValue(e.afterJson,new TypeReference<Map<String,Object>>(){}),key=cdkObject(before.get("key"));
+                if(!"cdk-use-v1".equals(before.get("protocol"))||!whole(before.get("uid"))||((Number)before.get("uid")).longValue()!=uid||!whole(before.get("type"))||((Number)before.get("type")).longValue()!=0||!whole(key.get("id"))||!e.target.equals(key.get("id").toString())||!e.operation.equals("redeem")||!resource(uid).equals(e.resource)||e.actor!=uid||e.targetRequest!=null)throw incompatible();
+                a=snapshot(uid,journal.encode(before.get("nativeBefore")));b=snapshot(uid,journal.encode(before.get("plan")));
+                if(!journal.hash(b).equals(journal.hash(outcome.get("plan")))||!whole(key.get("face"))||balance(b)-balance(a)!=((Number)key.get("face")).longValue())throw incompatible();
+                Map<String,Object> used=cdkObject(outcome.get("usedKey"));if(!Objects.equals(used.get("codeHash"),key.get("codeHash"))||!whole(used.get("status"))||((Number)used.get("status")).longValue()!=1||!whole(used.get("useUid"))||((Number)used.get("useUid")).longValue()!=uid)throw incompatible();
+            }catch(java.io.IOException failure){throw incompatible();}
+        }else throw new DofFailure(409,"原回执不是该账号的已验证点券充值或CDK奖励");
+        Map<String,Object> expected=new LinkedHashMap<>(a);expected.put("balance",balance(b));if(!journal.hash(expected).equals(journal.hash(b)))throw incompatible();
+        return new Map[]{a,b};
+    }
     private Map<String,Object> plan(Connection c,long uid,Edit e,Map<String,Object> before)throws SQLException{
         if(!journal.hash(before).equals(e.revision))throw new DofFailure(409,"余额、账号身份或结构已改变，请重新读取并预览");
         if(e.operation.equals("accept-current")){
             if(!source(c,uid,e.targetRequestId).state.equals("CONFLICT"))throw new DofFailure(409,"只能显式保留结果不明操作的当前余额");return before;
         }
         if(e.operation.equals("compensate")){
-            ManagedOperationJournal.Entry original=source(c,uid,e.targetRequestId);
-            if(!original.state.equals("PERSISTED")||!original.operation.equals("credit"))throw new DofFailure(409,"只能对已确认充值执行一次明确的补偿扣回");
-            long credited=balance(snapshot(uid,original.afterJson))-balance(snapshot(uid,original.beforeJson));
+            Map<String,Object>[] original=originalCredit(c,uid,e.targetRequestId);
+            long credited=balance(original[1])-balance(original[0]);
             if(credited<1||credited>MAX_DELTA||amount(e)!=-credited)throw new DofFailure(409,"补偿金额必须对应原充值，不恢复整份旧余额");
-            if(!Objects.equals(before.get("accountIdentity"),snapshot(uid,original.afterJson).get("accountIdentity")))throw new DofFailure(409,"原充值账号身份已改变，停止补偿");
-            if(!Objects.equals(before.get("databaseUuid"),snapshot(uid,original.afterJson).get("databaseUuid")))throw new DofFailure(409,"原充值属于其他数据库，停止补偿");
+            if(!Objects.equals(before.get("accountIdentity"),original[1].get("accountIdentity")))throw new DofFailure(409,"原充值账号身份已改变，停止补偿");
+            if(!Objects.equals(before.get("databaseUuid"),original[1].get("databaseUuid")))throw new DofFailure(409,"原充值属于其他数据库，停止补偿");
             noCompensation(c,uid,e.targetRequestId);
         }
         long after=balance(before)+amount(e);
@@ -214,10 +244,7 @@ public class ManagedRechargeService {
                 if(!journal.hash(current).equals(e.beforeHash)){
                     e=journal.finish(c,e,"NOT_APPLIED",who);c.commit();return result(uid,e);
                 }
-                try(PreparedStatement p=c.prepareStatement("UPDATE "+WALLET+" SET cera=? WHERE BINARY account=? AND cera=?")){
-                    p.setLong(1,balance(after));p.setString(2,Long.toString(uid));p.setLong(3,balance(before));if(p.executeUpdate()!=1)throw new SQLException("Wallet update count mismatch");
-                }
-                if(!journal.hash(read(c,uid)).equals(e.afterHash))throw new SQLException("Wallet readback mismatch");
+                applyBalance(c,uid,before,after);
                 e=journal.finish(c,e,"PERSISTED",who);c.commit();return result(uid,e);
             }catch(SQLException|RuntimeException failure){
                 try{c.rollback();}catch(SQLException rollbackFailure){

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 // 定义路由记录
 const routes: Array<RouteRecordRaw> = [
+    { path: '/cdk', name: 'CdkRedeem', component: () => import('../views/CdkRedeem.vue'), meta: { title: 'CDK兑换', requiresAuth: false } },
     { path: '/account-security', name: 'AccountSecurity', component: () => import('../views/AccountSecurity.vue'), meta: { title: '玩家改密', requiresAuth: false } },
     // 1. 登录页面 (独立页面，不需要布局容器)
     {
@@ -149,6 +150,7 @@ const routes: Array<RouteRecordRaw> = [
                             title: '玩家角色管理'
                         }
                     },
+                    { path: 'cdk', name: 'CdkClaims', component: () => import('../views/admin/player/CdkClaims.vue'), meta: { title: 'CDK兑换记录' } },
                     {
                         path: 'postal',
                         name: 'PostalRecords',

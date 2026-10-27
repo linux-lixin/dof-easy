@@ -150,7 +150,8 @@ public class ManagedPostalService {
             try(ResultSet r=p.getGeneratedKeys()){if(!r.next())throw new SQLException("Missing mail identifier");long id=r.getLong(1);if(id<=0||r.next())throw new SQLException("Invalid mail identifier");return id;}
         }
     }
-    private Map<String,Object> insertMail(Connection c,Map<String,Object> plan,long id)throws SQLException{
+    Map<String,Object> insertMail(Connection c,Map<String,Object> plan,long id)throws SQLException{
+        if(c.getAutoCommit())throw new DofFailure(409,"邮件写入须与业务回执在同一事务执行");
         Map<String,Object> m=(Map<String,Object>)plan.get("mail");String body=(String)m.get("message");long letter=0;
         if(!body.isEmpty())letter=insert(c,"INSERT INTO "+LETTER+" (charac_no,send_charac_name,letter_text,reg_date) VALUES(?,'DNF Manager',?,NOW())",id,body);
         long postal=insert(c,"INSERT INTO "+POSTAL+" (occ_time,send_charac_name,receive_charac_no,item_id,add_info,`upgrade`,amplify_option,amplify_value,gold,seal_flag,letter_id,seperate_upgrade) VALUES(NOW(),'DNF Manager',?,?,?,?,?,?,?,?,?,?)",id,m.get("itemId"),m.get("quantity"),m.get("upgrade"),m.get("amplifyOption"),m.get("amplifyValue"),m.get("gold"),Boolean.TRUE.equals(m.get("sealFlag"))?1:0,letter,m.get("seperateUpgrade"));
@@ -162,6 +163,12 @@ public class ManagedPostalService {
         if(letter!=0)try(PreparedStatement p=c.prepareStatement("SELECT charac_no,HEX(letter_text) FROM "+LETTER+" WHERE letter_id=?")){
             p.setLong(1,letter);try(ResultSet r=p.executeQuery()){if(!r.next()||r.getLong(1)!=id||!r.getString(2).equalsIgnoreCase(hex(body))||r.next())throw new SQLException("Letter readback differs");}
         }
+                if(plan.get("attachment")!=null){
+                    try{if(!Objects.equals(((Map<?,?>)plan.get("attachment")).get("pvfSha256"),ResourceIndex.hash(pvf.sourceFile())))throw new SQLException("PVF changed during mail insert");}
+                    catch(java.io.IOException failure){throw new SQLException("PVF unavailable after mail insert",failure);}
+                    catch(SQLException failure){throw failure;}
+                    catch(Exception failure){throw new SQLException("PVF validation unavailable after mail insert",failure);}
+                }
         Map<String,Object> out=new TreeMap<>();out.put("plan",plan);out.put("postalId",postal);out.put("letterId",letter);return out;
     }
     private String hex(String text){StringBuilder b=new StringBuilder();for(byte v:text.getBytes(StandardCharsets.UTF_8))b.append(String.format("%02x",v&255));return b.toString();}
@@ -185,12 +192,6 @@ public class ManagedPostalService {
                 // Revalidate the frozen PVF plan after the table-lock reacquisition.
                 if(!journal.hash(plan(c,id,edit,mail,current)).equals(e.afterHash))throw new SQLException("Mail plan changed before insert");
                 Map<String,Object> outcome=insertMail(c,after,id);
-                if(after.get("attachment")!=null){
-                    try{if(!Objects.equals(((Map<?,?>)after.get("attachment")).get("pvfSha256"),ResourceIndex.hash(pvf.sourceFile())))throw new SQLException("PVF changed during mail insert");}
-                    catch(java.io.IOException failure){throw new SQLException("PVF unavailable after mail insert",failure);}
-                    catch(SQLException failure){throw failure;}
-                    catch(Exception failure){throw new SQLException("PVF validation unavailable after mail insert",failure);}
-                }
                 e=journal.finishWithGeneratedOutcome(c,e,outcome,who);c.commit();return result(e);
             }catch(SQLException|RuntimeException failure){
                 try{c.rollback();}catch(SQLException rollback){failure.addSuppressed(rollback);discarded=true;discard(c,failure);}throw uncertain();

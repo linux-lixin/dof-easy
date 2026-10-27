@@ -1,0 +1,147 @@
+{
+  "stage": "S14",
+  "date": "2026-10-28",
+  "state": "locally_implemented",
+  "completeReplacement": false,
+  "protocol": "cdk-use-v1",
+  "scope": "existing website CDK redemption only; native companion CDK and fixed-code behavior still pending",
+  "standardMaven": {
+    "total": 395,
+    "passed": 182,
+    "skipped": 213,
+    "failures": 0,
+    "errors": 0,
+    "log": "/tmp/dof-admin-s14-cdk-maven-4.log"
+  },
+  "databaseContracts": {
+    "passed": true,
+    "contractTests": 14,
+    "databaseVersion": "5.6.51",
+    "generatedMailReceiptContractTests": 3,
+    "managedPostalContractTests": 12,
+    "postalBatchContractTests": 11,
+    "postalReceiptControlContractTests": 7,
+    "postalBatchControlContractTests": 8,
+    "cdkContractTests": 13,
+    "totalContractTests": 68,
+    "realServiceSqlFaultAndConcurrencyGatePassed": true,
+    "fixtureSchemasRemoved": true,
+    "originalToolEquivalenceVerified": false,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false
+  },
+  "namespaceProvenance": {
+    "schema": 1,
+    "serverAccessed": false,
+    "network": "private namespace; no routes or external interfaces",
+    "rootReadOnly": true,
+    "inputsReadOnly": true,
+    "loopbackOnly": true,
+    "inputsFingerprint": "db962d0c2ce288e35f5948ce131df606b36a72f30decb85b36393bb46e1eb7e6",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "command": [
+      "/bin/sh",
+      "/inputs/run.sh"
+    ],
+    "completed": true,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "evidenceValid": true
+  },
+  "mockedCdkPage": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false,
+    "checks": [
+      "lost redemption response freezes code/account and original ID and blocks a new operation",
+      "same-ID reconciliation recovers receipt without issuing again; browser storage contains no code or captcha",
+      "reload restores only the receipt ID and can recover after re-entering original secret inputs",
+      "CDK compensation opens the existing debit preview with original ID and exact negative face value",
+      "administrator reconciles uncertainty then acknowledges and freezes the code without issuing or reclaiming a reward",
+      "cancelling a reserved preview records no reward and preserves its original receipt",
+      "expired captcha creates no reward; refreshing it can explicitly retry the same frozen request ID",
+      "history failures remain visible rather than pretending to be empty successful records",
+      "management permission refusal remains visible"
+    ],
+    "pageErrors": 0,
+    "nativeWritesInMock": 4
+  },
+  "mockedRechargeRegression": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "pageErrors": 0,
+    "checks": [
+      "read before edit; frozen preview changes no money and locks inputs",
+      "reload rehydrates the exact original preview body and request identity",
+      "lost submit retains original request; reconciliation never resends credit",
+      "reload recovers original durable receipt from history without submitting",
+      "compensation links original credit and subtracts only its delta from later balance",
+      "stale submit does not award and requires explicit reconciliation before new intent",
+      "MyISAM interrupted result stays unknown and blocks new credits",
+      "explicit keep-current acknowledgment changes no money and preserves unknown original outcome",
+      "permission/read failure leaves writing disabled"
+    ],
+    "nativeMutationsInMock": 3,
+    "automaticResubmissions": 0
+  },
+  "frontendBuildPassed": true,
+  "frontendStagedSourceMatchesWorkspace": true,
+  "pythonChecks": {
+    "inventory": 4,
+    "package": 1,
+    "failures": 0
+  },
+  "schemaBaselineObserved": {
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "table": "dnf_service.recharge_key",
+    "engine": "InnoDB",
+    "columns": 10,
+    "triggers": 0,
+    "method": "read-only SSH metadata before implementation; no code values read"
+  },
+  "invariants": {
+    "serverStoredRewardOnly": true,
+    "recipientOwnershipChecked": true,
+    "publicCaptchaPurposeScopedAndOneUse": true,
+    "rawCodeOrCaptchaInNewJournal": false,
+    "requestSerializersRedactSecrets": true,
+    "keyConsumptionAndTransactionalNativeRewardCommitWithReceipt": true,
+    "myisamUncertaintyNotInferredFromCurrentRows": true,
+    "acknowledgedUnknownKeyCannotBeRedeemedAgain": true,
+    "pendingClaimsBlockExistingNativeResourceWriters": true,
+    "compensationReusesExistingWriterAndRetainsLaterBalanceChanges": true,
+    "legacyUseDelegatesToSameIssuer": true,
+    "listAndCreationRequireAdministrator": true
+  },
+  "loggingAudit": {
+    "coreJarSHA256": "982fca3e42e9dd6a1b5e2bfae9ef989a33b1fb94044a7e6c521fffea53a14d67",
+    "pointcut": "@annotation(com.aiyi.core.annotation.po.Log)",
+    "serializer": "FastJSON",
+    "newRequestAnnotationsAndUnitVerified": true,
+    "rawCodeNotInClaimReceiptVerified": true
+  },
+  "retainedFailures": [
+    {
+      "stage": "first CDK mock browser run",
+      "reason": "locator matched both inline error and global toast; scoped to inline alert without changing business implementation",
+      "output": "/tmp/dof-admin-s14-cdk-page"
+    }
+  ],
+  "realDeployment": {
+    "verified": false
+  },
+  "remaining": [
+    "管理制码、导出、停用等流程接入统一预览/持久化协议",
+    "晴空14列配套及固定口令码的真实消费和执行归属核对",
+    "真实点券CDK受控兑换与补偿",
+    "真实物品CDK/客户端领取及特殊邮件标记",
+    "真实网络、进程和磁盘故障",
+    "原工具菜单/默认值/副作用对照",
+    "其他wp01-wp13未完成操作及多等级兼容",
+    "独立复现的正式镜像与最终交付门禁"
+  ]
+}

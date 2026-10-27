@@ -52,8 +52,20 @@ public class RechargeKeyController {
      */
     @PostMapping("use")
     @NoLogin
-    public void use(@RequestBody RechargeKey key){
-        rechargeKeyService.use(key);
+    public Object use(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkService.Claim key){return managed.claim(key);}
+    @Resource private com.aiyi.game.dnfserver.service.dof.ManagedCdkService managed;
+    @NoLogin @PostMapping("use/reconcile") public Object reconcile(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkService.Claim key){return managed.reconcile(key);}
+    @GetMapping("claims") public Object history(){return managed.history();}
+    @GetMapping("claims/{requestId}") public Object read(@PathVariable String requestId){return managed.adminRead(requestId);}
+    @PostMapping("claims/{requestId}/reconcile") public Object adminReconcile(@PathVariable String requestId){return managed.adminReconcile(requestId);}
+    @GetMapping("claims/{source}/controls") public Object controls(@PathVariable String source){return managed.controls(source);}
+    @PostMapping("claims/{source}/controls/preview") public Object controlPreview(@PathVariable String source,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkService.Control edit){return managed.controlPreview(source,edit);}
+    @PostMapping("claims/{source}/controls") public Object controlSave(@PathVariable String source,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkService.Control edit){return managed.controlSave(source,edit);}
+    @PostMapping("claims/{source}/controls/{requestId}/reconcile") public Object controlReconcile(@PathVariable String source,@PathVariable String requestId){return managed.controlReconcile(source,requestId);}
+    @NoLogin @GetMapping("captcha/{index}") public void captcha(@PathVariable String index,javax.servlet.http.HttpServletResponse response)throws java.io.IOException {
+        com.wf.captcha.SpecCaptcha captcha=new com.wf.captcha.SpecCaptcha(130,48,5);captcha.setCharType(com.wf.captcha.base.Captcha.TYPE_NUM_AND_UPPER);managed.issueChallenge(index,captcha.text());
+        response.setContentType("image/png");response.setHeader("Cache-Control","no-store");try(java.io.OutputStream out=response.getOutputStream()){captcha.out(out);}
     }
-
+    @ExceptionHandler(com.aiyi.game.dnfserver.service.dof.DofFailure.class) public org.springframework.http.ResponseEntity<java.util.Map<String,String>> failure(com.aiyi.game.dnfserver.service.dof.DofFailure e){return org.springframework.http.ResponseEntity.status(e.status).body(java.util.Collections.singletonMap("message",e.getMessage()));}
+    @ExceptionHandler(com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure.class) public org.springframework.http.ResponseEntity<java.util.Map<String,String>> challengeFailure(com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure e){return org.springframework.http.ResponseEntity.status(e.status).body(java.util.Collections.singletonMap("message",e.getMessage()));}
 }
