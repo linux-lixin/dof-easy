@@ -1,4 +1,4 @@
-"""Actual recharge service, fault and concurrency contracts on namespace-only MySQL."""
+"""Actual recharge and generated mail receipt contracts on namespace-only MySQL."""
 import json
 from pathlib import Path
 import subprocess
@@ -22,12 +22,14 @@ r = subprocess.run([
     '-Ddof.recharge.contract.properties=' + str(properties), '-Ddof.recharge.contract.seed=/inputs/seed.sql',
     '-cp', '/inputs/classes:/inputs/dependencies/*', 'org.junit.runner.JUnitCore',
     'com.aiyi.game.dnfserver.service.dof.ManagedRechargeContractTest',
+    'com.aiyi.game.dnfserver.service.dof.ManagedMailReceiptContractTest',
 ], text=True, capture_output=True, timeout=150)
 Path('/output/junit.log').write_text(r.stdout + '\n' + r.stderr)
-passed = r.returncode == 0 and 'OK (14 tests)' in r.stdout
+passed = r.returncode == 0 and 'OK (17 tests)' in r.stdout
 summary = dict(passed=passed, contractTests=14, databaseVersion=sql('SELECT VERSION()'),
+               generatedMailReceiptContractTests=3,
                realServiceSqlFaultAndConcurrencyGatePassed=passed,
-               fixtureSchemasRemoved=sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('d_taiwan','taiwan_billing')") == '0',
+               fixtureSchemasRemoved=sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('d_taiwan','taiwan_billing','taiwan_cain_2nd')") == '0',
                originalToolEquivalenceVerified=False, realDeploymentVerified=False, actualPlayerReceiptVerified=False)
 Path('/output/recharge-result.json').write_text(json.dumps(summary, indent=2) + '\n')
 print(json.dumps(summary))

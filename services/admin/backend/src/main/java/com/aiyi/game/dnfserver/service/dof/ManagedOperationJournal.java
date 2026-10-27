@@ -109,6 +109,23 @@ public class ManagedOperationJournal {
         }
         return require(c,e.namespace,e.requestId);
     }
+    /**
+     * For native INSERTs whose identifiers are only known after execution.
+     * The caller must durably prepare first, then use this SAME InnoDB
+     * transaction for the native rows and this receipt, and commit both.
+     * This does not make MyISAM writes transactional or prove player delivery.
+     */
+    public Entry finishWithGeneratedOutcome(Connection c,Entry e,Object outcome,long actor)throws SQLException {
+        if(c.getAutoCommit())throw new DofFailure(409,"生成编号回执必须与原生写入在同一事务中提交");
+        if(!"PREPARED".equals(e.state))throw new DofFailure(409,"操作不是待提交状态，请核对原回执");
+        String text=encode(outcome);
+        try(PreparedStatement p=c.prepareStatement("UPDATE "+TABLE+" SET after_json=?,after_hash=?,state='PERSISTED',checked_by=?,finished_at=NOW() WHERE instance_id=? AND request_id=? AND namespace=? AND request_hash=? AND before_hash=? AND after_hash=? AND state='PREPARED'")) {
+            p.setString(1,text);p.setString(2,digest(text));p.setLong(3,actor);p.setString(4,instance());p.setString(5,e.requestId);
+            p.setString(6,e.namespace);p.setString(7,e.requestHash);p.setString(8,e.beforeHash);p.setString(9,e.afterHash);
+            if(p.executeUpdate()!=1)throw new SQLException("Generated operation receipt changed; rollback native inserts");
+        }
+        return require(c,e.namespace,e.requestId);
+    }
     public Entry acknowledge(Connection c,Entry source,Entry acknowledgment,long actor)throws SQLException {
         if(!"CONFLICT".equals(source.state) || !"PREPARED".equals(acknowledgment.state))throw new DofFailure(409,"冲突记录状态已改变");
         // One InnoDB statement changes both rows atomically; no native data is written.
