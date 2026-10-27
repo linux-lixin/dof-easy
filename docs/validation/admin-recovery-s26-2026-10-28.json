@@ -301,5 +301,6 @@
     "Read-only cross-border rules retain unresolved native ordinal-4 required-count semantics and remain included in the scope.",
     "Browser APIs were explicitly mocked; disposable SQL fixtures are not private original-tool samples.",
     "No original Windows executable was launched."
-  ]
+  ],
+  "followupRealDeployment": "docs/validation/admin-recovery-s27-2026-10-28.json"
 }

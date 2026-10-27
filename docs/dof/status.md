@@ -2,9 +2,9 @@
 
 当前 admin 部署快照更新至 2026-10-28（UTC+08:00）；下方 2026-10-26 的集成记录保留历史适用范围，不是实时监控。
 
-**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前 `dof-main` admin 已部署 S25 源码 `c612b9bfd811b45e443a506d2f914c159325082c`，镜像 `sha256:aa68a9ddf090d3a890f5fa6748c2e1f68056bceae6b630acbb1e7c2dc81a6d98`，宿主端口为 18080。原生继承规则的真实网页 CRUD、回复丢失核对、并发拒绝、定向恢复和受保护回退已通过，测试表恢复原空状态；首轮发现的整数回读问题和原编号恢复分别留证。原生配置、奖励、钱包、密钥及游戏容器启动身份保持不变。S18/S20/S22 的资源和配套历史证据保留；客户端消费、游戏效果及原工具手动对照仍待验。详见 [S25 验收](../validation/admin-inheritance-s25-2026-10-28.json)、[S24 首轮失败与恢复](../validation/admin-inheritance-s24-initial-2026-10-28.json) 和 [实施记录](../admin/replacement-implementation.md)。运行镜像内的能力台账固定在构建提交，后续证据文档更新不会自动改变它。
+**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前 `dof-main` admin 已部署 S27 源码 `f23c5749d3395c2575c0566c50c1ddc11f8c90dc`（回收实现 `d882861`），镜像 `sha256:56974f6c10849304f6da56dac8951da8df6be3255ebc1d45339ccf78a035d807`，宿主端口为 18080。S25 继承配置验收保留；S27 七字段回收规则的真实网页 CRUD、回复丢失核对、并发拒绝、定向恢复和受保护回退通过，测试表恢复原空状态。原生配置、奖励、钱包、密钥及游戏容器启动身份保持不变。S18/S20/S22 的资源与配套证据保留；组件消费、玩家回收扣除/奖励、游戏效果及原工具手动对照仍待验。详见 [S27 验收](../validation/admin-recovery-s27-2026-10-28.json)、[S25 验收](../validation/admin-inheritance-s25-2026-10-28.json) 和 [实施记录](../admin/replacement-implementation.md)。运行镜像内的台账固定在构建提交，后续证据更新不会自动改变它。
 
-S26 本地已补齐原生物品回收七字段配置编辑、两组奖励/消耗校验及配对恢复；标准 Maven、136 项隔离 SQL、前端构建和模拟页面通过。测试服回收表只读预检匹配且为空；本批尚未部署，当前运行版本仍为 S25。真实回收效果、客户端与原工具手动对照仍待验，见 [S26 本地验收](../validation/admin-recovery-s26-2026-10-28.json)。
+S26 为回收规则本地实现批次，标准 Maven、136 项隔离 SQL、前端构建及模拟页面证据保留；S27 在此基础上完成真实部署配置与恢复验收。原生玩家操作和原工具对照仍待验，见 [S26 本地验收](../validation/admin-recovery-s26-2026-10-28.json)。
 
 2026-10-26 当晚的 admin 批次新增免授权来源校验、独立插件/团本配置管理、记录结构诊断及刷图表适配；没有重启游戏或数据库，也未取得客户端/团本效果证据，见 [历史摘要](../validation/admin-replacement-2026-10-26.json)。以下原有提交及 PVF 记录保留其历史适用范围。
 

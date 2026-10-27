@@ -2085,9 +2085,10 @@
           "output": "规则读取、预览、保存、单条JSON导入导出、核对及定向恢复；原工具菜单、默认值、导入导出与客户端UI仍待验",
           "failureBehavior": "配对错误、超范围、数量无效、版本/配对恢复冲突、撤权、未知表序/索引/触发器/FK拒绝写入；未决记录保留原编号",
           "evidence": [
-            "docs/validation/admin-recovery-s26-2026-10-28.json"
+            "docs/validation/admin-recovery-s26-2026-10-28.json",
+            "docs/validation/admin-recovery-s27-2026-10-28.json"
           ],
-          "implementationStatus": "local_rule_editing_verified_deployment_consumer_and_ui_parity_pending",
+          "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_and_ui_parity_pending",
           "managementImplementation": {
             "state": "local_configuration_implemented",
             "entry": "/admin/activities",
@@ -2102,11 +2103,15 @@
             "maxExtraCostPairs": 7,
             "rewardAndCostRestorePairGuards": true,
             "originalImportExportVerified": false,
-            "realDeploymentVerified": false,
+            "realDeploymentVerified": true,
             "nativeConsumerAcceptanceVerified": false,
             "nativeGameplayVerified": false,
             "localPersistenceAndRecoveryContractVerified": true,
-            "verificationEvidence": "docs/validation/admin-recovery-s26-2026-10-28.json"
+            "verificationEvidence": "docs/validation/admin-recovery-s27-2026-10-28.json",
+            "configurationPersistenceVerified": true,
+            "configurationRecoveryVerified": true,
+            "guardedOldImageRollbackVerified": true,
+            "remaining": "组件消费、玩家回收扣除/奖励/公告、客户端UI及原工具默认值和导入导出对照仍待验"
           }
         }
       ]
