@@ -1,7 +1,7 @@
 {
   "stage": "S14",
   "date": "2026-10-28",
-  "state": "locally_implemented",
+  "state": "deployed_website_currency_flow_verified_client_pending",
   "completeReplacement": false,
   "protocol": "cdk-use-v1",
   "scope": "existing website CDK redemption only; native companion CDK and fixed-code behavior still pending",
@@ -129,19 +129,156 @@
       "stage": "first CDK mock browser run",
       "reason": "locator matched both inline error and global toast; scoped to inline alert without changing business implementation",
       "output": "/tmp/dof-admin-s14-cdk-page"
+    },
+    {
+      "stage": "first S14 upload",
+      "reason": "SSH control connection expired; authentication failed before transfer/deployment, then reauthenticated using existing pinned host key",
+      "serverChanged": false
     }
   ],
   "realDeployment": {
-    "verified": false
+    "readAndRefusalVerified": true,
+    "realWebsiteCurrencyRedemptionAndCompensationVerified": true,
+    "actualClientConsumptionVerified": false,
+    "equipmentCdkVerified": false,
+    "nativeCompanionParityVerified": false,
+    "deployment": {
+      "sourceCommit": "bee62b29bfcb4673bcfa11d582f3b242d2ae7c5b",
+      "adminImage": "sha256:3e01ec64da6e90121f1bf142dd3801e9d85d12e6e811253b5ddd41d669b7c15e",
+      "adminTag": "dof-admin-replacement:20261028-s14-candidate",
+      "appSHA256": "dfe140e815c65dcc0b900b15fd5056922220a6ce9890981c9a2aff5ddc4f5176",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s14-cdk/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": false
+    },
+    "readBrowser": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "businessBrowser": {
+      "passed": true,
+      "mockedApis": false,
+      "uid": 6,
+      "cardId": 1,
+      "claimRequestId": "63925824-bd7e-4d70-b546-1ca35d913c5e",
+      "compensationRequestId": "347edbdc-2473-4aa7-aee5-e4bd5c2d5cd8",
+      "face": 1,
+      "balanceBefore": 37,
+      "balanceAfterClaim": 38,
+      "balanceAfterCompensation": 37,
+      "codeRemainsUsed": true,
+      "controlledLostBrowserResponse": true,
+      "publicUsePosts": 1,
+      "publicReconcilePosts": 1,
+      "actualClientConsumptionVerified": false,
+      "equipmentCdkVerified": false,
+      "nativeCompanionParityVerified": false,
+      "checks": [
+        "pinned real dedicated UID 6, baseline 37 points and zero characters verified",
+        "anonymous real one-point redemption commits code use and credit; intentionally lost browser response recovers by original ID",
+        "public redemption uses no administrator session and does not persist the code in browser storage",
+        "real administrator UI compensates only the original one-point award; replays and a second compensation cannot credit or deduct again"
+      ],
+      "pageErrors": 0
+    },
+    "databaseCheck": {
+      "passed": true,
+      "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+      "uid": 6,
+      "cardId": 1,
+      "keyUsedByDedicatedUid": true,
+      "fullWalletRowMatchesBefore": true,
+      "exactlyOneConfirmedCompensation": true,
+      "claimAndCompensationReceiptsPersisted": true,
+      "adminKeysUnchanged": true,
+      "gameHealth": "healthy",
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminImage": "sha256:3e01ec64da6e90121f1bf142dd3801e9d85d12e6e811253b5ddd41d669b7c15e",
+      "testCouponPreparedByOperatorNotProductGeneration": true,
+      "walletEngine": "InnoDB",
+      "claimAtomicReceipt": true
+    },
+    "phase": "DEPLOYED_CDK_CURRENCY_FLOW_VERIFIED_CLIENT_PENDING",
+    "processes": {
+      "deployment": {
+        "pid": 106854,
+        "terminal": true
+      },
+      "browser": {
+        "pid": 107928,
+        "terminal": true
+      },
+      "cdk-business": {
+        "pid": 109262,
+        "terminal": true
+      }
+    }
   },
   "remaining": [
     "管理制码、导出、停用等流程接入统一预览/持久化协议",
     "晴空14列配套及固定口令码的真实消费和执行归属核对",
-    "真实点券CDK受控兑换与补偿",
     "真实物品CDK/客户端领取及特殊邮件标记",
     "真实网络、进程和磁盘故障",
     "原工具菜单/默认值/副作用对照",
     "其他wp01-wp13未完成操作及多等级兼容",
-    "独立复现的正式镜像与最终交付门禁"
+    "独立复现的正式镜像与最终交付门禁",
+    "跨S13旧兑换协议的镜像回退入口隔离/对账与故障演练；不得直接开放旧链处理S14保留、未决或冻结码"
+  ],
+  "sourceCommit": "bee62b29bfcb4673bcfa11d582f3b242d2ae7c5b",
+  "delivery": {
+    "appSHA256": "dfe140e815c65dcc0b900b15fd5056922220a6ce9890981c9a2aff5ddc4f5176",
+    "adminImage": "sha256:3e01ec64da6e90121f1bf142dd3801e9d85d12e6e811253b5ddd41d669b7c15e",
+    "transferSHA256": "3d8cf1137665fb73f926d4c9ba231cf9088d7ff553323fc8854d75bb07fbcd9c",
+    "transferBytes": 544246,
+    "transferArchive": ".dof-easy/admin-replacement-delivery-20261028-s14-transfer.tgz",
+    "oldAdminImage": "sha256:2cdf1c91a7b95c1b3a56fa9f41c92c4160a23d237d0914b23b291f3a9cfb3f07",
+    "oldAppSHA256": "d1a621cb3f166e4578f92db688923c252de70f75460fd20744879112893d4957",
+    "deploymentScriptSHA256": "0d8e3ae11aa6740a386d06901daf7118425d1e8047113b8a67ce6a377d74a0e7",
+    "privateCredentialsOrCodesOrBrowserScreenshotsExported": false,
+    "publicCaptchaPngViewedForOwnedTest": true
+  },
+  "controlledRealTestNotes": [
+    "专用1点测试码通过服务器受控准备写入既有码池；不计为管理制码功能验证",
+    "公开验证码PNG由实际网页请求获取并识别，未加入测试验证码后门；账号、卡密及管理员凭据未导出",
+    "publicUsePosts为界面POST计数；另有同编号API重放验证",
+    "本次为服务端网站点券链验证；未验证游戏客户端消费、物品领取或原晴空配套格式"
   ]
 }
