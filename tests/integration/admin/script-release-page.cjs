@@ -24,7 +24,7 @@ const server=createServer(async(req,res)=>{try{let f=path.resolve(dist,'.'+decod
    if(p==='/ui'||p==='/home')return reply({message:'synthetic incompatible UI; publication remains independent'},409);
    if(p==='/client')return reply({enabled:true,endpoint:'127.0.0.1',clientFormatVersion:2,revision:hash('inputs')});
    if(p==='/script')return reply({enabled:false,blocker:'synthetic browser test; no actual PVF generation'});
-   if(p==='/client/tasks')return reply(bundles.map((id,i)=>({requestId:id,state:'READY_FOR_TEST',scriptTaskId:'synthetic-script-'+i,clientFormatVersion:2,createdAt:'2026-10-28',sha256:hash(id),bytes:100,endpoint:'127.0.0.1'})));
+   if(p==='/client/tasks')return reply(bundles.map((id,i)=>({requestId:id,state:'READY_FOR_TEST',scriptTaskId:'synthetic-script-'+i,clientFormatVersion:2,createdAt:'2026-10-28',sha256:hash(id),bytes:100,endpoint:'127.0.0.1',...(i===0?{manifestVersion:1,manifestSha256:hash('manifest'),sourceBinding:{databaseUuid:'00000000-0000-4000-8000-000000000099',readerRecipe:'dof-launcher-reader-2.2'}}:{})})));
    if(u.pathname===root+'/status')return reply({instanceId:'mock-script',revision:hash(native),parameterCopiesEqual:true,sourceConfigured:true,manualModeCompatible:true,protocol:protocolSupported?'script-release-preview-v1':undefined});
    if(u.pathname===root&&method==='GET')return reply([...records.values(),...controls.values()].reverse().map(view));
    if(u.pathname===root+'/preview'||/\/restore\/preview$/.test(u.pathname)){
@@ -51,7 +51,14 @@ const server=createServer(async(req,res)=>{try{let f=path.resolve(dist,'.'+decod
   async function select(i=0){await page.locator('tr').filter({hasText:bundles[i]}).filter({has:page.getByRole('button',{name:'选择并配置隔离参数',exact:true})}).getByRole('button',{name:'选择并配置隔离参数',exact:true}).click()}
   async function preview(){await select();await page.getByRole('button',{name:'核对配套包并预览应用',exact:true}).click();await page.getByRole('button',{name:'应用此配套包参数',exact:true}).waitFor();return [...records.values()].findLast(r=>r.state==='PREVIEWED'&&r.operation==='apply')}
   const stored=()=>page.evaluate(()=>sessionStorage.getItem('script.release.pending.v1'));
-  await open();const first=await preview();assert.ok(first);const state=await stored();assert.ok(state.includes(first.requestId));assert.ok(!state.includes('bundleId')&&!state.includes('revision'));assert.equal(writes,0);
+  await open();
+  const newRow=page.locator('tr').filter({hasText:bundles[0]}),legacyRow=page.locator('tr').filter({hasText:bundles[1]});
+  await newRow.getByText('数据库 UUID：00000000-0000-4000-8000-000000000099',{exact:true}).waitFor();
+  await newRow.getByText('材料哈希已绑定；组件读取和游戏效果待验。',{exact:true}).waitFor();
+  await legacyRow.getByText('历史任务：未记录完整来源清单，保留原有产物校验。',{exact:true}).waitFor();
+  assert.ok(!(await legacyRow.textContent()).includes('材料哈希已绑定'));
+  checks.push('new provenance displays database and reader recipe; legacy archives remain explicitly unverified');
+  const first=await preview();assert.ok(first);const state=await stored();assert.ok(state.includes(first.requestId));assert.ok(!state.includes('bundleId')&&!state.includes('revision'));assert.equal(writes,0);
   await select(1);await page.reload();await page.getByText('客户端配置与背景',{exact:true}).click();await page.getByRole('button',{name:'应用此配套包参数',exact:true}).waitFor();assert.equal(records.size,1);checks.push('durable preview restored after reload; changed parent bundle cannot replace frozen request; storage contains identifiers only');
   await page.getByRole('button',{name:'应用此配套包参数',exact:true}).click();await page.locator('.arco-alert').filter({hasText:/Network Error|连接失败/}).first().waitFor();assert.equal(writes,1);assert.ok((await stored()).includes(first.requestId));checks.push('lost apply reply retains original operation ID after exactly one synthetic write');
   await page.reload();await page.getByText('客户端配置与背景',{exact:true}).click();await page.getByRole('button',{name:'核对配套包并预览应用',exact:true}).waitFor();await page.waitForFunction(()=>sessionStorage.getItem('script.release.pending.v1')===null);assert.equal(writes,1);checks.push('refresh reads persisted receipt and clears pending identity without submitting again');

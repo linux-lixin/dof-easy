@@ -148,7 +148,8 @@
           "evidence": [
             "docs/validation/admin-script-roundtrip-s18-2026-10-28.json",
             "docs/validation/admin-script-release-s19-2026-10-28.json",
-            "docs/validation/admin-script-release-s20-2026-10-28.json"
+            "docs/validation/admin-script-release-s20-2026-10-28.json",
+            "docs/validation/admin-client-provenance-s21-2026-10-28.json"
           ],
           "implementationStatus": "generation_and_parameter_persistence_deployed_consumer_pending",
           "releaseManagement": {
@@ -160,7 +161,15 @@
             "realParameterProtocolDeploymentVerified": true,
             "nativeConsumerAcceptanceVerified": false,
             "olderImageWriteRollbackVerified": false,
-            "guardedReadOnlyRollbackVerified": true
+            "guardedReadOnlyRollbackVerified": true,
+            "bundleProvenance": {
+              "manifestVersion": 1,
+              "explicitSourceAndDatabaseBindingImplemented": true,
+              "parameterBatchFrozen": true,
+              "legacyJobWirePreserved": true,
+              "realDeploymentVerified": false,
+              "nativeConsumerAcceptanceVerified": false
+            }
           }
         }
       ]
