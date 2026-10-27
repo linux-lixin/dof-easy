@@ -29,7 +29,12 @@ def call_once(method,path,data=None,expected=200):
  except ValueError:return raw.decode()
 def call(method,path,data=None,expected=200):
  for attempt in range(30):
-  try:return call_once(method,path,data,expected)
+  try:
+   result=call_once(method,path,data,expected)
+   if expected==409 and isinstance(result,dict) and str(result.get('message','')).startswith('另一个'):
+    if attempt==29:raise RuntimeError('Shared lock remained busy; cannot attribute rejection to the expected conflict')
+    time.sleep(0.07+(time.time()%0.13));continue
+   return result
   except RuntimeError as error:
    if expected!=200 or '409 另一个' not in str(error) or attempt==29:raise
    time.sleep(0.07+(time.time()%0.13))
@@ -54,7 +59,8 @@ def apply(m,label):
  for receipt in result['receipts']:assert receipt['state']=='APPLIED' and receipt['observed']==result['expected']
  time.sleep(3);before=counts();again=call('POST',p+'/runtime',request);assert again['requestId']==request['requestId'];time.sleep(3);after=counts();assert after==before
  a['duplicateNoExtraNativeCall']=True;a['invocationCountsAfter']=after;persist()
- call('POST',p+'/runtime',dict(request,revision='0'*64),409)
+ rejected=call('POST',p+'/runtime',dict(request,revision='0'*64),409)
+ assert '编号' in rejected['message'] and '不同' in rejected['message']
  return result
 for _ in range(100):
  try:
@@ -72,7 +78,8 @@ for m in ['anton','luke']:
  state[m]={'originalRevision':original['revision'],'edit':edit};persist();saved=False
  try:
   call('POST',p+'/preview',edit);r=call('PUT',p,edit);assert r['persisted'];saved=True;state[m]['saved']=True;persist()
-  call('POST',p+'/runtime/preview',{'requestId':str(uuid.uuid4()),'revision':original['revision']},409)
+  rejected=call('POST',p+'/runtime/preview',{'requestId':str(uuid.uuid4()),'revision':original['revision']},409)
+  assert '配置版本已改变' in rejected['message']
   r=apply(m,'changed');assert r['expected']['member_min']==new
  finally:
   if saved:

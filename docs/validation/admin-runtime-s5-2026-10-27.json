@@ -1583,7 +1583,13 @@
         }
       }
     },
-    "fullGameplayVerified": false
+    "fullGameplayVerified": false,
+    "keyVerificationScope": {
+      "gamePublicFileBytes": "unchanged",
+      "gamePrivateMaterial": "matches-unchanged-public-key",
+      "gamePrivateOriginalPEMBytes": "not-snapshotted",
+      "adminPersistentFiles": "private.key and publickey.pem byte-identical to pre-upgrade archive"
+    }
   },
   "installerRegeneration": {
     "passed": true,
@@ -1614,7 +1620,121 @@
   "remainingDeploymentIssues": [
     "Custom Frida script reports MySQL access error 1044 for database frida and an invalid argument in init_db. Fixed refresh executor works independently; all Frida features are not accepted.",
     "Game runtime on server is a private snapshot overlay. Final distributable game image still requires a clean source build.",
-    "Heartbeat and admin operations share the lock. Explicit lock-conflict rejection is safe, but reducing contention remains usability work.",
-    "Real browser after the final evidence-resource image update remains to be recorded."
-  ]
+    "Heartbeat and admin operations share the lock. Explicit lock-conflict rejection is safe, but reducing contention remains usability work."
+  ],
+  "finalDeployment": {
+    "sourceCommit": "12aac606a4928c08edb1730f10a9859a9429eb0b",
+    "adminImage": "sha256:af013455e07757d25eb6842917ce312f9de651eaa810e1ba2b0399929dc6bc15",
+    "adminTag": "dof-admin-replacement:20261027-s5-final",
+    "gameImage": "sha256:5ff597ff065027c2706b37d92694b0b11679ae43e8d9659752339234b62e82c3",
+    "gameSourceCommit": "0622d88483b7ec7d08ba7c6a4b2ebf17233fd58d",
+    "appSHA256": "697daab7cebe5b4f3bfd311d199e242f987ae3312a8aaf3e221e276725c5f739",
+    "onlyCanonicalEvidenceResourcesChanged": true,
+    "gameNotRecreated": true,
+    "adminPort": 18080,
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s5-runtime/before-ledger"
+  },
+  "real86FinalBrowser": {
+    "passed": true,
+    "backend": "real",
+    "instanceId": "dof-main",
+    "configEdits": false,
+    "actualGameplayVerified": false,
+    "checks": [
+      "real browser administrator login",
+      "anonymous access rejected",
+      "real plugin read and application guidance",
+      "real browser anton frozen preview, submit, two-channel native receipts and four-field readback",
+      "real browser luke frozen preview, submit, two-channel native receipts and four-field readback",
+      "real signin schema and queries",
+      "real read-only record projections: 30/30",
+      "deployed activity adapter and durable journal read",
+      "deployed penalty schema and protected-admin password-state/journal read without writes",
+      "role adapter sample unavailable: character list empty; no player data initialized",
+      "browser schema diagnosis",
+      "feature ledger uses canonical 71 classes / 239 operations and current management evidence"
+    ],
+    "pageErrors": 0
+  },
+  "real86FinalStatus": {
+    "passed": true,
+    "instanceId": "dof-main",
+    "grade": 86,
+    "channels": {
+      "siroco52": {
+        "pid": 747,
+        "dispatcherThreadId": 1132,
+        "bootId": "e38b7ca48c9cae0004d6f4e255c32829",
+        "nativeInvocationAttempts": {
+          "anton": 2,
+          "luke": 1
+        },
+        "lastError": null,
+        "independentlyAuditedExpectedCalls": {
+          "anton": 2,
+          "luke": 1
+        }
+      },
+      "siroco15": {
+        "pid": 746,
+        "dispatcherThreadId": 1120,
+        "bootId": "7ffe08dc4a8e492661404c2ab88b0499",
+        "nativeInvocationAttempts": {
+          "anton": 2,
+          "luke": 1
+        },
+        "lastError": null,
+        "independentlyAuditedExpectedCalls": {
+          "anton": 2,
+          "luke": 1
+        }
+      }
+    },
+    "gameHealthy": true,
+    "adminRunning": true,
+    "gameImage": "sha256:5ff597ff065027c2706b37d92694b0b11679ae43e8d9659752339234b62e82c3",
+    "adminImage": "sha256:af013455e07757d25eb6842917ce312f9de651eaa810e1ba2b0399929dc6bc15",
+    "publicKeyBytesUnchanged": true,
+    "currentPrivateMatchesUnchangedPublic": true,
+    "privateOriginalFileBytesSnapshotted": false,
+    "adminPersistentKeyFilesByteIdentical": [
+      "private.key",
+      "publickey.pem"
+    ],
+    "fixedRefreshDiagnostics": [],
+    "customFridaDatabase1044Observed": true,
+    "customFridaInitDbArgumentErrorObserved": true,
+    "baseFreeBytes": 25743204352,
+    "fullGameplayVerified": false
+  },
+  "real86SpecificConflictReasons": {
+    "passed": true,
+    "specificRejectionReasonsVerified": true,
+    "checks": [
+      {
+        "module": "anton",
+        "differentPayload": "相同操作编号的刷新内容或操作者不同",
+        "staleConfiguration": "配置版本已改变，请重新读取"
+      },
+      {
+        "module": "luke",
+        "differentPayload": "相同操作编号的刷新内容或操作者不同",
+        "staleConfiguration": "配置版本已改变，请重新读取"
+      }
+    ]
+  },
+  "additionalBrowserAttempt": {
+    "outcome": "Partial success after game recreation: anton applied and read back; luke preview rejected with shared-lock HTTP 409. Final browser separately passed both.",
+    "completedChecks": [
+      "real browser administrator login",
+      "anonymous access rejected",
+      "real plugin read and application guidance",
+      "real browser anton frozen preview, submit, two-channel native receipts and four-field readback"
+    ],
+    "finalBootCountsPerChannel": {
+      "anton": 2,
+      "luke": 1
+    },
+    "countsCheckedAgainstCurrentBootAppliedAuditReceipts": true
+  }
 }
