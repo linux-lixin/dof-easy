@@ -24,6 +24,29 @@ function clearOperation(){const c=context();c.edit=null;c.pending=null;c.prepare
 function body(value:Edit){const result:any=JSON.parse(JSON.stringify(value));if(['restore','accept-current'].includes(result.operation))delete result.values;return result}
 async function settled(result:any){context().last=result;if(terminal(result.state)){clearOperation();await load();return true}return false}
 
+const equipment = computed(() => ['inheritance','cross-border','recovery'].includes(active.value));
+const rowPage=ref(1),rowPageSize=ref(20),rowTotal=ref(0),datasetBusy=ref(false),datasetError=ref(''),datasetInfo=ref(''),datasetResult=ref<any>(null),datasetFile=ref<File|null>(null);
+let datasetAbort:AbortController|null=null;
+function cancelDataset(){datasetAbort?.abort()}
+const equipmentPagination=computed(()=>equipment.value?{current:rowPage.value,pageSize:rowPageSize.value,total:rowTotal.value,showTotal:true,showPageSize:true,pageSizeOptions:[20,50,100]}:{pageSize:10});
+async function changePage(value:number){if(equipment.value){rowPage.value=value;await load()}}
+async function changePageSize(value:number){if(equipment.value){rowPageSize.value=value;rowPage.value=1;await load()}}
+async function selectSection(){rowPage.value=1;datasetFile.value=null;datasetResult.value=null;datasetError.value='';datasetInfo.value='';await load()}
+function selectDataset(event:Event){datasetFile.value=(event.target as HTMLInputElement).files?.[0]||null;datasetResult.value=null;datasetError.value='';datasetInfo.value=''}
+async function datasetAction(action:'export'|'check'){
+  if(datasetBusy.value||!equipment.value)return;datasetBusy.value=true;datasetError.value='';datasetInfo.value='';datasetResult.value=null;datasetAbort=new AbortController();
+  const key=active.value,url=`/api/v1/admin/activities/${key}/dataset/${action}`;
+  try{
+    const config={timeout:1800000,signal:datasetAbort.signal};
+    if(action==='export'){
+      const response=await Request.get<Blob>(url,{...config,responseType:'blob'});const address=URL.createObjectURL(response.data);const link=document.createElement('a');link.href=address;link.download=`${key}-rules-v1.json`;link.click();setTimeout(()=>URL.revokeObjectURL(address),0);datasetInfo.value='已下载绑定实例的全表文件；行数和完整性摘要在文件末尾。';
+    }else{
+      if(!datasetFile.value)throw new Error('请选择网页规则文件');if(datasetFile.value.size>256*1024*1024)throw new Error('规则文件超过256 MiB上限');
+      datasetResult.value=(await Request.post<any>(url,datasetFile.value,{...config,headers:{'Content-Type':'application/json'}})).data;
+    }
+  }catch(e:any){if(e.code==='ERR_CANCELED')datasetInfo.value='已取消读取；没有提交原生写入。';else if(e.response?.data instanceof Blob){try{datasetError.value=JSON.parse(await e.response.data.text()).message||message(e)}catch{datasetError.value=message(e)}}else datasetError.value=message(e)}
+  finally{datasetBusy.value=false;datasetAbort=null}
+}
 const imported = ref('');
 const legacyPage = ref(1), legacyEdit = ref<any>(null), legacyReason = ref(''), legacyPrepared = ref<any>(null), legacyPending = ref<any>(null), legacyRequestId = ref('');
 const assessments: Record<string,string> = { MATCHES_AFTER: '当前值等于写后快照；不代表实际业务效果已经通过', MATCHES_BEFORE: '当前值等于写前快照；不据此推断历史操作从未执行', CONFLICT: '当前值与前后快照均不同，原结果未知', UNKNOWN: '旧自动编号未记录，无法确定新增目标或原结果' };
@@ -74,7 +97,7 @@ async function readPinned(id:string,open=true){
 async function load(){
   loading.value=true;error.value='';rows.value=[];history.value=[];const c=context(),old=saved[active.value],recover=!!old&&!c.pending;
   if(recover){c.pending={requestId:old!.requestId,revision:'new',values:null,operation:'upsert'};c.submitted=old!.submitted;c.exact=false;c.prepared={state:old!.submitted?'UNKNOWN':'PREVIEW_UNKNOWN'}}
-  try{const r=(await Request.get<any>(endpoint())).data;rows.value=r.rows;notice.value=[r.moduleNotice,r.notice].filter(Boolean).join(' ');if(!c.pending){c.edit=null;c.prepared=null}}
+  try{const r=(await Request.get<any>(endpoint()+(equipment.value?`?page=${rowPage.value}&pageSize=${rowPageSize.value}`:''))).data;rows.value=r.rows;rowTotal.value=equipment.value?Number(r.total??r.rows.length):r.rows.length;notice.value=[r.moduleNotice,r.notice].filter(Boolean).join(' ');if(!c.pending){c.edit=null;c.prepared=null}}
   catch(e){error.value=message(e)}
   if(recover)try{await readPinned(old!.requestId,false)}catch(e:any){if(e.response?.status===404&&!c.submitted)c.prepared={state:'MISSING_PREVIEW'};error.value=message(e)}
   loading.value=false;
@@ -168,13 +191,20 @@ onMounted(async () => {
 <template>
   <a-card title="活动与装备规则管理" style="margin: 24px">
     <a-alert style="margin-bottom: 16px">签到、战令与收集箱沿用配套游戏插件。此处修改活动规则，保留玩家领取和收集进度。活动到期不自动重置玩家记录。</a-alert>
-    <a-select v-model="active" @change="load" :disabled="saving || loading" style="width: 360px"><a-option v-for="s in sections" :key="s.key" :value="s.key">{{ s.title }}{{ s.writable === false ? "（只读）" : "" }}</a-option></a-select>
+    <a-select v-model="active" @change="selectSection" :disabled="saving || loading || datasetBusy" style="width: 360px"><a-option v-for="s in sections" :key="s.key" :value="s.key">{{ s.title }}{{ s.writable === false ? "（只读）" : "" }}</a-option></a-select>
     <a-alert v-if="error" type="error">{{ error }}</a-alert>
     <a-space style="margin: 16px 0" wrap>
       <a-button @click="load" :loading="loading" :disabled="saving">刷新</a-button>
       <a-button type="primary" v-if="section && section.writable !== false && !error && (section.primaryKey || !rows.length)" :disabled="loading || saving || hasPending" @click="begin()">新增配置</a-button>
-      <a-button :disabled="loading || !!error" @click="download(`${active}-config.json`, { section: active, rows })">导出配置</a-button>
+      <a-button v-if="!equipment" :disabled="loading || !!error" @click="download(`${active}-config.json`, { section: active, rows })">导出配置</a-button>
+      <a-button v-else :disabled="loading || saving || !!error || datasetBusy" @click="datasetAction('export')">导出全表规则</a-button>
       <a-button :disabled="loading || !!error" @click="openHistory()">修改记录与快照</a-button>
+    </a-space>
+    <a-space v-if="equipment" direction="vertical" fill style="margin-bottom:16px">
+      <a-alert>全表文件使用网页规则格式 v1，绑定当前实例和数据库 UUID。文件完整性检查不会生成写入计划或保存配置；批量导入、清除与原工具格式对照仍待补齐。</a-alert>
+      <a-space><input :key="active" type="file" accept=".json,application/json" :disabled="datasetBusy" aria-label="选择全表规则文件" @change="selectDataset" /><a-button :disabled="datasetBusy||!datasetFile" @click="datasetAction('check')">检查文件完整性</a-button><a-button v-if="datasetBusy" @click="cancelDataset">取消文件读取</a-button></a-space>
+      <a-alert v-if="datasetError" type="error">{{datasetError}}</a-alert><a-alert v-if="datasetInfo">{{datasetInfo}}</a-alert>
+      <a-alert v-if="datasetResult" type="success">文件完整性与绑定已通过，共 {{datasetResult.rowCount}} 条；没有生成写入计划或保存配置。</a-alert>
     </a-space>
     <a-space wrap><a-input v-model="lookup" placeholder="按原活动操作编号读取" /><a-button :disabled="saving||loading||!lookup" @click="readOriginal">读取原活动操作</a-button><a-button v-if="hasPending" :disabled="saving||loading" @click="lookup=pending!.requestId;readOriginal()">恢复原操作表单</a-button></a-space>
     <a-alert v-if="hasPending">当前活动保留操作 {{pending!.requestId}}：{{labels[prepared?.state]||prepared?.state}}；请按原编号核对，其他活动可独立管理。</a-alert>
@@ -182,7 +212,7 @@ onMounted(async () => {
     <a-alert v-if="context().last">最近核对 {{context().last.requestId}}：{{labels[context().last.state]||context().last.state}}</a-alert>
     <a-space v-if="hasPending" direction="vertical" fill><a-input v-model="cancelReason" placeholder="填写取消未提交预览的原因" :max-length="128" :disabled="saving||!!cancelPending" /><a-space><a-button :disabled="saving||loading||prepared?.state!=='PREVIEWED'" @click="cancellation(false)">预览取消未提交操作</a-button><a-button :disabled="saving||cancelReceipt?.state!=='PREVIEWED'" @click="cancellation(true)">确认取消原预览</a-button><a-button v-if="cancelPending||saved[active]?.cancelRequestId" :disabled="saving" @click="reconcileCancellation">核对取消编号</a-button></a-space><div v-if="cancelPending||cancelReceipt">取消编号 {{cancelPending?.requestId||cancelReceipt?.requestId}}：{{labels[cancelReceipt?.state]||cancelReceipt?.state}}</div></a-space>
     <a-table v-if="context().controls.length" :data="context().controls" :pagination="false" row-key="requestId"><template #columns><a-table-column title="取消操作编号" data-index="requestId" /><a-table-column title="原操作" data-index="targetRequestId" /><a-table-column title="状态" data-index="state" /><a-table-column title="原因" data-index="reason" /><a-table-column title="核对"><template #cell="{record}"><a-button v-if="record.state==='PREPARED'" :disabled="saving" @click="reconcileCancelRecord(record)">核对取消回执</a-button></template></a-table-column></template></a-table>
-    <a-table :data="rows" :loading="loading" :pagination="{ pageSize: 10 }" :scroll="{ x: 1000 }" row-key="revision">
+    <a-table :data="rows" :loading="loading" :pagination="equipmentPagination" @page-change="changePage" @page-size-change="changePageSize" :scroll="{ x: 1000 }" row-key="revision">
       <template #columns>
         <a-table-column v-for="f in summaries" :key="f.name" :title="f.label">
           <template #cell="{ record }">{{ record.values[f.name] ?? '未设置' }}</template>

@@ -12,7 +12,7 @@ proxy=module('rollback_receipts_proxy');guard=module('release_rollback_proxy')
 
 class FrozenReceiptsProxyTests(unittest.TestCase):
     def setup_values(self):
-        raw=(ROOT/'services/admin/docker/dof-nginx.conf.template').read_bytes()
+        raw=(ROOT/'tests/unit/dof/fixtures/nginx-admin-s29.conf.template').read_bytes()
         source=guard.render(raw,hashlib.sha256(raw).hexdigest())
         routes={}
         for path in [proxy.BASE,proxy.BASE+'/00000000-0000-4000-8000-000000000001']:

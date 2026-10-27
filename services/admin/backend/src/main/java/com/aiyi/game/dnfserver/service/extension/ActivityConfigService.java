@@ -92,14 +92,7 @@ public class ActivityConfigService {
                 while(r.next()) {
                     Map<String,Object> row=new LinkedHashMap<>();
                     for(Field f:s.fields) {
-                        Object value = "int".equals(f.type) ? r.getObject(f.name) : r.getString(f.name);
-                        // Unsigned native INT comes back as Long. The existing HTTP
-                        // serializer renders Long as text, but these supported rule fields
-                        // drive numeric controls and must retain the signed-INT wire type.
-                        if (Arrays.asList("inheritance","recovery","cross-border").contains(s.key) && value instanceof Number) {
-                            long number=((Number)value).longValue();
-                            if(number>=0 && number<=Integer.MAX_VALUE)value=(int)number;
-                        }
+                        Object value = readScalar(r,s,f);
                         // Connector/J 5.1 may append .0 to DATETIME strings; native schema has no fractional seconds.
                         if (value != null && "datetime".equals(f.type)) value = value.toString().replaceFirst("\\.0+$", "");
                         row.put(f.name, value);
@@ -111,6 +104,55 @@ public class ActivityConfigService {
                 return result;
             }
         }
+    }
+    private Object readScalar(ResultSet r,Section s,Field f)throws SQLException {
+        Object value="int".equals(f.type)?r.getObject(f.name):r.getString(f.name);
+        if(Arrays.asList("inheritance","recovery","cross-border").contains(s.key)&&value instanceof Number){long n=((Number)value).longValue();if(n>=0&&n<=Integer.MAX_VALUE)value=(int)n;}
+        return value;
+    }
+    private Section equipment(String key){Section s=section(key);if(!Arrays.asList("inheritance","recovery","cross-border").contains(key))throw new Failure(409,"全表规则格式目前只支持继承、跨界和回收");return s;}
+    private interface EquipmentRead<T>{T run(Connection c,Section s,NativeEquipmentDataset.Spec spec)throws Exception;}
+    private <T>T equipmentRead(String key,EquipmentRead<T> operation)throws Exception {
+        long actor=admin();Section s=equipment(key);
+        try(Connection c=journal.connection()){
+            String database;try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT @@server_uuid")){if(!r.next())throw new Failure(409,"数据库身份不可读");database=r.getString(1);}
+            Throwable primary=null;
+            try{
+                try(Statement st=c.createStatement()){st.execute("LOCK TABLES "+table(s)+" READ,`d_taiwan`.`accounts` READ");}
+                schema(c,s);
+                if(key.equals("inheritance"))NativeInheritanceRules.requireSchema(c);else if(key.equals("recovery"))NativeRecoveryRules.requireSchema(c);else NativeCrossBorderRules.requireSchema(c);
+                try(PreparedStatement p=c.prepareStatement("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME=?")){p.setString(1,s.table);try(ResultSet r=p.executeQuery()){if(!r.next()||!Arrays.asList("MyISAM","InnoDB").contains(r.getString(1)))throw new Failure(409,"规则表引擎不兼容");}}
+                cancelActor(c,actor);return operation.run(c,s,new NativeEquipmentDataset.Spec(s,journal.instance(),database));
+            }catch(Exception|Error failure){primary=failure;throw failure;}
+            finally{if(primary==null)unlock(c);else try{unlock(c);}catch(Exception cleanup){primary.addSuppressed(cleanup);}}
+        }
+    }
+    public Map<String,Object> page(String key,int page,int size){
+        if(page<1||size<1||size>100)throw new Failure(400,"页码须大于0，每页1～100条");
+        try{return equipmentRead(key,(c,s,spec)->{
+            long total;try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT COUNT(*) FROM "+table(s))){if(!r.next())throw new SQLException("Missing count");total=r.getLong(1);}
+            List<Map<String,Object>> result=new ArrayList<>();try(PreparedStatement p=c.prepareStatement("SELECT "+columns(s)+" FROM "+table(s)+" ORDER BY `"+s.primaryKey+"` LIMIT ? OFFSET ?")){p.setInt(1,size);p.setLong(2,(long)(page-1)*size);try(ResultSet r=p.executeQuery()){while(r.next()){Map<String,Object> row=new LinkedHashMap<>();for(Field f:s.fields)row.put(f.name,readScalar(r,s,f));result.add(envelope(row));}}}
+            Map<String,Object> out=new LinkedHashMap<>();out.put("rows",result);out.put("total",total);out.put("page",page);out.put("pageSize",size);out.put("writable",s.writable);out.put("moduleNotice",s.notice);out.put("notice","分页只影响查看；全表导出读取全部规则，不改变玩家进度或配置。");return out;
+        });}catch(SQLException e){throw unavailable();}catch(RuntimeException e){throw e;}catch(Exception e){throw new IllegalStateException(e);}
+    }
+    public void exportDataset(String key,java.io.OutputStream output)throws java.io.IOException {
+        try{equipmentRead(key,(c,s,spec)->{
+            try(Statement st=c.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY)){st.setFetchSize(Integer.MIN_VALUE);
+                String projection=s.fields.stream().map(f->("varchar".equals(f.type)?"BINARY `"+f.name+"` AS `"+f.name+"`":"`"+f.name+"`")).collect(Collectors.joining(","));
+                try(ResultSet r=st.executeQuery("SELECT "+projection+" FROM "+table(s)+" ORDER BY `"+s.primaryKey+"`")){
+                    try{NativeEquipmentDataset.write(spec,()->{if(!r.next())return null;Map<String,Object> row=new LinkedHashMap<>();for(Field f:s.fields){
+                        if("varchar".equals(f.type)){byte[] raw=r.getBytes(f.name);try{row.put(f.name,raw==null?null:StandardCharsets.UTF_8.newDecoder().onMalformedInput(java.nio.charset.CodingErrorAction.REPORT).onUnmappableCharacter(java.nio.charset.CodingErrorAction.REPORT).decode(java.nio.ByteBuffer.wrap(raw)).toString());}catch(java.nio.charset.CharacterCodingException bad){throw new Failure(409,"原生规则含无效UTF-8文本，停止导出，不替换原始字符");}}
+                        else row.put(f.name,readScalar(r,s,f));}return row;},output);}catch(java.io.IOException|RuntimeException failure){discard(c,failure);throw failure;}
+                }
+            }return null;
+        });}catch(java.io.IOException e){throw e;}catch(SQLException e){throw unavailable();}catch(RuntimeException e){throw e;}catch(Exception e){throw new java.io.IOException("规则导出未完成",e);}
+    }
+    public Map<String,Object> checkDataset(String key,java.io.InputStream input)throws java.io.IOException {
+        try{
+            NativeEquipmentDataset.Spec spec=equipmentRead(key,(c,s,value)->value);
+            Map<String,Object> result=NativeEquipmentDataset.inspect(spec,input);
+            try(Connection c=journal.connection()){cancelActor(c,admin());}return result;
+        }catch(java.io.IOException e){throw e;}catch(SQLException e){throw unavailable();}catch(RuntimeException e){throw e;}catch(Exception e){throw new java.io.IOException("规则文件检查未完成",e);}
     }
     private String revision(Map<String,Object> row) {
         if(row==null) return "new";

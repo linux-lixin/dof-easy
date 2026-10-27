@@ -11,7 +11,15 @@ import java.util.*;
 public class ActivityConfigController {
     @Resource private ActivityConfigService service;
     @GetMapping public Object catalog() {return service.catalog();}
-    @GetMapping("{section}") public Object list(@PathVariable String section) {return service.list(section);}
+    @GetMapping("{section}") public Object list(@PathVariable String section,@RequestParam(required=false) Integer page,@RequestParam(required=false) Integer pageSize) {if(page==null&&pageSize==null)return service.list(section);return service.page(section,page==null?1:page,pageSize==null?20:pageSize);}
+    @GetMapping("{section}/dataset/export") public void export(@PathVariable String section,javax.servlet.http.HttpServletResponse response)throws java.io.IOException {
+        response.setContentType("application/json;charset=UTF-8");response.setHeader("Cache-Control","no-store");
+        if(Arrays.asList("inheritance","recovery","cross-border").contains(section))response.setHeader("Content-Disposition","attachment; filename=\""+section+"-rules-v1.json\"");
+        service.exportDataset(section,response.getOutputStream());
+    }
+    @PostMapping(value="{section}/dataset/check",consumes="application/json") public Object check(@PathVariable String section,javax.servlet.http.HttpServletRequest request)throws java.io.IOException {
+        return service.checkDataset(section,request.getInputStream());
+    }
     @PostMapping("{section}/validate") public Object preview(@PathVariable String section,@RequestBody ActivityConfigService.Edit edit){return service.preview(section,edit);}
     @PutMapping("{section}") public Object save(@PathVariable String section, @RequestBody ActivityConfigService.Edit edit) {return service.save(section,edit,false);}
     @DeleteMapping("{section}") public Object remove(@PathVariable String section, @RequestBody ActivityConfigService.Edit edit) {return service.save(section,edit,true);}

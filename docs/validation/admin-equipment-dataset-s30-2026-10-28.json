@@ -1,0 +1,205 @@
+{
+  "stage": "S30",
+  "date": "2026-10-28",
+  "purpose": "full native equipment rule pagination, streaming web export and bound file integrity checks",
+  "baseCommit": "debd3f1",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "realDeploymentVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "batchImportImplemented": false,
+  "bulkClearImplemented": false,
+  "durableBatchWritePlanImplemented": false,
+  "webFormat": "dof-equipment-rules-v1",
+  "nativeWritesFromNewEndpoints": false,
+  "verificationScope": "local read-only dataset APIs; synthetic records in real isolated MySQL; explicitly mocked compiled UI",
+  "sourceSHA256": {
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeEquipmentDataset.java": "d8341849651ec93792eb76d3ade7a3b0dc941851d0ab67faee799892984b8f80",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/ActivityConfigService.java": "93f64ceb63869b0fdabdd5cea3bd1fce00f6d515792eea07bbc59ae5e277cdbd",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/controller/ActivityConfigController.java": "62b5934a3d00f5ab71ecf829705206d79af7ff3a2de1979ffcb868639ee22252",
+    "services/admin/frontend/src/views/admin/activities/ActivityManager.vue": "609b1be5d191f25b5e73deb2a064b030fa7dd355b2447b26e43249e25106d327",
+    "services/admin/docker/dof-nginx.conf.template": "66314caea71d2ce15573e194d3e8b5fcd6570ac7010a51a7fae2ef033ef23b61"
+  },
+  "standardMaven": {
+    "path": "/tmp/dof-admin-s30-dataset-maven-final.log",
+    "total": 492,
+    "passed": 203,
+    "conditionalSkipped": 289,
+    "failures": 0,
+    "errors": 0
+  },
+  "isolatedSQL": {
+    "run": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "80431179367ad4d6a4853bae879bd221d9a00e64aa838d4015459df0e8f10faf",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "result": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "managedPostalContractTests": 12,
+      "postalBatchContractTests": 11,
+      "postalReceiptControlContractTests": 7,
+      "postalBatchControlContractTests": 8,
+      "cdkContractTests": 13,
+      "cdkInventoryContractTests": 13,
+      "pointsContractTests": 8,
+      "activityPreviewControlContractTests": 10,
+      "scriptReleaseContractTests": 21,
+      "nativeInheritanceContractTests": 8,
+      "nativeRecoveryContractTests": 8,
+      "nativeCrossBorderContractTests": 8,
+      "nativeEquipmentDatasetContractTests": 6,
+      "totalContractTests": 150,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "path": "/tmp/dof-admin-s30-dataset-db-final",
+    "fixtureDataSynthetic": true
+  },
+  "retainedInitialFailure": {
+    "path": "/tmp/dof-admin-s30-dataset-db",
+    "exitCode": 1,
+    "failedContract": "exportUsesOriginalUtf8BytesAndRefusesUnexpectedBinaryColumns",
+    "cause": "test compared raw JSON spelling to emoji; corrected to compare decoded JSON after verifying original database HEX, without weakening character preservation"
+  },
+  "frontendBuild": {
+    "passed": true,
+    "path": "/tmp/dof-admin-s30-frontend-final.log",
+    "chunkSizeWarningPresent": true
+  },
+  "browsers": {
+    "dataset-browser-final": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "nativeWrites": 0,
+      "checks": [
+        "server pagination requests page two and renders its twenty rows without local double slicing",
+        "download contains all 1005 synthetic rows rather than only the current page",
+        "raw file upload preserves exact bytes and reports integrity only, with no write plan or native write",
+        "binding error clears stale success while keeping the current rule page usable",
+        "in-flight export cancellation returns to the page without submitting any native writes",
+        "switching native modules clears the actual file input and permits selecting the same file again"
+      ],
+      "pageErrors": 0
+    },
+    "inheritance-final": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "real field catalog renders code-zero default, material costs and five-group guidance",
+        "preview freezes exact paired cost text and code zero; one confirmed synthetic write updates the row",
+        "dedicated code creation has an independent request ID and explicit empty cost pair",
+        "unverified dragon-robe rules remain read-only while inheritance retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "recovery-final": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "production catalog renders all seven recovery fields, separate reward/cost summaries and explicit gold-zero guidance",
+        "preview freezes reward pair, gold/material cost pair, broadcast flag and original-item removal count; one confirmed synthetic write updates the row",
+        "new recovery rule has its own request ID and explicit empty reward/extra cost pairs",
+        "unverified dragon-robe rules remain read-only while recovery retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "cross-border-final": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "production cross-border catalog renders code-zero fallback, five material pairs and separate inventory threshold",
+        "preview freezes both material lists and distinct threshold while retaining the old read-only reserved value",
+        "new dedicated rule has an independent request ID, empty cost pair and read-only reserved value",
+        "unverified dragon-robe rules remain read-only while cross-border retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "activity-recovery-final2": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeWritesInMock": 2,
+      "checks": [
+        "preview freezes exact values and UUID before any native submission",
+        "lost native response retains UUID and freezes inputs; storage contains identifiers only",
+        "another lookup cannot overwrite an unresolved operation",
+        "reload reads committed receipt and clears the guard without replaying configuration writes",
+        "independent activity can be edited while the original activity keeps its pending UUID",
+        "section switch and reload recover exact original preview, with no invented UUID or values",
+        "lost cancellation reply reconciles same control ID; cancelled original cannot later write",
+        "confirmed missing preview with no native submit can explicitly return to editing",
+        "schema failures remain visible rather than successful empty records",
+        "permission failures remain visible"
+      ],
+      "pageErrors": 0
+    }
+  },
+  "pythonChecks": {
+    "passed": 19,
+    "modules": {
+      "test_rollback_receipts_proxy": 4,
+      "test_admin_packaging": 1,
+      "test_admin_inventory": 4,
+      "test_admin_baseline": 3,
+      "test_admin_runtime": 7
+    }
+  },
+  "proxySyntax": {
+    "passed": true,
+    "path": "/tmp/dof-admin-s30-nginx-check.log",
+    "method": "network-none disposable container using existing S29 image; no live container replacement",
+    "liveDeployment": false
+  },
+  "deployment": {
+    "upgraded": false,
+    "previousStage": "S29",
+    "hostPort": 18080
+  },
+  "remaining": [
+    "Durable bulk import/clear with immutable plans, per-row idempotent receipts, interruption reconciliation and targeted recovery",
+    "Real deployment and browser checks for the new APIs",
+    "Manual original Windows tool menu/default/import-export comparison",
+    "Native component consumption and gameplay effects; no item transfer/reward claim",
+    "Remaining wp01-wp13 requirements and full replacement gates"
+  ]
+}
