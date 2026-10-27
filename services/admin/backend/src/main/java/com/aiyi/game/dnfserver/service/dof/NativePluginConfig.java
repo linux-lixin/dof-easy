@@ -112,6 +112,13 @@ public final class NativePluginConfig {
         for(String key:keys) {
             Field f=fields.get(key);if(f==null || !source.values.containsKey(key))throw new DofFailure(400,"配置字段未知或当前文件缺失："+key);
             validate(f,patch.get(key));
+            if(!id.equals("plugin") && Arrays.asList(id+"_name",id+"_open_day",id+"_open_time").contains(key)) {
+                try {
+                    int bytes=source.encoding.newEncoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT)
+                        .encode(CharBuffer.wrap(patch.get(key).trim())).remaining();
+                    if(bytes>254)throw new DofFailure(400,"原生配置字符串超过255字节缓冲区（含结束符）："+key);
+                }catch(CharacterCodingException e){throw new DofFailure(400,"配置文字无法用原文件编码保存");}
+            }
         }
         keys.sort((a,b)->Integer.compare(source.values.get(b).start,source.values.get(a).start));
         StringBuilder result=new StringBuilder(source.text);

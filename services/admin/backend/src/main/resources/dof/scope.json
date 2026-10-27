@@ -1357,24 +1357,47 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-raid-s4-2026-10-27.json"
+            "docs/validation/admin-raid-s4-2026-10-27.json",
+            "docs/validation/admin-runtime-s5-2026-10-27.json"
           ],
           "managementImplementation": {
             "state": "configuration_implemented",
             "api": "/api/v1/admin/dof/plugins/anton",
             "entry": "/admin/dof",
             "executor": "libdof-plugin.so + DP2",
-            "activation": "GM reload command or scheduled game restart; no runtime reload is claimed",
+            "activation": "保存和运行时刷新分别执行；匹配执行器支持固定网页原生刷新及逐频道回执，否则显示GM聊天指引。四项回读与团本实际玩法分别验证。",
             "persistence": "atomic_file_with_write_ahead_journal",
-            "effectState": "not_observed"
+            "effectState": "not_observed",
+            "runtimeApi": "/api/v1/admin/dof/plugins/anton/runtime",
+            "runtimeVerificationFields": [
+              "name",
+              "open_day",
+              "open_time",
+              "member_min"
+            ]
           },
           "verification": {
             "consumption": {
               "state": "pending",
               "evidence": [
-                "docs/validation/admin-raid-s4-2026-10-27.json"
+                "docs/validation/admin-raid-s4-2026-10-27.json",
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
               ],
-              "reason": "本地70级原生初始化入口的名称、开放星期/时间、最少人数已完成两轮变更与恢复；86级实例、其他配置字段和网页运行时应用仍待验，不据此关闭整个团本消费阶段。"
+              "reason": "本地70级两轮实际dispatcher刷新、四项回读及恢复通过；86级、其他配置字段和完整团本流程尚未验收。"
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "配置管理、固定网页刷新和逐频道核对已实现；原工具完整分支、团本运行开关及其余高级操作仍需补齐。"
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "本地原生配置恢复、锁与重复请求已验证；其他故障注入及86级容器重建仍待验。"
             }
           }
         }
@@ -1398,24 +1421,47 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-raid-s4-2026-10-27.json"
+            "docs/validation/admin-raid-s4-2026-10-27.json",
+            "docs/validation/admin-runtime-s5-2026-10-27.json"
           ],
           "managementImplementation": {
             "state": "configuration_implemented",
             "api": "/api/v1/admin/dof/plugins/luke",
             "entry": "/admin/dof",
             "executor": "libdof-plugin.so + DP2",
-            "activation": "GM reload command or scheduled game restart; no runtime reload is claimed",
+            "activation": "保存和运行时刷新分别执行；匹配执行器支持固定网页原生刷新及逐频道回执，否则显示GM聊天指引。四项回读与团本实际玩法分别验证。",
             "persistence": "atomic_file_with_write_ahead_journal",
-            "effectState": "not_observed"
+            "effectState": "not_observed",
+            "runtimeApi": "/api/v1/admin/dof/plugins/luke/runtime",
+            "runtimeVerificationFields": [
+              "name",
+              "open_day",
+              "open_time",
+              "member_min"
+            ]
           },
           "verification": {
             "consumption": {
               "state": "pending",
               "evidence": [
-                "docs/validation/admin-raid-s4-2026-10-27.json"
+                "docs/validation/admin-raid-s4-2026-10-27.json",
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
               ],
-              "reason": "本地70级原生初始化入口的名称、开放星期/时间、最少人数已完成两轮变更与恢复；86级实例、其他配置字段和网页运行时应用仍待验，不据此关闭整个团本消费阶段。"
+              "reason": "本地70级两轮实际dispatcher刷新、四项回读及恢复通过；86级、其他配置字段和完整团本流程尚未验收。"
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "配置管理、固定网页刷新和逐频道核对已实现；原工具完整分支、团本运行开关及其余高级操作仍需补齐。"
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "本地原生配置恢复、锁与重复请求已验证；其他故障注入及86级容器重建仍待验。"
             }
           }
         }

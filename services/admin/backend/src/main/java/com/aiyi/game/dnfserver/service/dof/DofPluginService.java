@@ -33,6 +33,10 @@ public class DofPluginService {
         return new NativePluginFiles(Paths.get(configRoot),Paths.get(auditRoot),access.context().get("instanceId").toString());
     }
     private interface Action {Object run()throws IOException;}
+    private NativeRuntimeTasks runtime()throws IOException {
+        files();return new NativeRuntimeTasks(Paths.get(configRoot),Paths.get(auditRoot+"-runtime"),Paths.get(auditRoot),
+            access.context().get("instanceId").toString(),access.boundDatabaseUuid());
+    }
     private Object guarded(Action action) {
         access.admin();
         try(Connection ignored=access.boundConnection()){return action.run();}
@@ -74,6 +78,12 @@ public class DofPluginService {
             application.put("method",command==null || command.trim().isEmpty()?"unavailable":"gm_chat");
             application.put("command",command);
             application.put("instruction",command==null || command.trim().isEmpty()?"当前配置缺少刷新命令；请先核对匹配的插件版本。":"由具有插件所需权限的 GM 在游戏角色聊天中输入当前命令。网页不发送聊天，不确认刷新已执行；修改刷新命令本身的读取时机需单独验证。");
+            Map<String,Object> capability=runtime().status();application.put("runtime",capability);
+            application.put("runtimeObserved",capability.get("runtimeObserved"));application.put("webExecutionSupported",capability.get("webExecutionSupported"));
+            if(Boolean.TRUE.equals(capability.get("webExecutionSupported"))) {
+                application.put("method","native_task");application.put("instruction","可预览并提交固定的原生配置刷新。各频道分别返回回执；原生调用和配置回读不代表团本入场、结算或奖励已验证。");
+                out.put("activation","文件保存和运行时刷新分别执行；网页原生刷新按频道核对名称、开放星期/时间及最少人数。");
+            }
         }
         out.put("application",application);return out;
     });}
@@ -81,4 +91,9 @@ public class DofPluginService {
     public Object save(String module,NativePluginFiles.Edit edit,String restore){return guarded(()->files().save(module,edit,access.admin(),restore));}
     public Object history(String module){return guarded(()->files().history(module));}
     public Object reconcile(String module,String id){return guarded(()->files().reconcile(module,id));}
+    public Object runtimePreview(String module,NativeRuntimeTasks.Edit edit){return guarded(()->runtime().preview(module,edit,access.admin()));}
+    public Object runtimeSubmit(String module,NativeRuntimeTasks.Edit edit){return guarded(()->runtime().submit(module,edit,access.admin()));}
+    public Object runtimeHistory(String module){return guarded(()->runtime().history(module));}
+    public Object runtimeReconcile(String module,String id){return guarded(()->runtime().reconcile(module,id));}
+    public Object runtimeResolve(String module,String id,NativeRuntimeTasks.Resolve edit){return guarded(()->runtime().resolve(module,id,edit,access.admin()));}
 }

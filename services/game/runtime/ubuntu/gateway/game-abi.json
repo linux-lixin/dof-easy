@@ -163,6 +163,14 @@
       "symbols": [
         "_ZN9GameWorld19send_all_with_stateER11PacketGuardi"
       ]
+    },
+    {
+      "address": 140716568,
+      "bytes": 16,
+      "sha256": "f6a6cd900c158299e340668d8e899b34da6ed11fca4776d3d15bf6618b099727",
+      "symbols": [
+        "TimerDispatcher::dispatch/runtime-apply"
+      ]
     }
   ]
 }

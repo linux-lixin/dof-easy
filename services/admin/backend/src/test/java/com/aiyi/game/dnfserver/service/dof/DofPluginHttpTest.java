@@ -24,8 +24,17 @@ public class DofPluginHttpTest {
         MockMvc mvc=MockMvcBuilders.standaloneSetup(controller).build();
         when(access.admin()).thenThrow(new DofFailure(403,"admin required"));
         mvc.perform(get("/api/v1/admin/dof/plugins")).andExpect(status().isForbidden());verify(access,never()).boundConnection();
+        String revision=String.join("",Collections.nCopies(64,"0"));
+        String request="{\"requestId\":\"runtime-test-01\",\"revision\":\""+revision+"\"}";
+        for(String suffix:Arrays.asList("/runtime/preview","/runtime","/runtime/runtime-test-01/reconcile"))
+            mvc.perform(post("/api/v1/admin/dof/plugins/anton"+suffix).contentType("application/json").content(request)).andExpect(status().isForbidden());
+        mvc.perform(get("/api/v1/admin/dof/plugins/anton/runtime/history")).andExpect(status().isForbidden());
+        mvc.perform(post("/api/v1/admin/dof/plugins/anton/runtime/runtime-test-01/resolve").contentType("application/json")
+            .content("{\"requestId\":\"runtime-resolve-01\",\"taskRevision\":\""+revision+"\",\"keepCurrent\":true}")).andExpect(status().isForbidden());
+        verify(access,never()).boundConnection();
         reset(access);when(access.admin()).thenReturn(1L);when(access.boundConnection()).thenThrow(new DofFailure(409,"binding mismatch"));
         mvc.perform(get("/api/v1/admin/dof/plugins/anton")).andExpect(status().isConflict());
+        mvc.perform(post("/api/v1/admin/dof/plugins/anton/runtime/preview").contentType("application/json").content(request)).andExpect(status().isConflict());
     }
     @Test public void missingMountIsReportedAndDofModeDoesNotHidePluginCatalog()throws Exception {
         DofAdminService access=mock(DofAdminService.class);when(access.admin()).thenReturn(1L);when(access.boundConnection()).thenReturn(mock(Connection.class));

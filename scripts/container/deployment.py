@@ -40,6 +40,8 @@ def configure(model, values, root, databases, previous=None):
             SPRING_DATASOURCE_USERNAME='game',SPRING_DATASOURCE_PASSWORD=values['GAME_DB_PASSWORD'])
     managed = native or values.get('RAID_EXTENSION', 'off') == 'on' or values.get('DOF_ADMIN_ENABLED') == 'true'
     if managed:
+        services['game']['environment'].update(DOF_INSTANCE_ID='dof-'+root.name,
+            DOF_DATABASE_UUID=values.get('DOF_DATABASE_UUID',''))
         admin=services['admin']
         admin['entrypoint']=['/app/dof-entrypoint.sh']
         env=admin['environment']

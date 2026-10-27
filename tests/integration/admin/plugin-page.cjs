@@ -18,12 +18,13 @@ const state = {
 };
 const titles = { plugin: '基础插件', anton: '安徒恩团本', luke: '卢克团本' };
 const rows = [], calls = [], errors = [];
+const runtimeRows=[];let nativeInvocations=0,lostRuntimeReply=true;
 const revision = module => createHash('sha256').update(JSON.stringify(state[module])).digest('hex');
 const content = module => '// MOCK BROWSER FIXTURE ONLY\n' + Object.entries(state[module]).map(([k, v]) => `${k} = ${v}`).join('\n') + '\nunknown_setting = keep\n';
 function view(module) {
   return { module, title: titles[module], instanceId: 'dof-browser-fixture', revision: revision(module),
     content: content(module), encoding: 'UTF-8', activation: '模拟界面测试数据，仅验证网页交互。', effectState: 'not_observed',
-    application: { configuredEnabled: true, dependencyReady: true, webExecutionSupported: false, runtimeObserved: false, instruction: '模拟生效指引', command: module === 'anton' ? '模拟刷新命令' : null },
+    application: { configuredEnabled: true, dependencyReady: true, webExecutionSupported: module!=='plugin', runtimeObserved: module!=='plugin', runtime:module==='plugin'?undefined:{webExecutionSupported:true,channels:[{channel:'siroco15'},{channel:'siroco52'}]},instruction: '模拟生效指引', command: module === 'anton' ? '模拟刷新命令' : null },
     fields: Object.entries(state[module]).map(([key, value]) => ({ key, label: key.endsWith('member_min') ? '最少开团人数' : key.endsWith('name') ? '团本名称' : '装备镶嵌', kind: 'text', value, available: true })) };
 }
 const mime = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg' };
@@ -74,6 +75,17 @@ const server = createServer(async (request, response) => {
       const match = key.match(/^\/plugins\/(plugin|anton|luke)(.*)$/);
       if (!match) return json({ message: 'Unexpected mocked API' }, 404);
       const [, module, suffix] = match;
+      if(method==='GET'&&suffix==='/runtime/history')return json(runtimeRows);
+      if(method==='POST'&&suffix==='/runtime/preview'){
+        const row={...body,module,state:'PREVIEWED',targets:[{channel:'siroco15'},{channel:'siroco52'}],expiresAt:Date.now()+120000};runtimeRows.unshift(row);return json(row);
+      }
+      if(method==='POST'&&suffix==='/runtime'){
+        const row=runtimeRows.find(r=>r.requestId===body.requestId);assert.ok(row);assert.equal(body.revision,row.revision);
+        if(row.state==='PREVIEWED'){nativeInvocations++;row.state='SUBMITTED';}
+        if(lostRuntimeReply){lostRuntimeReply=false;return route.abort();}return json(row);
+      }
+      const runtimeCheck=suffix.match(/^\/runtime\/([^/]+)\/reconcile$/);
+      if(runtimeCheck){const row=runtimeRows.find(r=>r.requestId===runtimeCheck[1]);assert.ok(row);row.state=row.state==='SUBMITTED'?'PARTIAL':'APPLIED';row.receipts=[{channel:'siroco15',state:'APPLIED'},{channel:'siroco52',state:row.state==='PARTIAL'?'WAITING':'APPLIED'}];return json(row);}
       if (method === 'GET' && suffix === '') return json(view(module));
       if (method === 'GET' && suffix === '/history') return json(rows.filter(r => r.module === module).map(({ before, after, ...publicRow }) => publicRow));
       if (suffix === '/preview' || (method === 'PUT' && suffix === '')) {
@@ -128,6 +140,20 @@ const server = createServer(async (request, response) => {
     const imported = calls.filter(c => c.method === 'POST' && c.path.endsWith('/anton/preview')).at(-1).body;
     assert.ok(imported.content.includes('anton_member_min = 5')); assert.equal(imported.values, undefined);
     assert.equal(state.anton.anton_member_min, '3');
+    await page.getByRole('button',{name:'预览原生刷新',exact:true}).click();
+    const runtimeSubmit=page.getByRole('button',{name:'提交本次刷新',exact:true});await runtimeSubmit.waitFor();
+    await page.waitForFunction(()=>[...document.querySelectorAll('button')].some(b=>b.textContent==='提交本次刷新'&&!b.disabled));
+    assert.equal(nativeInvocations,0);const refresh=runtimeRows[0];assert.equal(refresh.revision,revision('anton'));
+    await runtimeSubmit.click();await page.getByRole('button',{name:'核对本次刷新',exact:true}).waitFor();
+    await page.getByRole('button',{name:'预览原生刷新',exact:true}).click();
+    await page.getByText('上次刷新提交结果尚未确认，请先按原操作编号核对',{exact:true}).waitFor();
+    assert.equal(runtimeRows.length,1);assert.equal(nativeInvocations,1);
+    await page.getByRole('button',{name:'核对本次刷新',exact:true}).click();
+    await page.getByText('部分频道已返回，继续核对；团本流程、结算和奖励仍需实际验证。',{exact:true}).waitFor();
+    assert.equal(await runtimeSubmit.isDisabled(),true);
+    await page.getByRole('button',{name:'核对本次刷新',exact:true}).click();
+    await page.getByText('各频道已调用刷新，四项回读一致；团本流程、结算和奖励仍需实际验证。',{exact:true}).waitFor();
+    assert.equal(nativeInvocations,1);assert.equal(runtimeRows[0].requestId,refresh.requestId);
     await afterHistory(() => save.click());
     assert.equal(state.anton.anton_member_min, '5');
     const download = page.waitForEvent('download'); await page.getByRole('button', { name: '导出当前配置', exact: true }).click();
@@ -148,7 +174,7 @@ const server = createServer(async (request, response) => {
     await page.screenshot({ path: path.join(output, 'plugin-page.png'), fullPage: true });
     assert.deepEqual(errors, []);
     console.log(JSON.stringify({ passed: true, backend: 'mocked', realServerAccessed: false,
-      scenarios: ['UI failure isolation', 'module selection', 'preview before save', 'request identity', 'stale revision rejection', 'import and export', 'targeted restore', 'available record selection', 'schema diagnosis', 'runtime application guidance'], pageErrors: errors.length }));
+      scenarios: ['UI failure isolation', 'module selection', 'preview before save', 'request identity', 'stale revision rejection', 'import and export', 'targeted restore', 'available record selection', 'schema diagnosis', 'runtime application guidance','runtime lost reply retains original request','per-channel partial acknowledgement','reconcile without repeat submit'], pageErrors: errors.length }));
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));

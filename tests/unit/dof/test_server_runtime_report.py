@@ -41,6 +41,15 @@ class NativeEvidence(unittest.TestCase):
             changed=snapshot(name + '刷新验证', '2,4,6', '01:02:03-04:05:06', 3),
             restored=snapshot(name, '1,2,3,4,5,6,7', '00:00:00-23:59:59', minimum))
             for key, name, minimum in [('anton', '安徒恩', 1), ('luke', '卢克', 2)]]
+        self.runtime = dict(passed=True, filesRestored={'anton':True,'luke':True},actions=[])
+        for raid,name,minimum in [('anton','安徒恩','1'),('luke','卢克','2')]:
+            for phase in ['change','restore']:
+                observed=dict(name=name+'网页刷新验证' if phase=='change' else name,
+                    member_min='3' if phase=='change' else minimum,
+                    open_day='2,4,6' if phase=='change' else '1,2,3,4,5,6,7',
+                    open_time='01:02:03-04:05:06' if phase=='change' else '00:00:00-23:59:59')
+                self.runtime['actions'].append(dict(module=raid,phase=phase,state='APPLIED',observed=observed,
+                    gamePid=10,executorThreadId=11,observedDispatcherThreadId=11,sharedLockExcludedExecution=True,duplicateDidNotInvokeAgain=True))
         self.callback = dict(originalItemCallback='0x85b949c',
             gameItemEntryBytes=[85,137,229,86,83,131,236,32,139,93,16,232,239,44,177,255])
         (self.root / 'game.exit').write_text('0\n')
@@ -67,6 +76,7 @@ class NativeEvidence(unittest.TestCase):
                  'Success', '[Dof runtime observation] ' + json.dumps(dict(
                      modules=self.modules, equipmentBroadcast=self.callback))]
         (self.root / 'game.stdout').write_text('\n'.join(lines))
+        (self.root / 'runtime-apply.json').write_text(json.dumps(self.runtime))
         return report.summarize(self.root)
 
     def test_missing_export_does_not_claim_live_callback_failure_or_full_success(self):
@@ -160,6 +170,26 @@ class NativeEvidence(unittest.TestCase):
         self.assertFalse(report.login_state_initialized('Init Login State Fail\nOther Init Success'))
         self.assertFalse(report.login_state_initialized('Init Login State [Dof test] {"ok":true}\nFail\nOther Success'))
         self.assertTrue(report.login_state_initialized('Init Login State [Dof test] {"ok":true}\nSuccess'))
+
+    def test_script_exception_is_not_hidden_by_successful_native_checks(self):
+        self.summarize()
+        with (self.root/'game.stdout').open('a') as stream:
+            stream.write('\n{"type":"error","description":"bad UTF-8 observer"}')
+        result=report.summarize(self.root)
+        self.assertFalse(result['checks']['diagnosticScriptErrorsAbsent'])
+        self.assertIn('diagnosticScriptErrorsAbsent',result['failures'])
+
+    def test_runtime_boolean_does_not_hide_missing_lock_replay_or_native_values(self):
+        self.assertTrue(self.summarize()['checks']['nativeRuntimeApply'])
+        self.runtime['actions'][0]['sharedLockExcludedExecution']=False
+        self.assertFalse(self.summarize()['checks']['nativeRuntimeApply'])
+        self.runtime['actions'][0]['sharedLockExcludedExecution']=True
+        self.runtime['actions'][0]['observed']['member_min']='1'
+        self.assertFalse(self.summarize()['checks']['nativeRuntimeApply'])
+
+    def test_runtime_requires_both_raids_and_both_restores(self):
+        self.runtime['actions'].pop()
+        self.assertFalse(self.summarize()['checks']['nativeRuntimeApply'])
 
 
 if __name__ == '__main__':

@@ -11,6 +11,11 @@ const selected = computed(() => catalog.value?.modules?.find((m: any) => m.id ==
 const fields = computed(() => (state.value?.fields || []).filter((f: any) => `${f.label} ${f.key}`.includes(filter.value)))
 const labels: Record<string, string> = { PREPARED: '结果待核对', PERSISTED: '文件已保存', NO_CHANGE: '无需修改', NOT_APPLIED: '未写入', RESTORED: '已恢复' }
 const restoreRequests = new Map<string, any>()
+const runtimeHistory = ref<any[]>([]), runtimePreview = ref<any>(null), runtimePending = ref<any>(null)
+const runtimeResult = ref<any>(null), runtimeSubmitted = ref(false)
+const resolveRequests = new Map<string, any>()
+const runtimeLabels: Record<string,string> = { PREVIEWED:'待提交的刷新预览', PUBLISHING:'提交结果待核对', SUBMITTED:'等待频道回执', PARTIAL:'部分频道已返回，继续核对', UNKNOWN:'结果未确认', APPLIED:'各频道已调用刷新，四项回读一致', REJECTED:'各频道已结束，存在拒绝', NOT_CONFIRMED:'已保留当前状态，原结果未确认', KEEP_CURRENT:'已记录保留当前状态的决定', RUNNING:'原生调用已开始', WAITING:'等待回执', BOOT_CHANGED:'频道已重启，原结果未确认' }
+const runtimeUnresolved = (state: string) => ['PUBLISHING','SUBMITTED','PARTIAL','UNKNOWN'].includes(state)
 function uuid() {
   const b = crypto.getRandomValues(new Uint8Array(16)); b[6] = (b[6]! & 15) | 64; b[8] = (b[8]! & 63) | 128
   const h = Array.from(b, x => x.toString(16).padStart(2, '0')).join('')
@@ -28,8 +33,33 @@ async function reload() {
   state.value = s.data; history.value = h.data
   values.value = Object.fromEntries(state.value.fields.filter((f: any) => f.available).map((f: any) => [f.key, f.value]))
   imported.value = undefined; changed()
+  runtimeHistory.value = module.value !== 'plugin' && state.value.application?.runtime ? (await Request.get(`${root}/${module.value}/runtime/history`)).data : []
 }
-function switchModule(id: string) { return run(async () => { module.value = id; state.value = null; result.value = null; changed(); await reload() }) }
+function switchModule(id: string) { return run(async () => { module.value = id; state.value = null; result.value = null; runtimePreview.value=null;runtimePending.value=null;runtimeResult.value=null;runtimeSubmitted.value=false;changed(); await reload() }) }
+function prepareRuntime(row?: any) { return run(async () => {
+  if(runtimeSubmitted.value && runtimePending.value)throw new Error('上次刷新提交结果尚未确认，请先按原操作编号核对')
+  runtimePreview.value=null;runtimePending.value=row ? {requestId:row.requestId,revision:row.revision} : {requestId:uuid(),revision:state.value.revision};runtimeSubmitted.value=false;runtimeResult.value=null
+  runtimePreview.value=(await Request.post(`${root}/${module.value}/runtime/preview`,runtimePending.value)).data
+  runtimeHistory.value=(await Request.get(`${root}/${module.value}/runtime/history`)).data
+}) }
+function submitRuntime() { return run(async()=>{
+  if(!runtimePending.value || !runtimePreview.value)return
+  runtimeSubmitted.value=true
+  runtimeResult.value=(await Request.post(`${root}/${module.value}/runtime`,runtimePending.value)).data
+  runtimeHistory.value=(await Request.get(`${root}/${module.value}/runtime/history`)).data
+}) }
+function checkRuntime(row: any) { return run(async()=>{
+  runtimeResult.value=(await Request.post(`${root}/${module.value}/runtime/${row.requestId}/reconcile`)).data
+  if(runtimePending.value?.requestId===row.requestId && !runtimeUnresolved(runtimeResult.value.state)){runtimePending.value=null;runtimePreview.value=null;runtimeSubmitted.value=false}
+  runtimeHistory.value=(await Request.get(`${root}/${module.value}/runtime/history`)).data
+}) }
+function resolveRuntime(row: any) { return run(async()=>{
+  let request=resolveRequests.get(row.requestId)
+  if(!request || request.taskRevision!==row.taskRevision){request={requestId:uuid(),taskRevision:row.taskRevision,keepCurrent:true};resolveRequests.set(row.requestId,request)}
+  runtimeResult.value=(await Request.post(`${root}/${module.value}/runtime/${row.requestId}/resolve`,request)).data
+  runtimeHistory.value=(await Request.get(`${root}/${module.value}/runtime/history`)).data
+  if(runtimePending.value?.requestId===row.requestId){runtimePending.value=null;runtimePreview.value=null;runtimeSubmitted.value=false}
+}) }
 function prepare() { return run(async () => {
   const patch = Object.fromEntries(state.value.fields.filter((f: any) => f.available && values.value[f.key] !== f.value).map((f: any) => [f.key, values.value[f.key]]))
   if (imported.value === undefined && !Object.keys(patch).length) throw new Error('配置没有变化')
@@ -89,6 +119,7 @@ onMounted(() => run(async () => {
       {{state.application.configuredEnabled ? '部署配置为启用' : '部署配置为停用'}} · {{state.application.dependencyReady ? '部署依赖已配置' : '部署依赖未满足'}} · 游戏运行效果尚未验证。
       {{state.application.instruction}}
       <p v-if="state.application.command">当前 GM 刷新命令：<code>{{state.application.command}}</code></p>
+      <p v-if="state.application.runtime?.reason">网页刷新不可用：{{state.application.runtime.reason}}</p>
     </a-alert>
     <a-space wrap>
       <a-input v-model="filter" placeholder="搜索配置名称或字段" allow-clear />
@@ -122,6 +153,32 @@ onMounted(() => run(async () => {
         </template></a-table-column>
       </template>
     </a-table>
+    <template v-if="module !== 'plugin' && state.application?.runtime">
+      <h3>刷新已保存的团本配置</h3>
+      <p>先保存配置，再预览目标频道并提交原生刷新。回执核对名称、开放星期、开放时间和最少人数；其余配置的业务效果另行验证。</p>
+      <a-space>
+        <a-button :disabled="busy || !state.application.webExecutionSupported" @click="prepareRuntime()">预览原生刷新</a-button>
+        <a-button type="primary" :disabled="busy || !runtimePreview || runtimeSubmitted" @click="submitRuntime">提交本次刷新</a-button>
+        <a-button v-if="runtimeSubmitted && runtimePending" :disabled="busy" @click="checkRuntime(runtimePending)">核对本次刷新</a-button>
+      </a-space>
+      <p v-if="runtimePreview">目标频道：{{runtimePreview.targets.map((v:any)=>v.channel).join('、')}}。本预览两分钟内有效；不包含表单中尚未保存的修改。</p>
+      <p v-if="runtimePending">刷新操作编号：{{runtimePending.requestId}}。提交回复丢失时，请核对原编号。</p>
+      <a-alert v-if="runtimeResult" class="space" :type="runtimeResult.state === 'APPLIED' ? 'success' : 'warning'">{{runtimeLabels[runtimeResult.state] || runtimeResult.state}}；团本流程、结算和奖励仍需实际验证。</a-alert>
+      <a-table class="space" :data="runtimeHistory" row-key="requestId" :pagination="{pageSize:5}">
+        <template #columns>
+          <a-table-column title="时间"><template #cell="{record}">{{record.createdAt ? new Date(record.createdAt).toLocaleString() : ''}}</template></a-table-column>
+          <a-table-column title="操作者" data-index="actor" />
+          <a-table-column title="刷新编号" data-index="requestId" />
+          <a-table-column title="状态"><template #cell="{record}">{{runtimeLabels[record.state] || record.state}}</template></a-table-column>
+          <a-table-column title="频道结果"><template #cell="{record}"><span v-for="row in (record.receipts || record.targets || [])" :key="row.channel">{{row.channel}}：{{runtimeLabels[row.state] || row.state || '待提交'}}；</span></template></a-table-column>
+          <a-table-column title="核对"><template #cell="{record}">
+            <a-button v-if="record.state==='PREVIEWED'" :disabled="busy" @click="prepareRuntime(record)">加载预览</a-button>
+            <a-button v-if="runtimeUnresolved(record.state)" :disabled="busy" @click="checkRuntime(record)">核对频道回执</a-button>
+            <a-popconfirm v-if="runtimeUnresolved(record.state)" content="仅在任务过期且频道已空闲时可关闭待核对任务。保留当前配置，不代表原刷新成功，也不会再次执行原任务。确认？" @ok="resolveRuntime(record)"><a-button :disabled="busy">确认保留当前状态</a-button></a-popconfirm>
+          </template></a-table-column>
+        </template>
+      </a-table>
+    </template>
   </template>
 </template>
 <style scoped>.space { margin-top: 16px }</style>

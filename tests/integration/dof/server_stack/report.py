@@ -88,6 +88,40 @@ def summarize(root):
     random_box = events(log, '[Dof random-box feature] ')
     equipment = events(log, '[Dof equipment feature] ')
     retired = events(log, '[Dof retired native literals] ')
+    script_errors = []
+    for line in log.splitlines():
+        match = re.search(r'\{\s*"type"\s*:\s*"error"', line)
+        if match:
+            try:
+                value, _ = json.JSONDecoder().raw_decode(line[match.start():])
+                script_errors.append(value)
+            except ValueError:
+                script_errors.append({'type': 'error', 'description': 'Truncated diagnostic script error'})
+    runtime_file = root / 'runtime-apply.json'
+    runtime = json.loads(runtime_file.read_text()) if runtime_file.is_file() else {}
+    runtime_actions = runtime.get('actions', [])
+    expected_runtime = {}
+    for raid, name in [('anton', '安徒恩'), ('luke', '卢克')]:
+        for phase in ['change', 'restore']:
+            expected_runtime[(raid, phase)] = dict(
+                name=name + '网页刷新验证' if phase == 'change' else name,
+                member_min='3' if phase == 'change' else '1' if raid == 'anton' else '2',
+                open_day='2,4,6' if phase == 'change' else '1,2,3,4,5,6,7',
+                open_time='01:02:03-04:05:06' if phase == 'change' else '00:00:00-23:59:59')
+    runtime_ok = bool(runtime.get('passed') is True and len(runtime_actions) == 4
+                      and runtime.get('filesRestored') == {'anton': True, 'luke': True})
+    seen_runtime = set()
+    for action in runtime_actions:
+        key = (action.get('module'), action.get('phase'))
+        runtime_ok = runtime_ok and key in expected_runtime and key not in seen_runtime
+        seen_runtime.add(key)
+        runtime_ok = bool(runtime_ok and action.get('observed') == expected_runtime.get(key)
+                          and action.get('state') == 'APPLIED'
+                          and action.get('sharedLockExcludedExecution') is True
+                          and action.get('duplicateDidNotInvokeAgain') is True
+                          and isinstance(action.get('gamePid'), int) and action['gamePid'] > 0
+                          and isinstance(action.get('executorThreadId'), int) and action['executorThreadId'] > 0
+                          and action['executorThreadId'] == action.get('observedDispatcherThreadId'))
     bridge_file = root / 'bridge-live.json'
     bridge = json.loads(bridge_file.read_text()) if bridge_file.exists() else {}
     bridge_trace = '\n'.join(p.read_text(errors='replace') for p in root.glob('bridge.trace.*'))
@@ -116,6 +150,8 @@ def summarize(root):
         p = root / 'runtime' / row['path']
         payload_ok = payload_ok and p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest() == row['sha256']
     checks = {
+        'diagnosticScriptErrorsAbsent': not script_errors,
+        'nativeRuntimeApply': runtime_ok,
         'retiredNativeLiterals': bool(retired and retired[-1].get('passed') and retired[-1].get('count',0)>0
             and all(x.get('cleared') for x in retired[-1].get('results',[]))),
         'equipmentBroadcastDispatch': bool(equipment and equipment[-1].get('passed')
@@ -152,6 +188,8 @@ def summarize(root):
     }
     report = dict(schema=1, serverAccessed=False, releaseReady=False,
                   gameExit=game_exit, checks=checks, raidConfigurations=configs,
+                  diagnosticScriptErrors=script_errors,
+                  nativeRuntimeApply=runtime,
                   raidConfigurationReloads=reloads,
                   randomBox=random_box[-1] if random_box else None,
                   equipmentBroadcast=equipment[-1] if equipment else None,

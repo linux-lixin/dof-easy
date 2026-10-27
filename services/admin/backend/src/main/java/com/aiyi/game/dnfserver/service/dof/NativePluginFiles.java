@@ -130,8 +130,13 @@ public final class NativePluginFiles {
         rows.sort((a,b)->b.createdAt.compareTo(a.createdAt));List<Map<String,Object>> out=new ArrayList<>();
         for(Journal j:rows.subList(0,Math.min(rows.size(),100)))out.add(result(j));return out;
     }
+    void requireSettled(String module)throws IOException {
+        NativePluginConfig.module(module);
+        for(Journal j:journals())if(module.equals(j.module) && "PREPARED".equals(j.state))throw new DofFailure(409,"配置保存结果尚未核对，请先核对操作："+j.requestId);
+    }
     private FileChannel lockChannel()throws IOException {
-        auditRoot();Path path=audit.resolve("worker.lock");links(path);
+        auditRoot();Path path=root.resolve(".admin-operation.lock");links(path);
+        if(Files.exists(path,LinkOption.NOFOLLOW_LINKS) && !Files.isRegularFile(path,LinkOption.NOFOLLOW_LINKS))throw new DofFailure(409,"配置锁不是普通文件");
         return FileChannel.open(path,StandardOpenOption.CREATE,StandardOpenOption.WRITE,LinkOption.NOFOLLOW_LINKS);
     }
     private FileLock lock(FileChannel channel)throws IOException {

@@ -128,8 +128,17 @@ def prepare(conf=Path('/etc/supervisor/conf.d/dof-gateway.conf')):
     mode = os.environ.get('PLUGIN_MODE', 'dp2-frida')
     body = (Path('/data/plugins/frida/frida.js').read_bytes() if mode in ('frida', 'dp2-frida')
             else b'rpc.exports = {init: function () {}};\n')
+    from gateway.admin_runtime import prepare as prepare_admin_runtime
+    try:
+        runtime_input = prepare_admin_runtime(state)
+    except (ValueError, OSError) as error:
+        runtime_input = None
+        detail=str(error) if isinstance(error,ValueError) else 'mailbox/helper I/O unavailable (errno='+str(error.errno)+')'
+        print('[Dof runtime apply] unavailable: '+detail, flush=True)
+    runtime_control = (b'var dofRuntimeApplyInput = ' + json.dumps(runtime_input, ensure_ascii=True).encode() + b';\n'
+                       + (BASE / 'admin_apply.js').read_bytes() + b'\n')
     wrapper = Path('/run/dof-easy/game-adapter.js')
-    wrapper.write_bytes(add_adapter(equipment + b'\n' + body, adapter))
+    wrapper.write_bytes(add_adapter(equipment + b'\n' + runtime_control + body, adapter))
     wrapper.chmod(0o600)
     shutil.copyfile('/opt/dnf/plugins/frida/frida.so', game / 'frida.so')
     import json

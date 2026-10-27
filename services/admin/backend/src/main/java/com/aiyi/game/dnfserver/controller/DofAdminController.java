@@ -17,6 +17,11 @@ public class DofAdminController {
     @GetMapping("plugins/{module}/history") public Object pluginHistory(@PathVariable("module") String module){return plugins.history(module);}
     @PostMapping("plugins/{module}/history/{id}/restore") public Object pluginRestore(@PathVariable("module") String module,@PathVariable("id") String id,@RequestBody NativePluginFiles.Edit edit){return plugins.save(module,edit,id);}
     @PostMapping("plugins/{module}/history/{id}/reconcile") public Object pluginReconcile(@PathVariable("module") String module,@PathVariable("id") String id){return plugins.reconcile(module,id);}
+    @PostMapping("plugins/{module}/runtime/preview") public Object runtimePreview(@PathVariable("module") String module,@RequestBody NativeRuntimeTasks.Edit edit){return plugins.runtimePreview(module,edit);}
+    @PostMapping("plugins/{module}/runtime") public Object runtimeSubmit(@PathVariable("module") String module,@RequestBody NativeRuntimeTasks.Edit edit){return plugins.runtimeSubmit(module,edit);}
+    @GetMapping("plugins/{module}/runtime/history") public Object runtimeHistory(@PathVariable("module") String module){return plugins.runtimeHistory(module);}
+    @PostMapping("plugins/{module}/runtime/{id}/reconcile") public Object runtimeReconcile(@PathVariable("module") String module,@PathVariable("id") String id){return plugins.runtimeReconcile(module,id);}
+    @PostMapping("plugins/{module}/runtime/{id}/resolve") public Object runtimeResolve(@PathVariable("module") String module,@PathVariable("id") String id,@RequestBody NativeRuntimeTasks.Resolve edit){return plugins.runtimeResolve(module,id,edit);}
     @Resource private DofAdminService service;
     @Resource private DofTextService textService;
     @Resource private DofRecordsService recordsService;

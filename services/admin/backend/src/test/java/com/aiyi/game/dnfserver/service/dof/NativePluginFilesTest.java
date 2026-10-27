@@ -61,6 +61,15 @@ public class NativePluginFilesTest {
         for(Map<String,String> patch:Arrays.asList(Collections.singletonMap("anton_open_time","24:00:00-00:00:00"),Collections.singletonMap("anton_open_day","1,1"),Collections.singletonMap("anton_open_day","0,7"),Collections.singletonMap("anton_area_info","17 2 109")))
             rejects(400,()->NativePluginConfig.apply("anton",data,patch));
     }
+    @Test public void nativeStringBuffersAreBoundedByActualFileEncodingAndReserveTerminator()throws Exception {
+        String ascii=String.join("",Collections.nCopies(254,"a"));assertNotNull(NativePluginConfig.apply("anton",fixture(),Collections.singletonMap("anton_name",ascii)));
+        rejects(400,()->NativePluginConfig.apply("anton",fixture(),Collections.singletonMap("anton_name",ascii+"a")));
+        rejects(400,()->NativePluginConfig.apply("anton",fixture(),Collections.singletonMap("anton_name",String.join("",Collections.nCopies(85,"安")))));
+        String c1=String.join("",Collections.nCopies(64,"\u0080"));assertNotNull(NativePluginConfig.apply("anton",fixture(),Collections.singletonMap("anton_name",c1)));
+        byte[] gb=new String(fixture(),StandardCharsets.UTF_8).getBytes(Charset.forName("GB18030"));rejects(400,()->NativePluginConfig.apply("anton",gb,Collections.singletonMap("anton_name",c1)));
+        byte[] day="anton_open_day = 1,2,3\n".getBytes(StandardCharsets.UTF_8);
+        rejects(400,()->NativePluginConfig.apply("anton",day,Collections.singletonMap("anton_open_day","1"+String.join("",Collections.nCopies(300," "))+",2")));
+    }
     @Test public void previewSaveIdempotencyAndTargetedRestore()throws Exception {
         NativePluginFiles.Edit e=edit("anton_member_min","2");assertEquals(false,files.preview("anton",e).get("persisted"));
         assertArrayEquals(fixture(),Files.readAllBytes(root.resolve("anton-raid.ini")));
@@ -102,7 +111,7 @@ public class NativePluginFilesTest {
     }
     @Test public void corruptedJournalAndSymbolicLinksAndConcurrentWriterStopChanges()throws Exception {
         NativePluginFiles.Edit e=edit("anton_member_min","2");files.save("anton",e,1,null);
-        try(FileChannel channel=FileChannel.open(audit.resolve("worker.lock"),StandardOpenOption.WRITE);FileLock held=channel.lock()) {
+        try(FileChannel channel=FileChannel.open(root.resolve(".admin-operation.lock"),StandardOpenOption.WRITE);FileLock held=channel.lock()) {
             rejects(409,()->files.save("anton",edit("anton_member_min","3"),1,null));
         }
         Path record=audit.resolve(e.requestId+".json");Files.write(record,"{}".getBytes(StandardCharsets.UTF_8));rejects(409,()->files.history("anton"));
