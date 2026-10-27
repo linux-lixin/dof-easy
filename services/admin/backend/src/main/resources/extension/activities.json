@@ -2594,65 +2594,70 @@
   },
   {
     "key": "cross-border",
-    "title": "装备跨界",
+    "title": "原生装备跨界规则",
     "table": "cross_border",
     "primaryKey": "code",
     "autoId": false,
     "fields": [
       {
         "name": "code",
-        "label": "code",
+        "label": "跨界装备代码（0 为默认规则）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "专属装备代码优先；未匹配时原生读取代码 0。删除专属规则后可能使用默认规则。"
       },
       {
         "name": "restitution",
-        "label": "restitution",
+        "label": "跨界材料代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "正整数用 / 分隔，最多 5 组；与扣除数量逐项对应，两项均留空表示未配置材料。"
       },
       {
         "name": "Return_quantity",
-        "label": "Return_quantity",
+        "label": "跨界扣除数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "实际扣除数量，正整数用 / 分隔，最多 5 组；与材料持有校验下限分开保存。"
       },
       {
         "name": "announcement",
-        "label": "announcement",
+        "label": "原生保留字段",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
-        "default": 0
+        "readonly": true,
+        "default": 1,
+        "hint": "原字段 announcement；当前读取链没有证实公告语义。现有值原样保留，不作为功能开关。"
       },
       {
         "name": "codenum",
-        "label": "codenum",
+        "label": "材料持有校验下限",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 1,
+        "hint": "原生逐项核对材料持有量的下限，0 表示下限为 0；实际扣除仍使用数量列表，不自动换算。"
       }
     ],
-    "writable": false,
-    "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "writable": true,
+    "deleteAllowed": true,
+    "notice": "维护原生跨界规则；代码 0 为专属装备未匹配时读取的默认规则。材料持有校验下限与实际扣除数量是不同参数，不会自动相互换算。网页不转移玩家装备或扣除材料，也不自动开启跨界；DP2 跨界券保持独立。保留字段只读，原工具默认值/导入导出、组件读取和游戏效果仍待验。"
   },
   {
     "key": "recovery",

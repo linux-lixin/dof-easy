@@ -96,7 +96,7 @@ public class ActivityConfigService {
                         // Unsigned native INT comes back as Long. The existing HTTP
                         // serializer renders Long as text, but these supported rule fields
                         // drive numeric controls and must retain the signed-INT wire type.
-                        if (Arrays.asList("inheritance","recovery").contains(s.key) && value instanceof Number) {
+                        if (Arrays.asList("inheritance","recovery","cross-border").contains(s.key) && value instanceof Number) {
                             long number=((Number)value).longValue();
                             if(number>=0 && number<=Integer.MAX_VALUE)value=(int)number;
                         }
@@ -198,6 +198,7 @@ public class ActivityConfigService {
         }
         if(s.key.equals("inheritance")&&!trustedRestore)NativeInheritanceRules.validate(result,old);
         if(s.key.equals("recovery")&&!trustedRestore)NativeRecoveryRules.validate(result,old);
+        if(s.key.equals("cross-border")&&!trustedRestore)NativeCrossBorderRules.validate(result,old);
         return result;
     }
     private void pair(Map<String,Object> row,String a,String b) {
@@ -210,9 +211,11 @@ public class ActivityConfigService {
         }
     }
     private void guard(Connection c,Section s) throws SQLException {
-        if(Arrays.asList("inheritance","recovery").contains(s.key)){
+        if(Arrays.asList("inheritance","recovery","cross-border").contains(s.key)){
             journal.metadataTransactionGuard(c);
-            if(s.key.equals("inheritance"))NativeInheritanceRules.requireSchema(c);else NativeRecoveryRules.requireSchema(c);
+            if(s.key.equals("inheritance"))NativeInheritanceRules.requireSchema(c);
+            else if(s.key.equals("recovery"))NativeRecoveryRules.requireSchema(c);
+            else NativeCrossBorderRules.requireSchema(c);
             cancelActor(c,admin());
         }
         String sql=null;
@@ -246,7 +249,7 @@ public class ActivityConfigService {
     private void lock(Connection c,Section s)throws SQLException {lock(c,s,false);}
     private void lock(Connection c,Section s,boolean actorLock)throws SQLException {
         String locks=table(s)+" WRITE";
-        if(actorLock || Arrays.asList("inheritance","recovery").contains(s.key))locks+=",`d_taiwan`.`accounts` READ";
+        if(actorLock || Arrays.asList("inheritance","recovery","cross-border").contains(s.key))locks+=",`d_taiwan`.`accounts` READ";
         if(s.key.startsWith("pot-")&&!s.key.equals("pot-switch"))locks+=",dof_native.earthenware_pot_item READ";
         if(s.key.equals("shop"))locks+=",dof_native.new_shop READ,dof_native.timed_task READ";
         if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ";
@@ -356,7 +359,7 @@ public class ActivityConfigService {
     private Long rowId(Section s,Map<String,Object> values) {
         if(s.primaryKey==null)return null;
         Object value=values==null?null:values.get(s.primaryKey);
-        if(value==null || !value.toString().matches(Arrays.asList("charts-rewards","inheritance").contains(s.key)?"(?:0|[1-9][0-9]{0,9})":"[1-9][0-9]{0,9}"))throw new Failure(400,"记录编号无效");
+        if(value==null || !value.toString().matches(Arrays.asList("charts-rewards","inheritance","cross-border").contains(s.key)?"(?:0|[1-9][0-9]{0,9})":"[1-9][0-9]{0,9}"))throw new Failure(400,"记录编号无效");
         long id=Long.parseLong(value.toString());if(id>2147483647L)throw new Failure(400,"记录编号超出范围");return id;
     }
     private Map<String,Object> current(Connection c,Section s,Long id)throws SQLException {
@@ -410,6 +413,7 @@ public class ActivityConfigService {
                 if(change.before==null)throw new Failure(409,"当前配置已被删除，停止恢复");
                 if(s.key.equals("inheritance"))NativeInheritanceRules.restoreGuard(before,after,change.before);
                 if(s.key.equals("recovery"))NativeRecoveryRules.restoreGuard(before,after,change.before);
+                if(s.key.equals("cross-border"))NativeCrossBorderRules.restoreGuard(before,after,change.before);
                 change.after=new LinkedHashMap<>(change.before);
                 for(Field f:s.fields)if(!Objects.equals(String.valueOf(before.get(f.name)),String.valueOf(after.get(f.name)))) {
                     if(!Objects.equals(String.valueOf(change.before.get(f.name)),String.valueOf(after.get(f.name))))throw new Failure(409,"本次涉及的字段已有第三方修改："+f.label);

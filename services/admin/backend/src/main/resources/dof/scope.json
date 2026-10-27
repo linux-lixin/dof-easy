@@ -1956,14 +1956,39 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "跨界装备代码（含0默认规则）、材料代码/数量及独立持有量校验下限；材料最多5组。announcement作为只读保留字段",
+          "nativeLocation": "dof_native.cross_border(code,restitution,Return_quantity,announcement,codenum)",
+          "encoding": "五字段固定顺序；材料VARCHAR255以 / 成对分隔；codenum是每种材料持有量下限，不自动替代Return_quantity",
+          "executor": "现有原生插件执行材料检查、扣除和装备跨界；网页只维护规则。DP2跨界券独立",
+          "activation": "保存不自动开启跨界；重开跨界窗口核对，组件消费与游戏效果独立验收",
+          "output": "规则读取、预览、保存、单条JSON导入导出、原编号核对和定向恢复；原工具全表导入导出、批量清除、默认值及客户端UI仍待验",
+          "failureBehavior": "错误配对、版本冲突、材料/数量/下限第三方修改、未知表序/索引/触发器/FK及撤权拒绝写入；结果不明保留原编号",
+          "evidence": [
+            "docs/validation/admin-cross-border-s28-2026-10-28.json"
+          ],
+          "implementationStatus": "local_rule_editing_verified_deployment_consumer_defaults_and_ui_parity_pending",
+          "managementImplementation": {
+            "state": "local_configuration_implemented",
+            "entry": "/admin/activities",
+            "api": "/api/v1/admin/activities/cross-border",
+            "nativeLocation": "dof_native.cross_border(code,restitution,Return_quantity,announcement,codenum)",
+            "activation": "保存不自动开启跨界；重开跨界窗口核对，组件消费与游戏效果独立验收"
+          },
+          "crossBorderRuleManagement": {
+            "configurationEditingImplemented": true,
+            "defaultCodeZeroSupported": true,
+            "inventoryThresholdAndDeductionQuantitiesSeparate": true,
+            "materialTripleRestoreGuard": true,
+            "announcementReadOnly": true,
+            "nativeAnnouncementSemanticsVerified": false,
+            "originalDefaultValuesVerified": false,
+            "originalImportExportVerified": false,
+            "realDeploymentVerified": false,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false,
+            "localPersistenceAndRecoveryContractVerified": true,
+            "verificationEvidence": "docs/validation/admin-cross-border-s28-2026-10-28.json"
+          }
         }
       ]
     },

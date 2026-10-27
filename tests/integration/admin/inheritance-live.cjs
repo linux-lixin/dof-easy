@@ -26,7 +26,7 @@ async function phase(value){state.phase=value;await fs.writeFile(path.join(outpu
   const rows=async()=>(await api('GET',base)).rows;
   const catalog=await api('GET','/api/v1/admin/dof');assert.equal(catalog.instanceId,'dof-main');assert.equal(catalog.completeReplacement,false);assert.equal(catalog.scope.baselineOperations,239);
   const wallet=await api('GET','/api/v1/recharge/6');assert.equal(wallet.databaseUuid,'899d147e-d0ef-11f1-9ff4-525400542f67');assert.equal(Number(wallet.cera),37);
-  const sections=await api('GET','/api/v1/admin/activities'),section=sections.find(s=>s.key==='inheritance');assert.equal(section.writable,true);assert.equal(sections.find(s=>s.key==='cross-border').writable,false);assert.equal(sections.find(s=>s.key==='recovery').writable,true);
+  const sections=await api('GET','/api/v1/admin/activities'),section=sections.find(s=>s.key==='inheritance');assert.equal(section.writable,true);assert.equal(sections.find(s=>s.key==='cross-border').writable,true);assert.equal(sections.find(s=>s.key==='dragon-robe').writable,false);assert.equal(sections.find(s=>s.key==='recovery').writable,true);
   assert.deepEqual(await rows(),[]);await phase('BOUND_EMPTY_RULE_TABLE');
   const select=async()=>{await page.locator('.arco-select').first().click();await page.locator('.arco-select-option').getByText(section.title,{exact:true}).click();};
   const modal=page.locator('.arco-modal').filter({has:page.getByRole('button',{name:'确认本次预览',exact:true})});

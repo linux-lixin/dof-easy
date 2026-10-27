@@ -1,0 +1,310 @@
+{
+  "stage": "S28",
+  "date": "2026-10-28",
+  "purpose": "native cross-border configuration including distinct material-inventory threshold and material-group restoration",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "realDeploymentVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "liveDeploymentUnchanged": {
+    "stage": "S27",
+    "sourceCommit": "f23c5749d3395c2575c0566c50c1ddc11f8c90dc",
+    "adminImage": "sha256:56974f6c10849304f6da56dac8951da8df6be3255ebc1d45339ccf78a035d807",
+    "adminPort": 18080,
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameStartedAt": "2026-10-27T11:23:40.630436627Z"
+  },
+  "serverAccessThisBatch": "read-only schema/count and container identity checks; no server write or deployment",
+  "sourceEvidence": {
+    "sourceToolSha256": "c109b4484fc1440b5927f85b2cee2587285fdb0b8b61447a29bd803bb5535e89",
+    "historicalTextSHA256": "3d065c8d8cea151a0a1fc39e65ee3b950b27986a9dd69fd79bb2cdb5441209ee",
+    "historicalRdataSHA256": "50a3bde93ff3e94d8f9019066470edddb6d2ec125ab2e10f55f461aa095e2edd",
+    "runtimePluginSHA256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+    "originalWindowsToolStarted": false,
+    "existingHistoricalImageReused": true,
+    "controlsVerifiedDirectly": [
+      {
+        "id": "0x16030d46",
+        "address": "0x172f689",
+        "strings": [
+          "回收_物品代码20",
+          "跨界默认规则:",
+          "如果物品代码填写0 则是全局 装备可跨界",
+          "0的基础上，在添加固定代码，则优先选择固定代码后选择全局！",
+          "扣除道具为跨界所需消耗的道具及数量"
+        ],
+        "recordSha256": "a76952f015f2cb9c603cd53642b8f343f96d754e7f88655beb973841ac4b3c6e"
+      },
+      {
+        "id": "0x16030d02",
+        "address": "0x172f930",
+        "strings": [
+          "装备跨界查看列表",
+          "跨界装备代码",
+          "扣除道具代码",
+          "扣除道具数量"
+        ],
+        "recordSha256": "73c3ad3e618d33683c3381a2a00558f34462a5167c3912d53d41bda934e88083"
+      },
+      {
+        "id": "0x16030d0d",
+        "address": "0x173003e",
+        "strings": [
+          "回收_物品代码21",
+          "最多支持5组  分割用 /"
+        ],
+        "recordSha256": "547eb7f67e708956b79050bc3036457f9b54969a97a8d2961619d2cbaa2ef9fb"
+      },
+      {
+        "id": "0x16030d0e",
+        "address": "0x17300ed",
+        "strings": [
+          "回收_物品代码22",
+          "最多支持5组  分割用 /"
+        ],
+        "recordSha256": "71c276ab5d53cde822967e6b242e80ddb36615e2b45ee73bff7269ad93727d27"
+      }
+    ],
+    "nativeSchemaAddress": "0x2957f4",
+    "nativeSchema": "\n\t\tCREATE TABLE cross_border (\n\t\t\tcode                   INT UNSIGNED NOT NULL , \n\t\t\trestitution         VARCHAR(255) NOT NULL,                 \n\t\t\tReturn_quantity         VARCHAR(255) NOT NULL,        \n\t\t\tannouncement         INT UNSIGNED NOT NULL,        \n\t\t\tcodenum         INT UNSIGNED NOT NULL,        \n\t\t\tPRIMARY KEY (code),\t\t\t\t\t\t\t\t\t\t\t\n\t\t\tUNIQUE (code)                       -- 唯一索引，ID的唯一性\n\t\t) ENGINE=InnoDB DEFAULT CHARSET=utf8;\n\t",
+    "nativeConsumers": {
+      "materialWindow": "0x4a9a0",
+      "executor": "0x83db0",
+      "zeroDefaultQueries": [
+        "0x2787cc",
+        "0x296ad0"
+      ],
+      "materialIdsOrdinal": 1,
+      "deductionQuantitiesOrdinal": 2,
+      "inventoryThresholdOrdinal": 4,
+      "ordinal4Read": "0x84030",
+      "thresholdComparedToEachMaterialInventoryCount": "0x842cf..0x842dd"
+    },
+    "announcementSemantic": "No runtime announcement behavior established; preserved read-only, not advertised as broadcast switch.",
+    "originalSaveStringPool": {
+      "prefix": "insert into qk.cross_border (code,restitution,Return_quantity,announcement,codenum) values ",
+      "adjacentSuffix": "','1','1')",
+      "prefixAddress": "0xb30800",
+      "directTextReferenceEstablished": false,
+      "liveDefaultValuesVerified": false
+    },
+    "newReservedFieldValue": 1,
+    "newInventoryThresholdDefault": 1,
+    "defaultPolicyEvidence": "Static INSERT column list and adjacent 1/1 suffix only; execution-path/default parity remains pending manual tool comparison.",
+    "originalToolEquivalenceVerified": false,
+    "nativeRuntimeConsumptionVerified": false
+  },
+  "implementation": {
+    "operation": "feature-023-02",
+    "configurationTable": "dof_native.cross_border",
+    "fixedOrdinalFields": [
+      "code",
+      "restitution",
+      "Return_quantity",
+      "announcement",
+      "codenum"
+    ],
+    "zeroDefaultSupported": true,
+    "maxMaterialPairs": 5,
+    "inventoryThresholdSeparateFromActualDeduction": true,
+    "materialTripleRestoreConflictGuard": true,
+    "reservedFieldReadOnly": true,
+    "newReservedValue": 1,
+    "newInventoryThresholdDefault": 1,
+    "newDefaultsParity": "static INSERT pool and adjacent 1/1 suffix only; live save path/default equivalence NOT established",
+    "unknownLegacyUneditedMaterialsAndReservedValuesPreserved": true,
+    "knownSchemaIndexesAndSideEffectsRequired": true,
+    "administratorRecheckedUnderAccountReadLock": true,
+    "executor": "existing native plugin only; DP2 voucher remains independent",
+    "newPlayerTransferOrMaterialDebitExecutor": false
+  },
+  "verification": {
+    "standardMaven": {
+      "command": "mvn -Dmaven.test.skip=false test",
+      "log": "/tmp/dof-admin-s28-cross-border-maven-final.log",
+      "passed": true,
+      "total": 481,
+      "passedCases": 198,
+      "skipped": 283,
+      "failures": 0,
+      "errors": 0,
+      "conditionalSkipsCountAsPass": false
+    },
+    "sealedSql": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "managedPostalContractTests": 12,
+      "postalBatchContractTests": 11,
+      "postalReceiptControlContractTests": 7,
+      "postalBatchControlContractTests": 8,
+      "cdkContractTests": 13,
+      "cdkInventoryContractTests": 13,
+      "pointsContractTests": 8,
+      "activityPreviewControlContractTests": 10,
+      "scriptReleaseContractTests": 21,
+      "nativeInheritanceContractTests": 8,
+      "nativeRecoveryContractTests": 8,
+      "nativeCrossBorderContractTests": 8,
+      "totalContractTests": 144,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "sealedEnvironment": {
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "frontend": {
+      "newStandardBuildThisBatch": false,
+      "reusedStandardBuild": "S26 / npm run build / /tmp/dof-admin-s26-frontend.log",
+      "allTrackedFrontendSourcesAndConfigurationByteMatch": true,
+      "catalogServedFromBackend": true
+    },
+    "browser": {
+      "cross-border": {
+        "passed": true,
+        "mockedApis": true,
+        "realDeploymentVerified": false,
+        "originalToolEquivalenceVerified": false,
+        "nativeGameplayVerified": false,
+        "syntheticWrites": 1,
+        "checks": [
+          "production cross-border catalog renders code-zero fallback, five material pairs and separate inventory threshold",
+          "preview freezes both material lists and distinct threshold while retaining the old read-only reserved value",
+          "new dedicated rule has an independent request ID, empty cost pair and read-only reserved value",
+          "unverified dragon-robe rules remain read-only while cross-border retains its own pending preview"
+        ],
+        "pageErrors": 0
+      },
+      "inheritance": {
+        "passed": true,
+        "mockedApis": true,
+        "realDeploymentVerified": false,
+        "originalToolEquivalenceVerified": false,
+        "nativeGameplayVerified": false,
+        "syntheticWrites": 1,
+        "checks": [
+          "real field catalog renders code-zero default, material costs and five-group guidance",
+          "preview freezes exact paired cost text and code zero; one confirmed synthetic write updates the row",
+          "dedicated code creation has an independent request ID and explicit empty cost pair",
+          "unverified dragon-robe rules remain read-only while inheritance retains its own pending preview"
+        ],
+        "pageErrors": 0
+      },
+      "recovery": {
+        "passed": true,
+        "mockedApis": true,
+        "realDeploymentVerified": false,
+        "originalToolEquivalenceVerified": false,
+        "nativeGameplayVerified": false,
+        "syntheticWrites": 1,
+        "checks": [
+          "production catalog renders all seven recovery fields, separate reward/cost summaries and explicit gold-zero guidance",
+          "preview freezes reward pair, gold/material cost pair, broadcast flag and original-item removal count; one confirmed synthetic write updates the row",
+          "new recovery rule has its own request ID and explicit empty reward/extra cost pairs",
+          "unverified dragon-robe rules remain read-only while recovery retains its own pending preview"
+        ],
+        "pageErrors": 0
+      }
+    },
+    "initialMavenBeforeFinalContractClassWasAdded": {
+      "total": 473,
+      "passedCases": 198,
+      "skipped": 275,
+      "supersededByFinal481CaseRun": true
+    },
+    "preparedRealBrowserRunner": {
+      "path": "tests/integration/admin/cross-border-live.cjs",
+      "syntaxChecked": true,
+      "executed": false
+    }
+  },
+  "realServerReadOnlyPreflight": {
+    "columns": [
+      [
+        "code",
+        "int(10) unsigned",
+        "0",
+        "",
+        "NO"
+      ],
+      [
+        "restitution",
+        "varchar(255)",
+        "255",
+        "utf8",
+        "NO"
+      ],
+      [
+        "Return_quantity",
+        "varchar(255)",
+        "255",
+        "utf8",
+        "NO"
+      ],
+      [
+        "announcement",
+        "int(10) unsigned",
+        "0",
+        "",
+        "NO"
+      ],
+      [
+        "codenum",
+        "int(10) unsigned",
+        "0",
+        "",
+        "NO"
+      ]
+    ],
+    "engine": "InnoDB",
+    "indexes": [
+      [
+        "PRIMARY",
+        "code",
+        "0",
+        "1"
+      ],
+      [
+        "code",
+        "code",
+        "0",
+        "1"
+      ]
+    ],
+    "ruleCount": 0,
+    "testCodePresent": 0,
+    "zeroCodeRules": 0,
+    "tableTriggers": 0,
+    "gameGrants": [
+      [
+        "'game'@'172.29.86.0/255.255.255.0'",
+        "dof\\\\_native",
+        "TRIGGER"
+      ],
+      [
+        "'game'@'172.29.86.0/255.255.255.0'",
+        "dnf\\\\_service",
+        "TRIGGER"
+      ]
+    ]
+  },
+  "limitations": [
+    "Not deployed. Test server remains S27 and no live cross-border rule was written.",
+    "Actual native material checks/debit, equipment ownership transfer, failure compensation and game UI remain unverified.",
+    "The reserved announcement column is not advertised as a broadcast switch; its behavior is not established.",
+    "Static string-pool INSERT defaults are a provisional new-rule policy; original save-path and default-value equivalence need manual original-tool comparison.",
+    "Original-tool full-table import/export and bulk clear behavior remain unverified; current editor exposes single-rule JSON and directional operations only.",
+    "Local synthetic SQL and mocked browser APIs do not count as original-tool equivalence, private-sample acceptance or game effects.",
+    "All existing feature operations, independent DP2 vouchers and client UI tasks remain in scope."
+  ]
+}

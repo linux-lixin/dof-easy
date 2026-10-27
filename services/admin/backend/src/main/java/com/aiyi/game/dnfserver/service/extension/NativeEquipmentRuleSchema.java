@@ -10,7 +10,7 @@ final class NativeEquipmentRuleSchema {
         return new ActivityConfigService.Failure(409,"装备规则表结构、索引或副作用未匹配当前原生版本，停止写入");
     }
     static void requireSchema(Connection c,String table,List<String> names,Set<String> integers) throws SQLException {
-        if (!Arrays.asList("inheritance","item_recovery").contains(table)) throw incompatible();
+        if (!Arrays.asList("inheritance","item_recovery","cross_border").contains(table)) throw incompatible();
         int index = 0;
         try (Statement s = c.createStatement(); ResultSet r = s.executeQuery("SELECT COLUMN_NAME,DATA_TYPE,COLUMN_TYPE,CHARACTER_MAXIMUM_LENGTH,CHARACTER_SET_NAME,IS_NULLABLE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME='"+table+"' ORDER BY ORDINAL_POSITION")) {
             while (r.next()) {
