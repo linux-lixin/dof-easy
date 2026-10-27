@@ -32,7 +32,7 @@ public class ActivityConfigService {
     private static final String AUDIT = "`dnf_service`.`EXTENSION_CONFIG_AUDIT`";
 
     public static class Field {
-        public String name, label, type, group;
+        public String name, label, type, group, hint;
         public long min, max;
         public boolean readonly;
         @com.fasterxml.jackson.annotation.JsonProperty("default") public Object initial;
@@ -132,6 +132,9 @@ public class ActivityConfigService {
     private Failure unavailable() { return new Failure(503,"活动数据库暂不可用或权限不足；未自动初始化或覆盖原生表"); }
     // Strict scalar validation: never accept SQL names, nested objects, coercive numbers or unknown fields.
     Map<String,Object> validate(Section s, Map<String,Object> input, Map<String,Object> old, boolean creating) {
+        return validate(s,input,old,creating,false);
+    }
+    private Map<String,Object> validate(Section s, Map<String,Object> input, Map<String,Object> old, boolean creating, boolean trustedRestore) {
         if(input==null) throw new Failure(400,"配置不能为空");
         Set<String> names=s.fields.stream().map(f->f.name).collect(Collectors.toSet());
         if(!names.equals(input.keySet())) throw new Failure(400,"配置字段缺失或包含未知字段，请刷新页面");
@@ -186,6 +189,7 @@ public class ActivityConfigService {
                     throw new Failure(400,"在线奖励时间和累计门槛必须大于零");
             }
         }
+        if(s.key.equals("inheritance")&&!trustedRestore)NativeInheritanceRules.validate(result,old);
         return result;
     }
     private void pair(Map<String,Object> row,String a,String b) {
@@ -198,6 +202,7 @@ public class ActivityConfigService {
         }
     }
     private void guard(Connection c,Section s) throws SQLException {
+        if(s.key.equals("inheritance")){journal.metadataTransactionGuard(c);NativeInheritanceRules.requireSchema(c);cancelActor(c,admin());}
         String sql=null;
         if(s.key.startsWith("pot-") && !s.key.equals("pot-switch"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(item_off_1),0)=0 AND COALESCE(MAX(item_off_2),0)=0 AND COALESCE(MAX(item_off_3),0)=0 FROM dof_native.earthenware_pot_item";
         if(s.key.equals("shop"))sql="SELECT (SELECT COUNT(*) FROM dof_native.new_shop)=1 AND (SELECT COUNT(*) FROM dof_native.new_shop WHERE swoff<>0)=0 AND (SELECT COUNT(*) FROM dof_native.timed_task WHERE task_state=1)=0";
@@ -229,16 +234,28 @@ public class ActivityConfigService {
     private void lock(Connection c,Section s)throws SQLException {lock(c,s,false);}
     private void lock(Connection c,Section s,boolean actorLock)throws SQLException {
         String locks=table(s)+" WRITE";
-        if(actorLock)locks+=",`d_taiwan`.`accounts` READ";
+        if(actorLock || s.key.equals("inheritance"))locks+=",`d_taiwan`.`accounts` READ";
         if(s.key.startsWith("pot-")&&!s.key.equals("pot-switch"))locks+=",dof_native.earthenware_pot_item READ";
         if(s.key.equals("shop"))locks+=",dof_native.new_shop READ,dof_native.timed_task READ";
         if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ";
         if(s.key.equals("collection"))locks+=",dof_native.Collection_box_user_item READ";
         if(legacyExists(c))locks+=","+AUDIT+" READ";
-        journal.lock(c,locks);schema(c,s);
-        try(PreparedStatement p=c.prepareStatement("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME=?")) {
-            p.setString(1,s.table);try(ResultSet r=p.executeQuery()){if(!r.next()||!Arrays.asList("MyISAM","InnoDB").contains(r.getString(1)))throw new Failure(409,"活动表引擎不受支持，停止写入");}
+        try {
+            journal.lock(c,locks);schema(c,s);
+            try(PreparedStatement p=c.prepareStatement("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME=?")) {
+                p.setString(1,s.table);try(ResultSet r=p.executeQuery()){if(!r.next()||!Arrays.asList("MyISAM","InnoDB").contains(r.getString(1)))throw new Failure(409,"活动表引擎不受支持，停止写入");}
+            }
+        }catch(SQLException|RuntimeException failure) {
+            try{unlock(c);}catch(SQLException|RuntimeException cleanup){failure.addSuppressed(cleanup);}
+            throw failure;
         }
+    }
+    private void discard(Connection c,Throwable failure) {
+        try{c.unwrap(Connection.class).close();}
+        catch(SQLException|RuntimeException close){failure.addSuppressed(close);try{c.abort(Runnable::run);}catch(SQLException|RuntimeException abort){failure.addSuppressed(abort);}}
+    }
+    private void unlock(Connection c)throws SQLException {
+        try{journal.unlock(c);}catch(SQLException|RuntimeException failure){discard(c,failure);throw failure;}
     }
     private void noLegacyPending(Connection c,Section s)throws SQLException {
         if(!legacyExists(c))return;
@@ -301,7 +318,7 @@ public class ActivityConfigService {
     public Map<String,Object> legacyCurrent(String key,long id) {
         admin();Section s=section(key);try(Connection c=journal.connection()){lock(c,s);try{
             Map<String,Object> proof=legacyProof(c,s,id);Map<String,Object> out=new LinkedHashMap<>(proof);out.put("revision",journal.hash(proof));out.put("legacyId",Long.toString(id));return out;
-        }finally{journal.unlock(c);}}catch(SQLException e){throw unavailable();}
+        }finally{unlock(c);}}catch(SQLException e){throw unavailable();}
     }
     public Map<String,Object> legacyReview(String key,long id,LegacyEdit edit,boolean commit) {
         long actor=admin();Section s=section(key);legacyEdit(edit);
@@ -314,7 +331,7 @@ public class ActivityConfigService {
             Map<String,Object> proof=legacyProof(c,s,id);if(!journal.hash(proof).equals(edit.revision))throw new Failure(409,"旧日志或当前配置改变，请重新读取并预览");
             if(!commit)return journal.result(journal.preview(c,edit.requestId,actor,legacyNamespace(key),resource(s),Long.toString(id),"legacy-check",null,legacyFingerprint(id,edit),edit.reason,proof,proof));
             e=journal.prepare(c,e,Long.toString(id),proof,proof);return journal.result(journal.finish(c,e,"NO_CHANGE",actor));
-        }finally{journal.unlock(c);}}catch(SQLException e){throw new Failure(503,"核对记录结果未确认；未改写原生配置或旧审计，请保留编号核对");}
+        }finally{unlock(c);}}catch(SQLException e){throw new Failure(503,"核对记录结果未确认；未改写原生配置或旧审计，请保留编号核对");}
     }
     public Map<String,Object> legacyReconcile(String key,long id,String requestId) {
         long actor=admin();Section s=section(key);try(Connection c=journal.connection()){lock(c,s);try {
@@ -322,12 +339,12 @@ public class ActivityConfigService {
             boolean matches=false;
             try{matches=journal.hash(legacyProof(c,s,id)).equals(e.afterHash);}catch(Failure changed){/* This review never writes native data; changed/deleted legacy evidence cannot confirm it. */}
             return journal.result(journal.finish(c,e,matches?"NO_CHANGE":"NOT_APPLIED",actor));
-        }finally{journal.unlock(c);}}catch(SQLException e){throw unavailable();}
+        }finally{unlock(c);}}catch(SQLException e){throw unavailable();}
     }
     private Long rowId(Section s,Map<String,Object> values) {
         if(s.primaryKey==null)return null;
         Object value=values==null?null:values.get(s.primaryKey);
-        if(value==null || !value.toString().matches(s.key.equals("charts-rewards")?"(?:0|[1-9][0-9]{0,9})":"[1-9][0-9]{0,9}"))throw new Failure(400,"记录编号无效");
+        if(value==null || !value.toString().matches(Arrays.asList("charts-rewards","inheritance").contains(s.key)?"(?:0|[1-9][0-9]{0,9})":"[1-9][0-9]{0,9}"))throw new Failure(400,"记录编号无效");
         long id=Long.parseLong(value.toString());if(id>2147483647L)throw new Failure(400,"记录编号超出范围");return id;
     }
     private Map<String,Object> current(Connection c,Section s,Long id)throws SQLException {
@@ -379,12 +396,13 @@ public class ActivityConfigService {
                 change.after=validate(s,before,before,false);
             }else {
                 if(change.before==null)throw new Failure(409,"当前配置已被删除，停止恢复");
+                if(s.key.equals("inheritance"))NativeInheritanceRules.restoreGuard(before,after,change.before);
                 change.after=new LinkedHashMap<>(change.before);
                 for(Field f:s.fields)if(!Objects.equals(String.valueOf(before.get(f.name)),String.valueOf(after.get(f.name)))) {
                     if(!Objects.equals(String.valueOf(change.before.get(f.name)),String.valueOf(after.get(f.name))))throw new Failure(409,"本次涉及的字段已有第三方修改："+f.label);
                     change.after.put(f.name,before.get(f.name));
                 }
-                change.after=validate(s,change.after,change.before,false);
+                change.after=validate(s,change.after,change.before,false,true);
             }
         }else {
             boolean creating=e.revision.equals("new");
@@ -438,7 +456,7 @@ public class ActivityConfigService {
                 Change change=plan(c,s,edit,op,false);
                 ManagedOperationJournal.Entry entry=journal.preview(c,edit.requestId,actor,namespace(key),resource(s),change.id==null?"new":change.id.toString(),op,edit.targetRequestId,fingerprint(edit,op),edit.reason,change.before,change.after);
                 Map<String,Object> out=result(entry,s);out.put("changes",changes(s,change));out.put("persisted",false);return out;
-            }finally{journal.unlock(c);}
+            }finally{unlock(c);}
         }catch(SQLException e){throw unavailable();}
     }
     private void write(Connection c,Section s,Change ch)throws SQLException {
@@ -479,7 +497,7 @@ public class ActivityConfigService {
                 if(op.equals("accept-current"))return result(journal.acknowledge(c,change.source,entry,actor),s);
                 if(journal.hash(change.before).equals(journal.hash(change.after)))return result(journal.finish(c,entry,"NO_CHANGE",actor),s);
                 write(c,s,change);return result(journal.finish(c,entry,"PERSISTED",actor),s);
-            }finally{journal.unlock(c);}
+            }finally{unlock(c);}
         }catch(SQLException e){throw new Failure(503,"活动操作可能尚未写入或结果尚未确认；请保留操作编号并核对历史，不要更换编号重试");}
     }
     public Map<String,Object> reconcile(String key,String id) {
@@ -495,7 +513,7 @@ public class ActivityConfigService {
                     return result(hash.equals(e.afterHash)?journal.acknowledge(c,source,e,actor):journal.finish(c,e,"NOT_APPLIED",actor),s);
                 }
                 return result(journal.finish(c,e,hash.equals(e.afterHash)?(e.beforeHash.equals(e.afterHash)?"NO_CHANGE":"PERSISTED"):hash.equals(e.beforeHash)?"NOT_APPLIED":"CONFLICT",actor),s);
-            }finally{journal.unlock(c);}
+            }finally{unlock(c);}
         }catch(SQLException e){throw unavailable();}
     }
     private Map<String,Object> receiptProof(ManagedOperationJournal.Entry e){
@@ -516,7 +534,7 @@ public class ActivityConfigService {
         }catch(SQLException e){throw unavailable();}
     }
     private void cancelActor(Connection c,long actor)throws SQLException {
-        try(PreparedStatement p=c.prepareStatement("SELECT admin FROM d_taiwan.accounts WHERE UID=?")){p.setLong(1,actor);try(ResultSet r=p.executeQuery()){if(!r.next()||r.getInt(1)==0||r.wasNull()||r.next())throw new Failure(403,"管理员权限已改变，停止取消控制");}}
+        try(PreparedStatement p=c.prepareStatement("SELECT admin FROM d_taiwan.accounts WHERE UID=?")){p.setLong(1,actor);try(ResultSet r=p.executeQuery()){if(!r.next()||r.getInt(1)==0||r.wasNull()||r.next())throw new Failure(403,"管理员权限已改变，停止管理写入");}}
     }
     private Map<String,Object> cancelResult(ManagedOperationJournal.Entry e){Map<String,Object> out=journal.result(e);out.put("revision",e.beforeHash);return out;}
     private String cancelNamespace(String key){return "activity.cancel."+key;}
@@ -545,7 +563,7 @@ public class ActivityConfigService {
                 original=journal.require(c,namespace(key),source);if(!journal.hash(receiptProof(original)).equals(control.beforeHash)){control=journal.finish(c,control,"NOT_APPLIED",actor);c.commit();return cancelResult(control);}
                 journal.cancelPreviewInTransaction(c,original,actor);Map<String,Object> outcome=new TreeMap<>();outcome.put("cancelledRequestId",original.requestId);outcome.put("sourceState","NOT_APPLIED");outcome.put("nativeDataChanged",false);control=journal.finishMetadataTransaction(c,control,outcome,actor);c.commit();return cancelResult(control);
             }catch(SQLException|RuntimeException failure){try{c.rollback();}catch(SQLException rollback){failure.addSuppressed(rollback);discarded=true;try{c.unwrap(Connection.class).close();}catch(SQLException close){failure.addSuppressed(close);c.abort(Runnable::run);}}throw new Failure(503,"取消结果待核对，请保留取消操作编号，不要新建原操作");}
-        }finally{if(!discarded&&!c.isClosed()){journal.unlock(c);if(!c.getAutoCommit())c.setAutoCommit(true);}}}catch(SQLException e){throw unavailable();}
+        }finally{if(!discarded&&!c.isClosed()){unlock(c);if(!c.getAutoCommit())c.setAutoCommit(true);}}}catch(SQLException e){throw unavailable();}
     }
     public List<Map<String,Object>> cancellations(String key,String source){
         admin();Section s=section(key);source=ManagedOperationJournal.id(source);try(Connection c=journal.connection()){
@@ -557,7 +575,7 @@ public class ActivityConfigService {
             journal.metadataTransactionGuard(c);cancelActor(c,actor);ManagedOperationJournal.Entry e=cancellation(c,s,source,id);
             // Source cancellation and completion commit in the same known InnoDB log transaction.
             if(e.state.equals("PREPARED"))e=journal.finish(c,e,"NOT_APPLIED",actor);return cancelResult(e);
-        }finally{journal.unlock(c);}}catch(SQLException e){throw unavailable();}
+        }finally{unlock(c);}}catch(SQLException e){throw unavailable();}
     }
     public Map<String,Object> currentForHistory(String key,String id) {
         admin();Section s=section(key);

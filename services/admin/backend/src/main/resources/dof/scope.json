@@ -1992,14 +1992,25 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "固定四字段的原生继承规则；支持装备代码0默认规则及专属代码，费用代码/数量以 / 成对分隔、最多5组",
+          "nativeLocation": "dof_native.inheritance(code,restitution,Return_quantity,differ_lv)；原生继承材料窗口及执行请求按代码读取，未匹配时读取code=0",
+          "encoding": "VARCHAR原始费用列表；differ_lv为两件装备等级差的绝对值上限；保留未修改的旧文本",
+          "executor": "原生插件执行扣料、属性继承及失败返还；网页仅维护规则。Frida继承券独立",
+          "activation": "保存不自动开启功能；重开继承窗口核对材料，组件读取和游戏效果独立验收",
+          "output": "规则读取、预览、保存、单条JSON导入导出、操作核对和定向恢复；原工具导入导出格式及客户端UI仍待对照",
+          "failureBehavior": "错误列表、版本冲突、费用配对恢复冲突、权限撤销、未知表结构或副作用拒绝写入；结果不明保留原编号",
+          "evidence": [
+            "docs/validation/admin-inheritance-s23-2026-10-28.json"
+          ],
+          "implementationStatus": "local_rule_editing_consumer_and_deployment_pending",
+          "inheritanceRuleManagement": {
+            "configurationEditingImplemented": true,
+            "defaultCodeZeroSupported": true,
+            "originalImportExportVerified": false,
+            "realDeploymentVerified": false,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false
+          }
         }
       ]
     },

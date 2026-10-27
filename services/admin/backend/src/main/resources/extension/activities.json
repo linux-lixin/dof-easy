@@ -2538,55 +2538,59 @@
   },
   {
     "key": "inheritance",
-    "title": "装备继承",
+    "title": "原生装备继承规则",
     "table": "inheritance",
     "primaryKey": "code",
     "autoId": false,
     "fields": [
       {
         "name": "code",
-        "label": "code",
+        "label": "继承装备代码（0 为默认规则）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "填单个装备代码；0 的影响范围为未匹配专属规则的装备。"
       },
       {
         "name": "restitution",
-        "label": "restitution",
+        "label": "扣除道具代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "最多 5 组正整数，以 / 分隔，如 3037/3340；两组列表均留空表示不配置材料。"
       },
       {
         "name": "Return_quantity",
-        "label": "Return_quantity",
+        "label": "扣除道具数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "与道具代码顺序和组数一致，如 10/20。"
       },
       {
         "name": "differ_lv",
-        "label": "differ_lv",
+        "label": "允许装备等级差",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "原生比较两件装备等级差的绝对值；0 表示要求同级。"
       }
     ],
-    "writable": false,
-    "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "writable": true,
+    "deleteAllowed": true,
+    "notice": "维护原生插件的装备继承规则；Frida 继承券仍走原有独立逻辑，不共用此表。扣料、属性转移和失败返还由原生组件执行。代码 0 是专属代码未匹配时读取的默认规则；删除专属规则后可能回退到默认规则。保存后重新打开游戏继承窗口核对材料；实际扣料与继承效果尚待验。不会自动开启继承功能。"
   },
   {
     "key": "cross-border",

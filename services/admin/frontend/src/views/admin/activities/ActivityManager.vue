@@ -2,7 +2,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import Request from '../../../api/Request';
-type Field = { name: string; label: string; type: string; group: string; min: number; max: number; readonly: boolean; default: any };
+type Field = { name: string; label: string; type: string; group: string; min: number; max: number; readonly: boolean; hint?: string; default: any };
 type Section = { key: string; title: string; primaryKey: string | null; autoId: boolean; writable?: boolean; deleteAllowed?: boolean; notice?: string; fields: Field[] };
 type Row = { revision: string; values: Record<string, any> | null };
 type Edit = Row & { requestId: string; operation: 'upsert' | 'delete' | 'restore' | 'accept-current'; targetRequestId?: string; reason?: string };
@@ -52,7 +52,7 @@ async function reconcileLegacy(row: any) {
 const section = computed(() => sections.value.find(s => s.key === active.value));
 const groups = computed(() => [...new Set(section.value?.fields.map(f => f.group) || [])]);
 const fields = (group: string) => section.value?.fields.filter(f => f.group === group) || [];
-const summaries = computed(() => section.value?.fields.filter(f => ['lv','id','box_id','Dname','item_id','name','d_Name','start_time','end_time','end_date','te_date_end','d_on','d_off','item1','item_code1','item2','item_code2','item3','item_code3'].includes(f.name)) || []);
+const summaries = computed(() => section.value?.fields.filter(f => ['code','restitution','Return_quantity','differ_lv','lv','id','box_id','Dname','item_id','name','d_Name','start_time','end_time','end_date','te_date_end','d_on','d_off','item1','item_code1','item2','item_code2','item3','item_code3'].includes(f.name)) || []);
 const endpoint = () => `/api/v1/admin/activities/${active.value}`;
 const labels: Record<string, string> = { PREVIEWED: '仅预览', PREPARED: '结果待核对', PERSISTED: '配置已保存', NOT_APPLIED: '未写入', CONFLICT: '当前值与前后快照均不同', ACKNOWLEDGED: '已确认保留当前值，原结果未知', NO_CHANGE: '无需写入', UNKNOWN:'提交响应不明，保留原编号', SUBMITTING:'正在提交原编号', PREVIEW_UNKNOWN:'预览响应不明，重读原编号', MISSING_PREVIEW:'仅预览请求未找到，未提交原生写入' };
 function uuid() {
@@ -166,7 +166,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <a-card title="活动管理" style="margin: 24px">
+  <a-card title="活动与装备规则管理" style="margin: 24px">
     <a-alert style="margin-bottom: 16px">签到、战令与收集箱沿用配套游戏插件。此处修改活动规则，保留玩家领取和收集进度。活动到期不自动重置玩家记录。</a-alert>
     <a-select v-model="active" @change="load" :disabled="saving || loading" style="width: 360px"><a-option v-for="s in sections" :key="s.key" :value="s.key">{{ s.title }}{{ s.writable === false ? "（只读）" : "" }}</a-option></a-select>
     <a-alert v-if="error" type="error">{{ error }}</a-alert>
@@ -209,7 +209,7 @@ onMounted(async () => {
           <a-collapse-item v-for="group in groups" :key="group" :header="group">
             <a-row :gutter="16">
               <a-col v-for="f in fields(group)" :key="f.name" :span="8">
-                <a-form-item :label="f.label">
+                <a-form-item :label="f.label" :extra="f.hint">
                   <a-input-number v-if="f.type === 'int'" v-model="edit.values[f.name]" :min="f.min" :max="f.max" :precision="0" :disabled="saving || formFrozen || edit.operation !== 'upsert' || section.writable === false || f.readonly || (f.name === section.primaryKey && (section.autoId || edit.revision !== 'new'))" />
                   <a-input v-else v-model="edit.values[f.name]" :max-length="255" :disabled="saving || formFrozen || edit.operation !== 'upsert' || section.writable === false || f.readonly" :placeholder="f.type === 'date' ? 'YYYY-MM-DD' : f.type === 'datetime' ? 'YYYY-MM-DD HH:mm:ss' : ''" />
                 </a-form-item>

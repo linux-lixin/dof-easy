@@ -46,7 +46,7 @@ public class ActivityConfigServiceTest {
         for(ActivityConfigService.Section s:service.catalog()) if(Arrays.asList("signin","battle","rewards","collection","online").contains(s.key)) assertEquals(s.fields.size(),service.validate(s,values(s),null,true).size());
     }
     @Test public void readOnlyNativeModulesRejectWritesBeforeDatabase() {
-        fails(409,()->service.save("inheritance",null,false));verifyZeroInteractions(db);
+        fails(409,()->service.save("dragon-robe",null,false));verifyZeroInteractions(db);
     }
     @Test public void requiresMatchingItemAndCountAndBoundedLevel() {
         ActivityConfigService.Section s=section("rewards");Map<String,Object> v=values(s);
