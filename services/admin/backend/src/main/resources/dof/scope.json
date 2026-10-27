@@ -2000,16 +2000,24 @@
           "output": "规则读取、预览、保存、单条JSON导入导出、操作核对和定向恢复；原工具导入导出格式及客户端UI仍待对照",
           "failureBehavior": "错误列表、版本冲突、费用配对恢复冲突、权限撤销、未知表结构或副作用拒绝写入；结果不明保留原编号",
           "evidence": [
-            "docs/validation/admin-inheritance-s23-2026-10-28.json"
+            "docs/validation/admin-inheritance-s23-2026-10-28.json",
+            "docs/validation/admin-inheritance-s24-initial-2026-10-28.json",
+            "docs/validation/admin-inheritance-s25-2026-10-28.json"
           ],
-          "implementationStatus": "local_rule_editing_consumer_and_deployment_pending",
+          "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_and_ui_parity_pending",
           "inheritanceRuleManagement": {
             "configurationEditingImplemented": true,
             "defaultCodeZeroSupported": true,
             "originalImportExportVerified": false,
-            "realDeploymentVerified": false,
+            "realDeploymentVerified": true,
             "nativeConsumerAcceptanceVerified": false,
-            "nativeGameplayVerified": false
+            "nativeGameplayVerified": false,
+            "configurationPersistenceVerified": true,
+            "configurationRecoveryVerified": true,
+            "unsignedIntegerHttpReadbackVerified": true,
+            "guardedOldImageRollbackVerified": true,
+            "verificationEvidence": "docs/validation/admin-inheritance-s25-2026-10-28.json",
+            "remaining": "原生消费、扣料/继承/返还及客户端UI、原工具默认值和导入导出对照仍待验"
           }
         }
       ]
