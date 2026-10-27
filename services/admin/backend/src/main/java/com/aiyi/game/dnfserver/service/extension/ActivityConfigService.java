@@ -93,6 +93,13 @@ public class ActivityConfigService {
                     Map<String,Object> row=new LinkedHashMap<>();
                     for(Field f:s.fields) {
                         Object value = "int".equals(f.type) ? r.getObject(f.name) : r.getString(f.name);
+                        // Unsigned native INT comes back as Long. The existing HTTP
+                        // serializer renders Long as text, but these supported rule fields
+                        // drive numeric controls and must retain the signed-INT wire type.
+                        if (s.key.equals("inheritance") && value instanceof Number) {
+                            long number=((Number)value).longValue();
+                            if(number>=0 && number<=Integer.MAX_VALUE)value=(int)number;
+                        }
                         // Connector/J 5.1 may append .0 to DATETIME strings; native schema has no fractional seconds.
                         if (value != null && "datetime".equals(f.type)) value = value.toString().replaceFirst("\\.0+$", "");
                         row.put(f.name, value);

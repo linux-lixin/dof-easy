@@ -1,0 +1,46 @@
+{
+  "deployment": {
+    "sourceCommit": "55c3e288c494f1f5bcaee4f2ec011508214f45c0",
+    "adminImage": "sha256:8a614b89048a2dda03d80c154571c59edbfd0678c62f05e0a79a90458b70bae8",
+    "adminTag": "dof-admin-replacement:20261028-s24-candidate",
+    "appSHA256": "7f5f04520de31a7e7bc9ace217e31285c234e5e50daaf9ddd67580750aaadce4",
+    "adminPort": 18080,
+    "adminHttpStatus": 200,
+    "anonymousBackendStatus": 401,
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameNotRecreatedDuringAdminDeployment": true,
+    "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+    "adminPersistentKeysUnchanged": true,
+    "modelOnlyAdminImageChanged": true,
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s24-release/before-admin",
+    "testWalletBefore": 37,
+    "dedicatedTestUid": 6,
+    "acceptancePassed": false
+  },
+  "failure": {
+    "stage": "browser readback after actual create",
+    "actualWireType": "String for unsigned INT code and differ_lv",
+    "expectedWireType": "Integer numeric controls",
+    "browserPid": 197804,
+    "browserProcessExited": true
+  },
+  "recovery": {
+    "originalCreateId": "84311db8-1690-4151-b592-6f115f9ae3c7",
+    "defaultPreviewId": "ac7e6598-bcb2-4b21-9b3b-4174505f4583",
+    "defaultCancelId": "585e0367-316e-49d0-ab0f-03dd59a27a0e",
+    "recoveryId": "91c0a3e5-600b-4982-be25-54ed5e2c5953",
+    "initialEmptyTableRestored": true,
+    "originalCreateState": "PERSISTED",
+    "recoveryState": "PERSISTED"
+  },
+  "completeReplacement": false,
+  "stage": "S24",
+  "date": "2026-10-28",
+  "purpose": "initial real inheritance acceptance exposed unsigned integer wire mismatch; test row recovered",
+  "realDeploymentVerified": true,
+  "fullAcceptancePassed": false,
+  "originalWindowsToolStarted": false,
+  "nativeGameplayVerified": false,
+  "originalToolEquivalenceVerified": false,
+  "followup": "wire normalization in S25; full lifecycle must be rerun after the definitive original-ID recovery"
+}

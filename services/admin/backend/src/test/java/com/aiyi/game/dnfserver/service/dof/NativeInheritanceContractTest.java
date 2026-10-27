@@ -42,6 +42,9 @@ public class NativeInheritanceContractTest {
     }
     private void reject(int status,Runnable action){try{action.run();fail();}catch(ActivityConfigService.Failure e){assertEquals(e.getMessage(),status,e.status);}catch(DofFailure e){assertEquals(e.getMessage(),status,e.status);}}
     @Test public void defaultRulePersistsReplaysAndRestoresOnlyItsChangedLevel() throws Exception {
+        Map<?,?> wire=(Map<?,?>)row().get("values");
+        assertTrue("unsigned code must not become a long-string HTTP value",wire.get("code") instanceof Integer);
+        assertTrue("level difference must drive the numeric form",wire.get("differ_lv") instanceof Integer);
         ActivityConfigService.Edit e=edit();e.values.put("differ_lv",10);
         assertEquals("PREVIEWED",service.preview("inheritance",e).get("state"));
         assertEquals("PERSISTED",service.save("inheritance",e,false).get("state"));
