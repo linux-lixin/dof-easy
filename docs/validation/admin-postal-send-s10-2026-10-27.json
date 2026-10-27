@@ -48,6 +48,10 @@
     {
       "path": "tests/integration/admin/postal-send-page.cjs",
       "sha256": "98ba58afbda5e2958f661552c170503ac106e7679ab386175a1660a595488e72"
+    },
+    {
+      "path": "tests/integration/admin/postal-live.cjs",
+      "sha256": "6cde373e5a81808febcf028164ebc1c26930ba03ec0b7a172aa0d185b55eb7b7"
     }
   ],
   "implementation": {
@@ -156,7 +160,9 @@
       "nativeWritesInMock": 2,
       "submitRequests": 3
     },
-    "realDeploymentVerified": false
+    "realDeploymentVerified": false,
+    "realDeploymentReadAndRefusalVerified": true,
+    "realComposeUiOnRealCharacterVerified": false
   },
   "otherChecks": {
     "inventoryTestsPassed": 4,
@@ -171,12 +177,37 @@
     "allFailureLogsRetained": true
   },
   "deployment": {
-    "performed": false,
-    "lastVerifiedAdminImage": "sha256:56d8afa1341fb76185b84388bc05c9a9df32003fec7de975d252234cc0ebf83e",
-    "hostPort": 18080,
-    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
-    "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
-    "readOnlySshAndContainerCheckPassed": true,
+    "performed": true,
+    "result": {
+      "sourceCommit": "d77928dc561656a24d59802e66edacfcf01116f7",
+      "adminImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee",
+      "adminTag": "dof-admin-replacement:20261027-s10-candidate",
+      "appSHA256": "b5caa1f60fb4de931ea4fe37571be7bcac3678c61a6f882dc54cb6ef264e02b8",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s10-mail/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_READ_VERIFIED_NATIVE_MAIL_PENDING",
+      "sourceCommit": "d77928dc561656a24d59802e66edacfcf01116f7",
+      "adminImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee",
+      "updatedAt": 1793106335.9094086,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "deploymentProcessExited": true,
+      "browserProcessExited": true
+    },
+    "gameHealthy": true,
+    "adminRunning": true,
     "readOnlyDatabaseCheck": {
       "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
       "dedicatedTestUid": 6,
@@ -184,10 +215,12 @@
       "postalEngine": "InnoDB",
       "letterEngine": "InnoDB",
       "databaseChanged": false
-    }
+    },
+    "fullyVerifiedMailIssuance": false,
+    "rollbackImage": "sha256:56d8afa1341fb76185b84388bc05c9a9df32003fec7de975d252234cc0ebf83e"
   },
   "remaining": [
-    "Real bound 86-level deployment and browser verification.",
+    "Real bound 86-level mail compose/preview/commit/history/rebuild verification with a dedicated native character; deployed reads/refusals have passed.",
     "Dedicated real test character, native letter display and actual reward receipt.",
     "Per-target batch job receipts and partial-result recovery.",
     "Native avatar, creature and artifact flags; no ordinary-gear fallback.",
@@ -201,6 +234,29 @@
     "mainClassesMatchStandardBuild": true,
     "mailSchemaMatchesSource": true,
     "privateKeyAndTestClassesExcluded": true,
-    "serverImageBuilt": false
+    "serverImageBuilt": true,
+    "serverImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee"
+  },
+  "businessSourceCommit": "d77928dc561656a24d59802e66edacfcf01116f7",
+  "realBrowser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentReadAndRefusalVerified": true,
+    "actualMailIssued": false,
+    "actualPlayerReceiptVerified": false,
+    "mailComposeUiOnRealCharacterVerified": false,
+    "checks": [
+      "real administrator login and current mail protocol catalog with native gates pending",
+      "anonymous mail management rejected",
+      "legacy unversioned sender rejected before native issuance",
+      "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+      "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+      "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+      "real deployed postal records page loads through actual backend"
+    ],
+    "pageErrors": 0,
+    "targetUid": 6,
+    "dedicatedCharacterCount": 0,
+    "balanceUnchanged": 37
   }
 }
