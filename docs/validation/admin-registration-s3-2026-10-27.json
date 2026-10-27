@@ -6,13 +6,24 @@
   "adminImplementationComplete": false,
   "completeReplacement": false,
   "deployment": {
-    "performed": false,
-    "retainedImage": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+    "performed": true,
     "adminHostPort": 18080,
-    "gameDataWritten": false,
+    "gameDataWritten": true,
     "gameContainerRestarted": false,
-    "schemaMigrationApplied": false,
-    "reason": "Historical registration IP evidence and native registration-card consumption remain unverified; existing deployment retained"
+    "schemaMigrationApplied": true,
+    "reason": "User explicitly authorized direct test-server replacement; only dedicated new test accounts and temporary registration settings were written; settings restored",
+    "deployed": true,
+    "imageId": "sha256:7c812e558d72822e239e8310cca685271e09680c45d42bbbd1687828d1e3048d",
+    "sourceCommit": "29497fdf81420fcb6ff16007226a92a24b446865",
+    "hostPort": 18080,
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s3-registration/before-upgrade",
+    "gameUnchanged": true,
+    "configurationAndKeysUnchanged": true,
+    "existingAccountsUnchanged": true,
+    "managementMigrationApplied": true,
+    "nativeGameEffectsVerified": false,
+    "retainedRollbackImage": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+    "testOnlyAccountWrites": true
   },
   "targetReadOnlyChecks": {
     "hostFingerprintConfirmedByUser": true,
@@ -28,7 +39,8 @@
     },
     "nativeRegistrationCodeGate": false,
     "existingPlayers": 1,
-    "playersWithoutRecordedRegistrationIp": 1
+    "playersWithoutRecordedRegistrationIp": 1,
+    "baselineBeforeDedicatedTestAccounts": true
   },
   "checks": {
     "maven": {
@@ -850,14 +862,138 @@
         ],
         "pageErrors": 0
       }
+    },
+    "imageBuild": {
+      "built": true,
+      "tag": "dof-admin-replacement:20261027-s3-registration",
+      "imageId": "sha256:7c812e558d72822e239e8310cca685271e09680c45d42bbbd1687828d1e3048d",
+      "sourceCommit": "29497fdf81420fcb6ff16007226a92a24b446865",
+      "appSHA256": "5f45fe5314fb4e94a74f9e4be78ec646314de0a95179286c82204afb9415647e",
+      "deployed": false,
+      "adminImplementationComplete": false,
+      "completeReplacement": false,
+      "protectedContainersUnchanged": true,
+      "currentAdminImage": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+      "buildDirectory": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s3-registration/build",
+      "freeBytesAfter": 34098987008
+    },
+    "realDeploymentBrowser": {
+      "passed": true,
+      "backend": "real",
+      "instanceId": "dof-main",
+      "configEdits": false,
+      "actualGameplayVerified": false,
+      "checks": [
+        "real browser administrator login",
+        "anonymous access rejected",
+        "real plugin read and application guidance",
+        "real signin schema and queries",
+        "real read-only record projections: 30/30",
+        "deployed activity adapter and durable journal read",
+        "role adapter sample unavailable: character list empty; no player data initialized",
+        "browser schema diagnosis",
+        "feature ledger uses canonical 71 classes / 239 operations and current management evidence"
+      ],
+      "pageErrors": 0
+    },
+    "realRegistrationBrowser": {
+      "passed": true,
+      "backend": "real deployment after container recreation",
+      "instanceId": "dof-main",
+      "actualGameplayVerified": false,
+      "pageErrors": 0,
+      "checks": [
+        "real administrator login and registration navigation",
+        "persisted registration receipt visible",
+        "original registration policy and gift settings restored",
+        "historical registration IP gap explicitly displayed",
+        "no empty-success fallback"
+      ]
+    },
+    "realRegistration": {
+      "passed": true,
+      "uid": 6,
+      "requestId": "42283359-cae4-41af-8673-09f91238c49f",
+      "nativeWallet": {
+        "uid": 6,
+        "nativeProfileRows": 7,
+        "points": 37,
+        "tokens": 0,
+        "privilegedClientFieldsIgnored": true,
+        "trustedIpUsed": true,
+        "existingAccountsUnchanged": true,
+        "actualGameplayVerified": false
+      },
+      "checks": [
+        "deployed instance authenticated",
+        "managed policy and generation replay",
+        "native test settings persisted",
+        "real image CAPTCHA and seven-table registration",
+        "completed replay without new CAPTCHA",
+        "changed payload rejected",
+        "ordinary player refused GM admin login; anonymous management rejected",
+        "persisted receipt and single configured gift",
+        "used code cannot be revoked",
+        "native settings and own activation policy restored",
+        "real DOF HTTP login credential check; native gateway consumption pending",
+        "managed ban rejects subsequent HTTP login",
+        "managed unban disables own penalty and HTTP login recovers",
+        "directed restore recovers original absence of own penalty",
+        "managed password reset validates old/new credentials",
+        "completed registration replay preserves later password reset",
+        "password reset replay and redacted ordinary history"
+      ],
+      "settingsRestored": true,
+      "nativeGatewayConsumed": false,
+      "actualGameClientVerified": false
+    },
+    "realAdminRecreation": {
+      "recreated": true,
+      "imageId": "sha256:7c812e558d72822e239e8310cca685271e09680c45d42bbbd1687828d1e3048d",
+      "adminContainerId": "18d6977e46b1dcf285783a13f0635ced37319eba167dc08c261f0866019d006b",
+      "gameUnchanged": true,
+      "keysUnchanged": true,
+      "testPointsRetained": 37,
+      "originalRegistrationSettingsRestored": true
+    },
+    "realAccountManagement": {
+      "passed": true,
+      "uid": 6,
+      "ordinaryPenaltyRestoredToOriginalAbsence": true,
+      "dofHttpLoginTested": true,
+      "nativeGatewayLoginVerified": false,
+      "adminPasswordResetTested": true,
+      "oldPasswordNoLongerAuthenticates": true,
+      "registrationReplayDoesNotUndoPasswordChange": true,
+      "noOldPasswordRestoreFeature": true,
+      "newPasswordRetainedAfterRecreation": true
     }
   },
   "remaining": [
     "Native dof_native.regCdkey format, State meaning and actual gateway/launcher consumption",
     "Verified historical registration IP evidence and cross-registration-chain quota compatibility; no login IP backfill",
-    "Dedicated runtime SQL write/lock privileges and controlled real test-account validation",
+    "Runtime SQL writes/locks verified for registration seven tables, owned penalty and player password reset only; other business operations still need independent checks",
     "Native-tool defaults, negative IP-limit semantics and effects comparison",
     "Actual client login, game currency receipt, faults/container reconstruction and multi-grade support",
     "Remaining wp01–wp13 scope; 71 groups and 239 operations retained"
+  ],
+  "sourceImplementationCommit": "29497fdf81420fcb6ff16007226a92a24b446865",
+  "credentialHandling": {
+    "plaintextPasswordsInReport": false,
+    "playerPlaintextLongTermSavePerformed": false,
+    "optionalPlayerPasswordExportRejectedByAutoReview": true,
+    "safeAlternative": "Keep only the normal native password hash; use admin reset for future testing; remove local temporary secrets after checks"
+  },
+  "testAccounts": [
+    {
+      "uid": 5,
+      "account": "codex_s3_admin_20261027",
+      "purpose": "dedicated acceptance administrator"
+    },
+    {
+      "uid": 6,
+      "account": "codex_s3_player_20261027",
+      "purpose": "dedicated registration/login/penalty/password acceptance player"
+    }
   ]
 }

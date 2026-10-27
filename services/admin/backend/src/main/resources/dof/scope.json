@@ -404,15 +404,20 @@
           "evidence": [
             "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedBanContractTest.java",
             "tests/integration/admin/activity-page.cjs",
-            "docs/validation/admin-management-s2-2026-10-27.json"
+            "docs/validation/admin-management-s2-2026-10-27.json",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
           ],
           "validation": {
             "nativeComparison": "pending",
-            "webPersistence": "passed_synthetic_real_backend",
-            "componentConsumption": "web_login_verified_synthetic; native_game_pending",
-            "actualEffect": "native_game_pending",
-            "failureRecovery": "passed_synthetic_mysql56",
-            "restartRetention": "passed_backend_process; container_pending"
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          },
+          "managementImplementation": {
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
           }
         },
         {
@@ -431,15 +436,20 @@
           "evidence": [
             "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedBanContractTest.java",
             "tests/integration/admin/activity-page.cjs",
-            "docs/validation/admin-management-s2-2026-10-27.json"
+            "docs/validation/admin-management-s2-2026-10-27.json",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
           ],
           "validation": {
             "nativeComparison": "pending",
-            "webPersistence": "passed_synthetic_real_backend",
-            "componentConsumption": "web_login_verified_synthetic; native_game_pending",
-            "actualEffect": "native_game_pending",
-            "failureRecovery": "passed_synthetic_mysql56",
-            "restartRetention": "passed_backend_process; container_pending"
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          },
+          "managementImplementation": {
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
           }
         },
         {
@@ -493,7 +503,8 @@
           "failureBehavior": null,
           "evidence": [
             "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedPasswordContractTest.java",
-            "docs/validation/admin-management-s2-2026-10-27.json"
+            "docs/validation/admin-management-s2-2026-10-27.json",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
           ],
           "implementationSubsets": [
             {
@@ -504,7 +515,17 @@
           ],
           "managementImplementation": {
             "state": "management_protocol_implemented_effect_pending",
-            "description": "管理员重置普通玩家密码已接通；玩家自助保留旧密码+一次性验证码；原生入口/原工具对照仍待验，不将管理员重置替代游戏内改密。"
+            "description": "管理员重置普通玩家密码已接通；玩家自助保留旧密码+一次性验证码；原生入口/原工具对照仍待验，不将管理员重置替代游戏内改密。",
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
           }
         },
         {
@@ -532,7 +553,7 @@
             }
           ],
           "managementImplementation": {
-            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
             "api": "/api/v1/admin/registration",
             "entry": "/admin/extension-operations → 注册激活码",
             "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
@@ -540,15 +561,17 @@
             "blockers": [
               "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
               "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
-            ]
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
           },
           "validation": {
             "nativeComparison": "pending",
-            "webPersistence": "passed_synthetic_real_backend",
-            "componentConsumption": "pending",
-            "actualEffect": "pending",
-            "failureRecovery": "passed_synthetic_mysql56",
-            "restartRetention": "passed_synthetic_backend_restart"
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
           }
         },
         {
@@ -569,7 +592,7 @@
             "docs/validation/admin-registration-s3-2026-10-27.json"
           ],
           "managementImplementation": {
-            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
             "api": "/api/v1/admin/registration",
             "entry": "/admin/extension-operations → 注册激活码",
             "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
@@ -577,15 +600,17 @@
             "blockers": [
               "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
               "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
-            ]
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
           },
           "validation": {
             "nativeComparison": "pending",
-            "webPersistence": "passed_synthetic_real_backend",
-            "componentConsumption": "pending",
-            "actualEffect": "pending",
-            "failureRecovery": "passed_synthetic_mysql56",
-            "restartRetention": "passed_synthetic_backend_restart"
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
           }
         },
         {
@@ -608,7 +633,7 @@
           "implementationStatus": "native_mapping_and_myisam_contract_tested_effect_pending",
           "apiModule": "registration",
           "managementImplementation": {
-            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
             "api": "/api/v1/admin/registration",
             "entry": "/admin/extension-operations → 注册激活码",
             "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
@@ -616,15 +641,17 @@
             "blockers": [
               "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
               "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
-            ]
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
           },
           "validation": {
             "nativeComparison": "pending",
-            "webPersistence": "passed_synthetic_real_backend",
-            "componentConsumption": "pending",
-            "actualEffect": "pending",
-            "failureRecovery": "passed_synthetic_mysql56",
-            "restartRetention": "passed_synthetic_backend_restart"
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
           }
         },
         {
@@ -647,7 +674,7 @@
           "implementationStatus": "native_mapping_and_myisam_contract_tested_effect_pending",
           "apiModule": "registration",
           "managementImplementation": {
-            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
             "api": "/api/v1/admin/registration",
             "entry": "/admin/extension-operations → 注册激活码",
             "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
@@ -655,15 +682,17 @@
             "blockers": [
               "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
               "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
-            ]
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
           },
           "validation": {
             "nativeComparison": "pending",
-            "webPersistence": "passed_synthetic_real_backend",
-            "componentConsumption": "pending",
-            "actualEffect": "pending",
-            "failureRecovery": "passed_synthetic_mysql56",
-            "restartRetention": "passed_synthetic_backend_restart"
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
           }
         }
       ]
