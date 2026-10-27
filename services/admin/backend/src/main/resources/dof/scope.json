@@ -446,11 +446,24 @@
         "report": "docs/validation/admin-postal-batch-s11-2026-10-27.json",
         "remaining": [
           "真实目标批量执行/重建/领取",
-          "终止与跨管理员接管审计",
+          "终止与跨管理员接管的真实任务及故障验证",
           "原角色删除后的未知结果处理已接入本地回执流程，真实删角/组件效果待验",
           "原工具行为与批量上限对照"
         ],
-        "requiresChildRequestId": true
+        "requiresChildRequestId": true,
+        "taskControls": {
+          "protocol": "postal-batch-control-v1",
+          "codeImplemented": true,
+          "localContractVerified": true,
+          "realDeploymentVerified": false,
+          "actualPlayerReceiptVerified": false,
+          "permanentCancellation": "unsubmitted previews in original task only",
+          "crossAdminTakeover": "new linked task with selected confirmed unsubmitted targets",
+          "originalActorPreserved": true,
+          "retryLineageClaimGuard": true,
+          "metadataTransactionAtomic": true,
+          "report": "docs/validation/admin-postal-batch-control-s13-2026-10-27.json"
+        }
       },
       "receiptControl": {
         "codeImplemented": true,

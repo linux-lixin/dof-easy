@@ -3,17 +3,19 @@ import {computed,reactive,ref,watch} from 'vue'
 import Request from '../api/Request'
 import ItemPicker from './ItemPicker.vue'
 import ManagedPostal from './ManagedPostal.vue'
+import PostalBatchControl from './PostalBatchControl.vue'
 const props=defineProps<{visible:boolean;recipients:number[]}>()
 const emit=defineEmits<{(e:'update:visible',value:boolean):void}>()
 const busy=ref(false),running=ref(false),unknown=ref(false),error=ref(''),ids=ref<number[]>([]),history=ref<any[]>([]),historyLoaded=ref(false)
 const frozen=ref<any>(null),task=ref<any>(null),item=ref<any>(null),reason=ref(''),retryOf=ref<string>(),inspect=ref<number>()
 const mail=reactive({quantity:1,gold:0,message:'',upgrade:0,seperateUpgrade:0,amplifyOption:0,amplifyValue:0,sealFlag:false})
+const controlVisible=ref(false),controlOperation=ref('cancel-pending'),retryTargets=ref<number[]>([])
 const root='api/v1/postal/batch'
 const editable=computed(()=>!busy.value&&!frozen.value&&historyLoaded.value)
 const failure=(e:any)=>e.response?.data?.message||e.message||'任务结果无法确认，请读取原编号，不要新建任务重发'
 function uuid(){const b=crypto.getRandomValues(new Uint8Array(16));b[6]=(b[6]!&15)|64;b[8]=(b[8]!&63)|128;const s=Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');return `${s.slice(0,8)}-${s.slice(8,12)}-${s.slice(12,16)}-${s.slice(16,20)}-${s.slice(20)}`}
 function reset(){frozen.value=null;task.value=null;unknown.value=false;item.value=null;reason.value='';retryOf.value=undefined;ids.value=[...props.recipients];Object.assign(mail,{quantity:1,gold:0,message:'',upgrade:0,seperateUpgrade:0,amplifyOption:0,amplifyValue:0,sealFlag:false})}
-function restore(data:any){task.value=data;frozen.value={...data.draft,requestId:data.requestId,revision:data.revision};ids.value=[...data.draft.recipients];reason.value=data.draft.reason;retryOf.value=data.draft.retryOf||undefined;Object.assign(mail,data.draft.mail);mail.quantity=data.draft.mail.itemId?data.draft.mail.quantity:1;item.value=data.draft.mail.itemId?{id:data.draft.mail.itemId,name:data.mailPlan.attachment?.name||String(data.draft.mail.itemId)}:null;unknown.value=false}
+function restore(data:any){retryTargets.value=data.targets.filter((r:any)=>r.state==='NOT_APPLIED').map((r:any)=>Number(r.recipient));task.value=data;frozen.value={...data.draft,requestId:data.requestId,revision:data.revision};ids.value=[...data.draft.recipients];reason.value=data.draft.reason;retryOf.value=data.draft.retryOf||undefined;Object.assign(mail,data.draft.mail);mail.quantity=data.draft.mail.itemId?data.draft.mail.quantity:1;item.value=data.draft.mail.itemId?{id:data.draft.mail.itemId,name:data.mailPlan.attachment?.name||String(data.draft.mail.itemId)}:null;unknown.value=false}
 async function reloadHistory(){try{history.value=(await Request.get(root+'/history')).data;historyLoaded.value=true}catch(e){history.value=[];historyLoaded.value=false;throw e}}
 async function refresh(){if(busy.value)return;busy.value=true;error.value='';try{if(frozen.value)restore((await Request.get(`${root}/${frozen.value.requestId}`)).data);await reloadHistory()}catch(e:any){error.value=failure(e)}finally{busy.value=false}}
 watch(()=>props.visible,async value=>{if(value){reset();history.value=[];historyLoaded.value=false;await refresh()}else running.value=false},{immediate:true})
@@ -44,13 +46,14 @@ async function reconcile(){
   try{restore((await Request.post(`${root}/${frozen.value.requestId}/reconcile`,link())).data);await reloadHistory()}catch(e:any){error.value=failure(e)}finally{busy.value=false}
 }
 async function load(row:any){if(busy.value)return;busy.value=true;error.value='';try{restore((await Request.get(`${root}/${row.requestId}`)).data)}catch(e:any){error.value=failure(e)}finally{busy.value=false}}
+function selectRetry(recipient:number,checked:boolean|(string|number|boolean)[]){retryTargets.value=retryTargets.value.filter(id=>id!==recipient);if(checked===true)retryTargets.value.push(recipient)}
 function beginRetry(){
   if(busy.value||unknown.value||!task.value)return
-  const failed=task.value.targets.filter((r:any)=>r.state==='NOT_APPLIED').map((r:any)=>Number(r.recipient));if(!failed.length)return
+  const failed=task.value.targets.filter((r:any)=>r.state==='NOT_APPLIED'&&retryTargets.value.includes(Number(r.recipient))).map((r:any)=>Number(r.recipient));if(!failed.length)return
   const source=task.value,body=source.draft.mail,attachment=source.mailPlan.attachment;reset();ids.value=failed;retryOf.value=source.requestId;Object.assign(mail,body);item.value=body.itemId?{id:body.itemId,name:attachment?.name||String(body.itemId)}:null
 }
 function newDraft(){if(!busy.value&&!unknown.value)reset()}
-function close(){running.value=false;emit('update:visible',false)}
+function close(){running.value=false;controlVisible.value=false;emit('update:visible',false)}
 function label(state:string){return ({PREVIEWED:'仅预览',PREPARED:'写入待核对',PERSISTED:'已写入，领取未验证',NOT_APPLIED:'确认未提交',CONFLICT:'结果未知，需核对',ACKNOWLEDGED:'已人工保留，原结果未知'} as Record<string,string>)[state]||state}
 function phase(state:string){return ({PREVIEWED:'仅预览，尚未开始',READY_FOR_NEXT:'可继续剩余目标',NEEDS_RECONCILIATION:'子结果待核对，已停止后续发放',ALL_RESULTS_RECORDED:'目标回执齐全，待保存汇总',COMPLETED:'全部目标已写入，领取仍待验证',COMPLETED_WITH_FAILURES:'任务结束，存在确认未提交目标',COMPLETED_WITH_UNCERTAINTY:'任务结束，存在人工保留的未知结果'} as Record<string,string>)[state]||state}
 </script>
@@ -83,18 +86,25 @@ function phase(state:string){return ({PREVIEWED:'仅预览，尚未开始',READY
         <a-button type="primary" :disabled="busy||unknown||task?.state!=='PREVIEWED'" @click="run(true)">开始批量任务</a-button>
         <a-button :disabled="busy||unknown||!['READY_FOR_NEXT','ALL_RESULTS_RECORDED'].includes(task?.phase)" @click="run()">继续已确认的剩余目标</a-button>
         <a-button :disabled="busy||!frozen" @click="reconcile">核对批量结果</a-button>
-        <a-button :disabled="busy||unknown||!task?.targets?.some((r:any)=>r.state==='NOT_APPLIED')" @click="beginRetry">仅重试确认未提交目标</a-button>
+        <a-button :disabled="busy||unknown||!retryTargets.length" @click="beginRetry">仅重试确认未提交目标</a-button>
+      </a-space>
+      <a-space v-if="task?.controlRevision" wrap>
+        <a-button :disabled="busy||!task.targets.some((r:any)=>r.state==='PREVIEWED')" @click="controlOperation='cancel-pending';controlVisible=true">永久终止未提交目标</a-button>
+        <a-button :disabled="busy||task.phase!=='ALL_RESULTS_RECORDED'" @click="controlOperation='finalize';controlVisible=true">由当前管理员保存汇总</a-button>
+        <a-button :disabled="busy" @click="controlVisible=true">任务控制历史</a-button>
+        <span>跨管理员接管：终止未提交部分，再勾选目标创建新关联预览；未决项可逐条核对，最后由当前管理员保存汇总。</span>
       </a-space>
       <a-alert v-if="frozen" :type="unknown?'warning':'info'">任务编号 {{frozen.requestId}} · {{unknown?'响应不明，请读取原任务或核对':phase(task?.phase)}}<template v-if="task"><br />回执进度 {{task.progress.terminal}} / {{task.progress.total}}；已写入 {{task.progress.sent}}；未提交 {{task.progress.notApplied}}；未知 {{task.progress.unknown}}；待核对 {{task.progress.pending}}</template></a-alert>
       <pre v-if="task?.state==='PREVIEWED'" style="white-space:pre-wrap;overflow-wrap:anywhere">{{JSON.stringify(task.mailPlan,null,2)}}</pre>
       <a-table v-if="task" :data="task.targets" :pagination="false" row-key="requestId" :scroll="{x:1100}">
         <template #columns>
+          <a-table-column title="关联重试"><template #cell="{record}"><a-checkbox v-if="record.state==='NOT_APPLIED'" :model-value="retryTargets.includes(Number(record.recipient))" :disabled="busy" @change="checked=>selectRetry(Number(record.recipient),checked)">选择</a-checkbox></template></a-table-column>
           <a-table-column title="收件角色" data-index="recipient" />
           <a-table-column title="子操作编号" data-index="requestId" :width="310" />
           <a-table-column title="状态" :width="220"><template #cell="{record}">{{label(record.state)}}</template></a-table-column>
           <a-table-column title="邮件编号" data-index="postalId" />
           <a-table-column title="错误"><template #cell="{record}">{{record.error?.message}}</template></a-table-column>
-          <a-table-column title="人工核对"><template #cell="{record}"><a-button v-if="record.state==='CONFLICT'" :disabled="busy" size="mini" @click="inspect=Number(record.recipient)">打开角色核对</a-button></template></a-table-column>
+          <a-table-column title="人工核对"><template #cell="{record}"><a-button v-if="['PREPARED','CONFLICT'].includes(record.state)" :disabled="busy" size="mini" @click="inspect=Number(record.recipient)">打开角色核对</a-button></template></a-table-column>
         </template>
       </a-table>
       <a-divider>持久化批量历史</a-divider>
@@ -107,6 +117,7 @@ function phase(state:string){return ({PREVIEWED:'仅预览，尚未开始',READY
         <a-table-column title="查看"><template #cell="{record}"><a-button :disabled="busy" size="mini" @click="load(record)">读取原任务</a-button></template></a-table-column>
       </template></a-table>
     </a-space>
+    <PostalBatchControl v-model:visible="controlVisible" :source="task" :operation="controlOperation" @changed="refresh" />
     <ManagedPostal v-if="inspect" :visible="true" :charac-no="inspect" :name="`角色 ${inspect}`" @update:visible="inspect=undefined;refresh()" />
   </a-modal>
 </template>

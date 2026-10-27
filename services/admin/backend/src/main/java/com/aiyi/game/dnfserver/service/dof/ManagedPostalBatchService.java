@@ -18,6 +18,8 @@ public class ManagedPostalBatchService {
     public static class Draft {public JsonNode recipients,mail;public String reason,retryOf;}
     public static class Edit extends Draft {public String requestId,revision;}
     public static class Link {public String requestId,revision,childRequestId;}
+    public static class Control {public String requestId,revision,operation,reason;}
+    private static final String CONTROLS="postal.batch.control";
     private static DofFailure corrupt(){return new DofFailure(409,"批量邮件任务结构或子回执不一致，停止执行，请保留原编号核对");}
     private DofFailure unavailable(){return new DofFailure(503,"批量任务结果尚未确认，请读取原任务；不要新建任务重复发放");}
     private static Map<String,Object> map(Object v){if(!(v instanceof Map))throw corrupt();return (Map<String,Object>)v;}
@@ -63,7 +65,30 @@ public class ManagedPostalBatchService {
             if(!childId(parent.requestId,id).equals(ManagedOperationJournal.id(edit.requestId))||!Objects.equals(child.get("fingerprint"),fingerprint))throw corrupt();return;
         }}throw corrupt();
     }
-    private Map<String,Object> snapshot(Connection c,Map<String,Object> draft)throws SQLException{
+    private String origin(Connection c,ManagedOperationJournal.Entry root,long recipient)throws SQLException{
+        Set<String> visited=new HashSet<>();
+        while(true){
+            if(!visited.add(root.requestId)||visited.size()>64)throw corrupt();
+            child(root,recipient);
+            if(root.targetRequest==null)return childId(root.requestId,recipient);
+            root=parent(c,root.targetRequest);
+        }
+    }
+    private void unclaimedRetry(Connection c,ManagedOperationJournal.Entry source,long recipient,String ownRoot)throws SQLException{
+        String origin=origin(c,source,recipient);List<String> candidates=new ArrayList<>();
+        // Check the entire lineage, including sibling retries and reservations.
+        // A consumed native row or a new generation cannot release a successful claim.
+        try(PreparedStatement p=c.prepareStatement("SELECT request_id FROM "+ManagedOperationJournal.TABLE+" WHERE instance_id=? AND resource_key=? AND operation_name='send' AND target_request IS NOT NULL AND state<>'NOT_APPLIED'")){
+            p.setString(1,journal.instance());p.setString(2,"taiwan_cain_2nd.postal:"+recipient);try(ResultSet r=p.executeQuery()){while(r.next())candidates.add(r.getString(1));}
+        }
+        for(String request:candidates){ManagedOperationJournal.Entry candidate=journal.require(c,"postal."+recipient,request);
+            if(Objects.equals(candidate.targetRequest,ownRoot))continue;
+            ManagedOperationJournal.Entry root=parent(c,candidate.targetRequest);leaf(c,root,child(root,recipient));
+            if(origin.equals(origin(c,root,recipient)))throw new DofFailure(409,"该原目标已有保留、成功或未知的关联任务，请读取原任务，不能新建重复发放");
+        }
+    }
+    private Map<String,Object> snapshot(Connection c,Map<String,Object> draft)throws SQLException{return snapshot(c,draft,null);}
+    private Map<String,Object> snapshot(Connection c,Map<String,Object> draft,String ownRoot)throws SQLException{
         Map<String,Object> descriptor=postal.descriptor(c),out=new TreeMap<>(),states=new TreeMap<>();
         for(Object x:list(draft.get("recipients"))){long id=number(x);journal.noPending(c,"taiwan_cain_2nd.postal:"+id,null);states.put(Long.toString(id),postal.before(c,id,descriptor));}
         Map<String,Object> mailPlan=postal.frozenSendPlan(map(draft.get("mail")));String retry=(String)draft.get("retryOf");Map<String,Object> retries=new TreeMap<>();
@@ -72,6 +97,7 @@ public class ManagedPostalBatchService {
             if(!journal.hash(oldPlan.get("mailPlan")).equals(journal.hash(mailPlan)))throw new DofFailure(409,"重试内容或PVF批次与原任务不一致，请勿以重试切换配套");
             for(Object x:list(draft.get("recipients"))){long id=number(x);Map<String,Object> item=child(source,id);ManagedOperationJournal.Entry old=leaf(c,source,item);
                 if(!old.state.equals("NOT_APPLIED"))throw new DofFailure(409,"只能重试已确认未提交的目标，不能重发成功或结果未知的邮件");
+                unclaimedRetry(c,source,id,ownRoot);
                 Map<String,Object> a=new TreeMap<>(decode(old.beforeJson)),b=new TreeMap<>(map(states.get(Long.toString(id))));a.remove("generation");b.remove("generation");
                 if(!journal.hash(a).equals(journal.hash(b)))throw new DofFailure(409,"原失败目标的角色身份或结构已改变，停止关联重试");retries.put(Long.toString(id),old.requestId);
             }
@@ -120,7 +146,7 @@ public class ManagedPostalBatchService {
         long actor=journal.admin();Map<String,Object> d=draft(edit);String id=ManagedOperationJournal.id(edit.requestId);revision(edit.revision);
         try(Connection c=journal.connection()){postal.lock(c);try{
             postal.actor(c,actor);ManagedOperationJournal.Entry root=parent(c,id);journal.same(root,NAMESPACE,actor,fingerprint(edit,d));if(!root.state.equals("PREVIEWED"))return detail(c,root);
-            Map<String,Object> state=snapshot(c,d);if(!journal.hash(state).equals(root.beforeHash)||!journal.hash(state).equals(edit.revision))throw new DofFailure(409,"批量预览已经过期，尚未开始发放");
+            Map<String,Object> state=snapshot(c,d,id);if(!journal.hash(state).equals(root.beforeHash)||!journal.hash(state).equals(edit.revision))throw new DofFailure(409,"批量预览已经过期，尚未开始发放");
             for(Object v:list(unwrap(decode(root.afterJson)).get("children")))if(!leaf(c,root,map(v)).state.equals("PREVIEWED"))throw corrupt();
             root=journal.prepare(c,root,id,decode(root.beforeJson),decode(root.afterJson));return detail(c,root);
         }finally{postal.unlock(c);}}catch(SQLException e){throw unavailable();}
@@ -141,7 +167,7 @@ public class ManagedPostalBatchService {
         else if(root.state.equals("PREPARED"))phase=(int)counts.get("pending")>0?"NEEDS_RECONCILIATION":(int)counts.get("ready")>0?"READY_FOR_NEXT":"ALL_RESULTS_RECORDED";
         else if(root.state.equals("PERSISTED")){if((int)counts.get("terminal")!=rows.size())throw corrupt();phase=(boolean)counts.get("allSent")?"COMPLETED":(int)counts.get("unknown")>0?"COMPLETED_WITH_UNCERTAINTY":"COMPLETED_WITH_FAILURES";}
         else throw corrupt();
-        out.put("revision",root.beforeHash);out.put("phase",phase);out.put("progress",counts);out.put("targets",rows);out.put("draft",plan.get("draft"));out.put("mailPlan",plan.get("mailPlan"));out.put("retryOf",root.targetRequest);out.put("actualPlayerReceiptVerified",false);return out;
+        out.put("revision",root.beforeHash);out.put("controlRevision",journal.hash(controlSnapshot(c,root)));out.put("phase",phase);out.put("progress",counts);out.put("targets",rows);out.put("draft",plan.get("draft"));out.put("mailPlan",plan.get("mailPlan"));out.put("retryOf",root.targetRequest);out.put("actualPlayerReceiptVerified",false);return out;
     }
     private Map<String,Object> finishIfTerminal(Connection c,ManagedOperationJournal.Entry root)throws SQLException{
         Map<String,Object> result=detail(c,root),counts=map(result.get("progress"));if(root.state.equals("PREPARED")&&(int)counts.get("terminal")==((List<?>)result.get("targets")).size()){
@@ -185,6 +211,85 @@ public class ManagedPostalBatchService {
         }finally{postal.unlock(c);}}catch(SQLException e){throw unavailable();}
         for(Map<String,Object> child:pending)postal.reconcile(number(child.get("recipient")),(String)child.get("requestId"));
         try(Connection c=journal.connection()){postal.lock(c);try{postal.actor(c,actor);return finishIfTerminal(c,owned(c,actor,id,link));}finally{postal.unlock(c);}}catch(SQLException e){throw unavailable();}
+    }
+    private Map<String,Object> controlSnapshot(Connection c,ManagedOperationJournal.Entry root)throws SQLException{
+        Map<String,Object> out=new TreeMap<>();out.put("protocol","postal-batch-control-v1");out.put("root",ManagedPostalReceiptService.snapshot(root));List<Object> children=new ArrayList<>();
+        for(Object value:list(unwrap(decode(root.afterJson)).get("children")))children.add(ManagedPostalReceiptService.snapshot(leaf(c,root,map(value))));out.put("children",children);return out;
+    }
+    private String controlFingerprint(String source,Control edit){
+        ManagedOperationJournal.id(source);if(edit==null)throw new DofFailure(400,"缺少任务控制请求");ManagedOperationJournal.id(edit.requestId);revision(edit.revision);
+        if(!Arrays.asList("cancel-pending","finalize").contains(edit.operation))throw new DofFailure(400,"未知任务控制动作");
+        if(edit.reason==null||edit.reason.trim().isEmpty()||edit.reason.length()>100||edit.reason.chars().anyMatch(x->x<32||Character.isSurrogate((char)x)))throw new DofFailure(400,"请填写1～100字任务控制原因");
+        Map<String,Object> out=new TreeMap<>();out.put("source",ManagedOperationJournal.id(source));out.put("revision",edit.revision);out.put("operation",edit.operation);out.put("reason",edit.reason);return journal.hash(out);
+    }
+    private ManagedOperationJournal.Entry control(Connection c,String source,String request)throws SQLException{
+        ManagedOperationJournal.Entry e=journal.require(c,CONTROLS,request);
+        if(!ManagedOperationJournal.id(source).equals(e.targetRequest)||!e.targetRequest.equals(e.target)||!(CONTROLS+":"+e.targetRequest).equals(e.resource)||!Arrays.asList("cancel-pending","finalize").contains(e.operation))throw corrupt();return e;
+    }
+    private Map<String,Object> controlResult(ManagedOperationJournal.Entry e){Map<String,Object> out=journal.result(e);out.put("revision",e.beforeHash);out.put("outcome",decode(e.afterJson));out.put("nativeDataChanged",false);out.put("actualPlayerReceiptVerified",false);return out;}
+    private Map<String,Object> controlPlan(Connection c,ManagedOperationJournal.Entry root,Control edit)throws SQLException{
+        Map<String,Object> current=detail(c,root),counts=map(current.get("progress"));
+        if(!edit.revision.equals(current.get("controlRevision")))throw new DofFailure(409,"任务进度已改变，请重新读取并预览控制动作");
+        if(edit.operation.equals("cancel-pending")){
+            if(!Arrays.asList("PREVIEWED","PREPARED").contains(root.state)||(int)counts.get("ready")==0)throw new DofFailure(409,"没有可永久终止的未提交目标");
+        }else if(!root.state.equals("PREPARED")||(int)counts.get("ready")!=0||(int)counts.get("pending")!=0)throw new DofFailure(409,"只有全部目标已有确定回执后才能保存汇总");
+        List<Object> targets=new ArrayList<>();for(Object v:list(current.get("targets")))if(map(v).get("state").equals("PREVIEWED")){Map<String,Object> target=new TreeMap<>();target.put("recipient",map(v).get("recipient"));target.put("requestId",map(v).get("requestId"));targets.add(target);}
+        Map<String,Object> out=new TreeMap<>();out.put("protocol","postal-batch-control-v1");out.put("operation",edit.operation);out.put("cancelTargets",targets);out.put("nativeDataChanged",false);return out;
+    }
+    public Object controlPreview(String source,Control edit){
+        long actor=journal.admin();String fingerprint=controlFingerprint(source,edit);
+        try(Connection c=journal.connection()){postal.lock(c);try{
+            postal.actor(c,actor);ManagedOperationJournal.Entry old=journal.find(c,edit.requestId);
+            if(old!=null){journal.same(old,CONTROLS,actor,fingerprint);return controlResult(control(c,source,edit.requestId));}
+            ManagedOperationJournal.Entry root=parent(c,source);Map<String,Object> plan=controlPlan(c,root,edit);
+            return controlResult(journal.preview(c,edit.requestId,actor,CONTROLS,CONTROLS+":"+root.requestId,root.requestId,edit.operation,root.requestId,fingerprint,edit.reason,controlSnapshot(c,root),plan));
+        }finally{postal.unlock(c);}}catch(SQLException e){throw unavailable();}
+    }
+    public Object controlSave(String source,Control edit){
+        long actor=journal.admin();String fingerprint=controlFingerprint(source,edit);
+        try(Connection c=journal.connection()){boolean discarded=false;postal.lock(c);try{
+            postal.actor(c,actor);ManagedOperationJournal.Entry e=control(c,source,edit.requestId);journal.same(e,CONTROLS,actor,fingerprint);
+            if(!e.state.equals("PREVIEWED"))return controlResult(e);
+            ManagedOperationJournal.Entry root=parent(c,source);Map<String,Object> plan=controlPlan(c,root,edit),before=controlSnapshot(c,root);
+            if(!journal.hash(before).equals(e.beforeHash)||!journal.hash(plan).equals(e.afterHash))throw new DofFailure(409,"控制预览内容已改变");
+            e=journal.prepare(c,e,e.target,before,plan);
+            c.setAutoCommit(false);postal.lock(c);
+            try{
+                postal.actor(c,actor);e=control(c,source,edit.requestId);if(!e.state.equals("PREPARED")){c.rollback();return controlResult(e);}
+                root=parent(c,source);
+                if(!journal.hash(controlSnapshot(c,root)).equals(e.beforeHash)){e=journal.finish(c,e,"NOT_APPLIED",actor);c.commit();return controlResult(e);}
+                if(root.state.equals("PREVIEWED"))root=journal.prepare(c,root,root.target,decode(root.beforeJson),decode(root.afterJson));
+                if(edit.operation.equals("cancel-pending"))for(Object value:list(unwrap(decode(root.afterJson)).get("children"))){
+                    ManagedOperationJournal.Entry child=leaf(c,root,map(value));if(!child.state.equals("PREVIEWED"))continue;
+                    Map<String,Object> outcome=new TreeMap<>(),error=new TreeMap<>();outcome.put("plan",decode(child.afterJson));error.put("phase","cancelled_before_issue");error.put("message","管理员已永久终止本任务中尚未提交的目标");error.put("controlRequestId",e.requestId);outcome.put("error",error);
+                    journal.rejectPreviewInTransaction(c,child,outcome,actor);
+                }
+                Map<String,Object> result=detail(c,root),counts=map(result.get("progress"));
+                if((int)counts.get("terminal")==((List<?>)result.get("targets")).size()){
+                    Map<String,Object> outcome=new TreeMap<>();outcome.put("plan",unwrap(decode(root.afterJson)));outcome.put("summary",counts);root=journal.finishMetadataTransaction(c,root,outcome,actor);
+                }
+                Map<String,Object> outcome=new TreeMap<>();outcome.put("plan",plan);outcome.put("parentState",root.state);outcome.put("progress",counts);
+                e=journal.finishMetadataTransaction(c,e,outcome,actor);c.commit();return controlResult(e);
+            }catch(SQLException|RuntimeException failure){
+                try{c.rollback();}catch(SQLException rollback){failure.addSuppressed(rollback);discarded=true;postal.discard(c,failure);}throw unavailable();
+            }
+        }finally{if(!discarded&&!c.isClosed()){postal.unlock(c);if(!c.getAutoCommit())c.setAutoCommit(true);}}}catch(SQLException e){throw unavailable();}
+    }
+    public Object controlReconcile(String source,String request){
+        long actor=journal.admin();try(Connection c=journal.connection()){postal.lock(c);try{
+            postal.actor(c,actor);ManagedOperationJournal.Entry e=control(c,source,request);
+            // All source/child mutations commit with this InnoDB receipt. Under
+            // their shared locks, PREPARED proves the metadata transaction did not commit.
+            if(e.state.equals("PREPARED"))e=journal.finish(c,e,"NOT_APPLIED",actor);return controlResult(e);
+        }finally{postal.unlock(c);}}catch(SQLException e){throw unavailable();}
+    }
+    public Object controlHistory(String source){
+        long actor=journal.admin();try(Connection c=consistentRead()){try{
+            postal.actor(c,actor);parent(c,source);List<Object> result=new ArrayList<>();
+            try(PreparedStatement p=c.prepareStatement("SELECT request_id FROM "+ManagedOperationJournal.TABLE+" WHERE instance_id=? AND namespace=? AND target_request=? ORDER BY created_at DESC,request_id DESC LIMIT 100")){
+                p.setString(1,journal.instance());p.setString(2,CONTROLS);p.setString(3,ManagedOperationJournal.id(source));try(ResultSet r=p.executeQuery()){while(r.next())result.add(controlResult(control(c,source,r.getString(1))));}
+            }return result;
+        }finally{c.rollback();}}catch(SQLException e){throw unavailable();}
     }
     private Connection consistentRead()throws SQLException{
         Connection c=journal.connection();try{c.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);c.setAutoCommit(false);return c;}catch(SQLException e){c.close();throw e;}

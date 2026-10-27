@@ -98,5 +98,9 @@ public class PostalController {
     @GetMapping("batch/{requestId}") public Object batchRead(@PathVariable String requestId){return postalBatch.read(requestId);}
     @PostMapping("batch/{requestId}/step") public Object batchStep(@PathVariable String requestId,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Link link){return postalBatch.step(requestId,link);}
     @PostMapping("batch/{requestId}/reconcile") public Object batchReconcile(@PathVariable String requestId,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Link link){return postalBatch.reconcile(requestId,link);}
+    @GetMapping("batch/{source}/controls") public Object batchControls(@PathVariable String source){return postalBatch.controlHistory(source);}
+    @PostMapping("batch/{source}/controls/preview") public Object batchControlPreview(@PathVariable String source,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Control edit){return postalBatch.controlPreview(source,edit);}
+    @PostMapping("batch/{source}/controls") public Object batchControlSave(@PathVariable String source,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Control edit){return postalBatch.controlSave(source,edit);}
+    @PostMapping("batch/{source}/controls/{requestId}/reconcile") public Object batchControlReconcile(@PathVariable String source,@PathVariable String requestId){return postalBatch.controlReconcile(source,requestId);}
 
 }
