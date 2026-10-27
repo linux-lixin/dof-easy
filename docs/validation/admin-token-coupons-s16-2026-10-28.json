@@ -186,13 +186,134 @@
   ],
   "staticAuditLimit": "Derived local native runtime candidates only; no Windows GUI execution or original-tool behavior proof. Lucky-point tables do not prove score-shop identity. Score-shop issuer/data semantics remain unconfirmed.",
   "deployment": {
-    "verified": false,
-    "pending": "admin-only candidate deployment and dedicated UID6 coupon 0 -> 1 -> 0; preserve both wallets and rollback"
+    "verified": true,
+    "deployment": {
+      "sourceCommit": "32861a2d891f3ff98315fe81b795181a9ccd9f7f",
+      "adminImage": "sha256:38d2ca5e6fffb2be3a684e46a693e63f91cbd2b8cb26fd57e1797e688cafd5fb",
+      "adminTag": "dof-admin-replacement:20261028-s16-candidate",
+      "appSHA256": "5b01d291805e2de70970849dfdf1794f994f322653cdfb7c2a5055314392e8fd",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s16-coupons/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": true,
+      "acceptanceScope": "controlled native token-coupon web credit/reconciliation/compensation; original tool and client pending",
+      "completeReplacement": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_TOKEN_COUPONS_VERIFIED_CLIENT_PENDING",
+      "sourceCommit": "32861a2d891f3ff98315fe81b795181a9ccd9f7f",
+      "updatedAt": 1793124358.8258114,
+      "image": "sha256:38d2ca5e6fffb2be3a684e46a693e63f91cbd2b8cb26fd57e1797e688cafd5fb",
+      "completeReplacement": false
+    },
+    "readBrowser": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "pointsBrowser": {
+      "passed": true,
+      "checks": [
+        "real administrator login, instance/UUID, 71/239 scope and native incomplete gate",
+        "anonymous and old unversioned write rejected without changing balance",
+        "real UI preview/submit, committed response withheld, original-ID reconciliation and replay award only once",
+        "token coupon receipt cannot debit cera; original cera wallet remains 37",
+        "real reload/history, linked one-time compensation, replay after compensation and duplicate-compensation refusal",
+        "real postal page and literal nonexistent account filter; populated native mail comparison still pending"
+      ],
+      "pageErrors": 0,
+      "realDeployment": true,
+      "actualPlayerReceiptVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "responseLoss": "intercepted browser response after actual server commit; not a physical outage",
+      "targetUid": 6,
+      "beforeAmount": 0,
+      "afterAmount": 0,
+      "creditRequestId": "54aeb5c8-7e0a-4c5f-89be-56ec0eb8ebe6",
+      "compensationRequestId": "41e595e1-c4e7-4db9-9242-79676fb82801",
+      "netAmountChange": 0,
+      "currency": "cera_point",
+      "scopeMinimum": 239,
+      "completeReplacement": false,
+      "mailObservedRows": 0
+    },
+    "finalVerification": {
+      "passed": true,
+      "boundDatabaseUuidVerified": true,
+      "dedicatedUid": 6,
+      "couponBalance": 0,
+      "ceraBalance": 37,
+      "entireCouponWalletRowUnchanged": true,
+      "entireCeraWalletRowUnchanged": true,
+      "creditAndCompensationPersisted": true,
+      "singleConfirmedCompensation": true,
+      "priorTestCdkStillPausedWithoutConsumption": true,
+      "adminPersistentKeysUnchanged": true,
+      "gameImageAndStartIdentityUnchanged": true,
+      "gameHealthy": true,
+      "baseDiskReserve2GiBMaintained": true,
+      "privateCredentialsAndScreenshotsStayedOnServer": true,
+      "actualClientConsumptionVerified": false,
+      "completeReplacement": false
+    },
+    "taskStates": {
+      "129793": "exited",
+      "130738": "exited",
+      "131243": "exited"
+    }
   },
   "remaining": [
     "actual native coupon client display/consumption and read timing",
     "original admin manual behavior comparison",
     "score-shop accounting and exchange issuer; do not substitute cera_point or random-box luck",
     "external fault/rebuild/multi-level compatibility and full cross-protocol rollback drill"
-  ]
+  ],
+  "sourceCommit": "32861a2d891f3ff98315fe81b795181a9ccd9f7f",
+  "delivery": {
+    "archive": ".dof-easy/admin-replacement-delivery-20261028-s16-transfer.tgz",
+    "archiveSHA256": "7035167689b76473d3b8edd489f43cc695a990f697255ffa4e5b7f3e59cd5a1e",
+    "archiveBytes": 511278,
+    "helperSHA256": "764b63a9d9e4dc06fd9fa3eb56d7ba0aa1df7cd4addfcb627709cecbcf0c839e",
+    "appSHA256": "5b01d291805e2de70970849dfdf1794f994f322653cdfb7c2a5055314392e8fd",
+    "compiledClassesVerified": true,
+    "keysAndTestsExcluded": true,
+    "finalReadOnlyVerificationSHA256": "b2bdbc7ab1c125ac8b96887643f4ff4dcd898753a444cb911d1333d3ff5d066b"
+  },
+  "privateEvidencePolicy": "credentials, screenshots, operation checkpoints, backup SQL and native wallet contents stayed on server; only sanitized final JSON downloaded"
 }

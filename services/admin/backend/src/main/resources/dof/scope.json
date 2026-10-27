@@ -574,7 +574,21 @@
         "sharedWriter": "ManagedRechargeService fixed native coupon adapter; separate request namespace and snapshots",
         "amountField": "amount",
         "preservesNativeDates": true,
-        "report": "docs/validation/admin-token-coupons-s16-2026-10-28.json"
+        "report": "docs/validation/admin-token-coupons-s16-2026-10-28.json",
+        "realWebCreditCompensationVerified": true,
+        "realDeploymentReadAndRefusalVerified": true,
+        "realDeploymentVerifiedScope": "full token wallet matrix including external failures, recovery and supported levels",
+        "controlledDeploymentProof": {
+          "sourceCommit": "32861a2d891f3ff98315fe81b795181a9ccd9f7f",
+          "uid": 6,
+          "before": 0,
+          "after": 0,
+          "creditRequestId": "54aeb5c8-7e0a-4c5f-89be-56ec0eb8ebe6",
+          "compensationRequestId": "41e595e1-c4e7-4db9-9242-79676fb82801",
+          "walletDatesPreserved": true,
+          "ceraWalletUnchanged": true
+        },
+        "validationLimit": "real web 0 -> 1 -> 0, replay/compensation/cross-currency refusals passed; original admin, client consumption and physical outage matrix pending"
       }
     },
     {
