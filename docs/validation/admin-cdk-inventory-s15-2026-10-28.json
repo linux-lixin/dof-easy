@@ -104,17 +104,134 @@
     "interrupted export blocks new operation IDs until original metadata receipt is reconciled",
     "submitting preview clears the displayed preview receipt before sending; a lost response keeps the original ID and blocks a new batch/control",
     "browser test CommonJS exports binding corrected; initial failed runs retained",
-    "frontend form model is required by existing Arco types; initial failed build retained"
+    "frontend form model is required by existing Arco types; initial failed build retained",
+    "first remote browser exited before Playwright load because NODE_PATH was absent; fixed the runner environment, retained failed log; no native write in failed run"
   ],
   "deployment": {
-    "verified": false,
-    "pending": "deploy candidate admin only, real read/refusal and controlled code management; preserve current S14 rollback"
+    "verified": true,
+    "deployment": {
+      "sourceCommit": "7acd3dbd102a6126076fd8417bf9de051cac229e",
+      "adminImage": "sha256:3eedd0288a06d5415685bba3472de8c0ffc9ec017e951cf0b8a9b6136a7a9eea",
+      "adminTag": "dof-admin-replacement:20261028-s15-candidate",
+      "appSHA256": "246855646446dbdfbc5022ea6b34dafcced7a22f53bdb019837b86c0193b534a",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s15-inventory/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": true,
+      "acceptanceScope": "controlled website inventory management; native companion and client parity pending",
+      "completeReplacement": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_CDK_INVENTORY_VERIFIED_NATIVE_PARITY_PENDING",
+      "sourceCommit": "7acd3dbd102a6126076fd8417bf9de051cac229e",
+      "updatedAt": 1793123117.3431911,
+      "image": "sha256:3eedd0288a06d5415685bba3472de8c0ffc9ec017e951cf0b8a9b6136a7a9eea",
+      "completeReplacement": false
+    },
+    "readBrowser": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "inventoryBrowser": {
+      "passed": true,
+      "mockedApis": false,
+      "realWebsiteManagementVerified": true,
+      "originalToolEquivalenceVerified": false,
+      "actualClientConsumptionVerified": false,
+      "rewardIssued": false,
+      "batchId": "4f204fac-1d51-4ad8-b9ec-cbb0722c32a5",
+      "keyId": 2,
+      "pauseId": "d84a7702-b152-4b46-bd94-fa90385ae943",
+      "resumeId": "d03352d6-27f5-47c4-8e34-01d09aec4568",
+      "lastPauseId": "cb2c3c0b-72e8-488f-87cb-4d0804a137ea",
+      "exportId": "68bbe4c9-2e12-460a-8795-ad7bd8352598",
+      "artifactHash": "b942beef824df88e1af74da8f527b7814cc70ae80ad3f6d1ab58d66697d6daf9",
+      "finalAvailability": "paused",
+      "balanceUnchanged": 37,
+      "checks": [
+        "real bound instance, anonymous management refusal and unversioned/URL-secret request refusal",
+        "browser previews and atomically issues one one-point code; identical submission replays same persisted batch",
+        "explicit audited CSV remains private on server; downloaded artifact hash matches receipt header",
+        "browser pause persists native availability without consumption fields or rewards, and replay is idempotent",
+        "browser restore links confirmed pause receipt and returns code to available",
+        "controlled code is left disabled with no consumption metadata and dedicated wallet stays 37"
+      ],
+      "pageErrors": 0
+    },
+    "finalVerification": {
+      "passed": true,
+      "boundDatabaseUuidVerified": true,
+      "nativeCodeId": 2,
+      "nativeCodeStatus": 1,
+      "nativeConsumptionFieldsStillNull": true,
+      "noRedemptionReceiptForTestCode": true,
+      "allFiveManagementReceiptsPersisted": true,
+      "entireDedicatedWalletRowUnchanged": true,
+      "adminPersistentKeysUnchanged": true,
+      "gameImageAndStartIdentityUnchanged": true,
+      "gameHealthy": true,
+      "baseDiskReserve2GiBMaintained": true,
+      "privateCsvNativeRowMatches": true,
+      "privateCsvStayedOnServer": true,
+      "privateCsvMode": "0o600",
+      "completeReplacement": false
+    }
   },
   "remaining": [
     "Windows original menu/defaults/import/export and side effects comparison pending user manual opening",
     "native fixed codes, single-use codes and fourteen-column companion consumer parity",
     "real equipment CDK/client consumption and special native item flags",
+    "real inventory item-code branch and full external fault matrix; current real management proof is one-point website code only",
     "real external network/process/disk failures and cross-old-protocol rollback guard/drill",
     "other currency/points/exchange issuers and full replacement work packages remain open"
-  ]
+  ],
+  "sourceCommit": "7acd3dbd102a6126076fd8417bf9de051cac229e",
+  "delivery": {
+    "archive": ".dof-easy/admin-replacement-delivery-20261028-s15-transfer.tgz",
+    "archiveSHA256": "38e0194c5e323198d5ac21fec9b2ebf664bb5dba7c76015e36dc30e5d5dfa393",
+    "archiveBytes": 519248,
+    "helperSHA256": "69324d4185bf38e1fd112320f988742067edbc5546647037beec19e7275ca4c1",
+    "appSHA256": "246855646446dbdfbc5022ea6b34dafcced7a22f53bdb019837b86c0193b534a",
+    "compiledClassesVerified": true,
+    "keysAndTestClassesExcluded": true,
+    "finalReadOnlyVerificationSHA256": "32c037ebd3bb631f3590c46dc0ea9583b720bda92df95fc920ad36bc180976e3"
+  },
+  "privateEvidencePolicy": "credentials, plaintext CSV, raw logs, backups and screenshots stayed on server; only sanitized JSON copied"
 }
