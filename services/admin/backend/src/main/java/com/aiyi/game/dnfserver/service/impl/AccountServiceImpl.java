@@ -254,11 +254,21 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountVO info(long uid) {
+        long actorUid = ThreadUtil.getUserId();
+        if (actorUid <= 0) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(403, "需要有效的管理登录");
+        AccountVO actor = accountVODao.get(actorUid);
+        if (actor == null) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(403, "管理账号不可用");
         AccountVO accountVO = accountVODao.get(uid);
+        if (accountVO == null) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(404, "目标账号不存在");
+        if (!actor.isAdmin() && uid != actorUid && accountVO.getParentUid() != actorUid)
+            throw new com.aiyi.game.dnfserver.service.dof.DofFailure(403, "不能查看其他工会的账号详情");
         List<AccountVO> list = accountVODao.list("SELECT cera FROM taiwan_billing.cash_cera " +
                 "WHERE account=?", uid);
-        accountVO.setCera(list.get(0).getCera());
-        return accountVO;
+        if (list.size() != 1) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(409, "账号余额记录缺失或不唯一，请核对数据库结构");
+        AccountVO response = new AccountVO();
+        org.springframework.beans.BeanUtils.copyProperties(accountVO, response, "password");
+        response.setCera(list.get(0).getCera());
+        return response;
     }
 
     public static void main(String[] args) {

@@ -34,17 +34,17 @@ const search = (resetPage = false) => {
     searchForm.value.pageNum = 1;
   }
 
-  console.log('Search form:', searchForm.value);
-  let url = `api/v1/account?page=${searchForm.value.pageNum}&pageSize=${searchForm.value.pageSize}`;
-  url += searchForm.value.account ? `&account=${searchForm.value.account}` : '';
-  url += searchForm.value.loginStatus !== undefined && searchForm.value.loginStatus !== '' ?
-      `&loginStatus=${searchForm.value.loginStatus}` : '';
-  url += searchForm.value.lastLoginTime && searchForm.value.lastLoginTime.length === 2 ?
-      `&lastLoginDate=${searchForm.value.lastLoginTime[0]}&lastLoginDateEnd=${searchForm.value.lastLoginTime[1]}` : '';
+  const query = new URLSearchParams({page: String(searchForm.value.pageNum), pageSize: String(searchForm.value.pageSize)});
+  if (searchForm.value.account) query.set('account', searchForm.value.account);
+  if (searchForm.value.loginStatus !== undefined && searchForm.value.loginStatus !== '') query.set('loginStatus', String(searchForm.value.loginStatus));
+  if (searchForm.value.lastLoginTime && searchForm.value.lastLoginTime.length === 2) {
+    query.set('lastLoginDate', String(searchForm.value.lastLoginTime[0]));
+    query.set('lastLoginDateEnd', String(searchForm.value.lastLoginTime[1]));
+  }
+  const url = `api/v1/account?${query.toString()}`;
 
   loading.value = true;
   Request.get(url).then((response) => {
-    console.log('Search response:', response);
     pageResult.value = response.data;
 
     // 兼容后端返回当前页字段

@@ -2981,16 +2981,17 @@
             "docs/validation/admin-frida-s6-2026-10-27.json"
           ],
           "dependencyImplementation": {
-            "executor": "default Frida script",
             "storage": "frida.game_event",
             "installerCommand": "dof.sh plugin-db",
-            "state": "storage_adapter_implemented",
-            "activityEnabledByMigration": false
+            "state": "configured_frida_storage_verified_original_tool_ownership_pending",
+            "activityEnabledByMigration": false,
+            "candidateExecutor": "default Frida script",
+            "executorOwnershipVerified": false
           },
           "verification": {
             "consumption": {
               "state": "pending",
-              "reason": "隔离MySQL结构/进度保留和明确模拟JS控制流通过；实际Frida消费与活动流程仍待验。",
+              "reason": "已启用的默认Frida在86级两频道读取活动存储、处理坏JSON并恢复就绪；原工具此菜单归属尚未核实，不确认唯一执行方。有效非空进度、save回调、活动流程、奖励及网页仍待验。",
               "evidence": [
                 "docs/validation/admin-frida-s6-2026-10-27.json"
               ]

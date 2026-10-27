@@ -73,4 +73,9 @@ public class AccountController {
         return accountService.info(uid);
     }
 
+    @ExceptionHandler(com.aiyi.game.dnfserver.service.dof.DofFailure.class)
+    public org.springframework.http.ResponseEntity<java.util.Map<String,String>> queryFailure(com.aiyi.game.dnfserver.service.dof.DofFailure failure) {
+        return org.springframework.http.ResponseEntity.status(failure.status).body(java.util.Collections.singletonMap("message", failure.getMessage()));
+    }
+
 }

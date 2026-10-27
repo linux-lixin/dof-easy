@@ -11,6 +11,7 @@ const { values: args } = parseArgs({ options: {
   'require-all-records': { type: 'boolean', default: false },
   'inspect-management': { type: 'boolean', default: false },
   'expect-native-runtime': { type: 'boolean', default: false },
+  'inspect-account-search': { type: 'boolean', default: false },
 } });
 if (!args.origin || !args.credentials || !args.instance || !args.output) throw new Error('Required: --origin --credentials --instance --output; edits require --allow-config-edits');
 const origin = new URL(args.origin).origin;
@@ -184,6 +185,23 @@ const observe = promise => { promise.catch(() => {}); return promise; };
       await page.getByPlaceholder('搜索编号、功能或缺口').fill('feature-010-01');
       const feature = page.getByRole('row').filter({ hasText: 'feature-010-01' });await feature.getByText('管理协议已有证据，原生效果待验', { exact: true }).waitFor();
       checks.push('feature ledger uses canonical 71 classes / 239 operations and current management evidence');
+    }
+    if (args['inspect-account-search']) {
+      await page.goto(origin + '/admin/player/accounts');
+      const input = page.getByPlaceholder('搜索玩家账号');await input.waitFor();
+      for (const [value, count] of [[credentials.account, 1], ["probe' OR 1=1 -- ", 0], ["probe&account=" + credentials.account + '&loginStatus=true', 0]]) {
+        await input.fill(value);
+        const reply = observe(page.waitForResponse(r => {
+          const url = new URL(r.url());return url.pathname === '/api/v1/account' && url.searchParams.get('account') === value && r.request().method() === 'GET';
+        }));
+        await page.getByRole('button', { name: '搜索', exact: true }).click();
+        const response = await reply;assert.equal(response.status(), 200);
+        const query = new URL(response.url()).searchParams;assert.equal(query.getAll('account').length, 1);assert.equal(query.has('loginStatus'), false);
+        const result = await response.json();assert.equal(result.list.length, count);assert.equal(result.totalSize, count);
+        for (const row of result.list) assert.ok(row.password === undefined || row.password === null || row.password === '');
+        checks.push(`real browser account filter preserves literal ${count ? 'test account' : 'SQL/URL-looking text'}, list/count agree, no password hashes`);
+      }
+      await page.screenshot({ path: path.join(output, 'account-search-live.png'), fullPage: true });
     }
     assert.deepEqual(errors, []);
     const result = { passed: true, backend: 'real', instanceId: args.instance, configEdits: args['allow-config-edits'], actualGameplayVerified: false, checks, pageErrors: 0 };
