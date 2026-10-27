@@ -31,6 +31,16 @@ class NativeEvidence(unittest.TestCase):
         self.random_box = dict(returned=True,queries=['SELECT DISTINCT item_id FROM dof_native.randombox'],observedDistinct=True,sourceRows=3,userConstructed=True,rowCounts=[2])
         self.raid = {'results': [dict(raid=key, returned=True, name='???',
             nameBytes=list(name.encode()) + [0]) for key, name in [('anton', '安徒恩'), ('luke', '卢克')]]}
+        def snapshot(name, day, time, minimum):
+            value = dict(name=name, open_day=day, open_time=time, member_min=minimum)
+            for field in ['name', 'open_day', 'open_time']:
+                value[field + 'Bytes'] = list(value[field].encode('utf-8')) + [0]
+            return value
+        self.raid['reloads'] = [dict(raid=key, fileRestored=True, threadId=10,
+            before=snapshot(name, '1,2,3,4,5,6,7', '00:00:00-23:59:59', minimum),
+            changed=snapshot(name + '刷新验证', '2,4,6', '01:02:03-04:05:06', 3),
+            restored=snapshot(name, '1,2,3,4,5,6,7', '00:00:00-23:59:59', minimum))
+            for key, name, minimum in [('anton', '安徒恩', 1), ('luke', '卢克', 2)]]
         self.callback = dict(originalItemCallback='0x85b949c',
             gameItemEntryBytes=[85,137,229,86,83,131,236,32,139,93,16,232,239,44,177,255])
         (self.root / 'game.exit').write_text('0\n')
@@ -96,6 +106,37 @@ class NativeEvidence(unittest.TestCase):
     def test_wrong_native_name_is_not_accepted_from_rendered_text(self):
         self.raid['results'][0].update(name='安徒恩', nameBytes=list(b'wrong\0'))
         self.assertFalse(self.summarize()['checks']['raidConfiguration'])
+
+    def test_initial_read_alone_does_not_prove_reload(self):
+        self.raid.pop('reloads')
+        result = self.summarize()['checks']
+        self.assertTrue(result['raidConfiguration'])
+        self.assertFalse(result['raidConfigurationReload'])
+
+    def test_reload_requires_changed_native_bytes_and_restoration(self):
+        self.assertTrue(self.summarize()['checks']['raidConfigurationReload'])
+        self.raid['reloads'][0]['changed']['nameBytes'] = list(b'wrong\0')
+        self.assertFalse(self.summarize()['checks']['raidConfigurationReload'])
+
+    def test_reload_uses_native_utf8_bytes_when_console_damages_chinese(self):
+        for row in self.raid['reloads']:
+            for phase in ['before', 'changed', 'restored']:
+                row[phase]['name'] = '???'
+        self.assertTrue(self.summarize()['checks']['raidConfigurationReload'])
+
+    def test_reload_requires_original_values_and_exact_file_restore(self):
+        self.raid['reloads'][1]['restored']['member_min'] = 3
+        self.assertFalse(self.summarize()['checks']['raidConfigurationReload'])
+        self.raid['reloads'][1]['restored']['member_min'] = 2
+        self.raid['reloads'][1]['fileRestored'] = False
+        self.assertFalse(self.summarize()['checks']['raidConfigurationReload'])
+
+    def test_reload_requires_each_raid_and_each_field(self):
+        self.raid['reloads'][1]['changed']['member_min'] = 2
+        self.assertFalse(self.summarize()['checks']['raidConfigurationReload'])
+        self.raid['reloads'][1]['changed']['member_min'] = 3
+        self.raid['reloads'][0]['changed']['open_dayBytes'] = list(b'1,2,3,4,5,6,7\0')
+        self.assertFalse(self.summarize()['checks']['raidConfigurationReload'])
 
     def test_killed_game_cannot_pass_with_successful_initialization(self):
         (self.root / 'game.exit').write_text('137\n')

@@ -1356,7 +1356,9 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "docs/validation/admin-raid-s4-2026-10-27.json"
+          ],
           "managementImplementation": {
             "state": "configuration_implemented",
             "api": "/api/v1/admin/dof/plugins/anton",
@@ -1365,6 +1367,15 @@
             "activation": "GM reload command or scheduled game restart; no runtime reload is claimed",
             "persistence": "atomic_file_with_write_ahead_journal",
             "effectState": "not_observed"
+          },
+          "verification": {
+            "consumption": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-raid-s4-2026-10-27.json"
+              ],
+              "reason": "本地70级原生初始化入口的名称、开放星期/时间、最少人数已完成两轮变更与恢复；86级实例、其他配置字段和网页运行时应用仍待验，不据此关闭整个团本消费阶段。"
+            }
           }
         }
       ]
@@ -1386,7 +1397,9 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "docs/validation/admin-raid-s4-2026-10-27.json"
+          ],
           "managementImplementation": {
             "state": "configuration_implemented",
             "api": "/api/v1/admin/dof/plugins/luke",
@@ -1395,6 +1408,15 @@
             "activation": "GM reload command or scheduled game restart; no runtime reload is claimed",
             "persistence": "atomic_file_with_write_ahead_journal",
             "effectState": "not_observed"
+          },
+          "verification": {
+            "consumption": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-raid-s4-2026-10-27.json"
+              ],
+              "reason": "本地70级原生初始化入口的名称、开放星期/时间、最少人数已完成两轮变更与恢复；86级实例、其他配置字段和网页运行时应用仍待验，不据此关闭整个团本消费阶段。"
+            }
           }
         }
       ]

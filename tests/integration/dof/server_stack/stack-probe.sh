@@ -185,7 +185,7 @@ import json
 root = Path('/output')
 first = json.loads((root / 'first-start.json').read_text())
 second = json.loads((root / 'native-observations.json').read_text())
-required = ['loginStateInitialized', 'combinedModulesLoaded', 'raidConfiguration',
+required = ['loginStateInitialized', 'combinedModulesLoaded', 'raidConfiguration', 'raidConfigurationReload',
             'privateKeyConsumed', 'serverTextResourceLoaded', 'bridgeHealthy', 'normalStop']
 passed = (root / 'first-start').is_dir() and all(
  report['checks'][name] for report in [first, second] for name in required)

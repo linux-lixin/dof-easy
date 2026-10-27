@@ -1,0 +1,184 @@
+{
+  "schema": 1,
+  "date": "2026-10-27",
+  "phase": "S4 raid native configuration initializer",
+  "baseCommit": "fc5c698",
+  "adminImplementationComplete": false,
+  "completeReplacement": false,
+  "scope": {
+    "materialGrade": 70,
+    "originalSource": "pinned free 2.8 replacement inputs",
+    "raids": [
+      "anton",
+      "luke"
+    ],
+    "fieldsPerRaid": [
+      "name",
+      "open_day",
+      "open_time",
+      "member_min"
+    ],
+    "invocation": "GameWorld::init onLeave, before player login; real native init_config",
+    "gameplayVerified": false,
+    "activeRaidRefreshVerified": false
+  },
+  "checks": {
+    "affectedPythonUnitTests": {
+      "total": 30,
+      "failures": 0,
+      "skipped": 0
+    },
+    "probeJavaScriptSyntax": true,
+    "firstCycle": {
+      "retiredNativeLiterals": true,
+      "equipmentBroadcastDispatch": true,
+      "randomBoxQuery": true,
+      "nativeAbiNames": true,
+      "nativeTagGetters": true,
+      "formalPayloadInstalled": true,
+      "formalGatewayReady": true,
+      "noLegacyRootAliases": true,
+      "oldRobotTableQueriesAbsent": true,
+      "loginStateInitialized": true,
+      "combinedModulesLoaded": true,
+      "equipmentBroadcastResolved": true,
+      "raidConfiguration": true,
+      "raidConfigurationReload": true,
+      "privateKeyConsumed": true,
+      "serverTextResourceLoaded": true,
+      "bridgeHealthy": true,
+      "oldDatabaseQueriesAbsent": true,
+      "oldConfigTableQueriesAbsent": true,
+      "normalStop": true
+    },
+    "secondCycle": {
+      "retiredNativeLiterals": true,
+      "equipmentBroadcastDispatch": true,
+      "randomBoxQuery": true,
+      "nativeAbiNames": true,
+      "nativeTagGetters": true,
+      "formalPayloadInstalled": true,
+      "formalGatewayReady": true,
+      "noLegacyRootAliases": true,
+      "oldRobotTableQueriesAbsent": true,
+      "loginStateInitialized": true,
+      "combinedModulesLoaded": true,
+      "equipmentBroadcastResolved": true,
+      "raidConfiguration": true,
+      "raidConfigurationReload": true,
+      "privateKeyConsumed": true,
+      "serverTextResourceLoaded": true,
+      "bridgeHealthy": true,
+      "oldDatabaseQueriesAbsent": true,
+      "oldConfigTableQueriesAbsent": true,
+      "normalStop": true
+    },
+    "gameRestart": true,
+    "gatewayOwnerRestart": true,
+    "exactConfigFilesRestored": {
+      "anton-raid.ini": true,
+      "luke-raid.ini": true
+    },
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "nativeCallsOnGameMainThread": {
+      "first": true,
+      "second": true
+    }
+  },
+  "native": {
+    "pluginSHA256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+    "inlineSHA256": "35e3a05e86b950f5ac4880fbc8fb75bb9d0926662d9344ea808af4c2aad327f8",
+    "firstReloads": {
+      "anton": true,
+      "luke": true
+    },
+    "secondReloads": {
+      "anton": true,
+      "luke": true
+    },
+    "gameExitCodes": [
+      0,
+      0
+    ]
+  },
+  "target86ReadOnly": {
+    "performed": true,
+    "channelsObserved": 2,
+    "modulesObserved": [
+      "libdof-plugin.so",
+      "libdof-inline.so",
+      "libdp2.so",
+      "libdp2game.so",
+      "frida.so"
+    ],
+    "pluginAndInlineMatchLocalLock": true,
+    "gameContainerHealthy": true,
+    "freeBytes": 33787146240,
+    "adminHostPort": 18080,
+    "gameContainerRestarted": false,
+    "configurationWrites": false,
+    "imageReplaced": false
+  },
+  "earlierAttempts": [
+    {
+      "result": "failed before raid exercise",
+      "cause": "Windows output mount: legacy 32-bit font metadata incompatibility",
+      "fontInodeExceeds32Bit": true,
+      "runExit": 2,
+      "notCountedAsPassed": true
+    },
+    {
+      "result": "native bytes and restoration observed; reporter failed",
+      "cause": "Chinese display strings damaged by native logger; corrected reporter verifies exported UTF-8 buffer bytes",
+      "runExit": 2,
+      "notCountedAsPassed": true
+    }
+  ],
+  "finalRun": {
+    "exitCode": 0,
+    "inputsFingerprint": "cb09da584606e1fca34e14921c01dbe9e66cb35e21869161a8f79dd9fb0bdb68",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSHA256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "privateNetwork": true,
+    "serverAccessed": false
+  },
+  "evidenceSHA256": {
+    "run.json": "aa2de09ddec806dc5988492b0a44f06985add3eeba7ba2bb8fc40c9769ec66fc",
+    "first-start.json": "433255d2634fad53204a90d294b13396002a857316cfdc3266ca6deb3ef1f77b",
+    "native-observations.json": "100d3123d91817a651b079e3b0675020fd527d2bd302724b6a04089acaae23cc",
+    "restart.json": "05885453b2637783bed2da824b53d2d3c5576a17fbc3d23d945c065ea85b266e",
+    "gateway-restart.json": "dc7baa2f576c15dca777cbe8ef85264ef4005d557c80d3363c80b0e072477b33",
+    "first-start/game.stdout": "97c0f2cc9e3b68f52ecfa244f49d7a11c927f03e78e21022349f1587f31d8fb5",
+    "game.stdout": "90592990012fe7adde8ff0ba7745c7cd53974801a37a420620aa7106fb77bd82"
+  },
+  "sourceSHA256": {
+    "tests/integration/dof/server_raid_config_probe.js": "1d23b22a93ca1fd9d406e42e1212f270ef9769f0eb7cc21f0238d14a76198870",
+    "tests/integration/dof/server_stack/report.py": "9dea6b3245fcc275efc49549af646ea08f05c971a9b5fa413bd79e95fb8ef55d",
+    "tests/integration/dof/server_stack/stack-probe.sh": "90b9949cc59c36b6d30acba14b7a33b4c571146a7bfd8b7ca15860d05ed83896"
+  },
+  "notVerified": [
+    "86-level native configuration reload and recovery",
+    "web-triggered runtime apply with per-channel acknowledgements",
+    "GM chat permission flow",
+    "active raids and player reconnect",
+    "raid admission, stage progression, settlement and rewards",
+    "other 77 plugin/raid configuration fields",
+    "full Windows menu equivalence and client consumption",
+    "diagnostic equipment observer UTF-8 decoding error; full stack is not error-free"
+  ],
+  "diagnosticWarnings": [
+    {
+      "phase": "first",
+      "description": "Error: can't decode byte 0x00 in position 0",
+      "stack": "Error: can't decode byte 0x00 in position 0\n    at frida/runtime/core.js:144\n    at /game-adapter.js:574\n    at /game-adapter.js:529",
+      "scope": "diagnostic script callback; not counted as error-free full-stack acceptance"
+    },
+    {
+      "phase": "second",
+      "description": "Error: can't decode byte 0x00 in position 0",
+      "stack": "Error: can't decode byte 0x00 in position 0\n    at frida/runtime/core.js:144\n    at /game-adapter.js:574\n    at /game-adapter.js:529",
+      "scope": "diagnostic script callback; not counted as error-free full-stack acceptance"
+    }
+  ]
+}
