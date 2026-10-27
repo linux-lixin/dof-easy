@@ -117,12 +117,30 @@ public class ManagedOperationJournal {
      */
     public Entry finishWithGeneratedOutcome(Connection c,Entry e,Object outcome,long actor)throws SQLException {
         if(c.getAutoCommit())throw new DofFailure(409,"生成编号回执必须与原生写入在同一事务中提交");
+        return finishOutcome(c,e,outcome,actor);
+    }
+    /** Metadata-only aggregation after the independently durable business receipts exist. */
+    public Entry finishMetadataTask(Connection c,Entry e,Object outcome,long actor)throws SQLException {
+        if(!c.getAutoCommit())throw new DofFailure(409,"任务汇总必须独立持久化，不能代替原生业务事务");
+        return finishOutcome(c,e,outcome,actor);
+    }
+    private Entry finishOutcome(Connection c,Entry e,Object outcome,long actor)throws SQLException {
         if(!"PREPARED".equals(e.state))throw new DofFailure(409,"操作不是待提交状态，请核对原回执");
         String text=encode(outcome);
         try(PreparedStatement p=c.prepareStatement("UPDATE "+TABLE+" SET after_json=?,after_hash=?,state='PERSISTED',checked_by=?,finished_at=NOW() WHERE instance_id=? AND request_id=? AND namespace=? AND request_hash=? AND before_hash=? AND after_hash=? AND state='PREPARED'")) {
             p.setString(1,text);p.setString(2,digest(text));p.setLong(3,actor);p.setString(4,instance());p.setString(5,e.requestId);
             p.setString(6,e.namespace);p.setString(7,e.requestHash);p.setString(8,e.beforeHash);p.setString(9,e.afterHash);
             if(p.executeUpdate()!=1)throw new SQLException("Generated operation receipt changed; rollback native inserts");
+        }
+        return require(c,e.namespace,e.requestId);
+    }
+    /** Only after the issuer has returned and native locks prove the intent is still PREVIEWED. */
+    public Entry rejectUnsubmittedPreview(Connection c,Entry e,Object outcome,long actor)throws SQLException {
+        if(!c.getAutoCommit()||!"PREVIEWED".equals(e.state))throw new DofFailure(409,"只能记录尚未提交的预览拒绝结果");
+        String text=encode(outcome);
+        try(PreparedStatement p=c.prepareStatement("UPDATE "+TABLE+" SET after_json=?,after_hash=?,state='NOT_APPLIED',checked_by=?,finished_at=NOW() WHERE instance_id=? AND request_id=? AND namespace=? AND request_hash=? AND before_hash=? AND after_hash=? AND state='PREVIEWED'")){
+            p.setString(1,text);p.setString(2,digest(text));p.setLong(3,actor);p.setString(4,instance());p.setString(5,e.requestId);p.setString(6,e.namespace);p.setString(7,e.requestHash);p.setString(8,e.beforeHash);p.setString(9,e.afterHash);
+            if(p.executeUpdate()!=1)throw new SQLException("Unsubmitted preview changed while recording refusal");
         }
         return require(c,e.namespace,e.requestId);
     }

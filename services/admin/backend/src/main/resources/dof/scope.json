@@ -279,7 +279,8 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json"
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json",
+            "S11本地：固定1～100个角色的父任务和子预览同事务保存，子编号及归属固定，父任务开始后复用单角色发送；每步一个目标，结果未知阻止后续，关联新任务只重试确认NOT_APPLIED且原身份/内容/PVF一致的目标。40项独立MySQL（批量11项）与批量/单角色各8项模拟网页通过；实际目标、消费、故障及完整终止/接管待验。docs/validation/admin-postal-batch-s11-2026-10-27.json"
           ],
           "verification": {
             "nativeParity": {
@@ -326,7 +327,8 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json"
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json",
+            "S11本地：固定1～100个角色的父任务和子预览同事务保存，子编号及归属固定，父任务开始后复用单角色发送；每步一个目标，结果未知阻止后续，关联新任务只重试确认NOT_APPLIED且原身份/内容/PVF一致的目标。40项独立MySQL（批量11项）与批量/单角色各8项模拟网页通过；实际目标、消费、故障及完整终止/接管待验。docs/validation/admin-postal-batch-s11-2026-10-27.json"
           ],
           "verification": {
             "nativeParity": {
@@ -373,7 +375,8 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json"
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json",
+            "S11本地：固定1～100个角色的父任务和子预览同事务保存，子编号及归属固定，父任务开始后复用单角色发送；每步一个目标，结果未知阻止后续，关联新任务只重试确认NOT_APPLIED且原身份/内容/PVF一致的目标。40项独立MySQL（批量11项）与批量/单角色各8项模拟网页通过；实际目标、消费、故障及完整终止/接管待验。docs/validation/admin-postal-batch-s11-2026-10-27.json"
           ],
           "verification": {
             "nativeParity": {
@@ -432,6 +435,22 @@
           "creature",
           "creature-artifact"
         ]
+      },
+      "batchProtocol": {
+        "protocol": "postal-batch-v1",
+        "maxRecipients": 100,
+        "codeImplemented": true,
+        "localContractVerified": true,
+        "realDeploymentVerified": false,
+        "actualPlayerReceiptVerified": false,
+        "report": "docs/validation/admin-postal-batch-s11-2026-10-27.json",
+        "remaining": [
+          "真实目标批量执行/重建/领取",
+          "终止与跨管理员接管审计",
+          "原角色删除后的未知结果处理",
+          "原工具行为与批量上限对照"
+        ],
+        "requiresChildRequestId": true
       }
     },
     {

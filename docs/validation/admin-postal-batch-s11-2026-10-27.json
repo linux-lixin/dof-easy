@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "batch": "S11 fixed-recipient mail tasks",
+  "date": "2026-10-27",
+  "sourceBase": "1c1c35f",
+  "completeReplacement": false,
+  "sourceFiles": [
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/controller/PostalController.java",
+      "sha256": "f53756ab0f9f86703855db6eaa9a40a65f9891de9f94db8b7a5431975f9e385f"
+    },
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/dof/ManagedOperationJournal.java",
+      "sha256": "da29badd1f34f4d9eaf0135576dc3cb3d90c8a06f447cef54c4a205916e371d2"
+    },
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/dof/ManagedPostalService.java",
+      "sha256": "2d78f9d743062d9da10b0ade486d9256ee8dd685fa61bfe7ea88eeeeea377d9f"
+    },
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/dof/ManagedPostalBatchService.java",
+      "sha256": "0a20bd6ee1a1b14fcfaf5106cb25fb156153b3e7f576bbc4c3d98ffb5b7a49c0"
+    },
+    {
+      "path": "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedPostalBatchContractTest.java",
+      "sha256": "561554328efaf9a62be8a7fe20c8670291a9bdec3ab9955023141b81b0d1f617"
+    },
+    {
+      "path": "services/admin/frontend/src/components/ManagedPostal.vue",
+      "sha256": "696ac9d1dc8884b9240b449638a01b2e677974261e359fa21af31e4165036245"
+    },
+    {
+      "path": "services/admin/frontend/src/components/ManagedPostalBatch.vue",
+      "sha256": "e7de9d3cbd410b7503ff90fc8445b64549eca0f032a2bbbd1f5fc18487bc250c"
+    },
+    {
+      "path": "services/admin/frontend/src/views/admin/player/PlayerRoles.vue",
+      "sha256": "236a182cf7b000da51241f4fb1448157e1e3a26129e1041b5ec21fa4f2d31b30"
+    },
+    {
+      "path": "tests/integration/dof/recharge/probe.py",
+      "sha256": "156b01c5a9415ccc7eed9160103779a0ca900fc9e55176a5dc23c0d6bc2913b1"
+    },
+    {
+      "path": "tests/integration/admin/postal-batch-page.cjs",
+      "sha256": "6ef63ee5bed371d74e87a50fcfaf5e31f7359085a559aaefff419227eb961075"
+    },
+    {
+      "path": "tests/integration/admin/postal-live.cjs",
+      "sha256": "4c356110dfa3249183744fb588f8ddd800d794a457427556151d751ff3ec1a27"
+    },
+    {
+      "path": "services/admin/backend/src/main/resources/dof/scope.json",
+      "sha256": "6b05064738daed3a250591c9be9aeaff4ff3f8dfcc041b66ba56e5cdbd06df8f"
+    },
+    {
+      "path": "services/admin/backend/src/main/resources/dof/execution-plan.json",
+      "sha256": "6848b374123d5168a5867b082110aaaa228423b7d536481f8563899029785ed4"
+    }
+  ],
+  "implementation": {
+    "protocol": "postal-batch-v1",
+    "maxRecipients": 100,
+    "parentAndChildrenPreviewAtomic": true,
+    "singleNativeIssuerReused": true,
+    "childrenReservedBeforeParentAuthorization": true,
+    "progress": "Persisted parent intent and individual child receipts; bounded one-target server steps, explicitly driven by the browser after start. No claim that an idle PREPARED task is a live worker.",
+    "retry": "New linked task only for NOT_APPLIED children, with original identity/content/PVF; sent or unknown outcomes refused.",
+    "interruption": "Client stops scheduling on error/close/stop; original task and receipt IDs survive. PREPARED/CONFLICT children block continuation until reconciliation.",
+    "originalStandaloneFingerprintPreserved": true,
+    "metadataAggregationIsNotNativeDelivery": true,
+    "stepChildRequestIdRequired": true,
+    "sameStepReplayAdvancesNoOtherRecipient": true
+  },
+  "standardMaven": {
+    "total": 365,
+    "passed": 180,
+    "skipped": 185,
+    "failures": 0,
+    "errors": 0,
+    "logSha256": "7e2caea2dd6d1e2f259b939a7d22079355b60d4e6ab9f82b7c85a67cf8efa246",
+    "skipNote": "40 dedicated database contracts run separately below; other private samples/integration prerequisites remain skipped."
+  },
+  "isolatedMySQL": {
+    "summary": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "managedPostalContractTests": 12,
+      "postalBatchContractTests": 11,
+      "totalContractTests": 40,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "provenance": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "c518f5f60c54fc9ba835161d0003962d23a667a5ffe06e857b6a0c648b70a24c",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "compiledInputs": [
+      {
+        "path": "com/aiyi/game/dnfserver/controller/PostalController.class",
+        "sha256": "3dba435f34a8122b573d6ddf145b85a1dc7e2f5f3eac74fa077077de9570d067",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedOperationJournal.class",
+        "sha256": "6374932fa878d2c8d93b20a9288195b3119c55536b25cca47203bdf3a0420978",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedPostalService.class",
+        "sha256": "38cb3d37871e3be4b57fcfe2ae3c02b00b5d74aeeed03473e878a02495821d2c",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedPostalService$Edit.class",
+        "sha256": "427faa06b0f17195b4bb12dbfee4acda817977d9a6d5f91bf059744a253d1562",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedPostalBatchService.class",
+        "sha256": "8bf4825d4658da89879abf2db2a979c856c35a230caafcbcea3a55040f3f6ceb",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedPostalBatchContractTest.class",
+        "sha256": "4f80cdab4c18b4e69363e26640346c1f7f670b1804a7ea28a11aedc01ada7d5c",
+        "matchesIsolatedInput": true
+      }
+    ],
+    "fixtures": "Actual native seed mail tables; two synthetic characters and explicit fixture auth queries, not original-tool/client behavior evidence."
+  },
+  "frontend": {
+    "standardBuildPassed": true,
+    "sourceMatchesBuiltStage": true,
+    "batchBrowser": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false,
+      "checks": [
+        "checked recipient selection and content freeze together without issuing mail",
+        "reload restores exact original batch ID, recipients and content",
+        "lost final response stops writes; reading original task recovers receipts without resending",
+        "stop schedules no further targets; reload resumes only the original remaining target",
+        "partial results retain errors; linked retry contains only confirmed unsubmitted recipients",
+        "uncertain child blocks continuation and retries; reconciliation issues no mail",
+        "history failure cannot appear as a writable empty task list",
+        "revoked management permission disables batch writes"
+      ],
+      "pageErrors": 0,
+      "nativeWritesInMock": 7,
+      "stepRequests": 8
+    },
+    "singleBrowser": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false,
+      "checks": [
+        "gold plus body preview freezes content without sending",
+        "reload rehydrates original preview with the same ID and content",
+        "lost submit keeps original ID; reconcile recovers receipt without reissuing",
+        "history recovers generated postal ID after page reload",
+        "uncertain MyISAM mail blocks new sends",
+        "explicit acknowledgment sends no new mail and preserves unknown original outcome",
+        "failed history read disables new mail even with a valid identity",
+        "permission failure disables sending"
+      ],
+      "pageErrors": 0,
+      "nativeWritesInMock": 2,
+      "submitRequests": 3
+    },
+    "realDeploymentVerified": false
+  },
+  "attempts": {
+    "firstCheckboxMockFailed": "Arco hidden checkbox input was not clickable; final test clicks its visible label. No product force-click or bypass.",
+    "initial39ContractsPassed": true,
+    "final40AddsSinglePoolAuthenticationCase": true,
+    "finalVerificationIncludesStrictChildBinding": true
+  },
+  "deployment": {
+    "performed": false,
+    "lastVerifiedAdminImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee",
+    "port": 18080,
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+    "preflightRunningAndGameHealthy": true
+  },
+  "remaining": [
+    "Deploy candidate and verify actual batch route/history reads/refusals.",
+    "Real dedicated-character batch preview, issuance, consumption and container restart evidence.",
+    "Explicit permanent cancellation/auditing, cross-admin takeover and unknown-result handling after recipient deletion.",
+    "Native avatar/creature/artifact flags and original-tool menu/default/batch-limit comparison.",
+    "Actual network/database/disk/process fault injection and business compensation.",
+    "Remaining CDK/exchange, equipment, activities, UI and PVF/companion publication scope."
+  ],
+  "candidateArtifact": {
+    "directory": ".dof-easy/admin-replacement-delivery-20261027-s11-batch-v2",
+    "appSha256": "31b3f95439d913b71620f575faa40b2604aa6a38eab60fb1a6c8073b6447a997",
+    "mainClassesMatchStandardBuild": true,
+    "privateKeysAndTestClassesExcluded": true,
+    "serverImageBuilt": false,
+    "supersededLocalUnboundBuild": "7f9f85e6b57d34aa02c4c21061ef33c1342bf74d472a30dcc4f2562575228536"
+  },
+  "otherChecks": {
+    "inventoryTestsPassed": 4,
+    "packagingTestsPassed": 1,
+    "syntaxChecked": true,
+    "diffChecked": true
+  }
+}

@@ -51,7 +51,7 @@ async function reconcile(row:any){
   catch(e:any){error.value=failure(e)}finally{busy.value=false}
 }
 function load(row:any){
-  if(busy.value||unknown.value||row.state!=='PREVIEWED'||row.actor!==current.value?.actor)return
+  if(busy.value||unknown.value||row.batchRequestId||row.state!=='PREVIEWED'||row.actor!==current.value?.actor)return
   frozen.value={receiveCharacNo:props.characNo,requestId:row.requestId,revision:row.revision,operation:row.operation,reason:row.reason,targetRequestId:row.targetRequestId||undefined,mail:row.operation==='send'?row.outcome.mail:undefined};receipt.value=row
 }
 async function begin(row?:any){
@@ -100,7 +100,8 @@ function label(state:string){return ({PREVIEWED:'仅预览，未发送',PREPARED
           <a-table-column title="原因" data-index="reason" />
           <a-table-column title="邮件编号"><template #cell="{record}">{{record.outcome?.postalId||'—'}}</template></a-table-column>
           <a-table-column title="核对" :width="240"><template #cell="{record}"><a-space wrap>
-            <a-button v-if="record.state==='PREVIEWED'&&record.actor===current?.actor" :disabled="busy||unknown" size="mini" @click="load(record)">加载原预览</a-button>
+            <a-button v-if="record.state==='PREVIEWED'&&!record.batchRequestId&&record.actor===current?.actor" :disabled="busy||unknown" size="mini" @click="load(record)">加载原预览</a-button>
+            <span v-if="record.batchRequestId">所属批量任务：{{record.batchRequestId}}</span>
             <a-button v-if="record.state==='PREPARED'" :disabled="busy" size="mini" @click="reconcile(record)">核对结果</a-button>
             <a-button v-if="record.state==='CONFLICT'" :disabled="busy" size="mini" @click="begin(record)">人工确认保留</a-button>
           </a-space></template></a-table-column>

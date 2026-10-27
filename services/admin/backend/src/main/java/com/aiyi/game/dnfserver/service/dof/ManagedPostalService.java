@@ -22,7 +22,7 @@ public class ManagedPostalService {
     private final ObjectMapper json=new ObjectMapper();
     private static final String POSTAL="`taiwan_cain_2nd`.`postal`",LETTER="`taiwan_cain_2nd`.`letter`",ROLES="`taiwan_cain`.`charac_info`",ACCOUNTS="`d_taiwan`.`accounts`";
     private static final String PROTOCOL="postal-generated-id-v1";
-    public static class Edit {public JsonNode receiveCharacNo,mail;public String requestId,revision,operation,targetRequestId,reason;}
+    public static class Edit {public JsonNode receiveCharacNo,mail;public String requestId,revision,operation,targetRequestId,reason,batchRequestId;}
     private String namespace(long id){return "postal."+id;}
     private String resource(long id){return "taiwan_cain_2nd.postal:"+id;}
     private void target(long id){if(id<1||id>Integer.MAX_VALUE)throw new DofFailure(400,"收件角色编号无效");}
@@ -60,24 +60,31 @@ public class ManagedPostalService {
         if(e.revision==null||!e.revision.matches("[0-9a-f]{64}"))throw new DofFailure(400,"缺少收件身份版本，请重新读取");
         if(!Arrays.asList("send","accept-current").contains(e.operation))throw new DofFailure(400,"未知邮件操作");
         if(e.reason==null||e.reason.trim().isEmpty())throw new DofFailure(400,"请填写操作原因");text(e.reason,100,"操作原因",false);
-        if(e.operation.equals("send")){if(e.targetRequestId!=null)throw new DofFailure(400,"普通发送不能关联历史操作");return mail(e.mail);}
+        if(e.operation.equals("send")){if(e.targetRequestId!=null)throw new DofFailure(400,"普通发送不能关联历史操作");if(e.batchRequestId!=null)ManagedOperationJournal.id(e.batchRequestId);return mail(e.mail);}
+        if(e.batchRequestId!=null)throw new DofFailure(400,"结果确认不能声明批量归属");
         ManagedOperationJournal.id(e.targetRequestId);if(e.mail!=null&&!e.mail.isNull())throw new DofFailure(400,"结果不明确认不能携带新邮件");return null;
     }
-    private String fingerprint(long id,Edit e,Map<String,Object> mail){
-        Map<String,Object> out=new TreeMap<>();out.put("recipient",id);out.put("revision",e.revision);out.put("operation",e.operation);out.put("reason",e.reason);out.put("mail",mail);out.put("targetRequestId",e.targetRequestId==null?null:ManagedOperationJournal.id(e.targetRequestId));return journal.hash(out);
+    String fingerprint(long id,Edit e,Map<String,Object> mail){
+        Map<String,Object> out=new TreeMap<>();out.put("recipient",id);out.put("revision",e.revision);out.put("operation",e.operation);out.put("reason",e.reason);out.put("mail",mail);out.put("targetRequestId",e.targetRequestId==null?null:ManagedOperationJournal.id(e.targetRequestId));
+        // Preserve the existing S10 fingerprint for standalone requests.
+        if(e.batchRequestId!=null)out.put("batchRequestId",ManagedOperationJournal.id(e.batchRequestId));return journal.hash(out);
     }
     private DofFailure uncertain(){return new DofFailure(503,"邮件结果尚未确认，请保留原操作编号并核对历史，不要换编号重发");}
-    private void discard(Connection c,Throwable failure){try{Connection physical=c.unwrap(Connection.class);if(physical==null)throw new SQLException("No physical connection");physical.close();}catch(SQLException|RuntimeException ex){failure.addSuppressed(ex);try{c.abort(Runnable::run);}catch(SQLException|RuntimeException abort){failure.addSuppressed(abort);}}}
-    private void unlock(Connection c)throws SQLException{try{journal.unlock(c);}catch(SQLException|RuntimeException e){discard(c,e);throw e;}}
-    private void lock(Connection c)throws SQLException{
+    void discard(Connection c,Throwable failure){try{Connection physical=c.unwrap(Connection.class);if(physical==null)throw new SQLException("No physical connection");physical.close();}catch(SQLException|RuntimeException ex){failure.addSuppressed(ex);try{c.abort(Runnable::run);}catch(SQLException|RuntimeException abort){failure.addSuppressed(abort);}}}
+    void unlock(Connection c)throws SQLException{try{journal.unlock(c);}catch(SQLException|RuntimeException e){discard(c,e);throw e;}}
+    void lock(Connection c)throws SQLException{
         try{journal.lock(c,POSTAL+" WRITE,"+LETTER+" WRITE,"+ROLES+" READ,"+ACCOUNTS+" READ");schema.inspect(c,journal);}
         catch(SQLException|RuntimeException e){try{unlock(c);}catch(SQLException|RuntimeException cleanup){e.addSuppressed(cleanup);}throw e;}
     }
-    private void actor(Connection c,long who)throws SQLException{
+    void actor(Connection c,long who)throws SQLException{
         try(PreparedStatement p=c.prepareStatement("SELECT admin FROM "+ACCOUNTS+" WHERE UID=?")){p.setLong(1,who);try(ResultSet r=p.executeQuery()){if(!r.next()||r.getInt(1)==0||r.wasNull()||r.next())throw new DofFailure(403,"管理员权限已改变，停止发送");}}
     }
     private Map<String,Object> before(Connection c,long id)throws SQLException{
-        Map<String,Object> descriptor=schema.inspect(c,journal),out=new TreeMap<>();out.put("protocol",PROTOCOL);out.put("recipient",id);out.put("schemaRevision",journal.hash(descriptor));out.put("atomicReceipt",descriptor.get("atomicReceipt"));
+        return before(c,id,descriptor(c));
+    }
+    Map<String,Object> descriptor(Connection c)throws SQLException{return schema.inspect(c,journal);}
+    Map<String,Object> before(Connection c,long id,Map<String,Object> descriptor)throws SQLException{
+        Map<String,Object> out=new TreeMap<>();out.put("protocol",PROTOCOL);out.put("recipient",id);out.put("schemaRevision",journal.hash(descriptor));out.put("atomicReceipt",descriptor.get("atomicReceipt"));
         try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT @@server_uuid")){if(!r.next())throw uncertain();out.put("databaseUuid",r.getString(1));}
         long uid;
         try(PreparedStatement p=c.prepareStatement("SELECT m_id,HEX(charac_name),delete_flag,CAST(create_time AS CHAR) FROM "+ROLES+" WHERE charac_no=?")){
@@ -117,10 +124,11 @@ public class ManagedPostalService {
         if(e.operation.equals("accept-current")){
             if(!source(c,id,e.targetRequestId).state.equals("CONFLICT"))throw new DofFailure(409,"只能确认结果不明的邮件操作");return state;
         }
-        Map<String,Object> out=new TreeMap<>();out.put("protocol",PROTOCOL);out.put("mail",mail);out.put("attachment",attachment(mail));out.put("sender","DNF Manager");out.put("bodyEncoding","database-utf8-consumer-unverified");return out;
+        return frozenSendPlan(mail);
     }
+    Map<String,Object> frozenSendPlan(Map<String,Object> mail){Map<String,Object> out=new TreeMap<>();out.put("protocol",PROTOCOL);out.put("mail",mail);out.put("attachment",attachment(mail));out.put("sender","DNF Manager");out.put("bodyEncoding","database-utf8-consumer-unverified");return out;}
     private Map<String,Object> result(ManagedOperationJournal.Entry e){
-        Map<String,Object> out=journal.result(e);out.put("revision",e.beforeHash);out.put("recipient",e.target);out.put("before",decode(e.beforeJson));out.put("outcome",decode(e.afterJson));out.put("actualReceiptVerified",false);return out;
+        Map<String,Object> out=journal.result(e);out.put("revision",e.beforeHash);out.put("recipient",e.target);out.put("before",decode(e.beforeJson));out.put("outcome",decode(e.afterJson));out.put("actualReceiptVerified",false);out.put("batchRequestId",e.operation.equals("send")?e.targetRequest:null);return out;
     }
     public Object status(long id){
         long who=journal.admin();target(id);try(Connection c=journal.connection()){lock(c);try{actor(c,who);Map<String,Object> state=before(c,id),out=new TreeMap<>(state);out.put("revision",journal.hash(state));out.put("instanceId",journal.instance());out.put("actor",who);return out;}finally{unlock(c);}}catch(SQLException e){throw uncertain();}
@@ -130,6 +138,7 @@ public class ManagedPostalService {
         try(Connection c=journal.connection()){lock(c);try{
             actor(c,who);ManagedOperationJournal.Entry old=journal.find(c,edit.requestId);
             if(old!=null){journal.same(old,namespace(id),who,fingerprint);return result(source(c,id,edit.requestId));}
+            if(edit.batchRequestId!=null)throw new DofFailure(409,"批量子预览只能随父任务原子创建，请读取批量历史");
             journal.noPending(c,resource(id),edit.operation.equals("accept-current")?ManagedOperationJournal.id(edit.targetRequestId):null);
             Map<String,Object> state=before(c,id),after=plan(c,id,edit,mail,state);
             return result(journal.preview(c,edit.requestId,who,namespace(id),resource(id),Long.toString(id),edit.operation,edit.targetRequestId,fingerprint,edit.reason,state,after));
@@ -161,6 +170,7 @@ public class ManagedPostalService {
         try(Connection c=journal.connection()){boolean discarded=false;lock(c);try{
             actor(c,who);ManagedOperationJournal.Entry e=source(c,id,edit.requestId);journal.same(e,namespace(id),who,fingerprint);
             if(!e.state.equals("PREVIEWED"))return result(e);
+            if(edit.batchRequestId!=null)ManagedPostalBatchService.authorizeChild(c,journal,who,id,edit,fingerprint);
             journal.noPending(c,resource(id),edit.operation.equals("accept-current")?ManagedOperationJournal.id(edit.targetRequestId):null);
             Map<String,Object> state=before(c,id),after=plan(c,id,edit,mail,state);
             if(!journal.hash(state).equals(e.beforeHash)||!journal.hash(after).equals(e.afterHash))throw new DofFailure(409,"邮件预览已改变，未提交新内容");
@@ -169,6 +179,7 @@ public class ManagedPostalService {
             c.setAutoCommit(false);lock(c);
             try{
                 e=source(c,id,edit.requestId);if(!e.state.equals("PREPARED")){c.rollback();return result(e);}
+                if(edit.batchRequestId!=null)ManagedPostalBatchService.authorizeChild(c,journal,who,id,edit,fingerprint);
                 actor(c,who);Map<String,Object> current=before(c,id);
                 if(!journal.hash(current).equals(e.beforeHash)){e=journal.finish(c,e,"NOT_APPLIED",who);c.commit();return result(e);}
                 // Revalidate the frozen PVF plan after the table-lock reacquisition.

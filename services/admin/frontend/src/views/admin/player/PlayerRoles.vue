@@ -4,8 +4,12 @@ import {Message, Modal} from "@arco-design/web-vue";
 import Request from "../../../api/Request";
 import RoleAttributesEditor from "./RoleAttributesEditor.vue";
 import ManagedPostal from "../../../components/ManagedPostal.vue";
+import ManagedPostalBatch from "../../../components/ManagedPostalBatch.vue";
 
 const loading = ref(false);
+const selectedKeys=ref<Array<string|number>>([]),batchOpen=ref(false);
+const rowSelection={type:'checkbox' as const,showCheckedAll:true};
+const onSelection=(keys:Array<string|number>)=>{selectedKeys.value=keys};
 
 const searchForm = reactive({
 	pageNum: 1,
@@ -232,9 +236,15 @@ onMounted(() => {
 					<a-button type="primary" @click="search(true)">查询</a-button>
 				</a-form-item>
 			</a-form>
+			<a-space style="margin-top:12px">
+                <a-button :disabled="!selectedKeys.length||selectedKeys.length>100" @click="batchOpen=true">批量邮件（已选 {{selectedKeys.length}}）</a-button>
+                <a-button @click="batchOpen=true">批量任务历史</a-button>
+            </a-space>
 		</a-card>
 
 		<a-table
+			row-key="characNo"
+            :row-selection="rowSelection" :selected-keys="selectedKeys" @selection-change="onSelection"
 			scrollbar
 			:scroll="{ y: windowHeight }"
 			style="margin-top: 10px;"
@@ -298,6 +308,7 @@ onMounted(() => {
 
         <ManagedPostal v-if="sendMailOption.open" :key="sendMailOption.receiveCharacNo" v-model:visible="sendMailOption.open"
             :charac-no="sendMailOption.receiveCharacNo" :name="sendMailOption.receiveCharacName" />
+        <ManagedPostalBatch v-if="batchOpen" v-model:visible="batchOpen" :recipients="selectedKeys.map(Number)" />
 	</div>
 </template>
 

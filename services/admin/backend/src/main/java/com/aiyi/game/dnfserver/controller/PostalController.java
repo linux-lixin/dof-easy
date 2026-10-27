@@ -41,6 +41,9 @@ public class PostalController {
     @Resource
     private com.aiyi.game.dnfserver.service.dof.ManagedPostalService managedPostal;
 
+    @Resource
+    private com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService postalBatch;
+
     @GetMapping
     public ResultPage<Postal> list(String account, String start,
                                    String end, Integer page,
@@ -79,5 +82,13 @@ public class PostalController {
     @PostMapping("{characNo}/preview") public Object preview(@PathVariable long characNo,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalService.Edit edit){return managedPostal.preview(characNo,edit);}
     @GetMapping("{characNo}/history") public Object history(@PathVariable long characNo){return managedPostal.history(characNo);}
     @PostMapping("{characNo}/history/{requestId}/reconcile") public Object reconcile(@PathVariable long characNo,@PathVariable String requestId){return managedPostal.reconcile(characNo,requestId);}
+
+    @PostMapping("batch/validate") public Object batchValidate(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Draft draft){return postalBatch.validate(draft);}
+    @PostMapping("batch/preview") public Object batchPreview(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Edit edit){return postalBatch.preview(edit);}
+    @PostMapping("batch") public Object batchStart(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Edit edit){return postalBatch.start(edit);}
+    @GetMapping("batch/history") public Object batchHistory(){return postalBatch.history();}
+    @GetMapping("batch/{requestId}") public Object batchRead(@PathVariable String requestId){return postalBatch.read(requestId);}
+    @PostMapping("batch/{requestId}/step") public Object batchStep(@PathVariable String requestId,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Link link){return postalBatch.step(requestId,link);}
+    @PostMapping("batch/{requestId}/reconcile") public Object batchReconcile(@PathVariable String requestId,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Link link){return postalBatch.reconcile(requestId,link);}
 
 }
