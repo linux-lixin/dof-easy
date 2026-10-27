@@ -558,7 +558,24 @@
             }
           }
         }
-      ]
+      ],
+      "nativeTokenWalletManagement": {
+        "protocol": "recharge-points-atomic-v1",
+        "entry": "/admin/player/accounts -> 代币券管理",
+        "api": "/api/v1/recharge/points",
+        "nativeLocation": "taiwan_billing.cash_cera_point.cera_point",
+        "codeImplemented": true,
+        "localSqlVerified": true,
+        "localBrowserVerified": true,
+        "realDeploymentVerified": false,
+        "actualClientConsumptionVerified": false,
+        "originalToolEquivalenceVerified": false,
+        "scoreShopEquivalenceVerified": false,
+        "sharedWriter": "ManagedRechargeService fixed native coupon adapter; separate request namespace and snapshots",
+        "amountField": "amount",
+        "preservesNativeDates": true,
+        "report": "docs/validation/admin-token-coupons-s16-2026-10-28.json"
+      }
     },
     {
       "id": "feature-009",

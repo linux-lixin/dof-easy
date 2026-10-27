@@ -20,6 +20,7 @@ const pageResult = ref<PageResult>({
   list: []
 });
 const rechargeVisible = ref(false);
+const rechargeCurrency=ref<'cera'|'cera_point'>('cera');
 const rechargeTarget = ref<{uid:number;accountname:string}>();
 const windowHeight = ref(window.innerHeight - 250)
 
@@ -63,9 +64,10 @@ const onPageSizeChange = (pageSize: number) => {
   search(true);
 };
 
-const openRecharge = (uid: number | string, accountname: string) => {
+const openRecharge = (uid: number | string, accountname: string, currency:'cera'|'cera_point'='cera') => {
   const value = Number(uid);
   if (!Number.isSafeInteger(value) || value < 1) { Message.error('账号编号无效'); return; }
+  rechargeCurrency.value=currency;
   rechargeTarget.value = {uid:value,accountname};
   rechargeVisible.value = true;
 };
@@ -148,6 +150,7 @@ onMounted(() => {
           <template #cell="{ record }">
             <a-space>
               <a-button size="small" type="primary" @click="openRecharge(record.uid, record.accountname)">充值</a-button>
+              <a-button size="small" @click="openRecharge(record.uid,record.accountname,'cera_point')">代币券管理</a-button>
               <!--            <a-button size="small" status="warning" @click="{}"-->
               <!--            >封号/解封</a-button-->
               <!--            >-->
@@ -171,7 +174,7 @@ onMounted(() => {
       />
     </div>
 
-    <ManagedRecharge v-if="rechargeTarget" :key="rechargeTarget.uid" v-model:visible="rechargeVisible" :uid="rechargeTarget.uid" :account-name="rechargeTarget.accountname" @changed="search(false)" />
+    <ManagedRecharge v-if="rechargeTarget" :key="rechargeTarget.uid" v-model:visible="rechargeVisible" :uid="rechargeTarget.uid" :account-name="rechargeTarget.accountname" :currency="rechargeCurrency" @changed="search(false)" />
   </div>
 </template>
 

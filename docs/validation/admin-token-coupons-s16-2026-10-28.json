@@ -1,0 +1,198 @@
+{
+  "stage": "S16",
+  "date": "2026-10-28",
+  "protocol": "recharge-points-atomic-v1",
+  "purpose": "native cash_cera_point administrative management; not score-shop currency substitution",
+  "completeReplacement": false,
+  "originalToolEquivalenceVerified": false,
+  "actualClientConsumptionVerified": false,
+  "implementation": {
+    "entry": "/admin/player/accounts -> 代币券管理",
+    "api": "/api/v1/recharge/points",
+    "nativeLocation": "taiwan_billing.cash_cera_point.cera_point",
+    "sameTypedWriterAsCera": true,
+    "namespace": "recharge.points.<uid>",
+    "requestAmountField": "amount",
+    "preservesNativeDates": true,
+    "crossCurrencyCompensationRefused": true,
+    "nativeWalletNotAutomaticallyInitialized": true,
+    "noNewRewardScheduler": true
+  },
+  "standardMaven": {
+    "passed": true,
+    "total": 416,
+    "passedTests": 182,
+    "skippedTests": 234,
+    "failures": 0,
+    "errors": 0,
+    "log": "/tmp/dof-admin-s16-maven-2.log"
+  },
+  "frontend": {
+    "buildPassed": true,
+    "log": "/tmp/dof-admin-s16-frontend-1.log"
+  },
+  "sqlContract": {
+    "passed": true,
+    "contractTests": 14,
+    "databaseVersion": "5.6.51",
+    "generatedMailReceiptContractTests": 3,
+    "managedPostalContractTests": 12,
+    "postalBatchContractTests": 11,
+    "postalReceiptControlContractTests": 7,
+    "postalBatchControlContractTests": 8,
+    "cdkContractTests": 13,
+    "cdkInventoryContractTests": 13,
+    "pointsContractTests": 8,
+    "totalContractTests": 89,
+    "realServiceSqlFaultAndConcurrencyGatePassed": true,
+    "fixtureSchemasRemoved": true,
+    "originalToolEquivalenceVerified": false,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false
+  },
+  "sqlEvidence": {
+    "schema": 1,
+    "serverAccessed": false,
+    "network": "private namespace; no routes or external interfaces",
+    "rootReadOnly": true,
+    "inputsReadOnly": true,
+    "loopbackOnly": true,
+    "inputsFingerprint": "3daa0a6daf1d9dae1d3e558d603d98c5a040536229cd0c49ca06af45fd9d17d2",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "command": [
+      "/bin/sh",
+      "/inputs/run.sh"
+    ],
+    "completed": true,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "evidenceValid": true
+  },
+  "mockedBrowsers": {
+    "points": {
+      "passed": true,
+      "currency": "cera_point",
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "pageErrors": 0,
+      "checks": [
+        "read before edit; frozen preview changes no money and locks inputs",
+        "reload rehydrates the exact original preview body and request identity",
+        "lost submit retains original request; reconciliation never resends credit",
+        "reload recovers original durable receipt from history without submitting",
+        "compensation links original credit and subtracts only its delta from later balance",
+        "stale submit does not award and requires explicit reconciliation before new intent",
+        "MyISAM interrupted result stays unknown and blocks new credits",
+        "explicit keep-current acknowledgment changes no money and preserves unknown original outcome",
+        "permission/read failure leaves writing disabled"
+      ],
+      "nativeMutationsInMock": 3,
+      "automaticResubmissions": 0
+    },
+    "recharge": {
+      "passed": true,
+      "currency": "cera",
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "pageErrors": 0,
+      "checks": [
+        "read before edit; frozen preview changes no money and locks inputs",
+        "reload rehydrates the exact original preview body and request identity",
+        "lost submit retains original request; reconciliation never resends credit",
+        "reload recovers original durable receipt from history without submitting",
+        "compensation links original credit and subtracts only its delta from later balance",
+        "stale submit does not award and requires explicit reconciliation before new intent",
+        "MyISAM interrupted result stays unknown and blocks new credits",
+        "explicit keep-current acknowledgment changes no money and preserves unknown original outcome",
+        "permission/read failure leaves writing disabled"
+      ],
+      "nativeMutationsInMock": 3,
+      "automaticResubmissions": 0
+    },
+    "cdk": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false,
+      "checks": [
+        "lost redemption response freezes code/account and original ID and blocks a new operation",
+        "same-ID reconciliation recovers receipt without issuing again; browser storage contains no code or captcha",
+        "reload restores only the receipt ID and can recover after re-entering original secret inputs",
+        "CDK compensation opens the existing debit preview with original ID and exact negative face value",
+        "administrator reconciles uncertainty then acknowledges and freezes the code without issuing or reclaiming a reward",
+        "cancelling a reserved preview records no reward and preserves its original receipt",
+        "expired captcha creates no reward; refreshing it can explicitly retry the same frozen request ID",
+        "history failures remain visible rather than pretending to be empty successful records",
+        "management permission refusal remains visible"
+      ],
+      "pageErrors": 0,
+      "nativeWritesInMock": 4
+    }
+  },
+  "pythonChecks": {
+    "inventory": 4,
+    "packaging": 1,
+    "passed": true
+  },
+  "actualSchemaReadOnly": {
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "engine": "InnoDB",
+    "columns": [
+      "account varchar(30) NOT NULL",
+      "cera_point int(10) unsigned NOT NULL",
+      "reg_date datetime NOT NULL",
+      "mod_date datetime NOT NULL"
+    ],
+    "trigger": "known seed point boundary update",
+    "dedicatedUid": 6,
+    "couponBalance": 0,
+    "ceraBalance": 37,
+    "nativeWritePerformed": false
+  },
+  "staticRuntimeSqlCandidates": [
+    {
+      "file": "lib/libdof-plugin.so",
+      "sha256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+      "staticSqlCandidates": [
+        "SELECT LuckPoint FROM MultiBoxLottery WHERE acc_Id = %u AND userId = %u",
+        "dj Server Plugin get_MultiBoxLuckPoint SELECT query MultiBoxLottery failed 2",
+        "SELECT Lucky_points FROM randombox_user WHERE uid = %d",
+        "SELECT A.Lucky_points,B.item_id FROM randombox_config AS B, randombox_user AS A WHERE A.uid = %d AND edxof = 1"
+      ],
+      "candidateOnly": true
+    },
+    {
+      "file": "lib/libdof-inline.so",
+      "sha256": "35e3a05e86b950f5ac4880fbc8fb75bb9d0926662d9344ea808af4c2aad327f8",
+      "staticSqlCandidates": [],
+      "candidateOnly": true
+    },
+    {
+      "file": "bin/dof-gateway",
+      "sha256": "8e05eb8f2741061a8f9682d819eb774516ac7d8c357a5a90e688fcbc6ac0e9e1",
+      "staticSqlCandidates": [
+        "update taiwan_billing.cash_cera_point set cera_point=cera_point+? where account=(select m_id from taiwan_cain.charac_info where charac_no=?);",
+        "update taiwan_billing.cash_cera set cera=cera+%d where account=%d; update taiwan_billing.cash_cera_point set cera_point=cera_point+%d where account=%d;",
+        "select a.charac_no,a.m_id from taiwan_cain.charac_info AS a,taiwan_game_event.event_1306_account_reward AS b,taiwan_login.login_account_3 AS c LEFT JOIN taiwan_billing.cash_cera tbcc ON m_id = tbcc.account LEFT JOIN taiwan_billing.cash_cera_point tbccp ON m_id = tbccp.account WHERE a.m_id=b.m_id AND b.m_id=c.m_id AND a.charac_no=b.charac_no AND  c.login_status=1 AND login_ip != '10.0.0.1' and login_ip!='",
+        "update taiwan_billing.cash_cera_point set cera_point=cera_point+%d where account=%s;",
+        "select a.charac_no,CONVERT (unhex(hex(CONVERT (`charac_name` USING latin1))) USING utf8) charac_name,a.m_id from taiwan_cain.charac_info AS a,taiwan_game_event.event_1306_account_reward AS b,taiwan_login.login_account_3 AS c LEFT JOIN taiwan_billing.cash_cera tbcc ON m_id = tbcc.account LEFT JOIN taiwan_billing.cash_cera_point tbccp ON m_id = tbccp.account WHERE a.m_id=b.m_id AND b.m_id=c.m_id AND a.charac_no=b.charac_no AND  c.login_status=1 AND login_ip != '10.0.0.1' and login_ip!='",
+        "select * from (select a.charac_no,CONVERT (unhex(hex(CONVERT (`charac_name` USING latin1))) USING utf8) charac_name,a.m_id from taiwan_cain.charac_info AS a,taiwan_game_event.event_1306_account_reward AS b,taiwan_login.login_account_3 AS c LEFT JOIN taiwan_billing.cash_cera tbcc ON m_id = tbcc.account LEFT JOIN taiwan_billing.cash_cera_point tbccp ON m_id = tbccp.account WHERE a.m_id=b.m_id AND b.m_id=c.m_id AND a.charac_no=b.charac_no AND  c.login_status=1 AND login_ip != '10.0.0.1' AND login_ip!='%s') obj where obj.charac_name in (%s);",
+        "insert into taiwan_billing.cash_cera_point (account,cera_point,mod_date,reg_date) VALUES ('%s','%s',now(),now());"
+      ],
+      "candidateOnly": true
+    }
+  ],
+  "staticAuditLimit": "Derived local native runtime candidates only; no Windows GUI execution or original-tool behavior proof. Lucky-point tables do not prove score-shop identity. Score-shop issuer/data semantics remain unconfirmed.",
+  "deployment": {
+    "verified": false,
+    "pending": "admin-only candidate deployment and dedicated UID6 coupon 0 -> 1 -> 0; preserve both wallets and rollback"
+  },
+  "remaining": [
+    "actual native coupon client display/consumption and read timing",
+    "original admin manual behavior comparison",
+    "score-shop accounting and exchange issuer; do not substitute cera_point or random-box luck",
+    "external fault/rebuild/multi-level compatibility and full cross-protocol rollback drill"
+  ]
+}
