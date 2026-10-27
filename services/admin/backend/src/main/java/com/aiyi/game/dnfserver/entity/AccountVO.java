@@ -95,6 +95,14 @@ public class AccountVO extends PO {
 
     @TempField
     private String activationCode;
+    @TempField
+    private String registrationRequestId;
+    @TempField
+    private String registrationClientIp;
+    public String getRegistrationRequestId(){return registrationRequestId;}
+    public void setRegistrationRequestId(String value){registrationRequestId=value;}
+    public String getRegistrationClientIp(){return registrationClientIp;}
+    public void setRegistrationClientIp(String value){registrationClientIp=value;}
     public String getActivationCode() { return activationCode; }
     public void setActivationCode(String value) { activationCode = value; }
 

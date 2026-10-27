@@ -144,7 +144,7 @@ def management_migrations(query):
     source = (ROOT / 'services/admin/database/dof-admin.sql').read_text()
     statements = [s.strip() for s in re.sub(r'(?m)^\s*--.*$', '', source).split(';') if s.strip()]
     for sql in statements:
-        if (not re.match(r'^CREATE TABLE IF NOT EXISTS dnf_service\.DOF_[A-Z0-9_]+\b', sql)
+        if (not re.match(r'^CREATE TABLE IF NOT EXISTS dnf_service\.(?:DOF_[A-Z0-9_]+|REGISTRATION_POLICY|REGISTRATION_CODES|REGISTRATION_AUDIT)\b', sql)
                 or re.search(r'\b(?:DROP|TRUNCATE|INSERT|UPDATE|DELETE|ALTER|REPLACE)\b', sql, re.I)):
             raise ValueError('管理迁移包含非追加式语句，停止执行')
     query(';\n'.join(statements) + ';')

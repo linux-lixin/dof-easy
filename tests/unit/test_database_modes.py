@@ -68,6 +68,19 @@ class DatabaseModes(unittest.TestCase):
                 db.management_migrations(query)
             query.assert_not_called()
 
+    def test_registration_migration_allows_only_known_management_tables(self):
+        for table, accepted in [('REGISTRATION_POLICY', True), ('REGISTRATION_CODES', True), ('REGISTRATION_AUDIT', True), ('REGISTRATION_OTHER', False), ('accounts', False)]:
+            with self.subTest(table=table), tempfile.TemporaryDirectory() as folder:
+                root=Path(folder);path=root/'services/admin/database';path.mkdir(parents=True)
+                (path/'dof-admin.sql').write_text('CREATE TABLE IF NOT EXISTS dnf_service.'+table+'(id INT);')
+                query=Mock()
+                with patch.object(db,'ROOT',root):
+                    if accepted:
+                        db.management_migrations(query);query.assert_called_once()
+                    else:
+                        with self.assertRaises(ValueError):db.management_migrations(query)
+                        query.assert_not_called()
+
     def test_existing_schema_rejected_before_any_write(self):
         answers=iter(['5.6.51\t11111111-1111-1111-1111-111111111111','mysql\nd_taiwan'])
         query=Mock(side_effect=lambda _:next(answers))

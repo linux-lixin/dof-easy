@@ -38,6 +38,7 @@ import java.util.List;
 @Service
 public class AccountServiceImpl implements AccountService {
     @Resource private com.aiyi.game.dnfserver.service.extension.RegistrationCodesService registrationCodes;
+    @Resource private com.aiyi.game.dnfserver.service.dof.RegistrationReceipts registrationReceipts;
     @Resource private com.aiyi.game.dnfserver.service.extension.NativeAccountRegistration nativeAccountRegistration;
 
 
@@ -98,6 +99,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(AccountVO accountVO, boolean isAdmin) {
+        if(!isAdmin){com.aiyi.game.dnfserver.service.dof.RegistrationReceipts.validate(accountVO);com.aiyi.game.dnfserver.service.dof.RegistrationReceipts.Receipt replay=registrationReceipts.replay(accountVO);if(replay!=null&&replay.replay)return;}
+        if(accountVO.getValidationIndex()==null||accountVO.getValidationIndex().length()>128||accountVO.getValicode()==null||accountVO.getValicode().length()>32)throw new ValidationException("验证码格式无效");
         if (null == accountVO.getAccountname() || accountVO.getAccountname().trim().isEmpty()){
             throw new ValidationException("用户名不能为空");
         }
@@ -110,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
 //            throw new ValidationException("验证码不正确或已过期");
 //        }
 
-        String code = CacheUtil.get(Key.as(CommonAttr.CACHE.VALIDATION_CODE, accountVO.getValidationIndex()), String.class);
+        String code = CacheUtil.take(Key.as(CommonAttr.CACHE.VALIDATION_CODE, accountVO.getValidationIndex()), String.class);
         if (null == code || !code.equalsIgnoreCase(accountVO.getValicode())){
             throw new ValidationException("验证码不正确或已过期");
         }
@@ -159,7 +162,12 @@ public class AccountServiceImpl implements AccountService {
         }
 
 
+        com.aiyi.game.dnfserver.service.dof.RegistrationReceipts.Receipt receipt=isAdmin?null:registrationReceipts.begin(accountVO);
+        if(receipt!=null&&receipt.replay)return;
+        registrationReceipts.lockForExecution(receipt,accountVO);
+        nativeAccountRegistration.verify();
         Long activationId = isAdmin ? null : registrationCodes.claim(accountVO.getActivationCode(), accountVO.getAccountname());
+        int[] initialGift=isAdmin?new int[]{1000,1}:nativeAccountRegistration.gift(accountVO.getRegistrationClientIp());
         accountVO.setPassword(MD5.getMd5(accountVO.getPassword()));
         nativeAccountRegistration.insert(accountVO);
 //        accountDao.insert(accountVO);
@@ -167,10 +175,11 @@ public class AccountServiceImpl implements AccountService {
         accountDao.execute("INSERT INTO d_taiwan.member_info(m_id, user_id)VALUES('" + accountVO.getUid() + "', '" + accountVO.getUid() + "')");
         accountDao.execute("INSERT INTO d_taiwan.member_white_account(m_id)VALUES('" + accountVO.getUid() + "')");
         accountDao.execute("INSERT INTO taiwan_login.member_login(m_id)VALUES('" + accountVO.getUid() + "')");
-        accountDao.execute("INSERT INTO taiwan_billing.cash_cera(account, cera,mod_tran, mod_date, reg_date)VALUES('" + accountVO.getUid() + "', 1000, 0, NOW(), NOW())");
-        accountDao.execute("INSERT INTO taiwan_billing.cash_cera_point(account, cera_point,mod_date, reg_date)VALUES('" + accountVO.getUid() + "', 0, NOW(), NOW())");
+        accountDao.execute("INSERT INTO taiwan_billing.cash_cera(account, cera,mod_tran, mod_date, reg_date)VALUES('" + accountVO.getUid() + "', "+(initialGift[1]==1?initialGift[0]:0)+", 0, NOW(), NOW())");
+        accountDao.execute("INSERT INTO taiwan_billing.cash_cera_point(account, cera_point,mod_date, reg_date)VALUES('" + accountVO.getUid() + "', "+(initialGift[1]==0?initialGift[0]:0)+", NOW(), NOW())");
         accountDao.execute("INSERT INTO taiwan_cain_2nd.member_avatar_coin(m_id)VALUES('" + accountVO.getUid() + "')");
         registrationCodes.finish(activationId, accountVO.getUid());
+        registrationReceipts.complete(receipt,accountVO.getUid(),initialGift[0],initialGift[1]);
 
         /*
          *# 充值10点券

@@ -502,7 +502,10 @@
               "evidence": []
             }
           ],
-          "managementImplementation": "管理员重置普通玩家密码已接通；玩家自助保留旧密码+一次性验证码；原生入口/原工具对照仍待验，不将管理员重置替代游戏内改密。"
+          "managementImplementation": {
+            "state": "management_protocol_implemented_effect_pending",
+            "description": "管理员重置普通玩家密码已接通；玩家自助保留旧密码+一次性验证码；原生入口/原工具对照仍待验，不将管理员重置替代游戏内改密。"
+          }
         },
         {
           "id": "feature-011-02",
@@ -517,14 +520,36 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
           "implementationSubsets": [
             {
               "location": "dof_native.config.switch_regCdkey",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
-          ]
+          ],
+          "managementImplementation": {
+            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ]
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "passed_synthetic_backend_restart"
+          }
         },
         {
           "id": "feature-011-03",
@@ -539,7 +564,29 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
+          "managementImplementation": {
+            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ]
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "passed_synthetic_backend_restart"
+          }
         },
         {
           "id": "feature-011-04",
@@ -554,9 +601,31 @@
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
           "output": "原生读取/保存对照、带版本的预览保存、操作历史与定向恢复",
           "failureBehavior": "版本冲突拒绝；部分写入进入待核对，阻止新写入；恢复只改本次字段",
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
           "implementationStatus": "native_mapping_and_myisam_contract_tested_effect_pending",
-          "apiModule": "registration"
+          "apiModule": "registration",
+          "managementImplementation": {
+            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ]
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "passed_synthetic_backend_restart"
+          }
         },
         {
           "id": "feature-011-05",
@@ -571,9 +640,31 @@
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
           "output": "原生读取/保存对照、带版本的预览保存、操作历史与定向恢复",
           "failureBehavior": "版本冲突拒绝；部分写入进入待核对，阻止新写入；恢复只改本次字段",
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
           "implementationStatus": "native_mapping_and_myisam_contract_tested_effect_pending",
-          "apiModule": "registration"
+          "apiModule": "registration",
+          "managementImplementation": {
+            "state": "managed_registration_contract_tested_native_consumption_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ]
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "passed_synthetic_backend_restart"
+          }
         }
       ]
     },

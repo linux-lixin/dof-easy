@@ -57,7 +57,8 @@ public class ClientAccountController {
      */
     @GetMapping("client/register")
     @NoLogin
-    public String register(AccountVO accountVO){
+    public String register(AccountVO accountVO,javax.servlet.http.HttpServletRequest request){
+        accountVO.setRegistrationClientIp(com.aiyi.game.dnfserver.service.extension.RegistrationClientAddress.resolve(request));
         accountService.register(accountVO);
         return "注册成功";
     }
@@ -69,10 +70,12 @@ public class ClientAccountController {
      */
     @PostMapping("api/v1/client/register")
     @NoLogin
-    public Map<String, Object> register2(@RequestBody AccountVO accountVO){
+    public Map<String, Object> register2(@RequestBody AccountVO accountVO,javax.servlet.http.HttpServletRequest request){
+        accountVO.setRegistrationClientIp(com.aiyi.game.dnfserver.service.extension.RegistrationClientAddress.resolve(request));
         accountService.register(accountVO);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "注册成功");
+        map.put("requestId",accountVO.getRegistrationRequestId());
         return map;
     }
 
@@ -143,4 +146,12 @@ public class ClientAccountController {
         }
         return list;
     }
+    @ExceptionHandler(com.aiyi.game.dnfserver.service.dof.DofFailure.class)
+    public org.springframework.http.ResponseEntity<Map<String,String>> journalFailure(com.aiyi.game.dnfserver.service.dof.DofFailure e){return org.springframework.http.ResponseEntity.status(e.status).body(Collections.singletonMap("message",e.getMessage()));}
+    @ExceptionHandler(com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure.class)
+    public org.springframework.http.ResponseEntity<Map<String,String>> operationFailure(com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure e){return org.springframework.http.ResponseEntity.status(e.status).body(Collections.singletonMap("message",e.getMessage()));}
+    @ExceptionHandler(com.aiyi.core.exception.ValidationException.class)
+    public org.springframework.http.ResponseEntity<Map<String,String>> validationFailure(com.aiyi.core.exception.ValidationException e){return org.springframework.http.ResponseEntity.badRequest().body(Collections.singletonMap("message",e.getMessage()));}
+    @ExceptionHandler(org.springframework.dao.DataAccessException.class)
+    public org.springframework.http.ResponseEntity<Map<String,String>> databaseFailure(){return org.springframework.http.ResponseEntity.status(503).body(Collections.singletonMap("message","账号操作结果待核对，请保留注册操作编号；未自动重复执行"));}
 }
