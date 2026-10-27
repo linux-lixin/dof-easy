@@ -70,6 +70,12 @@ public class RechargeKey extends PO {
     public String getRequestId(){return requestId;}
     public void setRequestId(String value){requestId=value;}
 
+    @TempField private String revision;
+    @TempField private String reason;
+    public String getRevision(){return revision;}
+    public void setRevision(String value){revision=value;}
+    public String getReason(){return reason;}
+    public void setReason(String value){reason=value;}
     @TempField
     private int count;
 

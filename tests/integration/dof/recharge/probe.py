@@ -28,11 +28,12 @@ r = subprocess.run([
     'com.aiyi.game.dnfserver.service.dof.ManagedPostalReceiptContractTest',
     'com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchControlContractTest',
     'com.aiyi.game.dnfserver.service.dof.ManagedCdkContractTest',
+    'com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryContractTest',
 ], text=True, capture_output=True, timeout=150)
 Path('/output/junit.log').write_text(r.stdout + '\n' + r.stderr)
-passed = r.returncode == 0 and 'OK (68 tests)' in r.stdout
+passed = r.returncode == 0 and 'OK (81 tests)' in r.stdout
 summary = dict(passed=passed, contractTests=14, databaseVersion=sql('SELECT VERSION()'),
-               generatedMailReceiptContractTests=3, managedPostalContractTests=12, postalBatchContractTests=11, postalReceiptControlContractTests=7, postalBatchControlContractTests=8, cdkContractTests=13, totalContractTests=68,
+               generatedMailReceiptContractTests=3, managedPostalContractTests=12, postalBatchContractTests=11, postalReceiptControlContractTests=7, postalBatchControlContractTests=8, cdkContractTests=13, cdkInventoryContractTests=13, totalContractTests=81,
                realServiceSqlFaultAndConcurrencyGatePassed=passed,
                fixtureSchemasRemoved=sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('d_taiwan','taiwan_billing','taiwan_cain','taiwan_cain_2nd')") == '0',
                originalToolEquivalenceVerified=False, realDeploymentVerified=False, actualPlayerReceiptVerified=False)

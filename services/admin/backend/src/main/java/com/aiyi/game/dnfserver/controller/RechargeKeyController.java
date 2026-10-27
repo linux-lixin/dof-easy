@@ -15,36 +15,29 @@ public class RechargeKeyController {
     @Resource
     private RechargeKeyService rechargeKeyService;
 
-    /**
-     * 制作卡密
-     * @param key
-     *      卡密信息
-     */
-    @PostMapping
-    public void createKey(@RequestBody RechargeKey key){
-        rechargeKeyService.create(key);
+    @Resource private com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService inventory;
+    @PostMapping public Object createKey(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.Edit edit){return inventory.save(edit);}
+    @PostMapping("validate") public Object validate(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.Draft edit){return inventory.validate(edit);}
+    @PostMapping("preview") public Object preview(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.Edit edit){return inventory.preview(edit);}
+    @GetMapping public Object list(@RequestParam(required=false) Integer type,@RequestParam(required=false) Integer status,@RequestParam(defaultValue="1") int page,@RequestParam(defaultValue="20") int pageSize,@RequestParam(required=false) String content){
+        if(content!=null)throw new com.aiyi.game.dnfserver.service.dof.DofFailure(400,"卡密原文不能放入URL，请使用POST查询");
+        return rechargeKeyService.list(type,status,page,pageSize,null);
     }
-
-
-    /**
-     * 列出卡密列表
-     * @param type
-     *      卡密类型
-     * @param status
-     *      卡密状态
-     * @param page
-     *      页码
-     * @param pageSize
-     *      每页条数
-     * @return
-     */
-    @GetMapping
-    public ResultPage<RechargeKey> list(Integer type, Integer status,
-                                        int page, int pageSize,
-                                        String content){
-        return rechargeKeyService.list(type, status, page, pageSize,
-                content);
+    @PostMapping("query") public Object query(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.Query query){return inventory.query(query);}
+    @GetMapping("batches/history") public Object batches(){return inventory.history();}
+    @GetMapping("batches/{id}") public Object batch(@PathVariable String id){return inventory.read(id);}
+    @PostMapping("batches/{id}/reconcile") public Object batchReconcile(@PathVariable String id){return inventory.reconcile(id);}
+    @GetMapping("exports/history") public Object exports(){return inventory.exportHistory();}
+    @PostMapping("batches/{id}/export/{requestId}/reconcile") public Object exportReconcile(@PathVariable String id,@PathVariable String requestId){return inventory.exportReconcile(id,requestId);}
+    @PostMapping("batches/{id}/export") public org.springframework.http.ResponseEntity<byte[]> export(@PathVariable String id,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.ExportEdit edit){
+        com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.Download file=inventory.export(id,edit);
+        return org.springframework.http.ResponseEntity.ok().header("Cache-Control","no-store").header("Content-Disposition","attachment; filename=website-cdk-"+file.requestId+".csv").header("X-Operation-Id",file.requestId).header("X-Artifact-SHA256",file.sha256).contentType(org.springframework.http.MediaType.parseMediaType("text/csv;charset=UTF-8")).body(file.bytes);
     }
+    @GetMapping("inventory/{id}") public Object key(@PathVariable long id){return inventory.keyRead(id);}
+    @GetMapping("inventory/{id}/history") public Object keyHistory(@PathVariable long id){return inventory.keyHistory(id);}
+    @PostMapping("inventory/{id}/preview") public Object keyPreview(@PathVariable long id,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.KeyEdit edit){return inventory.keyPreview(id,edit);}
+    @PostMapping("inventory/{id}") public Object keySave(@PathVariable long id,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryService.KeyEdit edit){return inventory.keySave(id,edit);}
+    @PostMapping("inventory/{id}/{requestId}/reconcile") public Object keyReconcile(@PathVariable long id,@PathVariable String requestId){return inventory.reconcile(id,requestId);}
 
     /**
      * 使用卡密

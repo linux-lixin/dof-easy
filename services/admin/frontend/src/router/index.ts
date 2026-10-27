@@ -150,6 +150,7 @@ const routes: Array<RouteRecordRaw> = [
                             title: '玩家角色管理'
                         }
                     },
+                    { path: 'cdk-inventory', name: 'CdkInventory', component: () => import('../views/admin/player/CdkInventory.vue'), meta: { title: 'CDK制码与停用' } },
                     { path: 'cdk', name: 'CdkClaims', component: () => import('../views/admin/player/CdkClaims.vue'), meta: { title: 'CDK兑换记录' } },
                     {
                         path: 'postal',

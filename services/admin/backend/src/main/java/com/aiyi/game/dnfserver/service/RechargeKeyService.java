@@ -20,7 +20,7 @@ public interface RechargeKeyService {
      *      每页条数
      * @return
      */
-    ResultPage<RechargeKey> list(Integer type, Integer status, int page,
+    Object list(Integer type, Integer status, int page,
                                  int pageSize, String content);
 
     /**

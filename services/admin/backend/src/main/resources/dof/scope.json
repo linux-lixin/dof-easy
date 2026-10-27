@@ -625,7 +625,7 @@
         "confirmedCurrencyCompensation": "existing managed recharge service, one-time linked debit",
         "report": "docs/validation/admin-cdk-redemption-s14-2026-10-28.json",
         "remaining": [
-          "管理制码、导出、停用等流程接入统一预览/持久化协议",
+          "网站制码/查询/导出/停用已接统一协议并通过临时SQL，真实管理流程待验",
           "晴空14列配套及固定口令码的真实消费和执行归属核对",
           "真实物品CDK/客户端领取及特殊邮件标记",
           "真实网络、进程和磁盘故障",
@@ -635,6 +635,28 @@
         "currencyFlowVerified": true,
         "equipmentCdkVerified": false,
         "realDeploymentVerifiedScope": "complete website CDK matrix including actual equipment delivery and recovery"
+      },
+      "websiteInventory": {
+        "protocol": "cdk-inventory-v1",
+        "codeImplemented": true,
+        "localSqlContractVerified": true,
+        "localBrowserVerified": true,
+        "realDeploymentVerified": false,
+        "originalToolEquivalenceVerified": false,
+        "nativeCompanionParityVerified": false,
+        "codePool": "existing InnoDB website recharge_key; known ten-column schema only",
+        "route": "/admin/player/cdk-inventory",
+        "batchCreation": "preview + durable requestId/revision + atomic native rows and generated receipt",
+        "secretVisibility": "explicit audited website-cdk-csv-v1 export only; metadata query/history contain no plaintext codes",
+        "pause": "only unused unreserved codes; status=1 without use metadata, no rewards",
+        "resume": "exact state and generation must match persisted management pause receipt",
+        "exportRecovery": "same ID exact CSV from frozen metadata; pending export blocks new ID until reconciliation",
+        "report": "docs/validation/admin-cdk-inventory-s15-2026-10-28.json",
+        "remaining": [
+          "真实部署页面与受控制码/导出/停用恢复验证",
+          "原晴空单次码、固定口令、14列配套及消费端对照",
+          "真实故障及跨旧兑换协议镜像回退演练"
+        ]
       }
     },
     {
