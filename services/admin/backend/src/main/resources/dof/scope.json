@@ -312,16 +312,17 @@
         }
       ],
       "recordQueryImplementation": {
-        "state": "implemented_locally",
+        "state": "deployed_read_verified",
         "entry": "/admin/player/postal",
         "api": "/api/v1/postal",
         "executor": "existing_configured_datasource_read_only_mapper",
         "accountRelationship": "postal.receive_charac_no -> charac_info.charac_no -> charac_info.m_id -> accounts.UID",
         "permission": "administrator_all_history_or_actor_self_and_direct_children",
         "evidence": "docs/validation/admin-postal-s7-2026-10-27.json",
-        "realDeploymentVerified": false,
+        "realDeploymentVerified": true,
         "nativeToolEquivalenceVerified": false,
-        "sendProtocolComplete": false
+        "sendProtocolComplete": false,
+        "populatedRealDatasetVerified": false
       }
     },
     {
@@ -343,7 +344,7 @@
           "failureBehavior": null,
           "evidence": [],
           "managementImplementation": {
-            "state": "implemented_locally",
+            "state": "deployed_and_protocol_validated",
             "entry": "/admin/player/accounts",
             "api": "/api/v1/recharge",
             "executor": "explicit_web_admin_billing_patch",
@@ -359,9 +360,49 @@
             "unknownResultRule": "Never infer execution from balance equality; MyISAM acknowledgment keeps original outcome unknown.",
             "receiptAtomicWithBalance": "InnoDB only",
             "evidence": "docs/validation/admin-recharge-s8-2026-10-27.json",
-            "realDeploymentVerified": false,
+            "realDeploymentVerified": true,
             "nativeToolEquivalenceVerified": false,
-            "actualPlayerReceiptVerified": false
+            "actualPlayerReceiptVerified": false,
+            "boundDatabaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+            "validationLimit": "Original tool equivalence and player/client receipt remain unverified.",
+            "nativeLocation": "taiwan_billing.cash_cera.cera",
+            "activation": "数据库写入即时提交；网关/客户端读取时机待验证"
+          },
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": [],
+              "reason": "免授权原工具菜单、输入默认值、输出及副作用尚未逐项对照"
+            },
+            "implementation": {
+              "state": "passed",
+              "evidence": [
+                "业务实现 f5cb788；网页预览/提交/历史/核对、管理员权限与固定字段验证。docs/validation/admin-recharge-s8-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "passed",
+              "evidence": [
+                "真实86级实例UUID 899d147e-d0ef-11f1-9ff4-525400542f67；专用UID6 37→42→37，原请求重放及重复补偿拒绝。docs/validation/admin-recharge-s8-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": [],
+              "reason": "专用账号无角色，匹配网关/客户端消费与缓存读取时机尚未验证"
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": [],
+              "reason": "数据库余额核对通过，玩家客户端实际到账与消费效果待验"
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": [
+                "真实提交后受控丢弃响应、原编号核对/重放、关联补偿通过；十四项隔离MySQL/Hikari故障契约通过。docs/validation/admin-recharge-s8-2026-10-27.json"
+              ],
+              "reason": "其余真实网络、进程及磁盘故障尚未完成，重建证据及边界由S8报告记录，统一故障门禁未关闭"
+            }
           }
         }
       ]

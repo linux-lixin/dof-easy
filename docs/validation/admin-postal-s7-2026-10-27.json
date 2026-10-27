@@ -900,5 +900,12 @@
     "tests/integration/dof/postal_read/probe.py": "f54c02b84078c475a4a358dd2146e1b6883ad93aed9f9c856a312bd5b9d46aad",
     "tests/integration/dof/postal_read/run.sh": "c5da416cf84f62e7831a6148626096588289d4cdc87aaf5165ba492bd94d80f4",
     "tests/unit/dof/test_package_admin.py": "1cf77efd9a8092322af5cb3ea831fb10fd3455d0c42cbbfcb29ad6a759ef848f"
+  },
+  "laterDeployment": {
+    "batch": "S8",
+    "mailReadDeployedAndVerified": true,
+    "standaloneS7ArtifactDeployed": false,
+    "realPostalDatasetHadNoRows": true,
+    "evidence": "docs/validation/admin-recharge-s8-2026-10-27.json"
   }
 }
