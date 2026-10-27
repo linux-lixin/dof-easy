@@ -1,7 +1,7 @@
 {
   "stage": "S12",
   "date": "2026-10-27",
-  "state": "locally_implemented",
+  "state": "deployed_read_and_refusal_verified_effect_pending",
   "completeReplacement": false,
   "scope": "deleted-recipient reconciliation and metadata-only acknowledgment of unknown mail receipts",
   "protocol": "postal-receipt-control-v1",
@@ -118,7 +118,65 @@
     "incompleteMetadataIntentReconciledWithoutResending": true
   },
   "realDeployment": {
-    "verified": false
+    "readAndRefusalVerified": true,
+    "successfulNativeMailOrReceiptAcknowledgmentVerified": false,
+    "deployment": {
+      "sourceCommit": "21a812953c43280f83e349b9408a8e4753a40314",
+      "adminImage": "sha256:c3f96581ca8fe7dc053704f6835ad9fdcfacb599962c2515be5030f39de5d270",
+      "adminTag": "dof-admin-replacement:20261027-s12-candidate",
+      "appSHA256": "4ff1a7e1c0b51aae5edf09563a6dbdd38eafc43934da9bfbecdf7f7bb5f386f8",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s12-receipt/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": false
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "phase": "DEPLOYED_READ_VERIFIED_RECEIPT_EFFECT_PENDING",
+    "processes": {
+      "deployment": {
+        "pid": 78795,
+        "terminal": true
+      },
+      "browser": {
+        "pid": 79661,
+        "terminal": true
+      }
+    },
+    "gameHealth": "healthy"
   },
   "remaining": [
     "permanent cancellation of unsubmitted batch targets",
@@ -128,5 +186,15 @@
     "original Windows tool parity by later manual comparison",
     "real transport, process-exit and disk failure tests",
     "remaining R4 CDK/currency/exchange issuers and other work packages"
-  ]
+  ],
+  "sourceCommit": "21a812953c43280f83e349b9408a8e4753a40314",
+  "delivery": {
+    "appSHA256": "4ff1a7e1c0b51aae5edf09563a6dbdd38eafc43934da9bfbecdf7f7bb5f386f8",
+    "adminImage": "sha256:c3f96581ca8fe7dc053704f6835ad9fdcfacb599962c2515be5030f39de5d270",
+    "transferSHA256": "d922f8119758e24fa6b3a03be083d06b9bff1d740d05beffd29241b272d79d3d",
+    "transferArchive": ".dof-easy/admin-replacement-delivery-20261027-s12-transfer.tgz",
+    "oldAdminImage": "sha256:50fcbfc7f956b23b037530af01ec9e03fed61fe18ec14d8569f5d591a29754b8",
+    "oldAppSHA256": "31b3f95439d913b71620f575faa40b2604aa6a38eab60fb1a6c8073b6447a997",
+    "privateCredentialsAndScreenshotsExported": false
+  }
 }
