@@ -191,7 +191,9 @@
       "nativeWritesInMock": 2,
       "submitRequests": 3
     },
-    "realDeploymentVerified": false
+    "realDeploymentVerified": false,
+    "realDeploymentReadAndRefusalVerified": true,
+    "realBatchComposeUiOnTargetsVerified": false
   },
   "attempts": {
     "firstCheckboxMockFailed": "Arco hidden checkbox input was not clickable; final test clicks its visible label. No product force-click or bypass.",
@@ -200,15 +202,41 @@
     "finalVerificationIncludesStrictChildBinding": true
   },
   "deployment": {
-    "performed": false,
-    "lastVerifiedAdminImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee",
-    "port": 18080,
-    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
-    "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
-    "preflightRunningAndGameHealthy": true
+    "performed": true,
+    "result": {
+      "sourceCommit": "ca1849fd7d80776cf29273d0b7320b507dee27ef",
+      "adminImage": "sha256:50fcbfc7f956b23b037530af01ec9e03fed61fe18ec14d8569f5d591a29754b8",
+      "adminTag": "dof-admin-replacement:20261027-s11-candidate",
+      "appSHA256": "31b3f95439d913b71620f575faa40b2604aa6a38eab60fb1a6c8073b6447a997",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s11-batch/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_READ_VERIFIED_BATCH_EFFECT_PENDING",
+      "sourceCommit": "ca1849fd7d80776cf29273d0b7320b507dee27ef",
+      "adminImage": "sha256:50fcbfc7f956b23b037530af01ec9e03fed61fe18ec14d8569f5d591a29754b8",
+      "updatedAt": 1793112591.836595,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "deploymentProcessExited": true,
+      "browserProcessExited": true
+    },
+    "gameHealthy": true,
+    "adminRunning": true,
+    "fullyVerifiedBatchIssuance": false,
+    "rollbackImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee"
   },
   "remaining": [
-    "Deploy candidate and verify actual batch route/history reads/refusals.",
     "Real dedicated-character batch preview, issuance, consumption and container restart evidence.",
     "Explicit permanent cancellation/auditing, cross-admin takeover and unknown-result handling after recipient deletion.",
     "Native avatar/creature/artifact flags and original-tool menu/default/batch-limit comparison.",
@@ -220,13 +248,40 @@
     "appSha256": "31b3f95439d913b71620f575faa40b2604aa6a38eab60fb1a6c8073b6447a997",
     "mainClassesMatchStandardBuild": true,
     "privateKeysAndTestClassesExcluded": true,
-    "serverImageBuilt": false,
-    "supersededLocalUnboundBuild": "7f9f85e6b57d34aa02c4c21061ef33c1342bf74d472a30dcc4f2562575228536"
+    "serverImageBuilt": true,
+    "supersededLocalUnboundBuild": "7f9f85e6b57d34aa02c4c21061ef33c1342bf74d472a30dcc4f2562575228536",
+    "serverImage": "sha256:50fcbfc7f956b23b037530af01ec9e03fed61fe18ec14d8569f5d591a29754b8"
   },
   "otherChecks": {
     "inventoryTestsPassed": 4,
     "packagingTestsPassed": 1,
     "syntaxChecked": true,
     "diffChecked": true
+  },
+  "businessSourceCommit": "ca1849fd7d80776cf29273d0b7320b507dee27ef",
+  "realBrowser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentReadAndRefusalVerified": true,
+    "batchReadAndRefusalVerified": true,
+    "actualMailIssued": false,
+    "actualPlayerReceiptVerified": false,
+    "mailComposeUiOnRealCharacterVerified": false,
+    "batchComposeUiOnRealTargetsVerified": false,
+    "checks": [
+      "real administrator login and current mail protocol catalog with native gates pending",
+      "anonymous mail management rejected",
+      "legacy unversioned sender rejected before native issuance",
+      "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+      "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+      "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+      "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+      "real batch history modal reads backend and refuses preview with no selected recipients",
+      "real deployed postal records page loads through actual backend"
+    ],
+    "pageErrors": 0,
+    "targetUid": 6,
+    "dedicatedCharacterCount": 0,
+    "balanceUnchanged": 37
   }
 }
