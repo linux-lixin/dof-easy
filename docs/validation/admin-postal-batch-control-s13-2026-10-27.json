@@ -1,7 +1,7 @@
 {
   "stage": "S13",
   "date": "2026-10-27",
-  "state": "locally_implemented",
+  "state": "deployed_read_and_refusal_verified_effect_pending",
   "completeReplacement": false,
   "protocol": "postal-batch-control-v1",
   "scope": "permanent cancellation of original unsubmitted batch children and audited takeover through new linked tasks",
@@ -121,7 +121,67 @@
     "newAdminCanFinalizeFullyRecordedParent": true
   },
   "realDeployment": {
-    "verified": false
+    "readAndRefusalVerified": true,
+    "actualTaskCancellationOrTakeoverOnRealTargetsVerified": false,
+    "deployment": {
+      "sourceCommit": "d68f037c6722c966951b5d6970dc2bb134aa247c",
+      "adminImage": "sha256:2cdf1c91a7b95c1b3a56fa9f41c92c4160a23d237d0914b23b291f3a9cfb3f07",
+      "adminTag": "dof-admin-replacement:20261027-s13-candidate",
+      "appSHA256": "d1a621cb3f166e4578f92db688923c252de70f75460fd20744879112893d4957",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s13-control/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": false
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "phase": "DEPLOYED_READ_VERIFIED_BATCH_CONTROL_EFFECT_PENDING",
+    "processes": {
+      "deployment": {
+        "pid": 85205,
+        "terminal": true
+      },
+      "browser": {
+        "pid": 86012,
+        "terminal": true
+      }
+    },
+    "gameHealth": "healthy"
   },
   "remaining": [
     "controlled real target batch cancellation/takeover and restart verification",
@@ -129,5 +189,17 @@
     "real character mail display/receipt/claim",
     "real transport and process/disk failure tests",
     "CDK/currency/exchange issuer work and other wp01-wp13 requirements"
-  ]
+  ],
+  "sourceCommit": "d68f037c6722c966951b5d6970dc2bb134aa247c",
+  "delivery": {
+    "appSHA256": "d1a621cb3f166e4578f92db688923c252de70f75460fd20744879112893d4957",
+    "adminImage": "sha256:2cdf1c91a7b95c1b3a56fa9f41c92c4160a23d237d0914b23b291f3a9cfb3f07",
+    "transferSHA256": "3d335eeda2ccfd03e59a4e05edfc01c2230381311bb56349b23dfb1dd7cb8851",
+    "transferBytes": 510217,
+    "transferArchive": ".dof-easy/admin-replacement-delivery-20261027-s13-transfer.tgz",
+    "deploymentScriptSHA256": "a2bb8467e4ac2e9216b16b37c82c70c8402a55a1cdab764ba7da5c4b4d5fbe83",
+    "oldAdminImage": "sha256:c3f96581ca8fe7dc053704f6835ad9fdcfacb599962c2515be5030f39de5d270",
+    "oldAppSHA256": "4ff1a7e1c0b51aae5edf09563a6dbdd38eafc43934da9bfbecdf7f7bb5f386f8",
+    "privateCredentialsAndScreenshotsExported": false
+  }
 }
