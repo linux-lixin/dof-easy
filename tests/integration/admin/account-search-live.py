@@ -1,5 +1,5 @@
 """Read-only real account-filter regression; no credentials or account rows logged."""
-import argparse,json,urllib.request,urllib.parse
+import argparse,json,urllib.request,urllib.parse,hashlib
 from pathlib import Path
 p=argparse.ArgumentParser()
 for name in ['origin','credentials','instance','output']:p.add_argument('--'+name,required=True)
@@ -16,10 +16,11 @@ def request(path,body=None):
 
 token=request('/api/v1/login',{'account':credentials['account'],'password':credentials['password']});assert isinstance(token,str) and len(token)==32
 assert request('/api/v1/admin/dof')['instanceId']==a.instance
-checks=[]
+checks=[];stored_hash=hashlib.md5(credentials['password'].encode()).hexdigest()
 for value,expected in [(credentials['account'],1),("probe' OR 1=1 -- ",0),("probe'; SELECT 1; -- ",0)]:
  page=request('/api/v1/account?'+urllib.parse.urlencode({'account':value,'page':1,'pageSize':10}))
  assert isinstance(page['list'],list) and len(page['list'])==expected
+ assert stored_hash not in json.dumps(page)
  if expected:
   assert page['list'][0]['accountname']==credentials['account']
   assert page['list'][0].get('password') in (None,'')
@@ -27,6 +28,6 @@ for value,expected in [(credentials['account'],1),("probe' OR 1=1 -- ",0),("prob
  assert count_keys,'Require real list and total-count behavior, not a page-only check'
  for k in count_keys:assert page[k]==expected
  checks.append({'type':'known-test-account' if expected else 'SQL-looking-literal','rows':expected,'totalAgreesWithRows':True})
-info=request('/api/v1/account/'+str(credentials['uid']));assert info['uid']==credentials['uid'] and info.get('password') in (None,'')
+info=request('/api/v1/account/'+str(credentials['uid']));assert info['uid']==credentials['uid'] and info.get('password') in (None,'');assert stored_hash not in json.dumps(info)
 result={'accountDetailContainsNoPasswordHash':True,'passed':True,'backend':'real','instanceId':a.instance,'readOnly':True,'adminListAndCountChecked':True,'guildScopeCoveredByActualMapperBindingTests':True,'checks':checks}
 Path(a.output).write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))

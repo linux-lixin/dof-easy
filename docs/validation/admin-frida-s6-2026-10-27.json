@@ -697,9 +697,10 @@
     "Historical Docker fault logs rotated before a second regex scan; live compact-error check and row preservation were recorded, but raw historical re-audit is unavailable.",
     "Assignment of original-tool feature-049 to Frida vs native plugin is unconfirmed; no sole executor is claimed and no activity was enabled.",
     "Activity scheduling, multi-channel ownership, reward effects and feature-049 webpage remain pending.",
-    "Account read fixes await real deployed API/browser checks.",
     "Mail and recharge still directly mutate native tables without the required durable protocol; wp02 remains open.",
-    "Clean distributable game image, native menu audit, remaining business operations and full replacement gates remain open."
+    "Clean distributable game image, native menu audit, remaining business operations and full replacement gates remain open.",
+    "Real non-admin guild-actor reads remain to be exercised; actual mapper binding and service/HTTP permission tests passed.",
+    "Installer db_config replacement still requires preserving unknown nested noncredential options before broad compatibility acceptance."
   ],
   "realMigration": {
     "passed": true,
@@ -803,6 +804,69 @@
     "frontendSensitiveResponseLoggingRemoved": true,
     "actualMapperBindingTests": 4,
     "serviceAndHttpPermissionTests": 7,
-    "realDeploymentVerified": false
+    "realDeploymentVerified": true,
+    "liveGuildActorVerified": false
+  },
+  "adminCandidateDeployment": {
+    "sourceCommit": "96b67fb30392da85d0a1284de185cf5926ee3250",
+    "adminImage": "sha256:de41b30833aa66043a2c7fcea5a10f4cc2d0a2ce2f235b47173e599f41eba109",
+    "adminTag": "dof-admin-replacement:20261027-s6-candidate",
+    "appSHA256": "00fa655f00c6374c3b70420d8a1b4dff9414c400d0a0c469d4320d68f09af73b",
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameNotRecreated": true,
+    "adminPersistentKeyFilesUnchanged": true,
+    "adminPort": 18080,
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s6-frida/before-admin"
+  },
+  "realAccountRead": {
+    "accountDetailContainsNoPasswordHash": true,
+    "passed": true,
+    "backend": "real",
+    "instanceId": "dof-main",
+    "readOnly": true,
+    "adminListAndCountChecked": true,
+    "guildScopeCoveredByActualMapperBindingTests": true,
+    "checks": [
+      {
+        "type": "known-test-account",
+        "rows": 1,
+        "totalAgreesWithRows": true
+      },
+      {
+        "type": "SQL-looking-literal",
+        "rows": 0,
+        "totalAgreesWithRows": true
+      },
+      {
+        "type": "SQL-looking-literal",
+        "rows": 0,
+        "totalAgreesWithRows": true
+      }
+    ]
+  },
+  "realBrowser": {
+    "passed": true,
+    "backend": "real",
+    "instanceId": "dof-main",
+    "configEdits": false,
+    "actualGameplayVerified": false,
+    "checks": [
+      "real browser administrator login",
+      "anonymous access rejected",
+      "real plugin read and application guidance",
+      "real browser anton frozen preview, submit, two-channel native receipts and four-field readback",
+      "real browser luke frozen preview, submit, two-channel native receipts and four-field readback",
+      "real signin schema and queries",
+      "real read-only record projections: 30/30",
+      "deployed activity adapter and durable journal read",
+      "deployed penalty schema and protected-admin password-state/journal read without writes",
+      "role adapter sample unavailable: character list empty; no player data initialized",
+      "browser schema diagnosis",
+      "feature ledger uses canonical 71 classes / 239 operations and current management evidence",
+      "real browser account filter preserves literal test account, list/count agree, no password hashes",
+      "real browser account filter preserves literal SQL/URL-looking text, list/count agree, no password hashes",
+      "real browser account filter preserves literal SQL/URL-looking text, list/count agree, no password hashes"
+    ],
+    "pageErrors": 0
   }
 }
