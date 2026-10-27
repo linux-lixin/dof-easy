@@ -701,7 +701,8 @@
     "Mail and recharge still directly mutate native tables without the required durable protocol; wp02 remains open.",
     "Clean distributable game image, native menu audit, remaining business operations and full replacement gates remain open.",
     "Real non-admin guild-actor reads remain to be exercised; actual mapper binding and service/HTTP permission tests passed.",
-    "Installer db_config replacement still requires preserving unknown nested noncredential options before broad compatibility acceptance."
+    "Installer db_config replacement still requires preserving unknown nested noncredential options before broad compatibility acceptance.",
+    "Apply prepared 239-minimum resource correction after server network access is restored; rerun final ledger, UID6 balance and original-task replay checks."
   ],
   "realMigration": {
     "passed": true,
@@ -876,5 +877,40 @@
     "includedOperationCount": 239,
     "nativeMenuAuditComplete": false,
     "reason": "Final live check exposed the first-batch minimum still displayed as 209; all 239 operations were already present. Minimum corrected without removing or completing any operation."
+  },
+  "lastConfirmedAdminFinalDeployment": {
+    "sourceCommit": "35134e2ddf6b53084892c9a89c1e2647e828f3a5",
+    "businessImplementationCommit": "96b67fb30392da85d0a1284de185cf5926ee3250",
+    "adminImage": "sha256:d24f74a826558c047ac13d2ecd6652183c971699fdef6e30e336c188838ece23",
+    "appSHA256": "65e3e4433ecaa32149c34790497b6ef53b755979f9495d09e6f49868248e34f4",
+    "onlyJarMemberChanged": [
+      "BOOT-INF/classes/dof/execution-plan.json"
+    ],
+    "frontendAndBusinessClassesUnchanged": true,
+    "gameNotRecreated": true,
+    "adminPersistentKeyFilesUnchanged": true,
+    "adminPort": 18080
+  },
+  "postFinalVerification": {
+    "passed": false,
+    "accountReadSubprocessCompleted": true,
+    "failedCheck": "Historical baselineOperations was 209 although all 239 discovered operations were included.",
+    "runtimeReplayAndUid6BalanceChecksExecuted": false
+  },
+  "scopeCorrectionDeployment": {
+    "sourceCommit": "d1c2fb4",
+    "status": "pending",
+    "targetAppSHA256": "d860118570fafae249b4e8f39e89a4a7a81426b444719a0bac98cce365cfbcb2",
+    "businessClassesAndVerifiedFrontendUnchanged": true,
+    "networkObservation": {
+      "sshClosedBeforeBanner": true,
+      "adminHttpConnectionClosedWithoutResponse": true,
+      "windowsHostProbeAlsoClosedBeforeSshBanner": true,
+      "credentialsSentDuringProbes": false
+    },
+    "uploadOutcome": "not confirmed; connection closed",
+    "remoteDeploymentCommandInvoked": false,
+    "restorePointsRetained": true,
+    "preparedOperations": ".dof-easy/admin-replacement-delivery-20261027-s6-scope/operations"
   }
 }
