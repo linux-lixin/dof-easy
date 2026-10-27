@@ -4871,6 +4871,17 @@
     "sourceSnapshotsAndActorPreserved": true,
     "nativeDataChangedByCancellation": false,
     "freshDatabaseActorCheckOnCancellation": true,
-    "report": "docs/validation/admin-activity-recovery-s17-2026-10-28.json"
+    "report": "docs/validation/admin-activity-recovery-s17-2026-10-28.json",
+    "realWebPreviewCancellationVerified": true,
+    "realDeploymentReadAndRefusalVerified": true,
+    "realDeploymentVerifiedScope": "full activity write/recovery matrix including actual rule application and external failures",
+    "controlledDeploymentProof": {
+      "sourceCommit": "1e385217f5bc2452f274bbbb8d4fc17c2393cc4d",
+      "sourceRequestId": "3ea48851-0802-4760-9076-83e78e167bc9",
+      "cancelRequestId": "44768274-d067-4564-ab19-96ac3fbdfe1b",
+      "nativeRuleDataUnchanged": true,
+      "originalSnapshotsAndActorPreserved": true
+    },
+    "validationLimit": "actual preview/reload/cancel/late-submit fence verified; native rule mutation, plugin consumption, full activity parity and physical outages pending"
   }
 }

@@ -101,11 +101,119 @@
     "missing preview can return to editing only when no native submission was attempted",
     "cancellation history stays visible after original operation reaches terminal state",
     "first frontend runner started before its dependency symlink was staged; no product code execution, runner ordering corrected",
-    "TypeScript required explicit saved-identifier presence checks; failed build logs retained"
+    "TypeScript required explicit saved-identifier presence checks; failed build logs retained",
+    "live verifier explicitly checks a mutable reward field rather than the already-readonly primary key; this verifier-only refinement did not change the deployed product"
   ],
   "deployment": {
-    "verified": false,
-    "pending": "admin-only deployment, real preview/reload/cancel/reconcile and late original submit refusal without writing native rules"
+    "verified": true,
+    "deployment": {
+      "sourceCommit": "1e385217f5bc2452f274bbbb8d4fc17c2393cc4d",
+      "adminImage": "sha256:5454dc06f0f07c735ecfa988fa8fcbd31e2ed472c0e8daa32e29bd211695cd64",
+      "adminTag": "dof-admin-replacement:20261028-s17-candidate",
+      "appSHA256": "0e45effadf8bb1da7b78ce0e26b5a26599e47654e2d61abecd60eff844d4fd6b",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s17-activity/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": true,
+      "acceptanceScope": "real activity preview/reload/cancel/reconciliation and late submission fence only; no native rule mutation or plugin effect claim",
+      "completeReplacement": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_ACTIVITY_PREVIEW_RECOVERY_VERIFIED_NATIVE_EFFECT_PENDING",
+      "sourceCommit": "1e385217f5bc2452f274bbbb8d4fc17c2393cc4d",
+      "updatedAt": 1793127144.4506965,
+      "image": "sha256:5454dc06f0f07c735ecfa988fa8fcbd31e2ed472c0e8daa32e29bd211695cd64",
+      "completeReplacement": false
+    },
+    "readBrowser": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "activityBrowser": {
+      "passed": true,
+      "mockedApis": false,
+      "realActivityPreviewRecoveryVerified": true,
+      "nativeConfigurationWritten": false,
+      "originalToolEquivalenceVerified": false,
+      "actualPluginEffectVerified": false,
+      "originalRequestId": "3ea48851-0802-4760-9076-83e78e167bc9",
+      "cancelRequestId": "44768274-d067-4564-ab19-96ac3fbdfe1b",
+      "originalState": "NOT_APPLIED",
+      "cancelState": "PERSISTED",
+      "nativeConfigRowsUnchanged": true,
+      "ceraBalance": 37,
+      "couponBalance": 0,
+      "responseLoss": "browser reply withheld after actual metadata commit; not a physical outage",
+      "checks": [
+        "real bound administrator previews existing or default rules without any native write; inputs freeze",
+        "reload restores only the pinned identifier and exact verified preview; no approximate request or native update",
+        "real cancellation commits metadata atomically; withheld response recovers same control ID",
+        "late original submit is fenced and cancellation replay cannot write native rules",
+        "anonymous and unversioned controls refused; both dedicated wallets stay unchanged"
+      ],
+      "pageErrors": 0
+    },
+    "finalVerification": {
+      "passed": true,
+      "boundDatabaseUuidVerified": true,
+      "nativeRewardConfigEntireDataUnchanged": true,
+      "nativeConfigurationWritten": false,
+      "sourceState": "NOT_APPLIED",
+      "cancelState": "PERSISTED",
+      "originalSnapshotsAndActorPreserved": true,
+      "entireCouponWalletRowUnchanged": true,
+      "entireCeraWalletRowUnchanged": true,
+      "priorTestCdkStillPausedWithoutConsumption": true,
+      "adminPersistentKeysUnchanged": true,
+      "gameImageAndStartIdentityUnchanged": true,
+      "gameHealthy": true,
+      "baseDiskReserve2GiBMaintained": true,
+      "privateCredentialsAndCheckpointsStayedOnServer": true,
+      "actualPluginEffectVerified": false,
+      "completeReplacement": false
+    },
+    "taskStates": {
+      "142841": "exited",
+      "143912": "exited",
+      "144705": "exited"
+    }
   },
   "remaining": [
     "original tool manual menu/default/input/output/side-effect comparison",
@@ -114,5 +222,18 @@
     "physical outage/rebuild/multi-level matrix",
     "cross-version rollback compatibility including cancelled generated-ID previews not understood by older readers",
     "existing legacy audit confirmation and wider activity write protocol audit retain separate gates"
-  ]
+  ],
+  "sourceCommit": "1e385217f5bc2452f274bbbb8d4fc17c2393cc4d",
+  "delivery": {
+    "archive": ".dof-easy/admin-replacement-delivery-20261028-s17-transfer.tgz",
+    "archiveSHA256": "8615767ccef2e4601ac83fd8c38730c7d007c302e9b756df4b343692275ca9c9",
+    "archiveBytes": 538738,
+    "helperSHA256": "fdb30e1d91b555a46451e29a14af05f8ead772f30c9dbd5514e16dd6cc018757",
+    "appSHA256": "0e45effadf8bb1da7b78ce0e26b5a26599e47654e2d61abecd60eff844d4fd6b",
+    "compiledClassesVerified": true,
+    "keysAndTestsExcluded": true,
+    "finalReadOnlyVerificationSHA256": "2defe3d1b94a748ca2f5f89d44f91ffb04dac8697df4245e8420e874fb8ed6f3",
+    "liveVerifierSHA256": "ee7c50940d626a6f4655295125272b085dfcc7f4d250b4d2ecf845069dc6a965"
+  },
+  "privateEvidencePolicy": "credentials, native configuration checkpoints, SQL backups and raw logs stayed on server; only sanitized result JSON returned"
 }
