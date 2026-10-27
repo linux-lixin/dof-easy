@@ -310,7 +310,19 @@
           "failureBehavior": null,
           "evidence": []
         }
-      ]
+      ],
+      "recordQueryImplementation": {
+        "state": "implemented_locally",
+        "entry": "/admin/player/postal",
+        "api": "/api/v1/postal",
+        "executor": "existing_configured_datasource_read_only_mapper",
+        "accountRelationship": "postal.receive_charac_no -> charac_info.charac_no -> charac_info.m_id -> accounts.UID",
+        "permission": "administrator_all_history_or_actor_self_and_direct_children",
+        "evidence": "docs/validation/admin-postal-s7-2026-10-27.json",
+        "realDeploymentVerified": false,
+        "nativeToolEquivalenceVerified": false,
+        "sendProtocolComplete": false
+      }
     },
     {
       "id": "feature-008",

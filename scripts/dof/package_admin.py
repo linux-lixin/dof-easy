@@ -46,7 +46,9 @@ def package(base_jar, classes, resources, frontend, output):
                 if any(part.startswith('.') for part in path.relative_to(root).parts):
                     continue
                 # Test classes and credentials must not be included in the application.
-                if relative.endswith('Test.class') or 'Test$' in relative or path.suffix in ('.key', '.pem', '.p12', '.pfx'):
+                if relative.endswith('Test.class') or 'Test$' in relative or any(
+                    suffix.lower() in ('.key', '.pem', '.p12', '.pfx') for suffix in path.suffixes
+                ):
                     continue
                 archive = 'BOOT-INF/classes/' + relative
                 if archive in written:

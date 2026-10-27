@@ -148,6 +148,12 @@ const routes: Array<RouteRecordRaw> = [
                         meta: {
                             title: '玩家角色管理'
                         }
+                    },
+                    {
+                        path: 'postal',
+                        name: 'PostalRecords',
+                        component: () => import('../views/admin/player/PostalRecords.vue'),
+                        meta: { title: '邮件记录' }
                     }
                 ]
             },
