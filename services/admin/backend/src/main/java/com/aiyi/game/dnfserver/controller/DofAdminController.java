@@ -30,9 +30,13 @@ public class DofAdminController {
     @Resource private DofScriptReleaseService scriptReleases;
     @GetMapping("client/releases/status") public Object scriptReleaseStatus(){return scriptReleases.status();}
     @GetMapping("client/releases") public Object scriptReleaseHistory(){return scriptReleases.history();}
+    @GetMapping("client/releases/{id}") public Object scriptReleaseOperation(@PathVariable("id") String id){return scriptReleases.operation(id);}
     @PostMapping("client/releases/preview") public Object scriptReleasePreview(@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.preview(edit);}
     @PostMapping("client/releases") public Object applyScriptRelease(@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.apply(edit,null);}
     @PostMapping("client/releases/{id}/restore") public Object restoreScriptRelease(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.apply(edit,id);}
+    @PostMapping("client/releases/{id}/restore/preview") public Object previewScriptRestore(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.preview(edit,id);}
+    @PostMapping("client/releases/{id}/cancellations/preview") public Object previewScriptCancellation(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.CancelEdit edit){return scriptReleases.cancelPreview(id,edit,false);}
+    @PostMapping("client/releases/{id}/cancellations") public Object cancelScriptPreview(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.CancelEdit edit){return scriptReleases.cancelPreview(id,edit,true);}
     @PostMapping("client/releases/{id}/reconcile") public Object reconcileScriptRelease(@PathVariable("id") String id){return scriptReleases.reconcile(id);}
     @GetMapping("script") public Object scriptStatus() throws java.io.IOException {return clientService.scriptStatus();}
     @GetMapping("script/uploads") public Object scriptUploads() throws java.io.IOException {return clientService.scriptUploads();}

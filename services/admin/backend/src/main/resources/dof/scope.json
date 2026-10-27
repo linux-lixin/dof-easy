@@ -138,15 +138,28 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": "独立标准 PVF、已核对的数值掩码、压缩模式和测试尾部；现阶段不是发布接口",
-          "nativeLocation": "PVF 索引及1280字节尾部；内容参数与Scriptmd5的最终发布尚未接通",
-          "encoding": "索引变换、zlib6、末尾100字节MD5、完整文件SHA-256已对照；参数首字段和更新上下文仍阻塞",
-          "executor": "Linux 候选编码器；原生客户端更新消费待验证",
-          "activation": "候选文件生成不表示发布或客户端已接受",
-          "output": "两个真实原生样本完整字节一致的本地测试；尚无可用发布结果",
+          "input": "绑定实例的标准PVF或独立上传副本；生成任务在服务端选择并私下保存参数，目前管理入口仅支持不压缩模式",
+          "nativeLocation": "PVF索引及1280字节尾部；手动配套参数使用billing.decrypt与config.pvfencryption，保留四处原生更新字段",
+          "encoding": "索引变换、zlib6、末尾100字节MD5和完整文件SHA-256已有对照；压缩私有参数首字段、自动更新上下文及真实消费仍待验",
+          "executor": "admin生成和校验候选、保存两处配置；网关/原生插件/匹配客户端的读取与实际效果独立验收",
+          "activation": "生成、配置保存、运行时读取和游戏效果分开记录；参数不会自动刷新组件或重启实例",
+          "output": "S18真实部署完成整文件生成、反向校验、下载及同批次ZIP；S19新增本地持久化应用/恢复预览协议，尚未部署",
           "failureBehavior": "截断、长度变化、错误来源哈希、中断或磁盘写入失败时拒绝成功；未知协议不发布",
-          "evidence": [],
-          "implementationStatus": "codec_tested_publication_blocked"
+          "evidence": [
+            "docs/validation/admin-script-roundtrip-s18-2026-10-28.json",
+            "docs/validation/admin-script-release-s19-2026-10-28.json"
+          ],
+          "implementationStatus": "whole_file_generation_deployed_parameter_protocol_local",
+          "releaseManagement": {
+            "protocol": "script-release-preview-v1",
+            "previewRequired": true,
+            "ordinaryJournalContainsPrivateParameters": false,
+            "legacyPrivateSnapshotsPreserved": true,
+            "originalWindowsComparisonVerified": false,
+            "realParameterProtocolDeploymentVerified": false,
+            "nativeConsumerAcceptanceVerified": false,
+            "olderImageWriteRollbackVerified": false
+          }
         }
       ]
     },
