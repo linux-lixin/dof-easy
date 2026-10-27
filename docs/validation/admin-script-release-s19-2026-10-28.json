@@ -165,5 +165,12 @@
       "legacyAliasesRemainNegativeCases": true,
       "log": "/tmp/dof-admin-s19-scope-current.log"
     }
+  },
+  "followupDeployment": {
+    "passed": true,
+    "sourceCommit": "bee499e34c9b4b0451bf66d8942fa96bd6b77025",
+    "adminImage": "sha256:a300942e8e3b9c630e812c28273703cd410da7d299a79e021c3c113e83bfb2b0",
+    "evidence": "docs/validation/admin-script-release-s20-2026-10-28.json",
+    "nativeConsumerAcceptanceVerified": false
   }
 }

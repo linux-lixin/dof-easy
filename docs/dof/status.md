@@ -2,7 +2,7 @@
 
 当前 admin 部署快照更新至 2026-10-28（UTC+08:00）；下方 2026-10-26 的集成记录保留历史适用范围，不是实时监控。
 
-**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前 `dof-main` admin 已部署 S18 源码 `23d5669c3ac2d697217da8ceef03a9a390052987`，镜像 `sha256:4612b0b11164ab2397e5cd262deaf4a07592935cf2bb53daa9006c5bf6123752`，宿主端口为 18080。真实 PVF 生成、下载、同批次配套打包、任务实际退出及 admin 重建已验证，参数未应用，客户端消费和游戏效果待验。游戏容器保持原镜像与启动身份。详见 [S18 验收](../validation/admin-script-roundtrip-s18-2026-10-28.json) 和 [实施记录](../admin/replacement-implementation.md)。
+**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前 `dof-main` admin 已部署 S20 源码 `bee499e34c9b4b0451bf66d8942fa96bd6b77025`，镜像 `sha256:a300942e8e3b9c630e812c28273703cd410da7d299a79e021c3c113e83bfb2b0`，宿主端口为 18080。真实 PVF 生成、下载、同批次配套打包、任务实际退出及 admin 重建已验证；S20 参数受控应用/定向恢复、取消保护及旧版 HTTP 写隔离回退通过，客户端消费和游戏效果仍待验。游戏容器保持原镜像与启动身份。详见 [S20 验收](../validation/admin-script-release-s20-2026-10-28.json) 和 [实施记录](../admin/replacement-implementation.md)。
 
 2026-10-26 当晚的 admin 批次新增免授权来源校验、独立插件/团本配置管理、记录结构诊断及刷图表适配；没有重启游戏或数据库，也未取得客户端/团本效果证据，见 [历史摘要](../validation/admin-replacement-2026-10-26.json)。以下原有提交及 PVF 记录保留其历史适用范围。
 
