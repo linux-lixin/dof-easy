@@ -306,5 +306,6 @@
     "Original-tool full-table import/export and bulk clear behavior remain unverified; current editor exposes single-rule JSON and directional operations only.",
     "Local synthetic SQL and mocked browser APIs do not count as original-tool equivalence, private-sample acceptance or game effects.",
     "All existing feature operations, independent DP2 vouchers and client UI tasks remain in scope."
-  ]
+  ],
+  "followupRealDeployment": "docs/validation/admin-cross-border-s29-2026-10-28.json"
 }

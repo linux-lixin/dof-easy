@@ -1964,9 +1964,10 @@
           "output": "规则读取、预览、保存、单条JSON导入导出、原编号核对和定向恢复；原工具全表导入导出、批量清除、默认值及客户端UI仍待验",
           "failureBehavior": "错误配对、版本冲突、材料/数量/下限第三方修改、未知表序/索引/触发器/FK及撤权拒绝写入；结果不明保留原编号",
           "evidence": [
-            "docs/validation/admin-cross-border-s28-2026-10-28.json"
+            "docs/validation/admin-cross-border-s28-2026-10-28.json",
+            "docs/validation/admin-cross-border-s29-2026-10-28.json"
           ],
-          "implementationStatus": "local_rule_editing_verified_deployment_consumer_defaults_and_ui_parity_pending",
+          "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_defaults_and_ui_parity_pending",
           "managementImplementation": {
             "state": "local_configuration_implemented",
             "entry": "/admin/activities",
@@ -1983,11 +1984,15 @@
             "nativeAnnouncementSemanticsVerified": false,
             "originalDefaultValuesVerified": false,
             "originalImportExportVerified": false,
-            "realDeploymentVerified": false,
+            "realDeploymentVerified": true,
             "nativeConsumerAcceptanceVerified": false,
             "nativeGameplayVerified": false,
             "localPersistenceAndRecoveryContractVerified": true,
-            "verificationEvidence": "docs/validation/admin-cross-border-s28-2026-10-28.json"
+            "verificationEvidence": "docs/validation/admin-cross-border-s29-2026-10-28.json",
+            "configurationPersistenceVerified": true,
+            "configurationRecoveryVerified": true,
+            "guardedOldImageRollbackVerified": true,
+            "remaining": "组件消费、玩家材料扣除/装备去向/失败补偿、客户端UI、原工具默认值/全表导入导出及批量清除仍待验"
           }
         }
       ]
