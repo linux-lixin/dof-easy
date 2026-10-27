@@ -1,0 +1,118 @@
+{
+  "stage": "S17",
+  "date": "2026-10-28",
+  "purpose": "freeze activity intents, exact preview recovery and atomic metadata cancellation/fencing",
+  "completeReplacement": false,
+  "originalToolEquivalenceVerified": false,
+  "actualPluginEffectVerified": false,
+  "implementation": {
+    "entry": "/admin/activities",
+    "existingWriteRoutesPreserved": true,
+    "metadataNamespace": "activity.cancel.<section>",
+    "requestRecovery": "only reconstruct when the original fingerprint matches exactly; original coercive types are not invented",
+    "frozenDrafts": "per-section contexts; identifiers and submitted flag only in session storage",
+    "lateSubmissionFence": "cancel source PREVIEWED to NOT_APPLIED and control receipt atomically in known InnoDB journal; no native data write",
+    "originalSnapshotsAndActorPreserved": true,
+    "freshCancellationActorCheck": "database accounts READ lock, metadata trigger visibility and no foreign keys/triggers",
+    "generatedIdCancellation": "no native ID allocated, no native insert, invalid current-for-restore explicitly refused"
+  },
+  "standardMaven": {
+    "passed": true,
+    "total": 426,
+    "passedTests": 182,
+    "skippedTests": 244,
+    "failures": 0,
+    "errors": 0,
+    "log": "/tmp/dof-admin-s17-maven-4.log"
+  },
+  "frontend": {
+    "buildPassed": true,
+    "log": "/tmp/dof-admin-s17-frontend-4.log"
+  },
+  "sqlContract": {
+    "passed": true,
+    "contractTests": 14,
+    "databaseVersion": "5.6.51",
+    "generatedMailReceiptContractTests": 3,
+    "managedPostalContractTests": 12,
+    "postalBatchContractTests": 11,
+    "postalReceiptControlContractTests": 7,
+    "postalBatchControlContractTests": 8,
+    "cdkContractTests": 13,
+    "cdkInventoryContractTests": 13,
+    "pointsContractTests": 8,
+    "activityPreviewControlContractTests": 10,
+    "totalContractTests": 99,
+    "realServiceSqlFaultAndConcurrencyGatePassed": true,
+    "fixtureSchemasRemoved": true,
+    "originalToolEquivalenceVerified": false,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false
+  },
+  "sqlEvidence": {
+    "schema": 1,
+    "serverAccessed": false,
+    "network": "private namespace; no routes or external interfaces",
+    "rootReadOnly": true,
+    "inputsReadOnly": true,
+    "loopbackOnly": true,
+    "inputsFingerprint": "3c4e12f38073475bf5d6140945d3dea2ef0fb642fed345bfce7766be7a70ae04",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "command": [
+      "/bin/sh",
+      "/inputs/run.sh"
+    ],
+    "completed": true,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "evidenceValid": true
+  },
+  "mockedBrowser": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "originalToolEquivalenceVerified": false,
+    "nativeWritesInMock": 2,
+    "checks": [
+      "preview freezes exact values and UUID before any native submission",
+      "lost native response retains UUID and freezes inputs; storage contains identifiers only",
+      "another lookup cannot overwrite an unresolved operation",
+      "reload reads committed receipt and clears the guard without replaying configuration writes",
+      "independent activity can be edited while the original activity keeps its pending UUID",
+      "section switch and reload recover exact original preview, with no invented UUID or values",
+      "lost cancellation reply reconciles same control ID; cancelled original cannot later write",
+      "confirmed missing preview with no native submit can explicitly return to editing",
+      "schema failures remain visible rather than successful empty records",
+      "permission failures remain visible"
+    ],
+    "pageErrors": 0
+  },
+  "pythonChecks": {
+    "inventory": 4,
+    "packaging": 1,
+    "passed": true
+  },
+  "correctedFindings": [
+    "old form watcher generated new IDs whenever content changed, even after unknown submit response; replaced with immutable pending intent and per-section recovery",
+    "original preview values and revision cannot be inferred blindly from normalized snapshots; exact fingerprint gate required",
+    "cancelling generated-ID previews must preserve source snapshots and handle target=new without inventing an allocated native ID",
+    "missing preview can return to editing only when no native submission was attempted",
+    "cancellation history stays visible after original operation reaches terminal state",
+    "first frontend runner started before its dependency symlink was staged; no product code execution, runner ordering corrected",
+    "TypeScript required explicit saved-identifier presence checks; failed build logs retained"
+  ],
+  "deployment": {
+    "verified": false,
+    "pending": "admin-only deployment, real preview/reload/cancel/reconcile and late original submit refusal without writing native rules"
+  },
+  "remaining": [
+    "original tool manual menu/default/input/output/side-effect comparison",
+    "actual plugin/client activity consumption, reward delivery and time boundaries",
+    "complete bulk/import/export/resource compatibility and advanced activity gaps",
+    "physical outage/rebuild/multi-level matrix",
+    "cross-version rollback compatibility including cancelled generated-ID previews not understood by older readers",
+    "existing legacy audit confirmation and wider activity write protocol audit retain separate gates"
+  ]
+}

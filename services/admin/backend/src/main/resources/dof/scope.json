@@ -4856,5 +4856,21 @@
   "discoveredOperations": 239,
   "sourceEdition": "qingkong-2.8-replacement",
   "initialBaselineOperations": 209,
-  "baselineRule": "本轮最低覆盖71类239项；初始209项只作历史记录，不能排除新增项或降低门禁。"
+  "baselineRule": "本轮最低覆盖71类239项；初始209项只作历史记录，不能排除新增项或降低门禁。",
+  "activityPreviewRecovery": {
+    "metadataNamespace": "activity.cancel.<section>",
+    "codeImplemented": true,
+    "existingWriteRoutesPreserved": true,
+    "localSqlVerified": true,
+    "localMockedBrowserVerified": true,
+    "realDeploymentVerified": false,
+    "actualPluginEffectVerified": false,
+    "originalToolEquivalenceVerified": false,
+    "exactFingerprintRequiredForReconstructedRequest": true,
+    "perSectionPendingIdentifiers": true,
+    "sourceSnapshotsAndActorPreserved": true,
+    "nativeDataChangedByCancellation": false,
+    "freshDatabaseActorCheckOnCancellation": true,
+    "report": "docs/validation/admin-activity-recovery-s17-2026-10-28.json"
+  }
 }

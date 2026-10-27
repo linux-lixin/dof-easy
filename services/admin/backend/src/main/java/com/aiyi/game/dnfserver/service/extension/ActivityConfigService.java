@@ -226,8 +226,10 @@ public class ActivityConfigService {
     private boolean legacyExists(Connection c)throws SQLException {
         try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA='dnf_service' AND TABLE_NAME='EXTENSION_CONFIG_AUDIT'")){return r.next();}
     }
-    private void lock(Connection c,Section s)throws SQLException {
+    private void lock(Connection c,Section s)throws SQLException {lock(c,s,false);}
+    private void lock(Connection c,Section s,boolean actorLock)throws SQLException {
         String locks=table(s)+" WRITE";
+        if(actorLock)locks+=",`d_taiwan`.`accounts` READ";
         if(s.key.startsWith("pot-")&&!s.key.equals("pot-switch"))locks+=",dof_native.earthenware_pot_item READ";
         if(s.key.equals("shop"))locks+=",dof_native.new_shop READ,dof_native.timed_task READ";
         if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ";
@@ -343,6 +345,7 @@ public class ActivityConfigService {
     private void checkEntry(Section s,ManagedOperationJournal.Entry entry) {
         if(!namespace(s.key).equals(entry.namespace)||!resource(s).equals(entry.resource))throw new Failure(409,"操作日志来源与当前配置不一致");
         if(entry.state.equals("PREVIEWED"))return;
+        if(entry.state.equals("NOT_APPLIED")&&entry.target.equals("new")&&(s.primaryKey==null||s.autoId&&entry.beforeJson.equals("null")))return;
         try {
             if(s.primaryKey==null){if(!entry.target.equals("singleton"))throw new IllegalArgumentException();}
             else {if(!entry.target.matches("(?:0|[1-9][0-9]{0,9})")||Long.parseLong(entry.target)>2147483647L)throw new IllegalArgumentException();for(String text:Arrays.asList(entry.beforeJson,entry.afterJson)) {
@@ -495,11 +498,73 @@ public class ActivityConfigService {
             }finally{journal.unlock(c);}
         }catch(SQLException e){throw unavailable();}
     }
+    private Map<String,Object> receiptProof(ManagedOperationJournal.Entry e){
+        Map<String,Object> out=new TreeMap<>();out.put("requestId",e.requestId);out.put("namespace",e.namespace);out.put("resource",e.resource);out.put("target",e.target);out.put("operation",e.operation);out.put("source",e.targetRequest);out.put("actor",e.actor);out.put("requestHash",e.requestHash);out.put("beforeHash",e.beforeHash);out.put("afterHash",e.afterHash);out.put("state",e.state);return out;
+    }
+    /** Only return a reconstructed preview if its exact fingerprint still matches. */
+    public Map<String,Object> operation(String key,String id){
+        long actor=admin();Section s=section(key);
+        try(Connection c=journal.connection()){
+            journal.schema(c);ManagedOperationJournal.Entry e=journal.require(c,namespace(key),id);Map<String,Object> out=result(e,s);out.put("receiptRevision",journal.hash(receiptProof(e)));out.put("requestReplayAvailable",false);
+            if(e.state.equals("PREVIEWED")&&e.actor==actor){
+                Map<String,Object> before=snapshot(s,e.beforeJson),ordered=before==null?null:new LinkedHashMap<>();if(ordered!=null)for(Field f:s.fields)ordered.put(f.name,before.get(f.name));
+                Edit request=new Edit();request.requestId=e.requestId;request.revision=revision(ordered);request.operation=e.operation;request.targetRequestId=e.targetRequest;request.reason=e.operation.equals("accept-current")?e.reason:null;
+                request.values=Arrays.asList("restore","accept-current").contains(e.operation)?null:snapshot(s,e.operation.equals("delete")?e.beforeJson:e.afterJson);
+                if(fingerprint(request,e.operation).equals(e.requestHash)){out.put("requestReplayAvailable",true);out.put("request",request);}else out.put("requestReplayUnavailableReason","原始请求的类型或默认值无法精确重建；保留原编号，可核对或取消预览，不能用近似内容重提");
+            }else if(e.state.equals("PREVIEWED"))out.put("requestReplayUnavailableReason","原预览属于其他管理员，不能代其提交");
+            return out;
+        }catch(SQLException e){throw unavailable();}
+    }
+    private void cancelActor(Connection c,long actor)throws SQLException {
+        try(PreparedStatement p=c.prepareStatement("SELECT admin FROM d_taiwan.accounts WHERE UID=?")){p.setLong(1,actor);try(ResultSet r=p.executeQuery()){if(!r.next()||r.getInt(1)==0||r.wasNull()||r.next())throw new Failure(403,"管理员权限已改变，停止取消控制");}}
+    }
+    private Map<String,Object> cancelResult(ManagedOperationJournal.Entry e){Map<String,Object> out=journal.result(e);out.put("revision",e.beforeHash);return out;}
+    private String cancelNamespace(String key){return "activity.cancel."+key;}
+    private String cancelFingerprint(String source,LegacyEdit e){
+        ManagedOperationJournal.id(source);if(e==null)throw new Failure(400,"缺少取消请求");ManagedOperationJournal.id(e.requestId);
+        if(e.revision==null||!e.revision.matches("[0-9a-f]{64}")||e.reason==null||e.reason.trim().isEmpty()||e.reason.length()>128||e.reason.codePoints().anyMatch(x->x<32||x>65535||Character.isSurrogate((char)x)))throw new Failure(400,"缺少原回执版本或有效取消原因");
+        Map<String,Object> out=new TreeMap<>();out.put("source",ManagedOperationJournal.id(source));out.put("revision",e.revision);out.put("reason",e.reason);return journal.hash(out);
+    }
+    private ManagedOperationJournal.Entry cancellation(Connection c,Section s,String source,String id)throws SQLException{
+        ManagedOperationJournal.Entry e=journal.require(c,cancelNamespace(s.key),id);
+        if(!e.target.equals(ManagedOperationJournal.id(source))||!e.target.equals(e.targetRequest)||!e.operation.equals("cancel-preview")||!e.resource.equals(resource(s)+":cancel:"+e.target))throw new Failure(409,"取消回执归属不匹配");return e;
+    }
+    public Map<String,Object> cancelPreview(String key,String source,LegacyEdit edit,boolean commit){
+        long actor=admin();Section s=section(key);String fp=cancelFingerprint(source,edit);
+        try(Connection c=journal.connection()){boolean discarded=false;lock(c,s,true);try{
+            journal.metadataTransactionGuard(c);cancelActor(c,actor);ManagedOperationJournal.Entry control=journal.find(c,edit.requestId);
+            if(control!=null){journal.same(control,cancelNamespace(key),actor,fp);control=cancellation(c,s,source,edit.requestId);if(!control.state.equals("PREVIEWED")||!commit)return cancelResult(control);}
+            ManagedOperationJournal.Entry original=journal.require(c,namespace(key),source);checkEntry(s,original);Map<String,Object> proof=receiptProof(original);
+            if(!original.state.equals("PREVIEWED")||!journal.hash(proof).equals(edit.revision))throw new Failure(409,"只能取消版本匹配的未提交预览；待核对或已提交操作不能取消");
+            String resource=resource(s)+":cancel:"+ManagedOperationJournal.id(source);journal.noPending(c,resource,null);
+            if(!commit)return cancelResult(journal.preview(c,edit.requestId,actor,cancelNamespace(key),resource,ManagedOperationJournal.id(source),"cancel-preview",source,fp,edit.reason,proof,proof));
+            if(control==null)throw new Failure(404,"请先预览取消操作");
+            control=journal.prepare(c,control,control.target,proof,proof);c.setAutoCommit(false);lock(c,s,true);
+            try{
+                journal.metadataTransactionGuard(c);cancelActor(c,actor);control=cancellation(c,s,source,edit.requestId);if(!control.state.equals("PREPARED")){c.rollback();return cancelResult(control);}
+                original=journal.require(c,namespace(key),source);if(!journal.hash(receiptProof(original)).equals(control.beforeHash)){control=journal.finish(c,control,"NOT_APPLIED",actor);c.commit();return cancelResult(control);}
+                journal.cancelPreviewInTransaction(c,original,actor);Map<String,Object> outcome=new TreeMap<>();outcome.put("cancelledRequestId",original.requestId);outcome.put("sourceState","NOT_APPLIED");outcome.put("nativeDataChanged",false);control=journal.finishMetadataTransaction(c,control,outcome,actor);c.commit();return cancelResult(control);
+            }catch(SQLException|RuntimeException failure){try{c.rollback();}catch(SQLException rollback){failure.addSuppressed(rollback);discarded=true;try{c.unwrap(Connection.class).close();}catch(SQLException close){failure.addSuppressed(close);c.abort(Runnable::run);}}throw new Failure(503,"取消结果待核对，请保留取消操作编号，不要新建原操作");}
+        }finally{if(!discarded&&!c.isClosed()){journal.unlock(c);if(!c.getAutoCommit())c.setAutoCommit(true);}}}catch(SQLException e){throw unavailable();}
+    }
+    public List<Map<String,Object>> cancellations(String key,String source){
+        admin();Section s=section(key);source=ManagedOperationJournal.id(source);try(Connection c=journal.connection()){
+            journal.require(c,namespace(key),source);List<Map<String,Object>> out=new ArrayList<>();for(ManagedOperationJournal.Entry e:journal.history(c,cancelNamespace(key)))if(source.equals(e.targetRequest))out.add(cancelResult(cancellation(c,s,source,e.requestId)));return out;
+        }catch(SQLException e){throw unavailable();}
+    }
+    public Map<String,Object> reconcileCancellation(String key,String source,String id){
+        long actor=admin();Section s=section(key);try(Connection c=journal.connection()){lock(c,s,true);try{
+            journal.metadataTransactionGuard(c);cancelActor(c,actor);ManagedOperationJournal.Entry e=cancellation(c,s,source,id);
+            // Source cancellation and completion commit in the same known InnoDB log transaction.
+            if(e.state.equals("PREPARED"))e=journal.finish(c,e,"NOT_APPLIED",actor);return cancelResult(e);
+        }finally{journal.unlock(c);}}catch(SQLException e){throw unavailable();}
+    }
     public Map<String,Object> currentForHistory(String key,String id) {
         admin();Section s=section(key);
         try(Connection c=journal.connection()) {
             journal.schema(c);ManagedOperationJournal.Entry e=journal.require(c,namespace(key),id);checkEntry(s,e);
             if(e.state.equals("PREVIEWED"))throw new Failure(409,"该操作仅预览，尚无可恢复写入");
+            if(s.primaryKey!=null&&!e.target.matches("[0-9]+"))throw new Failure(409,"该预览未分配原生记录编号，没有可恢复写入");
             schema(c,s);return envelope(current(c,s,s.primaryKey==null?null:Long.valueOf(e.target)));
         }catch(SQLException e){throw unavailable();}
     }

@@ -164,6 +164,24 @@ public class ManagedOperationJournal {
         }
         return require(c,acknowledgment.namespace,acknowledgment.requestId);
     }
+    /** Metadata controls may atomically change multiple journal rows, never native business tables. */
+    public void metadataTransactionGuard(Connection c)throws SQLException {
+        schema(c);String identity;
+        try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT CURRENT_USER()")){if(!r.next())throw badSchema();identity=r.getString(1);}
+        int at=identity==null?-1:identity.lastIndexOf('@');if(at<1)throw badSchema();
+        String grantee="'"+identity.substring(0,at).replace("'","''")+"'@'"+identity.substring(at+1).replace("'","''")+"'";
+        String privilege="SELECT (EXISTS(SELECT 1 FROM information_schema.USER_PRIVILEGES WHERE GRANTEE=? AND PRIVILEGE_TYPE='TRIGGER') OR EXISTS(SELECT 1 FROM information_schema.SCHEMA_PRIVILEGES WHERE GRANTEE=? AND TABLE_SCHEMA IN (?,?) AND PRIVILEGE_TYPE='TRIGGER') OR EXISTS(SELECT 1 FROM information_schema.TABLE_PRIVILEGES WHERE GRANTEE=? AND TABLE_SCHEMA='dnf_service' AND TABLE_NAME='DOF_OPERATION_JOURNAL' AND PRIVILEGE_TYPE='TRIGGER'))";
+        try(PreparedStatement st=c.prepareStatement(privilege)){st.setString(1,grantee);st.setString(2,grantee);st.setString(3,"dnf_service");st.setString(4,"dnf\\_service");st.setString(5,grantee);try(ResultSet r=st.executeQuery()){if(!r.next()||!r.getBoolean(1))throw new DofFailure(409,"无法确认管理日志触发器，停止元数据控制");}}
+        try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE EVENT_OBJECT_SCHEMA='dnf_service' AND EVENT_OBJECT_TABLE='DOF_OPERATION_JOURNAL'")){if(!r.next()||r.getInt(1)!=0)throw badSchema();}
+        try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT COUNT(*) FROM information_schema.KEY_COLUMN_USAGE WHERE REFERENCED_TABLE_NAME IS NOT NULL AND ((TABLE_SCHEMA='dnf_service' AND TABLE_NAME='DOF_OPERATION_JOURNAL') OR (REFERENCED_TABLE_SCHEMA='dnf_service' AND REFERENCED_TABLE_NAME='DOF_OPERATION_JOURNAL'))")){if(!r.next()||r.getInt(1)!=0)throw badSchema();}
+    }
+    /** Fence late submissions while preserving native snapshot formats and the original actor. */
+    public Entry cancelPreviewInTransaction(Connection c,Entry e,long actor)throws SQLException {
+        if(c.getAutoCommit()||!"PREVIEWED".equals(e.state))throw new DofFailure(409,"只能在日志事务中取消未提交预览");
+        try(PreparedStatement p=c.prepareStatement("UPDATE "+TABLE+" SET state='NOT_APPLIED',checked_by=?,finished_at=NOW() WHERE instance_id=? AND request_id=? AND namespace=? AND request_hash=? AND before_hash=? AND after_hash=? AND state='PREVIEWED'")){
+            p.setLong(1,actor);p.setString(2,instance());p.setString(3,e.requestId);p.setString(4,e.namespace);p.setString(5,e.requestHash);p.setString(6,e.beforeHash);p.setString(7,e.afterHash);if(p.executeUpdate()!=1)throw new SQLException("Unsubmitted preview changed while cancelling");
+        }return require(c,e.namespace,e.requestId);
+    }
     public List<Entry> history(Connection c,String namespace)throws SQLException {
         schema(c);List<Entry> result=new ArrayList<>();
         try(PreparedStatement p=c.prepareStatement("SELECT * FROM "+TABLE+" WHERE instance_id=? AND namespace=? ORDER BY (state IN ('PREPARED','CONFLICT')) DESC,created_at DESC,request_id DESC LIMIT 50")) {
