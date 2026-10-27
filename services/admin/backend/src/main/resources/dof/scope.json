@@ -278,7 +278,39 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json"
+          ],
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": []
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "S10接口及页面本地实现和构建通过；真实部署门禁尚未关闭。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "pending",
+              "evidence": [
+                "S10实际临时MySQL契约通过；绑定86级实例的邮件写入尚未验证。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": []
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": []
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": []
+            }
+          }
         },
         {
           "id": "feature-007-02",
@@ -293,7 +325,39 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json"
+          ],
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": []
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "S10接口及页面本地实现和构建通过；真实部署门禁尚未关闭。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "pending",
+              "evidence": [
+                "S10实际临时MySQL契约通过；绑定86级实例的邮件写入尚未验证。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": []
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": []
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": []
+            }
+          }
         },
         {
           "id": "feature-007-03",
@@ -308,7 +372,39 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json"
+          ],
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": []
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "S10接口及页面本地实现和构建通过；真实部署门禁尚未关闭。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "pending",
+              "evidence": [
+                "S10实际临时MySQL契约通过；绑定86级实例的邮件写入尚未验证。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": []
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": []
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": []
+            }
+          }
         }
       ],
       "recordQueryImplementation": {
@@ -323,6 +419,19 @@
         "nativeToolEquivalenceVerified": false,
         "sendProtocolComplete": false,
         "populatedRealDatasetVerified": false
+      },
+      "sendManagementImplementation": {
+        "state": "locally_implemented",
+        "protocol": "postal-generated-id-v1",
+        "report": "docs/validation/admin-postal-send-s10-2026-10-27.json",
+        "realDeploymentVerified": false,
+        "actualPlayerReceiptVerified": false,
+        "batchDeliveryImplemented": false,
+        "unsupportedPendingNativeFlags": [
+          "avatar",
+          "creature",
+          "creature-artifact"
+        ]
       }
     },
     {

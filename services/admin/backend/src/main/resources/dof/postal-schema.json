@@ -1,0 +1,258 @@
+{
+  "postal": {
+    "postal_id": {
+      "type": "int unsigned",
+      "nullable": "NO",
+      "default": null,
+      "extra": "auto_increment",
+      "charset": null
+    },
+    "occ_time": {
+      "type": "datetime",
+      "nullable": "NO",
+      "default": "0000-00-00 00:00:00",
+      "extra": "",
+      "charset": null
+    },
+    "send_charac_no": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "send_charac_name": {
+      "type": "varchar(20)",
+      "nullable": "NO",
+      "default": "",
+      "extra": "",
+      "charset": "utf8"
+    },
+    "receive_charac_no": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "item_id": {
+      "type": "int unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "add_info": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "endurance": {
+      "type": "smallint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "upgrade": {
+      "type": "tinyint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "amplify_option": {
+      "type": "tinyint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "amplify_value": {
+      "type": "mediumint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "gold": {
+      "type": "int unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "receive_time": {
+      "type": "datetime",
+      "nullable": "NO",
+      "default": "0000-00-00 00:00:00",
+      "extra": "",
+      "charset": null
+    },
+    "delete_flag": {
+      "type": "tinyint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "avata_flag": {
+      "type": "tinyint",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "unlimit_flag": {
+      "type": "tinyint",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "seal_flag": {
+      "type": "tinyint",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "creature_flag": {
+      "type": "tinyint",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "postal": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "letter_id": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "extend_info": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "ipg_db_id": {
+      "type": "tinyint",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "ipg_transaction_id": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "ipg_nexon_id": {
+      "type": "varchar(32)",
+      "nullable": "NO",
+      "default": "",
+      "extra": "",
+      "charset": "utf8"
+    },
+    "auction_id": {
+      "type": "bigint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "random_option": {
+      "type": "varbinary(14)",
+      "nullable": "NO",
+      "default": "",
+      "extra": "",
+      "charset": null
+    },
+    "seperate_upgrade": {
+      "type": "tinyint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "type": {
+      "type": "tinyint unsigned",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "item_guid": {
+      "type": "varbinary(10)",
+      "nullable": "NO",
+      "default": "",
+      "extra": "",
+      "charset": null
+    }
+  },
+  "letter": {
+    "letter_id": {
+      "type": "int",
+      "nullable": "NO",
+      "default": null,
+      "extra": "auto_increment",
+      "charset": null
+    },
+    "charac_no": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "send_charac_no": {
+      "type": "int",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    },
+    "send_charac_name": {
+      "type": "varchar(20)",
+      "nullable": "NO",
+      "default": "",
+      "extra": "",
+      "charset": "utf8"
+    },
+    "letter_text": {
+      "type": "varchar(255)",
+      "nullable": "NO",
+      "default": "",
+      "extra": "",
+      "charset": "utf8"
+    },
+    "reg_date": {
+      "type": "datetime",
+      "nullable": "NO",
+      "default": "0000-00-00 00:00:00",
+      "extra": "",
+      "charset": null
+    },
+    "stat": {
+      "type": "tinyint",
+      "nullable": "NO",
+      "default": "0",
+      "extra": "",
+      "charset": null
+    }
+  }
+}

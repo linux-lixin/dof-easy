@@ -29,7 +29,7 @@ public class PostalController {
     public org.springframework.http.ResponseEntity<java.util.Map<String,String>> databaseFailure(org.springframework.dao.DataAccessException e,javax.servlet.http.HttpServletRequest request){
         if(!"GET".equals(request.getMethod()))
             return org.springframework.http.ResponseEntity.status(503).body(java.util.Collections.singletonMap("message",
-                "邮件写入结果尚未确认，请核对邮件记录，不要直接重发；持久化操作协议尚未接入此旧发送入口"));
+                "邮件写入结果尚未确认，请保留原操作编号并核对历史，不要换编号重发"));
         boolean structure = e instanceof org.springframework.jdbc.BadSqlGrammarException;
         return org.springframework.http.ResponseEntity.status(structure ? 409 : 503).body(java.util.Collections.singletonMap("message",
             structure ? "邮件查询所需的账号、角色或邮件表结构不兼容，请核对绑定实例；没有修改数据" : "邮件数据库查询失败，请检查连接及读取权限；未返回空结果代替错误"));
@@ -37,6 +37,9 @@ public class PostalController {
 
     @Resource
     private PostalService postalService;
+
+    @Resource
+    private com.aiyi.game.dnfserver.service.dof.ManagedPostalService managedPostal;
 
     @GetMapping
     public ResultPage<Postal> list(String account, String start,
@@ -68,8 +71,13 @@ public class PostalController {
     }
 
     @PostMapping
-    public void sendMail(@RequestBody Postal postal){
-        postalService.sendMail(postal);
+    public Object sendMail(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalService.Edit edit){
+        return managedPostal.save(edit);
     }
+
+    @GetMapping("{characNo}/send-status") public Object sendStatus(@PathVariable long characNo){return managedPostal.status(characNo);}
+    @PostMapping("{characNo}/preview") public Object preview(@PathVariable long characNo,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalService.Edit edit){return managedPostal.preview(characNo,edit);}
+    @GetMapping("{characNo}/history") public Object history(@PathVariable long characNo){return managedPostal.history(characNo);}
+    @PostMapping("{characNo}/history/{requestId}/reconcile") public Object reconcile(@PathVariable long characNo,@PathVariable String requestId){return managedPostal.reconcile(characNo,requestId);}
 
 }

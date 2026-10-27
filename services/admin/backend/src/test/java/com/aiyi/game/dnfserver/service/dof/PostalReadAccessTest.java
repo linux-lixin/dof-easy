@@ -24,6 +24,8 @@ public class PostalReadAccessTest {
         AccountVO actor=new AccountVO();actor.setUid(7L);actor.setAdmin(false);when(accounts.get(7L)).thenReturn(actor);
         when(query.list(any(),anyBoolean(),anyLong(),any(),any(),anyInt(),anyInt())).thenReturn(Collections.emptyList());
         PostalController controller=new PostalController();ReflectionTestUtils.setField(controller,"postalService",service);
+        ManagedPostalService managed=new ManagedPostalService();ManagedOperationJournal journal=mock(ManagedOperationJournal.class);
+        when(journal.admin()).thenReturn(7L);ReflectionTestUtils.setField(managed,"journal",journal);ReflectionTestUtils.setField(controller,"managedPostal",managed);
         http=MockMvcBuilders.standaloneSetup(controller).build();
     }
     @After public void clear(){ThreadUtil.setUserId(1L);}
@@ -59,11 +61,10 @@ public class PostalReadAccessTest {
         http.perform(get("/api/v1/postal")).andExpect(status().isServiceUnavailable()).andExpect(jsonPath("$.message").isNotEmpty()).andExpect(jsonPath("$.list").doesNotExist());
         verify(query,never()).list(any(),anyBoolean(),anyLong(),any(),any(),anyInt(),anyInt());
     }
-    @Test public void legacySendFailureDoesNotClaimThatNoWriteOccurred()throws Exception {
+    @Test public void legacyUnversionedSenderIsRejectedBeforeNativeDaoIsCalled()throws Exception {
         PostalDao writes=mock(PostalDao.class);ReflectionTestUtils.setField(service,"postalDao",writes);
-        doThrow(new org.springframework.dao.DataAccessResourceFailureException("synthetic lost write reply")).when(writes).add(any(com.aiyi.game.dnfserver.entity.Postal.class));
-        http.perform(post("/api/v1/postal").contentType("application/json").content("{\"receiveCharacNo\":\"101\",\"itemId\":5001}"))
-            .andExpect(status().isServiceUnavailable()).andExpect(jsonPath("$.message",org.hamcrest.Matchers.containsString("结果尚未确认")))
-            .andExpect(jsonPath("$.message",org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("没有修改数据"))));
+        http.perform(post("/api/v1/postal").contentType("application/json").content("{\"receiveCharacNo\":101,\"itemId\":5001}"))
+            .andExpect(status().isBadRequest()).andExpect(jsonPath("$.message",org.hamcrest.Matchers.containsString("操作编号")));
+        verifyZeroInteractions(writes);
     }
 }

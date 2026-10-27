@@ -44,6 +44,23 @@ public class PvfManager {
         } catch(Exception e) {throw new IllegalStateException("请先为当前游戏 PVF 构建资源索引",e);}
     }
     public void validateIndex() {index();}
+    /** Fresh validation for irreversible attachment issuance; bypass mtime caches. */
+    public static class VerifiedMailItem {
+        public com.aiyi.game.dnfserver.entity.common.Item item;
+        public String kind,sha256;
+    }
+    public VerifiedMailItem verifiedMailItem(int id)throws Exception {
+        String path=System.getenv("DNF_PVF_INDEX");
+        if(path==null||path.isEmpty())throw new IllegalStateException("邮件附件须绑定经校验的PVF索引");
+        File source=sourceFile();String hash=ResourceIndex.hash(source);
+        ResourceIndex data=ResourceIndex.mapper().readValue(new File(path),ResourceIndex.class);
+        if(data.version!=1||data.size!=source.length()||!hash.equals(data.sha256)||data.equipment==null||data.stackable==null||data.unverifiedItems==null||data.unverifiedItems.contains(id))throw new IllegalStateException("邮件索引与绑定PVF不匹配或物品未核实");
+        VerifiedMailItem result=new VerifiedMailItem();result.sha256=hash;
+        for(Equipment value:data.equipment)if(value.getId()==id){if(result.item!=null)throw new IllegalStateException("物品编号重复");result.item=value;result.kind="equipment";}
+        for(Stackable value:data.stackable)if(value.getId()==id){if(result.item!=null)throw new IllegalStateException("物品编号重复");result.item=value;result.kind="stackable";}
+        if(result.item==null||!hash.equals(ResourceIndex.hash(source)))throw new IllegalStateException("物品不存在或PVF检查期间改变");
+        return result;
+    }
     public boolean referenceExists(String path,String id) {
         ResourceIndex data=index();
         if(data!=null) {
