@@ -651,7 +651,8 @@
           "reason": "got: <false>, expected: is <true>"
         }
       ],
-      "log": "/tmp/dof-admin-s6-delivery-maven.log"
+      "log": "/tmp/dof-admin-s6-scope-maven.log",
+      "scopeMinimumAndIncludedRowsChecked": true
     },
     "frontendBuild": {
       "passed": true,
@@ -868,5 +869,12 @@
       "real browser account filter preserves literal SQL/URL-looking text, list/count agree, no password hashes"
     ],
     "pageErrors": 0
+  },
+  "scopeMinimumCorrection": {
+    "initialBaselineOperations": 209,
+    "acceptedMinimumOperations": 239,
+    "includedOperationCount": 239,
+    "nativeMenuAuditComplete": false,
+    "reason": "Final live check exposed the first-batch minimum still displayed as 209; all 239 operations were already present. Minimum corrected without removing or completing any operation."
   }
 }

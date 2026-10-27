@@ -2,7 +2,7 @@
   "schema": 1,
   "adapter": "dof-native-1",
   "baselineClasses": 71,
-  "baselineOperations": 209,
+  "baselineOperations": 239,
   "nativeMenuAuditComplete": false,
   "groups": [
     {
@@ -4537,5 +4537,7 @@
   ],
   "discoveredClasses": 71,
   "discoveredOperations": 239,
-  "sourceEdition": "qingkong-2.8-replacement"
+  "sourceEdition": "qingkong-2.8-replacement",
+  "initialBaselineOperations": 209,
+  "baselineRule": "本轮最低覆盖71类239项；初始209项只作历史记录，不能排除新增项或降低门禁。"
 }
