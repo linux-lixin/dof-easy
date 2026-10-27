@@ -870,12 +870,25 @@
     ]
   },
   "deployment": {
-    "performed": false,
-    "hostPort": 18080,
-    "targetGrade": 86,
-    "existingGameImage": "sha256:a3cc8049518362c85d3847fdadb942ec930d7ed3fc689fd20dcdb1e32409b9b8",
-    "existingAdminImage": "sha256:025985c5940e04e3176d128867690cbcfe6ff11cb1b8399f684082bf01d45669",
-    "freeBytesReadOnly": 33773506560
+    "sourceCommit": "0622d88483b7ec7d08ba7c6a4b2ebf17233fd58d",
+    "appSha256": "0ebdf8145d500e7cce5a73f30b21afdb115192e16e7cca715e91afea84022117",
+    "images": {
+      "game": "sha256:5ff597ff065027c2706b37d92694b0b11679ae43e8d9659752339234b62e82c3",
+      "admin": "sha256:e9875dfb8c0fca524bd2437cd7400495800e35814a31d8675b7dfb04130f3c85"
+    },
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s5-runtime/before-upgrade",
+    "adminPort": 18080,
+    "keyHashesUnchanged": true,
+    "deploymentStartedAt": 1793082266,
+    "performed": true,
+    "grade": 86,
+    "instanceId": "dof-main",
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "formalProductionSwitch": false,
+    "gameRecoveryImage": "sha256:587a88262b9e45d81637fc7dc7645ec3f6ef52978e7728ed4ebec6f701ba8860",
+    "gameBaseNote": "Original running image was missing from Docker. A private local container snapshot preserved the running baseline and rollback. No mounted database, PVF or game data is included in the snapshot.",
+    "gameImageDistribution": "private-test-host-only",
+    "cleanSourceGameImageBuildStillRequired": true
   },
   "compatibility": {
     "extraContainerPrivilegesRequired": false,
@@ -919,5 +932,689 @@
     "raid admission, progression, settlement and rewards",
     "other native configuration fields",
     "full Windows menu equivalence and multi-version matrix"
+  ],
+  "sourceCommit": "0622d88483b7ec7d08ba7c6a4b2ebf17233fd58d",
+  "real86Api": {
+    "passed": true,
+    "actions": [
+      {
+        "module": "anton",
+        "label": "changed",
+        "request": {
+          "requestId": "8edf4312-be33-40d7-bdbc-3f961a3f9c8f",
+          "revision": "4168d2afd437684227e75636efdaa81171941e0925dbb6e5f1ec9968ac3e0efb"
+        },
+        "previewTargets": [
+          {
+            "channel": "siroco15",
+            "bootId": "7026d710820d0950db21767f488fb10e",
+            "pid": 747,
+            "dispatcherThreadId": 1131
+          },
+          {
+            "channel": "siroco52",
+            "bootId": "60951ccfe1f6a433c5207aa94629f088",
+            "pid": 748,
+            "dispatcherThreadId": 1120
+          }
+        ],
+        "submitted": true,
+        "result": {
+          "schema": 1,
+          "instanceId": "dof-main",
+          "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+          "requestId": "8edf4312-be33-40d7-bdbc-3f961a3f9c8f",
+          "module": "anton",
+          "actor": 5,
+          "revision": "4168d2afd437684227e75636efdaa81171941e0925dbb6e5f1ec9968ac3e0efb",
+          "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+          "executor": {
+            "channels": [
+              "siroco15",
+              "siroco52"
+            ],
+            "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+            "digestHelperBytes": 14968,
+            "digestHelperSHA256": "caa98f9fb5b937aeea9addb7d1d17283e455771a5ffb98c9be50dd29d5bb6f9f",
+            "digestHelperSourceSHA256": "0f2b6c7769243fa58b594177c557e9cb2cd2e164d30efe1580f69c30eefc737a",
+            "executorScriptSHA256": "ff9f0ee5e4da0267671bba28b2ae0c00e1ca809e10a2b61949ecb094285bc9a8",
+            "gameAbiSHA256": "1ecafdc5a7d6e602eb41ab274c9378772be4e694f74ec19a4c6e2ad1e8ab8c19",
+            "instanceId": "dof-main",
+            "pluginBytes": 9193440,
+            "pluginSHA256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+            "schema": 1,
+            "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb"
+          },
+          "targets": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120
+            }
+          ],
+          "createdAt": "1793082616228",
+          "expiresAt": "1793082736228",
+          "state": "APPLIED",
+          "expected": {
+            "name": "安徒恩",
+            "open_day": "1,2,3,4,5,6,7",
+            "open_time": "00:00:00-23:59:59",
+            "member_min": "2"
+          },
+          "submittedAt": "1793082616274",
+          "receipts": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1131,
+              "requestId": "8edf4312-be33-40d7-bdbc-3f961a3f9c8f",
+              "module": "anton",
+              "revision": "4168d2afd437684227e75636efdaa81171941e0925dbb6e5f1ec9968ac3e0efb",
+              "state": "APPLIED",
+              "updatedAt": "1793082617933",
+              "reason": null,
+              "observed": {
+                "name": "安徒恩",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "2"
+              }
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1120,
+              "requestId": "8edf4312-be33-40d7-bdbc-3f961a3f9c8f",
+              "module": "anton",
+              "revision": "4168d2afd437684227e75636efdaa81171941e0925dbb6e5f1ec9968ac3e0efb",
+              "state": "APPLIED",
+              "updatedAt": "1793082617313",
+              "reason": null,
+              "observed": {
+                "name": "安徒恩",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "2"
+              }
+            }
+          ],
+          "taskRevision": "4cc7672149941b8500dc55f786241f7e95e19ef527846df83a88c4fad9a6510c",
+          "gameplayVerified": false,
+          "verificationFields": [
+            "name",
+            "open_day",
+            "open_time",
+            "member_min"
+          ]
+        },
+        "duplicateNoExtraNativeCall": true,
+        "invocationCountsAfter": {
+          "status-siroco52.json": {
+            "anton": 1,
+            "luke": 0
+          },
+          "status-siroco15.json": {
+            "anton": 1,
+            "luke": 0
+          }
+        }
+      },
+      {
+        "module": "anton",
+        "label": "restored",
+        "request": {
+          "requestId": "f226f9a2-0271-416e-bf44-f3f288cbc2c7",
+          "revision": "be633776b971f983ff277abb98d084e7f99b78861c13831a58eae07a73b94b58"
+        },
+        "previewTargets": [
+          {
+            "channel": "siroco15",
+            "bootId": "7026d710820d0950db21767f488fb10e",
+            "pid": 747,
+            "dispatcherThreadId": 1131
+          },
+          {
+            "channel": "siroco52",
+            "bootId": "60951ccfe1f6a433c5207aa94629f088",
+            "pid": 748,
+            "dispatcherThreadId": 1120
+          }
+        ],
+        "submitted": true,
+        "result": {
+          "schema": 1,
+          "instanceId": "dof-main",
+          "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+          "requestId": "f226f9a2-0271-416e-bf44-f3f288cbc2c7",
+          "module": "anton",
+          "actor": 5,
+          "revision": "be633776b971f983ff277abb98d084e7f99b78861c13831a58eae07a73b94b58",
+          "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+          "executor": {
+            "channels": [
+              "siroco15",
+              "siroco52"
+            ],
+            "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+            "digestHelperBytes": 14968,
+            "digestHelperSHA256": "caa98f9fb5b937aeea9addb7d1d17283e455771a5ffb98c9be50dd29d5bb6f9f",
+            "digestHelperSourceSHA256": "0f2b6c7769243fa58b594177c557e9cb2cd2e164d30efe1580f69c30eefc737a",
+            "executorScriptSHA256": "ff9f0ee5e4da0267671bba28b2ae0c00e1ca809e10a2b61949ecb094285bc9a8",
+            "gameAbiSHA256": "1ecafdc5a7d6e602eb41ab274c9378772be4e694f74ec19a4c6e2ad1e8ab8c19",
+            "instanceId": "dof-main",
+            "pluginBytes": 9193440,
+            "pluginSHA256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+            "schema": 1,
+            "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb"
+          },
+          "targets": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120
+            }
+          ],
+          "createdAt": "1793082624748",
+          "expiresAt": "1793082744748",
+          "state": "APPLIED",
+          "expected": {
+            "name": "安徒恩",
+            "open_day": "1,2,3,4,5,6,7",
+            "open_time": "00:00:00-23:59:59",
+            "member_min": "1"
+          },
+          "submittedAt": "1793082624800",
+          "receipts": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1131,
+              "requestId": "f226f9a2-0271-416e-bf44-f3f288cbc2c7",
+              "module": "anton",
+              "revision": "be633776b971f983ff277abb98d084e7f99b78861c13831a58eae07a73b94b58",
+              "state": "APPLIED",
+              "updatedAt": "1793082626050",
+              "reason": null,
+              "observed": {
+                "name": "安徒恩",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "1"
+              }
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1120,
+              "requestId": "f226f9a2-0271-416e-bf44-f3f288cbc2c7",
+              "module": "anton",
+              "revision": "be633776b971f983ff277abb98d084e7f99b78861c13831a58eae07a73b94b58",
+              "state": "APPLIED",
+              "updatedAt": "1793082625400",
+              "reason": null,
+              "observed": {
+                "name": "安徒恩",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "1"
+              }
+            }
+          ],
+          "taskRevision": "2ea0bd8638bdfbb2a11818f4c5ccce215c84c115de8b7f4562bb841580b197f8",
+          "gameplayVerified": false,
+          "verificationFields": [
+            "name",
+            "open_day",
+            "open_time",
+            "member_min"
+          ]
+        },
+        "duplicateNoExtraNativeCall": true,
+        "invocationCountsAfter": {
+          "status-siroco52.json": {
+            "anton": 2,
+            "luke": 0
+          },
+          "status-siroco15.json": {
+            "anton": 2,
+            "luke": 0
+          }
+        }
+      },
+      {
+        "module": "luke",
+        "label": "changed",
+        "request": {
+          "requestId": "31d75526-51dd-47ce-8729-04f8badc727a",
+          "revision": "c9a85af758d9b25ccff4f75cef2b366c30fca4cd09a31616e6a3d67844158d13"
+        },
+        "previewTargets": [
+          {
+            "channel": "siroco15",
+            "bootId": "7026d710820d0950db21767f488fb10e",
+            "pid": 747,
+            "dispatcherThreadId": 1131
+          },
+          {
+            "channel": "siroco52",
+            "bootId": "60951ccfe1f6a433c5207aa94629f088",
+            "pid": 748,
+            "dispatcherThreadId": 1120
+          }
+        ],
+        "submitted": true,
+        "result": {
+          "schema": 1,
+          "instanceId": "dof-main",
+          "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+          "requestId": "31d75526-51dd-47ce-8729-04f8badc727a",
+          "module": "luke",
+          "actor": 5,
+          "revision": "c9a85af758d9b25ccff4f75cef2b366c30fca4cd09a31616e6a3d67844158d13",
+          "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+          "executor": {
+            "channels": [
+              "siroco15",
+              "siroco52"
+            ],
+            "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+            "digestHelperBytes": 14968,
+            "digestHelperSHA256": "caa98f9fb5b937aeea9addb7d1d17283e455771a5ffb98c9be50dd29d5bb6f9f",
+            "digestHelperSourceSHA256": "0f2b6c7769243fa58b594177c557e9cb2cd2e164d30efe1580f69c30eefc737a",
+            "executorScriptSHA256": "ff9f0ee5e4da0267671bba28b2ae0c00e1ca809e10a2b61949ecb094285bc9a8",
+            "gameAbiSHA256": "1ecafdc5a7d6e602eb41ab274c9378772be4e694f74ec19a4c6e2ad1e8ab8c19",
+            "instanceId": "dof-main",
+            "pluginBytes": 9193440,
+            "pluginSHA256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+            "schema": 1,
+            "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb"
+          },
+          "targets": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120
+            }
+          ],
+          "createdAt": "1793082633189",
+          "expiresAt": "1793082753189",
+          "state": "APPLIED",
+          "expected": {
+            "name": "卢克",
+            "open_day": "1,2,3,4,5,6,7",
+            "open_time": "00:00:00-23:59:59",
+            "member_min": "1"
+          },
+          "submittedAt": "1793082633225",
+          "receipts": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1131,
+              "requestId": "31d75526-51dd-47ce-8729-04f8badc727a",
+              "module": "luke",
+              "revision": "c9a85af758d9b25ccff4f75cef2b366c30fca4cd09a31616e6a3d67844158d13",
+              "state": "APPLIED",
+              "updatedAt": "1793082634133",
+              "reason": null,
+              "observed": {
+                "name": "卢克",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "1"
+              }
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1120,
+              "requestId": "31d75526-51dd-47ce-8729-04f8badc727a",
+              "module": "luke",
+              "revision": "c9a85af758d9b25ccff4f75cef2b366c30fca4cd09a31616e6a3d67844158d13",
+              "state": "APPLIED",
+              "updatedAt": "1793082633479",
+              "reason": null,
+              "observed": {
+                "name": "卢克",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "1"
+              }
+            }
+          ],
+          "taskRevision": "c0112f74eaee2ae81a53ed032cbf8e7d137f8c0303950f24b30a138cff755a95",
+          "gameplayVerified": false,
+          "verificationFields": [
+            "name",
+            "open_day",
+            "open_time",
+            "member_min"
+          ]
+        },
+        "duplicateNoExtraNativeCall": true,
+        "invocationCountsAfter": {
+          "status-siroco52.json": {
+            "anton": 2,
+            "luke": 1
+          },
+          "status-siroco15.json": {
+            "anton": 2,
+            "luke": 1
+          }
+        }
+      },
+      {
+        "module": "luke",
+        "label": "restored",
+        "request": {
+          "requestId": "4133eda0-d8cd-4c7a-b921-d968c253357d",
+          "revision": "0a3dc69163c7d12618cb38e52ded7aff4f2dc6517b166eb0027076eefa98bdcd"
+        },
+        "previewTargets": [
+          {
+            "channel": "siroco15",
+            "bootId": "7026d710820d0950db21767f488fb10e",
+            "pid": 747,
+            "dispatcherThreadId": 1131
+          },
+          {
+            "channel": "siroco52",
+            "bootId": "60951ccfe1f6a433c5207aa94629f088",
+            "pid": 748,
+            "dispatcherThreadId": 1120
+          }
+        ],
+        "submitted": true,
+        "result": {
+          "schema": 1,
+          "instanceId": "dof-main",
+          "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+          "requestId": "4133eda0-d8cd-4c7a-b921-d968c253357d",
+          "module": "luke",
+          "actor": 5,
+          "revision": "0a3dc69163c7d12618cb38e52ded7aff4f2dc6517b166eb0027076eefa98bdcd",
+          "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+          "executor": {
+            "channels": [
+              "siroco15",
+              "siroco52"
+            ],
+            "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+            "digestHelperBytes": 14968,
+            "digestHelperSHA256": "caa98f9fb5b937aeea9addb7d1d17283e455771a5ffb98c9be50dd29d5bb6f9f",
+            "digestHelperSourceSHA256": "0f2b6c7769243fa58b594177c557e9cb2cd2e164d30efe1580f69c30eefc737a",
+            "executorScriptSHA256": "ff9f0ee5e4da0267671bba28b2ae0c00e1ca809e10a2b61949ecb094285bc9a8",
+            "gameAbiSHA256": "1ecafdc5a7d6e602eb41ab274c9378772be4e694f74ec19a4c6e2ad1e8ab8c19",
+            "instanceId": "dof-main",
+            "pluginBytes": 9193440,
+            "pluginSHA256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+            "schema": 1,
+            "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb"
+          },
+          "targets": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120
+            }
+          ],
+          "createdAt": "1793082640483",
+          "expiresAt": "1793082760483",
+          "state": "APPLIED",
+          "expected": {
+            "name": "卢克",
+            "open_day": "1,2,3,4,5,6,7",
+            "open_time": "00:00:00-23:59:59",
+            "member_min": "2"
+          },
+          "submittedAt": "1793082640522",
+          "receipts": [
+            {
+              "channel": "siroco15",
+              "bootId": "7026d710820d0950db21767f488fb10e",
+              "pid": 747,
+              "dispatcherThreadId": 1131,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1131,
+              "requestId": "4133eda0-d8cd-4c7a-b921-d968c253357d",
+              "module": "luke",
+              "revision": "0a3dc69163c7d12618cb38e52ded7aff4f2dc6517b166eb0027076eefa98bdcd",
+              "state": "APPLIED",
+              "updatedAt": "1793082642211",
+              "reason": null,
+              "observed": {
+                "name": "卢克",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "2"
+              }
+            },
+            {
+              "channel": "siroco52",
+              "bootId": "60951ccfe1f6a433c5207aa94629f088",
+              "pid": 748,
+              "dispatcherThreadId": 1120,
+              "schema": 1,
+              "instanceId": "dof-main",
+              "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+              "bindingRevision": "c38ee8ee178167ea32117d71eaeb5909f80b65de666a0c5865392da3dd8058bb",
+              "executorThreadId": 1120,
+              "requestId": "4133eda0-d8cd-4c7a-b921-d968c253357d",
+              "module": "luke",
+              "revision": "0a3dc69163c7d12618cb38e52ded7aff4f2dc6517b166eb0027076eefa98bdcd",
+              "state": "APPLIED",
+              "updatedAt": "1793082641559",
+              "reason": null,
+              "observed": {
+                "name": "卢克",
+                "open_day": "1,2,3,4,5,6,7",
+                "open_time": "00:00:00-23:59:59",
+                "member_min": "2"
+              }
+            }
+          ],
+          "taskRevision": "2d9adb66a764b7c1c4137aad4cd55ca25c52417c520c14e159c6e0077045c300",
+          "gameplayVerified": false,
+          "verificationFields": [
+            "name",
+            "open_day",
+            "open_time",
+            "member_min"
+          ]
+        },
+        "duplicateNoExtraNativeCall": true,
+        "invocationCountsAfter": {
+          "status-siroco52.json": {
+            "anton": 2,
+            "luke": 2
+          },
+          "status-siroco15.json": {
+            "anton": 2,
+            "luke": 2
+          }
+        }
+      }
+    ],
+    "checks": [
+      "real administrator login",
+      "two-channel ready and bound",
+      "saved config change and native readback for both raids",
+      "targeted file and native restore for both raids",
+      "same request ID no repeated native calls",
+      "different payload rejected",
+      "old config revision rejected"
+    ],
+    "initialCounts": {
+      "status-siroco52.json": {
+        "anton": 0,
+        "luke": 0
+      },
+      "status-siroco15.json": {
+        "anton": 0,
+        "luke": 0
+      }
+    },
+    "finalCounts": {
+      "status-siroco52.json": {
+        "anton": 2,
+        "luke": 2
+      },
+      "status-siroco15.json": {
+        "anton": 2,
+        "luke": 2
+      }
+    },
+    "originalFileAndNativeValuesRestored": true,
+    "actualGameplayVerified": false
+  },
+  "real86BrowserBeforeRecreate": {
+    "passed": true,
+    "backend": "real",
+    "instanceId": "dof-main",
+    "configEdits": false,
+    "actualGameplayVerified": false,
+    "checks": [
+      "real browser administrator login",
+      "anonymous access rejected",
+      "real plugin read and application guidance",
+      "real browser anton frozen preview, submit, two-channel native receipts and four-field readback",
+      "real browser luke frozen preview, submit, two-channel native receipts and four-field readback",
+      "real signin schema and queries",
+      "real read-only record projections: 30/30",
+      "deployed activity adapter and durable journal read",
+      "deployed penalty schema and protected-admin password-state/journal read without writes",
+      "role adapter sample unavailable: character list empty; no player data initialized",
+      "browser schema diagnosis",
+      "feature ledger uses canonical 71 classes / 239 operations and current management evidence"
+    ],
+    "pageErrors": 0
+  },
+  "real86ContainerRecreate": {
+    "passed": true,
+    "bothContainersRecreated": true,
+    "sameImages": true,
+    "sameKeys": true,
+    "sameConfigBytes": true,
+    "oldTaskReplayNoNativeCalls": true,
+    "channels": {
+      "siroco52": {
+        "pid": 747,
+        "dispatcherThreadId": 1132,
+        "bootId": "e38b7ca48c9cae0004d6f4e255c32829",
+        "nativeInvocationAttempts": {
+          "anton": 0,
+          "luke": 0
+        }
+      },
+      "siroco15": {
+        "pid": 746,
+        "dispatcherThreadId": 1120,
+        "bootId": "7ffe08dc4a8e492661404c2ab88b0499",
+        "nativeInvocationAttempts": {
+          "anton": 0,
+          "luke": 0
+        }
+      }
+    },
+    "fullGameplayVerified": false
+  },
+  "installerRegeneration": {
+    "passed": true,
+    "applied": false,
+    "imagesPreserved": true,
+    "instanceAndDatabasePreserved": true,
+    "allGameAdminMountsPreserved": true,
+    "portsPreserved": true,
+    "keysImagePreserved": true,
+    "differencePaths": [
+      "/services/db-tools/image"
+    ]
+  },
+  "firstRealAttempt": {
+    "outcome": "Explicit common-lock HTTP 409 before publication; configuration restored using original saved operation. No native calls occurred.",
+    "nativeCountsAfterRestore": {
+      "status-siroco52.json": {
+        "anton": 0,
+        "luke": 0
+      },
+      "status-siroco15.json": {
+        "anton": 0,
+        "luke": 0
+      }
+    },
+    "browserHarnessCorrection": "Treat lock HTTP 409 as rejection, explicitly reconcile original task before loading its preview and resubmitting the same ID. Initial preview retries require absence of a durable task."
+  },
+  "remainingDeploymentIssues": [
+    "Custom Frida script reports MySQL access error 1044 for database frida and an invalid argument in init_db. Fixed refresh executor works independently; all Frida features are not accepted.",
+    "Game runtime on server is a private snapshot overlay. Final distributable game image still requires a clean source build.",
+    "Heartbeat and admin operations share the lock. Explicit lock-conflict rejection is safe, but reducing contention remains usability work.",
+    "Real browser after the final evidence-resource image update remains to be recorded."
   ]
 }

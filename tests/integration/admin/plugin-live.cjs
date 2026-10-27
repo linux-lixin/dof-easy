@@ -10,6 +10,7 @@ const { values: args } = parseArgs({ options: {
   'allow-config-edits': { type: 'boolean', default: false },
   'require-all-records': { type: 'boolean', default: false },
   'inspect-management': { type: 'boolean', default: false },
+  'expect-native-runtime': { type: 'boolean', default: false },
 } });
 if (!args.origin || !args.credentials || !args.instance || !args.output) throw new Error('Required: --origin --credentials --instance --output; edits require --allow-config-edits');
 const origin = new URL(args.origin).origin;
@@ -55,9 +56,58 @@ const observe = promise => { promise.catch(() => {}); return promise; };
     // The feature ledger has an identically named collapse header with role=button.
     await panel.locator('button').filter({ hasText: /^安徒恩团本$/ }).click();
     original = await api('GET', '/plugins/anton');assert.equal(original.instanceId, args.instance);
-    assert.equal(original.application.webExecutionSupported, false);assert.equal(original.application.runtimeObserved, false);
+    assert.equal(original.application.webExecutionSupported, args['expect-native-runtime']);assert.equal(original.application.runtimeObserved, args['expect-native-runtime']);
     if (original.application.command) await page.getByText('当前 GM 刷新命令：').waitFor();
     checks.push('real plugin read and application guidance');
+    if (args['expect-native-runtime']) {
+      assert.equal(args['allow-config-edits'], false, 'Runtime acceptance uses the saved configuration; keep copied-directory edits separate');
+      for (const [module, title] of [['anton', '安徒恩团本'], ['luke', '卢克团本']]) {
+        const clickPost = async (button, suffix, beforeRetry) => {
+          for (let attempt = 0; ; attempt++) {
+            const pending = observe(page.waitForResponse(r => r.url().endsWith(suffix) && r.request().method() === 'POST'));
+            await button().click();const reply = await pending, value = await reply.json();
+            if (reply.status() === 200) return value;
+            assert.equal(reply.status(), 409);assert.match(value.message, /另一个.*操作正在执行/);assert.ok(attempt < 15);
+            if (beforeRetry) await beforeRetry(reply.request().postDataJSON());
+            await page.waitForTimeout(170 + attempt * 35);
+          }
+        };
+        await panel.locator('button').filter({ hasText: new RegExp('^' + title + '$') }).click();
+        await panel.getByRole('heading', { name: '刷新已保存的团本配置' }).waitFor();
+        const before = await api('GET', '/plugins/' + module);
+        const frozen = await clickPost(() => panel.getByRole('button', { name: '预览原生刷新', exact: true }), `/${module}/runtime/preview`, async request => {
+          const history = await api('GET', `/plugins/${module}/runtime/history`);
+          assert.ok(!history.some(row => row.requestId === request.requestId), 'Failed initial preview must have no durable task before preparing another ID');
+        });
+        assert.equal(frozen.revision, before.revision);assert.equal(frozen.targets.length, 2);
+        for (let attempt = 0; ; attempt++) {
+          const submitReply = observe(page.waitForResponse(r => r.url().endsWith(`/${module}/runtime`) && r.request().method() === 'POST'));
+          await panel.getByRole('button', { name: '提交本次刷新', exact: true }).click();
+          const reply = await submitReply, submitted = await reply.json();
+          if (reply.status() === 200) { assert.equal(submitted.requestId, frozen.requestId);break; }
+          assert.equal(reply.status(), 409);assert.match(submitted.message, /另一个.*操作正在执行/);assert.ok(attempt < 15);
+          // Exercise the user's explicit reconciliation/reload flow. Only a
+          // confirmed PREVIEWED task may be submitted again, with its original ID.
+          const reconciled = await clickPost(() => panel.getByRole('button', { name: '核对本次刷新', exact: true }), `/${frozen.requestId}/reconcile`);
+          assert.equal(reconciled.state, 'PREVIEWED');
+          await page.waitForTimeout(150 + attempt * 30);
+          const loaded = await clickPost(() => panel.getByRole('row').filter({ hasText: frozen.requestId }).getByRole('button', { name: '加载预览', exact: true }), `/${module}/runtime/preview`);
+          assert.equal(loaded.requestId, frozen.requestId);
+        }
+        let result;
+        for (let attempt = 0; attempt < 25; attempt++) {
+          result = await clickPost(() => panel.getByRole('button', { name: '核对本次刷新', exact: true }), `/${frozen.requestId}/reconcile`);
+          if (['APPLIED', 'REJECTED', 'UNKNOWN'].includes(result.state)) break;
+          await page.waitForTimeout(1000);
+        }
+        assert.equal(result.state, 'APPLIED');assert.equal(result.receipts.length, 2);
+        assert.equal(result.gameplayVerified, false);
+        for (const row of result.receipts) { assert.equal(row.state, 'APPLIED');assert.deepEqual(row.observed, result.expected); }
+        assert.equal((await api('GET', '/plugins/' + module)).revision, before.revision);
+        await panel.getByText('各频道已调用刷新，四项回读一致；团本流程、结算和奖励仍需实际验证。', { exact: true }).waitFor();
+        checks.push(`real browser ${module} frozen preview, submit, two-channel native receipts and four-field readback`);
+      }
+    }
     if (args['allow-config-edits']) {
       const field = original.fields.find(f => f.key === 'anton_member_min' && f.available);
       assert.ok(field && /^[0-9]+$/.test(field.value));

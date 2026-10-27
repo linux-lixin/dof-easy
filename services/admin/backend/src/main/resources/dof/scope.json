@@ -1374,7 +1374,17 @@
               "open_day",
               "open_time",
               "member_min"
-            ]
+            ],
+            "runtimeVerification": {
+              "state": "four_fields_verified",
+              "grade": 86,
+              "channels": [
+                "siroco15",
+                "siroco52"
+              ],
+              "evidence": "docs/validation/admin-runtime-s5-2026-10-27.json",
+              "gameplayVerified": false
+            }
           },
           "verification": {
             "consumption": {
@@ -1383,7 +1393,7 @@
                 "docs/validation/admin-raid-s4-2026-10-27.json",
                 "docs/validation/admin-runtime-s5-2026-10-27.json"
               ],
-              "reason": "本地70级两轮实际dispatcher刷新、四项回读及恢复通过；86级、其他配置字段和完整团本流程尚未验收。"
+              "reason": "本地70级两轮及真实86级两频道固定刷新、四项回读、变更与恢复通过；其余配置字段、团本开关及完整流程仍待验收。"
             },
             "implementation": {
               "state": "pending",
@@ -1397,7 +1407,7 @@
               "evidence": [
                 "docs/validation/admin-runtime-s5-2026-10-27.json"
               ],
-              "reason": "本地原生配置恢复、锁与重复请求已验证；其他故障注入及86级容器重建仍待验。"
+              "reason": "真实86级原字段和原生值恢复、game/admin容器重建后配置与密钥保留、原4项请求不重放通过；其他故障注入与进行中团本边界仍待验。"
             }
           }
         }
@@ -1438,7 +1448,17 @@
               "open_day",
               "open_time",
               "member_min"
-            ]
+            ],
+            "runtimeVerification": {
+              "state": "four_fields_verified",
+              "grade": 86,
+              "channels": [
+                "siroco15",
+                "siroco52"
+              ],
+              "evidence": "docs/validation/admin-runtime-s5-2026-10-27.json",
+              "gameplayVerified": false
+            }
           },
           "verification": {
             "consumption": {
@@ -1447,7 +1467,7 @@
                 "docs/validation/admin-raid-s4-2026-10-27.json",
                 "docs/validation/admin-runtime-s5-2026-10-27.json"
               ],
-              "reason": "本地70级两轮实际dispatcher刷新、四项回读及恢复通过；86级、其他配置字段和完整团本流程尚未验收。"
+              "reason": "本地70级两轮及真实86级两频道固定刷新、四项回读、变更与恢复通过；其余配置字段、团本开关及完整流程仍待验收。"
             },
             "implementation": {
               "state": "pending",
@@ -1461,7 +1481,7 @@
               "evidence": [
                 "docs/validation/admin-runtime-s5-2026-10-27.json"
               ],
-              "reason": "本地原生配置恢复、锁与重复请求已验证；其他故障注入及86级容器重建仍待验。"
+              "reason": "真实86级原字段和原生值恢复、game/admin容器重建后配置与密钥保留、原4项请求不重放通过；其他故障注入与进行中团本边界仍待验。"
             }
           }
         }
