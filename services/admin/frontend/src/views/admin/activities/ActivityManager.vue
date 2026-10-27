@@ -52,7 +52,7 @@ async function reconcileLegacy(row: any) {
 const section = computed(() => sections.value.find(s => s.key === active.value));
 const groups = computed(() => [...new Set(section.value?.fields.map(f => f.group) || [])]);
 const fields = (group: string) => section.value?.fields.filter(f => f.group === group) || [];
-const summaries = computed(() => section.value?.fields.filter(f => ['code','restitution','Return_quantity','differ_lv','lv','id','box_id','Dname','item_id','name','d_Name','start_time','end_time','end_date','te_date_end','d_on','d_off','item1','item_code1','item2','item_code2','item3','item_code3'].includes(f.name)) || []);
+const summaries = computed(() => section.value?.fields.filter(f => ['code','restitution','Return_quantity','differ_lv','codenum','announcement','extra_consumption_id','extra_consumption_num','lv','id','box_id','Dname','item_id','name','d_Name','start_time','end_time','end_date','te_date_end','d_on','d_off','item1','item_code1','item2','item_code2','item3','item_code3'].includes(f.name)) || []);
 const endpoint = () => `/api/v1/admin/activities/${active.value}`;
 const labels: Record<string, string> = { PREVIEWED: '仅预览', PREPARED: '结果待核对', PERSISTED: '配置已保存', NOT_APPLIED: '未写入', CONFLICT: '当前值与前后快照均不同', ACKNOWLEDGED: '已确认保留当前值，原结果未知', NO_CHANGE: '无需写入', UNKNOWN:'提交响应不明，保留原编号', SUBMITTING:'正在提交原编号', PREVIEW_UNKNOWN:'预览响应不明，重读原编号', MISSING_PREVIEW:'仅预览请求未找到，未提交原生写入' };
 function uuid() {

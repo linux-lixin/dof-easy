@@ -2656,85 +2656,92 @@
   },
   {
     "key": "recovery",
-    "title": "物品回收",
+    "title": "原生物品回收规则",
     "table": "item_recovery",
     "primaryKey": "code",
     "autoId": false,
     "fields": [
       {
         "name": "code",
-        "label": "code",
+        "label": "回收物品代码",
         "type": "int",
         "group": "基本设置",
-        "min": 0,
+        "min": 1,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 1,
+        "hint": "填写要回收的物品代码；此表没有继承或跨界的代码 0 默认规则语义。"
       },
       {
         "name": "restitution",
-        "label": "restitution",
+        "label": "奖励物品代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "使用 / 分隔，逐项对应且最多 7 组；两项均留空表示未配置奖励。"
       },
       {
         "name": "Return_quantity",
-        "label": "Return_quantity",
+        "label": "奖励物品数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "使用 / 分隔，逐项对应且最多 7 组；两项均留空表示未配置奖励。"
       },
       {
         "name": "announcement",
-        "label": "announcement",
+        "label": "是否播报",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "0 不播报，1 播报；未修改的旧扩展值原样保留。"
       },
       {
         "name": "codenum",
-        "label": "codenum",
+        "label": "回收扣除数量",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 1,
+        "hint": "本次回收扣除的原物品数量，新增或修改必须大于 0；原生组件执行扣除。"
       },
       {
         "name": "extra_consumption_id",
-        "label": "extra_consumption_id",
+        "label": "额外扣除物品代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "使用 / 分隔，最多 7 组；0 为金币，正数为道具代码；不额外扣除时两项均留空。"
       },
       {
         "name": "extra_consumption_num",
-        "label": "extra_consumption_num",
+        "label": "额外扣除物品数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "与额外扣除代码逐项对应，数量必须为正整数。"
       }
     ],
-    "writable": false,
-    "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "writable": true,
+    "deleteAllowed": true,
+    "notice": "维护原生插件的回收规则；网页不回收玩家物品、不扣款或发奖。奖励与额外消耗各用 / 成对分隔、最多 7 组；额外消耗代码 0 表示金币，留空表示不额外扣除。保存不会自动开启回收功能，组件读取、扣除、奖励及公告效果仍待验。原工具菜单及导入导出格式待手动对照。"
   },
   {
     "key": "appearance",

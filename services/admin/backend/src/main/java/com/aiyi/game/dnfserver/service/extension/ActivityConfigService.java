@@ -96,7 +96,7 @@ public class ActivityConfigService {
                         // Unsigned native INT comes back as Long. The existing HTTP
                         // serializer renders Long as text, but these supported rule fields
                         // drive numeric controls and must retain the signed-INT wire type.
-                        if (s.key.equals("inheritance") && value instanceof Number) {
+                        if (Arrays.asList("inheritance","recovery").contains(s.key) && value instanceof Number) {
                             long number=((Number)value).longValue();
                             if(number>=0 && number<=Integer.MAX_VALUE)value=(int)number;
                         }
@@ -197,6 +197,7 @@ public class ActivityConfigService {
             }
         }
         if(s.key.equals("inheritance")&&!trustedRestore)NativeInheritanceRules.validate(result,old);
+        if(s.key.equals("recovery")&&!trustedRestore)NativeRecoveryRules.validate(result,old);
         return result;
     }
     private void pair(Map<String,Object> row,String a,String b) {
@@ -209,7 +210,11 @@ public class ActivityConfigService {
         }
     }
     private void guard(Connection c,Section s) throws SQLException {
-        if(s.key.equals("inheritance")){journal.metadataTransactionGuard(c);NativeInheritanceRules.requireSchema(c);cancelActor(c,admin());}
+        if(Arrays.asList("inheritance","recovery").contains(s.key)){
+            journal.metadataTransactionGuard(c);
+            if(s.key.equals("inheritance"))NativeInheritanceRules.requireSchema(c);else NativeRecoveryRules.requireSchema(c);
+            cancelActor(c,admin());
+        }
         String sql=null;
         if(s.key.startsWith("pot-") && !s.key.equals("pot-switch"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(item_off_1),0)=0 AND COALESCE(MAX(item_off_2),0)=0 AND COALESCE(MAX(item_off_3),0)=0 FROM dof_native.earthenware_pot_item";
         if(s.key.equals("shop"))sql="SELECT (SELECT COUNT(*) FROM dof_native.new_shop)=1 AND (SELECT COUNT(*) FROM dof_native.new_shop WHERE swoff<>0)=0 AND (SELECT COUNT(*) FROM dof_native.timed_task WHERE task_state=1)=0";
@@ -241,7 +246,7 @@ public class ActivityConfigService {
     private void lock(Connection c,Section s)throws SQLException {lock(c,s,false);}
     private void lock(Connection c,Section s,boolean actorLock)throws SQLException {
         String locks=table(s)+" WRITE";
-        if(actorLock || s.key.equals("inheritance"))locks+=",`d_taiwan`.`accounts` READ";
+        if(actorLock || Arrays.asList("inheritance","recovery").contains(s.key))locks+=",`d_taiwan`.`accounts` READ";
         if(s.key.startsWith("pot-")&&!s.key.equals("pot-switch"))locks+=",dof_native.earthenware_pot_item READ";
         if(s.key.equals("shop"))locks+=",dof_native.new_shop READ,dof_native.timed_task READ";
         if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ";
@@ -404,6 +409,7 @@ public class ActivityConfigService {
             }else {
                 if(change.before==null)throw new Failure(409,"当前配置已被删除，停止恢复");
                 if(s.key.equals("inheritance"))NativeInheritanceRules.restoreGuard(before,after,change.before);
+                if(s.key.equals("recovery"))NativeRecoveryRules.restoreGuard(before,after,change.before);
                 change.after=new LinkedHashMap<>(change.before);
                 for(Field f:s.fields)if(!Objects.equals(String.valueOf(before.get(f.name)),String.valueOf(after.get(f.name)))) {
                     if(!Objects.equals(String.valueOf(change.before.get(f.name)),String.valueOf(after.get(f.name))))throw new Failure(409,"本次涉及的字段已有第三方修改："+f.label);

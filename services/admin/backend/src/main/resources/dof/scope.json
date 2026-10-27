@@ -2077,14 +2077,37 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "回收物品代码、奖励代码/数量、播报标志、回收扣除数量、额外消耗代码/数量；两组列表各用 / 配对、最多7组，额外代码0为金币",
+          "nativeLocation": "dof_native.item_recovery(code,restitution,Return_quantity,announcement,codenum,extra_consumption_id,extra_consumption_num)",
+          "encoding": "原生七字段固定顺序；奖励与额外消耗为VARCHAR255，整数为unsigned INT；未修改的旧文本与扩展值保留",
+          "executor": "现有原生插件回收/扣除/奖励流程；网页只维护规则，Frida装备/时装/宠物回收独立",
+          "activation": "保存不会开启回收；重新打开回收窗口后由组件读取，实际扣除与到账另行验收",
+          "output": "规则读取、预览、保存、单条JSON导入导出、核对及定向恢复；原工具菜单、默认值、导入导出与客户端UI仍待验",
+          "failureBehavior": "配对错误、超范围、数量无效、版本/配对恢复冲突、撤权、未知表序/索引/触发器/FK拒绝写入；未决记录保留原编号",
+          "evidence": [
+            "docs/validation/admin-recovery-s26-2026-10-28.json"
+          ],
+          "implementationStatus": "local_rule_editing_verified_deployment_consumer_and_ui_parity_pending",
+          "managementImplementation": {
+            "state": "local_configuration_implemented",
+            "entry": "/admin/activities",
+            "api": "/api/v1/admin/activities/recovery",
+            "nativeLocation": "dof_native.item_recovery(code,restitution,Return_quantity,announcement,codenum,extra_consumption_id,extra_consumption_num)",
+            "activation": "保存不会开启回收；重新打开回收窗口后由组件读取，实际扣除与到账另行验收"
+          },
+          "recoveryRuleManagement": {
+            "configurationEditingImplemented": true,
+            "goldZeroExtraCostSupported": true,
+            "maxRewardPairs": 7,
+            "maxExtraCostPairs": 7,
+            "rewardAndCostRestorePairGuards": true,
+            "originalImportExportVerified": false,
+            "realDeploymentVerified": false,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false,
+            "localPersistenceAndRecoveryContractVerified": true,
+            "verificationEvidence": "docs/validation/admin-recovery-s26-2026-10-28.json"
+          }
         }
       ]
     },
