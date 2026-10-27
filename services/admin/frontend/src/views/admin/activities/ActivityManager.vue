@@ -2,6 +2,8 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import Request from '../../../api/Request';
+import EquipmentBatchManager from './EquipmentBatchManager.vue';
+const batchBusy=ref(false);
 type Field = { name: string; label: string; type: string; group: string; min: number; max: number; readonly: boolean; hint?: string; default: any };
 type Section = { key: string; title: string; primaryKey: string | null; autoId: boolean; writable?: boolean; deleteAllowed?: boolean; notice?: string; fields: Field[] };
 type Row = { revision: string; values: Record<string, any> | null };
@@ -182,7 +184,7 @@ async function openHistory(reset = true) {
 }
 onMounted(async () => {
   loading.value = true;
-  try { sections.value=(await Request.get<Section[]>('/api/v1/admin/activities')).data;const pinned=Object.keys(saved).find(k=>sections.value.some(s=>s.key===k));if(pinned)active.value=pinned;await load(); }
+  try { sections.value=(await Request.get<Section[]>('/api/v1/admin/activities')).data;const pinned=Object.keys(saved).find(k=>sections.value.some(s=>s.key===k));if(pinned)active.value=pinned;else{const lastBatch=sessionStorage.getItem('equipment.batch.lastSection.v1');if(lastBatch&&sections.value.some(s=>s.key===lastBatch))active.value=lastBatch;}await load(); }
   catch (e) { error.value = message(e); }
   finally { loading.value = false; }
 });
@@ -191,7 +193,7 @@ onMounted(async () => {
 <template>
   <a-card title="活动与装备规则管理" style="margin: 24px">
     <a-alert style="margin-bottom: 16px">签到、战令与收集箱沿用配套游戏插件。此处修改活动规则，保留玩家领取和收集进度。活动到期不自动重置玩家记录。</a-alert>
-    <a-select v-model="active" @change="selectSection" :disabled="saving || loading || datasetBusy" style="width: 360px"><a-option v-for="s in sections" :key="s.key" :value="s.key">{{ s.title }}{{ s.writable === false ? "（只读）" : "" }}</a-option></a-select>
+    <a-select v-model="active" @change="selectSection" :disabled="saving || loading || datasetBusy || batchBusy" style="width: 360px"><a-option v-for="s in sections" :key="s.key" :value="s.key">{{ s.title }}{{ s.writable === false ? "（只读）" : "" }}</a-option></a-select>
     <a-alert v-if="error" type="error">{{ error }}</a-alert>
     <a-space style="margin: 16px 0" wrap>
       <a-button @click="load" :loading="loading" :disabled="saving">刷新</a-button>
@@ -201,11 +203,12 @@ onMounted(async () => {
       <a-button :disabled="loading || !!error" @click="openHistory()">修改记录与快照</a-button>
     </a-space>
     <a-space v-if="equipment" direction="vertical" fill style="margin-bottom:16px">
-      <a-alert>全表文件使用网页规则格式 v1，绑定当前实例和数据库 UUID。文件完整性检查不会生成写入计划或保存配置；批量导入、清除与原工具格式对照仍待补齐。</a-alert>
+      <a-alert>全表文件使用网页规则格式 v1，绑定当前实例和数据库 UUID。文件完整性检查不会生成写入计划或保存配置；批量写入另行创建下方任务；原工具文件格式仍待对照。</a-alert>
       <a-space><input :key="active" type="file" accept=".json,application/json" :disabled="datasetBusy" aria-label="选择全表规则文件" @change="selectDataset" /><a-button :disabled="datasetBusy||!datasetFile" @click="datasetAction('check')">检查文件完整性</a-button><a-button v-if="datasetBusy" @click="cancelDataset">取消文件读取</a-button></a-space>
       <a-alert v-if="datasetError" type="error">{{datasetError}}</a-alert><a-alert v-if="datasetInfo">{{datasetInfo}}</a-alert>
       <a-alert v-if="datasetResult" type="success">文件完整性与绑定已通过，共 {{datasetResult.rowCount}} 条；没有生成写入计划或保存配置。</a-alert>
     </a-space>
+    <EquipmentBatchManager v-if="equipment" :key="active" :section="active" :file="datasetFile" @busy-change="batchBusy=$event" @changed="load" />
     <a-space wrap><a-input v-model="lookup" placeholder="按原活动操作编号读取" /><a-button :disabled="saving||loading||!lookup" @click="readOriginal">读取原活动操作</a-button><a-button v-if="hasPending" :disabled="saving||loading" @click="lookup=pending!.requestId;readOriginal()">恢复原操作表单</a-button></a-space>
     <a-alert v-if="hasPending">当前活动保留操作 {{pending!.requestId}}：{{labels[prepared?.state]||prepared?.state}}；请按原编号核对，其他活动可独立管理。</a-alert>
     <a-button v-if="prepared?.state==='MISSING_PREVIEW'&&!context().submitted" :disabled="saving||loading" @click="editMissingPreview">清除未提交的无回执编号</a-button>

@@ -1,0 +1,258 @@
+{
+  "stage": "S31",
+  "date": "2026-10-28",
+  "baseCommit": "2383529",
+  "purpose": "durable native equipment rule merge, clear, per-item reconciliation, cancellation and linked restoration",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "originalToolFileFormatVerified": false,
+  "realDeploymentVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "sourceSHA256": {
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeEquipmentBatchService.java": "979ea29e568f98fba030a6d54ffcca45cb3cdea41ba700864499e84cc98a9363",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeEquipmentDataset.java": "06f68e8a4cda60b14ada5406b0832eca7d7078368d8be3f2c40741f4a866b8a8",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/ActivityConfigService.java": "42c09308ac5af3a2bc9106fa29b9f2b95dcfe9644ab292d1a3e76a52c4a69655",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/controller/NativeEquipmentBatchController.java": "9d2f1ca8e480028b3317627c02769052c80a28a0e58f149448992ed4fc258989",
+    "services/admin/frontend/src/views/admin/activities/EquipmentBatchManager.vue": "ab02e3637a9cad20a78a41d425514b7c521623bc7fb548a9f890d794c6b3d083",
+    "services/admin/frontend/src/views/admin/activities/ActivityManager.vue": "7ba0990c12db07ac32096b2b0ba87f698efca847fa81c6fbadd0b31a198a4811",
+    "services/admin/docker/dof-nginx.conf.template": "4d2e3f2a9e34139fbd67617eafc16d14f40324cf9e031651429989050d4ab060"
+  },
+  "implementation": {
+    "protocol": "equipment-batch-v1",
+    "parentMetadataBounded": true,
+    "independentChildSnapshots": true,
+    "previewNeverWritesNativeRows": true,
+    "maximumItemsPerStep": 20,
+    "unmentionedImportRulesPreserved": true,
+    "preparedChildNeverAutomaticallyReexecuted": true,
+    "cancelOnlyUnsubmittedItems": true,
+    "acknowledgmentPreservesUnknownOriginalResult": true,
+    "restoreUsesConfirmedOriginalSnapshots": true,
+    "freshAdministratorAndDatabaseIdentityGuard": true,
+    "ordinaryEditsCannotBypassActiveTask": true,
+    "controlHistoryPagination": true
+  },
+  "standardMaven": {
+    "path": "/tmp/dof-admin-s31-batch-maven-release.log",
+    "total": 505,
+    "passed": 203,
+    "conditionalSkipped": 302,
+    "failures": 0,
+    "errors": 0
+  },
+  "isolatedSQL": {
+    "path": "/tmp/dof-admin-s31-equipment-batch-db-final",
+    "run": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "c6eed82527c4364791f932250474bd658777b3119050b099323302495747b811",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "result": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "managedPostalContractTests": 12,
+      "postalBatchContractTests": 11,
+      "postalReceiptControlContractTests": 7,
+      "postalBatchControlContractTests": 8,
+      "cdkContractTests": 13,
+      "cdkInventoryContractTests": 13,
+      "pointsContractTests": 8,
+      "activityPreviewControlContractTests": 10,
+      "scriptReleaseContractTests": 21,
+      "nativeInheritanceContractTests": 8,
+      "nativeRecoveryContractTests": 8,
+      "nativeCrossBorderContractTests": 8,
+      "nativeEquipmentDatasetContractTests": 6,
+      "nativeEquipmentBatchContractTests": 13,
+      "totalContractTests": 163,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "productionClasses": 331,
+    "testClasses": 124,
+    "allStagedClassesByteMatchStandardMavenCompile": true,
+    "completeThousandRowClearAndRestoration": {
+      "rows": 1005,
+      "segmentsPerTask": 51,
+      "originalFullTableRevisionRestored": true
+    },
+    "injectedFaultsAreSqlAndConnectionFaultsNotPhysicalOutages": true,
+    "serviceObjectReconstructionIsNotContainerRebuild": true
+  },
+  "earlierSQL": {
+    "path": "/tmp/dof-admin-s31-equipment-batch-db",
+    "passed": 162,
+    "scope": "initial twelve batch contracts before final control-history and complete-segment coverage"
+  },
+  "frontendBuild": {
+    "path": "/tmp/dof-admin-s31-frontend-verified.log",
+    "passed": true,
+    "stagedSourceMatchesWorkingTree": true,
+    "existingChunkSizeWarning": true
+  },
+  "browsers": {
+    "equipment-batch": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeGameplayVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "syntheticNativeWrites": 2,
+      "checks": [
+        "clear preview reserves an independent task ID before any native mutation; storage keeps identifiers",
+        "reload after a withheld step reply reads the original task and preserves the completed item",
+        "cancel preview and committed reply loss retain the control ID; unsubmitted items stop without repeating completed writes",
+        "recovery uses a new task explicitly linked to the selected original task",
+        "import sends raw file bytes; PREPARED child reconciliation records not applied without automatic retry"
+      ],
+      "pageErrors": 0
+    },
+    "equipment-dataset": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "nativeWrites": 0,
+      "checks": [
+        "server pagination requests page two and renders its twenty rows without local double slicing",
+        "download contains all 1005 synthetic rows rather than only the current page",
+        "raw file upload preserves exact bytes and reports integrity only, with no write plan or native write",
+        "binding error clears stale success while keeping the current rule page usable",
+        "in-flight export cancellation returns to the page without submitting any native writes",
+        "switching native modules clears the actual file input and permits selecting the same file again"
+      ],
+      "pageErrors": 0
+    },
+    "inheritance": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "real field catalog renders code-zero default, material costs and five-group guidance",
+        "preview freezes exact paired cost text and code zero; one confirmed synthetic write updates the row",
+        "dedicated code creation has an independent request ID and explicit empty cost pair",
+        "unverified dragon-robe rules remain read-only while inheritance retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "recovery": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "production catalog renders all seven recovery fields, separate reward/cost summaries and explicit gold-zero guidance",
+        "preview freezes reward pair, gold/material cost pair, broadcast flag and original-item removal count; one confirmed synthetic write updates the row",
+        "new recovery rule has its own request ID and explicit empty reward/extra cost pairs",
+        "unverified dragon-robe rules remain read-only while recovery retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "cross-border": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "production cross-border catalog renders code-zero fallback, five material pairs and separate inventory threshold",
+        "preview freezes both material lists and distinct threshold while retaining the old read-only reserved value",
+        "new dedicated rule has an independent request ID, empty cost pair and read-only reserved value",
+        "unverified dragon-robe rules remain read-only while cross-border retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "activity-recovery": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeWritesInMock": 2,
+      "checks": [
+        "preview freezes exact values and UUID before any native submission",
+        "lost native response retains UUID and freezes inputs; storage contains identifiers only",
+        "another lookup cannot overwrite an unresolved operation",
+        "reload reads committed receipt and clears the guard without replaying configuration writes",
+        "independent activity can be edited while the original activity keeps its pending UUID",
+        "section switch and reload recover exact original preview, with no invented UUID or values",
+        "lost cancellation reply reconciles same control ID; cancelled original cannot later write",
+        "confirmed missing preview with no native submit can explicitly return to editing",
+        "schema failures remain visible rather than successful empty records",
+        "permission failures remain visible"
+      ],
+      "pageErrors": 0
+    }
+  },
+  "retainedBrowserFailures": [
+    {
+      "path": "/tmp/dof-admin-s31-equipment-batch-browser",
+      "cause": "Arco wrapper received aria-label instead of its input; fixed production input-attrs"
+    },
+    {
+      "path": "/tmp/dof-admin-s31-equipment-batch-browser-final",
+      "cause": "reload returned to default module; fixed last batch section restoration while preserving pending single-operation priority"
+    },
+    {
+      "path": "/tmp/dof-admin-s31-equipment-batch-browser-verified",
+      "cause": "test used substring label matching for task and source IDs; fixed exact test locator"
+    }
+  ],
+  "pythonChecks": {
+    "passed": 19,
+    "modules": {
+      "test_rollback_receipts_proxy": 4,
+      "test_admin_inventory": 4,
+      "test_admin_runtime": 7,
+      "test_admin_packaging": 1,
+      "test_admin_baseline": 3
+    }
+  },
+  "proxySyntax": {
+    "passed": true,
+    "path": "/tmp/dof-admin-s31-nginx.log",
+    "temporaryContainerNetworkDisabled": true,
+    "capacityReserveVerified": true,
+    "liveContainersReplaced": false
+  },
+  "deployment": {
+    "upgraded": false,
+    "previousStage": "S29",
+    "hostPort": 18080
+  },
+  "remaining": [
+    "Real test deployment/browser, restart/rebuild, old-image read-only rollback and new-receipt compatibility",
+    "Original Windows menu/default/import-export comparison by user; web format is not original tool format",
+    "Native component consumption, player items/materials and actual gameplay evidence",
+    "Capacity, duration and concurrency beyond the 1005-row verified workload; current integrity checks scan all children",
+    "All remaining wp01-wp13 requirements; no full replacement completion claim"
+  ]
+}

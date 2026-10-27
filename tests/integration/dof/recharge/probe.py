@@ -36,11 +36,12 @@ r = subprocess.run([
     'com.aiyi.game.dnfserver.service.dof.NativeRecoveryContractTest',
     'com.aiyi.game.dnfserver.service.dof.NativeCrossBorderContractTest',
     'com.aiyi.game.dnfserver.service.dof.NativeEquipmentDatasetContractTest',
-], text=True, capture_output=True, timeout=150)
+    'com.aiyi.game.dnfserver.service.dof.NativeEquipmentBatchContractTest',
+], text=True, capture_output=True, timeout=240)
 Path('/output/junit.log').write_text(r.stdout + '\n' + r.stderr)
-passed = r.returncode == 0 and 'OK (150 tests)' in r.stdout
+passed = r.returncode == 0 and 'OK (163 tests)' in r.stdout
 summary = dict(passed=passed, contractTests=14, databaseVersion=sql('SELECT VERSION()'),
-               generatedMailReceiptContractTests=3, managedPostalContractTests=12, postalBatchContractTests=11, postalReceiptControlContractTests=7, postalBatchControlContractTests=8, cdkContractTests=13, cdkInventoryContractTests=13, pointsContractTests=8, activityPreviewControlContractTests=10, scriptReleaseContractTests=21, nativeInheritanceContractTests=8, nativeRecoveryContractTests=8, nativeCrossBorderContractTests=8, nativeEquipmentDatasetContractTests=6, totalContractTests=150,
+               generatedMailReceiptContractTests=3, managedPostalContractTests=12, postalBatchContractTests=11, postalReceiptControlContractTests=7, postalBatchControlContractTests=8, cdkContractTests=13, cdkInventoryContractTests=13, pointsContractTests=8, activityPreviewControlContractTests=10, scriptReleaseContractTests=21, nativeInheritanceContractTests=8, nativeRecoveryContractTests=8, nativeCrossBorderContractTests=8, nativeEquipmentDatasetContractTests=6, nativeEquipmentBatchContractTests=13, totalContractTests=163,
                realServiceSqlFaultAndConcurrencyGatePassed=passed,
                fixtureSchemasRemoved=sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('d_taiwan','taiwan_billing','taiwan_cain','taiwan_cain_2nd','dof_native')") == '0',
                originalToolEquivalenceVerified=False, realDeploymentVerified=False, actualPlayerReceiptVerified=False)

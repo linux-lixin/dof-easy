@@ -44,7 +44,9 @@ final class NativeEquipmentDataset {
             g.writeEndArray();String revision=hex(d.digest());g.writeNumberField("rowCount",count);g.writeStringField("revision",revision);g.writeEndObject();g.flush();Map<String,Object> result=new LinkedHashMap<>();result.put("rowCount",count);result.put("revision",revision);return result;
         }finally{g.close();}
     }
-    static Map<String,Object> inspect(Spec spec,InputStream input)throws IOException{
+    interface RowConsumer {void accept(Map<String,Object> row)throws IOException;}
+    static Map<String,Object> inspect(Spec spec,InputStream input)throws IOException{return inspect(spec,input,row->{});}
+    static Map<String,Object> inspect(Spec spec,InputStream input,RowConsumer consumer)throws IOException{
         MessageDigest d=digest();append(d,spec.header());Set<String> seen=new HashSet<>();Map<String,Object> header=new LinkedHashMap<>();long count=0,previous=-1;Object declaredCount=null,declaredRevision=null;
         InputStream bounded=new FilterInputStream(input){
             long bytes;int tokenBytes,depth;boolean string,escape;
@@ -62,7 +64,7 @@ final class NativeEquipmentDataset {
                 if(p.currentToken()!=JsonToken.FIELD_NAME)throw invalid("规则文件不完整");String key=p.getCurrentName();if(!KEYS.contains(key)||!seen.add(key))throw invalid("规则文件有未知或重复字段");JsonToken token=p.nextToken();
                 if(key.equals("rows")){
                     if(token!=JsonToken.START_ARRAY)throw invalid("规则行必须是数组");
-                    while(p.nextToken()!=JsonToken.END_ARRAY){if(p.currentToken()!=JsonToken.START_OBJECT)throw invalid("规则行必须是对象");Map<String,Object> raw=new LinkedHashMap<>();while(p.nextToken()!=JsonToken.END_OBJECT){if(p.currentToken()!=JsonToken.FIELD_NAME||raw.size()>=16)throw invalid("规则行字段无效");String name=p.getCurrentName();JsonToken scalar=p.nextToken();Object value;if(scalar==JsonToken.VALUE_STRING)value=p.getText();else if(scalar==JsonToken.VALUE_NUMBER_INT){try{value=p.getLongValue();}catch(JsonProcessingException bad){throw invalid("规则整数超出范围");}}else throw invalid("规则行只接受标量字段");if(raw.put(name,value)!=null)throw invalid("规则行字段重复");}Map<String,Object> row=spec.canonical(raw);long id=((Number)row.get("code")).longValue();if(id<=previous)throw invalid("文件规则代码必须唯一并递增");previous=id;append(d,row);count++;}
+                    while(p.nextToken()!=JsonToken.END_ARRAY){if(p.currentToken()!=JsonToken.START_OBJECT)throw invalid("规则行必须是对象");Map<String,Object> raw=new LinkedHashMap<>();while(p.nextToken()!=JsonToken.END_OBJECT){if(p.currentToken()!=JsonToken.FIELD_NAME||raw.size()>=16)throw invalid("规则行字段无效");String name=p.getCurrentName();JsonToken scalar=p.nextToken();Object value;if(scalar==JsonToken.VALUE_STRING)value=p.getText();else if(scalar==JsonToken.VALUE_NUMBER_INT){try{value=p.getLongValue();}catch(JsonProcessingException bad){throw invalid("规则整数超出范围");}}else throw invalid("规则行只接受标量字段");if(raw.put(name,value)!=null)throw invalid("规则行字段重复");}Map<String,Object> row=spec.canonical(raw);long id=((Number)row.get("code")).longValue();if(id<=previous)throw invalid("文件规则代码必须唯一并递增");previous=id;append(d,row);consumer.accept(row);count++;}
                 }else if(key.equals("fields")){
                     if(token!=JsonToken.START_ARRAY)throw invalid("规则列目录无效");List<String> fields=new ArrayList<>();while(p.nextToken()!=JsonToken.END_ARRAY){if(p.currentToken()!=JsonToken.VALUE_STRING||fields.size()>=16)throw invalid("规则列目录无效");fields.add(p.getText());}header.put(key,fields);
                 }else if(key.equals("schema")||key.equals("rowCount")){

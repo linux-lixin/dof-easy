@@ -66,7 +66,7 @@ public class ActivityConfigService {
         return sections.stream().filter(s -> s.key.equals(key)).findFirst()
             .orElseThrow(() -> new Failure(404, "未知活动配置"));
     }
-    private String table(Section s) { return "`dof_native`.`" + s.table + "`"; }
+    String table(Section s) { return "`dof_native`.`" + s.table + "`"; }
     private String columns(Section s) {
         return s.fields.stream().map(f -> "`" + f.name + "`").collect(Collectors.joining(","));
     }
@@ -110,7 +110,7 @@ public class ActivityConfigService {
         if(Arrays.asList("inheritance","recovery","cross-border").contains(s.key)&&value instanceof Number){long n=((Number)value).longValue();if(n>=0&&n<=Integer.MAX_VALUE)value=(int)n;}
         return value;
     }
-    private Section equipment(String key){Section s=section(key);if(!Arrays.asList("inheritance","recovery","cross-border").contains(key))throw new Failure(409,"全表规则格式目前只支持继承、跨界和回收");return s;}
+    Section equipment(String key){Section s=section(key);if(!Arrays.asList("inheritance","recovery","cross-border").contains(key))throw new Failure(409,"全表规则格式目前只支持继承、跨界和回收");return s;}
     private interface EquipmentRead<T>{T run(Connection c,Section s,NativeEquipmentDataset.Spec spec)throws Exception;}
     private <T>T equipmentRead(String key,EquipmentRead<T> operation)throws Exception {
         long actor=admin();Section s=equipment(key);
@@ -154,7 +154,27 @@ public class ActivityConfigService {
             try(Connection c=journal.connection()){cancelActor(c,admin());}return result;
         }catch(java.io.IOException e){throw e;}catch(SQLException e){throw unavailable();}catch(RuntimeException e){throw e;}catch(Exception e){throw new java.io.IOException("规则文件检查未完成",e);}
     }
-    private String revision(Map<String,Object> row) {
+    NativeEquipmentDataset.Spec batchSpec(Connection c,Section s)throws SQLException {
+        try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT @@server_uuid")){if(!r.next())throw new Failure(409,"数据库身份不可读");return new NativeEquipmentDataset.Spec(s,journal.instance(),r.getString(1));}
+    }
+    List<Map<String,Object>> batchRows(Connection c,Section s,long previous)throws SQLException {
+        List<Map<String,Object>> rows=new ArrayList<>();if(previous==4294967295L)return rows;
+        String projection=s.fields.stream().map(f->("varchar".equals(f.type)?"BINARY `"+f.name+"` AS `"+f.name+"`":"`"+f.name+"`")).collect(Collectors.joining(","));
+        try(PreparedStatement p=c.prepareStatement("SELECT "+projection+" FROM "+table(s)+" WHERE `code` >= ? ORDER BY `code` LIMIT 100")){
+            p.setLong(1,previous+1);try(ResultSet r=p.executeQuery()){while(r.next()){
+                Map<String,Object> row=new LinkedHashMap<>();for(Field f:s.fields){
+                    if("varchar".equals(f.type)){byte[] bytes=r.getBytes(f.name);try{row.put(f.name,bytes==null?null:StandardCharsets.UTF_8.newDecoder().onMalformedInput(java.nio.charset.CodingErrorAction.REPORT).decode(java.nio.ByteBuffer.wrap(bytes)).toString());}catch(java.nio.charset.CharacterCodingException bad){throw new Failure(409,"原生规则含无效UTF-8文本，停止批量操作");}}
+                    else row.put(f.name,readScalar(r,s,f));
+                }rows.add(row);
+            }}
+        }return rows;
+    }
+    Map<String,Object> batchState(Connection c,Section s)throws Exception {
+        return NativeEquipmentDataset.write(batchSpec(c,s),new NativeEquipmentDataset.Rows(){long previous=-1;Iterator<Map<String,Object>> cursor=Collections.emptyIterator();public Map<String,Object> next()throws Exception{
+            if(!cursor.hasNext())cursor=batchRows(c,s,previous).iterator();if(!cursor.hasNext())return null;Map<String,Object> row=cursor.next();previous=((Number)row.get("code")).longValue();return row;
+        }},new java.io.OutputStream(){public void write(int b){}public void write(byte[] b,int off,int len){}});
+    }
+    String revision(Map<String,Object> row) {
         if(row==null) return "new";
         try {
             byte[] bytes=MessageDigest.getInstance("SHA-256").digest(json.writeValueAsBytes(row));
@@ -252,7 +272,7 @@ public class ActivityConfigService {
             p.setLong(1,id);try(ResultSet r=p.executeQuery()) {return r.next();}
         }
     }
-    private void guard(Connection c,Section s) throws SQLException {
+    void guard(Connection c,Section s) throws SQLException {
         if(Arrays.asList("inheritance","recovery","cross-border").contains(s.key)){
             journal.metadataTransactionGuard(c);
             if(s.key.equals("inheritance"))NativeInheritanceRules.requireSchema(c);
@@ -268,7 +288,7 @@ public class ActivityConfigService {
         if(sql!=null)try(Statement st=c.createStatement();ResultSet r=st.executeQuery(sql)){if(!r.next() || !r.getBoolean(1))throw new Failure(409,"原生功能仍在启用或开关状态不明确，拒绝改写，请先完成停用及兼容验证");}
     }
     private String namespace(String key){return "activity."+key;}
-    private String resource(Section s){return "dof_native."+s.table;}
+    String resource(Section s){return "dof_native."+s.table;}
     private String action(Edit edit) {
         if(edit==null || edit.revision==null || !(edit.revision.equals("new") || edit.revision.matches("[0-9a-f]{64}")))throw new Failure(400,"缺少有效配置版本");
         ManagedOperationJournal.id(edit.requestId);
@@ -288,7 +308,7 @@ public class ActivityConfigService {
     private boolean legacyExists(Connection c)throws SQLException {
         try(Statement st=c.createStatement();ResultSet r=st.executeQuery("SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA='dnf_service' AND TABLE_NAME='EXTENSION_CONFIG_AUDIT'")){return r.next();}
     }
-    private void lock(Connection c,Section s)throws SQLException {lock(c,s,false);}
+    void lock(Connection c,Section s)throws SQLException {lock(c,s,false);}
     private void lock(Connection c,Section s,boolean actorLock)throws SQLException {
         String locks=table(s)+" WRITE";
         if(actorLock || Arrays.asList("inheritance","recovery","cross-border").contains(s.key))locks+=",`d_taiwan`.`accounts` READ";
@@ -307,14 +327,14 @@ public class ActivityConfigService {
             throw failure;
         }
     }
-    private void discard(Connection c,Throwable failure) {
+    void discard(Connection c,Throwable failure) {
         try{c.unwrap(Connection.class).close();}
         catch(SQLException|RuntimeException close){failure.addSuppressed(close);try{c.abort(Runnable::run);}catch(SQLException|RuntimeException abort){failure.addSuppressed(abort);}}
     }
-    private void unlock(Connection c)throws SQLException {
+    void unlock(Connection c)throws SQLException {
         try{journal.unlock(c);}catch(SQLException|RuntimeException failure){discard(c,failure);throw failure;}
     }
-    private void noLegacyPending(Connection c,Section s)throws SQLException {
+    void noLegacyPending(Connection c,Section s)throws SQLException {
         if(!legacyExists(c))return;
         List<String> related=sections.stream().filter(x->x.table.equals(s.table)).map(x->x.key).collect(Collectors.toList());
         try(PreparedStatement p=c.prepareStatement("SELECT id FROM "+AUDIT+" WHERE section_name IN ("+String.join(",",Collections.nCopies(related.size(),"?"))+") AND state='pending'")) {
@@ -404,10 +424,10 @@ public class ActivityConfigService {
         if(value==null || !value.toString().matches(Arrays.asList("charts-rewards","inheritance","cross-border").contains(s.key)?"(?:0|[1-9][0-9]{0,9})":"[1-9][0-9]{0,9}"))throw new Failure(400,"记录编号无效");
         long id=Long.parseLong(value.toString());if(id>2147483647L)throw new Failure(400,"记录编号超出范围");return id;
     }
-    private Map<String,Object> current(Connection c,Section s,Long id)throws SQLException {
+    Map<String,Object> current(Connection c,Section s,Long id)throws SQLException {
         List<Map<String,Object>> found=rows(c,s,id);if(found.size()>1)throw new Failure(409,"同一配置编号存在多行，拒绝覆盖");return found.isEmpty()?null:found.get(0);
     }
-    private Map<String,Object> snapshot(Section s,String text) {
+    Map<String,Object> snapshot(Section s,String text) {
         try {
             Map<String,Object> row=json.readValue(text,new TypeReference<Map<String,Object>>(){});
             if(row==null)return null;
@@ -428,14 +448,20 @@ public class ActivityConfigService {
             }}
         }catch(IllegalArgumentException e){throw new Failure(409,"日志中的目标编号与快照不一致，停止恢复");}
     }
-    private static class Change {Map<String,Object> before,after;Long id;ManagedOperationJournal.Entry source;String action;}
+    static class Change {Map<String,Object> before,after;Long id;ManagedOperationJournal.Entry source;String action;}
     private Change plan(Connection c,Section s,Edit e,String op,boolean commit)throws SQLException {
+        return plan(c,s,e,op,commit,null);
+    }
+    Change batchRestore(Connection c,Section s,ManagedOperationJournal.Entry source)throws SQLException {
+        Edit e=new Edit();e.targetRequestId=source.requestId;e.revision=revision(current(c,s,Long.valueOf(source.target)));return plan(c,s,e,"restore",false,source);
+    }
+    private Change plan(Connection c,Section s,Edit e,String op,boolean commit,ManagedOperationJournal.Entry suppliedSource)throws SQLException {
         if(!s.writable)throw new Failure(409,"此配置尚未完成规则验证，只读");
         Change change=new Change();change.action=op;
         if(op.equals("restore")||op.equals("accept-current")) {
             if(e.values!=null)throw new Failure(400,"历史操作不接受浏览器提供快照");
-            change.source=journal.require(c,namespace(s.key),e.targetRequestId);
-            checkEntry(s,change.source);
+            change.source=suppliedSource==null?journal.require(c,namespace(s.key),e.targetRequestId):suppliedSource;
+            if(suppliedSource==null)checkEntry(s,change.source);
             if(!resource(s).equals(change.source.resource))throw new Failure(409,"历史配置来源不匹配");
             Map<String,Object> before=snapshot(s,change.source.beforeJson),after=snapshot(s,change.source.afterJson);
             if(op.equals("restore")&&!Arrays.asList("PERSISTED","NO_CHANGE").contains(change.source.state))throw new Failure(409,"只能恢复已核对持久化的操作");
@@ -511,14 +537,14 @@ public class ActivityConfigService {
             lock(c,s);try {
                 ManagedOperationJournal.Entry existing=journal.find(c,edit.requestId);
                 if(existing!=null){journal.same(existing,namespace(key),actor,fingerprint(edit,op));Map<String,Object> out=result(existing,s);Change ch=new Change();ch.before=snapshot(s,existing.beforeJson);ch.after=snapshot(s,existing.afterJson);out.put("changes",changes(s,ch));return out;}
-                noLegacyPending(c,s);journal.noPending(c,resource(s),op.equals("accept-current")?ManagedOperationJournal.id(edit.targetRequestId):null);guard(c,s);
+                NativeEquipmentBatchService.guardOrdinary(c,journal,s.key);noLegacyPending(c,s);journal.noPending(c,resource(s),op.equals("accept-current")?ManagedOperationJournal.id(edit.targetRequestId):null);guard(c,s);
                 Change change=plan(c,s,edit,op,false);
                 ManagedOperationJournal.Entry entry=journal.preview(c,edit.requestId,actor,namespace(key),resource(s),change.id==null?"new":change.id.toString(),op,edit.targetRequestId,fingerprint(edit,op),edit.reason,change.before,change.after);
                 Map<String,Object> out=result(entry,s);out.put("changes",changes(s,change));out.put("persisted",false);return out;
             }finally{unlock(c);}
         }catch(SQLException e){throw unavailable();}
     }
-    private void write(Connection c,Section s,Change ch)throws SQLException {
+    void write(Connection c,Section s,Change ch)throws SQLException {
         String sql;List<Field> changed=new ArrayList<>();
         if(ch.after!=null)for(Field f:s.fields)if(ch.before==null||!Objects.equals(ch.before.get(f.name)==null?null:ch.before.get(f.name).toString(),ch.after.get(f.name)==null?null:ch.after.get(f.name).toString()))changed.add(f);
         if(ch.after==null)sql="DELETE FROM "+table(s)+" WHERE `"+s.primaryKey+"`=?";
@@ -550,7 +576,7 @@ public class ActivityConfigService {
                 ManagedOperationJournal.Entry entry=journal.require(c,namespace(s.key),edit.requestId);journal.same(entry,namespace(s.key),actor,fingerprint(edit,op));
                 checkEntry(s,entry);
                 if(!entry.state.equals("PREVIEWED"))return result(entry,s);
-                noLegacyPending(c,s);journal.noPending(c,resource(s),op.equals("accept-current")?ManagedOperationJournal.id(edit.targetRequestId):null);guard(c,s);
+                NativeEquipmentBatchService.guardOrdinary(c,journal,s.key);noLegacyPending(c,s);journal.noPending(c,resource(s),op.equals("accept-current")?ManagedOperationJournal.id(edit.targetRequestId):null);guard(c,s);
                 Change change=plan(c,s,edit,op,true);
                 entry=journal.prepare(c,entry,change.id==null?"singleton":change.id.toString(),change.before,change.after);
                 if(op.equals("accept-current"))return result(journal.acknowledge(c,change.source,entry,actor),s);
