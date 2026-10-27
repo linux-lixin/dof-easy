@@ -5,7 +5,8 @@ const {parseArgs}=require('node:util'),{chromium}=require(process.env.PLAYWRIGHT
 const {values:args}=parseArgs({options:{dist:{type:'string'},output:{type:'string'}}});
 if(!args.dist||!args.output)throw new Error('Use --dist <built frontend> --output <private test directory>');
 const dist=path.resolve(args.dist),output=path.resolve(args.output),rows=[],bodies=new Map(),posts=[],checks=[],errors=[];
-let generation=0,nativeWrites=0,lose=true,engine='InnoDB',allowed=true,historyFailure=false;
+let generation=0,nativeWrites=0,lose=true,engine='InnoDB',allowed=true,historyFailure=false,deleted=false;
+const controls=[];
 const revision=()=>createHash('sha256').update(JSON.stringify({generation,engine})).digest('hex');
 const server=createServer(async(req,res)=>{try{
  let file=path.resolve(dist,'.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));
@@ -25,10 +26,24 @@ const server=createServer(async(req,res)=>{try{
    if(url.pathname==='/api/v1/charac')return json({page:1,totalPageSize:1,totalSize:1,list:[{characNo:123,characName:'synthetic-role',mId:22,job:0,lev:86,growType:0}]});
    if(!url.pathname.startsWith('/api/v1/postal'))return json([]);
    if(!allowed)return json({message:'模拟：仅管理员可发送邮件'},403);
+   if(url.pathname.endsWith('/send-status')&&deleted)return json({message:'模拟：收件角色不存在'},404);
+   if(url.pathname.endsWith('/receipt-controls'))return json(controls);
    if(url.pathname.endsWith('/send-status'))return json({recipient:123,uid:22,actor:1,revision:revision(),atomicReceipt:engine==='InnoDB'});
    if(url.pathname.endsWith('/history'))return historyFailure?json({message:'模拟：历史查询失败'},503):json(rows);
    const reconcile=url.pathname.match(/\/history\/([^/]+)\/reconcile$/);
-   if(reconcile){const row=rows.find(r=>r.requestId===reconcile[1]);assert.ok(row);if(row.state==='PREPARED')row.state='CONFLICT';return json(row)}
+   if(reconcile){const row=rows.find(r=>r.requestId===reconcile[1]);assert.ok(row);if(row.state==='PREPARED')row.state='CONFLICT';row.receiptRevision=createHash('sha256').update(row.requestId+row.state).digest('hex');return json(row)}
+   const ackPath=url.pathname.match(/\/history\/([^/]+)\/acknowledgments(\/preview|\/[^/]+\/reconcile)?$/);
+   if(ackPath){
+    const source=rows.find(r=>r.requestId===ackPath[1]);assert.ok(source);
+    if(ackPath[2]?.endsWith('/reconcile'))return json(controls.find(r=>r.requestId===ackPath[2].split('/')[1]));
+    const body=req.postDataJSON();assert.ok(body.requestId);assert.equal(body.receiveCharacNo,undefined);
+    let row=controls.find(r=>r.requestId===body.requestId);
+    if(ackPath[2]==='/preview'){
+     if(!row){assert.equal(source.state,'CONFLICT');assert.equal(body.revision,source.receiptRevision);row={...body,actor:1,targetRequestId:source.requestId,state:'PREVIEWED',operation:'ack-unknown',nativeDataChanged:false};controls.push(row)}
+     return json(row);
+    }
+    assert.ok(row);if(row.state==='PREVIEWED'){assert.equal(source.state,'CONFLICT');source.state='ACKNOWLEDGED';row.state='NO_CHANGE'}return json(row);
+   }
    const body=req.postDataJSON();assert.equal(body.receiveCharacNo,123);assert.ok(body.requestId);
    if(url.pathname.endsWith('/preview')){
     const old=rows.find(r=>r.requestId===body.requestId);if(old){assert.deepEqual(body,bodies.get(body.requestId));return json(old)}
@@ -43,7 +58,7 @@ const server=createServer(async(req,res)=>{try{
    if(lose){lose=false;return route.abort()}return json(row);
   });
   const dialog=page.locator('.arco-modal');
-  const open=async()=>{await page.getByRole('button',{name:'操作',exact:true}).click();await page.getByText('发送邮件',{exact:true}).click();await dialog.getByText(/账号 UID 22/).waitFor()};
+  const open=async(waitIdentity=true)=>{await page.getByRole('button',{name:'操作',exact:true}).click();await page.getByText('发送邮件',{exact:true}).click();if(waitIdentity)await dialog.getByText(/账号 UID 22/).waitFor()};
   const formInput=label=>dialog.getByPlaceholder(label==='金币'?'邮件金币':'填写本次邮件操作原因',{exact:true});
   const clickPost=async(name,suffix)=>{const result=page.waitForResponse(r=>new URL(r.url()).pathname.endsWith(suffix)&&r.request().method()==='POST');await dialog.getByRole('button',{name,exact:true}).click();const r=await result;assert.equal(r.status(),200);return r.json()};
   await page.goto(origin+'/admin/player/roles');await open();await formInput('金币').fill('5');await dialog.locator('textarea').fill('模拟中文正文');await formInput('操作原因').fill('synthetic frozen mail');
@@ -55,6 +70,14 @@ const server=createServer(async(req,res)=>{try{
   engine='MyISAM';await dialog.getByRole('button',{name:'新建发送预览',exact:true}).click();await formInput('金币').fill('1');await formInput('操作原因').fill('synthetic MyISAM interruption');const pending=await clickPost('生成预览','/123/preview');lose=true;
   await dialog.getByRole('button',{name:'提交已预览内容',exact:true}).click();await dialog.getByText(/响应不明，保留原编号/).waitFor();assert.equal((await clickPost('核对原操作',`/${pending.requestId}/reconcile`)).state,'CONFLICT');assert.equal(await dialog.getByRole('button',{name:'新建发送预览',exact:true}).isDisabled(),true);checks.push('uncertain MyISAM mail blocks new sends');
   await dialog.getByRole('row').filter({hasText:pending.requestId}).getByRole('button',{name:'人工确认保留',exact:true}).click();await formInput('操作原因').fill('synthetic manually checked, outcome remains unknown');const ack=await clickPost('生成预览','/123/preview');assert.equal(ack.operation,'accept-current');assert.equal((await clickPost('提交已预览内容','/api/v1/postal')).state,'NO_CHANGE');assert.equal(nativeWrites,2);checks.push('explicit acknowledgment sends no new mail and preserves unknown original outcome');
+  await dialog.getByRole('button',{name:'新建发送预览',exact:true}).click();await formInput('金币').fill('1');await formInput('操作原因').fill('synthetic deleted recipient');const deletedMail=await clickPost('生成预览','/123/preview');lose=true;
+  await dialog.getByRole('button',{name:'提交已预览内容',exact:true}).click();await dialog.getByText(/响应不明，保留原编号/).waitFor();await clickPost('核对原操作',`/${deletedMail.requestId}/reconcile`);deleted=true;
+  await page.reload();await open(false);await dialog.getByText('模拟：收件角色不存在',{exact:true}).waitFor();assert.equal(await dialog.getByRole('button',{name:'生成预览',exact:true}).isDisabled(),true);const writesBefore=nativeWrites;
+  await dialog.getByRole('row').filter({hasText:deletedMail.requestId}).getByRole('button',{name:'仅确认未知回执',exact:true}).click();
+  const control=page.locator('.arco-modal').filter({hasText:'仅确认未知回执'}).last();await control.getByPlaceholder('填写人工核对原因').fill('synthetic review after character deletion');
+  const ackPreview=page.waitForResponse(r=>r.url().endsWith('/acknowledgments/preview'));await control.getByRole('button',{name:'预览回执确认',exact:true}).click();assert.equal((await (await ackPreview).json()).state,'PREVIEWED');
+  const ackSubmit=page.waitForResponse(r=>r.url().endsWith('/acknowledgments')&&r.request().method()==='POST');await control.getByRole('button',{name:'提交回执确认',exact:true}).click();assert.equal((await (await ackSubmit).json()).state,'NO_CHANGE');await control.getByText(/原邮件结果仍未知/).waitFor();assert.equal(nativeWrites,writesBefore);assert.equal(rows.find(r=>r.requestId===deletedMail.requestId).state,'ACKNOWLEDGED');checks.push('deleted recipient can acknowledge an unknown receipt without enabling new mail or issuing native writes');
+  deleted=false;
   historyFailure=true;await page.reload();await open();await dialog.getByText('模拟：历史查询失败',{exact:true}).waitFor();assert.equal(await dialog.getByRole('button',{name:'生成预览',exact:true}).isDisabled(),true);checks.push('failed history read disables new mail even with a valid identity');
   historyFailure=false;allowed=false;await page.reload();await page.getByRole('button',{name:'操作',exact:true}).click();await page.getByText('发送邮件',{exact:true}).click();await dialog.getByText('模拟：仅管理员可发送邮件',{exact:true}).waitFor();assert.equal(await dialog.getByRole('button',{name:'生成预览',exact:true}).isDisabled(),true);checks.push('permission failure disables sending');
   assert.deepEqual(errors,[]);const result={passed:true,mockedApis:true,realDeploymentVerified:false,actualPlayerReceiptVerified:false,checks,pageErrors:errors.length,nativeWritesInMock:nativeWrites,submitRequests:posts.length};await writeFile(path.join(output,'result.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));

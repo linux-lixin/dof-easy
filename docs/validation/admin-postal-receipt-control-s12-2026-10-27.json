@@ -1,0 +1,132 @@
+{
+  "stage": "S12",
+  "date": "2026-10-27",
+  "state": "locally_implemented",
+  "completeReplacement": false,
+  "scope": "deleted-recipient reconciliation and metadata-only acknowledgment of unknown mail receipts",
+  "protocol": "postal-receipt-control-v1",
+  "databaseContracts": {
+    "passed": true,
+    "contractTests": 14,
+    "databaseVersion": "5.6.51",
+    "generatedMailReceiptContractTests": 3,
+    "managedPostalContractTests": 12,
+    "postalBatchContractTests": 11,
+    "postalReceiptControlContractTests": 7,
+    "totalContractTests": 47,
+    "realServiceSqlFaultAndConcurrencyGatePassed": true,
+    "fixtureSchemasRemoved": true,
+    "originalToolEquivalenceVerified": false,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false
+  },
+  "namespaceProvenance": {
+    "schema": 1,
+    "serverAccessed": false,
+    "network": "private namespace; no routes or external interfaces",
+    "rootReadOnly": true,
+    "inputsReadOnly": true,
+    "loopbackOnly": true,
+    "inputsFingerprint": "62374cd4e38440cba9da9908836efa656ea0299e65840b49a7fdfebc91cc3e11",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "command": [
+      "/bin/sh",
+      "/inputs/run.sh"
+    ],
+    "completed": true,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "evidenceValid": true
+  },
+  "standardMaven": {
+    "total": 372,
+    "passed": 180,
+    "skipped": 192,
+    "failures": 0,
+    "errors": 0,
+    "log": "/tmp/dof-admin-s12-receipt-maven-2.log"
+  },
+  "frontendBuildPassed": true,
+  "mockedSinglePage": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false,
+    "checks": [
+      "gold plus body preview freezes content without sending",
+      "reload rehydrates original preview with the same ID and content",
+      "lost submit keeps original ID; reconcile recovers receipt without reissuing",
+      "history recovers generated postal ID after page reload",
+      "uncertain MyISAM mail blocks new sends",
+      "explicit acknowledgment sends no new mail and preserves unknown original outcome",
+      "deleted recipient can acknowledge an unknown receipt without enabling new mail or issuing native writes",
+      "failed history read disables new mail even with a valid identity",
+      "permission failure disables sending"
+    ],
+    "pageErrors": 0,
+    "nativeWritesInMock": 3,
+    "submitRequests": 4
+  },
+  "mockedBatchPage": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false,
+    "checks": [
+      "checked recipient selection and content freeze together without issuing mail",
+      "reload restores exact original batch ID, recipients and content",
+      "lost final response stops writes; reading original task recovers receipts without resending",
+      "stop schedules no further targets; reload resumes only the original remaining target",
+      "partial results retain errors; linked retry contains only confirmed unsubmitted recipients",
+      "uncertain child blocks continuation and retries; reconciliation issues no mail",
+      "history failure cannot appear as a writable empty task list",
+      "revoked management permission disables batch writes"
+    ],
+    "pageErrors": 0,
+    "nativeWritesInMock": 7,
+    "stepRequests": 8
+  },
+  "pythonChecks": {
+    "inventory": 4,
+    "package": 1,
+    "failures": 0
+  },
+  "retainedFailures": [
+    {
+      "stage": "local MySQL launch",
+      "reason": "wrong runtime workspace; exited before database launch",
+      "log": "/tmp/dof-admin-s12-receipt-db-launch.log"
+    },
+    {
+      "stage": "first disposable SQL contract",
+      "failures": 5,
+      "total": 47,
+      "reason": "new operation name exceeded existing VARCHAR(16); shortened to ack-unknown",
+      "output": "/tmp/dof-admin-s12-receipt-db"
+    }
+  ],
+  "invariants": {
+    "nativeDataChangedByAcknowledgment": false,
+    "originalOutcomeAfterAcknowledgment": "unknown",
+    "requiresLiveRecipient": false,
+    "originalActorPreserved": true,
+    "currentAdministratorChecked": true,
+    "sameRequestDifferentContentRejected": true,
+    "committedResponseLossRecoverable": true,
+    "incompleteMetadataIntentReconciledWithoutResending": true
+  },
+  "realDeployment": {
+    "verified": false
+  },
+  "remaining": [
+    "permanent cancellation of unsubmitted batch targets",
+    "cross-administrator continuation or linked takeover of batch tasks",
+    "actual deleted-recipient workflow on isolated game instance",
+    "actual native mail consumption and client encoding",
+    "original Windows tool parity by later manual comparison",
+    "real transport, process-exit and disk failure tests",
+    "remaining R4 CDK/currency/exchange issuers and other work packages"
+  ]
+}

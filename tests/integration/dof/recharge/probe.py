@@ -25,11 +25,12 @@ r = subprocess.run([
     'com.aiyi.game.dnfserver.service.dof.ManagedMailReceiptContractTest',
     'com.aiyi.game.dnfserver.service.dof.ManagedPostalContractTest',
     'com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchContractTest',
+    'com.aiyi.game.dnfserver.service.dof.ManagedPostalReceiptContractTest',
 ], text=True, capture_output=True, timeout=150)
 Path('/output/junit.log').write_text(r.stdout + '\n' + r.stderr)
-passed = r.returncode == 0 and 'OK (40 tests)' in r.stdout
+passed = r.returncode == 0 and 'OK (47 tests)' in r.stdout
 summary = dict(passed=passed, contractTests=14, databaseVersion=sql('SELECT VERSION()'),
-               generatedMailReceiptContractTests=3, managedPostalContractTests=12, postalBatchContractTests=11, totalContractTests=40,
+               generatedMailReceiptContractTests=3, managedPostalContractTests=12, postalBatchContractTests=11, postalReceiptControlContractTests=7, totalContractTests=47,
                realServiceSqlFaultAndConcurrencyGatePassed=passed,
                fixtureSchemasRemoved=sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('d_taiwan','taiwan_billing','taiwan_cain','taiwan_cain_2nd')") == '0',
                originalToolEquivalenceVerified=False, realDeploymentVerified=False, actualPlayerReceiptVerified=False)

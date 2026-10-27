@@ -44,6 +44,9 @@ public class PostalController {
     @Resource
     private com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService postalBatch;
 
+    @Resource
+    private com.aiyi.game.dnfserver.service.dof.ManagedPostalReceiptService postalReceipt;
+
     @GetMapping
     public ResultPage<Postal> list(String account, String start,
                                    String end, Integer page,
@@ -82,6 +85,11 @@ public class PostalController {
     @PostMapping("{characNo}/preview") public Object preview(@PathVariable long characNo,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalService.Edit edit){return managedPostal.preview(characNo,edit);}
     @GetMapping("{characNo}/history") public Object history(@PathVariable long characNo){return managedPostal.history(characNo);}
     @PostMapping("{characNo}/history/{requestId}/reconcile") public Object reconcile(@PathVariable long characNo,@PathVariable String requestId){return managedPostal.reconcile(characNo,requestId);}
+
+    @GetMapping("{characNo}/receipt-controls") public Object receiptControls(@PathVariable long characNo){return postalReceipt.history(characNo);}
+    @PostMapping("{characNo}/history/{source}/acknowledgments/preview") public Object receiptPreview(@PathVariable long characNo,@PathVariable String source,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalReceiptService.Edit edit){return postalReceipt.preview(characNo,source,edit);}
+    @PostMapping("{characNo}/history/{source}/acknowledgments") public Object receiptSave(@PathVariable long characNo,@PathVariable String source,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalReceiptService.Edit edit){return postalReceipt.save(characNo,source,edit);}
+    @PostMapping("{characNo}/history/{source}/acknowledgments/{requestId}/reconcile") public Object receiptReconcile(@PathVariable long characNo,@PathVariable String source,@PathVariable String requestId){return postalReceipt.reconcile(characNo,source,requestId);}
 
     @PostMapping("batch/validate") public Object batchValidate(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Draft draft){return postalBatch.validate(draft);}
     @PostMapping("batch/preview") public Object batchPreview(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchService.Edit edit){return postalBatch.preview(edit);}

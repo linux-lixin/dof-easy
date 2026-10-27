@@ -2,12 +2,14 @@
 import {computed,ref,watch} from 'vue'
 import Request from '../api/Request'
 import ItemPicker from './ItemPicker.vue'
+import PostalReceiptControl from './PostalReceiptControl.vue'
 const props=defineProps<{visible:boolean;characNo:number;name:string}>()
 const emit=defineEmits<{(e:'update:visible',value:boolean):void}>()
 const busy=ref(false),error=ref(''),current=ref<any>(null),history=ref<any[]>([]),historyLoaded=ref(false)
 const frozen=ref<any>(null),receipt=ref<any>(null),item=ref<any>(null)
 const quantity=ref(1),gold=ref(0),upgrade=ref(0),forge=ref(0),amplifyOption=ref(0),amplifyValue=ref(0),seal=ref(false),message=ref(''),reason=ref('')
 const operation=ref('send'),target=ref<string>()
+const receiptControlVisible=ref(false),receiptControlSource=ref<any>(null)
 const root=computed(()=>`api/v1/postal/${props.characNo}`)
 const pending=computed(()=>history.value.filter(r=>['PREPARED','CONFLICT'].includes(r.state)))
 const unknown=computed(()=>['UNKNOWN','SUBMITTING','PREPARED','CONFLICT'].includes(receipt.value?.state))
@@ -103,10 +105,12 @@ function label(state:string){return ({PREVIEWED:'仅预览，未发送',PREPARED
             <a-button v-if="record.state==='PREVIEWED'&&!record.batchRequestId&&record.actor===current?.actor" :disabled="busy||unknown" size="mini" @click="load(record)">加载原预览</a-button>
             <span v-if="record.batchRequestId">所属批量任务：{{record.batchRequestId}}</span>
             <a-button v-if="record.state==='PREPARED'" :disabled="busy" size="mini" @click="reconcile(record)">核对结果</a-button>
-            <a-button v-if="record.state==='CONFLICT'" :disabled="busy" size="mini" @click="begin(record)">人工确认保留</a-button>
+            <a-button v-if="record.state==='CONFLICT'&&current" :disabled="busy" size="mini" @click="begin(record)">人工确认保留</a-button>
+            <a-button v-if="record.state==='CONFLICT'&&record.operation==='send'&&record.receiptRevision" :disabled="busy" size="mini" @click="receiptControlSource=record;receiptControlVisible=true">仅确认未知回执</a-button>
           </a-space></template></a-table-column>
         </template>
       </a-table>
     </a-space>
   </a-modal>
+  <PostalReceiptControl v-model:visible="receiptControlVisible" :charac-no="characNo" :source="receiptControlSource" @changed="refresh" />
 </template>

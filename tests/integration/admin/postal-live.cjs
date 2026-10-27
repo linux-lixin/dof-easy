@@ -2,7 +2,7 @@
 // Run beside the pinned isolated instance. Credentials and screenshots remain on that server.
 const assert=require('node:assert/strict'),{readFile,writeFile,mkdir,stat}=require('node:fs/promises'),path=require('node:path');
 const {parseArgs}=require('node:util'),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const {values:args}=parseArgs({options:{origin:{type:'string'},credentials:{type:'string'},output:{type:'string'},instance:{type:'string'},'database-uuid':{type:'string'},'target-uid':{type:'string'},'expect-batch':{type:'boolean',default:false}}});
+const {values:args}=parseArgs({options:{origin:{type:'string'},credentials:{type:'string'},output:{type:'string'},instance:{type:'string'},'database-uuid':{type:'string'},'target-uid':{type:'string'},'expect-batch':{type:'boolean',default:false},'expect-receipt-control':{type:'boolean',default:false}}});
 if(!args.origin||!args.credentials||!args.output||args.instance!=='dof-main'||args['target-uid']!=='6'||args['database-uuid']!=='899d147e-d0ef-11f1-9ff4-525400542f67')throw new Error('Requires pinned dof-main, database UUID and existing dedicated UID 6');
 const origin=new URL(args.origin).origin;if(!['127.0.0.1','localhost','[::1]'].includes(new URL(origin).hostname))throw new Error('Server loopback origin required');
 const output=path.resolve(args.output),checks=[],errors=[];
@@ -22,6 +22,16 @@ const output=path.resolve(args.output),checks=[],errors=[];
   const legacy=await api('POST','/api/v1/postal',{receiveCharacNo:2147483647,itemId:5001},400);assert.match(legacy.message,/操作编号/);checks.push('legacy unversioned sender rejected before native issuance');
   await api('GET','/api/v1/postal/0/send-status',undefined,400);
   const absent=await api('GET','/api/v1/postal/2147483647/send-status',undefined,404);assert.match(absent.message,/角色不存在/);assert.deepEqual(await api('GET','/api/v1/postal/2147483647/history'),[]);checks.push('actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated');
+  if(args['expect-receipt-control']){
+   assert.equal(feature.receiptControl.codeImplemented,true);assert.equal(feature.receiptControl.actualPlayerReceiptVerified,false);
+   assert.deepEqual(await api('GET','/api/v1/postal/2147483647/receipt-controls'),[]);
+   const denied=await context.request.get(origin+'/api/v1/postal/2147483647/receipt-controls');assert.ok([401,403].includes(denied.status()));
+   const endpoint='/api/v1/postal/2147483647/history/00000000-0000-4000-8000-000000000001/acknowledgments';
+   await api('POST',endpoint+'/preview',{reason:'controlled missing operation ID'},400);
+   await api('POST',endpoint+'/preview',{requestId:'00000000-0000-4000-8000-000000000002',revision:'0'.repeat(64),reason:'controlled nonexistent source'},404);
+   assert.deepEqual(await api('GET','/api/v1/postal/2147483647/receipt-controls'),[]);
+   checks.push('real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts');
+  }
   const target=await api('GET','/api/v1/account/6');assert.equal(Number(target.uid),6);assert.ok(target.password==null);const roles=await api('GET','/api/v1/charac?account='+encodeURIComponent(target.accountname)+'&page=1&pageSize=10');assert.equal(Number(roles.totalSize),0);assert.deepEqual(roles.list,[]);checks.push('dedicated test account has no real character; live issuance and consumption explicitly remain pending');
   const balance=await api('GET','/api/v1/recharge/6');assert.equal(balance.databaseUuid,args['database-uuid']);assert.equal(Number(balance.cera),37);const moneyHistory=await api('GET','/api/v1/recharge/6/history');for(const id of ['418f6c07-5349-47ce-8a9a-ebfb34026906','87cd2653-bcfc-473d-a584-30327e03f263'])assert.equal(moneyHistory.find(r=>r.requestId===id)?.state,'PERSISTED');checks.push('existing recharge receipts retained and dedicated balance unchanged without any recharge request');
   if(args['expect-batch']){
@@ -35,6 +45,6 @@ const output=path.resolve(args.output),checks=[],errors=[];
    const dialog=page.locator('.arco-modal');await dialog.getByText('持久化批量历史',{exact:true}).waitFor();await dialog.getByRole('button',{name:'生成批量预览',exact:true}).click();await dialog.getByText('请选择1～100个固定角色',{exact:true}).waitFor();checks.push('real batch history modal reads backend and refuses preview with no selected recipients');
   }
   const response=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/v1/postal'&&r.request().method()==='GET');await page.goto(origin+'/admin/player/postal');assert.equal((await response).status(),200);await page.getByPlaceholder('收件人账号（精确匹配，可选）').waitFor();checks.push('real deployed postal records page loads through actual backend');
-  assert.deepEqual(errors,[]);const result={passed:true,mockedApis:false,realDeploymentReadAndRefusalVerified:true,batchReadAndRefusalVerified:args['expect-batch'],actualMailIssued:false,actualPlayerReceiptVerified:false,mailComposeUiOnRealCharacterVerified:false,batchComposeUiOnRealTargetsVerified:false,checks,pageErrors:errors.length,targetUid:6,dedicatedCharacterCount:0,balanceUnchanged:37};await page.screenshot({path:path.join(output,'postal-live.png'),fullPage:true});await writeFile(path.join(output,'result.json'),JSON.stringify(result,null,2),{mode:0o600});console.log(JSON.stringify(result));
+  assert.deepEqual(errors,[]);const result={passed:true,mockedApis:false,realDeploymentReadAndRefusalVerified:true,batchReadAndRefusalVerified:args['expect-batch'],receiptControlReadAndRefusalVerified:args['expect-receipt-control'],actualMailIssued:false,actualPlayerReceiptVerified:false,mailComposeUiOnRealCharacterVerified:false,batchComposeUiOnRealTargetsVerified:false,checks,pageErrors:errors.length,targetUid:6,dedicatedCharacterCount:0,balanceUnchanged:37};await page.screenshot({path:path.join(output,'postal-live.png'),fullPage:true});await writeFile(path.join(output,'result.json'),JSON.stringify(result,null,2),{mode:0o600});console.log(JSON.stringify(result));
  }finally{if(context)await context.close();await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});

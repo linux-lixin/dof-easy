@@ -447,10 +447,22 @@
         "remaining": [
           "真实目标批量执行/重建/领取",
           "终止与跨管理员接管审计",
-          "原角色删除后的未知结果处理",
+          "原角色删除后的未知结果处理已接入本地回执流程，真实删角/组件效果待验",
           "原工具行为与批量上限对照"
         ],
         "requiresChildRequestId": true
+      },
+      "receiptControl": {
+        "codeImplemented": true,
+        "protocol": "postal-receipt-control-v1",
+        "report": "docs/validation/admin-postal-receipt-control-s12-2026-10-27.json",
+        "localContractVerified": true,
+        "realDeploymentVerified": false,
+        "actualPlayerReceiptVerified": false,
+        "nativeDataChanged": false,
+        "originalOutcomeAfterAcknowledgment": "unknown",
+        "requiresLiveRecipient": false,
+        "originalActorPreserved": true
       }
     },
     {

@@ -115,7 +115,7 @@ public class ManagedPostalService {
         }catch(DofFailure e){throw e;}catch(Exception e){throw new DofFailure(409,"绑定PVF或索引不可用，未发送物品；请先核对资源");}
     }
     private Map<String,Object> decode(String value){try{return json.readValue(value,new TypeReference<Map<String,Object>>(){});}catch(java.io.IOException e){throw new DofFailure(409,"邮件回执损坏，停止核对");}}
-    private ManagedOperationJournal.Entry source(Connection c,long id,String request)throws SQLException{
+    ManagedOperationJournal.Entry source(Connection c,long id,String request)throws SQLException{
         ManagedOperationJournal.Entry e=journal.require(c,namespace(id),request);
         if(!resource(id).equals(e.resource)||!Long.toString(id).equals(e.target)||!PROTOCOL.equals(decode(e.beforeJson).get("protocol"))||!Arrays.asList("send","accept-current").contains(e.operation))throw new DofFailure(409,"邮件回执不属于当前收件角色或协议");return e;
     }
@@ -128,7 +128,7 @@ public class ManagedPostalService {
     }
     Map<String,Object> frozenSendPlan(Map<String,Object> mail){Map<String,Object> out=new TreeMap<>();out.put("protocol",PROTOCOL);out.put("mail",mail);out.put("attachment",attachment(mail));out.put("sender","DNF Manager");out.put("bodyEncoding","database-utf8-consumer-unverified");return out;}
     private Map<String,Object> result(ManagedOperationJournal.Entry e){
-        Map<String,Object> out=journal.result(e);out.put("revision",e.beforeHash);out.put("recipient",e.target);out.put("before",decode(e.beforeJson));out.put("outcome",decode(e.afterJson));out.put("actualReceiptVerified",false);out.put("batchRequestId",e.operation.equals("send")?e.targetRequest:null);return out;
+        Map<String,Object> out=journal.result(e);out.put("revision",e.beforeHash);out.put("receiptRevision",journal.hash(ManagedPostalReceiptService.snapshot(e)));out.put("recipient",e.target);out.put("before",decode(e.beforeJson));out.put("outcome",decode(e.afterJson));out.put("actualReceiptVerified",false);out.put("batchRequestId",e.operation.equals("send")?e.targetRequest:null);return out;
     }
     public Object status(long id){
         long who=journal.admin();target(id);try(Connection c=journal.connection()){lock(c);try{actor(c,who);Map<String,Object> state=before(c,id),out=new TreeMap<>(state);out.put("revision",journal.hash(state));out.put("instanceId",journal.instance());out.put("actor",who);return out;}finally{unlock(c);}}catch(SQLException e){throw uncertain();}
@@ -200,8 +200,12 @@ public class ManagedPostalService {
     public Object reconcile(long id,String request){
         long who=journal.admin();target(id);try(Connection c=journal.connection()){lock(c);try{
             actor(c,who);ManagedOperationJournal.Entry e=source(c,id,request);if(!e.state.equals("PREPARED"))return result(e);
-            Map<String,Object> old=decode(e.beforeJson),current=before(c,id);
-            if(!Objects.equals(old.get("schemaRevision"),current.get("schemaRevision"))||!Objects.equals(old.get("databaseUuid"),current.get("databaseUuid")))throw new DofFailure(409,"数据库或结构已改变，不能推断旧邮件结果");
+            Map<String,Object> old=decode(e.beforeJson);String databaseUuid;
+            try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT @@server_uuid")){if(!r.next())throw uncertain();databaseUuid=r.getString(1);}
+            // Receipt reconciliation must survive character deletion. It depends on
+            // the locked native engines and database identity, never a live recipient
+            // or the continued presence of a possibly consumed mail row.
+            if(!Objects.equals(old.get("schemaRevision"),journal.hash(descriptor(c)))||!Objects.equals(old.get("databaseUuid"),databaseUuid))throw new DofFailure(409,"数据库或结构已改变，不能推断旧邮件结果");
             // InnoDB receipt commits with both native rows; PREPARED after taking
             // their locks proves no atomic commit. MyISAM rows may already exist.
             return result(journal.finish(c,e,Boolean.TRUE.equals(old.get("atomicReceipt"))?"NOT_APPLIED":"CONFLICT",who));
