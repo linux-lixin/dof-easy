@@ -2,7 +2,7 @@
 
 当前 admin 部署快照更新至 2026-10-28（UTC+08:00）；下方 2026-10-26 的集成记录保留历史适用范围，不是实时监控。
 
-**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前 `dof-main` admin 已部署 S20 源码 `bee499e34c9b4b0451bf66d8942fa96bd6b77025`，镜像 `sha256:a300942e8e3b9c630e812c28273703cd410da7d299a79e021c3c113e83bfb2b0`，宿主端口为 18080。真实 PVF 生成、下载、同批次配套打包、任务实际退出及 admin 重建已验证；S20 参数受控应用/定向恢复、取消保护及旧版 HTTP 写隔离回退通过，客户端消费和游戏效果仍待验。游戏容器保持原镜像与启动身份。详见 [S20 验收](../validation/admin-script-release-s20-2026-10-28.json) 和 [实施记录](../admin/replacement-implementation.md)。
+**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前 `dof-main` admin 已部署 S22 源码 `fe2091c865a65c63c8d4cbe6014c88603abd221c`（实现 `0d6ab6c`），镜像 `sha256:40a8e76cc1609a373903e502389e4af89bd86e3f3ce0cc89dc407595bb0c17d5`，宿主端口为 18080。S18 整文件生成/任务中断和 S20 参数应用/恢复证据保留；S22 完整来源配套真实生成下载、错批次拒绝、旧读取器读取/完整下载、受保护回退与 sidecar 重建保留通过。本批没有应用参数；客户端消费、游戏效果及原工具手动对照仍待验。游戏容器保持原镜像与启动身份。详见 [S22 验收](../validation/admin-client-provenance-s22-2026-10-28.json)、[S20 验收](../validation/admin-script-release-s20-2026-10-28.json) 和 [实施记录](../admin/replacement-implementation.md)。
 
 2026-10-26 当晚的 admin 批次新增免授权来源校验、独立插件/团本配置管理、记录结构诊断及刷图表适配；没有重启游戏或数据库，也未取得客户端/团本效果证据，见 [历史摘要](../validation/admin-replacement-2026-10-26.json)。以下原有提交及 PVF 记录保留其历史适用范围。
 

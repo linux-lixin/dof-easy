@@ -77,5 +77,11 @@
     "The recipe names derived reader materials; file hashes do not establish original-tool functional equivalence.",
     "No Windows GUI, native gateway/plugin/client consumption, gameplay effect or automatic update acceptance is claimed.",
     "Historical readers ignore the provenance sidecar and do not enforce its parameter batch; downgrade write ingress must remain blocked with the established read-only proxy guard."
-  ]
+  ],
+  "followupDeployment": {
+    "stage": "S22",
+    "evidence": "docs/validation/admin-client-provenance-s22-2026-10-28.json",
+    "realDeploymentVerified": true,
+    "historicalLocalFlagsPreserved": true
+  }
 }

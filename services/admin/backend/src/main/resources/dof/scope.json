@@ -143,13 +143,14 @@
           "encoding": "索引变换、zlib6、末尾100字节MD5和完整文件SHA-256已有对照；压缩私有参数首字段、自动更新上下文及真实消费仍待验",
           "executor": "admin生成和校验候选、保存两处配置；网关/原生插件/匹配客户端的读取与实际效果独立验收",
           "activation": "生成、配置保存、运行时读取和游戏效果分开记录；参数不会自动刷新组件或重启实例",
-          "output": "S18真实部署完成整文件生成、反向校验、下载和同批次ZIP；S20完成实际参数预览/应用/恢复/取消、旧版写隔离回退，组件消费与游戏效果仍待验",
+          "output": "S18真实部署完成整文件生成、反向校验、下载和同批次ZIP；S20完成实际参数预览/应用/恢复/取消、旧版写隔离回退，组件消费与游戏效果仍待验；S22完整来源清单、真实生成下载、错批次拒绝和旧读取器受保护回退通过",
           "failureBehavior": "截断、长度变化、错误来源哈希、中断或磁盘写入失败时拒绝成功；未知协议不发布",
           "evidence": [
             "docs/validation/admin-script-roundtrip-s18-2026-10-28.json",
             "docs/validation/admin-script-release-s19-2026-10-28.json",
             "docs/validation/admin-script-release-s20-2026-10-28.json",
-            "docs/validation/admin-client-provenance-s21-2026-10-28.json"
+            "docs/validation/admin-client-provenance-s21-2026-10-28.json",
+            "docs/validation/admin-client-provenance-s22-2026-10-28.json"
           ],
           "implementationStatus": "generation_and_parameter_persistence_deployed_consumer_pending",
           "releaseManagement": {
@@ -167,8 +168,11 @@
               "explicitSourceAndDatabaseBindingImplemented": true,
               "parameterBatchFrozen": true,
               "legacyJobWirePreserved": true,
-              "realDeploymentVerified": false,
-              "nativeConsumerAcceptanceVerified": false
+              "realDeploymentVerified": true,
+              "nativeConsumerAcceptanceVerified": false,
+              "olderReaderReadAndDownloadVerified": true,
+              "guardedDowngradeVerified": true,
+              "containerRecreationVerified": true
             }
           }
         }

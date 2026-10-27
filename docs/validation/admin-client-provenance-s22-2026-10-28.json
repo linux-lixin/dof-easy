@@ -1,0 +1,245 @@
+{
+  "stage": "S22",
+  "date": "2026-10-28",
+  "purpose": "real isolated client provenance publication, mismatch refusal and guarded older-reader compatibility",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "realDeploymentVerified": true,
+  "serverAccessed": true,
+  "localImplementationEvidence": "docs/validation/admin-client-provenance-s21-2026-10-28.json",
+  "buildIdentity": {
+    "sourceCommit": "fe2091c865a65c63c8d4cbe6014c88603abd221c",
+    "implementationCommit": "0d6ab6cf9bb0a8479f4836c40f03d80542aa701c",
+    "appSHA256": "256c2877d369cfcf2bca35149bd9c0fd6e6fc0880b876cd8aa007caf0a61ec22",
+    "transferSHA256": "29b9740aaf926f4ac2a76604f13c19a82bd79d6d51d3291a9542b1410a69a17c",
+    "transferBytes": 527985,
+    "helperSHA256": {
+      "admin-deploy": "157b5e218e34d90d4fca308f52d65663b3a516d93e5310ad625aeab23dcf9d25",
+      "provenance-check": "4ff6d0d366ac896f13aaecd8f54af447c454a6625d7ed1b5bb2231c927d063cb",
+      "rollback-drill": "cff7cc7fd4eaba67c761b0c7ab5e015730ff09a5d52bad9000177140b747a7f3",
+      "final-check": "2075d257233cd771cf4ba5a242d9fbff23f37062c4fd14f4be0d2010273e4641"
+    }
+  },
+  "evidence": {
+    "deployment": {
+      "sourceCommit": "fe2091c865a65c63c8d4cbe6014c88603abd221c",
+      "adminImage": "sha256:40a8e76cc1609a373903e502389e4af89bd86e3f3ce0cc89dc407595bb0c17d5",
+      "adminTag": "dof-admin-replacement:20261028-s22-candidate",
+      "appSHA256": "256c2877d369cfcf2bca35149bd9c0fd6e6fc0880b876cd8aa007caf0a61ec22",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s22-release/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": true,
+      "acceptanceScope": "real explicit-provenance bundle generation/download, mismatch refusal, preview cancellation, old-reader guarded rollback and new-sidecar recreation; no native consumption claim",
+      "completeReplacement": false
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": false,
+      "bundleId": "9df768fa-9eff-4fb2-85fe-558f3006d99c",
+      "scriptTaskId": "f9492783-a020-49e6-8bf5-010c5c304035",
+      "legacyBundleId": "1c9d7de5-a1de-4225-a599-b286560a5cd9",
+      "bundleSha256": "d146863e5244b7c5dab898a108a020cdb721da152d90faa37426b27580fd9079",
+      "bundleBytes": 285564028,
+      "manifestSha256": "05336ec56ef71ff94b6835d931f02850a63942b9b54eaf316bbefacd913c5298",
+      "manifestVersion": 1,
+      "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+      "serverParametersApplied": false,
+      "nativeClientAcceptance": false,
+      "originalWindowsToolStarted": false,
+      "completeReplacement": false,
+      "checks": [
+        "real bound database and original verified PVF task; historical bundle remains without new provenance",
+        "real page creates a same-PVF bundle and preserves explicit provenance after reload",
+        "complete ZIP streamed on server and matched archive length and SHA-256"
+      ],
+      "pageErrors": 0
+    },
+    "provenance": {
+      "passed": true,
+      "bundleId": "9df768fa-9eff-4fb2-85fe-558f3006d99c",
+      "fullDownloadedArchiveAndAllEntryHashesVerified": true,
+      "explicitSourceAndDatabaseBindingVerified": true,
+      "actualPrivateParameterDigestMatchedWithoutDisclosure": true,
+      "historicalJobWirePreserved": true,
+      "wrongDatabaseAndManifestDigestRejected": true,
+      "wrongParameterBatchRejectedBeforePreviewOrNativeAudit": true,
+      "validBatchPreviewAndCancellationVerified": true,
+      "lateCancelledSubmissionFenced": true,
+      "sidecarRestoredByteExactly": true,
+      "previewId": "6f335cb0-ff4a-482f-8453-c2d5ce8f63a8",
+      "cancelId": "97481e75-1643-4159-a4ee-8b82c547e0a8",
+      "rejectedPreviewId": "b7b014ca-1321-48c4-85a4-b960be6f3a86",
+      "serverParametersApplied": false,
+      "nativeClientAcceptance": false,
+      "originalWindowsToolStarted": false,
+      "completeReplacement": false
+    },
+    "rollback": {
+      "passed": true,
+      "oldImage": "sha256:284b3658580fef2e28f004f00458cb9e468b8bf310e78a6cdde2dd0324b440d4",
+      "oldAppSHA256": "0969a87fbd7939f7b91ee073c72541fbacd0879815fb600d434f55bacba9e0c4",
+      "guardSHA256": "6171aae17e626f65c82c525107d2a9f088ea3a7d32040af14ec02af53220a282",
+      "blockedRequests": [
+        "POST /api/v1/admin/dof/client/releases",
+        "PUT /api/v1/admin/dof/client/releases",
+        "PATCH /api/v1/admin/dof/client/releases",
+        "DELETE /api/v1/admin/dof/client/releases",
+        "POST /api/v1/admin/dof/client/releases/preview",
+        "POST /api/v1/admin/dof/client/releases/6f335cb0-ff4a-482f-8453-c2d5ce8f63a8/restore",
+        "POST //api/v1/admin/dof/client/releases",
+        "POST /api/v1/admin/dof/client/releases?retry=1"
+      ],
+      "loginAndStatusReadPreserved": true,
+      "cancelledRequestCouldNotWriteOnOldImage": true,
+      "sixNativeFieldsUnchanged": true,
+      "returnedToCandidate": true,
+      "newReaderStillFencesCancelledRequest": true,
+      "modelAndEnvironmentRestored": true,
+      "gameContainerNotRecreated": true,
+      "newJobReadAndFullDownloadOnOldReaderVerified": true,
+      "newSidecarRecoveredAfterContainerRecreation": true,
+      "scope": "HTTP ingress write isolation only; old reader ignores provenance and must not accept writes",
+      "completeReplacement": false
+    },
+    "readRegression": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "finalIntegrity": {
+      "passed": true,
+      "sixNativeFieldsUnchangedByteExactly": true,
+      "entireNativeConfigurationDataUnchanged": true,
+      "ordinaryJournalContainsNoParameter": true,
+      "cancelledIntentHasNoNativeSnapshotOrWrite": true,
+      "oldImageIngressWriteIsolationVerified": true,
+      "oldReaderCanReadAndDownloadNewJob": true,
+      "newProvenanceSurvivesContainerRecreation": true,
+      "gamePvfConfigurationAndRuntimeIdentityUnchanged": true,
+      "runtimeStatusOnlyHeartbeatTimestampChanged": true,
+      "walletsAndPriorPausedCodeUnchanged": true,
+      "persistentIdentityKeysUnchanged": true,
+      "baseReserve2GiBMaintained": true,
+      "nativeConsumerAcceptance": false,
+      "originalWindowsToolStarted": false,
+      "completeReplacement": false
+    },
+    "rollbackImage": {
+      "tag": "dof-admin-replacement:20261028-s22-rollback-readonly",
+      "image": "sha256:284b3658580fef2e28f004f00458cb9e468b8bf310e78a6cdde2dd0324b440d4",
+      "oldAppSHA256": "0969a87fbd7939f7b91ee073c72541fbacd0879815fb600d434f55bacba9e0c4",
+      "guardSHA256": "6171aae17e626f65c82c525107d2a9f088ea3a7d32040af14ec02af53220a282",
+      "publicWriteIsolationVerified": true
+    },
+    "phase": {
+      "phase": "DEPLOYED_PROVENANCE_AND_GUARDED_ROLLBACK_VERIFIED_CONSUMER_PENDING",
+      "sourceCommit": "fe2091c865a65c63c8d4cbe6014c88603abd221c",
+      "image": "sha256:40a8e76cc1609a373903e502389e4af89bd86e3f3ce0cc89dc407595bb0c17d5",
+      "updatedAt": 1793134647.2678142,
+      "completeReplacement": false
+    },
+    "processes": {
+      "deploy": {
+        "pid": 182340,
+        "live": false
+      },
+      "provenance-browser": {
+        "pid": 183720,
+        "live": false
+      },
+      "provenance-check": {
+        "pid": 184286,
+        "live": false
+      },
+      "read-browser": {
+        "pid": 184406,
+        "live": false
+      },
+      "rollback-drill": {
+        "pid": 184748,
+        "live": false
+      },
+      "final-check": {
+        "pid": 185645,
+        "live": false
+      }
+    },
+    "runtimeSnapshot": {
+      "adminImage": "sha256:40a8e76cc1609a373903e502389e4af89bd86e3f3ce0cc89dc407595bb0c17d5",
+      "adminState": "running",
+      "adminPortMapping": {
+        "containerPort": 80,
+        "hostPort": 18080,
+        "hostIp": "0.0.0.0"
+      },
+      "sourceLabel": "fe2091c865a65c63c8d4cbe6014c88603abd221c",
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameHealth": "healthy",
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "freeBytes": 15584505856
+    }
+  },
+  "scope": {
+    "boundInstance": "dof-main",
+    "level": 86,
+    "adminHostPort": 18080,
+    "reusedVerifiedScriptTask": "f9492783-a020-49e6-8bf5-010c5c304035",
+    "scriptRegenerated": false,
+    "newBundleGeneratedAndFullyDownloaded": true,
+    "actualServerParametersApplied": false,
+    "validPreviewCancelled": true,
+    "wrongBatchCreatesNoPreviewOrNativeAudit": true,
+    "ordinaryJournalContainsPrivateParameter": false,
+    "gameContainerRecreated": false,
+    "originalToolMenuComparisonVerified": false,
+    "runtimeConsumerVerified": false,
+    "gameplayVerified": false
+  },
+  "limitations": [
+    "Original Windows UI comparison remains deferred to the user; no program was launched.",
+    "A real generated ZIP and persisted configuration metadata do not prove gateway, plugin or game-client consumption.",
+    "The older reader can read and download the historical job wire; it ignores provenance sidecars and must keep its write ingress blocked.",
+    "Rollback evidence covers the HTTP ingress guard; direct host SQL/Java access is outside that boundary.",
+    "No compressed private parameter, automatic updater, physical network/database outage or multiversion gameplay acceptance is added by this batch.",
+    "The live image embeds the S21 catalog; the S22 evidence and ledger update are a subsequent documentation commit and do not silently change that image."
+  ]
+}
