@@ -2,11 +2,15 @@
 
 当前 admin 部署快照更新至 2026-10-28（UTC+08:00）；下方 2026-10-26 的集成记录保留历史适用范围，不是实时监控。
 
-**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 最新留存证据为 admin S41：镜像 `sha256:bf100959ff904aafe8be05b7b3a60d01baa462b9d592e11f755a262a1e9a3953`、后端源码 `3bffffa`；game S45：镜像 `sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073`、修复源码 `679cf9b`；admin 宿主端口 18080。这些是历史部署证据，本轮尚未重新连接核对服务器，不能视为实时状态。
+**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 本轮实际核对并发布至 admin S48：镜像 `sha256:a07c47be6847fc39ab05f115bd4a9608183faf3251af31e38dcf74365106210c`，JAR `cd25334f34b54c3341490115c72ccb456efe37a6e5861477826bf45eb28facae`，源码 `876429e`，前端来自 `bb01d5a`。game 保持 S45 镜像 `sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073`，本轮没有重启游戏；admin 宿主端口仍18080。两批协调进程均已退出，游戏健康。这是本轮留存快照，后续操作仍须重新核对。
 
-S25/S27/S29装备配置闭环、S33批量段间重建、S42排行榜规则及奖励恢复和admin重建、S43固定旧镜像只读回退均保留。S45 Frida配置保留修复已部署，两个实际频道初始化通过；有效非空活动进度、调度发奖和完整干净游戏构建仍待验。S46记录页修复对应本轮基线 `bb01d5a`，已构建并通过7项模拟浏览器检查，尚未部署。当前签到查询200、取样0行；历史409原因未证实。
+S47先只更新S46记录页前端，保留S41后端；S48随后单独发布旧SQL入口封闭，188个前端文件保持。两批7项真实记录页检查均通过，页面错误0，固定非法字段触发真实400并验证本地错误展示和恢复；没有模拟响应。交易和签到取样仍为0行，不能认为有数据分页、数据库编码或原工具等价已通过，历史签到409原因仍未知。S48的任意SQL入口匿名拒绝，管理员旧读、旧写和空请求均410，提交内容不回显；其他直接写入口协议审计继续。
 
-继续执行R0～R8，沿用71类239项和wp01～wp13，不从接口或测试数量推算完成率。两个门禁分别为admin实现完成、完整替代通过；各工作包保持未完成。详见[当前执行台账](../../services/admin/backend/src/main/resources/dof/execution-plan.json)、[实施记录](../admin/replacement-implementation.md)、[S41部署](../validation/admin-native-charts-deployment-s41-2026-10-28.json)、[S45部署](../validation/admin-frida-config-deployment-s45-2026-10-28.json)和[S46本地验证](../validation/admin-record-filter-pagination-s46-2026-10-28.json)。运行镜像内台账固定在构建提交，后续证据不会自动进入部署。
+本轮核对真实数据库UUID、挂载及305张InnoDB/43张MyISAM，未转换引擎。S47将固定私有admin归档的57个条目、1,757,859,581字节恢复到独立新目录，完整字节、属主、权限及mtime通过，原目录保持；这不等同数据库或应用恢复。两批641条回执及受保护数据、密钥PVF保持，S48最终预算与实际均满足2GiB基础余量。原恢复点及恢复副本保留。
+
+标准Maven528项中204通过、324条件跳过，0失败/错误，已[逐项登记条件](../validation/admin-maven-conditions-r1-2026-10-28.json)。Windows POSIX能力错误和离线缺clean插件的失败保留，不宣称干净完整构建已通过。S25/S27/S29装备配置、S33段间重建、S42排行榜恢复、S43只读回退及S45配置保留证据继续有效；有效非空Frida进度、完整玩法和原工具等价仍待验。
+
+继续沿用71类239项、wp01～wp13和R0～R8；所有工作包保持未完成，不按接口或测试数量推算完成率。详见[原执行台账](../../services/admin/backend/src/main/resources/dof/execution-plan.json)、[实施记录](../admin/replacement-implementation.md)、[S47部署与恢复](../validation/admin-record-filter-deployment-s47-2026-10-28.json)及[S48部署](../validation/admin-sql-retirement-s48-2026-10-28.json)。镜像内台账固定在构建快照，后续证据不会自动进入部署。
 
 S26 为回收规则本地实现批次，标准 Maven、136 项隔离 SQL、前端构建及模拟页面证据保留；S27 在此基础上完成真实部署配置与恢复验收。原生玩家操作和原工具对照仍待验，见 [S26 本地验收](../validation/admin-recovery-s26-2026-10-28.json)。
 

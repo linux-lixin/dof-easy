@@ -179,5 +179,12 @@
     "游戏保持S45，没有客户端或游戏效果验收。交易和签到查询仍为空，记录完整性与实际数据库编码待验。",
     "S47文件归档恢复证明继续保留，不等同临时数据库或应用恢复。",
     "镜像是固定S47运行镜像加已核验后端JAR，完整源码OCI可复现构建门禁仍由R8独立验收。"
-  ]
+  ],
+  "sourceCommit": "876429e59d5fdf689242232062dccf3bc4515912",
+  "sourceCommitVerification": {
+    "javaAndResourceInputs": 333,
+    "allMatchAfterCheckoutLineEndingNormalization": true,
+    "rawWorkingTreeManifestSHA256": "66de1b19e40ed9f1201d57a2333c5dd31e7aeb55e7fbcb9fe3c5b2700d28d7e9",
+    "metadataFollowupCommitMayDiffer": true
+  }
 }
