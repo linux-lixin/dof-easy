@@ -41,6 +41,7 @@ public class ActivityConfigService {
         public String key, title, table, primaryKey;
         public boolean autoId;
         public boolean writable = true, deleteAllowed = true;
+        public boolean createAllowed = true;
         public String notice;
         public List<Field> fields;
     }
@@ -261,6 +262,7 @@ public class ActivityConfigService {
         if(s.key.equals("inheritance")&&!trustedRestore)NativeInheritanceRules.validate(result,old);
         if(s.key.equals("recovery")&&!trustedRestore)NativeRecoveryRules.validate(result,old);
         if(s.key.equals("cross-border")&&!trustedRestore)NativeCrossBorderRules.validate(result,old);
+        if(s.key.equals("charts"))NativeChartsRules.validate(result,old);
         return result;
     }
     private void pair(Map<String,Object> row,String a,String b) {
@@ -273,17 +275,18 @@ public class ActivityConfigService {
         }
     }
     void guard(Connection c,Section s) throws SQLException {
-        if(Arrays.asList("inheritance","recovery","cross-border").contains(s.key)){
+        if(Arrays.asList("inheritance","recovery","cross-border","charts","charts-rewards").contains(s.key)){
             journal.metadataTransactionGuard(c);
             if(s.key.equals("inheritance"))NativeInheritanceRules.requireSchema(c);
             else if(s.key.equals("recovery"))NativeRecoveryRules.requireSchema(c);
-            else NativeCrossBorderRules.requireSchema(c);
+            else if(s.key.equals("cross-border"))NativeCrossBorderRules.requireSchema(c);
+            else NativeChartsRules.requireSchema(c);
             cancelActor(c,admin());
         }
         String sql=null;
         if(s.key.startsWith("pot-") && !s.key.equals("pot-switch"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(item_off_1),0)=0 AND COALESCE(MAX(item_off_2),0)=0 AND COALESCE(MAX(item_off_3),0)=0 FROM dof_native.earthenware_pot_item";
         if(s.key.equals("shop"))sql="SELECT (SELECT COUNT(*) FROM dof_native.new_shop)=1 AND (SELECT COUNT(*) FROM dof_native.new_shop WHERE swoff<>0)=0 AND (SELECT COUNT(*) FROM dof_native.timed_task WHERE task_state=1)=0";
-        if(s.key.equals("charts-rewards"))sql="SELECT COUNT(*)=1 AND COALESCE(MAX(status),0)=0 FROM dof_native.game_charts_config";
+        if(s.key.equals("charts")||s.key.equals("charts-rewards"))sql="SELECT COUNT(*)=1 AND SUM(id=1 AND status=0 AND is_mobai=0)=1 FROM dof_native.game_charts_config";
         if(s.key.equals("appearance"))sql="SELECT COUNT(*)<=1 AND COALESCE(MAX(swoff),0)=0 FROM dof_native.transformation_item";
         if(sql!=null)try(Statement st=c.createStatement();ResultSet r=st.executeQuery(sql)){if(!r.next() || !r.getBoolean(1))throw new Failure(409,"原生功能仍在启用或开关状态不明确，拒绝改写，请先完成停用及兼容验证");}
     }
@@ -311,7 +314,7 @@ public class ActivityConfigService {
     void lock(Connection c,Section s)throws SQLException {lock(c,s,false);}
     private void lock(Connection c,Section s,boolean actorLock)throws SQLException {
         String locks=table(s)+" WRITE";
-        if(actorLock || Arrays.asList("inheritance","recovery","cross-border").contains(s.key))locks+=",`d_taiwan`.`accounts` READ";
+        if(actorLock || Arrays.asList("inheritance","recovery","cross-border","charts","charts-rewards").contains(s.key))locks+=",`d_taiwan`.`accounts` READ";
         if(s.key.startsWith("pot-")&&!s.key.equals("pot-switch"))locks+=",dof_native.earthenware_pot_item READ";
         if(s.key.equals("shop"))locks+=",dof_native.new_shop READ,dof_native.timed_task READ";
         if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ";
@@ -482,6 +485,7 @@ public class ActivityConfigService {
                 if(s.key.equals("inheritance"))NativeInheritanceRules.restoreGuard(before,after,change.before);
                 if(s.key.equals("recovery"))NativeRecoveryRules.restoreGuard(before,after,change.before);
                 if(s.key.equals("cross-border"))NativeCrossBorderRules.restoreGuard(before,after,change.before);
+                if(s.key.equals("charts"))NativeChartsRules.restoreGuard(before,after,change.before);
                 change.after=new LinkedHashMap<>(change.before);
                 for(Field f:s.fields)if(!Objects.equals(String.valueOf(before.get(f.name)),String.valueOf(after.get(f.name)))) {
                     if(!Objects.equals(String.valueOf(change.before.get(f.name)),String.valueOf(after.get(f.name))))throw new Failure(409,"本次涉及的字段已有第三方修改："+f.label);
@@ -491,6 +495,7 @@ public class ActivityConfigService {
             }
         }else {
             boolean creating=e.revision.equals("new");
+            if(creating&&!s.createAllowed)throw new Failure(409,"此配置仅支持修改已有记录，不允许新增或初始化");
             if(e.values==null)throw new Failure(400,"缺少配置内容");
             if(!e.values.keySet().equals(s.fields.stream().map(f->f.name).collect(Collectors.toSet())))throw new Failure(400,"配置字段缺失或包含未知字段");
             if(op.equals("delete")&&(!s.deleteAllowed||creating||s.primaryKey==null))throw new Failure(409,"此配置不支持删除");
@@ -517,6 +522,7 @@ public class ActivityConfigService {
             if(change.after==null || !Objects.equals(String.valueOf(change.before.get("box_id")),String.valueOf(change.after.get("box_id"))) || !Objects.equals(String.valueOf(change.before.get("item_id")),String.valueOf(change.after.get("item_id"))))
                 throw new Failure(409,"配置已有玩家收集记录，不能删除或更换箱号及道具");
         }
+        if(s.key.equals("charts"))NativeChartsRules.scheduleRange(c,change.before,change.after);
         return change;
     }
     private List<Map<String,Object>> changes(Section s,Change change) {

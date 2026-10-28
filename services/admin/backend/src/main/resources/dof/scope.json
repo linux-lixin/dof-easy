@@ -3170,7 +3170,33 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-s36-2026-10-28.json"
+          ],
+          "implementationSubsets": [
+            {
+              "location": "dof_native.game_charts_config / game_charts_code",
+              "status": "local_rule_management_and_independent_entry_guards_implemented_real_deployment_pending",
+              "fieldsEditable": [
+                "min_zhanli",
+                "jiangli_day",
+                "jiangli_hour"
+              ],
+              "fieldsPreserved": [
+                "id",
+                "status",
+                "is_mobai",
+                "next_time"
+              ],
+              "requiresBothEntriesDisabled": true,
+              "createsOrDeletesConfig": false,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-s36-2026-10-28.json"
+              ]
+            }
+          ]
         },
         {
           "id": "feature-044-02",
@@ -3185,7 +3211,29 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-s36-2026-10-28.json"
+          ],
+          "implementationSubsets": [
+            {
+              "location": "dof_native.game_charts_config / game_charts_code",
+              "status": "local_independent_ranking_and_worship_write_guards_hardened_real_deployment_pending",
+              "fieldsEditable": [],
+              "fieldsPreserved": [
+                "id",
+                "status",
+                "is_mobai",
+                "next_time"
+              ],
+              "requiresBothEntriesDisabled": true,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-s36-2026-10-28.json"
+              ],
+              "newConfigurationWritesEnabled": false
+            }
+          ]
         },
         {
           "id": "feature-044-03",
@@ -3200,7 +3248,34 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-s36-2026-10-28.json"
+          ],
+          "implementationSubsets": [
+            {
+              "location": "dof_native.game_charts_config / game_charts_code",
+              "status": "local_rule_management_and_independent_entry_guards_implemented_real_deployment_pending",
+              "fieldsEditable": [
+                "jiangli_day",
+                "jiangli_hour"
+              ],
+              "fieldsPreserved": [
+                "id",
+                "status",
+                "is_mobai",
+                "next_time"
+              ],
+              "requiresBothEntriesDisabled": true,
+              "createsOrDeletesConfig": false,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-s36-2026-10-28.json"
+              ],
+              "nativeFormulaImplemented": false,
+              "nativeSettlementAcceptanceVerified": false
+            }
+          ]
         },
         {
           "id": "feature-044-04",

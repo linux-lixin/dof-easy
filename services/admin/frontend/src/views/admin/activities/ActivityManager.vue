@@ -5,7 +5,7 @@ import Request from '../../../api/Request';
 import EquipmentBatchManager from './EquipmentBatchManager.vue';
 const batchBusy=ref(false);
 type Field = { name: string; label: string; type: string; group: string; min: number; max: number; readonly: boolean; hint?: string; default: any };
-type Section = { key: string; title: string; primaryKey: string | null; autoId: boolean; writable?: boolean; deleteAllowed?: boolean; notice?: string; fields: Field[] };
+type Section = { key: string; title: string; primaryKey: string | null; autoId: boolean; writable?: boolean; deleteAllowed?: boolean; createAllowed?: boolean; notice?: string; fields: Field[] };
 type Row = { revision: string; values: Record<string, any> | null };
 type Edit = Row & { requestId: string; operation: 'upsert' | 'delete' | 'restore' | 'accept-current'; targetRequestId?: string; reason?: string };
 const sections = ref<Section[]>([]), active = ref('signin'), rows = ref<Row[]>([]);
@@ -105,6 +105,7 @@ async function load(){
   loading.value=false;
 }
 function begin(row?:Row,operation:Edit['operation']='upsert'){
+  if(!row&&section.value?.createAllowed===false){error.value='此配置仅支持编辑已有记录，不能新增或初始化';return}
   if(hasPending.value){error.value='此活动已有保留的原操作编号，请先核对或取消未提交预览';return}
   imported.value='';prepared.value=null;
   if(row)edit.value={...JSON.parse(JSON.stringify(row)),requestId:uuid(),operation};
@@ -197,7 +198,7 @@ onMounted(async () => {
     <a-alert v-if="error" type="error">{{ error }}</a-alert>
     <a-space style="margin: 16px 0" wrap>
       <a-button @click="load" :loading="loading" :disabled="saving">刷新</a-button>
-      <a-button type="primary" v-if="section && section.writable !== false && !error && (section.primaryKey || !rows.length)" :disabled="loading || saving || hasPending" @click="begin()">新增配置</a-button>
+      <a-button type="primary" v-if="section && section.writable !== false && section.createAllowed !== false && !error && (section.primaryKey || !rows.length)" :disabled="loading || saving || hasPending" @click="begin()">新增配置</a-button>
       <a-button v-if="!equipment" :disabled="loading || !!error" @click="download(`${active}-config.json`, { section: active, rows })">导出配置</a-button>
       <a-button v-else :disabled="loading || saving || !!error || datasetBusy" @click="datasetAction('export')">导出全表规则</a-button>
       <a-button :disabled="loading || !!error" @click="openHistory()">修改记录与快照</a-button>

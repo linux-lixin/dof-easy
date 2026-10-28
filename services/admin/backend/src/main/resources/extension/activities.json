@@ -2984,24 +2984,24 @@
   },
   {
     "key": "charts",
-    "title": "战力排行榜规则",
+    "title": "原生战力排行榜规则",
     "table": "game_charts_config",
     "primaryKey": "id",
     "autoId": true,
     "fields": [
       {
         "name": "id",
-        "label": "主键ID",
+        "label": "原生规则ID（只读）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
-        "default": 0
+        "readonly": true,
+        "default": 1
       },
       {
         "name": "min_zhanli",
-        "label": "最小上榜战力要求",
+        "label": "最低上榜战力",
         "type": "int",
         "group": "基本设置",
         "min": 0,
@@ -3011,58 +3011,61 @@
       },
       {
         "name": "jiangli_day",
-        "label": "多少天发一次奖励     填1就是每天   填3就是每三天发一次",
+        "label": "奖励间隔（天）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 1
+        "default": 1,
+        "hint": "修改时至少1天；只保存规则，不自动重新计算下次结算时间。"
       },
       {
         "name": "jiangli_hour",
-        "label": "发送奖励的时间 - 时   就是jiangli_day的几点发奖励   填19就是晚上7点发",
+        "label": "奖励小时（0～23）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "修改时填0～23，按数据库时区解释；历史异常值保持原样时不会被网页自动纠正。"
       },
       {
         "name": "is_mobai",
-        "label": "是否开启膜拜  1开始  0不开启",
+        "label": "膜拜开关（原生保留）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
+        "readonly": true,
         "default": 0
       },
       {
         "name": "status",
-        "label": "状态 1可用 0不可用",
+        "label": "排行榜开关（原生保留）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
+        "readonly": true,
         "default": 1
       },
       {
         "name": "next_time",
-        "label": "下次奖励发放时间",
+        "label": "下次结算时间（原生维护）",
         "type": "datetime",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
+        "readonly": true,
         "default": ""
       }
     ],
-    "writable": false,
+    "writable": true,
     "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "notice": "仅编辑已有1号规则的上榜门槛、奖励间隔和小时；排行榜及膜拜入口都关闭时才允许保存或恢复。开关和下次结算时间只读，调度与发奖继续由原生网关执行；网页不会启用入口、计算排名或发奖。修改间隔不会重写下次结算时间，生效时机与实际奖励仍待验证。",
+    "createAllowed": false
   },
   {
     "key": "charts-rewards",
@@ -3104,7 +3107,7 @@
     ],
     "writable": true,
     "deleteAllowed": false,
-    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+    "notice": "排行榜与膜拜入口都关闭时才允许维护奖励；第0名是膜拜奖励，两条读取链独立检查。网页不启用入口、不计算排名或发奖；实际奖励与原工具对照仍待验证。"
   },
   {
     "key": "clearance",
