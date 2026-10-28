@@ -254,5 +254,12 @@
     "Native component consumption, player items/materials and actual gameplay evidence",
     "Capacity, duration and concurrency beyond the 1005-row verified workload; current integrity checks scan all children",
     "All remaining wp01-wp13 requirements; no full replacement completion claim"
-  ]
+  ],
+  "classInventoryClarification": {
+    "mainCompileClassFiles": 331,
+    "originalProductionClassesLabelWasMainCompileInventory": true,
+    "mainSampleClassExcludedFromRuntime": "com/aiyi/game/dnfserver/test/Test.class",
+    "runtimePackagedClassesEstablishedAtS32": 330,
+    "evidence": "docs/validation/admin-equipment-batch-s32-2026-10-28.json"
+  }
 }

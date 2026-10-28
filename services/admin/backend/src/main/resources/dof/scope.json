@@ -1967,7 +1967,8 @@
             "docs/validation/admin-cross-border-s28-2026-10-28.json",
             "docs/validation/admin-cross-border-s29-2026-10-28.json",
             "docs/validation/admin-equipment-dataset-s30-2026-10-28.json",
-            "docs/validation/admin-equipment-batch-s31-2026-10-28.json"
+            "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s32-2026-10-28.json"
           ],
           "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_defaults_and_ui_parity_pending",
           "managementImplementation": {
@@ -1997,7 +1998,7 @@
             "remaining": "组件消费、玩家材料扣除/装备去向/失败补偿、客户端UI、原工具默认值/全表导入导出及批量清除仍待验"
           },
           "equipmentDatasetManagement": {
-            "state": "local_batch_configuration_tasks_implemented",
+            "state": "deployed_catalog_read_verified_batch_write_acceptance_pending",
             "serverPaginationImplemented": true,
             "fullTableExportImplemented": true,
             "webFormat": "dof-equipment-rules-v1",
@@ -2007,13 +2008,21 @@
             "durableBatchWritePlanImplemented": true,
             "originalToolFormatVerified": false,
             "realDeploymentVerified": false,
-            "evidence": "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "evidence": "docs/validation/admin-equipment-batch-s32-2026-10-28.json",
             "independentChildReceipts": true,
             "maximumItemsPerStep": 20,
             "cancelUnsubmittedImplemented": true,
             "linkedRestoreImplemented": true,
             "manualConflictAcknowledgmentImplemented": true,
-            "controlHistoryPaginationImplemented": true
+            "controlHistoryPaginationImplemented": true,
+            "runtimeCodeDeployed": true,
+            "runtimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+            "runtimeImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+            "runtimeHostPort": 18080,
+            "realBatchCatalogReadVerified": true,
+            "realConfigurationLifecycleVerified": false,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false
           }
         }
       ]
@@ -2055,7 +2064,8 @@
             "docs/validation/admin-inheritance-s24-initial-2026-10-28.json",
             "docs/validation/admin-inheritance-s25-2026-10-28.json",
             "docs/validation/admin-equipment-dataset-s30-2026-10-28.json",
-            "docs/validation/admin-equipment-batch-s31-2026-10-28.json"
+            "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s32-2026-10-28.json"
           ],
           "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_and_ui_parity_pending",
           "inheritanceRuleManagement": {
@@ -2073,7 +2083,7 @@
             "remaining": "原生消费、扣料/继承/返还及客户端UI、原工具默认值和导入导出对照仍待验"
           },
           "equipmentDatasetManagement": {
-            "state": "local_batch_configuration_tasks_implemented",
+            "state": "deployed_configuration_lifecycle_verified_consumer_pending",
             "serverPaginationImplemented": true,
             "fullTableExportImplemented": true,
             "webFormat": "dof-equipment-rules-v1",
@@ -2082,14 +2092,22 @@
             "bulkClearImplemented": true,
             "durableBatchWritePlanImplemented": true,
             "originalToolFormatVerified": false,
-            "realDeploymentVerified": false,
-            "evidence": "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "realDeploymentVerified": true,
+            "evidence": "docs/validation/admin-equipment-batch-s32-2026-10-28.json",
             "independentChildReceipts": true,
             "maximumItemsPerStep": 20,
             "cancelUnsubmittedImplemented": true,
             "linkedRestoreImplemented": true,
             "manualConflictAcknowledgmentImplemented": true,
-            "controlHistoryPaginationImplemented": true
+            "controlHistoryPaginationImplemented": true,
+            "runtimeCodeDeployed": true,
+            "runtimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+            "runtimeImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+            "runtimeHostPort": 18080,
+            "realBatchCatalogReadVerified": true,
+            "realConfigurationLifecycleVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false
           }
         }
       ]
@@ -2160,7 +2178,8 @@
             "docs/validation/admin-recovery-s26-2026-10-28.json",
             "docs/validation/admin-recovery-s27-2026-10-28.json",
             "docs/validation/admin-equipment-dataset-s30-2026-10-28.json",
-            "docs/validation/admin-equipment-batch-s31-2026-10-28.json"
+            "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s32-2026-10-28.json"
           ],
           "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_and_ui_parity_pending",
           "managementImplementation": {
@@ -2188,7 +2207,7 @@
             "remaining": "组件消费、玩家回收扣除/奖励/公告、客户端UI及原工具默认值和导入导出对照仍待验"
           },
           "equipmentDatasetManagement": {
-            "state": "local_batch_configuration_tasks_implemented",
+            "state": "deployed_catalog_read_verified_batch_write_acceptance_pending",
             "serverPaginationImplemented": true,
             "fullTableExportImplemented": true,
             "webFormat": "dof-equipment-rules-v1",
@@ -2198,13 +2217,21 @@
             "durableBatchWritePlanImplemented": true,
             "originalToolFormatVerified": false,
             "realDeploymentVerified": false,
-            "evidence": "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "evidence": "docs/validation/admin-equipment-batch-s32-2026-10-28.json",
             "independentChildReceipts": true,
             "maximumItemsPerStep": 20,
             "cancelUnsubmittedImplemented": true,
             "linkedRestoreImplemented": true,
             "manualConflictAcknowledgmentImplemented": true,
-            "controlHistoryPaginationImplemented": true
+            "controlHistoryPaginationImplemented": true,
+            "runtimeCodeDeployed": true,
+            "runtimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+            "runtimeImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+            "runtimeHostPort": 18080,
+            "realBatchCatalogReadVerified": true,
+            "realConfigurationLifecycleVerified": false,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false
           }
         }
       ]

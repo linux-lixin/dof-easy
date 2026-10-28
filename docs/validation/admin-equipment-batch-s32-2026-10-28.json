@@ -1,0 +1,395 @@
+{
+  "stage": "S32",
+  "date": "2026-10-28",
+  "purpose": "real level-86 inheritance batch configuration and guarded old-image frozen-history rollback",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "realDeploymentVerified": true,
+  "verifiedRuntimeWriteModule": "inheritance",
+  "otherRuntimeBatchWriteModulesPending": [
+    "recovery",
+    "cross-border"
+  ],
+  "implementation": "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+  "build": {
+    "sourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+    "appSHA256": "1982fb0ab8f80cb9c3e134f7c51a42a6b29b7dcbab904e973897d7dfafb3c2bb",
+    "baseAppSHA256": "c649b3d227418297bb39210e015e2d8c727af81f252be83b41b2498dbfbd22a8",
+    "mainCompileClassFiles": 331,
+    "productionClassesPackaged": 330,
+    "allPackagedClassesMatchStandardMaven": true,
+    "classesMatchPackagedJar": true,
+    "keysAndTestsExcluded": true,
+    "excludedMainSampleClass": "com/aiyi/game/dnfserver/test/Test.class",
+    "initialAuditFailure": "initial verification included the intentionally excluded main sample Test.class; packaging itself succeeded",
+    "completeReplacement": false
+  },
+  "canonicalPrebuiltTemplateFix": "services/admin/docker/Dockerfile.dof-prebuilt",
+  "rollbackRenderer": "scripts/dof/rollback_equipment_batches_proxy.py",
+  "rollbackRendererUnitTestsPassed": 4,
+  "existingRollbackRendererTestsPassed": 4,
+  "server": {
+    "deployment": {
+      "sourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+      "adminImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+      "adminTag": "dof-admin-replacement:20261028-s32-candidate",
+      "appSHA256": "1982fb0ab8f80cb9c3e134f7c51a42a6b29b7dcbab904e973897d7dfafb3c2bb",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s32-release/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": true,
+      "acceptanceScope": "real 21-rule durable configuration lifecycle, partial cancellation, linked restoration, large file reads and authenticated frozen-history old-image rollback; no player/game claim",
+      "completeReplacement": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_BATCH_CONFIGURATION_VERIFIED_GAMEPLAY_PENDING",
+      "sourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+      "image": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+      "updatedAt": 1793145324.770783,
+      "completeReplacement": false
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": false,
+      "testCodes": [
+        2147483001,
+        2147483002,
+        2147483003,
+        2147483004,
+        2147483005,
+        2147483006,
+        2147483007,
+        2147483008,
+        2147483009,
+        2147483010,
+        2147483011,
+        2147483012,
+        2147483013,
+        2147483014,
+        2147483015,
+        2147483016,
+        2147483017,
+        2147483018,
+        2147483019,
+        2147483020,
+        2147483021
+      ],
+      "sourceRevision": "5df7cd3f650155074f055a4e8d006b658a665484463330ee3d069ff573ada1ff",
+      "sourceSHA256": "2255ddecf477c711bebd2a2e16c59f257c6722d4581157b6dec5775f74be350b",
+      "largeFileCheckBytes": 1128517,
+      "tasks": {
+        "partialImport": {
+          "requestId": "8c135f1e-71f9-4f10-b66d-05d0293b3126",
+          "previewRevision": "8f93444be0e1d418b48ee82eec57974371d83d84b0179e495222b177b0b10f09",
+          "operation": "import-upsert"
+        },
+        "undoPartial": {
+          "requestId": "dd4ed25f-f72b-45b0-9ea9-307b351138b3",
+          "previewRevision": "41cc6e3fba243224249a8fe5aae701011c4b3f2854beb3a7cd42f9062a0a866d",
+          "operation": "restore"
+        },
+        "fullImport": {
+          "requestId": "376cde82-a41e-4fd7-a25a-2d4a107edec6",
+          "previewRevision": "07cec7469acd593ab6ed7e24a816697a5400a622d4c1c3bff04eca544129b930",
+          "operation": "import-upsert"
+        },
+        "clearAll": {
+          "requestId": "ca2e4681-0048-4611-9735-af6e6632e8ca",
+          "previewRevision": "3376917f32da976e724cccb6451b7d16d3b3ad35759642496022ce8e7d772e50",
+          "operation": "clear"
+        },
+        "restoreClear": {
+          "requestId": "a8e29071-20d3-4d4d-915f-63a07cdb370c",
+          "previewRevision": "c8f01fc3c2ef418d9dff72c6c956fbfc6c3a8888b3ff7db61c463f69275ed4f7",
+          "operation": "restore"
+        },
+        "undoFullImport": {
+          "requestId": "3e1c6927-34e7-403e-a9b0-c2a9223fa343",
+          "previewRevision": "6de3aad0ae32e6c6337d0bdab1697c644988a8dea9d0e9073f76b2981ccd18e4",
+          "operation": "restore"
+        },
+        "cancelEmpty": {
+          "requestId": "ef56e2b4-23c2-4825-96ef-d31f851272c7",
+          "previewRevision": "41fc914e2bff94ac5f1bb16f920c5355a7b21e89536bf193238b6f2463445f83",
+          "operation": "clear"
+        }
+      },
+      "controls": {
+        "cancelPartial": {
+          "requestId": "1d3b8380-2463-40b1-ad1e-e0f129463281",
+          "parent": "8c135f1e-71f9-4f10-b66d-05d0293b3126"
+        },
+        "cancelEmptyPreview": {
+          "requestId": "67c512bc-8060-4918-ab16-f6eee6402de0",
+          "parent": "ef56e2b4-23c2-4825-96ef-d31f851272c7"
+        }
+      },
+      "seedCreateIds": [
+        "1af240a0-c1ad-40b6-8cf7-63726a69fd19",
+        "ccc0ca61-1cc3-4bd2-853e-d4fb2d18185c",
+        "3845f9d4-15f2-4e54-803d-9705c2941f3c",
+        "d6fd9114-2bb0-44a9-af05-c3c7cc170f91",
+        "e8e9c719-baac-4316-aba7-a431a1827911",
+        "f2b95b76-1fdd-415f-97f2-bc6f5c06d49a",
+        "ea803825-856f-4137-906c-f1d852b8ffd8",
+        "c21169b3-ab8d-480a-bc55-35830b2b56f5",
+        "c325e5bf-0dc2-46d0-8ecb-1895634a3901",
+        "2839c704-fbe9-4f66-aca2-bddcfbe11efb",
+        "1d0ce9b5-a0d4-4159-a2cb-2f426fed2da0",
+        "152556c9-6bb3-454f-b184-58b302b16770",
+        "e137bc9f-4ff8-433d-8b44-cc4ea41b06cb",
+        "b2a47a43-da63-4b68-9994-172d9d6f498a",
+        "77498fce-4bc1-47db-bae0-d4812e3ecb52",
+        "2421f110-7fb3-436c-beb7-998f2365d616",
+        "06a41b3c-036d-40e3-b56c-5d8203430e58",
+        "ea8618c7-e912-40c2-ae95-e9b2f1790e16",
+        "f1ea477c-be4b-43b8-8ab1-f63efab05716",
+        "855c7fd7-927a-4446-96da-1eef3306d112",
+        "c6f463a8-f1fd-47db-a10d-0e8f88b6e038"
+      ],
+      "seedUndoIds": [
+        "d925da02-fafd-4492-b532-fbf9c0bf2215",
+        "56a05392-48d9-481a-88f3-2704f4362641",
+        "0662d34e-779c-41d8-a3bf-7c93c49d4027",
+        "aa926b5e-0e93-4b7d-b70d-8d03b5ff897d",
+        "9420fd21-2da6-456d-83da-f51ae9828d73",
+        "3eb63eb9-0206-4a76-a259-0b93c5778ff5",
+        "0051dcb8-0592-446c-9f1f-60842ddd4f31",
+        "1dcea2fe-239a-45ed-9da8-6e54c967760d",
+        "8838c16d-4847-44f6-9e2f-0449dc6238a2",
+        "a4572152-3d4f-448f-8285-f8b5e31190b4",
+        "127b6f60-73f7-4fe1-9721-196e6b946ddd",
+        "a012421e-95b8-4870-8fc8-b4ec9073e910",
+        "5184cb70-2b41-41de-b606-a7e23fecf111",
+        "a7d5f1f8-2891-459a-8468-52abe3a48308",
+        "66e7f565-786c-4d05-a98b-f841535cd218",
+        "cb8533d3-43d3-4887-8bdc-90846ae10837",
+        "e6de2dfc-610d-45af-a078-f2def8f88216",
+        "74612c4a-f4b3-4504-88ea-87c646165b0e",
+        "fd4fd3c6-cbbe-4377-b474-c9aafb3c5b5d",
+        "63a6cbf9-7587-4a6d-bf54-3991f8757829",
+        "eb1595dd-ab91-41d4-b157-ac3321526a85"
+      ],
+      "resumedOriginalPreview": true,
+      "initialBrowserFailurePreserved": true,
+      "responseLoss": "actual backend commit followed by deliberately withheld browser response; no physical outage claim",
+      "nativeRuleConfigurationWrittenAndRestored": true,
+      "initialRows": 0,
+      "finalRows": 0,
+      "originalWindowsToolStarted": false,
+      "nativeConsumerAcceptanceVerified": false,
+      "nativeGameplayVerified": false,
+      "completeReplacement": false,
+      "checks": [
+        "real single-rule source export, 21 test codes and >1MiB streaming integrity check; original seed creates undone without changing default code zero",
+        "actual first segment writes 20 of 21; withheld reply and reload preserve IDs, stale segment and ordinary bypass are refused, cancellation stops only the remaining item",
+        "linked restoration removes only the twenty confirmed test imports and skips the unsubmitted item",
+        "full import completes in two real segments, final page contains the twenty-first receipt and full export matches the original source",
+        "clear and associated recovery both survive committed reply loss; complete restored rule bytes produce the original full-table revision",
+        "all seven task histories and two controls remain readable, all three native rule tables return to empty, wallets stay unchanged, no default rule or game/client action"
+      ],
+      "pageErrors": 0
+    },
+    "readRegression": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "rollback": {
+      "passed": true,
+      "frozenQueriesVerified": 38,
+      "liveAdministratorAuthorizationVerified": true,
+      "anonymousGetAndHeadAndInvalidTokenRefused": true,
+      "internalAuthRouteUnavailableExternally": true,
+      "unsnapshottedQueriesRefused": true,
+      "currentStateNotFrozen": true,
+      "oldImageBusinessWriteProbesBlocked": 8,
+      "oldJarByteUnchanged": true,
+      "oldBackendNativeBatchProtocolSupported": false,
+      "candidateRecreatedAndAllFrozenReceiptsMatchLiveAgain": true,
+      "originalCandidateProxyRestoredBothPaths": true,
+      "gameNotRecreated": true,
+      "threeRuleTablesEmpty": true,
+      "sourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+      "completeReplacement": false,
+      "nativeGameplayVerified": false,
+      "initialMapBucketFailurePreserved": true,
+      "offlineOldNginxSyntaxVerified": true,
+      "revokedAdministratorGetAndHeadRefused": true,
+      "testAdministratorRoleRestored": true,
+      "permissionProbeOriginalValue": 1,
+      "initialRoleAssumptionFailurePreserved": true
+    },
+    "compatibilityImage": {
+      "tag": "dof-admin-replacement:20261028-s32-rollback-batches-readonly-v2",
+      "image": "sha256:0de451d36843a82642304e341ab80735ec3171d87616bc74b93bdef9d4686f0f",
+      "oldAppSHA256": "c649b3d227418297bb39210e015e2d8c727af81f252be83b41b2498dbfbd22a8",
+      "guardSHA256": "76fbf3e4527c87ee61fc0403aea62a91d72004b3df86896cc8bf9d9aa67c9c96",
+      "manifestSHA256": "06417a24335da5d282acc709f19744bc47864086d3b2664eb27a1eb468a65dd1",
+      "frozenQueries": 38,
+      "offlineActualNginxSyntaxVerified": true,
+      "oldBackendNativeBatchProtocolSupported": false,
+      "firstFailedImageAndDrillPreserved": true,
+      "publicWriteIsolationVerified": true,
+      "liveVerification": "batch-rollback-drill-result-v3.json"
+    },
+    "firstRollbackFailure": {
+      "phase": "FAILED_RETURNED_TO_CANDIDATE",
+      "pid": 243792,
+      "updatedAt": 1793144645.2323039,
+      "oldVerificationPassed": false
+    },
+    "secondRollbackFailure": {
+      "phase": "FAILED_RETURNED_TO_CANDIDATE",
+      "pid": 247574,
+      "updatedAt": 1793144933.8442082,
+      "oldVerificationPassed": false
+    },
+    "firstCompatibilityImage": {
+      "tag": "dof-admin-replacement:20261028-s32-rollback-batches-readonly",
+      "image": "sha256:199b3655733d312e366fdf91ba5dbf9df5030ad005dfe13bec966c4631dc4fc0",
+      "oldAppSHA256": "c649b3d227418297bb39210e015e2d8c727af81f252be83b41b2498dbfbd22a8",
+      "guardSHA256": "453ab931d0c6cca8a3d87144aaf594efabe5e466da225683a44f8d0a785714cf",
+      "manifestSHA256": "06417a24335da5d282acc709f19744bc47864086d3b2664eb27a1eb468a65dd1",
+      "frozenQueries": 38,
+      "sourceSnapshotComparedUnderWriteBarrier": true,
+      "oldBackendNativeBatchProtocolSupported": false,
+      "publicWriteIsolationVerified": false
+    },
+    "actualTestAdminRole": {
+      "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+      "uid": 5,
+      "admin": 1,
+      "accountTriggers": 0,
+      "automaticUpdateColumns": 0,
+      "readOnly": true
+    },
+    "permissionProbe": {
+      "uid": 5,
+      "before": 1,
+      "phase": "RESTORED"
+    },
+    "finalVerification": {
+      "passed": true,
+      "all176NewReceiptsRetainedWithOriginalActor": true,
+      "batchParents": 7,
+      "batchChildren": 125,
+      "batchControls": 2,
+      "singleSeedAndUndoReceipts": 42,
+      "originalFailedBrowserPreviewReusedWithoutDuplicate": true,
+      "all34PriorEquipmentReceiptsPreserved": true,
+      "noUnresolvedEquipmentOperations": true,
+      "threeNativeRuleTablesRestoredExactly": true,
+      "firstDefaultCodeZeroNeverCreated": true,
+      "wholeTableRestorationHashesVerified": true,
+      "sixNativeScriptFieldsAndEntireNativeConfigUnchanged": true,
+      "activityRewardsWalletsAndPausedCodeUnchanged": true,
+      "testAdministratorPermissionRestored": true,
+      "gamePvfConfigurationAndRuntimeIdentityUnchanged": true,
+      "runtimeStatusOnlyHeartbeatTimestampChanged": true,
+      "persistentIdentityKeysUnchanged": true,
+      "bothProxyTemplatePathsAndExpandedConfigMatchCandidate": true,
+      "initialMapBucketFailurePreserved": true,
+      "oldFrozenHistoryRoleRevalidationVerified": true,
+      "oldBackendNativeBatchProtocolSupported": false,
+      "completeReplacement": false,
+      "originalWindowsToolStarted": false,
+      "nativeConsumerAcceptanceVerified": false,
+      "nativeGameplayVerified": false,
+      "baseReserve2GiBMaintained": true,
+      "processes": {
+        "deploy": {
+          "pid": 239477,
+          "exited": true
+        },
+        "bulk-browser": {
+          "pid": 240920,
+          "exited": true
+        },
+        "bulk-browser-resume": {
+          "pid": 241940,
+          "exited": true
+        },
+        "batch-rollback-build": {
+          "pid": 242888,
+          "exited": true
+        },
+        "batch-rollback-drill": {
+          "pid": 243792,
+          "exited": true
+        },
+        "batch-rollback-build-v2": {
+          "pid": 246881,
+          "exited": true
+        },
+        "batch-rollback-drill-v2": {
+          "pid": 247574,
+          "exited": true
+        },
+        "batch-rollback-drill-v3": {
+          "pid": 249218,
+          "exited": true
+        },
+        "read-browser": {
+          "pid": 250359,
+          "exited": true
+        }
+      }
+    },
+    "rendererSHA256": "95ad5fa66442ed025d57dc894eee9353f52dc097da790756543a9817abb7bccd",
+    "rendererByteMatchesCompatibilityImage": true
+  },
+  "retainedFailures": {
+    "initialPackagingAudit": "main compile inventory included the intentionally excluded sample Test.class; 330 actual runtime classes verified against standard Maven and package",
+    "firstImageRecipe": "prebuilt base contained the preferred legacy proxy path; canonical recipe now replaces both paths and real >1MiB check passed",
+    "initialBrowser": "CDP response body evicted after real original preview commit; same preview ID recovered through API without reseeding",
+    "initialRollback": "old Nginx map bucket default64 rejected long UUID URLs before readiness; automatic candidate return; larger buckets tested offline before v2 image",
+    "secondRollback": "old history/auth reads passed, but a role=7 assumption failed before any permission write; actual role=1 read with no triggers/auto-update columns, then third drill dynamically revoked/restored the original field"
+  },
+  "verificationScope": "21 dedicated inheritance configuration codes; 7 parents, 125 children, 2 controls and 42 seed/undo receipts; no player item/currency executor or original GUI claim",
+  "remaining": [
+    "Recovery and cross-border batch write/recovery on the real instance; their current runtime catalog reads only are verified here",
+    "Original Windows menus/defaults/file formats and native component/client/game acceptance",
+    "Physical outage and capacity/concurrency beyond prior isolated 1005-row test",
+    "Remaining wp01-wp13 business functions and multi-version full acceptance"
+  ]
+}
