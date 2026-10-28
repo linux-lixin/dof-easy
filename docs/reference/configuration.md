@@ -15,6 +15,12 @@
 | 容器公共环境 | [共享模板](../../deploy/shared)与[启动源码](../../services/game/runtime/ubuntu/bootstrap.sh) | 配置存在不等于组件消费 |
 | 原生可选私有输入 | `DOF_LEGACY_UI_PROFILE`、`DNF_COMPANION_PREVIEW` | 分别指向只读旧 UI 精确样本与本机配套预览；缺失时不造示例能力 |
 
+## 只读 PVF 与资源索引
+
+`DNF_PVF_PATH` 指向后台容器内可读的实例 PVF；未配置或空白时源码回退 `data/Script.pvf`。挂载应只读，不能混用其他实例或版本的 PVF。`DNF_PVF_INDEX` 指向配套资源索引 JSON，需核对版本 1、文件长度与绑定 PVF 的 SHA-256；不匹配、未知或未核实的资源保持不可用，不猜名称替换。
+
+有效索引是邮件附件核验的必要条件；普通 PVF 查询可在未提供索引时按源码解析，不能将两者条件混为一谈。索引还需包含核验所需的装备、消耗品与未核实条目集合，重复或未知 ID 拒绝。失败先检查只读挂载、来源和索引，不上传 PVF/索引进 Git。定义以[PvfManager.java](../../services/admin/backend/src/main/java/com/aiyi/game/dnfserver/pvf/PvfManager.java)及[ResourceIndex.java](../../services/admin/backend/src/main/java/com/aiyi/game/dnfserver/pvf/ResourceIndex.java)为准。
+
 `IMAGE_REGISTRY` / 镜像标签属于实例镜像来源，修改全局默认不改变已建实例；`GAME_BIND_IP` 与 `ADMIN_BIND_IP` 的作用不同。数据库连接和 ADMIN_PASSWORD 为私有运行材料，不写入公共说明。查看配置时使用本机编辑器，不输出整份 `.env` 到日志。
 
 成功信号：模板渲染无未解析变量、挂载符合目标实例、服务启动后值回读符合预期。失败先按[故障指南](../operations/troubleshooting.md)定位，不改业务源码配合错误路径。端口见[端口参考](ports.md)。

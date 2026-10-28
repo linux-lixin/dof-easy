@@ -1800,6 +1800,16 @@
       "path": "docs/history/admin/isolated-admin-before-restructure.md",
       "kind": "history",
       "authority": "docs/history/admin/isolated-admin-before-restructure.md"
+    },
+    {
+      "path": "docs/history/admin/isolated-game-before-restructure.md",
+      "kind": "history",
+      "authority": "docs/history/admin/isolated-game-before-restructure.md"
+    },
+    {
+      "path": "docs/reference/admin-activities.md",
+      "kind": "current",
+      "authority": "docs/reference/admin-activities.md"
     }
   ],
   "immutableTextNormalization": [

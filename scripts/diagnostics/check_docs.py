@@ -172,6 +172,23 @@ def check_ledger_references(root,ledgers,files):
             if reference not in files: errors.append(f'ledger reference missing: {p}: {reference}')
     return errors
 
+def check_superseded_claims(root,pages):
+    """Guard specific superseded assertions found by the human-facing doc audit.
+
+    This is deliberately bounded; it does not pretend to understand arbitrary
+    prose or prohibit future honestly scoped pending work.
+    """
+    errors=[]
+    patterns={
+        'docs/operations/isolated-game.md': r'签到[^\n]{0,40}(?:仍返回|当前仍)[^\n]{0,40}409',
+        'docs/operations/admin/activities.md': r'该实现尚未部署到\s*86\s*级实例|需先修复并部署后再验收',
+    }
+    for page in pages:
+        p=page['path']
+        if page['kind']=='current' and p in patterns and re.search(patterns[p],(Path(root)/p).read_text(encoding='utf8')):
+            errors.append('superseded current deployment claim: '+p)
+    return errors
+
 def baseline_blobs(root,paths):
     request=''.join(BASELINE+':'+p+'\n' for p in paths).encode('utf8')
     result=subprocess.run(['git','-C',str(root),'cat-file','--batch'],input=request,check=True,capture_output=True).stdout
@@ -297,6 +314,7 @@ def audit(root,includes=()):
     errors+=check_immutable(root,catalog['immutable'],files)
     errors+=check_baseline(root,catalog,files)
     errors+=check_contracts(root,catalog,files,graph)
+    errors+=check_superseded_claims(root,catalog['pages'])
     errors+=check_public_material(root,files)
     return errors,{'originalDocuments':len(catalog['originals']),'originalEvidence':sum(p.startswith('docs/') and p.endswith('.json') for p in catalog['immutable']),'registeredPages':len(catalog['pages']),'trackedFilesChecked':len(files)}
 

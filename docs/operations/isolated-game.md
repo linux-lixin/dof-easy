@@ -2,7 +2,7 @@
 
 用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
 
-事实来源：[game-test-deployment.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/docs/dof/game-test-deployment.md)。限制和当前验收边界见[当前状态](../status/README.md)。
+事实来源：[deploy_game_test.py](../../scripts/dof/deploy_game_test.py)与[最终部署证据](../validation/main-deployment-2026-10-28.json)。限制和当前验收边界见[当前状态](../status/README.md)。
 
 
 部署脚本要求 Python 3.11+。此入口用于私有 profile 明确绑定的测试实例，不是通用服务器部署器。最新部署和验收结果见 [当前状态](../status/README.md)；本文说明操作约束，不自动授权操作任意实例。
@@ -36,6 +36,8 @@ python3 scripts/dof/deploy_game_test.py --profile /private/game-profile.json \
 
 核对实际 `dof-gateway` 进程、两个新名模块、配置访问、新库表查询和初始化结果；镜像内原生程序还需保留可执行权限。停止及恢复只针对本次目标，不覆盖玩家进度。
 
-2026-10-26 保存的证据确认游戏 main `175e0624` 已 healthy，实际加载新网关和两个库，随机盒三表存在。随后网页 main `1fd1b6c3` 完成绑定 PVF 导入与加密；游戏和数据库未因网页替换重启。两次提交的服务端源码和资源相同，但不能写成同一部署提交。
+成功应记录本次实际镜像、容器身份、网关及模块加载、数据库身份和保护数据核对，不能将 2026-10-26 的加载记录写成本次结果。最新已存签到为 200、空样本；历史 409 原因未知，见[当前部署](../status/deployment.md)。Windows 当前读取配方、配套实际安装和完整玩家流程仍待验。
 
-网页 client/script 状态接口的重定向已修复；签到记录仍返回结构不兼容的 HTTP 409。Windows 读取端、配套包实际安装和登录／城镇／地下城／重登尚未验收。健康、网页保存、PVF 生成分别记录，不能代替玩家流程。
+## 回退前提与证据
+
+此工具依赖 profile 明确绑定且实际仍保留的基础镜像、旧容器和原数据。当前测试服旧镜像已经清理，不能将历史旧镜像 ID 或当时恢复记录当作现成回退条件；当前游戏镜像恢复来源与最终重建结果见[部署证据](../validation/main-deployment-2026-10-28.json)。缺少基础或回退镜像时停止本流程，另行准备并验证发布与恢复方案。历史批次见[旧正文](../history/admin/isolated-game-before-restructure.md)。

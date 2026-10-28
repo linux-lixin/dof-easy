@@ -25,3 +25,5 @@
 - [格式 2 更新阶段原文](clients/format2-update.md)
 
 - [隔离后台部署旧正文](admin/isolated-admin-before-restructure.md)
+
+- [隔离游戏部署旧正文](admin/isolated-game-before-restructure.md)

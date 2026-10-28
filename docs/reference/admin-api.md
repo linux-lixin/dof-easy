@@ -47,3 +47,6 @@
 ## 源码查阅
 
 账号、邮件、经济、活动和装备批量请求分属各自控制器；不能用统一 SQL 入口替代固定业务。API 参考采用源码链接保持完整字段定义：[控制器目录](../../services/admin/backend/src/main/java/com/aiyi/game/dnfserver/controller)、[服务目录](../../services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service)。未适配结构应返回不可用原因，不能自行造表。完整业务与消费门禁见[功能状态](../status/capabilities.md)。
+
+
+活动、装备批量和排行榜字段、接口及文件格式见[专项 API 参考](admin-activities.md)。

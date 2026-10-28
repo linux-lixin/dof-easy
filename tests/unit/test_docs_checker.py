@@ -109,4 +109,10 @@ class DocumentationChecker(unittest.TestCase):
         errors=docs.check_baseline(ROOT,catalog,docs.tracked_files(ROOT))
         self.assertTrue(any('hash differs from baseline' in e and path in e for e in errors))
 
+    def test_superseded_deployment_claims_cannot_return_to_current_guides(self):
+        self.put('docs/operations/isolated-game.md','签到记录仍返回结构不兼容的 HTTP 409。')
+        self.put('docs/operations/admin/activities.md','该实现尚未部署到86级实例，需先修复并部署后再验收。')
+        pages=[{'path':p,'kind':'current'} for p in ('docs/operations/isolated-game.md','docs/operations/admin/activities.md')]
+        self.assertEqual(len(docs.check_superseded_claims(self.root,pages)),2)
+
 if __name__=='__main__': unittest.main()

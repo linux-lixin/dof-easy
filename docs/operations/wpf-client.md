@@ -6,7 +6,7 @@
 
 适用 dof 登录链。此 DNFLogin.exe 不能消费原生格式 2 配套；当前 WPF 未消费后台 SHA-256 且字符串排序，见[兼容表](../reference/clients/compatibility.md)。
 
-# 后台配置、客户端与自动更新
+## 后台配置、客户端与自动更新
 
 适用范围：`LAUNCHER_MODE=dof` 的 WPF 登录器与默认后台。原生模式的配置容器、PVF 加密和读取端另见 [原生文档](../getting-started/login-modes.md)。下表采用手动模板频道 11、52；通用安装器默认 15、52，以实际生成配置为准。
 

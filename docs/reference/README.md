@@ -14,3 +14,5 @@
 - [docs/reference/platform-compatibility.md](platform-compatibility.md)
 - [docs/reference/ports.md](ports.md)
 - [docs/reference/resources.md](resources.md)
+
+- [活动、装备与排行 API](admin-activities.md)

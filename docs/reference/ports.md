@@ -6,7 +6,7 @@
 
 以下表格是手动模板的 group=3、channels=11,52 示例。安装器默认 channels=15,52，必须显式传给生成器；不可直接照搬手动表作为安装器安全组。运行 `python scripts/diagnostics/ubuntu_ports.py --group 3 --channels "15,52"` 获取对应清单。
 
-# Ubuntu 角色端口表
+## Ubuntu 角色端口表
 
 由 `python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52` 从配置生成。
 

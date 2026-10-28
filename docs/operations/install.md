@@ -6,7 +6,7 @@
 
 安装器默认频道 15,52。菜单与高级命令默认值对照见[CLI](../reference/cli.md)。当前测试服镜像、备份和构建限制只看[部署状态](../status/deployment.md)。
 
-# 容器一键端
+## 容器一键端
 
 在 Ubuntu 24.04／26.04、Debian 12／13 的 amd64 / systemd 主机使用。只管理本机默认 Docker；拒绝远程 context、`DOCKER_HOST` 和 `DOCKER_CONTEXT`。本轮开发与测试不连接现有服务器。
 
@@ -19,7 +19,7 @@
 ```sh
 cd /opt/dof-easy # 换成自己的项目目录
 sudo bash dof.sh
-# 等价菜单入口
+## 等价菜单入口
 sudo bash dof.sh
 ```
 
