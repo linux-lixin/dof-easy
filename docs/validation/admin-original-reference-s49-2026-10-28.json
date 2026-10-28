@@ -1,0 +1,206 @@
+{
+  "stage": "S49",
+  "date": "2026-10-28",
+  "edition": "qingkong-2.8-replacement",
+  "sourceLock": "metadata/dof/admin-baseline.lock.json",
+  "sourceLockedToolFiles": [
+    {
+      "name": "晴空单机后台工具.exe",
+      "bytes": 24519680,
+      "sha256": "c109b4484fc1440b5927f85b2cee2587285fdb0b8b61447a29bd803bb5535e89",
+      "sourceLockMatched": true
+    },
+    {
+      "name": "libxl.dll",
+      "bytes": 1003704,
+      "sha256": "b536f624e52de04daea34d8e5348efcff4273538739a6a3757f90828e86d6093",
+      "sourceLockMatched": true
+    }
+  ],
+  "legacyToolCandidate": {
+    "exeBytes": 40353280,
+    "exeSHA256": "1baef9f179834c0f73557e4a2ae0dc01d244b1f10de7547bb3e2ada224a9cb4b",
+    "sourceLockMatched": false,
+    "bundledRuntimeModifierPresent": true,
+    "usedForThisComparison": false
+  },
+  "verifiedToolCopyStarted": true,
+  "copiedRuntimeModifier": false,
+  "observedInitialScreen": {
+    "title": "晴空单机-后台工具",
+    "loginTabVisible": true,
+    "activationTabVisible": true,
+    "databaseAddressFieldVisible": true,
+    "databaseAccountFieldVisible": true,
+    "databasePasswordFieldVisible": true,
+    "databasePortFieldVisible": true
+  },
+  "activationTabDoesNotEstablishActivationRequirement": true,
+  "authorizationPrerequisiteIntroduced": false,
+  "referenceDatabase": {
+    "ready": true,
+    "purpose": "original-GUI-readonly-reference",
+    "mysqlVersion": "5.6.51",
+    "port": 33307,
+    "bindAddress": "127.0.0.1",
+    "mysqlPid": 462,
+    "databaseUuid": "6ea739a9-d2a1-11f1-ab01-00155d2da5ee",
+    "sourceArchiveSHA256": "3a3d16c7981d91002835f0ba9bc89e9657b9147c5d2bc1ce347871266130609a",
+    "gatewaySchemaSHA256": "d91662fa6f1476abda8687bc5b9aabadabf24cd4861e440face9bf7f7c85982d",
+    "mysqldSHA256": "1f8e15cde8de3df8cef6f26607203b2dbaa0aadb0797f2a5d19a6893d4461082",
+    "schemaAliasForOriginalGui": "qingkong",
+    "nativeAlias": "dof_native",
+    "runtimeDirectory": "/tmp/dof-qk-s49-reference-v4",
+    "seedSchemas": 21,
+    "seedMembers": {
+      "d_channel.sql": "7c80abfad6850d9b18209bb89994416c40734401521e0485053b8eeef855825d",
+      "d_guild.sql": "43d784a927365d064c203b2f59668ee4835968de048389c153d3032f0c77f271",
+      "d_taiwan_secu.sql": "dade74ebd140c29e5bccd2261ac88cbf1d1cd1cf2da73e030e7263595af77838",
+      "d_taiwan.sql": "6e247308eb2c7281b58663c5000810e5ba0f2bf962e0e00ceba163cb42097d8e",
+      "d_technical_report.sql": "eb2a641e635ec70293423fd8f5e08e707db0fb3da81f133ec27eed3febdc7107",
+      "taiwan_billing.sql": "482e283cbbb0579a4ebe34bfc91958933234dfc2d52d4a51fa8382256b424ed9",
+      "taiwan_cain_2nd.sql": "0f1166af81f293f492b86a1a207c16edab86f8cfe34cc150ea4029f256ba84c2",
+      "taiwan_cain_auction_cera.sql": "7065ce2521720667d56ced72fc79e98c0edba02bf6ccd0bd00bfe2123f8f2d37",
+      "taiwan_cain_auction_gold.sql": "599c225b62d5470a6806fa1e2f52a32b3b7f13ee457152bf28fc361938c911f7",
+      "taiwan_cain_log.sql": "16a9c3e483a3c161ef927e4eca961dd52ae6fad2d372bceffd68ed519bf6a85f",
+      "taiwan_cain.sql": "4bc587a3a749f50bbe22ab0481a30e4c4e64076fc87c0673564130f976de4400",
+      "taiwan_cain_web.sql": "d2cfc76c6ac949f4d4705ff372964c8df030a351609be8a9f058e673be55eb16",
+      "taiwan_game_event.sql": "8cb7f1a41cbd282ade6522e9b1b653b903fe0e4e57a6df15c497548bcc9aa738",
+      "taiwan_login_play.sql": "32ae09bfbc215d9c0e109cafeaff7182713b51b7542fa1952ce44445e0d44ed3",
+      "taiwan_login.sql": "7aa09060a564508dae027c0149ecc9c747566f2576f1b7af21211ca48b73ae0f",
+      "taiwan_main_web.sql": "9d805ef0383e1446c0422cf45b0b3ff1af0140c1d2ff5632d98ff6178a1d1f66",
+      "taiwan_mng_manager.sql": "e6926996a7940b2da4f8d9f33b50a020bd2b89d9db4e3a6a803e79fd2de42f20",
+      "taiwan_prod.sql": "207f6c334e26e2ef1ed8cea781fa48e307fa6fcbe986a2594d0d711428273163",
+      "taiwan_pvp.sql": "777201a2d0ae0bc3da354a12b3a0f7a55cee77dc76f97edd4886444d22d3421d",
+      "taiwan_se_event.sql": "9b42ba082fd65ec971b98373201980a4bc0c0a6ef6bfd4327d45f103add83f70",
+      "taiwan_siroco.sql": "6d0284c4eb1f9513a29e1d0343c14cf3e0bc686503a54b590fa49ef8c3c3dc5c"
+    },
+    "sourceDataIsVersionedSeedNotLivePlayerData": true,
+    "originalGuiAccountReadOnly": true,
+    "gameServerConnected": false,
+    "completeReplacement": false
+  },
+  "readOnlyReferenceChecks": {
+    "readOnlyTcpConnectionVerified": true,
+    "caseSensitiveTableNamesVerified": true,
+    "referenceIdentityVerified": true,
+    "referenceGrantScopeVerified": true,
+    "sourceDataIsVersionedSeedNotLivePlayerData": true,
+    "originalGuiLoginVerified": false,
+    "originalGuiMenuComparisonVerified": false,
+    "gameClientLoginVerified": false,
+    "gameServerConnected": false,
+    "completeReplacement": false
+  },
+  "clientSourceChecks": [
+    {
+      "directory": ".dof-easy/client-integration/independent-client/pre-v76",
+      "files": [
+        {
+          "name": "启动器.exe",
+          "bytes": 27475968,
+          "sha256": "5b0c5195c58e1583cb5456e2b7139acf02f6ebb34ff86e4445468c91184be733",
+          "matchesOriginalClientSourceLock": true
+        },
+        {
+          "name": "ijl15.dll",
+          "bytes": 28710400,
+          "sha256": "d2b207e32f1d366c29f43d080366b7880d87659aaeb93a9bd8e36f44bf54b678",
+          "matchesOriginalClientSourceLock": true
+        },
+        {
+          "name": "DNF.exe",
+          "bytes": 59580416,
+          "sha256": "cb2d33cd73738de6f67ecab7c46470deede1ad51e18e2e5a1aa4a3b2a570a0a6",
+          "matchesOriginalClientSourceLock": null
+        }
+      ],
+      "gameLoginVerified": false,
+      "runtimeCompatibilityVerified": false
+    },
+    {
+      "directory": ".dof-easy/client-v2-integration/full-reader-baseline",
+      "files": [
+        {
+          "name": "启动器.exe",
+          "bytes": 27475968,
+          "sha256": "5b0c5195c58e1583cb5456e2b7139acf02f6ebb34ff86e4445468c91184be733",
+          "matchesOriginalClientSourceLock": true
+        },
+        {
+          "name": "dof-launcher.exe",
+          "bytes": 27484160,
+          "sha256": "91aaec7a480ffd90d0feebb8aad9c82d0199f0599c6660125d053e2dbda19cd6",
+          "matchesOriginalClientSourceLock": null
+        },
+        {
+          "name": "ijl15.dll",
+          "bytes": 28711424,
+          "sha256": "0f7f022f38f2dd4e7d2f4f0805c2ab8cb9b8a76303ffec2cbffa102e5d2f308e",
+          "matchesOriginalClientSourceLock": false
+        },
+        {
+          "name": "DNF.exe",
+          "bytes": 59580416,
+          "sha256": "cb2d33cd73738de6f67ecab7c46470deede1ad51e18e2e5a1aa4a3b2a570a0a6",
+          "matchesOriginalClientSourceLock": null
+        }
+      ],
+      "gameLoginVerified": false,
+      "runtimeCompatibilityVerified": false
+    }
+  ],
+  "noticeDatabaseObservation": {
+    "databaseUuidVerified": true,
+    "tablePresent": false,
+    "table": [],
+    "columns": [],
+    "indexes": [],
+    "triggerCount": 0,
+    "foreignKeys": 0,
+    "rowReadPerformed": false,
+    "rowIdsAndLengths": null,
+    "rowsSHA256": null,
+    "databaseWritesPerformed": false
+  },
+  "failedReferencePreparationAttempts": [
+    {
+      "attempt": 1,
+      "reason": "Missing mysql system database subdirectory; bootstrap exited before server start",
+      "retained": true
+    },
+    {
+      "attempt": 2,
+      "reason": "Unix socket unsupported on NTFS; case-insensitive data semantics unsuitable; server exited",
+      "retained": true
+    },
+    {
+      "attempt": 3,
+      "reason": "Safety scanner treated Source headings in a non-executable dump-header block comment as commands; owned server stopped",
+      "retained": true
+    }
+  ],
+  "successfulAttempt": 4,
+  "referencePreparationOperatorSHA256": "b400091d87e305fa341c41e94dade933b93d46f1b049fc8385e0e21f45c68986",
+  "desktopInputStatus": {
+    "programmaticFieldChangesVerified": false,
+    "pointCoveredByOtherWindowObserved": true,
+    "userReportedFieldsFilled": true,
+    "fieldsReobservedAfterUserReport": false,
+    "computerUseStoppedByPhysicalEscape": true,
+    "furtherComputerUseCallsAfterStop": false
+  },
+  "originalGuiLoginVerified": false,
+  "fullMenuComparisonVerified": false,
+  "gameClientStartedThisBatch": false,
+  "gameClientLoginVerified": false,
+  "allWorkPackagesComplete": false,
+  "completeReplacement": false,
+  "validationLimits": [
+    "本批只观察了原工具登录界面，未完成菜单、默认值或写入对照。",
+    "参考库来自版本化种子并提供独立数据库别名，不是真实玩家数据或运行组件消费证明。",
+    "原版客户端启动器和ijl15.dll匹配原始来源锁；派生读取端须按其独立来源和配套关系核对，不能混用。",
+    "自动输入未能确认改变字段；用户反馈填写后，后续观察被物理Esc停止。",
+    "缺少login_notice是缺表，不是空表；未创建或初始化未知表。"
+  ]
+}
