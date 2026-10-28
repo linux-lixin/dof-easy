@@ -1,0 +1,140 @@
+{
+  "stage": "S44",
+  "date": "2026-10-28",
+  "verificationScope": "Frida configuration preservation and complete-file publication; local exceptions plus actual game-image Python and bundled-assets preparation in a separate offline container",
+  "implemented": {
+    "onlyManagedAccountAndPasswordReplaced": true,
+    "unknownNestedAndUnrelatedActivityOptionsPreserved": true,
+    "missingDbObjectInitializesKnownFields": true,
+    "nonObjectRootOrDbConfigRefusedBeforePluginPreparation": true,
+    "sourceImporterPreservesOptionsAndClearsManagedPassword": true,
+    "sameDirectoryPrivateTemporaryFileAndAtomicReplace": true,
+    "persistentAndRuntimeFilesEachPublishedAsCompleteFile": true,
+    "passwordNeverAddedToAuditOrErrorMessages": true,
+    "startupStopsOnPreparationFailure": true
+  },
+  "regressionBeforeFix": {
+    "sourceCommit": "53f8e49",
+    "productionSourcesCopiedFromGitWithoutModification": true,
+    "newTestMethods": 7,
+    "subtestFailures": 14,
+    "subtestErrors": 3,
+    "exitCode": 1,
+    "logSHA256": "fadff37a084ad33d9362f7d6e941331ecdfd1703b70d2e878009227a03c906f2"
+  },
+  "unitTests": {
+    "total": 48,
+    "passed": 47,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "skipReason": "Original-archive derivation requires explicitly supplied local originals; not counted as pass.",
+    "modules": [
+      {
+        "module": "test_plugins_runtime.py",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": true
+      },
+      {
+        "module": "test_source_assets.py",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": true
+      },
+      {
+        "module": "test_bundled_native_assets.py",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "passed": true
+      },
+      {
+        "module": "test_source_import.py",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": true
+      },
+      {
+        "module": "test_frida_database.py",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": true
+      }
+    ],
+    "logSHA256": {
+      "test_bundled_native_assets.py.log": "d254d618b3743e5ad0c9eac9ffbf4ddfaae3cbb63fdaffcda5206aa3ab6665f2",
+      "test_frida_database.py.log": "ea739121ccd3bc4cf52a33fea2612d01d77afb302f180972015943a4ab46ce32",
+      "test_plugins_runtime.py.log": "d1a5b30b15891af2713d5a3191c62a08f6aba002ac94fd5769eebd7d477269bf",
+      "test_source_assets.py.log": "4caf4cea622824f2087fd17a7293c46c4dbdcd054c625b503fdb5fd44abac11f",
+      "test_source_import.py.log": "da5f8f0be404b5e712ce0cbe3059ff67c272645722fe3dd1ec720e03671b5b2b"
+    }
+  },
+  "serverContainerProbe": {
+    "stage": "S44",
+    "passed": true,
+    "probe": {
+      "passed": true,
+      "runtimeSHA256": "f351d94089ef955562cb9b64625c152b4e0c0fbb1b2d304f57aa8a6e4f5ce8ef",
+      "bundledFridaInputsSHA256": {
+        "frida.js": "395ba7db685ccd1e3942b5b24a54611fcdbbae71fa5b8693322ddb9762d560e5",
+        "frida.so": "669c0d4e13a50b2e114663d22cc5e6fc876303fffb2b685ecc48a47cb74b984a",
+        "frida_config.json": "89b1855ec9440f19cfb76b3eb5111586c4845e73247c53255e85f522400e697f"
+      },
+      "nestedOptionsAndFalseNullUnicodePreserved": true,
+      "passwordRotationAndRuntimeMirrorVerified": true,
+      "privatePermissionsVerified": true,
+      "operatorScriptAndLogsPreserved": true,
+      "unknownShapesRefusedBeforePluginWrites": 4,
+      "bundledInputsUnchanged": true,
+      "temporaryFilesCleaned": true,
+      "networkRequired": false,
+      "gameOrFridaBinaryExecuted": false,
+      "databaseConnectionOpened": false,
+      "nativeConsumerAcceptanceVerified": false,
+      "completeReplacement": false
+    },
+    "gameBaseImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "newRuntimeBindMountedForProbeOnly": true,
+    "runningGameImageChanged": false,
+    "gameAndAdminIdentitiesPreserved": true,
+    "gameHealthy": true,
+    "serverPrivateDataOrCredentialsMounted": false,
+    "networkDisabled": true,
+    "rootFilesystemReadOnly": true,
+    "baseReserve2GiBMaintained": true,
+    "freeBeforeBytes": 5614039040,
+    "probeDurationSeconds": 0.919,
+    "probeScriptSHA256": "4b0bc1c7e49cb6cfa29f7cd74da1ac624f7aa71f3e71f5499844f081ef9fe2c8",
+    "completeReplacement": false
+  },
+  "currentSourceSHA256": {
+    "services/game/runtime/ubuntu/plugins.py": "f351d94089ef955562cb9b64625c152b4e0c0fbb1b2d304f57aa8a6e4f5ce8ef",
+    "scripts/imports/prepare_assets.py": "23f13611b15003b9f757de4b9f4f297b2e6a9f09b5db8c55c890fa67d4f93134",
+    "tests/unit/test_plugins_runtime.py": "f42f6452b7406686bc419ae179245941e6c6da7b0d2ebc2b850690015b94bc4a",
+    "tests/unit/test_source_assets.py": "9c53c86790dfbcffbdbce35cd54dee9c24616832e256783332b643d5f82617ca",
+    "tests/integration/dof/frida_database/config-probe.py": "4b0bc1c7e49cb6cfa29f7cd74da1ac624f7aa71f3e71f5499844f081ef9fe2c8"
+  },
+  "validationLimits": [
+    "Running game still uses its previous plugins.py; actual image deployment/restart and retained private configuration are pending.",
+    "Probe prepares real bundled plugin files but does not load Frida, game binaries or connect to a database.",
+    "Interrupted replacement tests inject Python I/O exceptions; no SIGKILL, disk exhaustion or power-loss test was performed.",
+    "Persistent and runtime config files are individually atomic; a failure between them stops startup and a retry copies the current persistent configuration. They are not a two-file transaction.",
+    "Unknown options are preserved as JSON values; no claim is made that a native component implements those options.",
+    "Original Windows-tool equivalence, activity scheduling, rewards and original-archive derivation remain unverified."
+  ],
+  "mavenAndFrontendBuildRerun": false,
+  "buildReason": "No Java, Vue, frontend dependencies or admin image changed; affected Python and real-image file preparation checked.",
+  "originalWindowsToolStarted": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "completeReplacement": false
+}
