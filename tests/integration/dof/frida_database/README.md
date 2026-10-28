@@ -25,3 +25,10 @@ the copied Frida library or a game binary and never connects to a database.
 Its JSON report proves preparation in that image, not native consumption,
 gameplay, active-instance deployment, or physical fault recovery. Publish only
 the report; the temporary fixture tree is removed at the end.
+
+S45 also ran this probe against the built candidate image without binding an
+external runtime module. The subsequent bound-instance deployment separately
+verified both actual Frida database connections and retained private settings.
+The deployed instance had no custom database options and no saved activity
+rows, so custom-option semantics and valid nonempty native checkpoints remain
+outside that deployment evidence.

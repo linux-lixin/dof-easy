@@ -1,0 +1,126 @@
+{
+  "stage": "S45",
+  "date": "2026-10-28",
+  "deployment": {
+    "passed": true,
+    "sourceCommit": "679cf9b4fce0ce4c9ea4adfe40c280dde2e634cc",
+    "baseGameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+    "gameTag": "dof-game-replacement:20261028-s45",
+    "runtimeSHA256": "f351d94089ef955562cb9b64625c152b4e0c0fbb1b2d304f57aa8a6e4f5ce8ef",
+    "onlyOneNewImageFilesystemLayer": true,
+    "candidateImageProbePassedWithoutRuntimeBindMount": true,
+    "adminContainerAndImageUnchanged": true,
+    "adminPort": 18080,
+    "gameActuallyRecreated": true,
+    "gameHealthy": true,
+    "twoActualFridaChannelsStorageReady": true,
+    "noObservedFridaLoadOrNativeErrors": true,
+    "allPrivateFridaConfigurationValuesRetained": true,
+    "privateUnknownDbOptionsPresentBeforeDeployment": 0,
+    "persistentAndRuntimeConfigurationAgree": true,
+    "privateConfigurationPermissions600": true,
+    "customPluginFilesAndScriptsUnchanged": true,
+    "all641ManagedReceiptsUnchanged": true,
+    "protectedNativeSettingsRewardsWalletsRoleAndPausedCodeUnchanged": true,
+    "fridaProgressUnchangedFromPostNormalStopSnapshot": true,
+    "keysPvfAndOtherStaticConfigUnchanged": true,
+    "gatewayAllSectionsKeysAndValuesUnchanged": true,
+    "gatewayBytesUnchanged": false,
+    "onlyGameImageReferenceChangedInModelAndEnv": true,
+    "authenticatedAdminReadChecksPassed": 3,
+    "baseReserve2GiBMaintained": true,
+    "sourceCleanFullGameBuildVerified": false,
+    "originalWindowsToolStarted": false,
+    "nativeConfigurationPreparationAndFridaDatabaseConnectionVerified": true,
+    "unknownOptionsNativeSemanticsVerified": false,
+    "nativeActivitySchedulingOrRewardsVerified": false,
+    "completeReplacement": false
+  },
+  "candidateImageProbe": {
+    "passed": true,
+    "runtimeSHA256": "f351d94089ef955562cb9b64625c152b4e0c0fbb1b2d304f57aa8a6e4f5ce8ef",
+    "bundledFridaInputsSHA256": {
+      "frida.js": "395ba7db685ccd1e3942b5b24a54611fcdbbae71fa5b8693322ddb9762d560e5",
+      "frida.so": "669c0d4e13a50b2e114663d22cc5e6fc876303fffb2b685ecc48a47cb74b984a",
+      "frida_config.json": "89b1855ec9440f19cfb76b3eb5111586c4845e73247c53255e85f522400e697f"
+    },
+    "nestedOptionsAndFalseNullUnicodePreserved": true,
+    "passwordRotationAndRuntimeMirrorVerified": true,
+    "privatePermissionsVerified": true,
+    "operatorScriptAndLogsPreserved": true,
+    "unknownShapesRefusedBeforePluginWrites": 4,
+    "bundledInputsUnchanged": true,
+    "temporaryFilesCleaned": true,
+    "networkRequired": false,
+    "gameOrFridaBinaryExecuted": false,
+    "databaseConnectionOpened": false,
+    "nativeConsumerAcceptanceVerified": false,
+    "completeReplacement": false
+  },
+  "copiedSourceVerification": {
+    "filesChecked": 70,
+    "mismatches": [],
+    "passed": true,
+    "sourceCommit": "679cf9b4fce0ce4c9ea4adfe40c280dde2e634cc",
+    "manifestSHA256": "57672e964a3f7b66b204c2cdd7432c6d92a255f3daf6bf4c6d4d107df9d64608",
+    "scope": "tracked runtime/ubuntu and resources/plugins copied inputs; not a clean rebuild of native libraries or OCI image"
+  },
+  "capacityBudget": {
+    "freeBytes": 5609086976,
+    "baseReserveBytes": 2147483648,
+    "buildAndSqlPeakBytes": 268435456,
+    "managedConfigBackupPeakBytes": 67678325
+  },
+  "privateRestorePointArtifacts": {
+    "managed-game-config.tgz": {
+      "bytes": 14999299,
+      "sha256": "e72143abc593a67bf91c7c1fbb185f079782d161ddea633684cc413d9dd6ca35",
+      "mode": "0600"
+    },
+    "management.sql": {
+      "bytes": 460763,
+      "sha256": "8377ca14ebb61f12618fb383bc404e6302ca1dd8eba6683471df2e351a9bad7e",
+      "mode": "0600"
+    },
+    "frida-progress.sql": {
+      "bytes": 1990,
+      "sha256": "72283348c24b401e58b2be6c4c43e12da9f0c841d5b7a54b42a82c7cdf3fff61",
+      "mode": "0600"
+    }
+  },
+  "operatorScriptSHA256": "f8e1f04b58985c82ccc83403f475b50afecc38c38d38ddabf5f09f3cef08dbd3",
+  "terminalState": {
+    "phase": "DEPLOYED_CONFIG_AND_NATIVE_CONNECTION_VERIFIED_GAMEPLAY_PENDING",
+    "operatorProcessExited": true,
+    "gameId": "087c2bb08c547cdfda1e30c3dcaf317adad63c3865b129db1537ef2f5b702fb8",
+    "gameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+    "gameStartedAt": "2026-10-28T03:57:50.407519405Z",
+    "gameHealthy": true,
+    "adminIdImageAndStartedAtUnchanged": true,
+    "all641ReceiptHashesRechecked": true,
+    "fridaProgressRecordCount": 0
+  },
+  "completeReplacement": false,
+  "validationLimits": [
+    "Native initialization proves that both actual Frida channels opened the configured database and initialized activity storage; scheduling, rewards and original-tool equivalence were not tested.",
+    "The deployed private db_config had zero unknown options. Nested custom options were exercised by the S44/S45 isolated real-image probes, not by a private custom-options native scenario.",
+    "frida.game_event contains zero records; unchanged empty progress does not prove native loading or saving a valid nonempty activity checkpoint.",
+    "The image is the pinned S6 base plus one verified Python file layer; all 70 tracked copied runtime/plugin files match current source, but a clean rebuild of native libraries and the complete OCI image remains unverified.",
+    "Game was actually recreated and became healthy; admin was not recreated. Physical failure injection and a game-image rollback drill were not performed.",
+    "The old S6 image is retained and still has the known db_config overwrite behavior; its rollback safety must not be generalized to configurations with custom options.",
+    "Protected chart settings exclude the native-owned next_time deadline; runtime scheduling owns that field.",
+    "Gateway INI values were compared to a fresh full private snapshot; this does not close the first S42 run historical snapshot gap.",
+    "Only the bound 86-level test instance was checked."
+  ],
+  "localChecks": {
+    "productionCodeUnchangedSinceS44": true,
+    "s44RegressionEvidence": "docs/validation/admin-frida-config-preservation-s44-2026-10-28.json",
+    "gameRuntimeChangedFromS6Source": [
+      "services/game/runtime/ubuntu/plugins.py"
+    ],
+    "operatorSyntaxPassed": true,
+    "mavenAndFrontendBuildRerun": false,
+    "reason": "Only the already-tested game Python runtime was deployed; no Java or Vue changes."
+  }
+}
