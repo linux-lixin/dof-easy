@@ -1072,7 +1072,9 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json"
+          ],
           "managementImplementation": {
             "state": "read_only_implemented",
             "api": "/api/v1/admin/dof/records/dungeon-runs",
@@ -1080,7 +1082,10 @@
             "executor": "bound_instance_read_only_sql",
             "nativeLocation": "dof_native.map_history",
             "effectState": "native_equivalence_pending",
-            "diagnosisApi": "/api/v1/admin/dof/records/dungeon-runs/schema"
+            "diagnosisApi": "/api/v1/admin/dof/records/dungeon-runs/schema",
+            "sharedRecordFilterUiImplemented": true,
+            "sharedRecordFilterUiMockVerified": true,
+            "sharedRecordFilterUiRealDeploymentVerified": false
           }
         },
         {
@@ -1096,7 +1101,9 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json"
+          ],
           "managementImplementation": {
             "state": "read_only_implemented",
             "api": "/api/v1/admin/dof/records/auction-transactions",
@@ -1104,7 +1111,10 @@
             "executor": "bound_instance_read_only_sql",
             "nativeLocation": "dof_native.auction_house_log",
             "effectState": "native_equivalence_pending",
-            "diagnosisApi": "/api/v1/admin/dof/records/auction-transactions/schema"
+            "diagnosisApi": "/api/v1/admin/dof/records/auction-transactions/schema",
+            "sharedRecordFilterUiImplemented": true,
+            "sharedRecordFilterUiMockVerified": true,
+            "sharedRecordFilterUiRealDeploymentVerified": false
           }
         },
         {
@@ -1120,7 +1130,9 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json"
+          ],
           "managementImplementation": {
             "state": "read_only_implemented",
             "api": "/api/v1/admin/dof/records/chat-reports",
@@ -1128,7 +1140,10 @@
             "executor": "bound_instance_read_only_sql",
             "nativeLocation": "taiwan_cain_log.log_police_chatting",
             "effectState": "native_equivalence_pending",
-            "diagnosisApi": "/api/v1/admin/dof/records/chat-reports/schema"
+            "diagnosisApi": "/api/v1/admin/dof/records/chat-reports/schema",
+            "sharedRecordFilterUiImplemented": true,
+            "sharedRecordFilterUiMockVerified": true,
+            "sharedRecordFilterUiRealDeploymentVerified": false
           }
         },
         {
