@@ -35,6 +35,7 @@ public class ActivityConfigService {
         public String name, label, type, group, hint;
         public long min, max;
         public boolean readonly;
+        public int maxLength = 255;
         @com.fasterxml.jackson.annotation.JsonProperty("default") public Object initial;
     }
     public static class Section {
@@ -228,7 +229,7 @@ public class ActivityConfigService {
                 if(n<f.min || n>f.max) throw new Failure(400,f.label+"超出允许范围");
                 result.put(f.name,n);
             } else if("varchar".equals(f.type)) {
-                if(!(value instanceof String) || text.length()>255 || text.codePoints().anyMatch(n->n<32 || n>65535)) throw new Failure(400,f.label+"格式错误或超过 255 字符");
+                if(!(value instanceof String) || text.length()>f.maxLength || text.codePoints().anyMatch(n->n<32 || n>65535)) throw new Failure(400,f.label+"格式错误或超过 "+f.maxLength+" 字符");
                 if((f.name.equals("name") || f.name.equals("d_Name") || f.name.equals("Dname")) && text.trim().isEmpty()) throw new Failure(400,"请填写活动名称");
                 result.put(f.name,text);
             } else {
@@ -245,7 +246,7 @@ public class ActivityConfigService {
             for(int i=1;i<=4;i++) pair(result,"Cum_"+i,"C_num_"+i);
         }
         if(s.key.equals("rewards")) for(int i=1;i<=3;i++) pair(result,"item"+i,"item_code"+i);
-        if(s.key.equals("charts-rewards")) {
+        if(s.key.equals("charts-rewards")&&!trustedRestore) {
             String[] ids=result.get("code_data").toString().split(",",-1), amounts=result.get("code_num").toString().split(",",-1);
             if(ids.length!=amounts.length || ids.length>50)throw new Failure(400,"排行奖励道具和数量不匹配");
             for(int i=0;i<ids.length;i++)if(!ids[i].matches("[1-9][0-9]{0,9}") || !amounts[i].matches("[1-9][0-9]{0,9}") || Long.parseLong(ids[i])>2147483647L || Long.parseLong(amounts[i])>2147483647L)throw new Failure(400,"排行奖励编号或数量无效");
@@ -281,6 +282,7 @@ public class ActivityConfigService {
             else if(s.key.equals("recovery"))NativeRecoveryRules.requireSchema(c);
             else if(s.key.equals("cross-border"))NativeCrossBorderRules.requireSchema(c);
             else NativeChartsRules.requireSchema(c);
+            if(s.key.equals("charts-rewards"))NativeChartsRewardsRules.requireSchema(c);
             cancelActor(c,admin());
         }
         String sql=null;
@@ -317,7 +319,7 @@ public class ActivityConfigService {
         if(actorLock || Arrays.asList("inheritance","recovery","cross-border","charts","charts-rewards").contains(s.key))locks+=",`d_taiwan`.`accounts` READ";
         if(s.key.startsWith("pot-")&&!s.key.equals("pot-switch"))locks+=",dof_native.earthenware_pot_item READ";
         if(s.key.equals("shop"))locks+=",dof_native.new_shop READ,dof_native.timed_task READ";
-        if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ";
+        if(s.key.equals("charts-rewards"))locks+=",dof_native.game_charts_config READ"+NativeChartsRewardsRules.dependencyLocks(c);
         if(s.key.equals("collection"))locks+=",dof_native.Collection_box_user_item READ";
         if(legacyExists(c))locks+=","+AUDIT+" READ";
         try {
@@ -479,13 +481,14 @@ public class ActivityConfigService {
                 change.after=null;
             }else if(after==null) {
                 if(change.before!=null)throw new Failure(409,"被删除的配置编号已重新使用，拒绝覆盖");
-                change.after=validate(s,before,before,false);
+                change.after=validate(s,before,before,false,s.key.equals("charts-rewards"));
             }else {
                 if(change.before==null)throw new Failure(409,"当前配置已被删除，停止恢复");
                 if(s.key.equals("inheritance"))NativeInheritanceRules.restoreGuard(before,after,change.before);
                 if(s.key.equals("recovery"))NativeRecoveryRules.restoreGuard(before,after,change.before);
                 if(s.key.equals("cross-border"))NativeCrossBorderRules.restoreGuard(before,after,change.before);
                 if(s.key.equals("charts"))NativeChartsRules.restoreGuard(before,after,change.before);
+                if(s.key.equals("charts-rewards"))NativeChartsRewardsRules.restoreGuard(before,after,change.before);
                 change.after=new LinkedHashMap<>(change.before);
                 for(Field f:s.fields)if(!Objects.equals(String.valueOf(before.get(f.name)),String.valueOf(after.get(f.name)))) {
                     if(!Objects.equals(String.valueOf(change.before.get(f.name)),String.valueOf(after.get(f.name))))throw new Failure(409,"本次涉及的字段已有第三方修改："+f.label);

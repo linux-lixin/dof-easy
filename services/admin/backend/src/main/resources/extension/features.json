@@ -2534,8 +2534,8 @@
       {
         "id": "feature-044-02",
         "name": "膜拜记录及奖励配置",
-        "disposition": "奖励管理保护已补齐，待部署",
-        "delivery": "第0名膜拜奖励与排行榜奖励写入均要求status=0且is_mobai=0",
+        "disposition": "奖励配置本地CRUD及恢复通过，真实部署待验",
+        "delivery": "3000字符成对奖励、新增删除及关联恢复；排行、膜拜及已安装公益榜入口须停用，新增50对上限未经原工具对照",
         "adminEntry": "/admin/activities → charts/charts-rewards；排行/膜拜记录",
         "currentSwitch": "S36真实实例只读检查：status=1、is_mobai=1；没有改动现有入口",
         "owner": "QK",
@@ -2544,7 +2544,8 @@
         "consumer": "QK 原生奖励/调度；Frida 重复入口不启用",
         "configuration": "dof_native.game_charts_code；game_charts_config 两个独立入口同时检查",
         "evidence": [
-          "docs/validation/admin-native-charts-s36-2026-10-28.json"
+          "docs/validation/admin-native-charts-s36-2026-10-28.json",
+          "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
         ],
         "missing": "原工具菜单/默认值、真实部署、组件读取和实际结算/发奖仍待验；不能以配置保存或只读记录替代。",
         "required": "真实部署的预览/保存/回读/恢复、原生读取时机、完整结算与重复发奖防护验证；公式本身未新增执行器"
@@ -2589,14 +2590,16 @@
         "disposition": "缺资料关闭",
         "delivery": "资料调查收尾",
         "adminEntry": "/admin/extension-operations → 功能子项证据（无操作开关）",
-        "currentSwitch": "原生已有 status=1 保留；不新增结算启用",
+        "currentSwitch": "S37真实实例仅只读检查：fenghuo_charts_config缺失；不创建或开启",
         "owner": "QK",
         "gameplayVerified": false,
         "source": "配套在线奖励截图、第一阶段战令.txt、战力排行榜配置.txt；原生读取分支与表结构",
         "consumer": "QK 原生奖励/调度；Frida 重复入口不启用",
-        "configuration": "dof_native.online_rewards* / battle_pass / game_charts*",
-        "evidence": [],
-        "missing": "已有 game_charts_config.status=1 保留，配置/领取记录查询不等于公式及结算去重已验证；竞速/公益榜未找到完整独立执行证据。",
+        "configuration": "可选dof_native.fenghuo_charts_config；共享game_charts_code",
+        "evidence": [
+          "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
+        ],
+        "missing": "静态原网关引用确认共享奖励表；独立公益榜管理、规则、运行时读取及结算发奖仍待验。",
         "required": "完整配套规则、原生持久化与重复领取/结算验证"
       }
     ],

@@ -3212,7 +3212,8 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-native-charts-s36-2026-10-28.json"
+            "docs/validation/admin-native-charts-s36-2026-10-28.json",
+            "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
@@ -3232,6 +3233,26 @@
                 "docs/validation/admin-native-charts-s36-2026-10-28.json"
               ],
               "newConfigurationWritesEnabled": false
+            },
+            {
+              "location": "dof_native.game_charts_code",
+              "status": "local_reward_crud_and_targeted_restore_verified_deployment_pending",
+              "fieldsEditable": [
+                "top_index",
+                "code_data",
+                "code_num"
+              ],
+              "maxCharactersPerCsv": 3000,
+              "newEntryPairLimit": 50,
+              "originalToolPairLimitVerified": false,
+              "legacySnapshotRestorePreservesExactPairs": true,
+              "requiresBothEntriesDisabled": true,
+              "requiresInstalledSharedConsumerDisabled": true,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
+              ]
             }
           ]
         },
@@ -3305,7 +3326,9 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
+          ]
         }
       ]
     },

@@ -4,7 +4,7 @@ import { Message } from '@arco-design/web-vue';
 import Request from '../../../api/Request';
 import EquipmentBatchManager from './EquipmentBatchManager.vue';
 const batchBusy=ref(false);
-type Field = { name: string; label: string; type: string; group: string; min: number; max: number; readonly: boolean; hint?: string; default: any };
+type Field = { name: string; label: string; type: string; group: string; min: number; max: number; readonly: boolean; maxLength?: number; hint?: string; default: any };
 type Section = { key: string; title: string; primaryKey: string | null; autoId: boolean; writable?: boolean; deleteAllowed?: boolean; createAllowed?: boolean; notice?: string; fields: Field[] };
 type Row = { revision: string; values: Record<string, any> | null };
 type Edit = Row & { requestId: string; operation: 'upsert' | 'delete' | 'restore' | 'accept-current'; targetRequestId?: string; reason?: string };
@@ -245,7 +245,7 @@ onMounted(async () => {
               <a-col v-for="f in fields(group)" :key="f.name" :span="8">
                 <a-form-item :label="f.label" :extra="f.hint">
                   <a-input-number v-if="f.type === 'int'" v-model="edit.values[f.name]" :min="f.min" :max="f.max" :precision="0" :disabled="saving || formFrozen || edit.operation !== 'upsert' || section.writable === false || f.readonly || (f.name === section.primaryKey && (section.autoId || edit.revision !== 'new'))" />
-                  <a-input v-else v-model="edit.values[f.name]" :max-length="255" :disabled="saving || formFrozen || edit.operation !== 'upsert' || section.writable === false || f.readonly" :placeholder="f.type === 'date' ? 'YYYY-MM-DD' : f.type === 'datetime' ? 'YYYY-MM-DD HH:mm:ss' : ''" />
+                  <a-input v-else v-model="edit.values[f.name]" :max-length="f.maxLength ?? 255" :disabled="saving || formFrozen || edit.operation !== 'upsert' || section.writable === false || f.readonly" :placeholder="f.type === 'date' ? 'YYYY-MM-DD' : f.type === 'datetime' ? 'YYYY-MM-DD HH:mm:ss' : ''" />
                 </a-form-item>
               </a-col>
             </a-row>

@@ -23,7 +23,7 @@ public class NativeChartsContractTest {
         ((List<String>)ReflectionTestUtils.getField(fixture,"created")).add("dof_native");
         sql("CREATE TABLE dof_native.game_charts_config(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,min_zhanli INT NOT NULL DEFAULT 0,jiangli_day INT NOT NULL DEFAULT 1,jiangli_hour INT NOT NULL,is_mobai INT NOT NULL DEFAULT 0,status INT NOT NULL DEFAULT 1,next_time DATETIME NULL) ENGINE=MyISAM");
         sql("INSERT INTO dof_native.game_charts_config VALUES(1,100,1,3,0,0,'2026-11-01 03:00:00')");
-        sql("CREATE TABLE dof_native.game_charts_code(top_index INT PRIMARY KEY,code_data VARCHAR(255),code_num VARCHAR(255)) ENGINE=MyISAM");
+        sql("CREATE TABLE dof_native.game_charts_code(top_index INT PRIMARY KEY,code_data VARCHAR(3000) NOT NULL,code_num VARCHAR(3000) NOT NULL) ENGINE=InnoDB");
         sql("INSERT INTO dof_native.game_charts_code VALUES(0,'3037','1')");
         ManagedOperationJournal journal=new ManagedOperationJournal();ReflectionTestUtils.setField(journal,"access",access);
         service=new ActivityConfigService();ReflectionTestUtils.setField(service,"journal",journal);

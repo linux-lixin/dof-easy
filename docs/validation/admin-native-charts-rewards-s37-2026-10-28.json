@@ -1,0 +1,249 @@
+{
+  "stage": "S37",
+  "date": "2026-10-28",
+  "verificationBaseCommit": "c61f792",
+  "purpose": "Ranking and worship reward configuration: schema checks, paired long CSV, reversible CRUD and optional shared-consumer guard",
+  "gatewaySourceProof": {
+    "sourceSHA256": "67553a3b45de80ebea5f767f6e3a51d577d2cbb6c6647bd4c97037cb50a41f9b",
+    "literals": [
+      {
+        "text": "select code_data,code_num,top_index from qk.game_charts_code where top_index > 0 order by top_index;",
+        "address": 5032992,
+        "verifiedReferenceAddresses": [
+          4649983,
+          4675598
+        ]
+      },
+      {
+        "text": "select min_zhanli,jiangli_day,jiangli_hour,min_baodi_zhanli from qk.fenghuo_charts_config where status = 1 and next_time is not null and DATE_FORMAT(next_time, '%Y-%m-%d %H') <= DATE_FORMAT(NOW(), '%Y-%m-%d %H') and (SELECT count(1) FROM qk.game_charts_logs WHERE DATE_FORMAT(charts_day, '%Y-%m-%d %H') = DATE_FORMAT(NOW(), '%Y-%m-%d %H')) =0;",
+        "address": 5037376,
+        "verifiedReferenceAddresses": [
+          4674745
+        ]
+      },
+      {
+        "text": "UPDATE qk.fenghuo_charts_config SET next_time = DATE_ADD(CURDATE(), INTERVAL jiangli_day DAY) + INTERVAL jiangli_hour HOUR WHERE status = 1;",
+        "address": 5037720,
+        "verifiedReferenceAddresses": [
+          4674940
+        ]
+      },
+      {
+        "text": "select code_data,code_num,top_index from qk.game_charts_code where top_index =0 order by top_index;",
+        "address": 5038448,
+        "verifiedReferenceAddresses": [
+          4678320
+        ]
+      },
+      {
+        "text": "SELECT t1.cid, CONVERT ( unhex( hex( CONVERT (t3.charac_name USING latin1))) USING utf8 ) NAME, IFNULL(t2.occupation, '未获取职业'), t1.zzs FROM ( SELECT aa.cid, sum(aa.sponsor) zzs FROM qk.cdk aa WHERE to_days(aa.Redemptiontime) = to_days(now()) AND aa.exchange = 1 GROUP BY aa.cid ) t1 LEFT JOIN qk.fightingcapacity AS t2 ON t1.cid = t2.cid LEFT JOIN taiwan_cain.charac_info t3 ON t3.charac_no = t1.cid WHERE t1.zzs > ( SELECT t4.min_zhanli FROM qk.fenghuo_charts_config t4 WHERE t4. STATUS = 1 LIMIT 1 ) ORDER BY t1.ZZS DESC, t1.cid DESC LIMIT 15;",
+        "address": 5045912,
+        "verifiedReferenceAddresses": [
+          4763530
+        ]
+      },
+      {
+        "text": "SELECT t1.cid, CONVERT ( unhex( hex( CONVERT (t3.charac_name USING latin1))) USING utf8 ) NAME, IFNULL(t2.occupation, '未获取职业'), t1.zzs FROM ( SELECT aa.cid, sum(aa.sponsor) zzs FROM qk.cdk aa WHERE TO_DAYS(NOW()) - TO_DAYS(aa.Redemptiontime) = 1 AND aa.exchange = 1 GROUP BY aa.cid ) t1 LEFT JOIN qk.fightingcapacity AS t2 ON t1.cid = t2.cid LEFT JOIN taiwan_cain.charac_info t3 ON t3.charac_no = t1.cid WHERE t1.zzs > ( SELECT t4.min_zhanli FROM qk.fenghuo_charts_config t4 WHERE t4. STATUS = 1 LIMIT 1 ) ORDER BY t1.ZZS DESC, t1.cid DESC LIMIT 15;",
+        "address": 5046472,
+        "verifiedReferenceAddresses": [
+          4764106
+        ]
+      },
+      {
+        "text": "SELECT top_index,code_data,code_num FROM qk.game_charts_code;",
+        "address": 5047448,
+        "verifiedReferenceAddresses": [
+          4766781
+        ]
+      },
+      {
+        "text": "SELECT code_data, code_num FROM qk.game_charts_code, qk.game_charts_config WHERE top_index = 0 AND is_mobai = 1",
+        "address": 5049568,
+        "verifiedReferenceAddresses": [
+          4777265
+        ]
+      }
+    ],
+    "originalCodeExecuted": false,
+    "runtimeConsumptionVerified": false
+  },
+  "standardMaven": {
+    "command": "mvn -o -Dmaven.test.skip=false test",
+    "tests": 525,
+    "passed": 203,
+    "skipped": 322,
+    "failures": 0,
+    "errors": 0,
+    "skipsAreNotPasses": true,
+    "logSHA256": "db818abd5db2d9290c9b2ea268514f4bfd1de405c69303f19ced737e786c3c69"
+  },
+  "isolatedSql": {
+    "passed": true,
+    "tests": 44,
+    "failures": 0,
+    "assumptionSkips": 0,
+    "ignored": 0,
+    "databaseVersion": "5.6.51",
+    "nativeChartsTests": 8,
+    "nativeChartsRewardsTests": 12,
+    "equipmentRegressionTests": 24,
+    "fixtureSchemasRemoved": true,
+    "realServiceSql": true,
+    "syntheticDataOnly": true,
+    "serverAccessed": false,
+    "nativeGameplayVerified": false,
+    "completeReplacement": false
+  },
+  "isolation": {
+    "schema": 1,
+    "serverAccessed": false,
+    "network": "private namespace; no routes or external interfaces",
+    "rootReadOnly": true,
+    "inputsReadOnly": true,
+    "loopbackOnly": true,
+    "inputsFingerprint": "4770ed820c7c5001cb5cc7d8739384eb1414493d1f947bbc06d84c48e4e05698",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "command": [
+      "/bin/sh",
+      "/inputs/run.sh"
+    ],
+    "completed": true,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "evidenceValid": true
+  },
+  "classIdentity": {
+    "allClassesMatch": true,
+    "groups": [
+      {
+        "kind": "main",
+        "count": 334,
+        "differentClasses": []
+      },
+      {
+        "kind": "test",
+        "count": 126,
+        "differentClasses": []
+      }
+    ]
+  },
+  "frontendBuild": {
+    "passed": true,
+    "command": "npm run build",
+    "sourceIdentity": {
+      "allTrackedFrontendInputsMatch": true,
+      "trackedFiles": 221
+    }
+  },
+  "mockBrowserChecks": {
+    "rewards": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeGameplayVerified": false,
+      "nativeWritesInMock": 3,
+      "externalConfigChangesInMock": 1,
+      "checks": [
+        "fixed native ranks expose reversible configuration create and delete, including worship rank zero",
+        "both 549-character native CSV fields survive form editing, exact numbered preview and submission without 255-character truncation",
+        "deletion uses its own preview and operation ID without a hidden upsert",
+        "history restores the deleted long pair with a fresh linked ID and server-owned snapshots",
+        "a paired restore conflict is visible and never submits a replacement write"
+      ],
+      "pageErrors": 0
+    },
+    "charts": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeGameplayVerified": false,
+      "nativeWritesInMock": 1,
+      "checks": [
+        "existing-only ranking module exposes edit but no create or delete",
+        "identity, independent entry flags and native deadline remain disabled; submission requires preview",
+        "one numbered preview and commit change only threshold/interval/hour and retain original native-owned fields",
+        "native entry guard failure is visible and cannot proceed to commit",
+        "schema failure stays visible instead of becoming an empty successful list"
+      ],
+      "pageErrors": 0
+    },
+    "activityRecovery": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeWritesInMock": 2,
+      "checks": [
+        "preview freezes exact values and UUID before any native submission",
+        "lost native response retains UUID and freezes inputs; storage contains identifiers only",
+        "another lookup cannot overwrite an unresolved operation",
+        "reload reads committed receipt and clears the guard without replaying configuration writes",
+        "independent activity can be edited while the original activity keeps its pending UUID",
+        "section switch and reload recover exact original preview, with no invented UUID or values",
+        "lost cancellation reply reconciles same control ID; cancelled original cannot later write",
+        "confirmed missing preview with no native submit can explicitly return to editing",
+        "schema failures remain visible rather than successful empty records",
+        "permission failures remain visible"
+      ],
+      "pageErrors": 0
+    },
+    "equipmentBatch": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeGameplayVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "syntheticNativeWrites": 2,
+      "checks": [
+        "clear preview reserves an independent task ID before any native mutation; storage keeps identifiers",
+        "reload after a withheld step reply reads the original task and preserves the completed item",
+        "cancel preview and committed reply loss retain the control ID; unsubmitted items stop without repeating completed writes",
+        "recovery uses a new task explicitly linked to the selected original task",
+        "import sends raw file bytes; PREPARED child reconciliation records not applied without automatic retry"
+      ],
+      "pageErrors": 0
+    }
+  },
+  "liveReadOnlyPreflight": {
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "table": "game_charts_code",
+    "engine": "InnoDB",
+    "primaryKey": "top_index",
+    "rewardColumnsMaxLength": 3000,
+    "rewardColumnsNullable": false,
+    "rows": 12,
+    "maximumExistingPairs": 2,
+    "optionalSharedConsumerTablePresent": false,
+    "rankingStatus": 1,
+    "worshipStatus": 1,
+    "serverWritesPerformed": false,
+    "imageBuiltOrDeployed": false
+  },
+  "sourceHashes": {
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/ActivityConfigService.java": "087990bbd0195dda69a8bee4d548967e4ad5437dd16b8fd55a8c8fb26127131a",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeConfigSideEffects.java": "2019f158b66767329972cd714aea47cb26209987b5a3b758e522b2c4e9cd28ef",
+    "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/NativeChartsContractTest.java": "ee052099cfd6c44697744c3a3e0cbcbc782961a09a2ccbcd130d24c62281daff",
+    "services/admin/frontend/src/views/admin/activities/ActivityManager.vue": "343215aa08b3d409aac98f2a39a5f45627b58669e945c6f490d2f26de42189f1",
+    "tests/integration/admin/charts-contract-probe.py": "d5cb5cb28c84c80df394ade6b538090ce299dc87b96642fdfdee6dd35267ec39",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeChartsRewardsRules.java": "c33135e55e3ad3d47d033465800f476074a4462fc7727dea047f2207330a4f86",
+    "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/NativeChartsRewardsContractTest.java": "9a39a67153216d81c00b9f59ca8e128f795003c44dca2109295b43a5bab68d7f",
+    "tests/integration/admin/native-charts-rewards-page.cjs": "168f827e50d4faa45b5d9091708d32de6d08716721dd32b97d9e45cc9b6ff2ad"
+  },
+  "remaining": [
+    "Deploy matched backend/frontend and verify actual administrator navigation, existing-active-entry refusal, read/write/recovery and old-image history compatibility.",
+    "Original Windows menus, defaults and import/export remain manual; new-entry web limit of 50 pairs is not claimed as the original-tool limit.",
+    "Native component consumption, ranking formula, scheduling, worship and actual rewards remain unverified.",
+    "Other work packages, faults, raids, resources and multiple-level acceptance retain their existing unfinished status."
+  ],
+  "realDeploymentVerified": false,
+  "originalToolEquivalenceVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "completeReplacement": false,
+  "inventoryTests": {
+    "passed": 4,
+    "failed": 0
+  }
+}

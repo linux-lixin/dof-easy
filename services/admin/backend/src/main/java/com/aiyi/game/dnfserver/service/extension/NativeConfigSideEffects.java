@@ -10,7 +10,7 @@ final class NativeConfigSideEffects {
         return new ActivityConfigService.Failure(409,"原生配置的触发器、外键或检查权限不兼容，停止写入");
     }
     static void require(Connection c,String table) throws SQLException {
-        if(!Arrays.asList("inheritance","item_recovery","cross_border","game_charts_config").contains(table))throw incompatible();
+        if(!Arrays.asList("inheritance","item_recovery","cross_border","game_charts_config","game_charts_code").contains(table))throw incompatible();
         // Without TRIGGER visibility an empty information_schema result is not evidence.
         String identity;
         try (Statement s = c.createStatement(); ResultSet r = s.executeQuery("SELECT CURRENT_USER()")) {
