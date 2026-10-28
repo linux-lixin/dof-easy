@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref, reactive} from "vue";
-import {Message, Modal} from "@arco-design/web-vue";
+import {Message} from "@arco-design/web-vue";
 import Request from "../../../api/Request";
 import RoleAttributesEditor from "./RoleAttributesEditor.vue";
 import ManagedPostal from "../../../components/ManagedPostal.vue";
@@ -185,23 +185,6 @@ const openSendMail = (record: any) => {
 	sendMailOption.value.open = true;
 };
 
-const overTasks = (characNo: number) => {
-	Modal.confirm({
-		title: "提示",
-		content: "确定要完成该角色的所有任务吗？",
-		okText: "确定",
-		cancelText: "取消",
-		onOk: async () => {
-			try {
-				await Request.post(`api/v1/charac/${characNo}/overTasks`);
-				Message.success("操作成功!");
-			} catch (e: any) {
-				Message.error(e?.message || "操作失败");
-			}
-		}
-	});
-};
-
 onMounted(() => {
 	window.addEventListener("resize", () => {
 		windowHeight.value = window.innerHeight - 250;
@@ -281,7 +264,7 @@ onMounted(() => {
 							<template #content>
 								<a-doption @click="openEdit(record)">编辑/详情</a-doption>
 									<a-doption @click="openSendMail(record)">发送邮件</a-doption>
-								<a-doption @click="overTasks(record.characNo)">完成任务</a-doption>
+								<a-doption disabled title="任务修改与材料发放的预览、回执和结果核对尚未接通">完成任务（待适配）</a-doption>
 							</template>
 						</a-dropdown>
 					</template>

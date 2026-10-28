@@ -19,6 +19,10 @@ class ContainerMenu(unittest.TestCase):
         self.pvf.write_bytes(b'p' * 2048)
         self.state = patch.object(menu.manager, 'STATE', self.root / 'state')
         self.state.start(); self.addCleanup(self.state.stop)
+        # Menu routing tests must not depend on host ports used by live services.
+        # The manager's port validation has its own tests.
+        ports = patch.object(menu.manager, 'check_ports')
+        ports.start(); self.addCleanup(ports.stop)
         for name in ('system_check','local_docker','prepare_dependencies','disk_check','create_swap','firewall'):
             mock = patch.object(menu.host, name); mock.start(); self.addCleanup(mock.stop)
         mock = patch.object(menu.host,'memory',return_value={'MemTotal':8*menu.host.GIB,'MemAvailable':5*menu.host.GIB,'SwapTotal':0})
