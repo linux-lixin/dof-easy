@@ -124,5 +124,7 @@
     "324项仍为条件跳过；真实角色、记录数据、组件消费、非空进度及完整玩法仍待验。",
     "实际归档恢复引用S47，不宣称S50重新执行文件、数据库或应用恢复。",
     "完整干净源码OCI构建与原生依赖重建仍属于R8，不能用父镜像加JAR一层替代。"
-  ]
+  ],
+  "implementationCommit": "684af30e31f4e737f79b405f19fa301e889eef5d",
+  "implementationCommitScope": "333 Java/resource inputs matched the deployed snapshot before subsequent ledger-only edits; later ledger metadata is not automatically deployed."
 }

@@ -2,15 +2,17 @@
 
 当前 admin 部署快照更新至 2026-10-28（UTC+08:00）；下方 2026-10-26 的集成记录保留历史适用范围，不是实时监控。
 
-**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 本轮实际核对并发布至 admin S48：镜像 `sha256:a07c47be6847fc39ab05f115bd4a9608183faf3251af31e38dcf74365106210c`，JAR `cd25334f34b54c3341490115c72ccb456efe37a6e5861477826bf45eb28facae`，源码 `876429e`，前端来自 `bb01d5a`。game 保持 S45 镜像 `sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073`，本轮没有重启游戏；admin 宿主端口仍18080。两批协调进程均已退出，游戏健康。这是本轮留存快照，后续操作仍须重新核对。
+**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前留存部署为 admin S50：镜像 `sha256:702ae04862184b1539cc80c4459b2f3f67904612bc164905e17472cd1ab3dff6`，JAR `6aba2ac51e52916f1f9d06c34f62e3dfa0e962f1c9efd495a14db50fe1beba99`，实现提交 `684af30`，前端仍来自 `bb01d5a`。game 保持 S45 镜像 `sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073`，本批未重启游戏；admin 宿主端口18080。部署进程已退出、游戏健康；后续操作仍须重新核对身份与容量。
 
-S47先只更新S46记录页前端，保留S41后端；S48随后单独发布旧SQL入口封闭，188个前端文件保持。两批7项真实记录页检查均通过，页面错误0，固定非法字段触发真实400并验证本地错误展示和恢复；没有模拟响应。交易和签到取样仍为0行，不能认为有数据分页、数据库编码或原工具等价已通过，历史签到409原因仍未知。S48的任意SQL入口匿名拒绝，管理员旧读、旧写和空请求均410，提交内容不回显；其他直接写入口协议审计继续。
+S47记录页前端、S48旧任意SQL入口封闭及两批各7项真实浏览器检查继续有效。S50再封闭旧无编号公告写入口：真实HTTP验证匿名拒绝、管理员空/旧/伪编号请求410及不回显；SQL入口仍410。实际实例缺少 `d_taiwan.login_notice`，未建表；公告固定协议、原生读取及消费尚未完成。本批前端188个文件保持，未重新操作浏览器。签到200且取样0行，交易仍为空，历史签到409原因未知；30类有数据记录仍待验。
 
-本轮核对真实数据库UUID、挂载及305张InnoDB/43张MyISAM，未转换引擎。S47将固定私有admin归档的57个条目、1,757,859,581字节恢复到独立新目录，完整字节、属主、权限及mtime通过，原目录保持；这不等同数据库或应用恢复。两批641条回执及受保护数据、密钥PVF保持，S48最终预算与实际均满足2GiB基础余量。原恢复点及恢复副本保留。
+S49已核对来源锁匹配的晴空免授权2.8原工具EXE/libxl.dll及原始客户端启动器/DLL，并排除旧的错误工具副本。本机WSL独立MySQL5.6参考库由21份原始种子建立，仅127.0.0.1:33307开放audit只读，UUID独立；没有复制真实玩家数据。原工具只确认初始登录页，用户报告已填连接字段，随后电脑操作收到物理Esc停止，未继续点击；完整菜单、网页逐项对照、客户端登录及多开均待验。参考库三次准备失败和首次缺表查询失败保留，详见[S49](../validation/admin-original-reference-s49-2026-10-28.json)。
 
-标准Maven528项中204通过、324条件跳过，0失败/错误，已[逐项登记条件](../validation/admin-maven-conditions-r1-2026-10-28.json)。Windows POSIX能力错误和离线缺clean插件的失败保留，不宣称干净完整构建已通过。S25/S27/S29装备配置、S33段间重建、S42排行榜恢复、S43只读回退及S45配置保留证据继续有效；有效非空Frida进度、完整玩法和原工具等价仍待验。
+S50核对UUID、挂载和保护数据，641条回执摘要、配置/奖励/钱包、密钥PVF及游戏身份/启动时间保持，2GiB基础余量满足。S47真实admin归档57条目、1,757,859,581字节已恢复到独立目录，完整字节与元数据通过；S50引用该证据，不代表新做数据库或应用恢复。恢复点及旧镜像保留，305 InnoDB/43 MyISAM引擎不转换。
 
-继续沿用71类239项、wp01～wp13和R0～R8；所有工作包保持未完成，不按接口或测试数量推算完成率。详见[原执行台账](../../services/admin/backend/src/main/resources/dof/execution-plan.json)、[实施记录](../admin/replacement-implementation.md)、[S47部署与恢复](../validation/admin-record-filter-deployment-s47-2026-10-28.json)及[S48部署](../validation/admin-sql-retirement-s48-2026-10-28.json)。镜像内台账固定在构建快照，后续证据不会自动进入部署。
+标准Maven532项中208通过、324条件跳过，0失败/错误，新增4项公告HTTP回归通过；[跳过条件逐项登记](../validation/admin-maven-conditions-s50-2026-10-28.json)。Windows POSIX错误、离线缺clean插件失败继续保留，不宣称干净完整构建通过。既有装备、排行榜、只读回退和Frida配置保留证据沿用原范围；非空玩家进度、完整玩法和原工具等价待验。
+
+继续沿用71类239项、wp01～wp13和R0～R8，所有包未完成，不推算完成率。详见[原执行台账](../../services/admin/backend/src/main/resources/dof/execution-plan.json)、[实施记录](../admin/replacement-implementation.md)、[S47](../validation/admin-record-filter-deployment-s47-2026-10-28.json)、[S48](../validation/admin-sql-retirement-s48-2026-10-28.json)和[S50部署](../validation/admin-notice-retirement-s50-2026-10-28.json)。后续台账更新不会自动进入镜像。
 
 S26 为回收规则本地实现批次，标准 Maven、136 项隔离 SQL、前端构建及模拟页面证据保留；S27 在此基础上完成真实部署配置与恢复验收。原生玩家操作和原工具对照仍待验，见 [S26 本地验收](../validation/admin-recovery-s26-2026-10-28.json)。
 
