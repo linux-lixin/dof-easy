@@ -35,4 +35,6 @@ mvn package -DskipTests
 
 活动配置入口与验收边界见[签到、战令与收集箱管理](activities.md)。
 
+免授权版全量替代的实施进度、团本与插件文件管理接口、部署挂载及未完成项见[admin 替代实施记录](replacement-implementation.md)。
+
 原生网页适配的发布范围、私有输入及验收限制见 [源码发布说明](../dof/publication.txt)，隔离部署见 [部署与恢复](../dof/deployment.txt)，PVF 与配套包接口见 [协议与操作说明](../dof/protocol.txt)。

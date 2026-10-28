@@ -29,6 +29,9 @@ public class NativeScriptFileCodecTest {
             ByteArrayOutputStream out=new ByteArrayOutputStream();
             NativeScriptFileCodec.Result r=NativeScriptFileCodec.encode(new ByteArrayInputStream(original),out,original.length,sha(original),0x12345678,compressed,trailer());
             assertEquals(sha(out.toByteArray()),r.artifactSha256);assertEquals(original.length,r.sourceBytes);assertEquals(out.size(),r.artifactBytes);
+            NativeScriptFileCodec.Result verified=NativeScriptFileCodec.verify(new ByteArrayInputStream(out.toByteArray()),r.artifactBytes,
+                    original.length,sha(original),r.artifactSha256,r.nativeChecksum,0x12345678,compressed);
+            assertEquals(r.artifactSha256,verified.artifactSha256);
             PushbackInputStream wire=new PushbackInputStream(new ByteArrayInputStream(out.toByteArray()),65536);
             assertArrayEquals(Arrays.copyOf(original,56),read(wire,56));ByteArrayOutputStream index=new ByteArrayOutputStream();
             if(compressed)NativeScriptCompression.decodeIndex(wire,index,256,0x98765432,0x12345678);
@@ -37,6 +40,34 @@ public class NativeScriptFileCodecTest {
             assertArrayEquals(Arrays.copyOfRange(original,312,original.length),read(wire,43));
             assertArrayEquals(trailer(),read(wire,1280));assertEquals(-1,wire.read());
         }
+    }
+    @Test public void completeVerificationRejectsWrongPairingCorruptionAndFileBoundaries()throws Exception {
+        byte[] original=source();
+        for(boolean compressed:new boolean[]{false,true}) {
+            ByteArrayOutputStream out=new ByteArrayOutputStream();
+            NativeScriptFileCodec.Result r=NativeScriptFileCodec.encode(new ByteArrayInputStream(original),out,original.length,sha(original),8,compressed,trailer());
+            byte[] artifact=out.toByteArray();
+            // Recompute ciphertext hash after tampering: source and trailer checks
+            // must still reject it, rather than trusting the encoder's own digest.
+            for(int offset:new int[]{0,44,56,artifact.length-1281,artifact.length-1280,artifact.length-1}) {
+                byte[] damaged=artifact.clone();damaged[offset]^=1;
+                rejected(damaged,damaged.length,original.length,sha(original),sha(damaged),r.nativeChecksum,8,compressed);
+            }
+            rejected(artifact,artifact.length,original.length,sha(original),r.artifactSha256,r.nativeChecksum,9,compressed);
+            rejected(artifact,artifact.length,original.length,sha(original),r.artifactSha256,r.nativeChecksum,8,!compressed);
+            rejected(artifact,artifact.length-1,original.length,sha(original),r.artifactSha256,r.nativeChecksum,8,compressed);
+            rejected(artifact,artifact.length+1,original.length,sha(original),r.artifactSha256,r.nativeChecksum,8,compressed);
+            rejected(Arrays.copyOf(artifact,artifact.length-1),artifact.length,original.length,sha(original),r.artifactSha256,r.nativeChecksum,8,compressed);
+            rejected(Arrays.copyOf(artifact,artifact.length+1),artifact.length,original.length,sha(original),r.artifactSha256,r.nativeChecksum,8,compressed);
+            Thread.currentThread().interrupt();
+            try {NativeScriptFileCodec.verify(new ByteArrayInputStream(artifact),artifact.length,original.length,sha(original),r.artifactSha256,r.nativeChecksum,8,compressed);fail();}
+            catch(InterruptedIOException expected) { }finally {Thread.interrupted();}
+        }
+    }
+    private void rejected(byte[] artifact,long length,long sourceLength,String sourceHash,String artifactHash,
+            String checksum,int mask,boolean compressed)throws Exception {
+        try {NativeScriptFileCodec.verify(new ByteArrayInputStream(artifact),length,sourceLength,sourceHash,artifactHash,checksum,mask,compressed);fail("Invalid complete candidate accepted");}
+        catch(IOException expected) { }
     }
     @Test public void sameNativeChecksumCannotHideChangedContentOrMask() throws Exception {
         byte[] original=source();NativeScriptFileCodec.Result[] results=new NativeScriptFileCodec.Result[3];
@@ -89,6 +120,11 @@ public class NativeScriptFileCodecTest {
                 assertEquals(-1,expected.read());assertEquals(Files.size(reference),result.artifactBytes);
                 assertEquals(compressed?"4f0357a87d1d5dee3a020c1bbd22f37d4614f878c98ab263ceef3ec742f3e515":"e34592496e8d43679bb18beb4287d0c7c50a08b0cff9d088e16993981825db57",result.artifactSha256);
                 assertEquals(compressed?"6dc8b73d64fc03a21493bae8ac690a03":"4ce85986e4a3b9c05b4052fff849dea7",result.nativeChecksum);
+                try(InputStream candidate=new BufferedInputStream(Files.newInputStream(reference))) {
+                    NativeScriptFileCodec.Result verified=NativeScriptFileCodec.verify(candidate,Files.size(reference),Files.size(source),
+                            sourceHash,result.artifactSha256,result.nativeChecksum,mask,compressed);
+                    assertEquals(sourceHash,verified.sourceSha256);
+                }
             }
         }
     }

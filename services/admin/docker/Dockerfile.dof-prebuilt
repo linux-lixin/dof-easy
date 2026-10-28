@@ -6,5 +6,7 @@ RUN rm -rf /app/static
 COPY static/ /app/static/
 COPY dof-entrypoint.sh /app/dof-entrypoint.sh
 COPY dof-nginx.conf.template /etc/nginx/nginx.conf.template
+# The entrypoint prefers this path when the runtime base already contains it.
+COPY dof-nginx.conf.template /etc/nginx/dof-nginx.conf.template
 RUN chmod 755 /app/dof-entrypoint.sh
 ENTRYPOINT ["/app/dof-entrypoint.sh"]

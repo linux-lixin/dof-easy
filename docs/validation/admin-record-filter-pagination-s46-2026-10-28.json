@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "mockedApis": true,
+  "realDeploymentVerified": false,
+  "oldCompiledUiStaleRowsReproduced": true,
+  "redExitCode": 1,
+  "redFailureBodyContainsOldPageTwoRows": true,
+  "redFailureLogSHA256": "86ab4041019c8648bc398eb21e11b482e3362373e3517d80befeb8e83abeece2",
+  "scriptSHA256": "887f9bedb8e8418cb226ec78aa5f729cccd474717f22840ee00e7e4a68819513",
+  "greenDeltaSHA256": "9b53553cf049e891ea837670e330d04b68852f525efdb5f8ce9fcb6056ad4f6e",
+  "greenStaticFilesReconstructedAndVerified": 188,
+  "browser": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "nativeRecordsOrEncodingVerified": false,
+    "checks": [
+      "editing owner on page two hides old rows and pagination; next explicit query starts on page one",
+      "period changes invalidate the previous result and its page offset",
+      "initially selected searchable view supplies its default text field and sends literal search text unchanged",
+      "changing search column invalidates rows while retaining the entered search text",
+      "clearing owner or text returns to page one and omits cleared API filters",
+      "query failure remains visible and cannot leave old rows or a stale next-page action",
+      "missing record schema remains explicit without querying or initializing it"
+    ],
+    "pageErrors": 0,
+    "apiMethods": [
+      "GET"
+    ],
+    "completeReplacement": false
+  },
+  "networkDisabled": true,
+  "privateInstanceDataOrCredentialsMounted": false,
+  "runningGameOrAdminChanged": false,
+  "completeReplacement": false,
+  "firstAttemptFailure": {
+    "phase": "FAILED_REQUIRES_REVIEW",
+    "cause": "test locator matched both the local alert and global toast for the same 503 message; production filtering assertions had passed",
+    "greenLogSHA256": "f14801edb45ef79c9f3819682ad851dc74c4047a2edf34f1e4cc70c62b39028a",
+    "oldCompiledStaleRowsReproducedBeforeFailure": true,
+    "failedAttemptCountedAsPass": false
+  },
+  "currentSigninBackendRead": {
+    "schemaStatus": 200,
+    "queryStatus": 200,
+    "instanceId": "dof-main",
+    "requiredFieldsPresent": true,
+    "missingColumns": [],
+    "sampleLimit": 1,
+    "returnedSampleRowCount": 0,
+    "historical409Reproduced": false,
+    "historicalRootCauseVerified": false,
+    "dataRowsOrCredentialsExported": false
+  },
+  "terminalState": {
+    "phase": "MOCKED_RECORD_FILTER_REGRESSION_VERIFIED_REAL_DEPLOYMENT_PENDING",
+    "operatorProcessExited": true,
+    "firstFailedOperatorProcessExited": true
+  },
+  "stage": "S46",
+  "date": "2026-10-28",
+  "frontendBuild": {
+    "standardCommand": "npm run build",
+    "passed": true,
+    "logSHA256": "c09d0c849acee1b9f73a67b598f3aac88817d8f43f3bd796943dfc9e9cf2ddd9",
+    "inputs": 221,
+    "changedFromS37": [
+      "src/views/admin/dof/NativeRecords.vue"
+    ],
+    "allBuiltInputsMatchWorktree": true,
+    "redArchiveSHA256": "ba9b93370908b124a1e4ea9c9fdcbb75572eb6da3d1b2b7f72cf61acbfbca55c",
+    "greenArchiveSHA256": "b98e90fc5e2f1cd95f4bad30fec0549b40be87a1b6a4aeb39e27e8eedf461cb3",
+    "scriptSHA256": "887f9bedb8e8418cb226ec78aa5f729cccd474717f22840ee00e7e4a68819513",
+    "initialBrowserScriptSHA256": "1b7cca4df34d10c2126fbe57d7f3b67635bfe16e76af1f775478a0add6f7aa5a"
+  },
+  "changedUiSourceSHA256": "1c1b4978f0e82d04ee22f5a7542fecec5d7e010ba5586654e6d450c585d04d9d",
+  "earlyPackagingAttempt": {
+    "failedBecauseBuildWasStillRunning": true,
+    "failedArchiveBytes": 35,
+    "failedArchiveSHA256": "495d1d9c7ff500a47575ed7a9050ec2db555e282a9fdcee25cee4594127798ef",
+    "sentToServer": false,
+    "countedAsPass": false
+  },
+  "validationLimits": [
+    "All seven page scenarios use synthetic APIs and records, not a populated native database.",
+    "The real current signin endpoint and schema return 200 with zero sampled rows; the historical 409 root cause remains unknown.",
+    "New frontend has not been deployed to the admin image; this is code/build/browser-regression evidence only.",
+    "Literal Unicode text is verified in browser query parameters; native database encoding, original-tool equivalence and populated-record completeness remain unverified.",
+    "The first green attempt failed on an ambiguous local-alert/global-toast locator; outputs remain retained, and the unchanged build passed after fixing the locator."
+  ],
+  "mavenTestsRerun": false,
+  "backendJavaChanged": false
+}

@@ -35,6 +35,45 @@ def login_state_initialized(text):
     return bool(re.search(r'\bInit Login State\s+Success\b', ''.join(cleaned)))
 
 
+def raid_configuration_evidence(raids, trace):
+    configs = {}
+    reloads = {}
+    expected_names = {'anton': '安徒恩', 'luke': '卢克'}
+    for raid, name in expected_names.items():
+        expected = list(name.encode('utf-8')) + [0]
+        value = next((row for entry in raids for row in entry['results'] if row['raid'] == raid), None)
+        opened = re.search(r'openat\([^\n]*"/data/dof-easy/config/' + raid
+                           + r'-raid\.ini"[^\n]*= [0-9]+', trace) is not None
+        configs[raid] = bool(opened and value and value['returned']
+                             and value.get('nameBytes', [])[:len(expected)] == expected)
+        reload = next((row for entry in raids for row in entry.get('reloads', [])
+                       if row.get('raid') == raid), {})
+        initial = dict(name=name, open_day='1,2,3,4,5,6,7',
+                       open_time='00:00:00-23:59:59', member_min=1 if raid == 'anton' else 2)
+        changed = dict(name=name + '刷新验证', open_day='2,4,6',
+                       open_time='01:02:03-04:05:06', member_min=3)
+
+        def matches(snapshot, wanted):
+            for field, expected_value in wanted.items():
+                if isinstance(expected_value, str):
+                    # The native logger may replace non-ASCII display text.
+                    # Read bytes from the actual exported buffer, as for names
+                    # above; rendered console text is not the native oracle.
+                    encoded = list(expected_value.encode('utf-8')) + [0]
+                    if snapshot.get(field + 'Bytes', [])[:len(encoded)] != encoded:
+                        return False
+                elif snapshot.get(field) != expected_value:
+                    return False
+            return True
+
+        reloads[raid] = bool(configs[raid] and reload.get('fileRestored') is True
+                            and isinstance(reload.get('threadId'), int) and reload['threadId'] > 0
+                            and matches(reload.get('before', {}), initial)
+                            and matches(reload.get('changed', {}), changed)
+                            and matches(reload.get('restored', {}), initial))
+    return configs, reloads
+
+
 def summarize(root):
     root = Path(root)
     log = (root / 'game.stdout').read_text(errors='replace')
@@ -49,19 +88,45 @@ def summarize(root):
     random_box = events(log, '[Dof random-box feature] ')
     equipment = events(log, '[Dof equipment feature] ')
     retired = events(log, '[Dof retired native literals] ')
+    script_errors = []
+    for line in log.splitlines():
+        match = re.search(r'\{\s*"type"\s*:\s*"error"', line)
+        if match:
+            try:
+                value, _ = json.JSONDecoder().raw_decode(line[match.start():])
+                script_errors.append(value)
+            except ValueError:
+                script_errors.append({'type': 'error', 'description': 'Truncated diagnostic script error'})
+    runtime_file = root / 'runtime-apply.json'
+    runtime = json.loads(runtime_file.read_text()) if runtime_file.is_file() else {}
+    runtime_actions = runtime.get('actions', [])
+    expected_runtime = {}
+    for raid, name in [('anton', '安徒恩'), ('luke', '卢克')]:
+        for phase in ['change', 'restore']:
+            expected_runtime[(raid, phase)] = dict(
+                name=name + '网页刷新验证' if phase == 'change' else name,
+                member_min='3' if phase == 'change' else '1' if raid == 'anton' else '2',
+                open_day='2,4,6' if phase == 'change' else '1,2,3,4,5,6,7',
+                open_time='01:02:03-04:05:06' if phase == 'change' else '00:00:00-23:59:59')
+    runtime_ok = bool(runtime.get('passed') is True and len(runtime_actions) == 4
+                      and runtime.get('filesRestored') == {'anton': True, 'luke': True})
+    seen_runtime = set()
+    for action in runtime_actions:
+        key = (action.get('module'), action.get('phase'))
+        runtime_ok = runtime_ok and key in expected_runtime and key not in seen_runtime
+        seen_runtime.add(key)
+        runtime_ok = bool(runtime_ok and action.get('observed') == expected_runtime.get(key)
+                          and action.get('state') == 'APPLIED'
+                          and action.get('sharedLockExcludedExecution') is True
+                          and action.get('duplicateDidNotInvokeAgain') is True
+                          and isinstance(action.get('gamePid'), int) and action['gamePid'] > 0
+                          and isinstance(action.get('executorThreadId'), int) and action['executorThreadId'] > 0
+                          and action['executorThreadId'] == action.get('observedDispatcherThreadId'))
     bridge_file = root / 'bridge-live.json'
     bridge = json.loads(bridge_file.read_text()) if bridge_file.exists() else {}
     bridge_trace = '\n'.join(p.read_text(errors='replace') for p in root.glob('bridge.trace.*'))
     trace = '\n'.join(p.read_text(errors='replace') for p in root.glob('game.trace.*'))
-    configs = {}
-    expected_names = {'anton': '安徒恩', 'luke': '卢克'}
-    for raid, name in expected_names.items():
-        expected = list(name.encode('utf-8')) + [0]
-        value = next((row for entry in raids for row in entry['results'] if row['raid'] == raid), None)
-        opened = re.search(r'openat\([^\n]*"/data/dof-easy/config/' + raid
-                           + r'-raid\.ini"[^\n]*= [0-9]+', trace) is not None
-        configs[raid] = bool(opened and value and value['returned']
-                             and value.get('nameBytes', [])[:len(expected)] == expected)
+    configs, reloads = raid_configuration_evidence(raids, trace)
     game_exit = int((root / 'game.exit').read_text())
     broadcast = observations[-1].get('equipmentBroadcast') if observations else None
     # Missing ELF exports and a live installed hook are different claims.
@@ -85,6 +150,8 @@ def summarize(root):
         p = root / 'runtime' / row['path']
         payload_ok = payload_ok and p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest() == row['sha256']
     checks = {
+        'diagnosticScriptErrorsAbsent': not script_errors,
+        'nativeRuntimeApply': runtime_ok,
         'retiredNativeLiterals': bool(retired and retired[-1].get('passed') and retired[-1].get('count',0)>0
             and all(x.get('cleared') for x in retired[-1].get('results',[]))),
         'equipmentBroadcastDispatch': bool(equipment and equipment[-1].get('passed')
@@ -107,6 +174,7 @@ def summarize(root):
         }.issubset(observations[-1]['modules'])),
         'equipmentBroadcastResolved': bool(binding and binding[-1]['symbolResolved']),
         'raidConfiguration': all(configs.values()),
+        'raidConfigurationReload': all(reloads.values()),
         'privateKeyConsumed': bool(keys and keys[-1]['returnedKey']
             and key_sizes and key_sizes[-1]['bytes'] == 256
             and re.search(r'openat\([^\n]*"/data/dof-easy/keys/privatekey.pem"[^\n]*= [0-9]+', trace)),
@@ -120,6 +188,9 @@ def summarize(root):
     }
     report = dict(schema=1, serverAccessed=False, releaseReady=False,
                   gameExit=game_exit, checks=checks, raidConfigurations=configs,
+                  diagnosticScriptErrors=script_errors,
+                  nativeRuntimeApply=runtime,
+                  raidConfigurationReloads=reloads,
                   randomBox=random_box[-1] if random_box else None,
                   equipmentBroadcast=equipment[-1] if equipment else None,
                   retiredNativeLiterals=retired[-1] if retired else None,

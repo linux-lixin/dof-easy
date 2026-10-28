@@ -38,11 +38,8 @@ public class AssistConfigServiceImpl implements AssistConfigService {
     public Map<String, Object> getConfig() {
         AssistConfig cfg = assistConfigDao.get(SINGLETON_ID);
         if (cfg == null) {
-            cfg = new AssistConfig();
-            cfg.setId(SINGLETON_ID);
-            cfg.setConfigJson(JSON.toJSONString(defaultConfig()));
-            cfg.setUpdateTime(new Date());
-            assistConfigDao.add(cfg);
+            // A public config-text GET must never initialize persistent state.
+            return defaultConfig();
         }
 
         if (cfg.getConfigJson() == null || cfg.getConfigJson().trim().isEmpty()) {

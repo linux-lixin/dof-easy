@@ -6,9 +6,23 @@ The original Spring Boot archive contributes only its loader and dependency jars
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import zipfile
+
+
+ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
+FILESYSTEM_EPOCH = 315532800
+
+
+def zip_entry(name, compression=zipfile.ZIP_STORED):
+    """Ignore checkout metadata while retaining Boot's nested-JAR compression."""
+    entry = zipfile.ZipInfo(name, date_time=ZIP_TIMESTAMP)
+    entry.create_system = 3
+    entry.compress_type = compression
+    entry.external_attr = ((0o40755 << 16) | 0x10) if name.endswith('/') else (0o100644 << 16)
+    return entry
 
 
 def package(base_jar, classes, resources, frontend, output):
@@ -19,11 +33,14 @@ def package(base_jar, classes, resources, frontend, output):
     if not (frontend / 'index.html').is_file():
         raise ValueError('Compiled frontend is missing')
     output.mkdir(parents=True)
+    payloads = {}
     with zipfile.ZipFile(base_jar) as source, zipfile.ZipFile(output / 'app.jar', 'w') as target:
+        if len(source.namelist()) != len(set(source.namelist())):
+            raise ValueError('Base JAR has duplicate entries')
         for item in source.infolist():
             if item.filename.startswith('BOOT-INF/classes/'):
                 continue
-            target.writestr(item, source.read(item))
+            target.writestr(zip_entry(item.filename, item.compress_type), source.read(item))
         # Boot 2's JarLauncher discovers this directory entry, not just its children.
         # Omitting it makes otherwise present application classes invisible to the loader.
         directories = set()
@@ -31,9 +48,7 @@ def package(base_jar, classes, resources, frontend, output):
         def directory_entry(name):
             if name in directories:
                 return
-            directory = zipfile.ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))
-            directory.external_attr = (0o40755 << 16) | 0x10
-            target.writestr(directory, b'')
+            target.writestr(zip_entry(name), b'')
             directories.add(name)
 
         directory_entry('BOOT-INF/classes/')
@@ -46,7 +61,9 @@ def package(base_jar, classes, resources, frontend, output):
                 if any(part.startswith('.') for part in path.relative_to(root).parts):
                     continue
                 # Test classes and credentials must not be included in the application.
-                if relative.endswith('Test.class') or 'Test$' in relative or path.suffix in ('.key', '.pem', '.p12', '.pfx'):
+                if relative.endswith('Test.class') or 'Test$' in relative or any(
+                    suffix.lower() in ('.key', '.pem', '.p12', '.pfx') for suffix in path.suffixes
+                ):
                     continue
                 archive = 'BOOT-INF/classes/' + relative
                 if archive in written:
@@ -56,7 +73,9 @@ def package(base_jar, classes, resources, frontend, output):
                 parts = archive.split('/')
                 for count in range(3, len(parts)):
                     directory_entry('/'.join(parts[:count]) + '/')
-                target.write(path, archive, compress_type=zipfile.ZIP_DEFLATED)
+                data = path.read_bytes()
+                payloads[archive] = hashlib.sha256(data).hexdigest()
+                target.writestr(zip_entry(archive, zipfile.ZIP_DEFLATED), data)
     shutil.copytree(frontend, output / 'static')
     repo = Path(__file__).resolve().parents[2]
     shutil.copy(repo / 'services/admin/docker/dof-entrypoint.sh', output)
@@ -65,8 +84,19 @@ def package(base_jar, classes, resources, frontend, output):
     hashes = {p.relative_to(output).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
               for p in sorted(output.rglob('*')) if p.is_file()}
     (output / 'build-manifest.json').write_text(json.dumps({
-        'adapter': 'dof-native-1', 'environment': 'isolated',
+        'schema': 2, 'adapter': 'dof-native-1', 'environment': 'isolated',
+        'packagingPolicy': {'id': 'dof-admin-prebuilt-v2', 'zipTimestamp': ZIP_TIMESTAMP,
+                            'filesystemEpoch': FILESYSTEM_EPOCH,
+                            'nestedJarCompression': 'preserve-base'},
+        'inputs': {'baseJarSHA256': hashlib.sha256(base_jar.read_bytes()).hexdigest(),
+                   'packagedApplicationPayloadSHA256': hashlib.sha256(
+                       json.dumps(payloads, sort_keys=True, separators=(',', ':')).encode()).hexdigest()},
         'completeReplacement': False, 'files': hashes}, indent=2) + '\n')
+    # Docker context copies should not depend on source checkout times or modes.
+    # The final OCI image digest also depends on its builder and pinned base image.
+    for path in [*output.rglob('*'), output]:
+        path.chmod(0o755 if path.is_dir() or path.name == 'dof-entrypoint.sh' else 0o644)
+        os.utime(path, (FILESYSTEM_EPOCH, FILESYSTEM_EPOCH))
     return hashes
 
 

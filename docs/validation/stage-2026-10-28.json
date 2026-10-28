@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "date": "2026-10-28",
+  "timezone": "Asia/Hong_Kong",
+  "kind": "source-stage-checkpoint",
+  "sourceCommit": "4a79f3ecc9ecac4c7297e5d82caff1b9f0271f90",
+  "baseMain": "a9d1511ed330febe39e248e3713fed421647cc68",
+  "scopeLedger": "services/admin/backend/src/main/resources/dof/execution-plan.json",
+  "releaseReady": false,
+  "completeReplacement": false,
+  "serverAccessed": false,
+  "deploymentPerformed": false,
+  "retainedDeployment": {
+    "adminBatch": "S50",
+    "adminImplementation": "684af30",
+    "adminImage": "sha256:702ae04862184b1539cc80c4459b2f3f67904612bc164905e17472cd1ab3dff6",
+    "adminFrontend": "bb01d5a",
+    "gameBatch": "S45",
+    "gameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+    "liveHealthChecked": false,
+    "lastSourceChangesDeployed": false
+  },
+  "checks": {
+    "pythonGeneral": {
+      "status": "passed",
+      "total": 399,
+      "passed": 373,
+      "skipped": 26,
+      "failures": 0,
+      "errors": 0,
+      "logSHA256": "c001d0624701be42b2b15dab80f4508d1a7b9c5bbfad126a188537940431c846"
+    },
+    "pythonNative": {
+      "status": "passed",
+      "total": 149,
+      "passed": 132,
+      "skipped": 17,
+      "failures": 0,
+      "errors": 0,
+      "logSHA256": "8f349fa76a86b9c2e4a5ae17f9d789b787836bfee891e1dd9e801b167e522c69"
+    },
+    "pythonStructure": {
+      "status": "passed",
+      "total": 13,
+      "passed": 13,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "logSHA256": "13693c05e48c59801eaedf482944945f3901557bc9aeef7fa79b236eb4a54d88"
+    },
+    "java": {
+      "total": 539,
+      "passed": 215,
+      "skipped": 324,
+      "failures": 0,
+      "errors": 0,
+      "status": "passed",
+      "command": "mvn -o -Dmaven.test.skip=false test",
+      "environment": "WSL Ubuntu, JDK 21, Maven 3.9.9; existing local dependency cache",
+      "logSHA256": "a049aead609708a0b1bb1d552d44bab47ec7f2a285d5f54306194f0767ae5e18",
+      "skippedBySuite": {
+        "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest": 14,
+        "com.aiyi.game.dnfserver.service.dof.ActivityPreviewControlContractTest": 10,
+        "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest": 26,
+        "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest": 9,
+        "com.aiyi.game.dnfserver.service.dof.DofScriptReleaseContractTest": 21,
+        "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest": 10,
+        "com.aiyi.game.dnfserver.service.dof.DofTextContractTest": 4,
+        "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest": 10,
+        "com.aiyi.game.dnfserver.service.dof.ManagedCdkContractTest": 13,
+        "com.aiyi.game.dnfserver.service.dof.ManagedCdkInventoryContractTest": 13,
+        "com.aiyi.game.dnfserver.service.dof.ManagedMailReceiptContractTest": 3,
+        "com.aiyi.game.dnfserver.service.dof.ManagedPasswordContractTest": 6,
+        "com.aiyi.game.dnfserver.service.dof.ManagedPointsContractTest": 8,
+        "com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchContractTest": 11,
+        "com.aiyi.game.dnfserver.service.dof.ManagedPostalBatchControlContractTest": 8,
+        "com.aiyi.game.dnfserver.service.dof.ManagedPostalContractTest": 12,
+        "com.aiyi.game.dnfserver.service.dof.ManagedPostalReceiptContractTest": 7,
+        "com.aiyi.game.dnfserver.service.dof.ManagedRechargeContractTest": 14,
+        "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest": 9,
+        "com.aiyi.game.dnfserver.service.dof.NativeChartsContractTest": 10,
+        "com.aiyi.game.dnfserver.service.dof.NativeChartsRewardsContractTest": 12,
+        "com.aiyi.game.dnfserver.service.dof.NativeClientBundleTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeClientPayloadTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeClientPublicationTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeConfigContainerTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeCreationPresetsTest": 2,
+        "com.aiyi.game.dnfserver.service.dof.NativeCrossBorderContractTest": 8,
+        "com.aiyi.game.dnfserver.service.dof.NativeEquipmentBatchContractTest": 13,
+        "com.aiyi.game.dnfserver.service.dof.NativeEquipmentDatasetContractTest": 6,
+        "com.aiyi.game.dnfserver.service.dof.NativeFeatureSwitchesTest": 4,
+        "com.aiyi.game.dnfserver.service.dof.NativeFeatureValuesTest": 5,
+        "com.aiyi.game.dnfserver.service.dof.NativeHotkeysTest": 4,
+        "com.aiyi.game.dnfserver.service.dof.NativeInheritanceContractTest": 8,
+        "com.aiyi.game.dnfserver.service.dof.NativeRecoveryContractTest": 8,
+        "com.aiyi.game.dnfserver.service.dof.NativeScriptChecksumTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeScriptCompressionTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeScriptContextTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeScriptFileCodecTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeScriptIndexTest": 2,
+        "com.aiyi.game.dnfserver.service.dof.NativeScriptJobsTest": 2,
+        "com.aiyi.game.dnfserver.service.dof.NativeScriptMetadataTest": 1,
+        "com.aiyi.game.dnfserver.service.dof.NativeTextEnvelopeTest": 2,
+        "com.aiyi.game.dnfserver.service.dof.NativeUiCoordinatesTest": 2,
+        "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest": 4,
+        "com.aiyi.game.dnfserver.service.dof.NativeUiPresetApplicationTest": 4,
+        "com.aiyi.game.dnfserver.service.dof.NativeUiStateTest": 2,
+        "com.aiyi.game.dnfserver.service.dof.NativeUiSwitchesTest": 4,
+        "com.aiyi.game.dnfserver.service.dof.PostalReadContractTest": 4,
+        "com.aiyi.game.dnfserver.service.extension.RegistrationCodesIntegrationTest": 1
+      },
+      "cleanBuildClaimed": false
+    },
+    "frontend": {
+      "status": "passed",
+      "command": "npm run build (vue-tsc -b && vite build)",
+      "source": "current frontend copied to a new ignored build directory",
+      "dependencies": "existing locked local node_modules",
+      "logSHA256": "b2cf925a07219a7130c890dd4f1456d349df167e75fd0a0763e407213c309f97",
+      "warnings": [
+        "Bundle chunk exceeds 500 kB; build completed."
+      ]
+    },
+    "shellSyntax": {
+      "status": "passed",
+      "command": "bash -n dof.sh scripts/container/bootstrap.sh"
+    },
+    "documentationLinks": {
+      "status": "passed",
+      "command": "python3 tests/structure/test_deploy_layout.py DeploymentLayout.test_document_links_resolve"
+    },
+    "documentationJson": {
+      "status": "passed",
+      "files": 87
+    },
+    "gitWhitespace": {
+      "status": "passed",
+      "command": "git diff --check; git diff --cached --check"
+    }
+  },
+  "earlierAttempts": [
+    {
+      "environment": "Windows sandbox",
+      "result": "failed",
+      "reason": "POSIX APIs/path semantics unavailable and temporary-directory permissions; not counted as Linux validation"
+    },
+    {
+      "environment": "WSL Ubuntu",
+      "result": "failed",
+      "suite": "Python general",
+      "total": 399,
+      "failures": 1,
+      "errors": 10,
+      "skipped": 26,
+      "reason": "Menu routing tests attempted to bind host port 8887, already in use; isolated check_ports in menu test setup without changing production validation.",
+      "logSHA256": "91a24255897143097079755c21548c1a90e0eb6b228fc9395ec6b04e73e7d17b"
+    },
+    {
+      "environment": "WSL Ubuntu on Windows-mounted workspace",
+      "result": "failed",
+      "suite": "Python general second attempt",
+      "total": 399,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 26,
+      "reason": "One fixture atomic directory rename failed on DrvFS; Linux fixture temporary directories now use native /tmp.",
+      "logSHA256": "669a362f645b9b39596bbfd5e417ac52293107b855da6955cddcf61d516db8e4"
+    },
+    {
+      "result": "failed",
+      "suite": "documentation links",
+      "reason": "Stage summary JSON had not yet been created; final link validation follows summary generation."
+    }
+  ],
+  "notExecuted": [
+    "New server deployment or live health verification",
+    "Fresh Maven clean build",
+    "Private MySQL contract suites and private sample checks without their explicit inputs",
+    "New Windows client consumption and complete game lifecycle",
+    "Complete original management GUI equivalence"
+  ],
+  "publicationBoundary": {
+    "privateRuntimeIncluded": false,
+    "generatedBuildProductsIncluded": false,
+    "historyAndRecoveryRefsPreserved": true
+  }
+}

@@ -2501,7 +2501,7 @@
   {
     "id": "feature-044",
     "feature": "战力排行、膜拜奖励、竞速榜、公益榜",
-    "status": "仅可只读 / 缺资料关闭",
+    "status": "部分管理实现待部署 / 原生效果待验",
     "source": "配套说明/截图与源码静态审计",
     "nativeSource": "QK 有表/提示字符串，剑来排行配置",
     "clientDependency": "剑来配套客户端/PVF；涉及显示时另需 NPK/DLL",
@@ -2509,41 +2509,50 @@
     "owner": "QK",
     "adminEntry": "/admin/activities → charts/charts-rewards；排行/膜拜记录",
     "verification": "子项分别记录管理交付与业务验收；未进行客户端测试。",
-    "missing": "已有 game_charts_config.status=1 保留，配置/领取记录查询不等于公式及结算去重已验证；竞速/公益榜未找到完整独立执行证据。",
+    "missing": "配置规则、奖励和记录的管理与原生公式/排名/定时结算分别验收；开关、生效方式、实际发奖和竞速/公益榜仍待闭环。",
     "historicalEvidence": "缺管理接入；公式、排名、结算、重复发奖防护待验证",
-    "managementVerification": "2026-10-23：本批管理入口的配置/记录查询及权限检查通过。只读配置、尚未接入子功能和原生游戏执行按 missing 字段区分。",
+    "managementVerification": "S41恢复修正已部署，真实读取、长字段和启用入口拒绝通过；服务端快照恢复仅有隔离SQL证据，真实保存/恢复、容器重建与实际玩法仍待验。",
     "subfeatures": [
       {
         "id": "feature-044-01",
         "name": "战力规则及榜单查询",
-        "disposition": "仅可只读",
-        "delivery": "资料调查收尾",
+        "disposition": "管理实现待部署",
+        "delivery": "已有规则的门槛、周期和小时编辑；编号/版本/恢复复用公共协议",
         "adminEntry": "/admin/activities → charts/charts-rewards；排行/膜拜记录",
-        "currentSwitch": "原生已有 status=1 保留；不新增结算启用",
+        "currentSwitch": "S36真实实例只读检查：status=1、is_mobai=1；没有改动现有入口",
         "owner": "QK",
         "gameplayVerified": false,
         "source": "配套在线奖励截图、第一阶段战令.txt、战力排行榜配置.txt；原生读取分支与表结构",
         "consumer": "QK 原生奖励/调度；Frida 重复入口不启用",
-        "configuration": "dof_native.online_rewards* / battle_pass / game_charts*",
-        "evidence": [],
-        "missing": "已有 game_charts_config.status=1 保留，配置/领取记录查询不等于公式及结算去重已验证；竞速/公益榜未找到完整独立执行证据。",
-        "required": "完整配套规则、原生持久化与重复领取/结算验证"
+        "configuration": "dof_native.game_charts_config 的 min_zhanli、jiangli_day、jiangli_hour；其余四字段保留",
+        "evidence": [
+          "docs/validation/admin-native-charts-s36-2026-10-28.json",
+          "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+          "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json"
+        ],
+        "missing": "原工具菜单/默认值、真实部署、组件读取和实际结算/发奖仍待验；不能以配置保存或只读记录替代。",
+        "required": "真实部署的预览/保存/回读/恢复、原生读取时机、完整结算与重复发奖防护验证；公式本身未新增执行器"
       },
       {
         "id": "feature-044-02",
         "name": "膜拜记录及奖励配置",
-        "disposition": "仅可只读",
-        "delivery": "资料调查收尾",
+        "disposition": "奖励配置本地CRUD及恢复通过，真实部署待验",
+        "delivery": "3000字符成对奖励、新增删除及关联恢复；排行、膜拜及已安装公益榜入口须停用，新增50对上限未经原工具对照",
         "adminEntry": "/admin/activities → charts/charts-rewards；排行/膜拜记录",
-        "currentSwitch": "原生已有 status=1 保留；不新增结算启用",
+        "currentSwitch": "S36真实实例只读检查：status=1、is_mobai=1；没有改动现有入口",
         "owner": "QK",
         "gameplayVerified": false,
         "source": "配套在线奖励截图、第一阶段战令.txt、战力排行榜配置.txt；原生读取分支与表结构",
         "consumer": "QK 原生奖励/调度；Frida 重复入口不启用",
-        "configuration": "dof_native.online_rewards* / battle_pass / game_charts*",
-        "evidence": [],
-        "missing": "已有 game_charts_config.status=1 保留，配置/领取记录查询不等于公式及结算去重已验证；竞速/公益榜未找到完整独立执行证据。",
-        "required": "完整配套规则、原生持久化与重复领取/结算验证"
+        "configuration": "dof_native.game_charts_code；game_charts_config 两个独立入口同时检查",
+        "evidence": [
+          "docs/validation/admin-native-charts-s36-2026-10-28.json",
+          "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
+          "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+          "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json"
+        ],
+        "missing": "原工具菜单/默认值、真实部署、组件读取和实际结算/发奖仍待验；不能以配置保存或只读记录替代。",
+        "required": "真实部署的预览/保存/回读/恢复、原生读取时机、完整结算与重复发奖防护验证；公式本身未新增执行器"
       },
       {
         "id": "feature-044-03",
@@ -2551,15 +2560,17 @@
         "disposition": "缺资料关闭",
         "delivery": "资料调查收尾",
         "adminEntry": "/admin/extension-operations → 功能子项证据（无操作开关）",
-        "currentSwitch": "原生已有 status=1 保留；不新增结算启用",
+        "currentSwitch": "S36真实实例只读检查：status=1、is_mobai=1；没有改动现有入口",
         "owner": "QK",
         "gameplayVerified": false,
         "source": "配套在线奖励截图、第一阶段战令.txt、战力排行榜配置.txt；原生读取分支与表结构",
         "consumer": "QK 原生奖励/调度；Frida 重复入口不启用",
         "configuration": "dof_native.online_rewards* / battle_pass / game_charts*",
-        "evidence": [],
-        "missing": "已有 game_charts_config.status=1 保留，配置/领取记录查询不等于公式及结算去重已验证；竞速/公益榜未找到完整独立执行证据。",
-        "required": "完整配套规则、原生持久化与重复领取/结算验证"
+        "evidence": [
+          "docs/validation/admin-native-charts-s36-2026-10-28.json"
+        ],
+        "missing": "原工具菜单/默认值、真实部署、组件读取和实际结算/发奖仍待验；不能以配置保存或只读记录替代。",
+        "required": "真实部署的预览/保存/回读/恢复、原生读取时机、完整结算与重复发奖防护验证；公式本身未新增执行器"
       },
       {
         "id": "feature-044-04",
@@ -2583,18 +2594,20 @@
         "disposition": "缺资料关闭",
         "delivery": "资料调查收尾",
         "adminEntry": "/admin/extension-operations → 功能子项证据（无操作开关）",
-        "currentSwitch": "原生已有 status=1 保留；不新增结算启用",
+        "currentSwitch": "S37真实实例仅只读检查：fenghuo_charts_config缺失；不创建或开启",
         "owner": "QK",
         "gameplayVerified": false,
         "source": "配套在线奖励截图、第一阶段战令.txt、战力排行榜配置.txt；原生读取分支与表结构",
         "consumer": "QK 原生奖励/调度；Frida 重复入口不启用",
-        "configuration": "dof_native.online_rewards* / battle_pass / game_charts*",
-        "evidence": [],
-        "missing": "已有 game_charts_config.status=1 保留，配置/领取记录查询不等于公式及结算去重已验证；竞速/公益榜未找到完整独立执行证据。",
+        "configuration": "可选dof_native.fenghuo_charts_config；共享game_charts_code",
+        "evidence": [
+          "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
+        ],
+        "missing": "静态原网关引用确认共享奖励表；独立公益榜管理、规则、运行时读取及结算发奖仍待验。",
         "required": "完整配套规则、原生持久化与重复领取/结算验证"
       }
     ],
-    "reviewedAt": "2026-10-23"
+    "reviewedAt": "2026-10-28"
   },
   {
     "id": "feature-045",

@@ -178,8 +178,10 @@ def import_archive(source, archive, stage, records, excluded):
                 data = shell_helper(PurePosixPath(relative).name)
             elif relative == 'frida/frida_config.json':
                 config = json.loads(data)
-                config['db_config'] = {'account': 'game', 'password': ''}
-                data = (json.dumps(config, indent=2, ensure_ascii=True) + '\n').encode('utf-8')
+                if not isinstance(config, dict) or not isinstance(config.get('db_config', {}), dict):
+                    raise ValueError('Frida configuration and db_config must be JSON objects')
+                config['db_config'] = dict(config.get('db_config', {}), account='game', password='')
+                data = (json.dumps(config, indent=2, ensure_ascii=True, allow_nan=False) + '\n').encode('utf-8')
             put_file(stage, relative, data, records, archive, name, original_hash)
 
 

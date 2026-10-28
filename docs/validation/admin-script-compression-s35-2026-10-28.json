@@ -1,0 +1,231 @@
+{
+  "stage": "S35",
+  "date": "2026-10-28",
+  "verificationBaseCommit": "6ff8eee",
+  "purpose": "Independent complete compressed Script comparison and bounded marker investigation; generation remains blocked",
+  "completeArtifactAudit": {
+    "schema": 1,
+    "completeFileVerified": true,
+    "sourceSHA256": "2e65c17d075afec73203ba8f2bc9f5508f3b44706300f4ae7f9c13b5e0687fc5",
+    "candidateSHA256": "4f0357a87d1d5dee3a020c1bbd22f37d4614f878c98ab263ceef3ec742f3e515",
+    "clientSourceSHA256": "d2b207e32f1d366c29f43d080366b7880d87659aaeb93a9bd8e36f44bf54b678",
+    "indexBytes": 82583080,
+    "compressedIndexBytes": 38262851,
+    "resourceBytes": 482630201,
+    "trailerVerified": true,
+    "privateParameterSupplied": false,
+    "pairedNumericParameterVerified": false,
+    "compressedMarkerHypothesisMatched": null,
+    "originalToolEquivalenceVerified": false,
+    "nativeConsumerAcceptanceVerified": false,
+    "publishable": false,
+    "completeReplacement": false
+  },
+  "markerInvestigation": {
+    "classification": "hypothesis_not_a_publishable_parameter_codec",
+    "publicEnvelopePayload": "jmc",
+    "publicEnvelopeContext": "geah",
+    "decimalTailCandidate": 41444171,
+    "candidateFormula": "compressedIndexBytes XOR decimalTailCandidate",
+    "recordedCasesMatched": 8,
+    "recordedCasesTotal": 12,
+    "cases": [
+      {
+        "controlWord": "0x7f",
+        "precision": 0,
+        "rounding": 0,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 61826883,
+        "candidateMatched": false,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0x47f",
+        "precision": 0,
+        "rounding": 1,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 61826883,
+        "candidateMatched": false,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0x87f",
+        "precision": 0,
+        "rounding": 2,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 61806915,
+        "candidateMatched": false,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0xc7f",
+        "precision": 0,
+        "rounding": 3,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 61826883,
+        "candidateMatched": false,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0x27f",
+        "precision": 2,
+        "rounding": 0,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0x67f",
+        "precision": 2,
+        "rounding": 1,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0xa7f",
+        "precision": 2,
+        "rounding": 2,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0xe7f",
+        "precision": 2,
+        "rounding": 3,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0x37f",
+        "precision": 3,
+        "rounding": 0,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0x77f",
+        "precision": 3,
+        "rounding": 1,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0xb7f",
+        "precision": 3,
+        "rounding": 2,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      },
+      {
+        "controlWord": "0xf7f",
+        "precision": 3,
+        "rounding": 3,
+        "syntheticLength": 38262851,
+        "recordedFirstField": 4176648,
+        "candidateMatched": true,
+        "actualNativeContextVerified": false
+      }
+    ],
+    "traceReexecuted": false,
+    "originalProgramExecuted": false,
+    "sourceMatrixSHA256": "555cef3d52c7d30a24f409d6eed13c85e44c3ed11efd6ec440827de11e24b1bc",
+    "remaining": "Actual paired compressed private parameter and matching consumer path; floating-point discrepancy cannot be selected away"
+  },
+  "originalToolSHA256": "c109b4484fc1440b5927f85b2cee2587285fdb0b8b61447a29bd803bb5535e89",
+  "testSources": {
+    "scripts/dof/audit_compressed_script.py": "e7ca48ecdb3e3025ad961d58be7d61db3a4ec7b749085bf173d05b923cc8f70f",
+    "tests/unit/dof/test_compressed_script_audit.py": "d4d83bdc91ea983e1915669a2e9728792f96b39e6728cf931ad00fc739e3da1c"
+  },
+  "syntheticRejectionTests": {
+    "passed": 5,
+    "failed": 0,
+    "originalArtifactEvidence": false
+  },
+  "serverChanged": false,
+  "windowsToolStarted": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "compressedGenerationEnabled": false,
+  "completeReplacement": false,
+  "inventoryTests": {
+    "passed": 4,
+    "failed": 0
+  },
+  "targetedMavenCheck": {
+    "command": "mvn -o -Dmaven.test.skip=false -Dtest=NativeScriptFileCodecTest,NativeScriptCompressionTest,NativeScriptContextTest,NativeScriptJobsTest [explicit local fixture properties] test",
+    "passed": true,
+    "tests": 25,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "classes": [
+      {
+        "name": "NativeScriptCompressionTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "NativeScriptContextTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "NativeScriptFileCodecTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "NativeScriptJobsTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "entireSuiteRun": false,
+    "conditionalInputTestsExecuted": 5,
+    "fixtureProvenance": [
+      "preserved original compressed and uncompressed whole-file pairs",
+      "preserved original uncompressed parameter only",
+      "previous offline producer vectors with synthetic inputs, distinct from manual GUI behavior"
+    ],
+    "logSHA256": "376a27842a30a25f17e8a1765900eb7473f09872ef136d7fd6c7457831dce4d9"
+  },
+  "freshCompileByteComparison": {
+    "oldClassCount": 331,
+    "freshMavenClassCount": 331,
+    "pathsIdentical": true,
+    "differentClassCount": 0,
+    "comparedBaseline": "S32 standard Maven output",
+    "compilerAndToolchainChanged": false,
+    "cleanWorkspaceBuildPerformed": false,
+    "completeReplacement": false
+  },
+  "limits": [
+    "Complete file matching is not a native compressed parameter or consumer verification.",
+    "The first-field hypothesis matches eight of twelve historical synthetic floating-point traces; the four mismatches remain recorded.",
+    "No historical Windows code or CPU trace was executed in this stage.",
+    "No paired actual compressed parameter is available; the retained parameter belongs to the uncompressed artifact.",
+    "331 freshly compiled main class files match the S32 standard Maven files byte-for-byte; this is not an independent clean workspace build or OCI reproducibility proof.",
+    "Only the four named Java test classes were run this stage; other private-fixture and DB checks keep their existing acceptance status.",
+    "No database, Windows application, game process, deployment or published resources were changed."
+  ]
+}

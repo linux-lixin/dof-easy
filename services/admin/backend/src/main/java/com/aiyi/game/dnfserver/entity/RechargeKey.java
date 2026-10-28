@@ -17,6 +17,7 @@ public class RechargeKey extends PO {
     /**
      * 卡密
      */
+    @com.alibaba.fastjson.annotation.JSONField(serialize=false)
     private String content;
 
     /**
@@ -64,6 +65,17 @@ public class RechargeKey extends PO {
     @FieldName(name = "use_time")
     private Date useTime;
 
+    @TempField
+    private String requestId;
+    public String getRequestId(){return requestId;}
+    public void setRequestId(String value){requestId=value;}
+
+    @TempField private String revision;
+    @TempField private String reason;
+    public String getRevision(){return revision;}
+    public void setRevision(String value){revision=value;}
+    public String getReason(){return reason;}
+    public void setReason(String value){reason=value;}
     @TempField
     private int count;
 

@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "batch": "S9 mail generated-ID receipt foundation",
+  "date": "2026-10-27",
+  "completeReplacement": false,
+  "sourceBase": "e94f6eb",
+  "sourceFiles": [
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/dof/ManagedOperationJournal.java",
+      "sha256": "1c96e0376cd919fa0b862ee0d5167c9265ba2ad88b33e93265682ee1eb23a58a"
+    },
+    {
+      "path": "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedMailReceiptContractTest.java",
+      "sha256": "b973a8e879c038188cecc3067e812f8362a9cda2f7f85a1434209376257eb9d9"
+    },
+    {
+      "path": "tests/integration/dof/recharge/probe.py",
+      "sha256": "03efc0da16aac9729b2bee3779c7cecf1de312d1746202df4efec75ba90d9572"
+    },
+    {
+      "path": "scripts/dof/audit_admin_tool.py",
+      "sha256": "791aab27b6311938db38cdf0ae1f11ca9c4a2d8cb3f31ab0fedc416f71befd78"
+    }
+  ],
+  "implementation": {
+    "generatedOutcomeJournalPrimitive": true,
+    "nativeMailSendEndpointIntegrated": false,
+    "mailPageIntegrated": false,
+    "batchDeliveryImplemented": false,
+    "semantics": "Durable PREPARED intent precedes native INSERT; generated identifiers and PERSISTED receipt commit in the same caller-owned InnoDB transaction.",
+    "constraints": [
+      "Caller validates native schema, table engines and dependencies before mutation.",
+      "Caller must rollback native INSERTs on receipt failure.",
+      "This primitive does not make MyISAM transactional."
+    ]
+  },
+  "standardMaven": {
+    "total": 342,
+    "passed": 180,
+    "skipped": 162,
+    "failures": 0,
+    "errors": 0,
+    "logSha256": "752a6f9ce53bcbce4a4ac0ff0062868cc4030ad713afa61374ac2f392d256b9a",
+    "skipNote": "Three new mail receipt contracts and fourteen recharge contracts require the dedicated disposable database; they run separately below."
+  },
+  "isolatedMySQL": {
+    "summary": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "provenance": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "de8ffb7f464a647a0f5a0a0ed0208cc035f6cc22c29ea2b90cca36e84128c256",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "totalJUnitTests": 17,
+    "compiledInputs": [
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedOperationJournal.class",
+        "sha256": "021b9b1e3e2c59fb612ae682d0532309301741593f7dcdd164435c313e0ee4fc",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedMailReceiptContractTest.class",
+        "sha256": "5e6d93ef972d015ce7c6edc7d6af900443e5a4a172223db8f1610c92602343e2",
+        "matchesIsolatedInput": true
+      }
+    ]
+  },
+  "staticOriginalTool": {
+    "report": "docs/validation/admin-tool-static-2026-10-27.json",
+    "sourceMatched": true,
+    "fileResourceVersion": "2.8.2.8",
+    "sourceRecovered": false,
+    "standardMenuResources": 0,
+    "standardDialogResources": 0,
+    "stringTableEntries": 0,
+    "windowsUiObserved": false,
+    "windowsControlFailure": "codex/sandbox-state-meta: sandboxCwd is not a local file URI: file:///mnt/d/baidunetdiskdownload/dof-easy",
+    "manualComparisonDeferredByUser": true
+  },
+  "deployment": {
+    "performed": false,
+    "reason": "Mail endpoint is not integrated; retain the verified S8 deployment."
+  },
+  "remaining": [
+    "Connect typed mail preview/commit/history/reconcile and per-target batch receipts.",
+    "Validate PVF item parameters, recipient identity, native letter encoding and original defaults.",
+    "Replace the old unversioned admin sender and connect the UI together.",
+    "Verify component consumption, actual delivery and failure recovery on the bound 86-level instance.",
+    "User will manually open original tool later for menu/default/output comparison."
+  ]
+}

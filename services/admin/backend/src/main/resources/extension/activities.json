@@ -2538,199 +2538,215 @@
   },
   {
     "key": "inheritance",
-    "title": "装备继承",
+    "title": "原生装备继承规则",
     "table": "inheritance",
     "primaryKey": "code",
     "autoId": false,
     "fields": [
       {
         "name": "code",
-        "label": "code",
+        "label": "继承装备代码（0 为默认规则）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "填单个装备代码；0 的影响范围为未匹配专属规则的装备。"
       },
       {
         "name": "restitution",
-        "label": "restitution",
+        "label": "扣除道具代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "最多 5 组正整数，以 / 分隔，如 3037/3340；两组列表均留空表示不配置材料。"
       },
       {
         "name": "Return_quantity",
-        "label": "Return_quantity",
+        "label": "扣除道具数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "与道具代码顺序和组数一致，如 10/20。"
       },
       {
         "name": "differ_lv",
-        "label": "differ_lv",
+        "label": "允许装备等级差",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "原生比较两件装备等级差的绝对值；0 表示要求同级。"
       }
     ],
-    "writable": false,
-    "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "writable": true,
+    "deleteAllowed": true,
+    "notice": "维护原生插件的装备继承规则；Frida 继承券仍走原有独立逻辑，不共用此表。扣料、属性转移和失败返还由原生组件执行。代码 0 是专属代码未匹配时读取的默认规则；删除专属规则后可能回退到默认规则。保存后重新打开游戏继承窗口核对材料；实际扣料与继承效果尚待验。不会自动开启继承功能。"
   },
   {
     "key": "cross-border",
-    "title": "装备跨界",
+    "title": "原生装备跨界规则",
     "table": "cross_border",
     "primaryKey": "code",
     "autoId": false,
     "fields": [
       {
         "name": "code",
-        "label": "code",
+        "label": "跨界装备代码（0 为默认规则）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "专属装备代码优先；未匹配时原生读取代码 0。删除专属规则后可能使用默认规则。"
       },
       {
         "name": "restitution",
-        "label": "restitution",
+        "label": "跨界材料代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "正整数用 / 分隔，最多 5 组；与扣除数量逐项对应，两项均留空表示未配置材料。"
       },
       {
         "name": "Return_quantity",
-        "label": "Return_quantity",
+        "label": "跨界扣除数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "实际扣除数量，正整数用 / 分隔，最多 5 组；与材料持有校验下限分开保存。"
       },
       {
         "name": "announcement",
-        "label": "announcement",
+        "label": "原生保留字段",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
-        "default": 0
+        "readonly": true,
+        "default": 1,
+        "hint": "原字段 announcement；当前读取链没有证实公告语义。现有值原样保留，不作为功能开关。"
       },
       {
         "name": "codenum",
-        "label": "codenum",
+        "label": "材料持有校验下限",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 1,
+        "hint": "原生逐项核对材料持有量的下限，0 表示下限为 0；实际扣除仍使用数量列表，不自动换算。"
       }
     ],
-    "writable": false,
-    "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "writable": true,
+    "deleteAllowed": true,
+    "notice": "维护原生跨界规则；代码 0 为专属装备未匹配时读取的默认规则。材料持有校验下限与实际扣除数量是不同参数，不会自动相互换算。网页不转移玩家装备或扣除材料，也不自动开启跨界；DP2 跨界券保持独立。保留字段只读，原工具默认值/导入导出、组件读取和游戏效果仍待验。"
   },
   {
     "key": "recovery",
-    "title": "物品回收",
+    "title": "原生物品回收规则",
     "table": "item_recovery",
     "primaryKey": "code",
     "autoId": false,
     "fields": [
       {
         "name": "code",
-        "label": "code",
+        "label": "回收物品代码",
         "type": "int",
         "group": "基本设置",
-        "min": 0,
+        "min": 1,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 1,
+        "hint": "填写要回收的物品代码；此表没有继承或跨界的代码 0 默认规则语义。"
       },
       {
         "name": "restitution",
-        "label": "restitution",
+        "label": "奖励物品代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "使用 / 分隔，逐项对应且最多 7 组；两项均留空表示未配置奖励。"
       },
       {
         "name": "Return_quantity",
-        "label": "Return_quantity",
+        "label": "奖励物品数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "使用 / 分隔，逐项对应且最多 7 组；两项均留空表示未配置奖励。"
       },
       {
         "name": "announcement",
-        "label": "announcement",
+        "label": "是否播报",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "0 不播报，1 播报；未修改的旧扩展值原样保留。"
       },
       {
         "name": "codenum",
-        "label": "codenum",
+        "label": "回收扣除数量",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 1,
+        "hint": "本次回收扣除的原物品数量，新增或修改必须大于 0；原生组件执行扣除。"
       },
       {
         "name": "extra_consumption_id",
-        "label": "extra_consumption_id",
+        "label": "额外扣除物品代码",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "使用 / 分隔，最多 7 组；0 为金币，正数为道具代码；不额外扣除时两项均留空。"
       },
       {
         "name": "extra_consumption_num",
-        "label": "extra_consumption_num",
+        "label": "额外扣除物品数量",
         "type": "varchar",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "hint": "与额外扣除代码逐项对应，数量必须为正整数。"
       }
     ],
-    "writable": false,
-    "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "writable": true,
+    "deleteAllowed": true,
+    "notice": "维护原生插件的回收规则；网页不回收玩家物品、不扣款或发奖。奖励与额外消耗各用 / 成对分隔、最多 7 组；额外消耗代码 0 表示金币，留空表示不额外扣除。保存不会自动开启回收功能，组件读取、扣除、奖励及公告效果仍待验。原工具菜单及导入导出格式待手动对照。"
   },
   {
     "key": "appearance",
@@ -2968,24 +2984,24 @@
   },
   {
     "key": "charts",
-    "title": "战力排行榜规则",
+    "title": "原生战力排行榜规则",
     "table": "game_charts_config",
     "primaryKey": "id",
     "autoId": true,
     "fields": [
       {
         "name": "id",
-        "label": "主键ID",
+        "label": "原生规则ID（只读）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
-        "default": 0
+        "readonly": true,
+        "default": 1
       },
       {
         "name": "min_zhanli",
-        "label": "最小上榜战力要求",
+        "label": "最低上榜战力",
         "type": "int",
         "group": "基本设置",
         "min": 0,
@@ -2995,58 +3011,61 @@
       },
       {
         "name": "jiangli_day",
-        "label": "多少天发一次奖励     填1就是每天   填3就是每三天发一次",
+        "label": "奖励间隔（天）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 1
+        "default": 1,
+        "hint": "修改时至少1天；只保存规则，不自动重新计算下次结算时间。"
       },
       {
         "name": "jiangli_hour",
-        "label": "发送奖励的时间 - 时   就是jiangli_day的几点发奖励   填19就是晚上7点发",
+        "label": "奖励小时（0～23）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": 0
+        "default": 0,
+        "hint": "修改时填0～23，按数据库时区解释；历史异常值保持原样时不会被网页自动纠正。"
       },
       {
         "name": "is_mobai",
-        "label": "是否开启膜拜  1开始  0不开启",
+        "label": "膜拜开关（原生保留）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
+        "readonly": true,
         "default": 0
       },
       {
         "name": "status",
-        "label": "状态 1可用 0不可用",
+        "label": "排行榜开关（原生保留）",
         "type": "int",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
+        "readonly": true,
         "default": 1
       },
       {
         "name": "next_time",
-        "label": "下次奖励发放时间",
+        "label": "下次结算时间（原生维护）",
         "type": "datetime",
         "group": "基本设置",
         "min": 0,
         "max": 2147483647,
-        "readonly": false,
+        "readonly": true,
         "default": ""
       }
     ],
-    "writable": false,
+    "writable": true,
     "deleteAllowed": false,
-    "notice": "原生配置读取已接入；规则和客户端效果尚待验证。缺少完整字段协议、配套映射或冲突验证，目前只读，保持现状，不提供无效开关。"
+    "notice": "仅编辑已有1号规则的上榜门槛、奖励间隔和小时；排行榜及膜拜入口都关闭时才允许保存或恢复。开关和下次结算时间只读，调度与发奖继续由原生网关执行；网页不会启用入口、计算排名或发奖。修改间隔不会重写下次结算时间，生效时机与实际奖励仍待验证。",
+    "createAllowed": false
   },
   {
     "key": "charts-rewards",
@@ -3073,7 +3092,9 @@
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "maxLength": 3000,
+        "hint": "原生文本容量3000字符；当前网页支持最多50组成对奖励，原工具数量上限仍待对照。"
       },
       {
         "name": "code_num",
@@ -3083,12 +3104,14 @@
         "min": 0,
         "max": 2147483647,
         "readonly": false,
-        "default": ""
+        "default": "",
+        "maxLength": 3000,
+        "hint": "原生文本容量3000字符；当前网页支持最多50组成对奖励，原工具数量上限仍待对照。"
       }
     ],
     "writable": true,
-    "deleteAllowed": false,
-    "notice": "允许在原生入口关闭时维护配置；服务器会再次核对开关。不会自动启用，不代表已通过游戏验收。"
+    "deleteAllowed": true,
+    "notice": "排行榜与膜拜入口都关闭时维护固定名次的奖励；第0名是膜拜奖励。支持预览、新增、修改、删除及原编号核对和定向恢复。代码与数量成组恢复，保留原生3000字符容量；当前网页最多50组新奖励，原工具上限仍待对照。网页不启用入口、不计算排名或发奖。 若已安装共享奖励表的公益榜，也必须处于停用状态。"
   },
   {
     "key": "clearance",

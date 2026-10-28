@@ -1,0 +1,141 @@
+{
+  "stage": "S40-local",
+  "date": "2026-10-28",
+  "purpose": "Restore exact legacy ranking schedules only from server-owned snapshots",
+  "implementation": {
+    "ordinaryInputRestrictionsPreserved": true,
+    "browserProvidedRestoreValuesRejected": true,
+    "typedSchemaPrivilegeEntryAndRevisionChecksPreserved": true,
+    "trustedLegacyScheduleRestore": true,
+    "nativeSchedulingNotExecutedOrRecomputed": true,
+    "enginesTested": [
+      "MyISAM",
+      "InnoDB"
+    ],
+    "verifiedNamedUniqueIdentityUsed": true
+  },
+  "red": {
+    "result": {
+      "passed": false,
+      "tests": 46,
+      "failures": 1,
+      "assumptionSkips": 0,
+      "ignored": 0,
+      "databaseVersion": "5.6.51",
+      "nativeChartsTests": 10,
+      "nativeChartsRewardsTests": 12,
+      "equipmentRegressionTests": 24,
+      "fixtureSchemasRemoved": true,
+      "realServiceSql": true,
+      "syntheticDataOnly": true,
+      "serverAccessed": false,
+      "nativeGameplayVerified": false,
+      "completeReplacement": false
+    },
+    "isolation": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "98f253be0cc9475fdc90baf7420b2e90d914fea7a924cc779bb08c6dbea500d0",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 1,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "all333ProductionClassesMatchDeployedS39Jar": true,
+    "deployedAppSHA256": "64f3fbe832743a813725b8da2417c802f01e64ec9148b7b7595ca47be5da9120",
+    "failure": "legacyScheduleRestoresOnlyFromServerSnapshotsAcrossKnownEngines: restoring day 0/hour 30 rejected by new-entry validation",
+    "junitLogSHA256": "78e55ccf903e2218f8a6402f56c82018ff85cd589d5c070d26d1063168056826"
+  },
+  "green": {
+    "result": {
+      "passed": true,
+      "tests": 46,
+      "failures": 0,
+      "assumptionSkips": 0,
+      "ignored": 0,
+      "databaseVersion": "5.6.51",
+      "nativeChartsTests": 10,
+      "nativeChartsRewardsTests": 12,
+      "equipmentRegressionTests": 24,
+      "fixtureSchemasRemoved": true,
+      "realServiceSql": true,
+      "syntheticDataOnly": true,
+      "serverAccessed": false,
+      "nativeGameplayVerified": false,
+      "completeReplacement": false
+    },
+    "isolation": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "737193460c711480ed32d522248ec2bcbb52d34ec4ee9d80bbf037f60af07562",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "classIdentity": {
+      "allClassesMatch": true,
+      "groups": [
+        {
+          "kind": "main",
+          "count": 334,
+          "differentClasses": []
+        },
+        {
+          "kind": "test",
+          "count": 126,
+          "differentClasses": []
+        }
+      ]
+    }
+  },
+  "standardMaven": {
+    "command": "mvn -o -Dmaven.test.skip=false test",
+    "tests": 527,
+    "passed": 203,
+    "skipped": 324,
+    "failures": 0,
+    "errors": 0,
+    "skipsAreNotPasses": true,
+    "logSHA256": "417003bf4d43db2be35c29651413192fab532182148a1a257033ff3a359d9b9f"
+  },
+  "preparedRealConfigurationRunner": {
+    "path": "tests/integration/admin/native-charts-config-live.cjs",
+    "syntaxChecked": true,
+    "executed": false,
+    "requiresDeployedLegacyRestoreFixAndControlledGameStop": true
+  },
+  "inventoryTests": {
+    "passed": 4,
+    "failed": 0
+  },
+  "realDeploymentOfLegacyFixVerified": false,
+  "gameStopPerformed": false,
+  "serverConfigurationWritesPerformed": false,
+  "originalWindowsToolStarted": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "completeReplacement": false
+}

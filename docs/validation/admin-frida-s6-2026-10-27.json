@@ -1,0 +1,916 @@
+{
+  "schema": 1,
+  "phase": "S6 default Frida storage dependency",
+  "adminImplementationComplete": false,
+  "completeReplacement": false,
+  "baseCommit": "d868865",
+  "baselineScriptSHA256": "bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843",
+  "patchedScriptSHA256": "395ba7db685ccd1e3942b5b24a54611fcdbbae71fa5b8693322ddb9762d560e5",
+  "sourceClassification": "Observed server script exactly matches the previously shipped default, not an operator customization.",
+  "rootCause": "External installer omitted frida from provisioning, grants and backup scope. A failed frida connection was passed to a native query.",
+  "changes": [
+    "Fixed frida.game_event schema adapter; reject incompatible columns, engine, primary/unique indexes, triggers and foreign keys before writes.",
+    "Installer migration journal binds actual UUID, instance, host, scope, schema hash and operation ID; additive retry preserves progress.",
+    "Grant only SELECT/INSERT/UPDATE/DELETE/CREATE/LOCK TABLES on frida.* to the existing dedicated subnet game account; no password reset or global grant.",
+    "Explicit plugin-db CLI; startup refuses a missing managed dependency before starting game. Disabled-plugin progress remains in backup scope.",
+    "Known shipped script upgrade retains private recovery copy; operator edits remain untouched.",
+    "Null handles fail without native calls; failed/malformed loads cannot overwrite activity progress at shutdown; unknown JSON object fields preserved."
+  ],
+  "checks": {
+    "python": {
+      "total": 60,
+      "passed": 58,
+      "failed": 0,
+      "skipped": [
+        {
+          "test": "FridaCompatibility.test_scoped_audit_resolves_gadget_but_keeps_other_missing_symbols_fatal",
+          "reason": "requires Linux ELF loader and gcc-multilib"
+        },
+        {
+          "test": "FridaCompatibility.test_archived_gadget_executes_minimal_script_with_versioned_shim",
+          "reason": "requires Linux ELF loader and gcc-multilib"
+        }
+      ]
+    },
+    "mockedJavaScript": {
+      "connectionScenarios": 9,
+      "activityLoadScenarios": 9,
+      "nativeCallsMocked": true,
+      "existingItemOwnershipAndRecyclingRegressionPassed": true
+    },
+    "isolatedMySQL56": {
+      "passed": true,
+      "databaseVersion": "5.6.51",
+      "freshTableAndScopedGrant": true,
+      "existingUtf8ProgressBytePreserved": true,
+      "repeatOperationIdPreserved": true,
+      "scopedLockTablesDumpPassed": true,
+      "dumpSHA256": "7de2a6c8c10b35a967a8408ec0f9e062b9236771ea26426250c39d873b70c938",
+      "unknownSchemaRefusals": [
+        "unknown-column",
+        "extra-unique-index",
+        "unknown-trigger",
+        "unknown-foreign-key"
+      ],
+      "nativeFridaOrGameVerified": false,
+      "targetSubnetRoutingVerified": false
+    },
+    "namespace": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "8d3a4e8668cd0e65a570ac8c2e15314baeca61ba61c0127fda232abb653374cb",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "initialAttempt": {
+      "path": "/home/lixin/.cache/dof-easy/local-validation/runs/admin-frida-s6-db-1",
+      "failed": true,
+      "reason": "Missing mysqldump executable; no native/component pass claimed."
+    },
+    "standardMaven": {
+      "tests": 307,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 141,
+      "skippedTests": [
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.explicitAutoIdSurvivesCrashAndPlayerReferencesPreventRemoval",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.tamperedSnapshotAndTargetCannotBeUsedForRestore",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.changedCurrentAndChangedLegacyEvidenceInvalidateConfirmation",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.oldAutoIdIsExplicitlyUnknownAndMalformedSnapshotsStayBlocked",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.oneResolvedLegacyRowDoesNotHideAnotherPendingRow",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.interruptedBeforeWriteIsNotAppliedAndBlocksFreshRequestsUntilChecked",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.missingMigrationOldPendingAndWrongBindingNeverInitializeNativeData",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.previewIsDurableAndReplayNeverOverwritesLaterEdits",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.legacyReviewPreservesOriginalLogAndDoesNotRepeatNativeWrite",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.concurrentVersionsYieldOneWriteAndOneExplicitConflict",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.interruptedAfterMyisamWriteIsReconciledAndRestoresOnlyTouchedFields",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.explicitConflictAcceptancePreservesCurrentDataAndRecordsReason",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.changedLegacyStateDoesNotLeaveReviewPermanentlyPrepared",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ActivityOperationsContractTest.interruptedLegacyConfirmationIsReconciledWithoutNativeWrites",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.scalarInterruptedWriteReconcilesWithoutAutomaticRetry",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.customLayoutKeepsHotkeysSupportsDecimalAndRestoresExactSnapshot",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.switchesBindReplayPayloadAndRestoreOnlyChangedFields",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.otherPresetsRejectLegacyWithoutAuditAndPendingPresetWriteReconciles",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.scalarValuesPersistExactBytesReplayAndRestoreWithNoGameplayClaim",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.interruptedCoordinateWriteReconcilesWithoutBlindRetry",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.onlyOneConcurrentEditorCanCommit",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.interruptedAfterMyisamWriteDoesNotPretendTransactionRolledBack",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.switchValidationRejectsCoercionMissingFieldsAndMixedRequests",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.allFifteenPresetsPersistPreserveExtensionsAndRestoreFromFreshService",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.interruptedSwitchSaveReconcilesWithoutRepeatingTheWrite",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.creationPresetsPersistReloadReplayAndRestoreWithoutEnablingCreation",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.featureSwitchesPersistReplayRejectChangedPayloadAndRestore",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.scalarValuesRejectWrongTypesMixedEditsAndMissingFieldsWithoutAudit",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.coordinatesHavePreviewReplayPayloadBindingAndExactRestore",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.customLayoutFailureReconcilesAndInvalidNumbersNeverCreateAudit",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.coordinateValidationRejectsFloatsStringsUnknownControlsAndMixedPreset",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.staleRevisionAndRequestReuseCannotOverwrite",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.noChangeDoesNotRewriteNativeRowAndThirdPartyEditBlocksRecovery",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.persistsReplaysAndRestoresOnlyTheChangedFields",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.interruptedBeforeNativeWriteBlocksRetriesUntilReconciled",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.corruptRestoreSnapshotCannotBecomeNativeConfiguration",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.earringConflictsDelimitersAndInterruptedWriteUseSameRecoveryGuard",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.earringCompositePersistsOnlySelectedPartsAndRestoresExactBytes",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.featureInterruptionReconcilesWithoutRetryAndMixedMutationIsRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofMyisamContractTest.differentDatabaseIdentityOrMissingNativeRowIsRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.raidProgressUsesAccountFilterWithoutChangingRewardCounters",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.invalidParametersAndUnknownTablesCannotBecomeSql",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.nativeDateWindowsAndLiteralSearchAreBoundedAndReadOnly",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.missingNativeColumnsAreReportedWithoutInitializingThem",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.paginationFilteringTiesAndNullValuesArePreserved",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.catalogReportsMissingFieldsAndOtherViewsRemainUsableWithoutUiColumns",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.unsupportedOwnerDateSearchAndQueryInjectionAreRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.dungeonRecordsUseReplacementMapHistoryAndPreserveReadOnlyCounters",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofRecordsContractTest.schemaDiagnosisShowsMissingColumnsWithoutReadingOrRepairingProgress",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofScriptReleaseContractTest.concurrentApplicationsCannotOverwriteAndIdCannotChangePayload",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofScriptReleaseContractTest.partialMyisamWriteIsReconciledAndFieldScopedRecoveryWorks",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofScriptReleaseContractTest.appliesOnlyParametersReplaysAndRestoresUnequalOriginalValues",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofScriptReleaseContractTest.thirdPartyParameterChangesBlockRecoveryAndAuditEngineMustBeDurable",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofScriptReleaseContractTest.disconnectBeforeOrAfterWritesDoesNotTriggerAutomaticRetry",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofScriptReleaseContractTest.staleRevisionWrongSourceAndEnabledUpdateFailWithoutWrites",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.crossTableSaveReplayAndTargetedRestorePreserveUnrelatedChanges",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.incompatibleTypesAndNonDurableEnginesCannotBeWritten",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.interruptionBeforeWriteAndAfterWriteHaveDifferentReconciliation",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.corruptSnapshotsAndWrongDatabaseIdentityFailClosed",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.nativeSignedLimitsAndDistinctCurrencyEncodingsSurvivePersistence",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.thirdPartyChangesBlockRecoveryAndNeverOverwriteNativeData",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.interruptedBetweenMyisamTablesIsPartialAndRecoverable",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.concurrentEditorsCannotBothOverwriteSameRevision",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.switchSaveAndRestoreKeepUnknownExtension",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofSettingsContractTest.requestIdPayloadModuleAndVersionRemainBound",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofTextContractTest.pendingRecordRequiresReconciliationAndCorruptRestoreIsRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofTextContractTest.homepageSaveReplayRestorePreservesHudAndNulls",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofTextContractTest.nativeDelimiterInvalidUrlAndUnknownFieldsAreRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.DofTextContractTest.staleEditRequestReuseAndExternalChangesCannotOverwrite",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.unresolvedOlderOperationCannotBeHiddenByNewerPreviews",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.explicitConflictAcknowledgmentNeverOverwritesForeignPenalty",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.concurrentPreviewsHaveOneWinnerAndOneVersionConflict",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.beforeAndAfterWriteInterruptionsAreReconciledAndFreshIdsBlocked",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.previewRequiresConfirmationAndReplayDoesNotExtendExpiry",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.accountIdentityChangeInvalidatesOutstandingPreview",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.initialBanCanBeUndoneOnlyWhileExactInsertedPenaltyRemains",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.protectedAccountsUnknownSchemaAndInvalidBodiesAreRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.myisamUsesDurableBeforeAndAfterChecksWithoutTransactionClaims",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedBanContractTest.unbanAndRestorePreserveOtherPunishmentTypesAndForeignIssuers",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedPasswordContractTest.resetRequiresPreviewAndNeverStoresPasswordOrNativeDigestInJournal",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedPasswordContractTest.secretRotationCannotMisclassifyAnUnresolvedPasswordReset",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedPasswordContractTest.beforeAndAfterWriteFailuresHaveExplicitResultsAndInvalidateOldSessions",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedPasswordContractTest.myisamAndMissingKeyFailSafely",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedPasswordContractTest.protectedAccountsIdentityChangesAndOldPasswordRestoreAreRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedPasswordContractTest.thirdPartyChangeCanBeAcknowledgedWithoutRewritingPassword",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.restoreRefusesOwnershipAndTouchedFieldConflicts",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.boundedIntegersUnknownFieldsAndVersionsAreRejected",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.interruptionAfterNativeWriteAndTargetedRestorePreserveOtherFields",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.conflictAcknowledgmentDoesNotWriteNativeAttributes",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.incompatibleSchemaAndNonAdminsCannotWrite",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.restorePreservesValidSignedNativeValues",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.rechecksOfflineStateAtCommitAndUnknownStateIsNotOffline",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.fixedPatchRequiresPreviewAndReplayDoesNotRewriteLaterChanges",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.ManagedRoleContractTest.interruptionBeforeNativeWriteBlocksFreshIdsUntilReconciliation",
+          "reason": "requires dedicated disposable MySQL fixture"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeClientBundleTest.pinnedClientBundleContainsExactlySixFilesAndNoPrivateParameter",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeClientPayloadTest.privateNativeFixtureCanBeReencodedWithoutChangingExistingKey",
+          "reason": "Private native fixture/public identity not configured"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeClientPublicationTest.actualTemplateKeepsFiveVersionedClientRecords",
+          "reason": "Private fixtures absent"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeConfigContainerTest.suppliedNativeFixturesAreByteIdenticalAfterJavaRegeneration",
+          "reason": "Private native fixtures not configured"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeCreationPresetsTest.malformedLayoutsAreNeverInitializedByPreset",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeCreationPresetsTest.allNativePresetsOnlyChangeCreationCoordinatesAndPreserveExtensions",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureSwitchesTest.oneSwitchPreservesEveryOtherRawValueAndNoopPreservesLegacyZero",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureSwitchesTest.invalidOrMixedUnknownPatchCannotPartiallyModifyConfiguration",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureSwitchesTest.nativeCheckboxCatalogDoesNotDuplicateUiControlsOrInventLegacyDefaults",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureSwitchesTest.earringRemainsVisibleButUnknownNativeSaveIsBlocked",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureValuesTest.compositeEditsPreserveOtherPartsReservedSlotsAndFutureExtensions",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureValuesTest.oldConfigurationShowsMissingFieldsWithoutFabricatingValues",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureValuesTest.missingCompositeIsVisibleAndNeverInitializedByEditing",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureValuesTest.allTwentyTwoFieldsPreserveExactTextAndUnrelatedBytes",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeFeatureValuesTest.malformedInputCannotPartiallyModifyOrCorruptNativeDelimiter",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeHotkeysTest.malformedAndUnrepresentableEditsFailWithoutMutation",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeHotkeysTest.unknownNonTextBytesSurviveKnownFieldEdit",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeHotkeysTest.editsOnlySpecifiedFieldsAndRetainsUnknownTail",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeHotkeysTest.realNativeCapturesRoundTripAndDecodeGbk",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptChecksumTest.originalCompressedAndUncompressedTailVectorsMatch",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptCompressionTest.realCompressedIndexAndResourcesWhenProvided",
+          "reason": "got: <[null, null, null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptContextTest.authorizedNativeSampleRegeneratesEveryByteWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptFileCodecTest.twoCompleteOriginalArtifactsMatchIncludingNativeTrailersWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptIndexTest.completeRealIndexAndResourceDataWhenProvided",
+          "reason": "got: <[null, null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptIndexTest.capturedNativeArithmeticVectorsWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptJobsTest.currentPairedSourceStructureWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptJobsTest.originalProducerVectorsMatchNewParameterAndWholeFileCandidate",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeScriptMetadataTest.matchesOriginalLoaderVectorsWithinSafeFilenameScope",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeTextEnvelopeTest.approvedRealSampleExplainsIndexMaskWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeTextEnvelopeTest.nativeWriterVectorsWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiCoordinatesTest.namedCoordinateEditPreservesEveryUnrelatedFieldAndSwitch",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiCoordinatesTest.unknownOutOfRangeAndEmptyPatchesCannotChangeAnything",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest.partialChangePreservesUnknownFieldsAndNoOpSpelling",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest.malformedExistingKnownFieldsAndUnknownEditTargetsFailWithoutChangingSource",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest.all132FieldsMatchOriginalSaveSqlIncludingSignedBoundaries",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest.nativeDecimalSpacingIsPreservedWhileOtherCoordinatesStayIntegers",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiPresetApplicationTest.missingAndMalformedLayoutsFailWithoutChangingSource",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiPresetApplicationTest.native100LayoutMatchesButLegacyGeneralSaveStillHasUnreplicatedEffects",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiPresetApplicationTest.publicApplicationRejectsUnmigratedLegacyAndPreservesCurrentCustomSettings",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiPresetApplicationTest.allNativeApplicationsPreserveExtensionsAndAreIdempotent",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiStateTest.doesNotOverwriteUnrelatedHotkeysOrUnknownCoordinateExtensions",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiStateTest.nativeSamplesRoundTripWithoutTouchingOpaqueBytes",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiSwitchesTest.switchingOneControlDoesNotNormalizeOtherState",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiSwitchesTest.togglesPreserveUnknownFieldsAndRestoreExactly",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiSwitchesTest.legacyZeroIsReadAsNativeFalseButNotNormalizedOnNoChange",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.dof.NativeUiSwitchesTest.noncanonicalMissingAndUnknownValuesAreNotInitialized",
+          "reason": "requires private native comparison inputs"
+        },
+        {
+          "test": "com.aiyi.game.dnfserver.service.extension.RegistrationCodesIntegrationTest.registrationGateUsesOneNativeTransaction",
+          "reason": "got: <false>, expected: is <true>"
+        }
+      ],
+      "log": "/tmp/dof-admin-s6-scope-maven.log",
+      "scopeMinimumAndIncludedRowsChecked": true
+    },
+    "frontendBuild": {
+      "passed": true,
+      "source": "fresh tracked-source tree; cached node_modules only",
+      "log": "/tmp/dof-admin-s6-frontend-build.log"
+    },
+    "cleanJavaCompile": {
+      "sources": 166,
+      "parameterMetadata": true,
+      "sourceTarget": "8",
+      "output": "/tmp/dof-admin-s6-delivery-classes"
+    }
+  },
+  "credentialDiagnosis": {
+    "dotenvRootFieldEncrypted": false,
+    "dotenvRootFieldMatchesGenerator48Hex": true,
+    "composeParsingPreservesRawValue": true,
+    "dotenvValueAuthenticatesHostRoot": false,
+    "panelRootStorageEncrypted": true,
+    "officialPanelReaderAuthenticated": true,
+    "mysqlVersion": "5.6.50-log",
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "credentialsExported": false
+  },
+  "deployment": {
+    "sourceCommit": "156fe3eb2e0b0f1dcb1a7eca825616c6d9c64611",
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameTag": "dof-game-replacement:20261027-s6",
+    "adminImage": "sha256:af013455e07757d25eb6842917ce312f9de651eaa810e1ba2b0399929dc6bc15",
+    "adminNotRecreated": true,
+    "gameKeysByteUnchanged": true,
+    "instanceId": "dof-main",
+    "grade": 86,
+    "adminPort": 18080,
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s6-frida/before-upgrade",
+    "nativeConsumptionVerified": false,
+    "activityEnabledByMigration": false,
+    "gameImageDistribution": "private-test-host-only",
+    "performed": true
+  },
+  "remaining": [
+    "Valid nonempty activity JSON native load and native save-callback invocation have not been observed; original checkpoint was absent.",
+    "Historical Docker fault logs rotated before a second regex scan; live compact-error check and row preservation were recorded, but raw historical re-audit is unavailable.",
+    "Assignment of original-tool feature-049 to Frida vs native plugin is unconfirmed; no sole executor is claimed and no activity was enabled.",
+    "Activity scheduling, multi-channel ownership, reward effects and feature-049 webpage remain pending.",
+    "Mail and recharge still directly mutate native tables without the required durable protocol; wp02 remains open.",
+    "Clean distributable game image, native menu audit, remaining business operations and full replacement gates remain open.",
+    "Real non-admin guild-actor reads remain to be exercised; actual mapper binding and service/HTTP permission tests passed.",
+    "Installer db_config replacement still requires preserving unknown nested noncredential options before broad compatibility acceptance.",
+    "Apply prepared 239-minimum resource correction after server network access is restored; rerun final ledger, UID6 balance and original-task replay checks."
+  ],
+  "realMigration": {
+    "passed": true,
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "sourceCommit": "156fe3eb2e0b0f1dcb1a7eca825616c6d9c64611",
+    "operationId": "b9c41a75-9b01-4c52-b710-fdd0ca1c1075",
+    "schemaExistedBefore": false,
+    "tableExistedBefore": false,
+    "rowsBefore": null,
+    "rowsAfter": "0",
+    "replayPreservedOperationId": true,
+    "scopePrivilegesBefore": [],
+    "scopePrivilegesAfter": [
+      "CREATE",
+      "DELETE",
+      "INSERT",
+      "LOCK TABLES",
+      "SELECT",
+      "UPDATE"
+    ],
+    "credentialsExported": false,
+    "rootAuthMethod": "existing panel official reader; server memory only"
+  },
+  "realFaultCheck": {
+    "passed": true,
+    "operationId": "28226b75-0151-41f6-aef3-9922da0826e2",
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "twoChannelsObservedMalformedLoadWithoutNativeError": true,
+    "malformedRowPreservedThroughStartupAndStop": true,
+    "originalSingleRowRestoredExactly": true,
+    "healthyStorageReadyAfterRestore": true,
+    "adminNotRestarted": true,
+    "sameGameContainerAndImage": true,
+    "privateAndPublicKeyBytesUnchanged": true,
+    "gameplayOrRewardsVerified": false,
+    "activityEnabledByProbe": false,
+    "phaseBoots": {
+      "faultBoot": "2026-10-27T07:57:39.378759739Z",
+      "goodBoot": "2026-10-27T08:01:58.080970062Z"
+    },
+    "checkpointDisposition": "Actual stored row captured after initial normal stop; raw checkpoint kept only in private state file"
+  },
+  "realNativeStorage": {
+    "passed": true,
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "grade": 86,
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "adminImage": "sha256:af013455e07757d25eb6842917ce312f9de651eaa810e1ba2b0399929dc6bc15",
+    "patchedDefaultScriptSHA256": "395ba7db685ccd1e3942b5b24a54611fcdbbae71fa5b8693322ddb9762d560e5",
+    "previousDefaultScriptRetained": true,
+    "twoNativeFridaConnections": 2,
+    "positiveStartupReadyCount": 2,
+    "malformedLoadHandledCount": 2,
+    "restoredPhaseNativeScriptErrorsAbsent": true,
+    "faultLiveCompactErrorCheckPassed": true,
+    "historicalFaultRawLogRetained": false,
+    "posthocFaultRegexScanVerified": null,
+    "channels": {
+      "siroco52": {
+        "pid": 735,
+        "dispatcherThreadId": 1111,
+        "bootId": "329fb26654c6da0ac2b0cd0bb9ec43b0",
+        "nativeInvocationAttempts": {
+          "anton": 0,
+          "luke": 0
+        }
+      },
+      "siroco15": {
+        "pid": 734,
+        "dispatcherThreadId": 1122,
+        "bootId": "8c08f74c277333c28885e5cc3adca6e4",
+        "nativeInvocationAttempts": {
+          "anton": 0,
+          "luke": 0
+        }
+      }
+    },
+    "persistedAndWorkingKeyBytesUnchanged": true,
+    "fridaIncludedInGameAndHelperBackupScope": true,
+    "actualGameRoleScopedDumpPassed": true,
+    "scopedDumpSHA256": "f2beb2c47cb2bb8ecc77893f6c30a70f3c012a627ff2d4cabb0ad3f33ecbfa06",
+    "originalCheckpointPresent": false,
+    "validNonemptyNativeProgressLoadVerified": false,
+    "nativeSaveCallbackInvocationObserved": false,
+    "activityEnabledByProbe": false,
+    "gameplayOrRewardsVerified": false
+  },
+  "accountReadFix": {
+    "phaseScope": "R1/R2 existing endpoints",
+    "fourActualMapperPathsParameterBound": [
+      "list",
+      "count",
+      "listAll",
+      "countAll"
+    ],
+    "accountHashColumnsRemovedFromLists": true,
+    "detailsReturnSafeCopy": true,
+    "guildOwnershipCheckedBeforeBillingRead": true,
+    "missingAndAmbiguousDataReportExplicitStatus": true,
+    "frontendUrlSearchParams": true,
+    "frontendSensitiveResponseLoggingRemoved": true,
+    "actualMapperBindingTests": 4,
+    "serviceAndHttpPermissionTests": 7,
+    "realDeploymentVerified": true,
+    "liveGuildActorVerified": false
+  },
+  "adminCandidateDeployment": {
+    "sourceCommit": "96b67fb30392da85d0a1284de185cf5926ee3250",
+    "adminImage": "sha256:de41b30833aa66043a2c7fcea5a10f4cc2d0a2ce2f235b47173e599f41eba109",
+    "adminTag": "dof-admin-replacement:20261027-s6-candidate",
+    "appSHA256": "00fa655f00c6374c3b70420d8a1b4dff9414c400d0a0c469d4320d68f09af73b",
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameNotRecreated": true,
+    "adminPersistentKeyFilesUnchanged": true,
+    "adminPort": 18080,
+    "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s6-frida/before-admin"
+  },
+  "realAccountRead": {
+    "accountDetailContainsNoPasswordHash": true,
+    "passed": true,
+    "backend": "real",
+    "instanceId": "dof-main",
+    "readOnly": true,
+    "adminListAndCountChecked": true,
+    "guildScopeCoveredByActualMapperBindingTests": true,
+    "checks": [
+      {
+        "type": "known-test-account",
+        "rows": 1,
+        "totalAgreesWithRows": true
+      },
+      {
+        "type": "SQL-looking-literal",
+        "rows": 0,
+        "totalAgreesWithRows": true
+      },
+      {
+        "type": "SQL-looking-literal",
+        "rows": 0,
+        "totalAgreesWithRows": true
+      }
+    ]
+  },
+  "realBrowser": {
+    "passed": true,
+    "backend": "real",
+    "instanceId": "dof-main",
+    "configEdits": false,
+    "actualGameplayVerified": false,
+    "checks": [
+      "real browser administrator login",
+      "anonymous access rejected",
+      "real plugin read and application guidance",
+      "real browser anton frozen preview, submit, two-channel native receipts and four-field readback",
+      "real browser luke frozen preview, submit, two-channel native receipts and four-field readback",
+      "real signin schema and queries",
+      "real read-only record projections: 30/30",
+      "deployed activity adapter and durable journal read",
+      "deployed penalty schema and protected-admin password-state/journal read without writes",
+      "role adapter sample unavailable: character list empty; no player data initialized",
+      "browser schema diagnosis",
+      "feature ledger uses canonical 71 classes / 239 operations and current management evidence",
+      "real browser account filter preserves literal test account, list/count agree, no password hashes",
+      "real browser account filter preserves literal SQL/URL-looking text, list/count agree, no password hashes",
+      "real browser account filter preserves literal SQL/URL-looking text, list/count agree, no password hashes"
+    ],
+    "pageErrors": 0
+  },
+  "scopeMinimumCorrection": {
+    "initialBaselineOperations": 209,
+    "acceptedMinimumOperations": 239,
+    "includedOperationCount": 239,
+    "nativeMenuAuditComplete": false,
+    "reason": "Final live check exposed the first-batch minimum still displayed as 209; all 239 operations were already present. Minimum corrected without removing or completing any operation."
+  },
+  "lastConfirmedAdminFinalDeployment": {
+    "sourceCommit": "35134e2ddf6b53084892c9a89c1e2647e828f3a5",
+    "businessImplementationCommit": "96b67fb30392da85d0a1284de185cf5926ee3250",
+    "adminImage": "sha256:d24f74a826558c047ac13d2ecd6652183c971699fdef6e30e336c188838ece23",
+    "appSHA256": "65e3e4433ecaa32149c34790497b6ef53b755979f9495d09e6f49868248e34f4",
+    "onlyJarMemberChanged": [
+      "BOOT-INF/classes/dof/execution-plan.json"
+    ],
+    "frontendAndBusinessClassesUnchanged": true,
+    "gameNotRecreated": true,
+    "adminPersistentKeyFilesUnchanged": true,
+    "adminPort": 18080
+  },
+  "postFinalVerification": {
+    "passed": false,
+    "accountReadSubprocessCompleted": true,
+    "failedCheck": "Historical baselineOperations was 209 although all 239 discovered operations were included.",
+    "runtimeReplayAndUid6BalanceChecksExecuted": false
+  },
+  "scopeCorrectionDeployment": {
+    "sourceCommit": "d1c2fb4",
+    "status": "pending",
+    "targetAppSHA256": "d860118570fafae249b4e8f39e89a4a7a81426b444719a0bac98cce365cfbcb2",
+    "businessClassesAndVerifiedFrontendUnchanged": true,
+    "networkObservation": {
+      "sshClosedBeforeBanner": true,
+      "adminHttpConnectionClosedWithoutResponse": true,
+      "windowsHostProbeAlsoClosedBeforeSshBanner": true,
+      "credentialsSentDuringProbes": false
+    },
+    "uploadOutcome": "not confirmed; connection closed",
+    "remoteDeploymentCommandInvoked": false,
+    "restorePointsRetained": true,
+    "preparedOperations": ".dof-easy/admin-replacement-delivery-20261027-s6-scope/operations"
+  }
+}

@@ -52,9 +52,27 @@ public class CharacInfoController {
         return characService.list(account);
     }
 
+    @Resource
+    private com.aiyi.game.dnfserver.service.dof.ManagedRoleService managedRoles;
+
+    @GetMapping("{characNo}/edit")
+    public Object edit(@PathVariable long characNo){return managedRoles.read(characNo);}
+
+    @PostMapping("{characNo}/preview")
+    public Object preview(@PathVariable long characNo,@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedRoleService.Edit edit){return managedRoles.preview(characNo,edit);}
+
     @PutMapping
-    public void update(@RequestBody CharacInfo info){
-        characService.update(info);
+    public Object update(@RequestBody com.aiyi.game.dnfserver.service.dof.ManagedRoleService.Edit edit){return managedRoles.save(edit);}
+
+    @GetMapping("{characNo}/history")
+    public Object history(@PathVariable long characNo){return managedRoles.history(characNo);}
+
+    @PostMapping("{characNo}/history/{requestId}/reconcile")
+    public Object reconcile(@PathVariable long characNo,@PathVariable String requestId){return managedRoles.reconcile(characNo,requestId);}
+
+    @ExceptionHandler(com.aiyi.game.dnfserver.service.dof.DofFailure.class)
+    public org.springframework.http.ResponseEntity<java.util.Map<String,String>> managementFailure(com.aiyi.game.dnfserver.service.dof.DofFailure e){
+        return org.springframework.http.ResponseEntity.status(e.status).body(java.util.Collections.singletonMap("message",e.getMessage()));
     }
 
     /**

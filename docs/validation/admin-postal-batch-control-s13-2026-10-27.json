@@ -1,0 +1,205 @@
+{
+  "stage": "S13",
+  "date": "2026-10-27",
+  "state": "deployed_read_and_refusal_verified_effect_pending",
+  "completeReplacement": false,
+  "protocol": "postal-batch-control-v1",
+  "scope": "permanent cancellation of original unsubmitted batch children and audited takeover through new linked tasks",
+  "standardMaven": {
+    "total": 380,
+    "passed": 180,
+    "skipped": 200,
+    "failures": 0,
+    "errors": 0,
+    "log": "/tmp/dof-admin-s13-control-maven-2.log"
+  },
+  "databaseContracts": {
+    "passed": true,
+    "contractTests": 14,
+    "databaseVersion": "5.6.51",
+    "generatedMailReceiptContractTests": 3,
+    "managedPostalContractTests": 12,
+    "postalBatchContractTests": 11,
+    "postalReceiptControlContractTests": 7,
+    "postalBatchControlContractTests": 8,
+    "totalContractTests": 55,
+    "realServiceSqlFaultAndConcurrencyGatePassed": true,
+    "fixtureSchemasRemoved": true,
+    "originalToolEquivalenceVerified": false,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false
+  },
+  "namespaceProvenance": {
+    "schema": 1,
+    "serverAccessed": false,
+    "network": "private namespace; no routes or external interfaces",
+    "rootReadOnly": true,
+    "inputsReadOnly": true,
+    "loopbackOnly": true,
+    "inputsFingerprint": "def3ebc283e6f2405229b13f9e48d0dcac38a3bc440b8e8b44eab6068c404809",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "command": [
+      "/bin/sh",
+      "/inputs/run.sh"
+    ],
+    "completed": true,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "evidenceValid": true
+  },
+  "frontendBuildPassed": true,
+  "mockedBatchPage": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false,
+    "checks": [
+      "checked recipient selection and content freeze together without issuing mail",
+      "reload restores exact original batch ID, recipients and content",
+      "lost final response stops writes; reading original task recovers receipts without resending",
+      "stop schedules no further targets; reload resumes only the original remaining target",
+      "partial results retain errors; linked retry contains only confirmed unsubmitted recipients",
+      "uncertain child blocks continuation and retries; reconciliation issues no mail",
+      "permanent cancellation preserves unknown results and recovers a lost control response without issuing mail",
+      "cancel before start prevents issuance; selected unsubmitted subset creates a new linked preview without sending",
+      "history failure cannot appear as a writable empty task list",
+      "revoked management permission disables batch writes"
+    ],
+    "pageErrors": 0,
+    "nativeWritesInMock": 7,
+    "stepRequests": 8
+  },
+  "mockedSinglePage": {
+    "passed": true,
+    "mockedApis": true,
+    "realDeploymentVerified": false,
+    "actualPlayerReceiptVerified": false,
+    "checks": [
+      "gold plus body preview freezes content without sending",
+      "reload rehydrates original preview with the same ID and content",
+      "lost submit keeps original ID; reconcile recovers receipt without reissuing",
+      "history recovers generated postal ID after page reload",
+      "uncertain MyISAM mail blocks new sends",
+      "explicit acknowledgment sends no new mail and preserves unknown original outcome",
+      "deleted recipient can acknowledge an unknown receipt without enabling new mail or issuing native writes",
+      "failed history read disables new mail even with a valid identity",
+      "permission failure disables sending"
+    ],
+    "pageErrors": 0,
+    "nativeWritesInMock": 3,
+    "submitRequests": 4
+  },
+  "pythonChecks": {
+    "inventory": 4,
+    "package": 1,
+    "failures": 0
+  },
+  "earlierValidatedRun": {
+    "sqlContracts": 54,
+    "output": "/tmp/dof-admin-s13-batch-control-db",
+    "purpose": "before adding actual issuer/control lock-gap interleaving coverage"
+  },
+  "retainedFailures": [
+    {
+      "stage": "initial frontend build",
+      "reason": "Arco checkbox change type includes boolean array entries; corrected handler signature and explicit checked===true",
+      "log": "/tmp/dof-admin-s13-frontend.log"
+    }
+  ],
+  "invariants": {
+    "nativeDataChangedByTaskControl": false,
+    "originalTaskActorImmutable": true,
+    "controlAndChildChangesAtomicInJournal": true,
+    "alreadyPreparedOrUnknownChildrenNotCancelled": true,
+    "controlRevisionIncludesAllChildStatesAndHashes": true,
+    "issuerProgressAfterDurableControlIntentInvalidatesEntireControl": true,
+    "linkedRetriesRequireConfirmedUnsubmittedTargets": true,
+    "successfulConsumedAndReservedRetryLineagesCannotBeClaimedAgain": true,
+    "uncertainResultsRemainUnknown": true,
+    "newAdminCanFinalizeFullyRecordedParent": true
+  },
+  "realDeployment": {
+    "readAndRefusalVerified": true,
+    "actualTaskCancellationOrTakeoverOnRealTargetsVerified": false,
+    "deployment": {
+      "sourceCommit": "d68f037c6722c966951b5d6970dc2bb134aa247c",
+      "adminImage": "sha256:2cdf1c91a7b95c1b3a56fa9f41c92c4160a23d237d0914b23b291f3a9cfb3f07",
+      "adminTag": "dof-admin-replacement:20261027-s13-candidate",
+      "appSHA256": "d1a621cb3f166e4578f92db688923c252de70f75460fd20744879112893d4957",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s13-control/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": false
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "phase": "DEPLOYED_READ_VERIFIED_BATCH_CONTROL_EFFECT_PENDING",
+    "processes": {
+      "deployment": {
+        "pid": 85205,
+        "terminal": true
+      },
+      "browser": {
+        "pid": 86012,
+        "terminal": true
+      }
+    },
+    "gameHealth": "healthy"
+  },
+  "remaining": [
+    "controlled real target batch cancellation/takeover and restart verification",
+    "original tool batch/default and export parity",
+    "real character mail display/receipt/claim",
+    "real transport and process/disk failure tests",
+    "CDK/currency/exchange issuer work and other wp01-wp13 requirements"
+  ],
+  "sourceCommit": "d68f037c6722c966951b5d6970dc2bb134aa247c",
+  "delivery": {
+    "appSHA256": "d1a621cb3f166e4578f92db688923c252de70f75460fd20744879112893d4957",
+    "adminImage": "sha256:2cdf1c91a7b95c1b3a56fa9f41c92c4160a23d237d0914b23b291f3a9cfb3f07",
+    "transferSHA256": "3d335eeda2ccfd03e59a4e05edfc01c2230381311bb56349b23dfb1dd7cb8851",
+    "transferBytes": 510217,
+    "transferArchive": ".dof-easy/admin-replacement-delivery-20261027-s13-transfer.tgz",
+    "deploymentScriptSHA256": "a2bb8467e4ac2e9216b16b37c82c70c8402a55a1cdab764ba7da5c4b4d5fbe83",
+    "oldAdminImage": "sha256:c3f96581ca8fe7dc053704f6835ad9fdcfacb599962c2515be5030f39de5d270",
+    "oldAppSHA256": "4ff1a7e1c0b51aae5edf09563a6dbdd38eafc43934da9bfbecdf7f7bb5f386f8",
+    "privateCredentialsAndScreenshotsExported": false
+  }
+}

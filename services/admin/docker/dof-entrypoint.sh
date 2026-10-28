@@ -2,7 +2,10 @@
 set -eu
 
 # Dedicated development runtime: never runs init.sql or generates game keys.
-[ "${LAUNCHER_MODE:-}" = native ] || { echo 'Native launcher mode is required' >&2; exit 1; }
+case "${LAUNCHER_MODE:-}" in
+  native|dof) ;;
+  *) echo 'Unsupported launcher mode' >&2; exit 1 ;;
+esac
 if env | cut -d= -f1 | grep -q '^QINGKONG_'; then
   echo 'Legacy native environment is not supported' >&2; exit 1
 fi

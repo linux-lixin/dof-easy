@@ -1,0 +1,176 @@
+{
+  "stage": "S19",
+  "date": "2026-10-28",
+  "purpose": "durable apply/restore previews, recovery and cancellation fences for paired Script parameters",
+  "completeReplacement": false,
+  "serverAccessed": false,
+  "realDeploymentVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "originalToolEquivalenceVerified": false,
+  "originalWindowsToolStarted": false,
+  "implementation": {
+    "protocol": "script-release-preview-v1",
+    "namespace": "script.release",
+    "cancellationNamespace": "script.release.cancel",
+    "privateSnapshots": "existing DOF_SCRIPT_RELEASE retained; unchanged schema and legacy history",
+    "ordinaryJournal": "only configuration revisions, source/artifact identity, schema revision and operation metadata; never decryption parameter bytes",
+    "newWrites": "same durable preview, actor, fixed body, revision, schema and source required; missing protocol rejected; no fallback to an unpreviewed write",
+    "permission": "fresh account role under table locks; explicit trigger visibility and known schema/keys; no foreign keys or unknown triggers",
+    "myisam": "shared PREPARED receipt before private snapshot before native writes; reconcile missing private snapshot as no write, mixed values as conflict; no blind retries or whole-database rollback",
+    "restoration": "separate preview and ID, original two columns only; preserve unknown fields and updater settings; refuse third-party parameter conflicts",
+    "cancellation": "separate preview and ID; source cancellation and control receipt atomic in known InnoDB journal; preserve original snapshots and actor; fence late apply",
+    "browser": "session stores only identifiers/submitted flag; recover frozen apply/restore request from server; parent bundle changes cannot change a pending request"
+  },
+  "standardMaven": {
+    "passed": true,
+    "total": 442,
+    "passedTests": 183,
+    "skippedTests": 259,
+    "failures": 0,
+    "errors": 0,
+    "log": "/tmp/dof-admin-s19-maven-final.log",
+    "scope": "full standard suite on final production code and corrected role fixture; SQL opt-in tests run separately"
+  },
+  "contractFixtureCompilation": {
+    "passed": true,
+    "includedInStandardMaven": true,
+    "currentSourceClassEqualityChecked": true,
+    "originalPrivateUiCodecChecksUnchanged": true
+  },
+  "frontend": {
+    "buildPassed": true,
+    "log": "/tmp/dof-admin-s19-frontend-3.log",
+    "browser": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeSqlVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "checks": [
+        "durable preview restored after reload; changed parent bundle cannot replace frozen request; storage contains identifiers only",
+        "lost apply reply retains original operation ID after exactly one synthetic write",
+        "refresh reads persisted receipt and clears pending identity without submitting again",
+        "restoration has a separate durable preview and ID; reload and lost restore reply preserve exact target without a second write",
+        "cancel uses separate preview and persisted control; reply loss is reconciled from original IDs",
+        "late cancelled submission remains fenced in explicit synthetic protocol fixture",
+        "mismatched server protocol disables new publication writes before request"
+      ],
+      "syntheticNativeWrites": 2,
+      "pageErrors": 0
+    }
+  },
+  "sql": {
+    "summary": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "managedPostalContractTests": 12,
+      "postalBatchContractTests": 11,
+      "postalReceiptControlContractTests": 7,
+      "postalBatchControlContractTests": 8,
+      "cdkContractTests": 13,
+      "cdkInventoryContractTests": 13,
+      "pointsContractTests": 8,
+      "activityPreviewControlContractTests": 10,
+      "scriptReleaseContractTests": 21,
+      "totalContractTests": 120,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "environment": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "3071b1aae422b01175d7e7dfe9ff60d109ce4e25c6606039b462a0d7702136e4",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "output": "/tmp/dof-admin-s19-script-db-current",
+    "inputs": ".dof-easy/admin-validation-tools/s19-script-db-inputs-current"
+  },
+  "previousSqlRun": {
+    "passed": false,
+    "tests": 120,
+    "failures": 1,
+    "outputs": [
+      "/tmp/dof-admin-s19-script-db-final",
+      "/tmp/dof-admin-s19-script-db-release",
+      "/tmp/dof-admin-s19-script-db-verified"
+    ],
+    "reason": "test fixture mixed wildcard/exact database grant patterns; a more specific TRIGGER grant shadowed the initial lock privileges. Final fixture uses consistent escaped patterns and verified current compiled classes; previous inputs/results retained."
+  },
+  "fixtureBoundary": "Script release tests have always used generated parameters and a synthetic PVF; their former unrelated private UI prerequisite was removed to test UI independence. Original codec/artifact comparisons remain separate and unchanged; no native parity claim.",
+  "rollback": {
+    "olderImageWriteCompatibilityVerified": false,
+    "writeIsolationImplemented": false,
+    "gate": "S18 and earlier ignore shared cancelled/prepared intents; freeze all release POST routes before older-image rollback, preserve journals, reconcile original IDs and restore a matching reader before reopening writes; physical drill still pending"
+  },
+  "remaining": [
+    "deploy matching frontend/backend and validate controlled parameter application/restore on the bound isolated instance",
+    "verify old-image rollback with publication writes isolated",
+    "complete source/database UUID/component batch metadata in published manifests",
+    "compressed private parameter generation and matched native consumer",
+    "actual gateway/plugin/client consumption, update faults and game effects",
+    "original Windows comparison deferred for user manual operation"
+  ],
+  "grantPatternReproduction": {
+    "serverAccessed": false,
+    "output": "/tmp/dof-admin-s19-lock-grants-proof",
+    "results": [
+      {
+        "phase": "raw",
+        "exitCode": 0,
+        "error": ""
+      },
+      {
+        "phase": "trigger_only_exact_pattern",
+        "exitCode": 1,
+        "error": "ERROR 1044 (42000) at line 1: Access denied for user 'script_limited'@'localhost' to database 'dof_native'"
+      },
+      {
+        "phase": "consistent_exact_pattern",
+        "exitCode": 0,
+        "error": ""
+      }
+    ]
+  },
+  "additionalChecks": {
+    "webAdminPython": {
+      "tests": 9,
+      "passedTests": 8,
+      "skippedTests": 1,
+      "log": "/tmp/dof-admin-s19-web-admin.log"
+    },
+    "adapterCallerScope": {
+      "passed": true,
+      "combinations": 60,
+      "mockedFrida": true,
+      "gameProductionCodeChanged": false,
+      "legacyAliasesRemainNegativeCases": true,
+      "log": "/tmp/dof-admin-s19-scope-current.log"
+    }
+  },
+  "followupDeployment": {
+    "passed": true,
+    "sourceCommit": "bee499e34c9b4b0451bf66d8942fa96bd6b77025",
+    "adminImage": "sha256:a300942e8e3b9c630e812c28273703cd410da7d299a79e021c3c113e83bfb2b0",
+    "evidence": "docs/validation/admin-script-release-s20-2026-10-28.json",
+    "nativeConsumerAcceptanceVerified": false
+  }
+}

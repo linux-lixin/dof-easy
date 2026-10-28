@@ -37,7 +37,7 @@ public final class NativeScriptJobs implements AutoCloseable {
         public String sourceSha256,sha256,nativeChecksum,parameterSha256;
         public long actor,sourceBytes,bytes;
         public int progress;
-        public boolean compressed=false,nativeClientAcceptance=false;
+        public boolean compressed=false,nativeClientAcceptance=false,roundTripVerified=false;
         public String applicationState="NOT_APPLIED";
     }
     public static final class Artifact {
@@ -183,9 +183,16 @@ public final class NativeScriptJobs implements AutoCloseable {
                 result=NativeScriptFileCodec.encode(in,out,j.sourceBytes,j.sourceSha256,parameters.effectiveMask(h.indexCrc),false,NativeScriptFileCodec.newTrailer(random));
             }
             sync(part);j.progress=90;write(j);
-            if(!hash(part).equals(result.artifactSha256))throw fail(409,"Script 产物回读校验失败");
+            // Re-read both the persisted paired parameter and the entire file. A
+            // hash of generated ciphertext alone cannot prove reversibility.
+            NativeScriptParameters persisted=NativeScriptParameters.decode(parameters(id),NativeScriptContext.CLIENT_DLL_SHA256);
+            try(InputStream in=Files.newInputStream(part,LinkOption.NOFOLLOW_LINKS)) {
+                NativeScriptFileCodec.verify(in,result.artifactBytes,j.sourceBytes,j.sourceSha256,
+                        result.artifactSha256,result.nativeChecksum,persisted.effectiveMask(h.indexCrc),j.compressed);
+            }
             requireSpace(1024*1024);Files.move(part,tasks.resolve(id).resolve("Script.pvf"),StandardCopyOption.ATOMIC_MOVE);
             j.sha256=result.artifactSha256;j.nativeChecksum=result.nativeChecksum;j.bytes=result.artifactBytes;
+            j.roundTripVerified=true;
             j.state="READY_FOR_TEST";j.progress=100;j.finishedAt=now();write(j);
         }catch(Exception e){if(j!=null){j.state=e instanceof InterruptedIOException?"INTERRUPTED":"FAILED";j.error=safeError(e);j.finishedAt=now();try{write(j);}catch(IOException ignored){/* recovery converts RUNNING to INTERRUPTED */}}}
         finally{try{Files.deleteIfExists(part);}catch(IOException ignored){/* never downloadable */}}

@@ -1,0 +1,193 @@
+{
+  "schema": 1,
+  "method": "static-file-only",
+  "edition": "qingkong-2.8-replacement",
+  "input": {
+    "path": "晴空单机后台工具.exe",
+    "bytes": 24519680,
+    "sha256": "c109b4484fc1440b5927f85b2cee2587285fdb0b8b61447a29bd803bb5535e89",
+    "sourceMatched": true
+  },
+  "pe": {
+    "machine": "0x14c",
+    "clrDirectory": [
+      0,
+      0
+    ],
+    "coffSymbolCount": 0,
+    "entryRva": 29789852,
+    "entrySections": [
+      ".Ggh"
+    ],
+    "sections": [
+      {
+        "name": ".text",
+        "rva": 4096,
+        "virtualSize": 2547823,
+        "rawSize": 0,
+        "fileOffset": 0,
+        "executable": true
+      },
+      {
+        "name": ".rdata",
+        "rva": 2555904,
+        "virtualSize": 17811108,
+        "rawSize": 0,
+        "fileOffset": 0,
+        "executable": false
+      },
+      {
+        "name": ".data",
+        "rva": 20369408,
+        "virtualSize": 1449588,
+        "rawSize": 0,
+        "fileOffset": 0,
+        "executable": false
+      },
+      {
+        "name": ".b.N",
+        "rva": 21819392,
+        "virtualSize": 7762627,
+        "rawSize": 0,
+        "fileOffset": 0,
+        "executable": true
+      },
+      {
+        "name": ".ddQ",
+        "rva": 29585408,
+        "virtualSize": 3276,
+        "rawSize": 3584,
+        "fileOffset": 1024,
+        "executable": false
+      },
+      {
+        "name": ".Ggh",
+        "rva": 29589504,
+        "virtualSize": 24442448,
+        "rawSize": 24442880,
+        "fileOffset": 4608,
+        "executable": true
+      },
+      {
+        "name": ".reloc",
+        "rva": 54034432,
+        "virtualSize": 1532,
+        "rawSize": 1536,
+        "fileOffset": 24447488,
+        "executable": false
+      },
+      {
+        "name": ".rsrc",
+        "rva": 54038528,
+        "virtualSize": 70621,
+        "rawSize": 70656,
+        "fileOffset": 24449024,
+        "executable": false
+      }
+    ],
+    "resourceLeaves": [
+      {
+        "type": "icon",
+        "name": 1,
+        "language": 2052,
+        "codepage": 1252,
+        "bytes": 744,
+        "sha256": "c70bbabb35024b71265ad0cbc6b6553146b8417e6469c7031b292f87ac7f027c"
+      },
+      {
+        "type": "icon",
+        "name": 2,
+        "language": 2052,
+        "codepage": 1252,
+        "bytes": 296,
+        "sha256": "bfd6b9443d835d48f4872879c901fd73a9cb1dcd85ceb44ab769410cf282b756"
+      },
+      {
+        "type": "icon",
+        "name": 3,
+        "language": 0,
+        "codepage": 1252,
+        "bytes": 67624,
+        "sha256": "137509c1136eae4f36547adef4e14eae77068ae704a39cc4c2484ce5989d7c35"
+      },
+      {
+        "type": "group-icon",
+        "name": "DEFAULT_ICON",
+        "language": 0,
+        "codepage": 1252,
+        "bytes": 20,
+        "sha256": "c5ed0d15770e8cd7fb0d5796315496756f297460843dab62de0bea7c3cfea703"
+      },
+      {
+        "type": "group-icon",
+        "name": 1151,
+        "language": 2052,
+        "codepage": 1252,
+        "bytes": 20,
+        "sha256": "a0c9d012e2bf6b2fe05c2d97cb5594d97cf2f539e97935c12abd7a3562f4d9bf"
+      },
+      {
+        "type": "group-icon",
+        "name": 1152,
+        "language": 2052,
+        "codepage": 1252,
+        "bytes": 20,
+        "sha256": "6bcce1250099cc08d574211b3debabb0244cd2641f6d960538e7ddc97d319164"
+      },
+      {
+        "type": "version",
+        "name": 1,
+        "language": 2052,
+        "codepage": 1252,
+        "bytes": 676,
+        "sha256": "60be866ecec08a9592fc0ca8bdcf9b12f1b1646f3da311e8b1334fc630d80391"
+      },
+      {
+        "type": "manifest",
+        "name": 1,
+        "language": 0,
+        "codepage": 1252,
+        "bytes": 697,
+        "sha256": "70b7f6ec24cf159809467626ceade9ba45e1c46660c86257e85db8caa6b1926b"
+      }
+    ],
+    "stringTableEntries": [],
+    "versionResources": [
+      {
+        "language": 2052,
+        "fixed": {
+          "fileVersion": "2.8.2.8",
+          "productVersion": "2.8.2.8"
+        },
+        "strings": {
+          "FileVersion": "2.8.2.8",
+          "FileDescription": "本程序，仅个人测试单机使用，请勿商业用途！",
+          "ProductName": "晴空单机-后台工具",
+          "ProductVersion": "2.8.2.8",
+          "CompanyName": "晴空单机",
+          "LegalCopyright": "本程序，仅个人测试单机使用，请勿商业用途！如有雷同请联系作者删除本程序",
+          "Comments": "本程序，仅个人测试单机使用，请勿商业用途！"
+        }
+      }
+    ],
+    "protectionIndicators": {
+      "virtualSectionsWithoutFileData": [
+        ".text",
+        ".rdata",
+        ".data",
+        ".b.N"
+      ],
+      "codeNotDirectlyFileBacked": true,
+      "exactProtectorIdentified": false
+    }
+  },
+  "executableLoaded": false,
+  "sourceCodeRecovered": false,
+  "nativeMenuAuditVerified": false,
+  "behaviorEquivalenceVerified": false,
+  "limitations": [
+    "Resource presence does not prove menu coverage or defaults.",
+    "Packed code and runtime-built SQL are not recovered by this audit.",
+    "The edition name comes from the lock, not a verified runtime version screen."
+  ]
+}

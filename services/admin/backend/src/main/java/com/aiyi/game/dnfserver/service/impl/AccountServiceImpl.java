@@ -38,6 +38,7 @@ import java.util.List;
 @Service
 public class AccountServiceImpl implements AccountService {
     @Resource private com.aiyi.game.dnfserver.service.extension.RegistrationCodesService registrationCodes;
+    @Resource private com.aiyi.game.dnfserver.service.dof.RegistrationReceipts registrationReceipts;
     @Resource private com.aiyi.game.dnfserver.service.extension.NativeAccountRegistration nativeAccountRegistration;
 
 
@@ -98,6 +99,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(AccountVO accountVO, boolean isAdmin) {
+        if(!isAdmin){com.aiyi.game.dnfserver.service.dof.RegistrationReceipts.validate(accountVO);com.aiyi.game.dnfserver.service.dof.RegistrationReceipts.Receipt replay=registrationReceipts.replay(accountVO);if(replay!=null&&replay.replay)return;}
+        if(accountVO.getValidationIndex()==null||accountVO.getValidationIndex().length()>128||accountVO.getValicode()==null||accountVO.getValicode().length()>32)throw new ValidationException("验证码格式无效");
         if (null == accountVO.getAccountname() || accountVO.getAccountname().trim().isEmpty()){
             throw new ValidationException("用户名不能为空");
         }
@@ -110,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
 //            throw new ValidationException("验证码不正确或已过期");
 //        }
 
-        String code = CacheUtil.get(Key.as(CommonAttr.CACHE.VALIDATION_CODE, accountVO.getValidationIndex()), String.class);
+        String code = CacheUtil.take(Key.as(CommonAttr.CACHE.VALIDATION_CODE, accountVO.getValidationIndex()), String.class);
         if (null == code || !code.equalsIgnoreCase(accountVO.getValicode())){
             throw new ValidationException("验证码不正确或已过期");
         }
@@ -159,7 +162,12 @@ public class AccountServiceImpl implements AccountService {
         }
 
 
+        com.aiyi.game.dnfserver.service.dof.RegistrationReceipts.Receipt receipt=isAdmin?null:registrationReceipts.begin(accountVO);
+        if(receipt!=null&&receipt.replay)return;
+        registrationReceipts.lockForExecution(receipt,accountVO);
+        nativeAccountRegistration.verify();
         Long activationId = isAdmin ? null : registrationCodes.claim(accountVO.getActivationCode(), accountVO.getAccountname());
+        int[] initialGift=isAdmin?new int[]{1000,1}:nativeAccountRegistration.gift(accountVO.getRegistrationClientIp());
         accountVO.setPassword(MD5.getMd5(accountVO.getPassword()));
         nativeAccountRegistration.insert(accountVO);
 //        accountDao.insert(accountVO);
@@ -167,10 +175,11 @@ public class AccountServiceImpl implements AccountService {
         accountDao.execute("INSERT INTO d_taiwan.member_info(m_id, user_id)VALUES('" + accountVO.getUid() + "', '" + accountVO.getUid() + "')");
         accountDao.execute("INSERT INTO d_taiwan.member_white_account(m_id)VALUES('" + accountVO.getUid() + "')");
         accountDao.execute("INSERT INTO taiwan_login.member_login(m_id)VALUES('" + accountVO.getUid() + "')");
-        accountDao.execute("INSERT INTO taiwan_billing.cash_cera(account, cera,mod_tran, mod_date, reg_date)VALUES('" + accountVO.getUid() + "', 1000, 0, NOW(), NOW())");
-        accountDao.execute("INSERT INTO taiwan_billing.cash_cera_point(account, cera_point,mod_date, reg_date)VALUES('" + accountVO.getUid() + "', 0, NOW(), NOW())");
+        accountDao.execute("INSERT INTO taiwan_billing.cash_cera(account, cera,mod_tran, mod_date, reg_date)VALUES('" + accountVO.getUid() + "', "+(initialGift[1]==1?initialGift[0]:0)+", 0, NOW(), NOW())");
+        accountDao.execute("INSERT INTO taiwan_billing.cash_cera_point(account, cera_point,mod_date, reg_date)VALUES('" + accountVO.getUid() + "', "+(initialGift[1]==0?initialGift[0]:0)+", NOW(), NOW())");
         accountDao.execute("INSERT INTO taiwan_cain_2nd.member_avatar_coin(m_id)VALUES('" + accountVO.getUid() + "')");
         registrationCodes.finish(activationId, accountVO.getUid());
+        registrationReceipts.complete(receipt,accountVO.getUid(),initialGift[0],initialGift[1]);
 
         /*
          *# 充值10点券
@@ -226,30 +235,22 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void recharge(long uid, int face) {
-        long userId = ThreadUtil.getUserId();
-        AccountVO thisAccount = accountVODao.get(userId);
-        AccountVO accountVO = accountVODao.get(uid);
-        if (null == accountVO){
-            throw new ValidationException("Undefined the user!");
-        }
-        // 不是管理员且不是自己的下级
-        if (!thisAccount.isAdmin() && accountVO.getParentUid() != thisAccount.getUid()
-                && accountVO.getUid() != thisAccount.getUid()){
-            throw new ValidationException("不能夸权限为其他工会的成员充值");
-        }
-        accountVODao.execute("update taiwan_billing.cash_cera set " +
-                "cera = cera + ? where account=?", face, uid);
-
-    }
-
-    @Override
     public AccountVO info(long uid) {
+        long actorUid = ThreadUtil.getUserId();
+        if (actorUid <= 0) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(403, "需要有效的管理登录");
+        AccountVO actor = accountVODao.get(actorUid);
+        if (actor == null) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(403, "管理账号不可用");
         AccountVO accountVO = accountVODao.get(uid);
+        if (accountVO == null) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(404, "目标账号不存在");
+        if (!actor.isAdmin() && uid != actorUid && accountVO.getParentUid() != actorUid)
+            throw new com.aiyi.game.dnfserver.service.dof.DofFailure(403, "不能查看其他工会的账号详情");
         List<AccountVO> list = accountVODao.list("SELECT cera FROM taiwan_billing.cash_cera " +
                 "WHERE account=?", uid);
-        accountVO.setCera(list.get(0).getCera());
-        return accountVO;
+        if (list.size() != 1) throw new com.aiyi.game.dnfserver.service.dof.DofFailure(409, "账号余额记录缺失或不唯一，请核对数据库结构");
+        AccountVO response = new AccountVO();
+        org.springframework.beans.BeanUtils.copyProperties(accountVO, response, "password");
+        response.setCera(list.get(0).getCera());
+        return response;
     }
 
     public static void main(String[] args) {

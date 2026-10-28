@@ -95,6 +95,7 @@ public class NativeScriptJobsTest {
             try(NativeScriptJobs store=f.open()) {
                 r=request(store,source);store.submit(r,42);result=finished(store,r.requestId);
                 assertEquals(result.error,"READY_FOR_TEST",result.state);assertEquals("NOT_APPLIED",result.applicationState);assertFalse(result.nativeClientAcceptance);
+                assertTrue(result.roundTripVerified);
                 NativeScriptJobs.Artifact a=store.artifact(r.requestId,REV);assertEquals(source.length+1280,Files.size(a.path));
                 String envelope=store.parameters(r.requestId);assertFalse(JSON.writeValueAsString(result).contains(envelope));
                 byte[] artifact=Files.readAllBytes(a.path);
@@ -105,7 +106,10 @@ public class NativeScriptJobsTest {
                 try{store.submit(r,43);fail();}catch(DofFailure e){assertEquals(409,e.status);}
                 try{store.upload(r.uploadId,REV,42,source.length,new ByteArrayInputStream(source));fail();}catch(DofFailure e){assertEquals(409,e.status);}
             }
-            try(NativeScriptJobs store=f.open()){assertEquals(result.sha256,store.artifact(r.requestId,REV).job.sha256);}
+            try(NativeScriptJobs store=f.open()) {
+                NativeScriptJobs.Job reloaded=store.artifact(r.requestId,REV).job;
+                assertEquals(result.sha256,reloaded.sha256);assertTrue(reloaded.roundTripVerified);assertFalse(reloaded.nativeClientAcceptance);
+            }
         }
     }
     @Test public void damagedArtifactsAndParametersCannotBeDownloaded()throws Exception {

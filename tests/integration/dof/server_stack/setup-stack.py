@@ -13,6 +13,9 @@ sys.path.insert(0, str(root/'runtime'))
 from gateway import assets, service
 assets.install('/inputs/server-runtime', '/data/dof-easy')
 compat=Path('/opt/dnf/compat/i386');compat.mkdir(parents=True)
+subprocess.run(['gcc','-m32','-shared','-fPIC','-fvisibility=hidden','-fno-ident','-Wl,--build-id=none','-Wall','-Wextra','-Werror','-O2',
+    '/inputs/admin-runtime-digest.c','-o',str(compat/'libdof-admin-runtime.so')],check=True)
+shutil.copyfile('/inputs/admin-runtime-digest.c',compat/'admin-runtime-digest.c')
 for f in ['libGeoIP.so.1','libnxencryption.so']:shutil.copyfile('/inputs/'+f,compat/f)
 (root/'lib/i386').mkdir(parents=True)
 for f in ['libGeoIP.so.1','libnxencryption.so']:shutil.copyfile('/inputs/'+f,root/'lib/i386'/f)
@@ -86,6 +89,11 @@ Path('/data/plugins/frida/frida.js').write_bytes(body)
 os.environ.update(LAUNCHER_MODE='native', RAID_EXTENSION='on', PLUGIN_MODE='dp2-frida',
                   SERVER_TYPE='GAME', CUR_SG_DB_HOST='127.0.0.1', CUR_SG_DB_PORT='3307',
                   DOF_DB_GAME_PASSWORD=p)
+database_uuid=subprocess.check_output(['/inputs/mysql/usr/bin/mysql','--socket=/tmp/mysql-run/mysql.sock','-uroot','-N','-e','SELECT @@server_uuid'],text=True).strip()
+os.environ.update(DOF_INSTANCE_ID='dof-offline',DOF_DATABASE_UUID=database_uuid,
+                  DOF_OFFLINE_RUNTIME_CHANNEL='local',CORE_PUBLIC_IP='127.0.0.1')
+Path('/data/dof-easy/config/.admin-instance.json').write_text(json.dumps(dict(
+    instanceId='dof-offline',databaseUuid=database_uuid,environment='isolated')))
 service.prepare(Path('/run/dof-gateway.conf'))
 Path('/output/production-prepared.json').write_text(json.dumps(dict(
     entrypoint='gateway.assets.install + gateway.service.prepare',

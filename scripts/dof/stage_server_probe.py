@@ -76,9 +76,9 @@ def stage(source, output, runtime=None, reuse_assets=False):
             if not reuse_assets:
                 destination.chmod(0o500 if row['mode'] & 0o111 else 0o400)
         scripts = {name: FIXTURES / name for name in
-                   ('setup-stack.py', 'stack-probe.sh', 'db-port.py', 'db_adapter.js', 'report.py')}
+                   ('setup-stack.py', 'stack-probe.sh', 'db-port.py', 'db_adapter.js', 'report.py', 'runtime_apply_probe.py')}
         scripts.update({name: ROOT / 'services/game/docker/ubuntu' / name for name in
-                        ('frida-compat.c', 'frida-compat.map', 'legacy-stat.c', 'legacy-shm.c')})
+                        ('frida-compat.c', 'frida-compat.map', 'legacy-stat.c', 'legacy-shm.c', 'admin-runtime-digest.c')})
         scripts.update({name: ROOT / 'tests/integration/dof' / name for name in
                         ('server_runtime_probe.js', 'server_raid_config_probe.js', 'server_feature_probe.js', 'server_equipment_probe.js')})
         for name, path in scripts.items():

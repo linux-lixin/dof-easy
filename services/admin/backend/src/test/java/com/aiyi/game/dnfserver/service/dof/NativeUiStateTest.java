@@ -68,7 +68,8 @@ public class NativeUiStateTest {
                 assertEquals("pending_equivalence", op.get("status")); count++;
             }
         }
-        assertTrue(groups.size() >= 71); assertTrue(count >= 209); assertTrue(ids.contains("feature-016-01"));
+        assertTrue(groups.size() >= 71); assertTrue(count >= 239); assertTrue(ids.contains("feature-016-01"));
+        assertTrue(((Number)scope.get("baselineOperations")).intValue() >= 239);
         assertEquals(scope.get("discoveredOperations"), count);
         assertTrue(ids.contains("feature-015-23"));
     }

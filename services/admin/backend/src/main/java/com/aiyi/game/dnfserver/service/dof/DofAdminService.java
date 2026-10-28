@@ -46,7 +46,7 @@ public class DofAdminService {
     /** Fail application startup before any legacy admin endpoint can use a misbound datasource. */
     @PostConstruct public void verifyStartupBinding() {
         if (!enabled) return;
-        try (Connection ignored = connection()) {
+        try (Connection ignored = boundConnection()) {
             // connection() verifies both the server UUID and the dedicated binding row.
         } catch (SQLException e) { throw unavailable(); }
     }
@@ -91,15 +91,19 @@ public class DofAdminService {
             return new NativeUiState(fields);
         }
     }
-    Connection connection() throws SQLException {
+    Connection boundConnection() throws SQLException {
         configured();
         Connection c = dataSource.getConnection();
         try {
             c.setAutoCommit(true);
-            guard(c); schema(c);
+            guard(c);
             try (Statement s = c.createStatement()) { s.execute("SET SESSION lock_wait_timeout=5"); s.execute("SET SESSION innodb_lock_wait_timeout=5"); }
             return c;
         } catch (SQLException | RuntimeException e) { c.close(); throw e; }
+    }
+    Connection connection() throws SQLException {
+        Connection c=boundConnection();
+        try{schema(c);return c;}catch(SQLException | RuntimeException e){c.close();throw e;}
     }
     private DofFailure unavailable() { return new DofFailure(503, "隔离数据库或管理迁移不可用；未初始化或重建原生表"); }
     Map<String,Object> context() {
@@ -109,7 +113,7 @@ public class DofAdminService {
     }
     public Object catalog() {
         admin(); configured();
-        try (Connection c = connection(); InputStream in = getClass().getResourceAsStream("/dof/scope.json")) {
+        try (Connection c = boundConnection(); InputStream in = getClass().getResourceAsStream("/dof/scope.json")) {
             Map<String,Object> out = context();
             out.put("scope", json.readValue(in, new TypeReference<Map<String,Object>>() {}));
             try (InputStream plan = getClass().getResourceAsStream("/dof/execution-plan.json")) {

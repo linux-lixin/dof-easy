@@ -25,7 +25,7 @@ class SourcePreparation(unittest.TestCase):
 
     def test_shared_build_inputs_are_available_without_network(self):
         with patch('urllib.request.urlopen', side_effect=AssertionError('Unexpected network access')):
-            self.assertEqual(source.verify_build_inputs(), 422)
+            self.assertEqual(source.verify_build_inputs(), 424)
 
     def test_missing_or_changed_repo_input_is_rejected_without_restore(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(source, 'ROOT', Path(directory)):

@@ -3,12 +3,15 @@ package com.aiyi.game.dnfserver.controller;
 import com.aiyi.game.dnfserver.conf.NoLogin;
 import com.aiyi.game.dnfserver.dao.NoticeDao;
 import com.aiyi.game.dnfserver.entity.Notice;
-import com.aiyi.game.dnfserver.utils.ChinaseUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/notice")
@@ -30,12 +33,13 @@ public class NoticeController {
     }
 
     @PutMapping
-    public void setNotice(@RequestBody Notice notice){
+    public ResponseEntity<Map<String,String>> setNotice(@RequestBody(required=false) Notice ignored){
         security.requireAdmin();
-        if (notice == null || notice.getId() != 1 || notice.getContent() == null || notice.getContent().length() > 16000)
-            throw new com.aiyi.game.dnfserver.service.extension.ActivityConfigService.Failure(400, "仅允许修改主公告，内容最多 16000 字符");
-        notice.setContent(Base64.getEncoder().encodeToString(notice.getContent().getBytes(StandardCharsets.UTF_8)));
-        noticeDao.update(notice);
+        // The old entry bypassed the durable management protocol. The bound
+        // 86-level instance has no verified login_notice table; do not create
+        // one or pretend that a versioned replacement adapter already exists.
+        return ResponseEntity.status(HttpStatus.GONE).body(Collections.singletonMap(
+                "message", "旧无编号公告写入口已停用；公告表及固定预览、回执和恢复适配尚待核实，当前不提供公告写入"));
     }
 
 }

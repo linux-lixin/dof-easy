@@ -9,6 +9,19 @@ import java.util.*;
 @RestController
 @RequestMapping("api/v1/admin/dof")
 public class DofAdminController {
+    @Resource private DofPluginService plugins;
+    @GetMapping("plugins") public Object pluginCatalog(){return plugins.catalog();}
+    @GetMapping("plugins/{module}") public Object pluginRead(@PathVariable("module") String module){return plugins.read(module);}
+    @PostMapping("plugins/{module}/preview") public Object pluginPreview(@PathVariable("module") String module,@RequestBody NativePluginFiles.Edit edit){return plugins.preview(module,edit);}
+    @PutMapping("plugins/{module}") public Object pluginSave(@PathVariable("module") String module,@RequestBody NativePluginFiles.Edit edit){return plugins.save(module,edit,null);}
+    @GetMapping("plugins/{module}/history") public Object pluginHistory(@PathVariable("module") String module){return plugins.history(module);}
+    @PostMapping("plugins/{module}/history/{id}/restore") public Object pluginRestore(@PathVariable("module") String module,@PathVariable("id") String id,@RequestBody NativePluginFiles.Edit edit){return plugins.save(module,edit,id);}
+    @PostMapping("plugins/{module}/history/{id}/reconcile") public Object pluginReconcile(@PathVariable("module") String module,@PathVariable("id") String id){return plugins.reconcile(module,id);}
+    @PostMapping("plugins/{module}/runtime/preview") public Object runtimePreview(@PathVariable("module") String module,@RequestBody NativeRuntimeTasks.Edit edit){return plugins.runtimePreview(module,edit);}
+    @PostMapping("plugins/{module}/runtime") public Object runtimeSubmit(@PathVariable("module") String module,@RequestBody NativeRuntimeTasks.Edit edit){return plugins.runtimeSubmit(module,edit);}
+    @GetMapping("plugins/{module}/runtime/history") public Object runtimeHistory(@PathVariable("module") String module){return plugins.runtimeHistory(module);}
+    @PostMapping("plugins/{module}/runtime/{id}/reconcile") public Object runtimeReconcile(@PathVariable("module") String module,@PathVariable("id") String id){return plugins.runtimeReconcile(module,id);}
+    @PostMapping("plugins/{module}/runtime/{id}/resolve") public Object runtimeResolve(@PathVariable("module") String module,@PathVariable("id") String id,@RequestBody NativeRuntimeTasks.Resolve edit){return plugins.runtimeResolve(module,id,edit);}
     @Resource private DofAdminService service;
     @Resource private DofTextService textService;
     @Resource private DofRecordsService recordsService;
@@ -17,9 +30,13 @@ public class DofAdminController {
     @Resource private DofScriptReleaseService scriptReleases;
     @GetMapping("client/releases/status") public Object scriptReleaseStatus(){return scriptReleases.status();}
     @GetMapping("client/releases") public Object scriptReleaseHistory(){return scriptReleases.history();}
+    @GetMapping("client/releases/{id}") public Object scriptReleaseOperation(@PathVariable("id") String id){return scriptReleases.operation(id);}
     @PostMapping("client/releases/preview") public Object scriptReleasePreview(@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.preview(edit);}
     @PostMapping("client/releases") public Object applyScriptRelease(@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.apply(edit,null);}
     @PostMapping("client/releases/{id}/restore") public Object restoreScriptRelease(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.apply(edit,id);}
+    @PostMapping("client/releases/{id}/restore/preview") public Object previewScriptRestore(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.Edit edit)throws java.io.IOException{return scriptReleases.preview(edit,id);}
+    @PostMapping("client/releases/{id}/cancellations/preview") public Object previewScriptCancellation(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.CancelEdit edit){return scriptReleases.cancelPreview(id,edit,false);}
+    @PostMapping("client/releases/{id}/cancellations") public Object cancelScriptPreview(@PathVariable("id") String id,@RequestBody DofScriptReleaseService.CancelEdit edit){return scriptReleases.cancelPreview(id,edit,true);}
     @PostMapping("client/releases/{id}/reconcile") public Object reconcileScriptRelease(@PathVariable("id") String id){return scriptReleases.reconcile(id);}
     @GetMapping("script") public Object scriptStatus() throws java.io.IOException {return clientService.scriptStatus();}
     @GetMapping("script/uploads") public Object scriptUploads() throws java.io.IOException {return clientService.scriptUploads();}
@@ -64,6 +81,7 @@ public class DofAdminController {
             .contentLength(java.nio.file.Files.size(path)).body(new org.springframework.core.io.FileSystemResource(path.toFile()));
     }
     @GetMapping("records") public Object recordCatalog() { return recordsService.catalog(); }
+    @GetMapping("records/{key}/schema") public Object recordSchema(@PathVariable("key") String key) { return recordsService.diagnose(key); }
     @GetMapping("records/{key}") public Object records(@PathVariable("key") String key,
         @RequestParam(value="owner", required=false) Long owner,
         @RequestParam(value="page", defaultValue="1") int page,

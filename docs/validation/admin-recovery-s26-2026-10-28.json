@@ -1,0 +1,306 @@
+{
+  "stage": "S26",
+  "date": "2026-10-28",
+  "purpose": "native seven-field item recovery configuration with separate reward and debit restoration pairs",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "realDeploymentVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "liveDeploymentUnchanged": "S25 / c612b9b / admin 18080",
+  "sourceEvidence": {
+    "sourceToolSha256": "c109b4484fc1440b5927f85b2cee2587285fdb0b8b61447a29bd803bb5535e89",
+    "historicalRdataSHA256": "50a3bde93ff3e94d8f9019066470edddb6d2ec125ab2e10f55f461aa095e2edd",
+    "runtimePluginSha256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+    "originalWindowsToolStarted": false,
+    "historicalImageReused": true,
+    "controlRecordsVerifiedDirectly": [
+      {
+        "id": "0x16031804",
+        "address": "0x171d324",
+        "strings": [
+          "回收_物品代码27",
+          "额外扣除支持 金币扣除，填写0 是金币，数量写500 就是扣500金币 如果不额外扣除留空"
+        ],
+        "recordSha256": "d75e323fb3a6cbf5c7848b8320b513b4bd2f3657e3162c1f457bb85bfd7ace1a"
+      },
+      {
+        "id": "0x160317fd",
+        "address": "0x171d6f9",
+        "strings": [
+          "回收_物品代码25",
+          "最多支持7组  分割用 /"
+        ],
+        "recordSha256": "d4f07ea716139e07504196cb55df79cd5cef5ed91ac860c366bad07c376ac558"
+      },
+      {
+        "id": "0x16030c73",
+        "address": "0x17321ee",
+        "strings": [
+          "回收_物品代码8",
+          "回收扣除数量"
+        ],
+        "recordSha256": "67eda2b03ea15a1147ca41f70d92c31f53434fe54b0992ab7b863403d9597f5e"
+      },
+      {
+        "id": "0x16030c6f",
+        "address": "0x1732567",
+        "strings": [
+          "回收_物品代码4",
+          "0 关闭 1 播报"
+        ],
+        "recordSha256": "ba3a1ddbb5e9b93bae6e535c184f9b93a2b87f7c1d2ac24536925d65625e84bf"
+      },
+      {
+        "id": "0x16030c69",
+        "address": "0x17328f3",
+        "strings": [
+          "回收_物品代码1",
+          "奖励物品代码"
+        ],
+        "recordSha256": "927270286e6b0a89dde3c5d6137a16f39116028d0d5db6660a582dfd162e98ad"
+      },
+      {
+        "id": "0x16030c6b",
+        "address": "0x173277b",
+        "strings": [
+          "回收_物品代码2",
+          "奖励物品数量"
+        ],
+        "recordSha256": "0e5241b22dbe82d2cb8313e36fa1e71b67de1050cbe08d4f96d757aa5f0f5d21"
+      }
+    ],
+    "nativeSchemaAddress": "0x290a7c",
+    "nativeSchema": "\n\t\tCREATE TABLE item_recovery (\n\t\t\tcode                   INT UNSIGNED NOT NULL , \n\t\t\trestitution         VARCHAR(255) NOT NULL,                 \n\t\t\tReturn_quantity         VARCHAR(255) NOT NULL,        \n\t\t\tannouncement         INT UNSIGNED NOT NULL,        \n\t\t\tcodenum         INT UNSIGNED NOT NULL,    \n\t\t\textra_consumption_id         VARCHAR(255) NOT NULL,\n\t\t\textra_consumption_num         VARCHAR(255) NOT NULL,    \n\t\t\tPRIMARY KEY (code),\t\t\t\t\t\t\t\t\t\t\t\n\t\t\tUNIQUE (code)                       -- 唯一索引，ID的唯一性\n\t\t) ENGINE=InnoDB DEFAULT CHARSET=utf8;\n\t",
+    "nativeConsumers": {
+      "materialWindow": "0x4b320",
+      "stackableExecutor": "0x6a330",
+      "equipmentExecutor": "0x6b610",
+      "dispatcher": "0xfe1c0",
+      "goldBranch": "0x6aa2c",
+      "slashPairParsers": "0x6a68e/0x6a6ad/0x6a6ee/0x6a707"
+    },
+    "nativeRuntimeConsumptionVerified": false,
+    "originalToolEquivalenceVerified": false
+  },
+  "implementation": {
+    "operation": "feature-025-04",
+    "configurationTable": "dof_native.item_recovery",
+    "fields": [
+      "code",
+      "restitution",
+      "Return_quantity",
+      "announcement",
+      "codenum",
+      "extra_consumption_id",
+      "extra_consumption_num"
+    ],
+    "configurationEditingImplemented": true,
+    "executor": "existing native plugin only; no parallel player item/debit/reward execution",
+    "maxRewardPairs": 7,
+    "maxExtraDebitPairs": 7,
+    "extraCodeZeroMeansGold": true,
+    "costPairsPreserveWireText": true,
+    "unchangedLegacyPairsAndFlagsPreserved": true,
+    "trustedHistoryCanRestoreOriginalLegacyText": true,
+    "independentRewardAndExtraCostRestoreGuards": true,
+    "numericUnsignedHttpReadback": true,
+    "requiresExactOrdinalSchemaAndSideEffectVisibility": true,
+    "freshActorCheckedUnderAccountReadLock": true,
+    "unknownSchemasNotInitializedAutomatically": true,
+    "crossBorderStillReadOnly": true
+  },
+  "verification": {
+    "standardMaven": {
+      "command": "mvn -Dmaven.test.skip=false test",
+      "total": 469,
+      "passedCases": 194,
+      "skipped": 275,
+      "failures": 0,
+      "errors": 0,
+      "passed": true,
+      "conditionalSkipsCountAsPass": false,
+      "log": "/tmp/dof-admin-s26-recovery-maven.log"
+    },
+    "sealedSql": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "managedPostalContractTests": 12,
+      "postalBatchContractTests": 11,
+      "postalReceiptControlContractTests": 7,
+      "postalBatchControlContractTests": 8,
+      "cdkContractTests": 13,
+      "cdkInventoryContractTests": 13,
+      "pointsContractTests": 8,
+      "activityPreviewControlContractTests": 10,
+      "scriptReleaseContractTests": 21,
+      "nativeInheritanceContractTests": 8,
+      "nativeRecoveryContractTests": 8,
+      "totalContractTests": 136,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "sealedEnvironment": {
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "frontend": {
+      "command": "npm run build",
+      "passed": true,
+      "log": "/tmp/dof-admin-s26-frontend.log"
+    },
+    "recoveryBrowser": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "production catalog renders all seven recovery fields, separate reward/cost summaries and explicit gold-zero guidance",
+        "preview freezes reward pair, gold/material cost pair, broadcast flag and original-item removal count; one confirmed synthetic write updates the row",
+        "new recovery rule has its own request ID and explicit empty reward/extra cost pairs",
+        "unverified cross-border rules remain read-only while recovery retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "inheritanceBrowserRegression": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "real field catalog renders code-zero default, material costs and five-group guidance",
+        "preview freezes exact paired cost text and code zero; one confirmed synthetic write updates the row",
+        "dedicated code creation has an independent request ID and explicit empty cost pair",
+        "unverified cross-border rules remain read-only while inheritance retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "activityBrowserRegression": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeWritesInMock": 2,
+      "checks": [
+        "preview freezes exact values and UUID before any native submission",
+        "lost native response retains UUID and freezes inputs; storage contains identifiers only",
+        "another lookup cannot overwrite an unresolved operation",
+        "reload reads committed receipt and clears the guard without replaying configuration writes",
+        "independent activity can be edited while the original activity keeps its pending UUID",
+        "section switch and reload recover exact original preview, with no invented UUID or values",
+        "lost cancellation reply reconciles same control ID; cancelled original cannot later write",
+        "confirmed missing preview with no native submit can explicitly return to editing",
+        "schema failures remain visible rather than successful empty records",
+        "permission failures remain visible"
+      ],
+      "pageErrors": 0
+    }
+  },
+  "realServerReadOnlyPreflight": {
+    "columns": [
+      [
+        "code",
+        "int(10) unsigned",
+        "0",
+        "",
+        "NO"
+      ],
+      [
+        "restitution",
+        "varchar(255)",
+        "255",
+        "utf8",
+        "NO"
+      ],
+      [
+        "Return_quantity",
+        "varchar(255)",
+        "255",
+        "utf8",
+        "NO"
+      ],
+      [
+        "announcement",
+        "int(10) unsigned",
+        "0",
+        "",
+        "NO"
+      ],
+      [
+        "codenum",
+        "int(10) unsigned",
+        "0",
+        "",
+        "NO"
+      ],
+      [
+        "extra_consumption_id",
+        "varchar(255)",
+        "255",
+        "utf8",
+        "NO"
+      ],
+      [
+        "extra_consumption_num",
+        "varchar(255)",
+        "255",
+        "utf8",
+        "NO"
+      ]
+    ],
+    "engine": "InnoDB",
+    "indexes": [
+      [
+        "PRIMARY",
+        "code",
+        "0",
+        "1"
+      ],
+      [
+        "code",
+        "code",
+        "0",
+        "1"
+      ]
+    ],
+    "ruleCount": 0,
+    "testCodePresent": 0,
+    "zeroCodeRules": 0,
+    "tableTriggers": 0,
+    "gameGrants": [
+      [
+        "'game'@'172.29.86.0/255.255.255.0'",
+        "dof\\\\_native",
+        "TRIGGER"
+      ],
+      [
+        "'game'@'172.29.86.0/255.255.255.0'",
+        "dnf\\\\_service",
+        "TRIGGER"
+      ]
+    ]
+  },
+  "limitations": [
+    "S26 code is not deployed; live admin remains S25. Server actions in this batch were limited to read-only schema, rule-count and test-code preflight.",
+    "Actual native consumption, item removal, reward delivery, broadcast and game UI remain unverified.",
+    "Original-tool GUI/defaults/import-export behavior awaits user manual comparison; historical bytes establish static correspondence only.",
+    "Native rule editing does not complete independent Frida equipment/costume/pet recycling operations.",
+    "Read-only cross-border rules retain unresolved native ordinal-4 required-count semantics and remain included in the scope.",
+    "Browser APIs were explicitly mocked; disposable SQL fixtures are not private original-tool samples.",
+    "No original Windows executable was launched."
+  ],
+  "followupRealDeployment": "docs/validation/admin-recovery-s27-2026-10-28.json"
+}

@@ -2084,8 +2084,8 @@
     },
     {
       "path": "services/game/resources/plugins/frida/frida.js",
-      "bytes": 284624,
-      "sha256": "bab9a8a6abc5ccf8c9ab26a44cfc6e2db7cd0dd15afc6b91fd9cb8a9a73d6843",
+      "bytes": 286019,
+      "sha256": "395ba7db685ccd1e3942b5b24a54611fcdbbae71fa5b8693322ddb9762d560e5",
       "original_sha256": "3bf48075fd63db2a25db5076819dc4f902f8b92c953cfeb60ec45ef196998e8d"
     },
     {

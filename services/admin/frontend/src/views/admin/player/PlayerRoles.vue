@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import {onMounted, ref, reactive} from "vue";
-import {Message, Modal} from "@arco-design/web-vue";
+import {Message} from "@arco-design/web-vue";
 import Request from "../../../api/Request";
-import ItemPicker from "../../../components/ItemPicker.vue";
+import RoleAttributesEditor from "./RoleAttributesEditor.vue";
+import ManagedPostal from "../../../components/ManagedPostal.vue";
+import ManagedPostalBatch from "../../../components/ManagedPostalBatch.vue";
 
 const loading = ref(false);
+const selectedKeys=ref<Array<string|number>>([]),batchOpen=ref(false);
+const rowSelection={type:'checkbox' as const,showCheckedAll:true};
+const onSelection=(keys:Array<string|number>)=>{selectedKeys.value=keys};
 
 const searchForm = reactive({
 	pageNum: 1,
@@ -32,22 +37,6 @@ const sendMailOption = ref({
 	open: false,
 	receiveCharacNo: 0,
 	receiveCharacName: ""
-});
-
-const mailForm = ref({
-	sendCharacNo: 0,
-	message: "",
-	sendCharacName: "DNF Manageer",
-	receiveCharacNo: 0,
-	item: null as any,
-	itemId: undefined as number | undefined,
-	addInfo: 1,
-	upgrade: 0,
-	seperateUpgrade: 0,
-	sealFlag: false,
-	amplifyOption: undefined as number | undefined,
-	amplifyValue: 0,
-	gold: 0
 });
 
 const windowHeight = ref(window.innerHeight - 250);
@@ -190,87 +179,10 @@ const openEdit = (record: any) => {
 	editOption.value.open = true;
 };
 
-const submitEdit = async () => {
-	if (!editOption.value.form?.characNo) return;
-	const payload = {...editOption.value.form};
-	delete payload.job;
-	delete payload.growType;
-	try {
-		await Request.put("api/v1/charac", payload);
-		Message.success("修改成功，请上游戏查看");
-		editOption.value.open = false;
-		search(false);
-	} catch (e: any) {
-		Message.error(e?.message || "修改失败");
-	}
-};
-
 const openSendMail = (record: any) => {
 	sendMailOption.value.receiveCharacNo = record?.characNo ?? 0;
 	sendMailOption.value.receiveCharacName = record?.characName ?? "";
-	mailForm.value = {
-		sendCharacNo: 0,
-		message: "",
-		sendCharacName: "DNF Manageer",
-		receiveCharacNo: record?.characNo ?? 0,
-		item: null,
-		itemId: undefined,
-		addInfo: 1,
-		upgrade: 0,
-		seperateUpgrade: 0,
-		sealFlag: false,
-		amplifyOption: undefined,
-		amplifyValue: 0,
-		gold: 0
-	};
 	sendMailOption.value.open = true;
-};
-
-const submitSendMail = async () => {
-	mailForm.value.receiveCharacNo = sendMailOption.value.receiveCharacNo;
-	mailForm.value.itemId = mailForm.value.item?.id ?? null;
-	if (!mailForm.value.itemId) {
-		Message.error("必须选择一个物品");
-		return;
-	}
-	const payload = {
-		sendCharacNo: mailForm.value.sendCharacNo,
-		message: mailForm.value.message,
-		sendCharacName: mailForm.value.sendCharacName,
-		receiveCharacNo: mailForm.value.receiveCharacNo,
-		itemId: mailForm.value.itemId,
-		addInfo: mailForm.value.addInfo,
-		upgrade: mailForm.value.upgrade,
-		seperateUpgrade: mailForm.value.seperateUpgrade,
-		sealFlag: mailForm.value.sealFlag,
-		amplifyOption: mailForm.value.amplifyOption ?? 0,
-		amplifyValue: mailForm.value.amplifyValue,
-		gold: mailForm.value.gold
-	};
-	try {
-		await Request.post("api/v1/postal", payload);
-		Message.success("发送成功, 重新选择角色即可查看邮件");
-		sendMailOption.value.open = false;
-	} catch (e: any) {
-		Message.error(e?.message || "发送失败");
-	}
-};
-
-const overTasks = (characNo: number) => {
-	Modal.confirm({
-		title: "提示",
-		content: "确定要完成该角色的所有任务吗？",
-		okText: "确定",
-		cancelText: "取消",
-		onOk: async () => {
-			try {
-				await Request.post(`api/v1/charac/${characNo}/overTasks`);
-				Message.success("操作成功!");
-			} catch (e: any) {
-				Message.error(e?.message || "操作失败");
-			}
-		}
-	});
 };
 
 onMounted(() => {
@@ -307,9 +219,15 @@ onMounted(() => {
 					<a-button type="primary" @click="search(true)">查询</a-button>
 				</a-form-item>
 			</a-form>
+			<a-space style="margin-top:12px">
+                <a-button :disabled="!selectedKeys.length||selectedKeys.length>100" @click="batchOpen=true">批量邮件（已选 {{selectedKeys.length}}）</a-button>
+                <a-button @click="batchOpen=true">批量任务历史</a-button>
+            </a-space>
 		</a-card>
 
 		<a-table
+			row-key="characNo"
+            :row-selection="rowSelection" :selected-keys="selectedKeys" @selection-change="onSelection"
 			scrollbar
 			:scroll="{ y: windowHeight }"
 			style="margin-top: 10px;"
@@ -346,7 +264,7 @@ onMounted(() => {
 							<template #content>
 								<a-doption @click="openEdit(record)">编辑/详情</a-doption>
 									<a-doption @click="openSendMail(record)">发送邮件</a-doption>
-								<a-doption @click="overTasks(record.characNo)">完成任务</a-doption>
+								<a-doption disabled title="任务修改与材料发放的预览、回执和结果核对尚未接通">完成任务（待适配）</a-doption>
 							</template>
 						</a-dropdown>
 					</template>
@@ -368,165 +286,12 @@ onMounted(() => {
 			/>
 		</div>
 
-		<a-modal
-			v-model:visible="editOption.open"
-			title="编辑角色属性"
-			:width="820"
-			:mask-closable="false"
-			@ok="submitEdit"
-			@cancel="editOption.open = false"
-		>
-			<div style="margin-bottom: 16px; font-size: 12px; color: #999;">
-				PS: 修改角色属性时，请确保当前角色已退出登录，否则修改无效。
-			</div>
-			<a-form :model="editOption.form" layout="vertical" size="small" class="edit-form">
-				<a-row :gutter="16">
-					<a-col :span="12">
-						<a-form-item label="昵称">
-							<a-input v-model="editOption.form.characName" disabled />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="等级">
-							<a-input v-model="editOption.form.lev" disabled />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="职业">
-							<a-input v-model="editOption.form.job" disabled />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="转职">
-							<a-input v-model="editOption.form.growType" disabled />
-						</a-form-item>
-					</a-col>
+        <RoleAttributesEditor v-if="editOption.open" :charac-no="editOption.form.characNo"
+            :name="editOption.form.characName" @close="editOption.open = false" @saved="search(false)" />
 
-					<a-col :span="12">
-						<a-form-item label="HP">
-							<a-slider v-model="editOption.form.maxHp" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="MP">
-							<a-slider v-model="editOption.form.maxMp" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="物攻">
-							<a-slider v-model="editOption.form.phyAttack" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="物防">
-							<a-slider v-model="editOption.form.phyDefense" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="魔攻">
-							<a-slider v-model="editOption.form.magAttack" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="魔防">
-							<a-slider v-model="editOption.form.magDefense" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="跳跃">
-							<a-slider v-model="editOption.form.jump" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="硬直">
-							<a-slider v-model="editOption.form.hitRecovery" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="移速">
-							<a-slider v-model="editOption.form.moveSpeed" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="攻速">
-							<a-slider v-model="editOption.form.attackSpeed" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="12">
-						<a-form-item label="施速">
-							<a-slider v-model="editOption.form.castSpeed" :min="1" :max="65535" />
-						</a-form-item>
-					</a-col>
-				</a-row>
-			</a-form>
-		</a-modal>
-
-		<a-modal
-			v-model:visible="sendMailOption.open"
-			:title="`发送邮件到: ${sendMailOption.receiveCharacName}`"
-			:width="720"
-			:mask-closable="false"
-			@ok="submitSendMail"
-			@cancel="sendMailOption.open = false"
-		>
-			<a-form :model="mailForm" layout="vertical" size="small" class="mail-form">
-				<a-row :gutter="16">
-					<a-col :span="24">
-            <div class="mail-item-row">
-              <a-form-item label="发件人" style="flex: 1">
-                <a-input v-model="mailForm.sendCharacName" disabled />
-              </a-form-item>
-              <a-form-item label="金币数量" style="width: 160px">
-                <a-input-number v-model="mailForm.gold" :min="0" :max="10000000000" style="width: 100%" />
-              </a-form-item>
-            </div>
-					</a-col>
-					<a-col :span="24">
-            <div class="mail-item-row">
-              <a-form-item label="物品名称" style="flex: 1">
-                <ItemPicker v-model="mailForm.item" style="width: 100%;"/>
-              </a-form-item>
-              <a-form-item label="物品数量" style="width: 160px">
-                <a-input-number v-model="mailForm.addInfo" :min="1" :max="100000" />
-              </a-form-item>
-            </div>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="强化等级">
-							<a-input-number v-model="mailForm.upgrade" :min="0" :max="31" style="width: 100%" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="锻造等级">
-							<a-input-number v-model="mailForm.seperateUpgrade" :min="0" :max="31" style="width: 100%" />
-						</a-form-item>
-					</a-col>
-          <a-col :span="6">
-            <a-form-item label="增幅属性">
-              <a-select v-model="mailForm.amplifyOption" placeholder="请选择属性" allow-clear style="flex: 1">
-                <a-option label="体力" :value="1" />
-                <a-option label="精神" :value="2" />
-                <a-option label="力量" :value="3" />
-                <a-option label="智力" :value="4" />
-              </a-select>
-            </a-form-item>
-          </a-col>
-          <a-col :span="6">
-            <a-form-item label="增幅值">
-              <a-input-number v-model="mailForm.amplifyValue" :min="0" :max="65535" style="width: 160px" />
-            </a-form-item>
-          </a-col>
-					<a-col :span="24">
-						<a-form-item label="是否封装">
-							<div class="mail-seal-row">
-								<a-switch v-model="mailForm.sealFlag" />
-								<span class="mail-tip">注意: 史诗装备 (即：所有金色名称的物品) 不可封装，否则引起游戏崩溃</span>
-							</div>
-						</a-form-item>
-					</a-col>
-				</a-row>
-			</a-form>
-		</a-modal>
+        <ManagedPostal v-if="sendMailOption.open" :key="sendMailOption.receiveCharacNo" v-model:visible="sendMailOption.open"
+            :charac-no="sendMailOption.receiveCharacNo" :name="sendMailOption.receiveCharacName" />
+        <ManagedPostalBatch v-if="batchOpen" v-model:visible="batchOpen" :recipients="selectedKeys.map(Number)" />
 	</div>
 </template>
 

@@ -1,0 +1,362 @@
+{
+  "schema": 1,
+  "edition": "qingkong-2.8-replacement",
+  "sourceVerified": true,
+  "files": [
+    {
+      "role": "server",
+      "path": "QK",
+      "matched": true,
+      "bytes": 1095504,
+      "sha256": "67553a3b45de80ebea5f767f6e3a51d577d2cbb6c6647bd4c97037cb50a41f9b"
+    },
+    {
+      "role": "server",
+      "path": "qk_plugin.so",
+      "matched": true,
+      "bytes": 9129424,
+      "sha256": "33cd006a364d4c3e0b8738fb2333cf16771fb796443368be4eee7105e40aadfa"
+    },
+    {
+      "role": "server",
+      "path": "libantisvrinline.so",
+      "matched": true,
+      "bytes": 2562256,
+      "sha256": "d413b7df6c928b519986a9ceb3dbed4c78148564cca352d579f18e3650819da8"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libuv.so.1",
+      "matched": true,
+      "bytes": 734012,
+      "sha256": "44132391832bf67bb3d90de6b3c947d86aeffbb260c432261e64abb2d9bfa68b"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libcolib.so.0.5",
+      "matched": true,
+      "bytes": 86660,
+      "sha256": "bb06bae3d2a51376009ed7e68f0016367fe5d1c69b3e899f5559c06a128e890c"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libmysqlclient.so.18",
+      "matched": true,
+      "bytes": 8190300,
+      "sha256": "2da38cd7f1a3d79d0ec3991ad0ee30b02ef083272dad6bd6dd754d560e127edd"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libcrypto.so.1.0.0",
+      "matched": true,
+      "bytes": 2470301,
+      "sha256": "6a3634c2c2f5377c0b6381b5eda8528f29225d39214f638cd155be12dd32990a"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libjson.so",
+      "matched": true,
+      "bytes": 336408,
+      "sha256": "23a31e2679acc64bfa1e470743e2e568a6d02b401842c121792cbc47401e48fe"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libPocoUtil.so.16",
+      "matched": true,
+      "bytes": 374768,
+      "sha256": "668ffc723e9e96d10edd14a872902a96097878710d8231f7a0ecabd7f9d16255"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libPocoNet.so.16",
+      "matched": true,
+      "bytes": 1170672,
+      "sha256": "4fa3b3145b46d9815962d2a9171162d7bf90d06eafd95605bf779de501a1624d"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libPocoXML.so.16",
+      "matched": true,
+      "bytes": 634952,
+      "sha256": "56f2ef131395a848e0400f360b5bd6c1ae24fec3878ae2197a167acf860358ee"
+    },
+    {
+      "role": "server",
+      "path": "qingkong/libPocoFoundation.so.16",
+      "matched": true,
+      "bytes": 1788536,
+      "sha256": "10bb01ee842f7c23a6fca2698cd0d6235f3afee4289b8244166ee64f8ee4f246"
+    },
+    {
+      "role": "tool",
+      "path": "晴空单机后台工具.exe",
+      "matched": true,
+      "bytes": 24519680,
+      "sha256": "c109b4484fc1440b5927f85b2cee2587285fdb0b8b61447a29bd803bb5535e89"
+    },
+    {
+      "role": "tool",
+      "path": "libxl.dll",
+      "matched": true,
+      "bytes": 1003704,
+      "sha256": "b536f624e52de04daea34d8e5348efcff4273538739a6a3757f90828e86d6093"
+    },
+    {
+      "role": "client",
+      "path": "启动器.exe",
+      "matched": true,
+      "bytes": 27475968,
+      "sha256": "5b0c5195c58e1583cb5456e2b7139acf02f6ebb34ff86e4445468c91184be733"
+    },
+    {
+      "role": "client",
+      "path": "ijl15.dll",
+      "matched": true,
+      "bytes": 28710400,
+      "sha256": "d2b207e32f1d366c29f43d080366b7880d87659aaeb93a9bd8e36f44bf54b678"
+    }
+  ],
+  "originalToolMenuAuditComplete": false,
+  "nativeClientAcceptance": false,
+  "releaseReady": false,
+  "baseCommit": "a9d1511",
+  "branch": "codex/admin-replacement",
+  "codeChangesUncommitted": false,
+  "date": "2026-10-26",
+  "checks": {
+    "sourceInputs": {
+      "matched": 16,
+      "failed": 0
+    },
+    "backendCompile": {
+      "sources": 156,
+      "passed": true,
+      "parameterMetadata": true
+    },
+    "javaContracts": {
+      "run": 69,
+      "failed": 0,
+      "skipped": 0,
+      "database": "disposable MySQL 5.6.51",
+      "scope": "file journal, plugin HTTP, binding, records, UI/text/settings and PVF parameter contracts",
+      "note": "Earlier 69-case batch before continuation; final standard Maven run below includes the new record and guide cases."
+    },
+    "finalPluginRegression": {
+      "run": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    "pythonGeneral": {
+      "run": 327,
+      "failed": 0,
+      "skipped": 24,
+      "baseCommit": "9dcd268",
+      "note": "随后合入 a9d1511 并补跑全部原生 Python、数据库模式、安装器和菜单受影响模块；各套件包含重叠用例，不相加。"
+    },
+    "pythonNative": {
+      "run": 102,
+      "failed": 0,
+      "skipped": 15,
+      "overlapsGeneral": true,
+      "baseCommit": "a9d1511"
+    },
+    "frontend": {
+      "typecheck": true,
+      "productionBuild": true,
+      "browserAcceptance": false,
+      "mockBrowserInteractions": {
+        "passed": true,
+        "scenarios": 10,
+        "pageErrors": 0,
+        "backend": "mocked",
+        "realServerAccessed": false,
+        "runner": "WSL headless Chromium",
+        "script": "tests/integration/admin/plugin-page.cjs"
+      },
+      "realCandidateBrowser": {
+        "passed": true,
+        "backend": "real",
+        "instanceId": "dof-main",
+        "configEdits": true,
+        "actualGameplayVerified": false,
+        "checks": [
+          "real browser administrator login",
+          "anonymous access rejected",
+          "real plugin read and application guidance",
+          "preview and real persistence",
+          "identical request replay",
+          "stale revision rejection",
+          "browser targeted restore with exact original hash",
+          "real configuration export",
+          "real signin schema and queries",
+          "browser schema diagnosis"
+        ],
+        "pageErrors": 0,
+        "configSource": "isolated copied config directory, not consumed by game"
+      },
+      "realDeployedBrowser": {
+        "passed": true,
+        "backend": "real",
+        "instanceId": "dof-main",
+        "configEdits": false,
+        "actualGameplayVerified": false,
+        "checks": [
+          "real browser administrator login",
+          "anonymous access rejected",
+          "real plugin read and application guidance",
+          "real signin schema and queries",
+          "real read-only record projections: 30/30",
+          "browser schema diagnosis"
+        ],
+        "pageErrors": 0
+      },
+      "browserAcceptanceNote": "Only the new modules are accepted; full admin/original-tool parity remains incomplete."
+    },
+    "package": {
+      "jarCreated": true,
+      "newPluginClassesPresent": true,
+      "privateKeysExcluded": true,
+      "sha256": "2b3043fa179f2778e1f123f2644b39c3cbe89d7dd32fd47cc5d7a635af97136c",
+      "localOutput": ".dof-easy/admin-replacement-delivery-20261026-records",
+      "archive": ".dof-easy/admin-replacement-delivery-20261026-records.tar.gz",
+      "archiveSha256": "e7006f80cacc2b47d9bf94b82111dcb1d57e702bb008d63ddf3263f73fc002ae",
+      "archiveFiles": 187,
+      "previousSha256": "baa67297806dbbf8cd8c60eb3607eb15f38f682711845c6b9605d05e2f9ac46b"
+    },
+    "affectedDeploymentRegressions": {
+      "databaseModes": {
+        "run": 14,
+        "failed": 0,
+        "skipped": 0
+      },
+      "containerManager": {
+        "run": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "containerMenu": {
+        "run": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "overlapsGeneral": true
+    },
+    "fileDirectoryBinding": {
+      "instanceAndDatabaseChecked": true,
+      "conflictingMarkerOverwriteRejected": true,
+      "symbolicLinksRejected": true
+    },
+    "currentClientPluginTests": {
+      "run": 39,
+      "failed": 0,
+      "skipped": 4,
+      "baseCommit": "a9d1511",
+      "reason": "four explicit private-input assumptions",
+      "overlapsOtherJava": true
+    },
+    "mavenStandardWithPrivateFixtures": {
+      "run": 231,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 20,
+      "database": "disposable MySQL 5.6.51",
+      "passed": true,
+      "command": "mvn -Dmaven.test.skip=false test",
+      "jdk": "21 (Java 8 target)",
+      "byteBuddyExperimental": true,
+      "tlsVerificationEnabled": true,
+      "skippedByClass": {
+        "NativeClientBundleTest": 1,
+        "NativeClientPayloadTest": 1,
+        "NativeClientPublicationTest": 1,
+        "NativeConfigContainerTest": 1,
+        "NativeScriptChecksumTest": 1,
+        "NativeScriptCompressionTest": 1,
+        "NativeScriptContextTest": 1,
+        "NativeScriptFileCodecTest": 1,
+        "NativeScriptIndexTest": 2,
+        "NativeScriptJobsTest": 2,
+        "NativeScriptMetadataTest": 1,
+        "NativeTextEnvelopeTest": 2,
+        "NativeUiLayoutTest": 4,
+        "RegistrationCodesIntegrationTest": 1
+      },
+      "skipNote": "Additional native samples/profiles and a separately configured registration integration fixture remain unavailable; these are not accepted checks."
+    },
+    "inventory": {
+      "groups": 71,
+      "operations": 239,
+      "ownershipValidated": true,
+      "unitTests": 8,
+      "failed": 0,
+      "fullReplacementGatePassed": false,
+      "script": "scripts/dof/admin_inventory.py",
+      "scopeStillAuthoritative": true
+    },
+    "candidateContainerRecreation": {
+      "passed": true,
+      "auditFilesUnchanged": true,
+      "historyRowsReadable": 2,
+      "mainAdminUnchanged": true,
+      "gameNotRestarted": true
+    }
+  },
+  "pluginConfigurationFields": {
+    "plugin": 15,
+    "anton": 32,
+    "luke": 38
+  },
+  "sourceScope": {
+    "groups": 71,
+    "operations": 239,
+    "allAssignedToWorkPackages": true
+  },
+  "gameServerAccessed": true,
+  "gameClientStarted": false,
+  "dockerImageBuilt": true,
+  "pending": [
+    "Original replacement-tool full menu/default/import-export comparison",
+    "Complete account/role lifecycle, online conflicts and business write recovery coverage",
+    "Validated native reload execution and actual Anton/Luke flows",
+    "Remaining P4-P8 operation parity, ownership and compensation",
+    "Native client/PVF real consumption and actual rewards/gameplay",
+    "Full admin browser parity, end-to-end fault cases and other game levels",
+    "Update installer source before regenerating the verified deployment model"
+  ],
+  "desktopTool": {
+    "available": false,
+    "error": "sandboxCwd is not a local file URI: file:///mnt/d/baidunetdiskdownload/dof-easy",
+    "kernelResetResolved": false
+  },
+  "deployment": {
+    "instanceId": "dof-main",
+    "level": 86,
+    "environment": "isolated",
+    "image": "sha256:4d265d325bbc30be83123e72260c9432bbc8dc091243edec23a99534dbd26d40",
+    "initialPreviousImage": "sha256:a75316ec509cf457b40bab394eba621befecc408ccd3c0d5f15d17f3a0abf17c",
+    "gameImageUnchanged": "sha256:a3cc8049518362c85d3847fdadb942ec930d7ed3fc689fd20dcdb1e32409b9b8",
+    "hostPort": 18080,
+    "containerPort": 80,
+    "gameNotRestarted": true,
+    "gameConfigValuesUnchanged": true,
+    "keysUnchanged": true,
+    "databaseReinitialized": false,
+    "rollbackImageAndPrivateBackupRetained": true,
+    "installerSourceOnServerUpdated": false,
+    "candidateRemovedAfterAcceptance": true,
+    "temporaryBrowserCredentialsRemoved": true
+  },
+  "records": {
+    "views": 30,
+    "available": 30,
+    "actualProjectionQueriesPassed": 30,
+    "signinHttpStatus": 200,
+    "historical409Reproduced": false,
+    "dungeonTable": "dof_native.map_history",
+    "fullChatBodyAuditImplemented": false,
+    "playerRecordCompletenessComparedToOriginalTool": false
+  },
+  "adminImplementationComplete": false,
+  "completeReplacement": false,
+  "sourceCommit": "29cc3c7c87d48ac3387015b58eec8f3231e52dce"
+}

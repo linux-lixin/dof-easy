@@ -2,7 +2,7 @@
   "schema": 1,
   "adapter": "dof-native-1",
   "baselineClasses": 71,
-  "baselineOperations": 209,
+  "baselineOperations": 239,
   "nativeMenuAuditComplete": false,
   "groups": [
     {
@@ -138,15 +138,56 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": "独立标准 PVF、已核对的数值掩码、压缩模式和测试尾部；现阶段不是发布接口",
-          "nativeLocation": "PVF 索引及1280字节尾部；内容参数与Scriptmd5的最终发布尚未接通",
-          "encoding": "索引变换、zlib6、末尾100字节MD5、完整文件SHA-256已对照；参数首字段和更新上下文仍阻塞",
-          "executor": "Linux 候选编码器；原生客户端更新消费待验证",
-          "activation": "候选文件生成不表示发布或客户端已接受",
-          "output": "两个真实原生样本完整字节一致的本地测试；尚无可用发布结果",
+          "input": "绑定实例的标准PVF或独立上传副本；生成任务在服务端选择并私下保存参数，目前管理入口仅支持不压缩模式",
+          "nativeLocation": "PVF索引及1280字节尾部；手动配套参数使用billing.decrypt与config.pvfencryption，保留四处原生更新字段",
+          "encoding": "索引变换、zlib6、末尾100字节MD5和完整文件SHA-256已有对照；压缩私有参数首字段、自动更新上下文及真实消费仍待验",
+          "executor": "admin生成和校验候选、保存两处配置；网关/原生插件/匹配客户端的读取与实际效果独立验收",
+          "activation": "生成、配置保存、运行时读取和游戏效果分开记录；参数不会自动刷新组件或重启实例",
+          "output": "S18真实部署完成整文件生成、反向校验、下载和同批次ZIP；S20完成实际参数预览/应用/恢复/取消、旧版写隔离回退，组件消费与游戏效果仍待验；S22完整来源清单、真实生成下载、错批次拒绝和旧读取器受保护回退通过",
           "failureBehavior": "截断、长度变化、错误来源哈希、中断或磁盘写入失败时拒绝成功；未知协议不发布",
-          "evidence": [],
-          "implementationStatus": "codec_tested_publication_blocked"
+          "evidence": [
+            "docs/validation/admin-script-roundtrip-s18-2026-10-28.json",
+            "docs/validation/admin-script-release-s19-2026-10-28.json",
+            "docs/validation/admin-script-release-s20-2026-10-28.json",
+            "docs/validation/admin-client-provenance-s21-2026-10-28.json",
+            "docs/validation/admin-client-provenance-s22-2026-10-28.json",
+            "docs/validation/admin-script-compression-s35-2026-10-28.json"
+          ],
+          "implementationStatus": "generation_and_parameter_persistence_deployed_consumer_pending",
+          "releaseManagement": {
+            "protocol": "script-release-preview-v1",
+            "previewRequired": true,
+            "ordinaryJournalContainsPrivateParameters": false,
+            "legacyPrivateSnapshotsPreserved": true,
+            "originalWindowsComparisonVerified": false,
+            "realParameterProtocolDeploymentVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "olderImageWriteRollbackVerified": false,
+            "guardedReadOnlyRollbackVerified": true,
+            "bundleProvenance": {
+              "manifestVersion": 1,
+              "explicitSourceAndDatabaseBindingImplemented": true,
+              "parameterBatchFrozen": true,
+              "legacyJobWirePreserved": true,
+              "realDeploymentVerified": true,
+              "nativeConsumerAcceptanceVerified": false,
+              "olderReaderReadAndDownloadVerified": true,
+              "guardedDowngradeVerified": true,
+              "containerRecreationVerified": true
+            }
+          },
+          "compressedScriptAudit": {
+            "completeOriginalArtifactIndependentlyVerified": true,
+            "sourceIndexBytes": 82583080,
+            "compressedIndexBytes": 38262851,
+            "resourceBytes": 482630201,
+            "pairedCompressedParameterVerified": false,
+            "markerCandidateRecordedCasesMatched": 8,
+            "markerCandidateRecordedCasesTotal": 12,
+            "nativeConsumerAcceptanceVerified": false,
+            "compressedGenerationEnabled": false,
+            "evidence": "docs/validation/admin-script-compression-s35-2026-10-28.json"
+          }
         }
       ]
     },
@@ -211,14 +252,26 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "固定属性补丁、characNo、requestId、revision；先预览后提交",
+          "nativeLocation": "taiwan_cain.charac_info；taiwan_login.login_account_3 用于离线复核",
+          "encoding": "整数；无符号 smallint 0–65535，有符号写入 0–32767；旧有符号值恢复按原快照",
+          "executor": "ManagedRoleService（离线 SQL）；实际读取与效果由原生游戏组件承担",
+          "activation": "持久化后重登；实际客户端读取与效果待验证",
+          "output": "操作编号、持久化状态、差异及历史；effectState=not_observed",
+          "failureBehavior": "在线/未知在线状态、未知结构、错实例、版本冲突拒绝；PREPARED 先核对；恢复只修改原操作涉及字段",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedRoleContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-r1-2026-10-26.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "pending"
+          }
         },
         {
           "id": "feature-006-03",
@@ -226,14 +279,26 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "固定属性补丁、characNo、requestId、revision；先预览后提交",
+          "nativeLocation": "taiwan_cain.charac_info；taiwan_login.login_account_3 用于离线复核",
+          "encoding": "整数；无符号 smallint 0–65535，有符号写入 0–32767；旧有符号值恢复按原快照",
+          "executor": "ManagedRoleService（离线 SQL）；实际读取与效果由原生游戏组件承担",
+          "activation": "持久化后重登；实际客户端读取与效果待验证",
+          "output": "操作编号、持久化状态、差异及历史；effectState=not_observed",
+          "failureBehavior": "在线/未知在线状态、未知结构、错实例、版本冲突拒绝；PREPARED 先核对；恢复只修改原操作涉及字段",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedRoleContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-r1-2026-10-26.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_synthetic_real_backend",
+            "componentConsumption": "pending",
+            "actualEffect": "pending",
+            "failureRecovery": "passed_synthetic_mysql56",
+            "restartRetention": "pending"
+          }
         }
       ]
     },
@@ -254,7 +319,40 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json",
+            "S11本地：固定1～100个角色的父任务和子预览同事务保存，子编号及归属固定，父任务开始后复用单角色发送；每步一个目标，结果未知阻止后续，关联新任务只重试确认NOT_APPLIED且原身份/内容/PVF一致的目标。40项独立MySQL（批量11项）与批量/单角色各8项模拟网页通过；实际目标、消费、故障及完整终止/接管待验。docs/validation/admin-postal-batch-s11-2026-10-27.json"
+          ],
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": []
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "S10接口及页面本地实现和构建通过；真实部署门禁尚未关闭。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "pending",
+              "evidence": [
+                "S10实际临时MySQL契约通过；绑定86级实例的邮件写入尚未验证。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": []
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": []
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": []
+            }
+          }
         },
         {
           "id": "feature-007-02",
@@ -269,7 +367,40 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json",
+            "S11本地：固定1～100个角色的父任务和子预览同事务保存，子编号及归属固定，父任务开始后复用单角色发送；每步一个目标，结果未知阻止后续，关联新任务只重试确认NOT_APPLIED且原身份/内容/PVF一致的目标。40项独立MySQL（批量11项）与批量/单角色各8项模拟网页通过；实际目标、消费、故障及完整终止/接管待验。docs/validation/admin-postal-batch-s11-2026-10-27.json"
+          ],
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": []
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "S10接口及页面本地实现和构建通过；真实部署门禁尚未关闭。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "pending",
+              "evidence": [
+                "S10实际临时MySQL契约通过；绑定86级实例的邮件写入尚未验证。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": []
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": []
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": []
+            }
+          }
         },
         {
           "id": "feature-007-03",
@@ -284,9 +415,109 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "S10本地：邮件发送改为固定角色/内容的预览、requestId/revision提交、历史及核对；原无编号admin POST拒绝，内部CDK/任务发送服务未改。实际临时MySQL29项（其中发送12项）及明确模拟接口的网页8场景通过；真实部署、原工具和客户端效果待验。docs/validation/admin-postal-send-s10-2026-10-27.json",
+            "S11本地：固定1～100个角色的父任务和子预览同事务保存，子编号及归属固定，父任务开始后复用单角色发送；每步一个目标，结果未知阻止后续，关联新任务只重试确认NOT_APPLIED且原身份/内容/PVF一致的目标。40项独立MySQL（批量11项）与批量/单角色各8项模拟网页通过；实际目标、消费、故障及完整终止/接管待验。docs/validation/admin-postal-batch-s11-2026-10-27.json"
+          ],
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": []
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "S10接口及页面本地实现和构建通过；真实部署门禁尚未关闭。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "pending",
+              "evidence": [
+                "S10实际临时MySQL契约通过；绑定86级实例的邮件写入尚未验证。docs/validation/admin-postal-send-s10-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": []
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": []
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": []
+            }
+          }
         }
-      ]
+      ],
+      "recordQueryImplementation": {
+        "state": "deployed_read_verified",
+        "entry": "/admin/player/postal",
+        "api": "/api/v1/postal",
+        "executor": "existing_configured_datasource_read_only_mapper",
+        "accountRelationship": "postal.receive_charac_no -> charac_info.charac_no -> charac_info.m_id -> accounts.UID",
+        "permission": "administrator_all_history_or_actor_self_and_direct_children",
+        "evidence": "docs/validation/admin-postal-s7-2026-10-27.json",
+        "realDeploymentVerified": true,
+        "nativeToolEquivalenceVerified": false,
+        "sendProtocolComplete": false,
+        "populatedRealDatasetVerified": false
+      },
+      "sendManagementImplementation": {
+        "state": "locally_implemented",
+        "protocol": "postal-generated-id-v1",
+        "report": "docs/validation/admin-postal-send-s10-2026-10-27.json",
+        "realDeploymentVerified": false,
+        "actualPlayerReceiptVerified": false,
+        "batchDeliveryImplemented": false,
+        "unsupportedPendingNativeFlags": [
+          "avatar",
+          "creature",
+          "creature-artifact"
+        ]
+      },
+      "batchProtocol": {
+        "protocol": "postal-batch-v1",
+        "maxRecipients": 100,
+        "codeImplemented": true,
+        "localContractVerified": true,
+        "realDeploymentVerified": false,
+        "actualPlayerReceiptVerified": false,
+        "report": "docs/validation/admin-postal-batch-s11-2026-10-27.json",
+        "remaining": [
+          "真实目标批量执行/重建/领取",
+          "终止与跨管理员接管的真实任务及故障验证",
+          "原角色删除后的未知结果处理已接入本地回执流程，真实删角/组件效果待验",
+          "原工具行为与批量上限对照"
+        ],
+        "requiresChildRequestId": true,
+        "taskControls": {
+          "protocol": "postal-batch-control-v1",
+          "codeImplemented": true,
+          "localContractVerified": true,
+          "realDeploymentVerified": false,
+          "actualPlayerReceiptVerified": false,
+          "permanentCancellation": "unsubmitted previews in original task only",
+          "crossAdminTakeover": "new linked task with selected confirmed unsubmitted targets",
+          "originalActorPreserved": true,
+          "retryLineageClaimGuard": true,
+          "metadataTransactionAtomic": true,
+          "report": "docs/validation/admin-postal-batch-control-s13-2026-10-27.json"
+        }
+      },
+      "receiptControl": {
+        "codeImplemented": true,
+        "protocol": "postal-receipt-control-v1",
+        "report": "docs/validation/admin-postal-receipt-control-s12-2026-10-27.json",
+        "localContractVerified": true,
+        "realDeploymentVerified": false,
+        "actualPlayerReceiptVerified": false,
+        "nativeDataChanged": false,
+        "originalOutcomeAfterAcknowledgment": "unknown",
+        "requiresLiveRecipient": false,
+        "originalActorPreserved": true
+      }
     },
     {
       "id": "feature-008",
@@ -305,9 +536,101 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [],
+          "managementImplementation": {
+            "state": "deployed_and_protocol_validated",
+            "entry": "/admin/player/accounts",
+            "api": "/api/v1/recharge",
+            "executor": "explicit_web_admin_billing_patch",
+            "writeProtocol": [
+              "credit",
+              "compensate",
+              "accept-current"
+            ],
+            "supportedEngines": [
+              "InnoDB",
+              "MyISAM"
+            ],
+            "unknownResultRule": "Never infer execution from balance equality; MyISAM acknowledgment keeps original outcome unknown.",
+            "receiptAtomicWithBalance": "InnoDB only",
+            "evidence": "docs/validation/admin-recharge-s8-2026-10-27.json",
+            "realDeploymentVerified": true,
+            "nativeToolEquivalenceVerified": false,
+            "actualPlayerReceiptVerified": false,
+            "boundDatabaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+            "validationLimit": "Original tool equivalence and player/client receipt remain unverified.",
+            "nativeLocation": "taiwan_billing.cash_cera.cera",
+            "activation": "数据库写入即时提交；网关/客户端读取时机待验证"
+          },
+          "verification": {
+            "nativeParity": {
+              "state": "pending",
+              "evidence": [],
+              "reason": "免授权原工具菜单、输入默认值、输出及副作用尚未逐项对照"
+            },
+            "implementation": {
+              "state": "passed",
+              "evidence": [
+                "业务实现 f5cb788；网页预览/提交/历史/核对、管理员权限与固定字段验证。docs/validation/admin-recharge-s8-2026-10-27.json"
+              ]
+            },
+            "persistence": {
+              "state": "passed",
+              "evidence": [
+                "真实86级实例UUID 899d147e-d0ef-11f1-9ff4-525400542f67；专用UID6 37→42→37，原请求重放及重复补偿拒绝。docs/validation/admin-recharge-s8-2026-10-27.json"
+              ]
+            },
+            "consumption": {
+              "state": "pending",
+              "evidence": [],
+              "reason": "专用账号无角色，匹配网关/客户端消费与缓存读取时机尚未验证"
+            },
+            "effect": {
+              "state": "pending",
+              "evidence": [],
+              "reason": "数据库余额核对通过，玩家客户端实际到账与消费效果待验"
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": [
+                "真实提交后受控丢弃响应、原编号核对/重放、关联补偿通过；十四项隔离MySQL/Hikari故障契约通过。docs/validation/admin-recharge-s8-2026-10-27.json"
+              ],
+              "reason": "其余真实网络、进程及磁盘故障尚未完成，重建证据及边界由S8报告记录，统一故障门禁未关闭"
+            }
+          }
         }
-      ]
+      ],
+      "nativeTokenWalletManagement": {
+        "protocol": "recharge-points-atomic-v1",
+        "entry": "/admin/player/accounts -> 代币券管理",
+        "api": "/api/v1/recharge/points",
+        "nativeLocation": "taiwan_billing.cash_cera_point.cera_point",
+        "codeImplemented": true,
+        "localSqlVerified": true,
+        "localBrowserVerified": true,
+        "realDeploymentVerified": false,
+        "actualClientConsumptionVerified": false,
+        "originalToolEquivalenceVerified": false,
+        "scoreShopEquivalenceVerified": false,
+        "sharedWriter": "ManagedRechargeService fixed native coupon adapter; separate request namespace and snapshots",
+        "amountField": "amount",
+        "preservesNativeDates": true,
+        "report": "docs/validation/admin-token-coupons-s16-2026-10-28.json",
+        "realWebCreditCompensationVerified": true,
+        "realDeploymentReadAndRefusalVerified": true,
+        "realDeploymentVerifiedScope": "full token wallet matrix including external failures, recovery and supported levels",
+        "controlledDeploymentProof": {
+          "sourceCommit": "32861a2d891f3ff98315fe81b795181a9ccd9f7f",
+          "uid": 6,
+          "before": 0,
+          "after": 0,
+          "creditRequestId": "54aeb5c8-7e0a-4c5f-89be-56ec0eb8ebe6",
+          "compensationRequestId": "41e595e1-c4e7-4db9-9242-79676fb82801",
+          "walletDatesPreserved": true,
+          "ceraWalletUnchanged": true
+        },
+        "validationLimit": "real web 0 -> 1 -> 0, replay/compensation/cross-currency refusals passed; original admin, client consumption and physical outage matrix pending"
+      }
     },
     {
       "id": "feature-009",
@@ -358,7 +681,66 @@
           "failureBehavior": null,
           "evidence": []
         }
-      ]
+      ],
+      "websiteRedemption": {
+        "protocol": "cdk-use-v1",
+        "codeImplemented": true,
+        "localContractVerified": true,
+        "realDeploymentVerified": false,
+        "actualClientConsumptionVerified": false,
+        "nativeCompanionParityVerified": false,
+        "codePool": "existing website recharge_key",
+        "rewardSource": "stored key definition only",
+        "usesExistingMailAndCurrencyWriter": true,
+        "durableRequestIdRequired": true,
+        "unknownCodeQuarantinedAfterAcknowledgment": true,
+        "confirmedCurrencyCompensation": "existing managed recharge service, one-time linked debit",
+        "report": "docs/validation/admin-cdk-redemption-s14-2026-10-28.json",
+        "remaining": [
+          "网站制码/查询/导出/停用统一协议与一点评测码真实管理已验证，物品码及完整外部故障仍待验",
+          "晴空14列配套及固定口令码的真实消费和执行归属核对",
+          "真实物品CDK/客户端领取及特殊邮件标记",
+          "真实网络、进程和磁盘故障",
+          "CDK协议跨版本回退入口隔离与故障演练"
+        ],
+        "deploymentReadAndRefusalVerified": true,
+        "currencyFlowVerified": true,
+        "equipmentCdkVerified": false,
+        "realDeploymentVerifiedScope": "complete website CDK matrix including actual equipment delivery and recovery"
+      },
+      "websiteInventory": {
+        "protocol": "cdk-inventory-v1",
+        "codeImplemented": true,
+        "localSqlContractVerified": true,
+        "localBrowserVerified": true,
+        "realDeploymentVerified": false,
+        "originalToolEquivalenceVerified": false,
+        "nativeCompanionParityVerified": false,
+        "codePool": "existing InnoDB website recharge_key; known ten-column schema only",
+        "route": "/admin/player/cdk-inventory",
+        "batchCreation": "preview + durable requestId/revision + atomic native rows and generated receipt",
+        "secretVisibility": "explicit audited website-cdk-csv-v1 export only; metadata query/history contain no plaintext codes",
+        "pause": "only unused unreserved codes; status=1 without use metadata, no rewards",
+        "resume": "exact state and generation must match persisted management pause receipt",
+        "exportRecovery": "same ID exact CSV from frozen metadata; pending export blocks new ID until reconciliation",
+        "report": "docs/validation/admin-cdk-inventory-s15-2026-10-28.json",
+        "remaining": [
+          "真实物品码管理分支及网络/进程/磁盘外部故障验收",
+          "原晴空单次码、固定口令、14列配套及消费端对照",
+          "真实故障及跨旧兑换协议镜像回退演练"
+        ],
+        "realDeploymentReadAndRefusalVerified": true,
+        "websiteCurrencyInventoryFlowVerified": true,
+        "realDeploymentVerifiedScope": "full website inventory matrix including item codes and external failure/recovery",
+        "controlledDeploymentProof": {
+          "sourceCommit": "7acd3dbd102a6126076fd8417bf9de051cac229e",
+          "keyId": 2,
+          "batchId": "4f204fac-1d51-4ad8-b9ec-cbb0722c32a5",
+          "codeLeftPaused": true,
+          "walletUnchanged": true,
+          "originalToolEquivalenceVerified": false
+        }
+      }
     },
     {
       "id": "feature-010",
@@ -370,14 +752,31 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "账号编号、requestId、revision、操作类型、原因；封禁天数在预览时固定为服务器时间区间",
+          "nativeLocation": "d_taiwan.member_punish_info，主键(m_id,punish_type)；账号身份来自 accounts",
+          "encoding": "固定9列86级处罚结构，精确匹配 dof-easy 来源及 punish_value=101",
+          "executor": "ManagedBanService 管理SQL；登录服务读取处罚，游戏端读取仍待验",
+          "activation": "限制后续登录；不保证踢出在线角色，原生效果待验",
+          "output": "预览差异、持久化状态、操作历史、核对与定向恢复",
+          "failureBehavior": "错实例、未知结构、管理员/自身、其他来源占键、版本冲突均拒绝；PREPARED先核对，不换编号重做",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedBanContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-s2-2026-10-27.json",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          },
+          "managementImplementation": {
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          }
         },
         {
           "id": "feature-010-02",
@@ -385,14 +784,31 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "账号编号、requestId、revision、操作类型、原因；封禁天数在预览时固定为服务器时间区间",
+          "nativeLocation": "d_taiwan.member_punish_info，主键(m_id,punish_type)；账号身份来自 accounts",
+          "encoding": "固定9列86级处罚结构，精确匹配 dof-easy 来源及 punish_value=101",
+          "executor": "ManagedBanService 管理SQL；登录服务读取处罚，游戏端读取仍待验",
+          "activation": "限制后续登录；不保证踢出在线角色，原生效果待验",
+          "output": "预览差异、持久化状态、操作历史、核对与定向恢复",
+          "failureBehavior": "错实例、未知结构、管理员/自身、其他来源占键、版本冲突均拒绝；PREPARED先核对，不换编号重做",
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedBanContractTest.java",
+            "tests/integration/admin/activity-page.cjs",
+            "docs/validation/admin-management-s2-2026-10-27.json",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          },
+          "managementImplementation": {
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          }
         },
         {
           "id": "feature-010-03",
@@ -443,14 +859,32 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedPasswordContractTest.java",
+            "docs/validation/admin-management-s2-2026-10-27.json",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
           "implementationSubsets": [
             {
               "location": "dof_native.config.is_open_up_pwd",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
-          ]
+          ],
+          "managementImplementation": {
+            "state": "management_protocol_implemented_effect_pending",
+            "description": "管理员重置普通玩家密码已接通；玩家自助保留旧密码+一次性验证码；原生入口/原工具对照仍待验，不将管理员重置替代游戏内改密。",
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          }
         },
         {
           "id": "feature-011-02",
@@ -465,14 +899,38 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
           "implementationSubsets": [
             {
               "location": "dof_native.config.switch_regCdkey",
               "status": "configuration_only_native_execution_pending",
               "evidence": []
             }
-          ]
+          ],
+          "managementImplementation": {
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          }
         },
         {
           "id": "feature-011-03",
@@ -487,7 +945,31 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
+          "managementImplementation": {
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          }
         },
         {
           "id": "feature-011-04",
@@ -502,9 +984,33 @@
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
           "output": "原生读取/保存对照、带版本的预览保存、操作历史与定向恢复",
           "failureBehavior": "版本冲突拒绝；部分写入进入待核对，阻止新写入；恢复只改本次字段",
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
           "implementationStatus": "native_mapping_and_myisam_contract_tested_effect_pending",
-          "apiModule": "registration"
+          "apiModule": "registration",
+          "managementImplementation": {
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          }
         },
         {
           "id": "feature-011-05",
@@ -519,9 +1025,33 @@
           "activation": "配置已持久化不表示客户端效果已观察；实际刷新时机仍需联调",
           "output": "原生读取/保存对照、带版本的预览保存、操作历史与定向恢复",
           "failureBehavior": "版本冲突拒绝；部分写入进入待核对，阻止新写入；恢复只改本次字段",
-          "evidence": [],
+          "evidence": [
+            "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/extension/RegistrationCodesIntegrationTest.java",
+            "docs/validation/admin-registration-s3-2026-10-27.json"
+          ],
           "implementationStatus": "native_mapping_and_myisam_contract_tested_effect_pending",
-          "apiModule": "registration"
+          "apiModule": "registration",
+          "managementImplementation": {
+            "state": "deployed_web_subset_verified_native_equivalence_pending",
+            "api": "/api/v1/admin/registration",
+            "entry": "/admin/extension-operations → 注册激活码",
+            "executor": "既有 AccountService 注册事务；不新增网页调度或原生网关执行器",
+            "nativeCompatibility": "自有 REGISTRATION_CODES 与原生 dof_native.regCdkey 独立；原生格式/卡状态/消费链保持未完成",
+            "blockers": [
+              "目标实例历史账号缺少已验证注册 IP；正数配额尚不能无损兼容",
+              "原生客户端、晴空注册卡、实际网关消费及游戏赠送效果待验证"
+            ],
+            "liveEvidence": "docs/validation/admin-registration-s3-2026-10-27.json",
+            "verifiedSubset": "专用新账号的注册/DOF HTTP认证、原生余额写入、封禁解封与定向恢复、管理员改密及容器重建已验证；不代表原生卡、原生网关或游戏内效果通过"
+          },
+          "validation": {
+            "nativeComparison": "pending",
+            "webPersistence": "passed_real_isolated_subset",
+            "componentConsumption": "pending_native_gateway_and_game",
+            "actualEffect": "pending_game_client",
+            "failureRecovery": "passed_synthetic_faults_and_real_targeted_restore",
+            "restartRetention": "passed_real_admin_container_recreation"
+          }
         }
       ]
     },
@@ -542,7 +1072,25 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json",
+            "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json"
+          ],
+          "managementImplementation": {
+            "state": "read_only_implemented",
+            "api": "/api/v1/admin/dof/records/dungeon-runs",
+            "entry": "/admin/dof",
+            "executor": "bound_instance_read_only_sql",
+            "nativeLocation": "dof_native.map_history",
+            "effectState": "native_equivalence_pending",
+            "diagnosisApi": "/api/v1/admin/dof/records/dungeon-runs/schema",
+            "sharedRecordFilterUiImplemented": true,
+            "sharedRecordFilterUiMockVerified": true,
+            "sharedRecordFilterUiRealDeploymentVerified": true,
+            "sharedRecordFilterUiValidationView": "transactions",
+            "operationSpecificPopulatedRecordsVerified": false,
+            "validationLimit": "共享筛选页在真实部署的空交易表通过；不推定本分类有数据完整性、数据库编码或原工具等价通过。"
+          }
         },
         {
           "id": "feature-012-02",
@@ -557,7 +1105,25 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json",
+            "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json"
+          ],
+          "managementImplementation": {
+            "state": "read_only_implemented",
+            "api": "/api/v1/admin/dof/records/auction-transactions",
+            "entry": "/admin/dof",
+            "executor": "bound_instance_read_only_sql",
+            "nativeLocation": "dof_native.auction_house_log",
+            "effectState": "native_equivalence_pending",
+            "diagnosisApi": "/api/v1/admin/dof/records/auction-transactions/schema",
+            "sharedRecordFilterUiImplemented": true,
+            "sharedRecordFilterUiMockVerified": true,
+            "sharedRecordFilterUiRealDeploymentVerified": true,
+            "sharedRecordFilterUiValidationView": "transactions",
+            "operationSpecificPopulatedRecordsVerified": false,
+            "validationLimit": "共享筛选页在真实部署的空交易表通过；不推定本分类有数据完整性、数据库编码或原工具等价通过。"
+          }
         },
         {
           "id": "feature-012-03",
@@ -572,7 +1138,25 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json",
+            "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json"
+          ],
+          "managementImplementation": {
+            "state": "read_only_implemented",
+            "api": "/api/v1/admin/dof/records/chat-reports",
+            "entry": "/admin/dof",
+            "executor": "bound_instance_read_only_sql",
+            "nativeLocation": "taiwan_cain_log.log_police_chatting",
+            "effectState": "native_equivalence_pending",
+            "diagnosisApi": "/api/v1/admin/dof/records/chat-reports/schema",
+            "sharedRecordFilterUiImplemented": true,
+            "sharedRecordFilterUiMockVerified": true,
+            "sharedRecordFilterUiRealDeploymentVerified": true,
+            "sharedRecordFilterUiValidationView": "transactions",
+            "operationSpecificPopulatedRecordsVerified": false,
+            "validationLimit": "共享筛选页在真实部署的空交易表通过；不推定本分类有数据完整性、数据库编码或原工具等价通过。"
+          }
         },
         {
           "id": "feature-012-04",
@@ -586,7 +1170,7 @@
           "executor": null,
           "activation": null,
           "output": null,
-          "failureBehavior": null,
+          "failureBehavior": "当前固定视图只提供举报聊天元数据，不能替代全部聊天正文审计；完整来源与原工具行为未核实时保持待实现。",
           "evidence": []
         }
       ]
@@ -1157,7 +1741,60 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-raid-s4-2026-10-27.json",
+            "docs/validation/admin-runtime-s5-2026-10-27.json"
+          ],
+          "managementImplementation": {
+            "state": "configuration_implemented",
+            "api": "/api/v1/admin/dof/plugins/anton",
+            "entry": "/admin/dof",
+            "executor": "libdof-plugin.so + DP2",
+            "activation": "保存和运行时刷新分别执行；匹配执行器支持固定网页原生刷新及逐频道回执，否则显示GM聊天指引。四项回读与团本实际玩法分别验证。",
+            "persistence": "atomic_file_with_write_ahead_journal",
+            "effectState": "not_observed",
+            "runtimeApi": "/api/v1/admin/dof/plugins/anton/runtime",
+            "runtimeVerificationFields": [
+              "name",
+              "open_day",
+              "open_time",
+              "member_min"
+            ],
+            "runtimeVerification": {
+              "state": "four_fields_verified",
+              "grade": 86,
+              "channels": [
+                "siroco15",
+                "siroco52"
+              ],
+              "evidence": "docs/validation/admin-runtime-s5-2026-10-27.json",
+              "gameplayVerified": false
+            }
+          },
+          "verification": {
+            "consumption": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-raid-s4-2026-10-27.json",
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "本地70级两轮及真实86级两频道固定刷新、四项回读、变更与恢复通过；其余配置字段、团本开关及完整流程仍待验收。"
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "配置管理、固定网页刷新和逐频道核对已实现；原工具完整分支、团本运行开关及其余高级操作仍需补齐。"
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "真实86级原字段和原生值恢复、game/admin容器重建后配置与密钥保留、原4项请求不重放通过；其他故障注入与进行中团本边界仍待验。"
+            }
+          }
         }
       ]
     },
@@ -1178,7 +1815,60 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-raid-s4-2026-10-27.json",
+            "docs/validation/admin-runtime-s5-2026-10-27.json"
+          ],
+          "managementImplementation": {
+            "state": "configuration_implemented",
+            "api": "/api/v1/admin/dof/plugins/luke",
+            "entry": "/admin/dof",
+            "executor": "libdof-plugin.so + DP2",
+            "activation": "保存和运行时刷新分别执行；匹配执行器支持固定网页原生刷新及逐频道回执，否则显示GM聊天指引。四项回读与团本实际玩法分别验证。",
+            "persistence": "atomic_file_with_write_ahead_journal",
+            "effectState": "not_observed",
+            "runtimeApi": "/api/v1/admin/dof/plugins/luke/runtime",
+            "runtimeVerificationFields": [
+              "name",
+              "open_day",
+              "open_time",
+              "member_min"
+            ],
+            "runtimeVerification": {
+              "state": "four_fields_verified",
+              "grade": 86,
+              "channels": [
+                "siroco15",
+                "siroco52"
+              ],
+              "evidence": "docs/validation/admin-runtime-s5-2026-10-27.json",
+              "gameplayVerified": false
+            }
+          },
+          "verification": {
+            "consumption": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-raid-s4-2026-10-27.json",
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "本地70级两轮及真实86级两频道固定刷新、四项回读、变更与恢复通过；其余配置字段、团本开关及完整流程仍待验收。"
+            },
+            "implementation": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "配置管理、固定网页刷新和逐频道核对已实现；原工具完整分支、团本运行开关及其余高级操作仍需补齐。"
+            },
+            "recovery": {
+              "state": "pending",
+              "evidence": [
+                "docs/validation/admin-runtime-s5-2026-10-27.json"
+              ],
+              "reason": "真实86级原字段和原生值恢复、game/admin容器重建后配置与密钥保留、原4项请求不重放通过；其他故障注入与进行中团本边界仍待验。"
+            }
+          }
         }
       ]
     },
@@ -1306,14 +1996,76 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "跨界装备代码（含0默认规则）、材料代码/数量及独立持有量校验下限；材料最多5组。announcement作为只读保留字段",
+          "nativeLocation": "dof_native.cross_border(code,restitution,Return_quantity,announcement,codenum)",
+          "encoding": "五字段固定顺序；材料VARCHAR255以 / 成对分隔；codenum是每种材料持有量下限，不自动替代Return_quantity",
+          "executor": "现有原生插件执行材料检查、扣除和装备跨界；网页只维护规则。DP2跨界券独立",
+          "activation": "保存不自动开启跨界；重开跨界窗口核对，组件消费与游戏效果独立验收",
+          "output": "规则读取、预览、保存、单条JSON导入导出、原编号核对和定向恢复；原工具全表导入导出、批量清除、默认值及客户端UI仍待验",
+          "failureBehavior": "错误配对、版本冲突、材料/数量/下限第三方修改、未知表序/索引/触发器/FK及撤权拒绝写入；结果不明保留原编号",
+          "evidence": [
+            "docs/validation/admin-cross-border-s28-2026-10-28.json",
+            "docs/validation/admin-cross-border-s29-2026-10-28.json",
+            "docs/validation/admin-equipment-dataset-s30-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s32-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s33-2026-10-28.json"
+          ],
+          "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_defaults_and_ui_parity_pending",
+          "managementImplementation": {
+            "state": "local_configuration_implemented",
+            "entry": "/admin/activities",
+            "api": "/api/v1/admin/activities/cross-border",
+            "nativeLocation": "dof_native.cross_border(code,restitution,Return_quantity,announcement,codenum)",
+            "activation": "保存不自动开启跨界；重开跨界窗口核对，组件消费与游戏效果独立验收"
+          },
+          "crossBorderRuleManagement": {
+            "configurationEditingImplemented": true,
+            "defaultCodeZeroSupported": true,
+            "inventoryThresholdAndDeductionQuantitiesSeparate": true,
+            "materialTripleRestoreGuard": true,
+            "announcementReadOnly": true,
+            "nativeAnnouncementSemanticsVerified": false,
+            "originalDefaultValuesVerified": false,
+            "originalImportExportVerified": false,
+            "realDeploymentVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false,
+            "localPersistenceAndRecoveryContractVerified": true,
+            "verificationEvidence": "docs/validation/admin-cross-border-s29-2026-10-28.json",
+            "configurationPersistenceVerified": true,
+            "configurationRecoveryVerified": true,
+            "guardedOldImageRollbackVerified": true,
+            "remaining": "组件消费、玩家材料扣除/装备去向/失败补偿、客户端UI、原工具默认值/全表导入导出及批量清除仍待验"
+          },
+          "equipmentDatasetManagement": {
+            "state": "deployed_configuration_lifecycle_verified_consumer_pending",
+            "serverPaginationImplemented": true,
+            "fullTableExportImplemented": true,
+            "webFormat": "dof-equipment-rules-v1",
+            "instanceAndDatabaseBindingChecked": true,
+            "batchImportImplemented": true,
+            "bulkClearImplemented": true,
+            "durableBatchWritePlanImplemented": true,
+            "originalToolFormatVerified": false,
+            "realDeploymentVerified": true,
+            "evidence": "docs/validation/admin-equipment-batch-s33-2026-10-28.json",
+            "independentChildReceipts": true,
+            "maximumItemsPerStep": 20,
+            "cancelUnsubmittedImplemented": true,
+            "linkedRestoreImplemented": true,
+            "manualConflictAcknowledgmentImplemented": true,
+            "controlHistoryPaginationImplemented": true,
+            "runtimeCodeDeployed": true,
+            "runtimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+            "runtimeImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+            "runtimeHostPort": 18080,
+            "realBatchCatalogReadVerified": true,
+            "realConfigurationLifecycleVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false,
+            "postRecreationReceiptReadsVerified": true
+          }
         }
       ]
     },
@@ -1342,14 +2094,63 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "固定四字段的原生继承规则；支持装备代码0默认规则及专属代码，费用代码/数量以 / 成对分隔、最多5组",
+          "nativeLocation": "dof_native.inheritance(code,restitution,Return_quantity,differ_lv)；原生继承材料窗口及执行请求按代码读取，未匹配时读取code=0",
+          "encoding": "VARCHAR原始费用列表；differ_lv为两件装备等级差的绝对值上限；保留未修改的旧文本",
+          "executor": "原生插件执行扣料、属性继承及失败返还；网页仅维护规则。Frida继承券独立",
+          "activation": "保存不自动开启功能；重开继承窗口核对材料，组件读取和游戏效果独立验收",
+          "output": "规则读取、预览、保存、单条JSON导入导出、操作核对和定向恢复；原工具导入导出格式及客户端UI仍待对照",
+          "failureBehavior": "错误列表、版本冲突、费用配对恢复冲突、权限撤销、未知表结构或副作用拒绝写入；结果不明保留原编号",
+          "evidence": [
+            "docs/validation/admin-inheritance-s23-2026-10-28.json",
+            "docs/validation/admin-inheritance-s24-initial-2026-10-28.json",
+            "docs/validation/admin-inheritance-s25-2026-10-28.json",
+            "docs/validation/admin-equipment-dataset-s30-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s32-2026-10-28.json"
+          ],
+          "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_and_ui_parity_pending",
+          "inheritanceRuleManagement": {
+            "configurationEditingImplemented": true,
+            "defaultCodeZeroSupported": true,
+            "originalImportExportVerified": false,
+            "realDeploymentVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false,
+            "configurationPersistenceVerified": true,
+            "configurationRecoveryVerified": true,
+            "unsignedIntegerHttpReadbackVerified": true,
+            "guardedOldImageRollbackVerified": true,
+            "verificationEvidence": "docs/validation/admin-inheritance-s25-2026-10-28.json",
+            "remaining": "原生消费、扣料/继承/返还及客户端UI、原工具默认值和导入导出对照仍待验"
+          },
+          "equipmentDatasetManagement": {
+            "state": "deployed_configuration_lifecycle_verified_consumer_pending",
+            "serverPaginationImplemented": true,
+            "fullTableExportImplemented": true,
+            "webFormat": "dof-equipment-rules-v1",
+            "instanceAndDatabaseBindingChecked": true,
+            "batchImportImplemented": true,
+            "bulkClearImplemented": true,
+            "durableBatchWritePlanImplemented": true,
+            "originalToolFormatVerified": false,
+            "realDeploymentVerified": true,
+            "evidence": "docs/validation/admin-equipment-batch-s32-2026-10-28.json",
+            "independentChildReceipts": true,
+            "maximumItemsPerStep": 20,
+            "cancelUnsubmittedImplemented": true,
+            "linkedRestoreImplemented": true,
+            "manualConflictAcknowledgmentImplemented": true,
+            "controlHistoryPaginationImplemented": true,
+            "runtimeCodeDeployed": true,
+            "runtimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+            "runtimeImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+            "runtimeHostPort": 18080,
+            "realBatchCatalogReadVerified": true,
+            "realConfigurationLifecycleVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false
+          }
         }
       ]
     },
@@ -1408,14 +2209,75 @@
           "status": "pending_equivalence",
           "included": true,
           "nativeMenuConfirmed": false,
-          "input": null,
-          "nativeLocation": null,
-          "encoding": null,
-          "executor": null,
-          "activation": null,
-          "output": null,
-          "failureBehavior": null,
-          "evidence": []
+          "input": "回收物品代码、奖励代码/数量、播报标志、回收扣除数量、额外消耗代码/数量；两组列表各用 / 配对、最多7组，额外代码0为金币",
+          "nativeLocation": "dof_native.item_recovery(code,restitution,Return_quantity,announcement,codenum,extra_consumption_id,extra_consumption_num)",
+          "encoding": "原生七字段固定顺序；奖励与额外消耗为VARCHAR255，整数为unsigned INT；未修改的旧文本与扩展值保留",
+          "executor": "现有原生插件回收/扣除/奖励流程；网页只维护规则，Frida装备/时装/宠物回收独立",
+          "activation": "保存不会开启回收；重新打开回收窗口后由组件读取，实际扣除与到账另行验收",
+          "output": "规则读取、预览、保存、单条JSON导入导出、核对及定向恢复；原工具菜单、默认值、导入导出与客户端UI仍待验",
+          "failureBehavior": "配对错误、超范围、数量无效、版本/配对恢复冲突、撤权、未知表序/索引/触发器/FK拒绝写入；未决记录保留原编号",
+          "evidence": [
+            "docs/validation/admin-recovery-s26-2026-10-28.json",
+            "docs/validation/admin-recovery-s27-2026-10-28.json",
+            "docs/validation/admin-equipment-dataset-s30-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s31-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s32-2026-10-28.json",
+            "docs/validation/admin-equipment-batch-s33-2026-10-28.json"
+          ],
+          "implementationStatus": "deployed_rule_configuration_recovery_verified_consumer_and_ui_parity_pending",
+          "managementImplementation": {
+            "state": "local_configuration_implemented",
+            "entry": "/admin/activities",
+            "api": "/api/v1/admin/activities/recovery",
+            "nativeLocation": "dof_native.item_recovery(code,restitution,Return_quantity,announcement,codenum,extra_consumption_id,extra_consumption_num)",
+            "activation": "保存不会开启回收；重新打开回收窗口后由组件读取，实际扣除与到账另行验收"
+          },
+          "recoveryRuleManagement": {
+            "configurationEditingImplemented": true,
+            "goldZeroExtraCostSupported": true,
+            "maxRewardPairs": 7,
+            "maxExtraCostPairs": 7,
+            "rewardAndCostRestorePairGuards": true,
+            "originalImportExportVerified": false,
+            "realDeploymentVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false,
+            "localPersistenceAndRecoveryContractVerified": true,
+            "verificationEvidence": "docs/validation/admin-recovery-s27-2026-10-28.json",
+            "configurationPersistenceVerified": true,
+            "configurationRecoveryVerified": true,
+            "guardedOldImageRollbackVerified": true,
+            "remaining": "组件消费、玩家回收扣除/奖励/公告、客户端UI及原工具默认值和导入导出对照仍待验"
+          },
+          "equipmentDatasetManagement": {
+            "state": "deployed_configuration_lifecycle_verified_consumer_pending",
+            "serverPaginationImplemented": true,
+            "fullTableExportImplemented": true,
+            "webFormat": "dof-equipment-rules-v1",
+            "instanceAndDatabaseBindingChecked": true,
+            "batchImportImplemented": true,
+            "bulkClearImplemented": true,
+            "durableBatchWritePlanImplemented": true,
+            "originalToolFormatVerified": false,
+            "realDeploymentVerified": true,
+            "evidence": "docs/validation/admin-equipment-batch-s33-2026-10-28.json",
+            "independentChildReceipts": true,
+            "maximumItemsPerStep": 20,
+            "cancelUnsubmittedImplemented": true,
+            "linkedRestoreImplemented": true,
+            "manualConflictAcknowledgmentImplemented": true,
+            "controlHistoryPaginationImplemented": true,
+            "runtimeCodeDeployed": true,
+            "runtimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+            "runtimeImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+            "runtimeHostPort": 18080,
+            "realBatchCatalogReadVerified": true,
+            "realConfigurationLifecycleVerified": true,
+            "nativeConsumerAcceptanceVerified": false,
+            "nativeGameplayVerified": false,
+            "postRecreationReceiptReadsVerified": true,
+            "unfinishedTaskContainerRecreationVerified": true
+          }
         }
       ]
     },
@@ -2335,7 +3197,48 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-s36-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s38-2026-10-28.json",
+            "docs/validation/admin-native-charts-identity-s39-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+            "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json",
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+            "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
+          ],
+          "implementationSubsets": [
+            {
+              "location": "dof_native.game_charts_config / game_charts_code",
+              "status": "real_configuration_write_restore_and_admin_recreation_verified_native_effect_pending",
+              "fieldsEditable": [
+                "min_zhanli",
+                "jiangli_day",
+                "jiangli_hour"
+              ],
+              "fieldsPreserved": [
+                "id",
+                "status",
+                "is_mobai",
+                "next_time"
+              ],
+              "requiresBothEntriesDisabled": true,
+              "createsOrDeletesConfig": false,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-s36-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
+              ],
+              "realDeploymentReadAndRefusalVerified": true,
+              "realConfigurationWriteAndRestoreVerified": true,
+              "realAdminRecreationVerified": true,
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
+            }
+          ]
         },
         {
           "id": "feature-044-02",
@@ -2350,7 +3253,69 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-s36-2026-10-28.json",
+            "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+            "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json",
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+            "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
+          ],
+          "implementationSubsets": [
+            {
+              "location": "dof_native.game_charts_config / game_charts_code",
+              "status": "real_deployed_independent_entry_guards_verified_native_effect_pending",
+              "fieldsEditable": [],
+              "fieldsPreserved": [
+                "id",
+                "status",
+                "is_mobai",
+                "next_time"
+              ],
+              "requiresBothEntriesDisabled": true,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-s36-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
+              ],
+              "newConfigurationWritesEnabled": false,
+              "realDeploymentReadAndRefusalVerified": true,
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
+            },
+            {
+              "location": "dof_native.game_charts_code",
+              "status": "real_configuration_write_restore_and_admin_recreation_verified_native_effect_pending",
+              "fieldsEditable": [
+                "top_index",
+                "code_data",
+                "code_num"
+              ],
+              "maxCharactersPerCsv": 3000,
+              "newEntryPairLimit": 50,
+              "originalToolPairLimitVerified": false,
+              "legacySnapshotRestorePreservesExactPairs": true,
+              "requiresBothEntriesDisabled": true,
+              "requiresInstalledSharedConsumerDisabled": true,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
+              ],
+              "realDeploymentReadAndRefusalVerified": true,
+              "realConfigurationWriteAndRestoreVerified": true,
+              "realAdminRecreationVerified": true,
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
+            }
+          ]
         },
         {
           "id": "feature-044-03",
@@ -2365,7 +3330,44 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-s36-2026-10-28.json",
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+            "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
+          ],
+          "implementationSubsets": [
+            {
+              "location": "dof_native.game_charts_config / game_charts_code",
+              "status": "real_configuration_write_restore_and_admin_recreation_verified_native_effect_pending",
+              "fieldsEditable": [
+                "jiangli_day",
+                "jiangli_hour"
+              ],
+              "fieldsPreserved": [
+                "id",
+                "status",
+                "is_mobai",
+                "next_time"
+              ],
+              "requiresBothEntriesDisabled": true,
+              "createsOrDeletesConfig": false,
+              "newRewardExecutor": false,
+              "nativeConsumerAcceptanceVerified": false,
+              "evidence": [
+                "docs/validation/admin-native-charts-s36-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
+              ],
+              "nativeFormulaImplemented": false,
+              "nativeSettlementAcceptanceVerified": false,
+              "realDeploymentReadAndRefusalVerified": true,
+              "realConfigurationWriteAndRestoreVerified": true,
+              "realAdminRecreationVerified": true,
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
+            }
+          ]
         },
         {
           "id": "feature-044-04",
@@ -2395,7 +3397,9 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
+          ]
         }
       ]
     },
@@ -2672,7 +3676,26 @@
           "activation": null,
           "output": null,
           "failureBehavior": null,
-          "evidence": []
+          "evidence": [
+            "docs/validation/admin-frida-s6-2026-10-27.json"
+          ],
+          "dependencyImplementation": {
+            "storage": "frida.game_event",
+            "installerCommand": "dof.sh plugin-db",
+            "state": "configured_frida_storage_verified_original_tool_ownership_pending",
+            "activityEnabledByMigration": false,
+            "candidateExecutor": "default Frida script",
+            "executorOwnershipVerified": false
+          },
+          "verification": {
+            "consumption": {
+              "state": "pending",
+              "reason": "已启用的默认Frida在86级两频道读取活动存储、处理坏JSON并恢复就绪；原工具此菜单归属尚未核实，不确认唯一执行方。有效非空进度、save回调、活动流程、奖励及网页仍待验。",
+              "evidence": [
+                "docs/validation/admin-frida-s6-2026-10-27.json"
+              ]
+            }
+          }
         },
         {
           "id": "feature-049-02",
@@ -4212,5 +5235,35 @@
     }
   ],
   "discoveredClasses": 71,
-  "discoveredOperations": 239
+  "discoveredOperations": 239,
+  "sourceEdition": "qingkong-2.8-replacement",
+  "initialBaselineOperations": 209,
+  "baselineRule": "本轮最低覆盖71类239项；初始209项只作历史记录，不能排除新增项或降低门禁。",
+  "activityPreviewRecovery": {
+    "metadataNamespace": "activity.cancel.<section>",
+    "codeImplemented": true,
+    "existingWriteRoutesPreserved": true,
+    "localSqlVerified": true,
+    "localMockedBrowserVerified": true,
+    "realDeploymentVerified": false,
+    "actualPluginEffectVerified": false,
+    "originalToolEquivalenceVerified": false,
+    "exactFingerprintRequiredForReconstructedRequest": true,
+    "perSectionPendingIdentifiers": true,
+    "sourceSnapshotsAndActorPreserved": true,
+    "nativeDataChangedByCancellation": false,
+    "freshDatabaseActorCheckOnCancellation": true,
+    "report": "docs/validation/admin-activity-recovery-s17-2026-10-28.json",
+    "realWebPreviewCancellationVerified": true,
+    "realDeploymentReadAndRefusalVerified": true,
+    "realDeploymentVerifiedScope": "full activity write/recovery matrix including actual rule application and external failures",
+    "controlledDeploymentProof": {
+      "sourceCommit": "1e385217f5bc2452f274bbbb8d4fc17c2393cc4d",
+      "sourceRequestId": "3ea48851-0802-4760-9076-83e78e167bc9",
+      "cancelRequestId": "44768274-d067-4564-ab19-96ac3fbdfe1b",
+      "nativeRuleDataUnchanged": true,
+      "originalSnapshotsAndActorPreserved": true
+    },
+    "validationLimit": "actual preview/reload/cancel/late-submit fence verified; native rule mutation, plugin consumption, full activity parity and physical outages pending"
+  }
 }

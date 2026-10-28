@@ -76,7 +76,7 @@ export DOF_DB_GAME_PASSWORD=$(cat /output/game-password)
 export MYSQL_PWD="$DOF_DB_GAME_PASSWORD"
 run_game_cycle() {
 result=0
-timeout --kill-after=15s 200s strace -ff -o /output/game.trace -e trace=file,memory,network /opt/dnf/ubuntu/run-game /home/neople/game/df_game_r local nofork > /output/game.stdout 2> /output/game.stderr &
+timeout --kill-after=15s 300s strace -ff -o /output/game.trace -e trace=file,memory,network /opt/dnf/ubuntu/run-game /home/neople/game/df_game_r local nofork > /output/game.stdout 2> /output/game.stderr &
 game_probe=$!
 python3 - "$game_probe" <<'PYPROC'
 from pathlib import Path
@@ -85,6 +85,7 @@ sys.path.insert(0, '/inputs')
 from report import login_state_initialized
 ready_at=None
 stop_sent=False
+runtime_exercised=False
 parent=Path('/proc')/sys.argv[1]
 observations=0
 while parent.exists():
@@ -95,13 +96,17 @@ while parent.exists():
     observations+=1
     log=Path('/output/game.stdout').read_text(errors='replace')
     if login_state_initialized(log) and ready_at is None: ready_at=time.monotonic()
+    if ready_at is not None and not runtime_exercised:
+     runtime_exercised=True
+     from runtime_apply_probe import exercise
+     exercise()
     if ready_at is not None and not stop_sent and time.monotonic()-ready_at>15:
      Path('/output/game-stop.json').write_text(json.dumps(dict(pid=int(p.name),signal='SIGUSR2',afterLoginInitialization=True)))
      os.kill(int(p.name),signal.SIGUSR2)
      stop_sent=True
     Path('/output/game-process.json').write_text(json.dumps(dict(pid=int(p.name),exe='/output/game/df_game_r',maps=(p/'maps').read_text(),observations=observations)))
   except (FileNotFoundError,ProcessLookupError,PermissionError):pass
- if observations>100:break
+ if observations>150:break
  time.sleep(2)
 PYPROC
 wait "$game_probe" || result=$?
@@ -118,7 +123,7 @@ from pathlib import Path
 root = Path('/output')
 archive = root / 'first-start'
 archive.mkdir()
-for pattern in ['game.trace.*', 'game.stdout', 'game.stderr', 'game.exit', 'game-stop.json', 'game-process.json', 'bridge-live.json']:
+for pattern in ['game.trace.*', 'game.stdout', 'game.stderr', 'game.exit', 'game-stop.json', 'game-process.json', 'bridge-live.json','runtime-apply.json']:
  for path in root.glob(pattern): path.rename(archive / path.name)
 PYRESTART
  run_game_cycle
@@ -185,7 +190,7 @@ import json
 root = Path('/output')
 first = json.loads((root / 'first-start.json').read_text())
 second = json.loads((root / 'native-observations.json').read_text())
-required = ['loginStateInitialized', 'combinedModulesLoaded', 'raidConfiguration',
+required = ['loginStateInitialized', 'combinedModulesLoaded', 'raidConfiguration', 'raidConfigurationReload', 'nativeRuntimeApply',
             'privateKeyConsumed', 'serverTextResourceLoaded', 'bridgeHealthy', 'normalStop']
 passed = (root / 'first-start').is_dir() and all(
  report['checks'][name] for report in [first, second] for name in required)

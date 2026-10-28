@@ -19,7 +19,19 @@ import java.util.zip.*;
 public final class NativeClientJobs implements AutoCloseable {
     private static final List<String> INPUTS = Collections.unmodifiableList(Arrays.asList(
         "template.dll", "game-public.der", "dof-launcher.exe", "ijl15.dll"));
+    static final int MANIFEST_VERSION = 1;
     private static final ObjectMapper JSON = new ObjectMapper();
+    // Keep the historical job wire format readable by deployed older readers. HTTP uses
+    // Spring's mapper and still returns the enriched Job; provenance has its own sidecar.
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"manifestVersion","sourceBinding","manifestSha256","scriptBatch"})
+    private abstract static class HistoricalJobWire { }
+    private static final ObjectMapper JOB_JSON = new ObjectMapper().addMixIn(Job.class, HistoricalJobWire.class);
+    private static final class Provenance {
+        public int manifestVersion;
+        public Binding sourceBinding;
+        public String manifestSha256;
+        public Map<String,Object> scriptBatch;
+    }
     private static final long MAX_INPUT = 64L * 1024 * 1024;
     static final long BASE_RESERVE = 2L * 1024 * 1024 * 1024;
     // Two <=64 MiB binaries, generated config/background, ZIP overhead and metadata.
@@ -46,6 +58,11 @@ public final class NativeClientJobs implements AutoCloseable {
         public String requestId, instanceId, revision, endpoint, backgroundSha256, state, createdAt, finishedAt, error, sha256;
         public long actor, bytes;
         public int progress, clientFormatVersion;
+        // Version zero denotes a historical archive without explicit provenance. Never backfill it.
+        public int manifestVersion;
+        public Binding sourceBinding;
+        public String manifestSha256;
+        public Map<String,Object> scriptBatch;
         public boolean nativeClientAcceptance = false;
         public String packageKind = "isolated-launcher-update-candidate";
         public String scriptTaskId,scriptSha256;
@@ -145,6 +162,7 @@ public final class NativeClientJobs implements AutoCloseable {
             out.put("endpoint", NativeClientPayload.decode(NativeConfigContainer.decode(verified(binding, "template.dll"), new byte[0]), identity).endpoint());
         } catch (GeneralSecurityException e) { throw failure(409, "实例公钥格式不兼容"); }
         out.put("clientFormatVersion", NativeClientFormat.VERSION);
+        out.put("manifestVersion", MANIFEST_VERSION);
         out.put("revision", revision(binding)); out.put("instanceId", instance); out.put("environment", "isolated");
         out.put("packageKind", "isolated-launcher-update-candidate"); out.put("nativeClientAcceptance", false);
         out.put("files", Arrays.asList("dof-launcher.exe", "ijl15.dll", "dof-client.dll", "manifest.json", "使用与恢复.txt"));
@@ -190,7 +208,9 @@ public final class NativeClientJobs implements AutoCloseable {
         requireSpace(BUILD_PEAK+(script==null?0:script.job.bytes+1024*1024));
         Job job = new Job(); job.requestId = request.requestId; job.instanceId = instance; job.actor = actor;
         job.clientFormatVersion = NativeClientFormat.VERSION;
-        if(script!=null){job.scriptTaskId=script.job.requestId;job.scriptSha256=script.job.sha256;job.scriptBytes=script.job.bytes;job.packageKind="isolated-dof-pvf-bundle";}
+        job.manifestVersion = MANIFEST_VERSION;
+        job.sourceBinding = binding;
+        if(script!=null){job.scriptTaskId=script.job.requestId;job.scriptSha256=script.job.sha256;job.scriptBytes=script.job.bytes;job.scriptBatch=scriptBatch(script.job);job.packageKind="isolated-dof-pvf-bundle";}
         job.backgroundSha256 = backgroundHash;
         job.revision = request.revision; job.endpoint = request.endpoint; job.state = "QUEUED"; job.createdAt = Instant.now().toString();
         Path preparing = Files.createTempDirectory(jobs, ".prepare-", PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));
@@ -205,7 +225,7 @@ public final class NativeClientJobs implements AutoCloseable {
         } finally {
             // A crash may leave an ignored .prepare directory, never a visible incomplete job.
             if (Files.exists(preparing, LinkOption.NOFOLLOW_LINKS)) {
-                Files.deleteIfExists(preparing.resolve("background.img")); Files.deleteIfExists(preparing.resolve("job.json")); Files.deleteIfExists(preparing);
+                Files.deleteIfExists(preparing.resolve("background.img")); Files.deleteIfExists(preparing.resolve("provenance.json")); Files.deleteIfExists(preparing.resolve("job.json")); Files.deleteIfExists(preparing);
             }
         }
         try { worker.submit(() -> build(job.requestId)); }
@@ -224,7 +244,17 @@ public final class NativeClientJobs implements AutoCloseable {
         if (!validId(id)) throw failure(400, "客户端任务编号无效");
         Path path = jobs.resolve(id);
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) throw failure(404, "客户端任务不存在");
-        Job job = JSON.readValue(bounded(path.resolve("job.json"), 32768), Job.class);
+        byte[] record = bounded(path.resolve("job.json"), 32768);
+        com.fasterxml.jackson.databind.JsonNode wire = JSON.readTree(record);
+        for (String key : Arrays.asList("manifestVersion","sourceBinding","manifestSha256","scriptBatch"))
+            if (wire.has(key)) throw failure(409,"任务来源字段必须使用独立清单记录");
+        Job job = JOB_JSON.readValue(record, Job.class);
+        Path provenancePath = path.resolve("provenance.json");
+        if (Files.exists(provenancePath, LinkOption.NOFOLLOW_LINKS)) {
+            Provenance provenance = JSON.readValue(bounded(provenancePath, 16384), Provenance.class);
+            job.manifestVersion = provenance.manifestVersion; job.sourceBinding = provenance.sourceBinding;
+            job.manifestSha256 = provenance.manifestSha256; job.scriptBatch = provenance.scriptBatch;
+        }
         if (!instance.equals(job.instanceId) || !id.equals(job.requestId)) throw failure(409, "客户端任务记录与实例不符");
         return job;
     }
@@ -232,11 +262,21 @@ public final class NativeClientJobs implements AutoCloseable {
         writeAt(jobs.resolve(job.requestId), job);
     }
     private static void writeAt(Path directory, Job job) throws IOException {
+        // Sidecar first: interruption before terminal job publication remains RUNNING and
+        // becomes INTERRUPTED on restart. Initial creation is inside the atomic .prepare move.
+        if (job.manifestVersion != 0) {
+            Provenance provenance = new Provenance();
+            provenance.manifestVersion = job.manifestVersion; provenance.sourceBinding = job.sourceBinding;
+            provenance.manifestSha256 = job.manifestSha256; provenance.scriptBatch = job.scriptBatch;
+            writeJson(directory,"provenance.json",JSON.writeValueAsBytes(provenance));
+        }
+        writeJson(directory,"job.json",JOB_JSON.writeValueAsBytes(job));
+    }
+    private static void writeJson(Path directory, String name, byte[] bytes) throws IOException {
         Path temp = Files.createTempFile(directory, "job-", ".tmp", PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
         try {
-            byte[] bytes = JSON.writeValueAsBytes(job);
             try (FileChannel channel = FileChannel.open(temp, StandardOpenOption.WRITE)) { java.nio.ByteBuffer buffer = java.nio.ByteBuffer.wrap(bytes); while (buffer.hasRemaining()) channel.write(buffer); channel.force(true); }
-            Files.move(temp, directory.resolve("job.json"), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(temp, directory.resolve(name), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
             try (FileChannel channel = FileChannel.open(directory, StandardOpenOption.READ)) { channel.force(true); }
         } finally { Files.deleteIfExists(temp); }
     }
@@ -244,12 +284,14 @@ public final class NativeClientJobs implements AutoCloseable {
         Job job = null;
         try {
             job = read(id); job.state = "RUNNING"; job.progress = 5; write(job);
-            Binding binding = source(); if (!revision(binding).equals(job.revision)) throw failure(409, "任务执行前发布来源版本已改变");
+            Binding binding = source(); requireProvenance(job, binding);
+            if (!revision(binding).equals(job.revision)) throw failure(409, "任务执行前发布来源版本已改变");
             NativeScriptJobs.Artifact script=null;
             if(job.scriptTaskId!=null){
                 requireScriptVersion();if(scriptResolver==null)throw failure(409,"Script 任务解析器不可用");
                 script=scriptResolver.resolve(job.scriptTaskId,job.revision);
                 if(!script.job.sha256.equals(job.scriptSha256)||script.job.bytes!=job.scriptBytes)throw failure(409,"Script 配套产物已改变");
+                requireScriptBatch(job,script.job);
             }
             long peak=BUILD_PEAK+(script==null?0:script.job.bytes+1024*1024);requireSpace(peak);
             PublicKey identity = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(verified(binding, "game-public.der")));
@@ -269,7 +311,21 @@ public final class NativeClientJobs implements AutoCloseable {
             Map<String,Object> manifest = new LinkedHashMap<>(); manifest.put("clientFormatVersion", NativeClientFormat.VERSION); manifest.put("instanceId", instance); manifest.put("environment", "isolated");
             manifest.put("adapterVersion", DofAdminService.VERSION); manifest.put("requestId", id); manifest.put("sourceRevision", job.revision);
             manifest.put("packageKind", job.packageKind); manifest.put("nativeClientAcceptance", false);
-            if(script!=null){manifest.put("scriptTaskId",job.scriptTaskId);manifest.put("scriptSourceSha256",script.job.sourceSha256);manifest.put("nativeChecksum",script.job.nativeChecksum);manifest.put("applicationState","NOT_APPLIED");}
+            manifest.put("manifestVersion", job.manifestVersion);
+            manifest.put("databaseUuid", job.sourceBinding.databaseUuid);
+            manifest.put("readerRecipe", job.sourceBinding.readerRecipe);
+            manifest.put("sourceSha256", new LinkedHashMap<>(job.sourceBinding.sha256));
+            manifest.put("endpoint", job.endpoint);
+            manifest.put("backgroundSha256", job.backgroundSha256);
+            // Recipe identifies derived reader materials; hashes do not claim original-tool parity.
+            manifest.put("sourceVerification", "bound-material-hashes");
+            if(script!=null){manifest.put("scriptTaskId",job.scriptTaskId);manifest.put("scriptSourceSha256",script.job.sourceSha256);manifest.put("nativeChecksum",script.job.nativeChecksum);manifest.put("applicationState","NOT_APPLIED");
+                manifest.put("scriptBatch",job.scriptBatch);
+                manifest.put("scriptArtifactSha256",job.scriptSha256);
+                manifest.put("scriptParameterSha256",script.job.parameterSha256);
+                manifest.put("scriptCompressed",script.job.compressed);
+                manifest.put("scriptRoundTripVerified",script.job.roundTripVerified);
+            }
             Map<String,String> hashes = new LinkedHashMap<>(); manifest.put("sha256", hashes);
             Map<String,Long> sizes = new LinkedHashMap<>(); manifest.put("bytes", sizes);
             try (OutputStream file = Files.newOutputStream(part, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE); ZipOutputStream zip = new ZipOutputStream(file)) {
@@ -292,13 +348,17 @@ public final class NativeClientJobs implements AutoCloseable {
                     + "使用 dof-launcher.exe 登录。保留 manifest.json 核对批次和 SHA-256。此包没有数据库凭据或服务端身份私钥。\r\n");
                 byte[] guide=instructions.getBytes(java.nio.charset.StandardCharsets.UTF_8);
                 put(zip, "使用与恢复.txt",guide); hashes.put("使用与恢复.txt",NativeUiState.sha256(guide));sizes.put("使用与恢复.txt",(long)guide.length);
-                put(zip, "manifest.json", JSON.writerWithDefaultPrettyPrinter().writeValueAsBytes(manifest));
+                byte[] manifestBytes = JSON.writerWithDefaultPrettyPrinter().writeValueAsBytes(manifest);
+                job.manifestSha256 = NativeUiState.sha256(manifestBytes);
+                put(zip, "manifest.json", manifestBytes);
             }
             job.progress = 90; write(job);
             try (FileChannel channel = FileChannel.open(part, StandardOpenOption.WRITE)) { channel.force(true); }
             job.bytes = Files.size(part); job.sha256 = hashFile(part);
             // Verify the complete archive before its name becomes downloadable.
-            verifyArchive(part, hashes);
+            Map<String,String> expected = new LinkedHashMap<>(hashes);
+            expected.put("manifest.json", job.manifestSha256);
+            verifyArchive(part, expected);
             // The archive already occupies disk; only metadata remains to write.
             requireSpace(1024 * 1024);
             Files.move(part, jobs.resolve(id).resolve("candidate.zip"), StandardCopyOption.ATOMIC_MOVE);
@@ -365,13 +425,61 @@ public final class NativeClientJobs implements AutoCloseable {
         Set<String> allowed = new HashSet<>(expected.keySet()); allowed.add("manifest.json"); allowed.add("使用与恢复.txt");
         if (!names.equals(allowed)) throw new IOException("Unexpected archive content");
     }
+    private static Map<String,Object> scriptBatch(NativeScriptJobs.Job script) {
+        Map<String,Object> batch = new LinkedHashMap<>();
+        batch.put("taskId",script.requestId); batch.put("sourceSha256",script.sourceSha256);
+        batch.put("artifactSha256",script.sha256); batch.put("parameterSha256",script.parameterSha256);
+        batch.put("nativeChecksum",script.nativeChecksum); batch.put("compressed",script.compressed);
+        batch.put("roundTripVerified",script.roundTripVerified);
+        return batch;
+    }
+    static void requireScriptBatch(Job bundle, NativeScriptJobs.Job script) {
+        if (bundle.manifestVersion != 0 && !Objects.equals(bundle.scriptBatch,scriptBatch(script)))
+            throw failure(409, "配套包与 PVF 来源、参数或验证批次不匹配");
+    }
+    private void requireProvenance(Job job, Binding current) {
+        if (job.manifestVersion == 0) {
+            if (job.sourceBinding != null || job.manifestSha256 != null || job.scriptBatch != null)
+                throw failure(409, "旧配套任务不能混入新来源记录");
+            return;
+        }
+        Binding saved = job.sourceBinding;
+        if (job.manifestVersion != MANIFEST_VERSION || saved == null || saved.sha256 == null
+            || !instance.equals(saved.instanceId) || !Objects.equals(current.environment, saved.environment)
+            || !Objects.equals(current.adapterVersion, saved.adapterVersion)
+            || current.clientFormatVersion != saved.clientFormatVersion
+            || !Objects.equals(current.databaseUuid, saved.databaseUuid)
+            || !Objects.equals(current.readerRecipe, saved.readerRecipe)
+            || !current.sha256.equals(saved.sha256) || !job.revision.equals(revision(saved)))
+            throw failure(409, "配套任务来源、数据库或组件批次不匹配");
+    }
     public synchronized Path download(String id) throws IOException {
         Job job = read(id);
         if (!"READY_FOR_TEST".equals(job.state)) throw failure(409, "此任务没有可下载的完整测试包");
-        if (job.clientFormatVersion != NativeClientFormat.VERSION || !job.revision.equals(revision(source())))
+        Binding binding = source(); requireProvenance(job, binding);
+        if (job.clientFormatVersion != NativeClientFormat.VERSION || !job.revision.equals(revision(binding)))
             throw failure(409, "客户端任务格式或来源版本不匹配，请重新生成");
         Path path = jobs.resolve(id).resolve("candidate.zip");
         if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) || Files.size(path) != job.bytes || !hashFile(path).equals(job.sha256)) throw failure(409, "客户端包损坏或缺失，停止下载");
+        if (job.manifestVersion != 0) {
+            if (job.manifestSha256 == null || !job.manifestSha256.matches("[0-9a-f]{64}"))
+                throw failure(409, "配套任务缺少清单校验值");
+            // Full archive digest above covers payloads; inspect only the small manifest here.
+            try (ZipFile zip = new ZipFile(path.toFile())) {
+                ZipEntry entry = zip.getEntry("manifest.json");
+                if (entry == null || entry.getSize() < 0 || entry.getSize() > 16384)
+                    throw failure(409, "配套清单缺失或超限");
+                try (InputStream in = zip.getInputStream(entry); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                    byte[] buffer = new byte[4096]; int n;
+                    while ((n = in.read(buffer)) != -1) {
+                        if (out.size() + n > 16384) throw failure(409, "配套清单超限");
+                        out.write(buffer, 0, n);
+                    }
+                    if (!job.manifestSha256.equals(NativeUiState.sha256(out.toByteArray())))
+                        throw failure(409, "配套清单与任务批次不匹配");
+                }
+            }
+        }
         return path;
     }
     @Override public void close() throws IOException {

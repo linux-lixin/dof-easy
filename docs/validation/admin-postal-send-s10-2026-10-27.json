@@ -1,0 +1,262 @@
+{
+  "schema": 1,
+  "batch": "S10 managed administrative mail",
+  "date": "2026-10-27",
+  "sourceBase": "09fc745",
+  "completeReplacement": false,
+  "sourceFiles": [
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/controller/PostalController.java",
+      "sha256": "0d3b5a26ef93043d08207386bd4abe6192c0bdbfbe857f6b6f24eec40cf3c29a"
+    },
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/pvf/PvfManager.java",
+      "sha256": "4c8febb7be08c1061bbf71dbc8ab9afca8b6befa43f540974a8814bd8577b791"
+    },
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/dof/ManagedPostalService.java",
+      "sha256": "fa929f1e1f7630dc82cc53f40522f5990923b42fc0ee8a98f139eaf7d7ac9f2b"
+    },
+    {
+      "path": "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/dof/ManagedPostalSchema.java",
+      "sha256": "ae5f96fa4aa733efee6701f020109de51bb16760b9c863a049c75ca596b80a29"
+    },
+    {
+      "path": "services/admin/backend/src/main/resources/dof/postal-schema.json",
+      "sha256": "dc83585f82a7e639da4e825e03d7c1f5542c6ccb811db644a26b534170ebaca2"
+    },
+    {
+      "path": "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/ManagedPostalContractTest.java",
+      "sha256": "c2deb58243f9ae8a1aed3701087a125572a15eb4ff0a1ec069d922e14d3a9a71"
+    },
+    {
+      "path": "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/PostalReadAccessTest.java",
+      "sha256": "e6bb20dc165f7fcd5b0468ab0e06b9c0076e368d73fada42d8434ede0a616665"
+    },
+    {
+      "path": "services/admin/frontend/src/components/ManagedPostal.vue",
+      "sha256": "44801ba461634892e13f385e6d119f5bad2c09f91b5cdbd043be5751d92fa1e1"
+    },
+    {
+      "path": "services/admin/frontend/src/views/admin/player/PlayerRoles.vue",
+      "sha256": "1f2ad79a869a405f6e4c0f75759c802b2b575b18e16bab96435adcdacac74556"
+    },
+    {
+      "path": "tests/integration/dof/recharge/probe.py",
+      "sha256": "73d71a6c07ac967db6b7c5b0e676316c4b6af51946131ba0fb0de98f6afcde19"
+    },
+    {
+      "path": "tests/integration/admin/postal-send-page.cjs",
+      "sha256": "98ba58afbda5e2958f661552c170503ac106e7679ab386175a1660a595488e72"
+    },
+    {
+      "path": "tests/integration/admin/postal-live.cjs",
+      "sha256": "6cde373e5a81808febcf028164ebc1c26930ba03ec0b7a172aa0d185b55eb7b7"
+    }
+  ],
+  "implementation": {
+    "protocol": "postal-generated-id-v1",
+    "previewCommitHistoryReconcile": true,
+    "legacyUnversionedAdminPostRejected": true,
+    "internalPostalServiceChanged": false,
+    "bodyFormat": "Linked letter row; database UTF-8, client consumption unverified",
+    "sender": "DNF Manager",
+    "itemValidation": "Fresh source/index hash, unique item ID, quantities and equipment rules; unknown avatar/creature/artifact flags rejected",
+    "recovery": "Original durable request; atomic InnoDB receipt; MyISAM uncertainty requires explicit acknowledgment, without claiming original outcome or resending",
+    "batchDeliveryImplemented": false
+  },
+  "standardMaven": {
+    "total": 354,
+    "passed": 180,
+    "skipped": 174,
+    "failures": 0,
+    "errors": 0,
+    "logSha256": "2e2a532d828109d5c68f58d2ad39459a7e513688fe79ee5eee85740bb7dfe5b2",
+    "skipNote": "29 database contracts separately executed below; other missing private samples and integration conditions remain skipped."
+  },
+  "isolatedMySQL": {
+    "summary": {
+      "passed": true,
+      "contractTests": 14,
+      "databaseVersion": "5.6.51",
+      "generatedMailReceiptContractTests": 3,
+      "managedPostalContractTests": 12,
+      "totalContractTests": 29,
+      "realServiceSqlFaultAndConcurrencyGatePassed": true,
+      "fixtureSchemasRemoved": true,
+      "originalToolEquivalenceVerified": false,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false
+    },
+    "provenance": {
+      "schema": 1,
+      "serverAccessed": false,
+      "network": "private namespace; no routes or external interfaces",
+      "rootReadOnly": true,
+      "inputsReadOnly": true,
+      "loopbackOnly": true,
+      "inputsFingerprint": "1b11a46cf5688286474914f63ce62baec94d6beed615336e416679d171fb9e55",
+      "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+      "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+      "command": [
+        "/bin/sh",
+        "/inputs/run.sh"
+      ],
+      "completed": true,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "environmentUnchanged": true,
+      "evidenceValid": true
+    },
+    "compiledInputs": [
+      {
+        "path": "com/aiyi/game/dnfserver/controller/PostalController.class",
+        "sha256": "375d451ec158bda6ca693aa7b5374caa87574689f5635d88459935bf0a82b582",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/pvf/PvfManager.class",
+        "sha256": "0ca66e6b6410cf6503b2163d229ad33a762ba8c4bb282cba9c0e18ec4eabe007",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedPostalService.class",
+        "sha256": "cba7741e5ed486419f222d3573f0837a6cc54dd611e264d90f9230e7580ca859",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedPostalSchema.class",
+        "sha256": "58d4edc008e1f8a790254105dd4da3e895b5217f605545d99a75444fb8734e47",
+        "matchesIsolatedInput": true
+      },
+      {
+        "path": "com/aiyi/game/dnfserver/service/dof/ManagedPostalContractTest.class",
+        "sha256": "2b17136bbe410a502d70e24f43ff364290d4ac3d7d8fcda663e8fec5e82af161",
+        "matchesIsolatedInput": true
+      }
+    ],
+    "postalSchemaMatchesInput": true,
+    "pvfMetadataFixture": "Explicit synthetic metadata/fingerprint bytes; not native PVF or original-tool behavior proof"
+  },
+  "frontend": {
+    "standardBuildPassed": true,
+    "sourceMatchesBuiltStage": true,
+    "browser": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "actualPlayerReceiptVerified": false,
+      "checks": [
+        "gold plus body preview freezes content without sending",
+        "reload rehydrates original preview with the same ID and content",
+        "lost submit keeps original ID; reconcile recovers receipt without reissuing",
+        "history recovers generated postal ID after page reload",
+        "uncertain MyISAM mail blocks new sends",
+        "explicit acknowledgment sends no new mail and preserves unknown original outcome",
+        "failed history read disables new mail even with a valid identity",
+        "permission failure disables sending"
+      ],
+      "pageErrors": 0,
+      "nativeWritesInMock": 2,
+      "submitRequests": 3
+    },
+    "realDeploymentVerified": false,
+    "realDeploymentReadAndRefusalVerified": true,
+    "realComposeUiOnRealCharacterVerified": false
+  },
+  "otherChecks": {
+    "inventoryTestsPassed": 4,
+    "packagingTestsPassed": 1,
+    "syntaxChecked": true,
+    "diffChecked": true
+  },
+  "attempts": {
+    "firstMavenFailed": "Old legacy-sender HTTP fixture lacked the new service; updated to assert unversioned POST rejection before the old DAO.",
+    "firstFrontendBuildFailed": "Missing Arco form model, corrected before final build.",
+    "browserHarnessFailures": "Initial missing mock token, hover instead of click and ambiguous form label selectors; retained failure artifacts. Final runner has 8 passing scenarios.",
+    "allFailureLogsRetained": true
+  },
+  "deployment": {
+    "performed": true,
+    "result": {
+      "sourceCommit": "d77928dc561656a24d59802e66edacfcf01116f7",
+      "adminImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee",
+      "adminTag": "dof-admin-replacement:20261027-s10-candidate",
+      "appSHA256": "b5caa1f60fb4de931ea4fe37571be7bcac3678c61a6f882dc54cb6ef264e02b8",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s10-mail/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_READ_VERIFIED_NATIVE_MAIL_PENDING",
+      "sourceCommit": "d77928dc561656a24d59802e66edacfcf01116f7",
+      "adminImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee",
+      "updatedAt": 1793106335.9094086,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "deploymentProcessExited": true,
+      "browserProcessExited": true
+    },
+    "gameHealthy": true,
+    "adminRunning": true,
+    "readOnlyDatabaseCheck": {
+      "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+      "dedicatedTestUid": 6,
+      "characterCount": 0,
+      "postalEngine": "InnoDB",
+      "letterEngine": "InnoDB",
+      "databaseChanged": false
+    },
+    "fullyVerifiedMailIssuance": false,
+    "rollbackImage": "sha256:56d8afa1341fb76185b84388bc05c9a9df32003fec7de975d252234cc0ebf83e"
+  },
+  "remaining": [
+    "Real bound 86-level mail compose/preview/commit/history/rebuild verification with a dedicated native character; deployed reads/refusals have passed.",
+    "Dedicated real test character, native letter display and actual reward receipt.",
+    "Per-target batch job receipts and partial-result recovery.",
+    "Native avatar, creature and artifact flags; no ordinary-gear fallback.",
+    "Mail compensation/removal semantics and real network/database/disk/process fault acceptance.",
+    "Manual original Windows tool menu/default/input/output/side-effect comparison, deferred by user.",
+    "Remaining CDK, exchange, equipment, activities, UI and full PVF/companion publishing scope."
+  ],
+  "candidateArtifact": {
+    "directory": ".dof-easy/admin-replacement-delivery-20261027-s10-mail",
+    "appSha256": "b5caa1f60fb4de931ea4fe37571be7bcac3678c61a6f882dc54cb6ef264e02b8",
+    "mainClassesMatchStandardBuild": true,
+    "mailSchemaMatchesSource": true,
+    "privateKeyAndTestClassesExcluded": true,
+    "serverImageBuilt": true,
+    "serverImage": "sha256:e199e3960a22f71a10b898b5162af798fc7df909955450f8fa626c68269666ee"
+  },
+  "businessSourceCommit": "d77928dc561656a24d59802e66edacfcf01116f7",
+  "realBrowser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentReadAndRefusalVerified": true,
+    "actualMailIssued": false,
+    "actualPlayerReceiptVerified": false,
+    "mailComposeUiOnRealCharacterVerified": false,
+    "checks": [
+      "real administrator login and current mail protocol catalog with native gates pending",
+      "anonymous mail management rejected",
+      "legacy unversioned sender rejected before native issuance",
+      "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+      "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+      "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+      "real deployed postal records page loads through actual backend"
+    ],
+    "pageErrors": 0,
+    "targetUid": 6,
+    "dedicatedCharacterCount": 0,
+    "balanceUnchanged": 37
+  }
+}

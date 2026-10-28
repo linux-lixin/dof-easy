@@ -1,0 +1,87 @@
+{
+  "stage": "S21",
+  "date": "2026-10-28",
+  "purpose": "explicit client publication provenance and frozen Script parameter batch",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "realDeploymentVerified": false,
+  "serverAccessed": false,
+  "liveDeploymentUnchanged": "S20 / bee499e / admin 18080",
+  "implementation": {
+    "manifestVersion": 1,
+    "databaseUuidExplicit": true,
+    "readerRecipeExplicit": true,
+    "fourSourceHashesExplicit": true,
+    "endpointAndBackgroundHashRecorded": true,
+    "scriptTaskSourceArtifactAndParameterHashesFrozen": true,
+    "compressionAndRoundTripResultRecorded": true,
+    "scriptBatchRecheckedBeforeBuildAndApplication": true,
+    "manifestDigestVerifiedBeforeAtomicPublicationAndOnDownload": true,
+    "historicalJobWirePreserved": true,
+    "provenanceStoredInSeparateAtomicSidecar": true,
+    "oldRecordsNotBackfilledOrRelabelled": true,
+    "privateParameterBytesIncluded": false,
+    "nativeClientAcceptance": false
+  },
+  "verification": {
+    "standardMaven": {
+      "command": "mvn -Dmaven.test.skip=false test",
+      "passed": true,
+      "total": 445,
+      "passedCases": 186,
+      "skipped": 259,
+      "failures": 0,
+      "errors": 0,
+      "conditionalSkipsCountAsPass": false,
+      "log": "/tmp/dof-admin-s21-maven-final.log"
+    },
+    "pinnedReaderBundle": {
+      "readerDllSHA256": "dd5b3a9be419b910fb82f01d432fdf9a12d374d491c554e10103ba345942f66b",
+      "pvfFixture": "synthetic; not original-tool output",
+      "passed": true,
+      "total": 13,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "/tmp/dof-admin-s21-pinned-bundle-final.log"
+    },
+    "frontend": {
+      "command": "npm run build",
+      "passed": true
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeSqlVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "checks": [
+        "new provenance displays database and reader recipe; legacy archives remain explicitly unverified",
+        "durable preview restored after reload; changed parent bundle cannot replace frozen request; storage contains identifiers only",
+        "lost apply reply retains original operation ID after exactly one synthetic write",
+        "refresh reads persisted receipt and clears pending identity without submitting again",
+        "restoration has a separate durable preview and ID; reload and lost restore reply preserve exact target without a second write",
+        "cancel uses separate preview and persisted control; reply loss is reconciled from original IDs",
+        "late cancelled submission remains fenced in explicit synthetic protocol fixture",
+        "mismatched server protocol disables new publication writes before request"
+      ],
+      "syntheticNativeWrites": 2,
+      "pageErrors": 0
+    }
+  },
+  "limitations": [
+    "New manifest has not been deployed or generated on the real isolated instance in this batch.",
+    "Historical job JSON schema compatibility is checked locally; an actual older-reader rollback with newly generated sidecars remains pending.",
+    "The recipe names derived reader materials; file hashes do not establish original-tool functional equivalence.",
+    "No Windows GUI, native gateway/plugin/client consumption, gameplay effect or automatic update acceptance is claimed.",
+    "Historical readers ignore the provenance sidecar and do not enforce its parameter batch; downgrade write ingress must remain blocked with the established read-only proxy guard."
+  ],
+  "followupDeployment": {
+    "stage": "S22",
+    "evidence": "docs/validation/admin-client-provenance-s22-2026-10-28.json",
+    "realDeploymentVerified": true,
+    "historicalLocalFlagsPreserved": true
+  }
+}

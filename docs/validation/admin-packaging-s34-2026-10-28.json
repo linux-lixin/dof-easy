@@ -1,0 +1,73 @@
+{
+  "stage": "S34",
+  "date": "2026-10-28",
+  "purpose": "Deterministic packaging from real compiled admin inputs; source compilation and OCI reproducibility remain unverified",
+  "verificationBaseCommit": "078a11f",
+  "compiledRuntimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+  "resourceSourceCommit": "078a11f",
+  "previousRuntimeEvidence": "docs/validation/admin-equipment-batch-s32-2026-10-28.json",
+  "serverChanged": false,
+  "runtimeHostPort": 18080,
+  "toolchain": {
+    "python": "3.14.4",
+    "zlibRuntime": "1.3.1"
+  },
+  "actualArtifactVerification": {
+    "passed": true,
+    "baseJarSHA256": "c649b3d227418297bb39210e015e2d8c727af81f252be83b41b2498dbfbd22a8",
+    "appSHA256": "9bee960a542ca5d0f67aa9bd792a1c44aa82b9f98de29dfcaac62ee26ecfa3c2",
+    "buildManifestSHA256": "8cf63f9222d24083ed0f6f95fcecec941f0a0556ac1fa468f9cfb9a0bea5f3aa",
+    "outputFiles": 193,
+    "runtimeClassesLoadedWithoutInitialization": 330,
+    "sameBytesDespiteChangedInputMetadata": true,
+    "nestedJarBytesAndCompressionPreserved": true,
+    "deltaRoundTripVerified": true,
+    "deltaTransferBytes": 58429803,
+    "springStarted": false,
+    "databaseConnected": false,
+    "serverDeployed": false,
+    "sourceCompilationReproduced": false,
+    "ociImageReproduced": false,
+    "completeReplacement": false
+  },
+  "testSources": {
+    "scripts/dof/package_admin.py": "ad34cdd41ddeb516b6b5e4376a05ec312f9b124284d240f61156336b7427659c",
+    "tests/unit/dof/test_package_admin.py": "3a94cf583b24229d79150b1d724805813e9d581595c01314d5b834e0bbd81c39",
+    "tests/integration/admin/package-reproducibility.py": "ac9dc0d1a79f906951306e046118c1c661bba8e1c73f6f103749dcdf5fd3cabd"
+  },
+  "localChecks": {
+    "packagingTests": {
+      "passed": 4,
+      "failed": 0
+    },
+    "jarDeltaTests": {
+      "passed": 1,
+      "failed": 0
+    },
+    "regressionBeforeFix": "same payloads produced different app.jar SHA-256 after input timestamps changed",
+    "afterFix": "same payload bytes, canonical timestamps and permissions, identical manifests and app.jar",
+    "inventoryTests": {
+      "passed": 4,
+      "failed": 0
+    }
+  },
+  "nativeInvestigation": {
+    "windowsToolStarted": false,
+    "newPluginFeaturesEnabled": false,
+    "observedSymbols": [
+      "Controller::CanInlayEquipment(int)",
+      "DoItemUnlock(int, CUser*, int, int)"
+    ],
+    "remaining": "Protected initialization, hook ownership, fees/failure paths, runtime refresh, original UI and actual gameplay remain unverified"
+  },
+  "limits": [
+    "Same already-compiled payloads tested; no independent clean source compilation in this stage.",
+    "Identical packaging is scoped to the same base JAR and Python/zlib toolchain; cross-toolchain output not proven.",
+    "Spring Boot PropertiesLauncher loaded all runtime classes with initialization=false; Spring application and database were not started.",
+    "Docker context file bytes/timestamps/modes are canonical; OCI builder layers, metadata and pinned base-image identity require separate verification.",
+    "First canonical packaging changes dependency ZIP headers, so a delta against the old noncanonical JAR transfers almost the whole archive.",
+    "No new image was built or deployed; the 86-level server keeps the S32 image and S33 receipts.",
+    "Original Windows tool defaults/menu/file equivalence, plugin consumers and gameplay remain pending."
+  ],
+  "completeReplacement": false
+}

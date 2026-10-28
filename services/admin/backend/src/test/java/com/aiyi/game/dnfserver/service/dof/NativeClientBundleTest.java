@@ -10,6 +10,31 @@ import java.util.*;
 import java.util.zip.*;
 
 public class NativeClientBundleTest {
+    @Test public void sourceParameterOrVerificationChangeCannotBeAppliedAsSameBatch() {
+        NativeScriptJobs.Job script = new NativeScriptJobs.Job();
+        script.requestId = UUID.randomUUID().toString(); script.sourceSha256 = "source";
+        script.sha256 = "artifact"; script.parameterSha256 = "parameter"; script.nativeChecksum = "checksum";
+        script.roundTripVerified = true;
+        NativeClientJobs.Job bundle = new NativeClientJobs.Job(); bundle.manifestVersion = 1;
+        bundle.scriptBatch = new LinkedHashMap<>();
+        bundle.scriptBatch.put("taskId",script.requestId); bundle.scriptBatch.put("sourceSha256","source");
+        bundle.scriptBatch.put("artifactSha256","artifact"); bundle.scriptBatch.put("parameterSha256","parameter");
+        bundle.scriptBatch.put("nativeChecksum","checksum"); bundle.scriptBatch.put("compressed",false);
+        bundle.scriptBatch.put("roundTripVerified",true);
+        NativeClientJobs.requireScriptBatch(bundle,script);
+        for (String key : Arrays.asList("taskId","sourceSha256","artifactSha256","parameterSha256","nativeChecksum","compressed","roundTripVerified")) {
+            Object before = bundle.scriptBatch.put(key,"changed");
+            try { NativeClientJobs.requireScriptBatch(bundle,script); fail(key); }
+            catch (DofFailure e) { assertEquals(409,e.status); }
+            bundle.scriptBatch.put(key,before);
+        }
+        bundle.scriptBatch = null;
+        try { NativeClientJobs.requireScriptBatch(bundle,script); fail(); }
+        catch (DofFailure e) { assertEquals(409,e.status); }
+        bundle.manifestVersion = 0;
+        NativeClientJobs.requireScriptBatch(bundle,script); // Explicit compatibility, no new provenance claim.
+    }
+
     @Test public void pinnedClientBundleContainsExactlySixFilesAndNoPrivateParameter()throws Exception {
         String dll=System.getProperty("dof.script.clientDll");Assume.assumeNotNull(dll);
         Path root=Files.createTempDirectory("dof_native-script-bundle-");
@@ -39,6 +64,15 @@ public class NativeClientBundleTest {
                     String text=new String(manifest,java.nio.charset.StandardCharsets.UTF_8);assertFalse(text.contains(scripts.parameters(r.requestId)));assertFalse(text.contains("TEST-DB-SECRET"));assertTrue(text.contains(j.scriptSha256));
                     assertEquals(raw.length+1280,zip.getEntry("Script.pvf").getSize());
                     Map<?,?> parsed=new ObjectMapper().readValue(manifest,Map.class);
+                    assertEquals(b.databaseUuid,parsed.get("databaseUuid"));
+                    assertEquals(b.readerRecipe,parsed.get("readerRecipe"));
+                    assertEquals(b.sha256,parsed.get("sourceSha256"));
+                    assertEquals(r.requestId,parsed.get("scriptTaskId"));
+                    assertEquals(j.scriptBatch,parsed.get("scriptBatch"));
+                    assertEquals(j.scriptSha256,parsed.get("scriptArtifactSha256"));
+                    assertEquals(scripts.read(r.requestId).parameterSha256,parsed.get("scriptParameterSha256"));
+                    assertEquals(Boolean.FALSE,parsed.get("scriptCompressed"));
+                    assertEquals(Boolean.TRUE,parsed.get("scriptRoundTripVerified"));
                     Map<?,?> lengths=(Map<?,?>)parsed.get("bytes");
                     for(String name:names)if(!name.equals("manifest.json"))assertEquals(zip.getEntry(name).getSize(),((Number)lengths.get(name)).longValue());
                 }

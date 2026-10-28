@@ -32,6 +32,31 @@ CREATE TABLE IF NOT EXISTS dnf_service.DOF_TEXT_AUDIT LIKE dnf_service.DOF_CHANG
 -- Separate snapshot format for native billing/config settings; preserves older UI/text audit history.
 CREATE TABLE IF NOT EXISTS dnf_service.DOF_SETTINGS_AUDIT LIKE dnf_service.DOF_CHANGE_AUDIT;
 
+-- Shared durable protocol for typed management operations. No passwords belong here.
+-- PREVIEWED is not a native write; PREPARED must be reconciled before retrying.
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_OPERATION_JOURNAL (
+  instance_id VARCHAR(64) CHARACTER SET ascii NOT NULL,
+  request_id CHAR(36) CHARACTER SET ascii NOT NULL,
+  actor BIGINT NOT NULL,
+  namespace VARCHAR(64) CHARACTER SET ascii NOT NULL,
+  resource_key VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  target_key VARCHAR(128) CHARACTER SET ascii NOT NULL,
+  operation_name VARCHAR(16) CHARACTER SET ascii NOT NULL,
+  target_request CHAR(36) CHARACTER SET ascii NULL,
+  request_hash CHAR(64) CHARACTER SET ascii NOT NULL,
+  reason VARCHAR(255) NOT NULL,
+  before_hash CHAR(64) CHARACTER SET ascii NOT NULL,
+  after_hash CHAR(64) CHARACTER SET ascii NOT NULL,
+  before_json MEDIUMTEXT NOT NULL,
+  after_json MEDIUMTEXT NOT NULL,
+  state VARCHAR(16) CHARACTER SET ascii NOT NULL,
+  checked_by BIGINT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  finished_at TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (instance_id,request_id),
+  KEY unresolved_resource (instance_id,resource_key,state)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- Manual encrypted-PVF bundle application, independent from native auto-updates.
 -- Before/after fields are private; HTTP never returns these JSON snapshots.
 CREATE TABLE IF NOT EXISTS dnf_service.DOF_SCRIPT_RELEASE (
@@ -54,3 +79,39 @@ CREATE TABLE IF NOT EXISTS dnf_service.DOF_SCRIPT_RELEASE (
   UNIQUE KEY request_identity (instance_id,request_id),
   KEY pending_operations (instance_id,state)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Managed registration keeps legacy operational codes and audit rows intact.
+CREATE TABLE IF NOT EXISTS dnf_service.REGISTRATION_POLICY (
+  id INT PRIMARY KEY, enabled TINYINT NOT NULL, revision BIGINT NOT NULL
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS dnf_service.REGISTRATION_CODES (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY, request_id VARCHAR(64) NOT NULL UNIQUE,
+  code_hash CHAR(64) NOT NULL UNIQUE, state VARCHAR(16) NOT NULL,
+  expires_at BIGINT NOT NULL, created_at BIGINT NOT NULL, actor BIGINT NOT NULL,
+  used_uid BIGINT NULL, used_at BIGINT NULL
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS dnf_service.REGISTRATION_AUDIT (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY, actor BIGINT NOT NULL, code_id BIGINT NULL,
+  action VARCHAR(32) NOT NULL, created_at BIGINT NOT NULL
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_REGISTRATION_RECEIPT (
+  instance_id VARCHAR(64) CHARACTER SET ascii NOT NULL,
+  request_id CHAR(36) CHARACTER SET ascii NOT NULL,
+  name_tag CHAR(64) CHARACTER SET ascii NOT NULL,
+  ip_tag CHAR(64) CHARACTER SET ascii NOT NULL,
+  request_tag CHAR(64) CHARACTER SET ascii NOT NULL,
+  key_id CHAR(64) CHARACTER SET ascii NOT NULL,
+  state VARCHAR(16) CHARACTER SET ascii NOT NULL,
+  uid INT NULL, gift_amount INT NULL, gift_currency TINYINT NULL,
+  parent_request CHAR(36) CHARACTER SET ascii NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  finished_at TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY(instance_id,request_id),
+  KEY registration_account(instance_id,name_tag,state),
+  UNIQUE KEY registration_uid(instance_id,uid)
+) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS dnf_service.DOF_REGISTRATION_GATE (
+  instance_id VARCHAR(64) CHARACTER SET ascii NOT NULL,
+  name_tag CHAR(64) CHARACTER SET ascii NOT NULL,
+  PRIMARY KEY(instance_id,name_tag)
+) ENGINE=InnoDB;

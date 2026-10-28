@@ -347,10 +347,11 @@ def compose(root, *arguments, **kwargs):
     write_json(root / 'channels.json', ports_override(values))
     base = ['docker','compose','--project-directory',ROOT,'-p','dof-'+root.name,
             '--env-file',root/'.env','-f',ROOT/'compose.yaml','-f',root/'channels.json']
-    if database.kind(values) == 'external' or raid_assets.launcher_mode(values) == 'native':
+    if database.kind(values) == 'external' or database.web_management_enabled(values):
         result = run(base+['config','--format','json'],env=env,capture_output=True,text=True)
-        model = deployment.configure(json.loads(result.stdout),values,root,database.DATABASES)
         target = root/'deployment.json'
+        previous = json.loads(target.read_text()) if target.exists() else None
+        model = deployment.configure(json.loads(result.stdout),values,root,database.backup_databases(root,values),previous)
         database.private_json(target,deployment.literal_model(model))
         return run(['docker','compose','--project-directory',ROOT,'-p','dof-'+root.name,
                     '-f',target,*arguments],env=env,**kwargs)
@@ -440,15 +441,18 @@ def start(root, recreate=False):
         saved=json.loads(marker.read_text()) if marker.exists() else {}
         if saved.get('state') != 'ready' or any(saved.get(k) != values.get(v) for k,v in [('databaseUuid','DOF_DATABASE_UUID'),('host','DOF_DB_HOST'),('port','DOF_DB_PORT'),('grantHost','DOF_DB_ALLOW_HOST')]):
             raise ValueError('外置数据库初始化未完成或绑定不符，拒绝启动')
+        if 'frida' in database.required_databases(values) and 'frida' not in saved.get('databases', []):
+            raise ValueError('默认 Frida 活动库尚未初始化；先运行 dof.sh plugin-db --instance '+root.name+' --mysql-config 管理员配置文件。不会授予 game 全局权限。')
     retire_legacy_helpers(root)
     write_json(root / 'channels.json', ports_override(values))
     if values.get('ALLOWED_CLIENT_CIDRS'):
         print('旧实例玩家来源规则不再由容器执行；当前访问范围由云安全组控制。')
-    if raid_assets.launcher_mode(values) == 'native' and database.kind(values) == 'internal':
+    if database.web_management_enabled(values):
         # The web adapter is provisioned only after the actual native game is ready.
         compose(root, *args, 'game')
         identity=database.prepare_web(root,values,lambda sql:database_query(root,sql))
         values['DOF_DATABASE_UUID']=identity
+        values['DOF_ADMIN_ENABLED']='true'
         write_env(root/'.env',values)
     compose(root, *args)
     if raid_assets.launcher_mode(values) == 'native':
@@ -651,9 +655,12 @@ def main(argv=None):
         p.add_argument('--tag', help='镜像使用的版本标签')
         if command == 'build':
             p.add_argument('--database', choices=('internal','external'), default='internal', help='external 不构建数据库镜像')
-    for command in ('install', 'start', 'stop', 'restart', 'status', 'logs', 'backup', 'config'):
+    for command in ('install', 'start', 'stop', 'restart', 'status', 'logs', 'backup', 'config', 'plugin-db'):
         p = sub.add_parser(command)
         p.add_argument('--instance', default='main')
+        if command == 'plugin-db':
+            p.add_argument('--mysql-config', type=Path, required=True, help='服务器本地 0600 管理员配置；不会保存或导出凭据')
+            p.add_argument('--mysql-bin', help='本机 mysql 客户端路径')
         if command in ('install', 'config'):
             p.add_argument('--launcher', choices=('dof', 'native'), help='玩家登录方式；旧实例默认 dof')
             p.add_argument('--dof-assets', type=Path, help='已派生并校验的正式服务端资源目录')
@@ -785,7 +792,18 @@ def main(argv=None):
             start(root)
         else:
             values = read_env(root)
-            if args.command == 'start':
+            if args.command == 'plugin-db':
+                if database.kind(values) != 'external':
+                    raise ValueError('plugin-db 仅用于绑定的外置 MySQL 实例')
+                if 'frida' not in database.required_databases(values):
+                    raise ValueError('实例未启用 Frida，未创建插件库')
+                query = database.host_query(args.mysql_bin, args.mysql_config)
+                database.prepare_frida(root, values, query, values['DOF_DATABASE_UUID'])
+                marker = root/'external-database.json'
+                saved = json.loads(marker.read_text())
+                database.private_json(marker, dict(saved, databases=list(dict.fromkeys(saved.get('databases', []) + list(database.required_databases(values))))))
+                print('Frida 活动库结构及定向授权已核对；活动进度保留，未重启容器。')
+            elif args.command == 'start':
                 start(root)
             elif args.command == 'restart':
                 start(root, recreate=True)

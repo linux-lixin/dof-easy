@@ -4,7 +4,7 @@ import Request from '../../../api/Request'
 import NativeScriptFlow from './NativeScriptFlow.vue'
 import NativeScriptRelease from './NativeScriptRelease.vue'
 
-type Job = { requestId: string; state: string; progress: number; createdAt: string; error?: string; sha256?: string; bytes: number; endpoint: string; scriptTaskId?: string; clientFormatVersion: number }
+type Job = { requestId: string; state: string; progress: number; createdAt: string; error?: string; sha256?: string; bytes: number; endpoint: string; scriptTaskId?: string; clientFormatVersion: number; manifestVersion?: number; manifestSha256?: string; sourceBinding?: { databaseUuid: string; readerRecipe: string } }
 const root = '/api/v1/admin/dof/client'
 const status = ref<any>(null)
 const jobs = ref<Job[]>([])
@@ -109,6 +109,7 @@ onBeforeUnmount(() => { disposed = true; if (timer) clearTimeout(timer) })
         <a-table-column title="操作编号" data-index="requestId" />
         <a-table-column title="连接地址" data-index="endpoint" />
         <a-table-column title="加密 PVF 批次"><template #cell="{record}">{{ record.scriptTaskId || '仅登录器配置' }}</template></a-table-column>
+        <a-table-column title="材料来源"><template #cell="{record}"><template v-if="record.manifestVersion === 1 && record.sourceBinding"><p>清单 v{{ record.manifestVersion }} · {{ record.sourceBinding.readerRecipe }}</p><p class="hash">数据库 UUID：{{ record.sourceBinding.databaseUuid }}</p><code v-if="record.manifestSha256" class="hash">清单 SHA-256 {{ record.manifestSha256 }}</code><p>材料哈希已绑定；组件读取和游戏效果待验。</p></template><p v-else>历史任务：未记录完整来源清单，保留原有产物校验。</p></template></a-table-column>
         <a-table-column title="状态"><template #cell="{record}">{{ labels[record.state] || record.state }}<p v-if="record.error">{{ record.error }}</p><p v-if="record.state === 'RUNNING'">{{ record.progress }}%</p></template></a-table-column>
         <a-table-column title="产物"><template #cell="{record}"><template v-if="record.state === 'READY_FOR_TEST' && record.clientFormatVersion === status.clientFormatVersion"><a-button v-if="record.scriptTaskId" :disabled="busy" @click="releaseBundleId = record.requestId">选择并配置隔离参数</a-button><a-button :disabled="busy" @click="download(record)">下载测试包</a-button><p>{{ (record.bytes / 1024 / 1024).toFixed(2) }} MiB</p><code class="hash">SHA-256 {{ record.sha256 }}</code></template><p v-else-if="record.state === 'READY_FOR_TEST'">配套格式版本已改变，请重新生成。</p></template></a-table-column>
       </template>

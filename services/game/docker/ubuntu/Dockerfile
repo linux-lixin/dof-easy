@@ -29,6 +29,8 @@ COPY docker/ubuntu/audit/geoip-probe.c /tmp/geoip-probe.c
 RUN gcc -m32 -I/tmp/geoip/libGeoIP -L/opt/dnf/compat/i386/lib -o /tmp/geoip-probe /tmp/geoip-probe.c -lGeoIP
 COPY docker/ubuntu/legacy-shm.c /tmp/legacy-shm.c
 COPY docker/ubuntu/legacy-stat.c /tmp/legacy-stat.c
+COPY docker/ubuntu/admin-runtime-digest.c /tmp/admin-runtime-digest.c
+RUN gcc -m32 -shared -fPIC -fvisibility=hidden -fno-ident -Wl,--build-id=none -Wall -Wextra -Werror -O2 -o /tmp/libdof-admin-runtime.so /tmp/admin-runtime-digest.c
 RUN gcc -m32 -shared -fPIC -Wall -Wextra -Werror -O2 -o /tmp/liblegacy-stat.so /tmp/legacy-stat.c -ldl
 COPY docker/ubuntu/frida-compat.c docker/ubuntu/frida-compat.map /tmp/
 COPY docker/ubuntu/audit/frida-probe.c /tmp/frida-probe.c
@@ -57,6 +59,8 @@ COPY --from=hooks /tmp/geoip/LICENSE /opt/dnf/licenses/GeoIP-LICENSE
 COPY --from=hooks /tmp/geoip-probe /opt/dnf/audit/geoip-probe
 COPY --from=hooks /tmp/liblegacy-shm.so /opt/dnf/compat/i386/liblegacy-shm.so
 COPY --from=hooks /tmp/liblegacy-stat.so /opt/dnf/compat/i386/liblegacy-stat.so
+COPY --from=hooks /tmp/libdof-admin-runtime.so /opt/dnf/compat/i386/libdof-admin-runtime.so
+COPY docker/ubuntu/admin-runtime-digest.c /opt/dnf/compat/i386/admin-runtime-digest.c
 COPY --from=hooks /tmp/shm-probe /opt/dnf/audit/shm-probe
 COPY --from=hooks /tmp/libfrida-compat.so /opt/dnf/compat/i386/libfrida-compat.so
 COPY --from=hooks /tmp/frida-probe /opt/dnf/audit/frida-probe

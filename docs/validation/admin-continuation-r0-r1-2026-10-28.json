@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-28",
+  "baselineCommit": "bb01d5a",
+  "branch": "codex/admin-replacement",
+  "initialWorktreeClean": true,
+  "initialAheadOfOriginMain": 77,
+  "stashesRetained": 2,
+  "scope": {
+    "classes": 71,
+    "operations": 239,
+    "workPackages": 13,
+    "separateProgressLedgerCreated": false
+  },
+  "executionOrder": [
+    "R0",
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8"
+  ],
+  "lastRetainedDeploymentEvidence": {
+    "adminStage": "S41",
+    "adminImage": "sha256:bf100959ff904aafe8be05b7b3a60d01baa462b9d592e11f755a262a1e9a3953",
+    "gameStage": "S45",
+    "gameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+    "adminPort": 18080,
+    "reverifiedThisRun": false
+  },
+  "inventoryTests": {
+    "run": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "restoreDrillTests": {
+    "run": 3,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 2,
+    "skipReason": "Real ownership/mode restore requires POSIX; no POSIX runtime available in this run"
+  },
+  "legacyBackupRegression": {
+    "initialRun": {
+      "run": 4,
+      "errorsIncludingSubtests": 6,
+      "cause": "Sandbox temporary-directory child access denied; no pass claimed"
+    },
+    "workspaceTemporaryDirectoryRun": {
+      "run": 4,
+      "passed": 1,
+      "failures": 1,
+      "errors": 2,
+      "failure": "Windows chmod semantics do not distinguish tested POSIX modes",
+      "errorsReason": "Windows sandbox refused hard link creation"
+    },
+    "oldVerifierChanged": false,
+    "priorLinuxS41EvidenceInvalidated": false
+  },
+  "standardMaven": {
+    "attempted": true,
+    "started": false,
+    "passed": false,
+    "reason": "JAVA_HOME is not defined correctly; no JDK was located",
+    "historical203Passed324SkippedNotClaimedAsCurrentRun": true
+  },
+  "frontendBuildRerun": false,
+  "frontendSourceChanged": false,
+  "retiredSqlEndpoint": {
+    "route": "POST /api/v1/database",
+    "sourceCodeRefusesArbitraryReadsAndWrites": true,
+    "responseStatus": 410,
+    "daoDependencyRemoved": true,
+    "httpRegressionAdded": true,
+    "httpRegressionExecuted": false,
+    "deployed": false
+  },
+  "remainingWriteAuditFindings": [
+    {
+      "route": "PUT /api/v1/notice",
+      "finding": "Admin check exists, but write directly invokes noticeDao.update without managed preview, revision and receipt protocol",
+      "resolved": false
+    }
+  ],
+  "archiveActuallyRestoredIntoAnEmptyDirectoryVerified": false,
+  "databaseRestoreVerified": false,
+  "s33ExecutionSegmentProcessExitVerified": false,
+  "serverConnected": false,
+  "serverChangesPerformed": false,
+  "deployedRecordFilterFixThisRun": false,
+  "originalWindowsToolStarted": false,
+  "adminImplementationComplete": false,
+  "completeReplacement": false,
+  "limitations": [
+    "No server connection entry was found in known local deployment scripts; connection alias or private config path requested from user.",
+    "No S46 frontend deployment or real browser checks were performed.",
+    "Precise per-operation mapping remains incomplete; export shows explicit mapping gaps and package-scoped next steps.",
+    "Backend retirement code requires standard Maven and deployed HTTP refusal checks before acceptance.",
+    "Restore drill tool is prepared but no private real archive has been restored.",
+    "R0 and R1 exit conditions remain open; R2 through R8 remain open."
+  ],
+  "sourceSHA256": {
+    "scripts/dof/admin_inventory.py": "8b287331929c8be595808076c8678eed605dfc194627e54f756b79c4749f2fe6",
+    "scripts/dof/admin_restore_drill.py": "e46e30e6d6b3293fb02930c94917d471ab5dfac755db407d4cd2633eb670359f",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/controller/DatabaseToolsController.java": "f52d2197703869f1bddc484e8d01a06b29d76ae506e6ea11de5e737d7bfa41dc",
+    "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/DatabaseToolsRetirementHttpTest.java": "9446cf58a10b5d8fc18e843d79b2a20cdd6a13bcbd11f699a13343426355ab1e"
+  },
+  "finalLocalChecks": {
+    "documentLinksPassed": true,
+    "gitDiffWhitespacePassed": true,
+    "pythonSyntaxPassed": true,
+    "inventoryRowsExported": 239,
+    "allWorkPackagesRemainIncomplete": true
+  },
+  "recordScope": "初次本地续行的历史记录，尚无SSH信息时的事实；后续实际部署及Linux恢复见subsequentEvidence，不覆盖初次失败。",
+  "subsequentEvidence": [
+    "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json"
+  ]
+}

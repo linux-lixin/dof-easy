@@ -17,27 +17,27 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,
   ptr: value => value,
   console: { log: text => logs.push(text) }
 });
-for (const module of [{name: 'qk_plugin.so'}, {name: 'libantisvrinline.so'},
-                     {name: 'libdp2.so'}, null]) {
-  for (const database of ['qk', 'taiwan_cain', 'taiwan_cain_2nd', 'd_taiwan']) {
+for (const module of [{name: 'libdof-plugin.so'}, {name: 'libdof-inline.so'},
+                     {name: 'libdp2.so'}, {name:'qk_plugin.so'}, {name:'libantisvrinline.so'}, null]) {
+  for (const database of ['dof_native', 'taiwan_cain', 'taiwan_cain_2nd', 'd_taiwan', 'qk']) {
     for (const account of ['game', 'root']) {
       const original = pointer('original-test-value');
       const args = [null, null, null, pointer(database), pointer(account), original];
       const context = { returnAddress: module };
       interceptor.onEnter.call(context, args);
       const allowed = account === 'game' && (
-        (module?.name === 'qk_plugin.so' && ['qk', 'taiwan_cain_2nd'].includes(database))
-        || (module?.name === 'libantisvrinline.so'
-          && ['qk', 'taiwan_cain', 'taiwan_cain_2nd'].includes(database)));
+        (module?.name === 'libdof-plugin.so' && ['dof_native', 'taiwan_cain_2nd'].includes(database))
+        || (module?.name === 'libdof-inline.so'
+          && ['dof_native', 'taiwan_cain', 'taiwan_cain_2nd'].includes(database)));
       assert.equal(args[5] !== original, allowed);
       interceptor.onLeave.call(context, { toInt32: () => 1 });
     }
   }
 }
-assert(logs.includes('[QK DB adapter] qk_plugin.so/qk connected'));
-assert(logs.includes('[QK DB adapter] qk_plugin.so/taiwan_cain_2nd connected'));
-assert(logs.includes('[QK DB adapter] libantisvrinline.so/qk connected'));
-assert(logs.includes('[QK DB adapter] libantisvrinline.so/taiwan_cain connected'));
-assert(logs.includes('[QK DB adapter] libantisvrinline.so/taiwan_cain_2nd connected'));
+assert(logs.includes('[Dof DB adapter] libdof-plugin.so/dof_native connected'));
+assert(logs.includes('[Dof DB adapter] libdof-plugin.so/taiwan_cain_2nd connected'));
+assert(logs.includes('[Dof DB adapter] libdof-inline.so/dof_native connected'));
+assert(logs.includes('[Dof DB adapter] libdof-inline.so/taiwan_cain connected'));
+assert(logs.includes('[Dof DB adapter] libdof-inline.so/taiwan_cain_2nd connected'));
 assert(logs.every(text => !text.includes('test-only-credential')));
-console.log('32 caller/database/account combinations passed; no credential logged');
+console.log('60 caller/database/account combinations passed; no credential logged');

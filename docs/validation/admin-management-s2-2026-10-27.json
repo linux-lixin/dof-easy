@@ -1,0 +1,270 @@
+{
+  "date": "2026-10-27",
+  "baseline": {
+    "implementation": "0579182ceb33b3e3e36015feb27bc3b3768b1633",
+    "documentation": "d895fe2",
+    "edition": "晴空免授权2.8",
+    "classes": 71,
+    "operations": 239
+  },
+  "adminImplementationComplete": false,
+  "completeReplacement": false,
+  "scope": [
+    "S1 legacy activity pending review",
+    "S2 managed account ban/unban/restore",
+    "S2 admin player password reset and reconciliation"
+  ],
+  "checks": {
+    "maven": {
+      "tests": 273,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 20,
+      "command": "mvn -Dmaven.test.skip=false test",
+      "database": "identity-guarded disposable MySQL5.6",
+      "skippedTests": [
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeClientBundleTest",
+          "test": "pinnedClientBundleContainsExactlySixFilesAndNoPrivateParameter",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeClientPayloadTest",
+          "test": "privateNativeFixtureCanBeReencodedWithoutChangingExistingKey",
+          "reason": "Private native fixture/public identity not configured"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeClientPublicationTest",
+          "test": "actualTemplateKeepsFiveVersionedClientRecords",
+          "reason": "Private fixtures absent"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeConfigContainerTest",
+          "test": "suppliedNativeFixturesAreByteIdenticalAfterJavaRegeneration",
+          "reason": "Private native fixtures not configured"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptChecksumTest",
+          "test": "originalCompressedAndUncompressedTailVectorsMatch",
+          "reason": "private input not supplied"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptCompressionTest",
+          "test": "realCompressedIndexAndResourcesWhenProvided",
+          "reason": "got: <[null, null, null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptContextTest",
+          "test": "authorizedNativeSampleRegeneratesEveryByteWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptFileCodecTest",
+          "test": "twoCompleteOriginalArtifactsMatchIncludingNativeTrailersWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptIndexTest",
+          "test": "completeRealIndexAndResourceDataWhenProvided",
+          "reason": "got: <[null, null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptIndexTest",
+          "test": "capturedNativeArithmeticVectorsWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptJobsTest",
+          "test": "currentPairedSourceStructureWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptJobsTest",
+          "test": "originalProducerVectorsMatchNewParameterAndWholeFileCandidate",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeScriptMetadataTest",
+          "test": "matchesOriginalLoaderVectorsWithinSafeFilenameScope",
+          "reason": "private input not supplied"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeTextEnvelopeTest",
+          "test": "approvedRealSampleExplainsIndexMaskWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeTextEnvelopeTest",
+          "test": "nativeWriterVectorsWhenProvided",
+          "reason": "got: <[null]>, expected: every item is not null"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest",
+          "test": "partialChangePreservesUnknownFieldsAndNoOpSpelling",
+          "reason": "private input not supplied"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest",
+          "test": "malformedExistingKnownFieldsAndUnknownEditTargetsFailWithoutChangingSource",
+          "reason": "private input not supplied"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest",
+          "test": "all132FieldsMatchOriginalSaveSqlIncludingSignedBoundaries",
+          "reason": "private input not supplied"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.dof.NativeUiLayoutTest",
+          "test": "nativeDecimalSpacingIsPreservedWhileOtherCoordinatesStayIntegers",
+          "reason": "private input not supplied"
+        },
+        {
+          "class": "com.aiyi.game.dnfserver.service.extension.RegistrationCodesIntegrationTest",
+          "test": "registrationGateUsesOneNativeTransaction",
+          "reason": "got: <false>, expected: is <true>"
+        }
+      ]
+    },
+    "frontend": {
+      "command": "npm run build",
+      "passed": true
+    },
+    "browser": {
+      "passed": true,
+      "backend": "real Spring HTTP",
+      "database": "fresh synthetic MySQL 5.6 fixture",
+      "actualGameDataAccessed": false,
+      "gameEffectVerified": false,
+      "checks": [
+        "real authentication against synthetic accounts",
+        "durable preview without native write",
+        "browser commit and readback",
+        "real duplicate replay",
+        "missing identity and changed-body rejection",
+        "browser targeted restore",
+        "anonymous access rejected",
+        "role browser preview without native write",
+        "role browser commit, replay and changed-body refusal",
+        "role browser targeted restore",
+        "legacy pending reviewed without native write or old-log rewrite; later preview unblocked",
+        "canonical feature ledger 71 classes / 239 operations",
+        "browser ban preview, persistence, replay and unchanged expiry",
+        "browser unban, login rejection/reenabling and targeted penalty restores",
+        "browser admin password reset, credential verification, session revocation and secret-free history"
+      ],
+      "pageErrors": 0
+    },
+    "backendRestart": {
+      "passed": true,
+      "backendProcessRestarted": true,
+      "database": "same synthetic MySQL 5.6",
+      "actualGameDataAccessed": false,
+      "containerRecreationVerified": false,
+      "checks": [
+        "fresh login after process restart",
+        "activity history and restored configuration retained",
+        "role history and restored attributes retained",
+        "penalty history and original absence retained",
+        "old audit unchanged and resolution retained",
+        "password reset metadata retained without plaintext"
+      ],
+      "pageErrors": 0
+    },
+    "unresolvedHistoryPriority": {
+      "passed": true,
+      "case": "older PREPARED operation is visible ahead of 51 newer previews",
+      "contract": "ManagedBanContractTest.unresolvedOlderOperationCannotBeHiddenByNewerPreviews"
+    },
+    "canonicalFeatureLedger": {
+      "passed": true,
+      "source": "/api/v1/admin/dof -> scope.json",
+      "classes": 71,
+      "operations": 239,
+      "historicalFeatureSnapshotUsedForProgress": false,
+      "moduleFailuresIsolated": true
+    },
+    "deployedBrowser": {
+      "passed": true,
+      "backend": "real",
+      "instanceId": "dof-main",
+      "configEdits": false,
+      "actualGameplayVerified": false,
+      "checks": [
+        "real browser administrator login",
+        "anonymous access rejected",
+        "real plugin read and application guidance",
+        "real signin schema and queries",
+        "real read-only record projections: 30/30",
+        "deployed activity adapter and durable journal read",
+        "deployed penalty schema and protected-admin password-state/journal read without writes",
+        "role adapter sample unavailable: character list empty; no player data initialized",
+        "browser schema diagnosis",
+        "feature ledger uses canonical 71 classes / 239 operations and current management evidence"
+      ],
+      "pageErrors": 0
+    }
+  },
+  "runtime": {
+    "deployed": true,
+    "sourceCommit": "1e28894abdfa94e9ee6d10783dc25d23e9aabbec",
+    "image": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+    "previousImage": "sha256:77f85e86268dd5846d31993e517cc752d2b2e4032b62dd35d1847c4ba5f35125",
+    "jarSHA256": "d07f45a75d526aebcd4d9722c981616980c19161a373ee2cbf9775bdfd83ce2b",
+    "hostPort": 18080,
+    "portsUnchanged": true,
+    "gameNotRestarted": true,
+    "gameConfigurationUnchanged": true,
+    "keyMaterialUnchanged": true,
+    "instanceId": "dof-main",
+    "level": 86,
+    "databaseMigrationsExecuted": false,
+    "nativeBusinessWrites": false,
+    "authenticatedBrowserVerified": true,
+    "actualGameplayVerified": false,
+    "peakSpaceBudgetBytes": 537298180,
+    "recoveryDirectory": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s2-ledger/before-upgrade",
+    "rollbackImage": "dof-admin-rollback:20261027-77f85e86268d",
+    "realCharacterSampleAvailable": false,
+    "preBatchImage": "sha256:a83f46b672d49b55eebd7cd188730ab4b7ff62b61990da852e4ad60b9a58224f",
+    "preBatchRecoveryDirectory": "/opt/dof-easy/.dof-easy/admin-replacement/20261027-s2/before-upgrade"
+  },
+  "nativeSchemaReadOnlyCheck": {
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "penaltyPrimaryKey": [
+      "m_id",
+      "punish_type"
+    ],
+    "penaltyColumns": 9,
+    "penaltyEngine": "InnoDB",
+    "accountsEngine": "InnoDB",
+    "playerDataRead": false,
+    "businessWritesPerformed": false
+  },
+  "passwordEvidence": {
+    "nativePasswordFormat": "MD5 retained for matching components",
+    "journalEvidence": "HMAC keyed by existing persistent private material; instance/account-bound opaque tags",
+    "plaintextOrNativeDigestInOrdinaryHistory": false,
+    "passwordDownloadOrRestoreSupported": false,
+    "keyRotationWhilePending": "refuse reconciliation until original private material is restored",
+    "syntheticApplicationLogLeakCheck": true
+  },
+  "remaining": [
+    "Registration policy, activation consumption, gifts and native initialization/reconciliation still need completion",
+    "IP/MAC linkage and all native client/game effects remain unverified",
+    "Real isolated instance has no character samples; no player account or character was initialized by this batch",
+    "Original-tool complete menu/default/import/export audit and per-operation comparison remain pending",
+    "Other management writes, raid runtime actions, economy/mail/items/UI/PVF publication, fault injection and container acceptance remain pending",
+    "20 skipped tests keep their original private-sample/integration requirements",
+    "Nonempty record pagination/filter/encoding and chat-body collection chain still need verification"
+  ],
+  "artifact": {
+    "sourceCommit": "1e28894abdfa94e9ee6d10783dc25d23e9aabbec",
+    "directory": ".dof-easy/admin-replacement-delivery-20261027-s2-ledger",
+    "jarSHA256": "d07f45a75d526aebcd4d9722c981616980c19161a373ee2cbf9775bdfd83ce2b",
+    "manifest": "build-manifest.json",
+    "image": "sha256:fffb331a325839eb616e63060512d4372ed5ae26580e58e1cd25849ae4d836cc",
+    "imageTag": "dof-admin-replacement:20261027-s2-ledger",
+    "runtimeBase": "dof-admin-runtime-20261026:a75316ec509c",
+    "networkUsedDuringDockerBuild": false
+  }
+}

@@ -1,0 +1,418 @@
+{
+  "stage": "S33",
+  "date": "2026-10-28",
+  "purpose": "independent real recovery and cross-border configuration batches plus actual admin recreation with an unfinished task",
+  "verificationBaseCommit": "43973a3",
+  "runtimeSourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+  "runtimeImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+  "runtimeImageChanged": false,
+  "hostPort": 18080,
+  "realDeploymentVerified": true,
+  "verifiedRuntimeWriteModules": [
+    "recovery",
+    "cross-border"
+  ],
+  "inheritedVerifiedModule": {
+    "module": "inheritance",
+    "evidence": "docs/validation/admin-equipment-batch-s32-2026-10-28.json"
+  },
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "completeReplacement": false,
+  "server": {
+    "phase": {
+      "phase": "RECOVERY_AND_CROSS_BORDER_BATCH_CONFIGURATION_VERIFIED_GAMEPLAY_PENDING",
+      "adminImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+      "sourceCommit": "e8ccd6b226ffe2bd89f230e5a2e2e21751956089",
+      "updatedAt": 1793147084.121809,
+      "completeReplacement": false
+    },
+    "recovery": {
+      "passed": true,
+      "mockedApis": false,
+      "section": "recovery",
+      "runLabel": "S33",
+      "sampleValues": {
+        "code": 2147483001,
+        "restitution": "3037/3340",
+        "Return_quantity": "10/20",
+        "announcement": 1,
+        "codenum": 2,
+        "extra_consumption_id": "0/3037",
+        "extra_consumption_num": "500/2"
+      },
+      "testCodes": [
+        2147483001,
+        2147483002,
+        2147483003,
+        2147483004,
+        2147483005,
+        2147483006,
+        2147483007,
+        2147483008,
+        2147483009,
+        2147483010,
+        2147483011,
+        2147483012,
+        2147483013,
+        2147483014,
+        2147483015,
+        2147483016,
+        2147483017,
+        2147483018,
+        2147483019,
+        2147483020,
+        2147483021
+      ],
+      "sourceRevision": "c5f4cccef3985cb765d2d73da2edb23cbf98a2a873eb018127d8daac3f7e3abe",
+      "sourceSHA256": "543da3e239aa6716123b21476c0daac15cf75799d3f3ba3ebbb581fb1979e215",
+      "largeFileCheckBytes": 1130233,
+      "tasks": {
+        "partialImport": {
+          "requestId": "74b5332c-d141-4de3-ab5a-1cea08a38612",
+          "previewRevision": "0617ad38bd20aa4ed3b1b1e80deab49fff6e1598cdb71765b88f310b9f93d508",
+          "operation": "import-upsert"
+        },
+        "undoPartial": {
+          "requestId": "fc849efc-6978-40fe-841d-66ea5b294c82",
+          "previewRevision": "444452f63b56a2628842247d958223071dc86b3ca4eef3656a4301e172d301e3",
+          "operation": "restore"
+        },
+        "fullImport": {
+          "requestId": "74c2857d-abb9-4985-ae30-b2502dff0c47",
+          "previewRevision": "013d51920a43d436325d6e0c2d4f4aaf0d136dd22fc8792d2ff5a20c8e05e9f3",
+          "operation": "import-upsert"
+        },
+        "clearAll": {
+          "requestId": "599d8626-a075-40c9-8d89-3bf0ff303aca",
+          "previewRevision": "672cf81ee9edd685aa779fff7e9d1137e6c93192b4b08f41c6c206346d0bb4cd",
+          "operation": "clear"
+        },
+        "restoreClear": {
+          "requestId": "c20b552d-3cc3-4159-9c0d-dae8cad22fab",
+          "previewRevision": "ff284daadf7b507d02905ddf9e3f40796f59ed1622ec9eed1dc837c98178d70d",
+          "operation": "restore"
+        },
+        "undoFullImport": {
+          "requestId": "2477db44-3615-48d4-b2c1-7b7f284ad109",
+          "previewRevision": "8ce8778808bf9007ffc88847d0bf9ca2553d3cac0dcb5c1f082ee280de46c967",
+          "operation": "restore"
+        },
+        "cancelEmpty": {
+          "requestId": "c40a5ea4-dc3e-4a63-922c-8a6341ea7a66",
+          "previewRevision": "969be3ddd41b3cad3a6e4841eaf912984c3e35c6974ed44668014037cc5933ff",
+          "operation": "clear"
+        }
+      },
+      "controls": {
+        "cancelPartial": {
+          "requestId": "4fee5855-6ba6-4e35-aaf1-77e80a2910af",
+          "parent": "74b5332c-d141-4de3-ab5a-1cea08a38612"
+        },
+        "cancelEmptyPreview": {
+          "requestId": "24b6112b-b136-418e-8e9f-34bef11e9525",
+          "parent": "c40a5ea4-dc3e-4a63-922c-8a6341ea7a66"
+        }
+      },
+      "seedCreateIds": [
+        "5e8dd56f-a4d4-454e-8554-7a7e45b0fd1b",
+        "4365c0a5-d906-4e5c-a579-c11b87e62f0c",
+        "32826a83-3d9e-472c-8eb2-47b31dbebdc6",
+        "9cb20676-81bc-43aa-97e0-706266c46b4f",
+        "b91fd30d-a507-43bc-8a23-f4530bb6b870",
+        "f96b0082-1720-44fe-af2c-e7733b3b14ab",
+        "b3a0f33d-6d5d-4a5e-8d34-409d313e1b86",
+        "72910a9e-5e32-4bf4-a5b3-a7a6acf41a4c",
+        "8b814692-e222-4585-9ee7-47a9a3bb88c2",
+        "19b5f3ec-898f-4688-a95a-1f99d04765c3",
+        "4a410314-8a04-4c4a-85af-22cffd72c46f",
+        "2177ea8a-83cd-4608-baf0-2ebff4a4693d",
+        "1c642a2c-2782-402e-bf79-67fd3a52a4a1",
+        "b2a223ed-45f4-44c2-8290-d9b4e77d8386",
+        "007b3a9d-2c13-48b2-ab0b-dff34d53f4aa",
+        "9f17a1ff-fc3c-4233-91ba-75de6b6fa8fd",
+        "463be9e6-e83e-4d3e-af32-218ca439ecba",
+        "7c94e0f4-f6fd-4161-bd08-f17d13d32e4f",
+        "d235f830-6f3c-4028-838d-527a37d4f12d",
+        "b880341b-7137-441d-b206-1984a58692fc",
+        "1f08d99b-287f-4680-aca9-71e2050a6c1c"
+      ],
+      "seedUndoIds": [
+        "5a13789f-a62e-4e88-9c39-b6cb59be9ec0",
+        "b599501c-46bb-4104-9dcc-2df99e77c8e9",
+        "313604bb-de1b-4c63-971c-8dfad7ba4d01",
+        "97085d3f-3694-47af-a30b-61964931cd00",
+        "5325ac6f-cac2-4b55-aa7d-a65e1eefa0bd",
+        "3953163f-ddb8-40bd-8445-2216052008d9",
+        "c51f3c3c-e378-4eca-a4ff-3275f426993b",
+        "2aa0ed75-6763-45a6-aa9b-0a3d5b1788fe",
+        "20b07e67-6859-4388-a52a-cbbf1f491fd9",
+        "47c3f0a9-1f61-46a5-837b-2858e55b7711",
+        "c089232d-d1c4-473e-b9eb-73e001687783",
+        "f3742f88-5677-494b-b6ef-2214a5f47493",
+        "198aa7d3-362a-46de-8bd8-22c7603beef0",
+        "3bf0fe23-9ef9-489e-93df-e8bfd1bfd89e",
+        "95342ef7-dc8f-4c68-bacf-d5b8aecf558b",
+        "12198147-8f19-43f7-a18c-4807d640f3e0",
+        "2e7aa311-e7e3-4106-83e1-a7f6c7005f49",
+        "fed45848-231a-4e03-a841-3f970347eda6",
+        "60ce7d24-5991-4089-95dd-422065b8cbd1",
+        "72a383d4-34f3-49fd-8a7a-ca34a4e2f162",
+        "b0f11ac8-ed25-4d82-ac3c-b6fd4aa69b67"
+      ],
+      "resumedOriginalPreview": false,
+      "initialBrowserFailurePreserved": false,
+      "responseLoss": "actual backend commit followed by deliberately withheld browser response; no physical outage claim",
+      "nativeRuleConfigurationWrittenAndRestored": true,
+      "initialRows": 0,
+      "finalRows": 0,
+      "originalWindowsToolStarted": false,
+      "nativeConsumerAcceptanceVerified": false,
+      "nativeGameplayVerified": false,
+      "completeReplacement": false,
+      "checks": [
+        "real single-rule source export, 21 test codes and >1MiB streaming integrity check; original seed creates undone without changing default code zero",
+        "actual first segment writes 20 of 21; withheld reply and reload preserve IDs, stale segment and ordinary bypass are refused, cancellation stops only the remaining item",
+        "linked restoration removes only the twenty confirmed test imports and skips the unsubmitted item",
+        "full import completes in two real segments, final page contains the twenty-first receipt and full export matches the original source",
+        "clear and associated recovery both survive committed reply loss; complete restored rule bytes produce the original full-table revision",
+        "all seven task histories and two controls remain readable, all three native rule tables return to empty, wallets stay unchanged, no default rule or game/client action"
+      ],
+      "pageErrors": 0
+    },
+    "crossBorder": {
+      "passed": true,
+      "mockedApis": false,
+      "section": "cross-border",
+      "runLabel": "S33",
+      "sampleValues": {
+        "code": 2147483001,
+        "restitution": "3037/3340",
+        "Return_quantity": "10/20",
+        "announcement": 1,
+        "codenum": 3
+      },
+      "testCodes": [
+        2147483001,
+        2147483002,
+        2147483003,
+        2147483004,
+        2147483005,
+        2147483006,
+        2147483007,
+        2147483008,
+        2147483009,
+        2147483010,
+        2147483011,
+        2147483012,
+        2147483013,
+        2147483014,
+        2147483015,
+        2147483016,
+        2147483017,
+        2147483018,
+        2147483019,
+        2147483020,
+        2147483021
+      ],
+      "sourceRevision": "f784b17e68b362b337704581f6fcdc5f25a917bf4c9581ff0053cfca437ffe2f",
+      "sourceSHA256": "c54c5e903e2175e16d854526297c896f75e23051d444a6e11e8489effb278fcb",
+      "largeFileCheckBytes": 1128846,
+      "tasks": {
+        "partialImport": {
+          "requestId": "1d2b0890-8a21-4588-8da7-cc23dd690431",
+          "previewRevision": "f32d7ca411770bbfd44870a350518a7afa930ba1a1ae5eda7c45e5bd2105daa7",
+          "operation": "import-upsert"
+        },
+        "undoPartial": {
+          "requestId": "e924f744-e011-4f60-b2e4-e5d74aa9cd5a",
+          "previewRevision": "682b86aae3f359735750ca63393f75758e9c39c77b48cc152741f08b9116cce7",
+          "operation": "restore"
+        },
+        "fullImport": {
+          "requestId": "afb835f6-09c1-4820-be85-1365246202e6",
+          "previewRevision": "095076784527c4ec9e0b4c5fb8fdf4db1339591ba25d012af2227e998752b249",
+          "operation": "import-upsert"
+        },
+        "clearAll": {
+          "requestId": "2efa0344-8951-4b47-9c60-3f7092fbd5d7",
+          "previewRevision": "534853374ef35e52f4e182c40e1d7356c0cceaace482ce97d500acb6ec0ac6d0",
+          "operation": "clear"
+        },
+        "restoreClear": {
+          "requestId": "95112a99-3fd5-4a51-882d-5033716ed2d9",
+          "previewRevision": "a2de1e1cf3904c6f335af109711101b72bc144325bf5b705e17ac610e622c788",
+          "operation": "restore"
+        },
+        "undoFullImport": {
+          "requestId": "2f2064fc-68b4-4393-9a56-313411c7a345",
+          "previewRevision": "2d641b6e18e7b48a4f7f87ca8c1ccedd8d751888813e6c1e063a1e64f409873f",
+          "operation": "restore"
+        },
+        "cancelEmpty": {
+          "requestId": "f9357077-991a-4288-a612-c9d49f97848e",
+          "previewRevision": "28a764b94aa5ccc85285514a04fd4870e5ae1698d18af7c92e6c5cb9f37e9864",
+          "operation": "clear"
+        }
+      },
+      "controls": {
+        "cancelPartial": {
+          "requestId": "a500fe87-327d-4e36-97e6-8106feaf3650",
+          "parent": "1d2b0890-8a21-4588-8da7-cc23dd690431"
+        },
+        "cancelEmptyPreview": {
+          "requestId": "559a3948-4d1e-40b0-b211-b901695446f9",
+          "parent": "f9357077-991a-4288-a612-c9d49f97848e"
+        }
+      },
+      "seedCreateIds": [
+        "8bdab082-99ec-4001-86ee-1a3395248569",
+        "e36e3c23-1ec6-4cb2-a73d-bf8e2976b7b2",
+        "0d2f6ef4-c807-418a-8c62-276d46446e4b",
+        "c89fd3ac-dea4-4ee0-951b-350d5e6526c3",
+        "b82988da-43a6-4ed0-83eb-777623306171",
+        "e8aa3ebd-f732-4ab5-bd21-44197ad9471d",
+        "4bc87b84-44b3-4a37-a73d-095946aefa8e",
+        "46f186f0-7f8f-40ac-a6e0-503022ba5b2c",
+        "005eb404-fc6d-44ae-b39f-3399eb7fab44",
+        "081a2a5d-5ece-4894-8f2a-bb9191a84d81",
+        "6f58720a-a06e-41bd-8935-aec63b34c837",
+        "98e0f59f-a787-4561-9fc9-4f620f4f0e42",
+        "a18b4378-5e7b-4fe9-9c68-05091ebdc436",
+        "dffa85f6-6c8c-4da4-ab54-fe6648185ace",
+        "db14e75b-f95c-4fb1-8aa4-4967c6402e85",
+        "af3c39c8-1c5c-436d-8e8c-ab0c3b427468",
+        "5af02238-18ea-4a13-b862-e0855f75f847",
+        "95863304-6fe2-4f2f-9ae7-8ac0b35bceb5",
+        "88a01804-af6d-450a-8bc4-4607d5e78e7b",
+        "9669ccfc-78ac-4477-9648-91cf35f5163a",
+        "f9a8acb3-1e62-4a94-b782-a1c772f483d3"
+      ],
+      "seedUndoIds": [
+        "195c37bc-ba22-40a6-8466-cec67b8dbf70",
+        "117177e3-5bb5-4918-9088-006f0123aab9",
+        "27a0d9cc-b3ae-4a87-856e-87274d5450af",
+        "71a486db-5c33-441c-9a8e-bde31bd6e894",
+        "24970d6b-4412-45db-8261-eecee496a77f",
+        "ae9708b6-4119-4fa4-88fa-da36c0b324d2",
+        "07fbd57c-4d78-4bf5-914b-4a983065563a",
+        "5cbbaab4-c92a-4db0-9898-2a5f51fef7f1",
+        "8fb46c1a-56b0-42ed-9802-d72bdf59a297",
+        "2ba19f95-9416-426e-832a-c7a8fd103a82",
+        "943c0972-34fa-425c-81dc-e75a46cc43bc",
+        "4bd00a6d-5e80-4b97-bef5-fa9f3116d683",
+        "7de03310-277b-4502-9583-dfa50a7181dc",
+        "97bb3491-447d-47af-b977-05e895a469b2",
+        "1cde77f1-e4df-415c-8785-0fcc966a9bf1",
+        "4579cbce-acc2-4226-9f41-aabfa851670d",
+        "170e042b-2674-4674-811e-36d4890adf87",
+        "5092dc26-de3a-478a-9932-40893f498894",
+        "cde5ef49-00d9-47e1-a65f-9e7fd1cf2e41",
+        "246bc9f5-7b2e-4d63-b57a-d46146691d2e",
+        "5248ab9c-693d-4f79-bff3-8660c0493591"
+      ],
+      "resumedOriginalPreview": false,
+      "initialBrowserFailurePreserved": false,
+      "responseLoss": "actual backend commit followed by deliberately withheld browser response; no physical outage claim",
+      "nativeRuleConfigurationWrittenAndRestored": true,
+      "initialRows": 0,
+      "finalRows": 0,
+      "originalWindowsToolStarted": false,
+      "nativeConsumerAcceptanceVerified": false,
+      "nativeGameplayVerified": false,
+      "completeReplacement": false,
+      "checks": [
+        "real single-rule source export, 21 test codes and >1MiB streaming integrity check; original seed creates undone without changing default code zero",
+        "actual first segment writes 20 of 21; withheld reply and reload preserve IDs, stale segment and ordinary bypass are refused, cancellation stops only the remaining item",
+        "linked restoration removes only the twenty confirmed test imports and skips the unsubmitted item",
+        "full import completes in two real segments, final page contains the twenty-first receipt and full export matches the original source",
+        "clear and associated recovery both survive committed reply loss; complete restored rule bytes produce the original full-table revision",
+        "all seven task histories and two controls remain readable, all three native rule tables return to empty, wallets stay unchanged, no default rule or game/client action"
+      ],
+      "pageErrors": 0
+    },
+    "restart": {
+      "passed": true,
+      "actualAdminContainerRecreated": true,
+      "imageUnchanged": true,
+      "gameNotRecreated": true,
+      "partialTaskAndNativeRowsUnchangedAcrossRestart": true,
+      "noAutomaticReplayOrUnexpectedLastItem": true,
+      "originalPreviewReplayReturnsSameProgress": true,
+      "staleSegmentAndNewDuplicateIdRefused": true,
+      "cancelThenRestoreOnlyTwentyConfirmedRows": true,
+      "threeRuleTablesEmpty": true,
+      "taskId": "cc9de43c-7127-41e7-b4d0-49af2527348b",
+      "restoreTaskId": "6c5662fb-b4a8-4371-a9c1-31bc37080561",
+      "controlId": "802dd0eb-0a63-4dc8-abad-962a9a3c51d8",
+      "rejectedDuplicateId": "618c0f9b-8af1-4ab7-bea5-a38f768f061f",
+      "beforeAdminId": "a41aa4608977622b36a359d1ac7529e80ab0989865b9636ec606cc3e1fb94287",
+      "afterAdminId": "331a8790fb78a425bd93f66c2d20d7ef1aa0f15a20ebf7f8387809d80fc81af8",
+      "adminImage": "sha256:3cc7ef6ea5f7de7e50b129bdc692763d8c6aaa0d76508d17bcd6d333544f1aea",
+      "originalPreviewRevision": "98035d242e60b9cc88d5a91f62c9e3ea3a42305b3cc1239ce60a5b1c5cf188cd",
+      "partialRevision": "58befc94d9f662d5244cb62619c2635fb669f19da7f73ef5982d07a052b783fe",
+      "nativeGameplayVerified": false,
+      "completeReplacement": false
+    },
+    "finalVerification": {
+      "passed": true,
+      "modules": [
+        "recovery",
+        "cross-border"
+      ],
+      "realBrowserChecks": 12,
+      "perModuleDedicatedRules": 21,
+      "newReceipts": 396,
+      "allPrevious237ReceiptRowsByteHashUnchanged": true,
+      "previousReceiptCount": 237,
+      "allPriorReceiptRowsRetainedByteExactly": true,
+      "newReceiptsHaveOriginalActorAndExactExpectedSnapshots": true,
+      "postRecreationReadQueries": 30,
+      "threeRuleTablesRestoredExactly": true,
+      "nativeConfigurationAndRewardsWalletsAndPausedCodeUnchanged": true,
+      "persistentKeysUnchanged": true,
+      "gamePvfConfigurationAndIdentityUnchanged": true,
+      "runtimeStatusOnlyHeartbeatTimestampChanged": true,
+      "adminImageUnchangedAndActuallyRecreated": true,
+      "gameNotRecreated": true,
+      "deploymentModelAndEnvUnchanged": true,
+      "proxyTemplatesAndExpandedConfigUnchanged": true,
+      "noUnresolvedEquipmentOperations": true,
+      "baseReserve2GiBMaintained": true,
+      "processes": {
+        "recovery-browser": {
+          "pid": 255377,
+          "exited": true
+        },
+        "cross-border-browser": {
+          "pid": 256338,
+          "exited": true
+        },
+        "restart-task": {
+          "pid": 258916,
+          "exited": true
+        }
+      },
+      "originalWindowsToolStarted": false,
+      "nativeConsumerAcceptanceVerified": false,
+      "nativeGameplayVerified": false,
+      "completeReplacement": false
+    },
+    "browserRunnerSHA256": "1abb1a91246a656dbfcb139548c2b84d10594eea4fa3739df4633158cc98004c",
+    "restartRunnerSHA256": "48ec2791cb2c5141a2b1bd01a7c24f72786812aca3647409576a2e5ef59fb0e6"
+  },
+  "actualRestartScope": "recovery task paused after twenty confirmed native configuration writes and before its twenty-first item; controlled admin container recreation, fresh login and same task reload",
+  "testSources": {
+    "browser": "tests/integration/admin/equipment-batch-live.cjs",
+    "restart": "tests/integration/admin/equipment-batch-restart-live.py"
+  },
+  "verificationLimits": [
+    "Configuration persistence and recovery only; no player item removal, currency debit, reward delivery or game announcement claim",
+    "Recovery seven fields and cross-border five fields verified independently with21 dedicated codes each; cross-border reserved announcement kept at initial read-only value1, original tool default parity remains unverified",
+    "Actual task-segment container recreation does not prove database interruption, disk exhaustion, forced process kill or update interruption handling",
+    "S32 frozen S29 history image is a snapshot of S32 receipts; it is not an updated S33 journal view",
+    "Remaining wp01-wp13 functions, original Windows manual comparison, client/component consumption and multi-level acceptance remain incomplete"
+  ]
+}

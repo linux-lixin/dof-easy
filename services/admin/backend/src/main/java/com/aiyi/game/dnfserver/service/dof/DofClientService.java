@@ -94,6 +94,7 @@ public class DofClientService {
         if(!bundle.revision.equals(currentRevision()))throw new DofFailure(409,"配套包的组件版本已经改变");
         client.download(bundleId);NativeScriptJobs store=scripts();NativeScriptJobs.Artifact artifact=store.artifact(bundle.scriptTaskId,bundle.revision);
         if(!artifact.job.sha256.equals(bundle.scriptSha256)||artifact.job.bytes!=bundle.scriptBytes)throw new DofFailure(409,"配套包与 PVF 任务不匹配");
+        NativeClientJobs.requireScriptBatch(bundle,artifact.job);
         return new DofScriptReleaseService.Candidate(bundleId,bundle.scriptTaskId,artifact.job.sourceSha256,artifact.job.sha256,store.parameters(bundle.scriptTaskId));
     }
     public Object status() throws IOException {

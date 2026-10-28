@@ -38,6 +38,12 @@ menus.value = [
       {
         path: 'roles',
         meta: { title: '角色管理', icon: 'home' },
+      },
+      { path: 'cdk-inventory', meta: { title: 'CDK制码与停用', icon: 'home' } },
+      { path: 'cdk', meta: { title: 'CDK兑换记录', icon: 'home' } },
+      {
+        path: 'postal',
+        meta: { title: '邮件记录', icon: 'home' },
       }
     ]
   },

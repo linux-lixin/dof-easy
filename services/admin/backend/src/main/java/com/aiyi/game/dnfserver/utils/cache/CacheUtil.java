@@ -26,7 +26,7 @@ public class CacheUtil {
             return new Thread(r, "Cache-Local-Lock-Executor");
         }
     });
-    private static final Map<String, CacheItem> cacheItemMap = new HashMap<>();
+    private static final ConcurrentMap<String, CacheItem> cacheItemMap = new ConcurrentHashMap<>();
     static {
         new Thread(() -> {
             while (true){
@@ -35,8 +35,7 @@ public class CacheUtil {
                     for (Map.Entry<String, CacheItem> entry : entries) {
                         String key = entry.getKey();
                         CacheItem item = entry.getValue();
-                        if (item.getExpTime() <= System.currentTimeMillis()) {
-                            CacheUtil.cacheItemMap.remove(key);
+                        if (item.getExpTime() <= System.currentTimeMillis() && CacheUtil.cacheItemMap.remove(key, item)) {
                             logger.debug("Cache expire by [{}]", key);
                             if (item.getCollback() != null) {
                                 try {
@@ -133,6 +132,12 @@ public class CacheUtil {
             return null;
         }
         return cacheItem.getValue(clazz);
+    }
+
+    /** Atomically consume a live challenge, including under concurrent registration requests. */
+    public static <T> T take(Key key,Class<T> clazz){
+        CacheItem item=cacheItemMap.remove(key.toString());
+        return item==null||item.getExpTime()<=System.currentTimeMillis()?null:item.getValue(clazz);
     }
 
     /**

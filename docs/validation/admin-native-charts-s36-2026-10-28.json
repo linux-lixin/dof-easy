@@ -1,0 +1,279 @@
+{
+  "stage": "S36",
+  "date": "2026-10-28",
+  "verificationBaseCommit": "62acc8e",
+  "purpose": "Native ranking rules and independent worship entry protection; local implementation, deployment pending",
+  "implemented": {
+    "section": "charts",
+    "editableFields": [
+      "min_zhanli",
+      "jiangli_day",
+      "jiangli_hour"
+    ],
+    "preservedFields": [
+      "id",
+      "status",
+      "is_mobai",
+      "next_time"
+    ],
+    "createAllowed": false,
+    "deleteAllowed": false,
+    "requiresUniqueIdOneAndBothEntriesDisabled": true,
+    "requestIdRevisionAuditReconcileAndTargetedRestore": true,
+    "scheduleDeadlineConflictGuard": true,
+    "newSchedulerOrRewardExecutor": false
+  },
+  "gatewaySourceProof": {
+    "sourceSHA256": "67553a3b45de80ebea5f767f6e3a51d577d2cbb6c6647bd4c97037cb50a41f9b",
+    "literals": [
+      {
+        "address": 5032720,
+        "text": "UPDATE qk.game_charts_config SET next_time = DATE_ADD(CURDATE(), INTERVAL jiangli_day DAY) + INTERVAL jiangli_hour HOUR WHERE status = 1;",
+        "sourceLiteralVerified": true
+      },
+      {
+        "address": 5047032,
+        "text": "SELECT min_zhanli FROM qk.game_charts_config WHERE STATUS = 1",
+        "sourceLiteralVerified": true
+      },
+      {
+        "address": 5047344,
+        "text": "SELECT DATE_FORMAT(next_time, '%Y-%m-%d %H:%i:%s') FROM qk.game_charts_config  where status = 1;",
+        "sourceLiteralVerified": true
+      },
+      {
+        "address": 5049568,
+        "text": "SELECT code_data, code_num FROM qk.game_charts_code, qk.game_charts_config WHERE top_index = 0 AND is_mobai = 1",
+        "sourceLiteralVerified": true
+      }
+    ],
+    "originalCodeExecuted": false,
+    "gameplayVerified": false
+  },
+  "liveReadOnlyPreflight": {
+    "databaseUuid": "899d147e-d0ef-11f1-9ff4-525400542f67",
+    "ruleCount": 1,
+    "ruleId": 1,
+    "rankingStatus": 1,
+    "worshipStatus": 1,
+    "columns": [
+      {
+        "name": "id",
+        "type": "int",
+        "nullable": false
+      },
+      {
+        "name": "min_zhanli",
+        "type": "int",
+        "nullable": false
+      },
+      {
+        "name": "jiangli_day",
+        "type": "int",
+        "nullable": false
+      },
+      {
+        "name": "jiangli_hour",
+        "type": "int",
+        "nullable": false
+      },
+      {
+        "name": "is_mobai",
+        "type": "int",
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "int",
+        "nullable": false
+      },
+      {
+        "name": "next_time",
+        "type": "datetime",
+        "nullable": true
+      }
+    ],
+    "serverWritesPerformed": false,
+    "imageBuiltOrDeployed": false,
+    "existingEntriesDisabled": false
+  },
+  "standardMaven": {
+    "command": "mvn -o -Dmaven.test.skip=false test",
+    "tests": 513,
+    "passed": 203,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 310,
+    "logSHA256": "50306f8d4136815d84c49fc7bc85e070f87b9e9a6f57bcfbf917b72bce5510ef",
+    "skipsAreNotPasses": true
+  },
+  "isolatedSql": {
+    "passed": true,
+    "tests": 32,
+    "failures": 0,
+    "assumptionSkips": 0,
+    "ignored": 0,
+    "databaseVersion": "5.6.51",
+    "nativeChartsTests": 8,
+    "equipmentRegressionTests": 24,
+    "fixtureSchemasRemoved": true,
+    "realServiceSql": true,
+    "syntheticDataOnly": true,
+    "serverAccessed": false,
+    "nativeGameplayVerified": false,
+    "completeReplacement": false
+  },
+  "isolation": {
+    "schema": 1,
+    "serverAccessed": false,
+    "network": "private namespace; no routes or external interfaces",
+    "rootReadOnly": true,
+    "inputsReadOnly": true,
+    "loopbackOnly": true,
+    "inputsFingerprint": "2f7c804cded6b424d849263070f7b2450484b8db71961d8c63b0235ef0e5dd4d",
+    "rootfsFingerprint": "8a7327b4a4d8d991686324da76635d4ffb0cf3acb9bedcd9c0d4b2b681908bcf",
+    "packageManifestSha256": "30ccc9cce89ed9e63405f85fa462885f3aa3cd92c5b4461e4946d201d543e2f8",
+    "command": [
+      "/bin/sh",
+      "/inputs/run.sh"
+    ],
+    "completed": true,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "environmentUnchanged": true,
+    "evidenceValid": true
+  },
+  "classIdentity": {
+    "allClassesMatch": true,
+    "groups": [
+      {
+        "kind": "main",
+        "classFiles": 333,
+        "differentClasses": []
+      },
+      {
+        "kind": "test",
+        "classFiles": 125,
+        "differentClasses": []
+      }
+    ],
+    "sqlManualDeltaMatchesFinalMaven": true
+  },
+  "frontendBuild": {
+    "passed": true,
+    "command": "npm run build",
+    "logSHA256": "1f30949e7809e56da147b01f671ca485d35e4aff2cb83ee5ca3a946f214b2160",
+    "sourceIdentity": {
+      "allTrackedFrontendInputsMatch": true,
+      "trackedFiles": 221,
+      "lockfileMatchesReusedDependencies": true
+    }
+  },
+  "mockBrowserChecks": {
+    "charts": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeGameplayVerified": false,
+      "nativeWritesInMock": 1,
+      "checks": [
+        "existing-only ranking module exposes edit but no create or delete",
+        "identity, independent entry flags and native deadline remain disabled; submission requires preview",
+        "one numbered preview and commit change only threshold/interval/hour and retain original native-owned fields",
+        "native entry guard failure is visible and cannot proceed to commit",
+        "schema failure stays visible instead of becoming an empty successful list"
+      ],
+      "pageErrors": 0
+    },
+    "activityRecovery": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeWritesInMock": 2,
+      "checks": [
+        "preview freezes exact values and UUID before any native submission",
+        "lost native response retains UUID and freezes inputs; storage contains identifiers only",
+        "another lookup cannot overwrite an unresolved operation",
+        "reload reads committed receipt and clears the guard without replaying configuration writes",
+        "independent activity can be edited while the original activity keeps its pending UUID",
+        "section switch and reload recover exact original preview, with no invented UUID or values",
+        "lost cancellation reply reconciles same control ID; cancelled original cannot later write",
+        "confirmed missing preview with no native submit can explicitly return to editing",
+        "schema failures remain visible rather than successful empty records",
+        "permission failures remain visible"
+      ],
+      "pageErrors": 0
+    },
+    "equipmentBatch": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "nativeGameplayVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "syntheticNativeWrites": 2,
+      "checks": [
+        "clear preview reserves an independent task ID before any native mutation; storage keeps identifiers",
+        "reload after a withheld step reply reads the original task and preserves the completed item",
+        "cancel preview and committed reply loss retain the control ID; unsubmitted items stop without repeating completed writes",
+        "recovery uses a new task explicitly linked to the selected original task",
+        "import sends raw file bytes; PREPARED child reconciliation records not applied without automatic retry"
+      ],
+      "pageErrors": 0
+    }
+  },
+  "preservedFailures": [
+    {
+      "phase": "local environment preflight",
+      "reason": "Selected an old unprepared environment; refused before MySQL launch",
+      "databaseStarted": false,
+      "logSHA256": "f302d59a9811c31299ee8438a12e543d52cc106f5d178e152c3e8b3713f9e6d3"
+    },
+    {
+      "phase": "first SQL run",
+      "tests": 32,
+      "failures": 1,
+      "reason": "JDBC datetime text includes .0; the exact database datetime was unchanged. Assertion now uses explicit DATE_FORMAT, with unchanged production date semantics.",
+      "inputFingerprint": "4c8fcf4d8117807f06b61fb689bd818daf7f3e1c3e10442ed9e67c26c5c3b0f1",
+      "fixturesRemoved": true,
+      "logSHA256": "650b848af06a2d367ed7259aaae1c95ae02f1fd2cb15b3cbafb059e74aaabd84"
+    },
+    {
+      "phase": "first mock browser",
+      "reason": "Ambiguous selector also matched hidden history modals; scoped to visible modal.",
+      "logSHA256": "2ce0e70ecec4e12a6f62baa7fcdc2821dcc979e7af7ba5cce9d949d8007c4b44"
+    },
+    {
+      "phase": "second mock browser",
+      "reason": "Ambiguous error selector matched both page alert and toast; scoped to page alert.",
+      "logSHA256": "8b9d9ded0d1a6614a2f3f92787f9a5a9cc3cc8dffdd927647e5cd2dafc7c4260"
+    }
+  ],
+  "sourceHashes": {
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/ActivityConfigService.java": "c33ab73cf71c2881ca9a3a636e11803284e127121fabeee2868199db8a4eb6be",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeChartsRules.java": "fc5e71c91badd98f5e7f71a02b525668906a188f9a7102241926ac39e1ed8461",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeConfigSideEffects.java": "e1067f075951c667b205efcd5ce207d3581288d36bd05cd1d5203792ee19d03e",
+    "services/admin/backend/src/main/java/com/aiyi/game/dnfserver/service/extension/NativeEquipmentRuleSchema.java": "c738970038da8a81ddfe531e8e075acdfed6b139795c45fe7b9918b5f7a053ca",
+    "services/admin/backend/src/test/java/com/aiyi/game/dnfserver/service/dof/NativeChartsContractTest.java": "c19c8162043b1f76aaa6fb4152aed249ebf359640ecacf6655a6d9190ae5b5aa",
+    "services/admin/frontend/src/views/admin/activities/ActivityManager.vue": "9a3eca3b2c2585288944ec93ee2711f8325b8e37c58f9a664e83d92779bd109b",
+    "tests/integration/admin/native-charts-page.cjs": "72cb4f846860c82dcfd8989b4270d4ee467c78c9341b887cece3bd5a70e8b779",
+    "tests/integration/admin/charts-contract-probe.py": "3e155e218e584540fb5b0b94d35d8a6bc87a2a59459a15ceaa5787064b88b6b8"
+  },
+  "remaining": [
+    "Complete independent target-table schema/index/side-effect hardening for charts-rewards before claiming full reward management; this stage hardened its two entry guards and the ranking configuration table.",
+    "Deploy the paired backend/frontend and verify real administrator flows and rollback history compatibility.",
+    "Validate writes and restoration on the isolated instance after an explicit controlled pause; this stage did not change either live entry.",
+    "Native runtime reading, formula, ranking, scheduling, worship and actual rewards are not accepted by configuration tests.",
+    "Original Windows menu/default/import-export comparison remains manual; no original Windows program was started.",
+    "All other features, multiple levels and physical faults retain their existing unfinished status."
+  ],
+  "realDeploymentVerified": false,
+  "originalToolEquivalenceVerified": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "completeReplacement": false,
+  "inventoryTests": {
+    "passed": 4,
+    "failed": 0
+  }
+}

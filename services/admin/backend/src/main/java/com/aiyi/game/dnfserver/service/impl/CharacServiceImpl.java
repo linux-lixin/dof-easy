@@ -14,7 +14,8 @@ import com.aiyi.game.dnfserver.entity.*;
 import com.aiyi.game.dnfserver.entity.task.TaskType;
 import com.aiyi.game.dnfserver.pvf.PvfManager;
 import com.aiyi.game.dnfserver.service.CharacService;
-import com.aiyi.game.dnfserver.service.PostalService;
+import com.aiyi.game.dnfserver.service.dof.DofFailure;
+import com.aiyi.game.dnfserver.service.extension.ExtensionQueryService;
 import com.aiyi.game.dnfserver.utils.ChinaseUtil;
 import com.xiaoyouma.dnf.parser.pvf.model.Pvf;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class CharacServiceImpl implements CharacService {
     private PvfManager pvfManager;
 
     @Resource
-    private PostalService postalService;
+    private ExtensionQueryService managementSecurity;
 
     @Override
     public ResultPage<CharacInfo> list(Integer levMin, Integer levMax, Integer job,
@@ -120,56 +121,11 @@ public class CharacServiceImpl implements CharacService {
     }
 
     @Override
-    public void update(CharacInfo info) {
-        CharacInfo characInfo = characInfoDao.get(info.getCharacNo());
-        if (null == characInfo){
-            return;
-        }
-        // 三速
-        characInfo.setAttackSpeed(info.getAttackSpeed());
-        characInfo.setCastSpeed(info.getCastSpeed());
-        characInfo.setMoveSpeed(info.getMoveSpeed());
-
-        // 疲劳
-        characInfo.setFatigue(info.getFatigue());
-
-        // 红蓝
-        characInfo.setMaxHp(info.getMaxHp());
-        characInfo.setMaxMp(info.getMaxMp());
-
-        // 伤害
-        characInfo.setMagAttack(info.getMagAttack());
-        characInfo.setMagDefense(info.getMagDefense());
-        characInfo.setPhyAttack(info.getPhyAttack());
-        characInfo.setPhyDefense(info.getPhyDefense());
-
-        // 硬直、跳跃
-        characInfo.setHitRecovery(info.getHitRecovery());
-        characInfo.setJump(info.getJump());
-
-        characInfoDao.update(characInfo);
-    }
-
-    @Override
     public void overTasks(Long characId) {
-        List<TaskVO> tasks = listNoOverTasks(characId);
-        tasks.forEach(task -> {
-            if (task.getType().isCatFinish()){
-                // 直接完成
-                characInfoDao.execute("UPDATE `taiwan_cain`.`new_charac_quest` SET play_" + task.getNo() +
-                        "_trigger = 0 WHERE charac_no = ?", characId);
-            }else{
-                // 物品收集类任务，发邮件任务材料
-                for (TaskItemVO item: task.getItems()){
-                    Postal postal = new Postal();
-                    postal.setItemId(item.getId());
-                    postal.setAddInfo(item.getCount());
-                    postal.setReceiveCharacNo(characId + "");
-                    postal.setSendCharacName("Task materials");
-                    postalService.sendMail(postal);
-                }
-            }
-        });
+        managementSecurity.requireAdmin();
+        // The former loop mixed irreversible task changes and direct mail
+        // inserts without receipts. Never replay it after an unknown outcome.
+        throw new DofFailure(410,"旧无编号任务完成入口已停用；任务修改与材料发放的预览、回执和结果核对尚未接通");
     }
 
     @Override

@@ -101,6 +101,31 @@ class ImportAssets(unittest.TestCase):
         self.assertIn('mismatch', self.run_import(False).stderr)
         self.assertFalse(self.out.exists())
 
+    def test_frida_import_preserves_nested_options_and_removes_only_managed_credentials(self):
+        config = {'db_config': {'account': 'source-user', 'password': 'source-password',
+                  'pool': {'size': 9, 'labels': ['中文', None]}, 'retry': False},
+                  'event': {'reward': [8, 3]}}
+        self.members[FRIDA] = [(name, json.dumps(config).encode() if name.endswith('json') else content)
+                               for name, content in self.members[FRIDA]]
+        self.make_sources()
+        before = (self.source/FRIDA).read_bytes()
+        self.run_import()
+        config['db_config'].update(account='game', password='')
+        self.assertEqual(json.loads((self.out/'frida/frida_config.json').read_text()), config)
+        self.assertEqual((self.source/FRIDA).read_bytes(), before)
+        self.run_import()
+
+    def test_frida_import_unknown_shapes_never_publish_partial_overlay(self):
+        original = list(self.members[FRIDA])
+        for index, invalid in enumerate([[], None, {'db_config': []}, {'db_config': None}]):
+            with self.subTest(invalid=invalid):
+                self.out = self.root/('invalid-overlay-' + str(index))
+                self.members[FRIDA] = [(name, json.dumps(invalid).encode() if name.endswith('json') else content)
+                                       for name, content in original]
+                self.make_sources()
+                self.assertIn('Frida', self.run_import(False).stderr)
+                self.assertFalse(self.out.exists())
+
     def test_unsafe_paths_are_rejected_even_in_excluded_members(self):
         for name in ('../outside.log', '/absolute.log', 'C:/outside.log',
                      'dp2/../../outside.log', 'dp2\\outside.log', 'dp2/x:stream',

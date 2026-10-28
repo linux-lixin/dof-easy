@@ -35,6 +35,17 @@ public class NativeClientJobsTest {
         NativeClientJobs open(NativeClientJobs.SpaceProbe probe) throws IOException { return new NativeClientJobs(root,INSTANCE,probe); }
         public void close() throws IOException { try(java.util.stream.Stream<Path> paths=Files.walk(root)) { for(Path p:(Iterable<Path>)paths.sorted(Comparator.reverseOrder())::iterator) Files.delete(p); } }
     }
+    private static void saveHistoricalJob(Path path, NativeClientJobs.Job job) throws IOException {
+        com.fasterxml.jackson.databind.node.ObjectNode wire = JSON.valueToTree(job);
+        wire.remove(Arrays.asList("manifestVersion","sourceBinding","manifestSha256","scriptBatch"));
+        JSON.writeValue(path.toFile(),wire);
+    }
+    private static void saveProvenance(Path path, NativeClientJobs.Job job) throws IOException {
+        Map<String,Object> wire = new LinkedHashMap<>();
+        wire.put("manifestVersion",job.manifestVersion); wire.put("sourceBinding",job.sourceBinding);
+        wire.put("manifestSha256",job.manifestSha256); wire.put("scriptBatch",job.scriptBatch);
+        JSON.writeValue(path.resolveSibling("provenance.json").toFile(),wire);
+    }
     private static NativeClientJobs.Request request(NativeClientJobs jobs) throws IOException {
         NativeClientJobs.Request request=new NativeClientJobs.Request(); request.requestId=UUID.randomUUID().toString();
         request.endpoint="192.0.2.44"; request.revision=(String)jobs.status().get("revision"); return request;
@@ -83,6 +94,63 @@ public class NativeClientJobsTest {
             try(NativeClientJobs restarted=f.open()) { assertEquals(hash,restarted.read(id).sha256);assertTrue(Files.exists(restarted.download(id))); }
         }
     }
+    @Test public void manifestPinsDatabaseReaderMaterialsAndTaskAcrossRestart() throws Exception {
+        try (Fixture f = new Fixture()) {
+            String id;
+            try (NativeClientJobs jobs = f.open()) {
+                NativeClientJobs.Request request = request(jobs); id = request.requestId;
+                jobs.submit(request,42); NativeClientJobs.Job job = finished(jobs,id);
+                assertEquals("READY_FOR_TEST",job.state);
+                assertEquals(1,job.manifestVersion);
+                Map<?,?> historical = JSON.readValue(f.root.resolve("jobs").resolve(id).resolve("job.json").toFile(),Map.class);
+                for (String field : Arrays.asList("manifestVersion","sourceBinding","manifestSha256","scriptBatch"))
+                    assertFalse("old readers must not see new fields: " + field,historical.containsKey(field));
+                try (ZipFile zip = new ZipFile(jobs.download(id).toFile());
+                     InputStream in = zip.getInputStream(zip.getEntry("manifest.json"))) {
+                    byte[] bytes = new byte[(int)zip.getEntry("manifest.json").getSize()];
+                    new DataInputStream(in).readFully(bytes);
+                    assertEquals(NativeUiState.sha256(bytes),job.manifestSha256);
+                    Map<?,?> manifest = JSON.readValue(bytes,Map.class);
+                    assertEquals(id,manifest.get("requestId"));
+                    assertEquals(job.sourceBinding.databaseUuid,manifest.get("databaseUuid"));
+                    assertEquals(job.sourceBinding.readerRecipe,manifest.get("readerRecipe"));
+                    assertEquals(job.sourceBinding.sha256,manifest.get("sourceSha256"));
+                    assertEquals(request.endpoint,manifest.get("endpoint"));
+                    assertEquals("bound-material-hashes",manifest.get("sourceVerification"));
+                    assertEquals(Boolean.FALSE,manifest.get("nativeClientAcceptance"));
+                }
+            }
+            try (NativeClientJobs jobs = f.open()) {
+                assertTrue(Files.exists(jobs.download(id)));
+                NativeClientJobs.Job job = jobs.read(id);
+                job.sourceBinding.databaseUuid = "00000000-0000-4000-8000-000000000002";
+                Path record = f.root.resolve("jobs").resolve(id).resolve("job.json");
+                saveProvenance(record,job);
+                try { jobs.download(id); fail(); } catch (DofFailure e) { assertEquals(409,e.status); }
+            }
+        }
+    }
+    @Test public void alteredManifestReceiptAndMixedLegacyMetadataAreRejected() throws Exception {
+        try (Fixture f = new Fixture(); NativeClientJobs jobs = f.open()) {
+            NativeClientJobs.Request request = request(jobs); jobs.submit(request,42);
+            NativeClientJobs.Job job = finished(jobs,request.requestId);
+            assertEquals("READY_FOR_TEST",job.state);
+            Path record = f.root.resolve("jobs").resolve(job.requestId).resolve("job.json");
+            job.manifestSha256 = String.join("",Collections.nCopies(64,"0"));
+            saveProvenance(record,job);
+            try { jobs.download(job.requestId); fail(); } catch (DofFailure e) { assertEquals(409,e.status); }
+            job.manifestVersion = 0;
+            saveProvenance(record,job);
+            try { jobs.download(job.requestId); fail(); } catch (DofFailure e) { assertEquals(409,e.status); }
+            // Pre-provenance records remain readable/downloadable under the existing archive hash,
+            // but never acquire the new version or claim newly verified provenance.
+            job.manifestSha256 = null; job.sourceBinding = null;
+            Files.delete(record.resolveSibling("provenance.json"));
+            assertTrue(Files.exists(jobs.download(job.requestId)));
+            assertEquals(0,jobs.read(job.requestId).manifestVersion);
+            assertNull(jobs.submit(request,42).sourceBinding);
+        }
+    }
     @Test public void changedInputsFailWithoutDownloadOrRetryingOldRequest() throws Exception {
         try(Fixture f=new Fixture();NativeClientJobs jobs=f.open()) {
             NativeClientJobs.Request request=request(jobs);
@@ -98,7 +166,7 @@ public class NativeClientJobsTest {
             NativeClientJobs.Request request=request(jobs);jobs.submit(request,42);
             NativeClientJobs.Job job=finished(jobs,request.requestId);assertEquals("READY_FOR_TEST",job.state);
             job.clientFormatVersion=0;
-            JSON.writeValue(f.root.resolve("jobs").resolve(job.requestId).resolve("job.json").toFile(),job);
+            saveHistoricalJob(f.root.resolve("jobs").resolve(job.requestId).resolve("job.json"),job);
             try{jobs.download(job.requestId);fail();}catch(DofFailure e){assertEquals(409,e.status);}
             try{jobs.submit(request,42);fail();}catch(DofFailure e){assertEquals(409,e.status);}
         }
@@ -111,7 +179,7 @@ public class NativeClientJobsTest {
                 Files.write(jobs.download(job.requestId),new byte[]{1,2,3});
                 try{jobs.download(job.requestId);fail();}catch(DofFailure e){assertEquals(409,e.status);}
             }
-            job.state="RUNNING";JSON.writeValue(f.root.resolve("jobs").resolve(job.requestId).resolve("job.json").toFile(),job);
+            job.state="RUNNING";saveHistoricalJob(f.root.resolve("jobs").resolve(job.requestId).resolve("job.json"),job);
             try(NativeClientJobs jobs=f.open()) { assertEquals("INTERRUPTED",jobs.read(job.requestId).state);try{jobs.download(job.requestId);fail();}catch(DofFailure e){assertEquals(409,e.status);} }
         }
     }

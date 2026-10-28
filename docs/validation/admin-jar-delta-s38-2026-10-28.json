@@ -1,0 +1,20 @@
+{
+  "targetBytes": 58443909,
+  "transferBytes": 259051,
+  "targetSha256": "6e1dfaf6170294800cc847c1eeebe2cb25db79f7b126ffe7bc8397e7b608769c",
+  "exactBytesMatch": true,
+  "sourceSHA256": "46ef109fb0caf0da253bf440c8458d36a0b994a825e78ff8d681f4750e6bac94",
+  "previousTransferBytes": 58443909,
+  "productionDeploymentTransferChanged": false,
+  "stage": "S38-local-transfer",
+  "date": "2026-10-28",
+  "purpose": "Reuse compressed dependency bytes across ZIP metadata changes without changing delta format",
+  "formatVersion": 1,
+  "unitTests": {
+    "passed": 3,
+    "failed": 0
+  },
+  "sameJarReconstructedByteExactly": true,
+  "originalWindowsToolStarted": false,
+  "completeReplacement": false
+}

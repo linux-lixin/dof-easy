@@ -52,7 +52,6 @@ public interface AccountDao {
             "    SELECT\n" +
             "        accounts.UID AS uid,\n" +
             "        accounts.accountname AS accountname,\n" +
-            "        accounts.password AS password,\n" +
             "        accounts.qq AS qq,\n" +
             "        accounts.vip AS vip,\n" +
             "        accounts.parent_uid AS parentUid,\n" +
@@ -67,7 +66,7 @@ public interface AccountDao {
             "            ON  login_account.m_id = d_taiwan.`accounts`.UID\n" +
             "    WHERE\n" +
             "        (parent_uid=#{parentUid} or UID=#{parentUid})\n" +
-            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE '%${account}%'</if>\n" +
+            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE CONCAT('%', #{account}, '%')</if>\n" +
             "        <if test=\"null != loginStatus\">AND login_account.login_status = #{loginStatus}</if>\n" +
             "        <if test=\"null != lastLoginDate\">AND login_account.last_login_date &gt;= #{lastLoginDate}</if>\n" +
             "        <if test=\"null != lastLoginDateEnd\">AND login_account.last_login_date &lt;= #{lastLoginDateEnd}</if>\n" +
@@ -91,7 +90,7 @@ public interface AccountDao {
             "            ON  login_account.m_id = d_taiwan.`accounts`.UID\n" +
             "    WHERE\n" +
             "        (parent_uid=#{parentUid} or UID=#{parentUid})\n" +
-            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE '%${account}%'</if>\n" +
+            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE CONCAT('%', #{account}, '%')</if>\n" +
             "        <if test=\"null != loginStatus\">AND login_account.login_status = #{loginStatus}</if>\n" +
             "        <if test=\"null != lastLoginDate\">AND login_account.last_login_date &gt;= #{lastLoginDate}</if>\n" +
             "        <if test=\"null != lastLoginDateEnd\">AND login_account.last_login_date &lt;= #{lastLoginDateEnd}</if>\n" +
@@ -108,7 +107,6 @@ public interface AccountDao {
             "    SELECT\n" +
             "        accounts.UID AS uid,\n" +
             "        accounts.accountname AS accountname,\n" +
-            "        accounts.password AS password,\n" +
             "        accounts.qq AS qq,\n" +
             "        accounts.vip AS vip,\n" +
             "        accounts.parent_uid AS parentUid,\n" +
@@ -123,7 +121,7 @@ public interface AccountDao {
             "            ON  login_account.m_id = d_taiwan.`accounts`.UID\n" +
             "    WHERE\n" +
             "        1=1\n" +
-            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE '%${account}%'</if>\n" +
+            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE CONCAT('%', #{account}, '%')</if>\n" +
             "        <if test=\"null != loginStatus\">AND login_account.login_status = #{loginStatus}</if>\n" +
             "        <if test=\"null != lastLoginDate\">AND login_account.last_login_date &gt;= #{lastLoginDate}</if>\n" +
             "        <if test=\"null != lastLoginDateEnd\">AND login_account.last_login_date &lt;= #{lastLoginDateEnd}</if>\n" +
@@ -146,7 +144,7 @@ public interface AccountDao {
             "            ON  login_account.m_id = d_taiwan.`accounts`.UID\n" +
             "    WHERE\n" +
             "        1=1\n" +
-            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE '%${account}%'</if>\n" +
+            "        <if test=\"null != account and '' != account\">AND accounts.accountname LIKE CONCAT('%', #{account}, '%')</if>\n" +
             "        <if test=\"null != loginStatus\">AND login_account.login_status = #{loginStatus}</if>\n" +
             "        <if test=\"null != lastLoginDate\">AND login_account.last_login_date &gt;= #{lastLoginDate}</if>\n" +
             "        <if test=\"null != lastLoginDateEnd\">AND login_account.last_login_date &lt;= #{lastLoginDateEnd}</if>\n" +

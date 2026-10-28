@@ -1,0 +1,283 @@
+{
+  "stage": "S29",
+  "date": "2026-10-28",
+  "purpose": "real cross-border rule configuration, independent material threshold, reconciliation and directional recovery",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "originalDefaultValuesVerified": false,
+  "realDeploymentVerified": true,
+  "nativeConsumerAcceptanceVerified": false,
+  "nativeGameplayVerified": false,
+  "implementationAndStaticEvidence": "docs/validation/admin-cross-border-s28-2026-10-28.json",
+  "build": {
+    "sourceCommit": "dff424be80758111ec1287f6b5d355240f494702",
+    "productionClasses": 314,
+    "allClassesByteMatchStandardMavenCompile": true,
+    "classesMatchPackagedJar": true,
+    "keysAndTestsExcluded": true,
+    "appSHA256": "c649b3d227418297bb39210e015e2d8c727af81f252be83b41b2498dbfbd22a8",
+    "standardMaven": "/tmp/dof-admin-s28-cross-border-maven-final.log",
+    "sealedSQL": "/tmp/dof-admin-s28-cross-border-db/run.json",
+    "frontendBuildReused": "S26; all tracked frontend source/configuration unchanged",
+    "completeReplacement": false
+  },
+  "verificationScope": "test-owned cross-border configuration and authenticated frozen-history rollback; no player ownership transfer/material debit",
+  "rollbackCompatibility": {
+    "originalOldReaderZeroHistorySupported": false,
+    "initialRollbackFailedAndReturnedToS29": true,
+    "frozenSnapshotRoutes": 17,
+    "liveBackendAdministratorAuthorization": true,
+    "source": "scripts/dof/rollback_receipts_proxy.py",
+    "unitChecksPassed": 4,
+    "liveCurrentStateNotFrozen": true,
+    "buildAttemptsPreserved": {
+      "v1": "import rewrite failure before proxy change",
+      "v2": "reload-readiness probe saw old 400 before write barrier active; proxy restored",
+      "v3": "Dockerfile image-ID source resolution failed; proxy restored",
+      "v4": "local pinned base tag and readiness verified; build and live rollback passed"
+    },
+    "rendererByteMatchesDeployedProxy": true,
+    "rendererSHA256": "fe8c68a0b5f86afe4ce27501261fedbd8ed10dd41ddf037deaa71c98a1596178"
+  },
+  "realServer": {
+    "deployment": {
+      "sourceCommit": "dff424be80758111ec1287f6b5d355240f494702",
+      "adminImage": "sha256:152dd09280fd58a23596025b059617c7d0eb24c6de3fb116be066e6a04e0103c",
+      "adminTag": "dof-admin-replacement:20261028-s29-candidate",
+      "appSHA256": "c649b3d227418297bb39210e015e2d8c727af81f252be83b41b2498dbfbd22a8",
+      "adminPort": 18080,
+      "adminHttpStatus": 200,
+      "anonymousBackendStatus": 401,
+      "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+      "gameNotRecreatedDuringAdminDeployment": true,
+      "gameStartedAt": "2026-10-27T11:23:40.630436627Z",
+      "adminPersistentKeysUnchanged": true,
+      "modelOnlyAdminImageChanged": true,
+      "backup": "/opt/dof-easy/.dof-easy/admin-replacement/20261028-s29-release/before-admin",
+      "testWalletBefore": 37,
+      "dedicatedTestUid": 6,
+      "acceptancePassed": true,
+      "acceptanceScope": "real native cross-border rule configuration lifecycle, committed reply loss, conflict refusal, exact recovery and guarded old-reader limitation; no gameplay claim",
+      "completeReplacement": false
+    },
+    "phase": {
+      "phase": "DEPLOYED_CROSS_BORDER_RULE_CONFIGURATION_VERIFIED_GAMEPLAY_PENDING",
+      "sourceCommit": "dff424be80758111ec1287f6b5d355240f494702",
+      "image": "sha256:152dd09280fd58a23596025b059617c7d0eb24c6de3fb116be066e6a04e0103c",
+      "updatedAt": 1793140655.5407763,
+      "completeReplacement": false
+    },
+    "browser": {
+      "passed": true,
+      "mockedApis": false,
+      "testCode": 2147483001,
+      "initialRows": 0,
+      "finalRows": 0,
+      "zeroDefaultActuallyCreated": false,
+      "realRuleConfigurationWrittenAndRestored": true,
+      "defaultPreviewId": "58325a0d-c8ff-4f95-8020-5419cc825af2",
+      "defaultCancelId": "a4fc1608-430a-4503-9680-a375fe70491a",
+      "createId": "11ad0a0b-9c91-49f3-9b0b-8f09be4c4ddb",
+      "updateId": "16596f8b-b0c1-440c-8b80-d4fb50fbf3e8",
+      "staleId": "4658e9e4-3354-4af4-a4bb-f9a482e3527e",
+      "staleCancelId": "2a232319-173b-4c6c-a139-4b0739a9df14",
+      "restoreUpdateId": "1c634f55-2e43-439d-a7a9-859f411f91c8",
+      "deleteId": "80f34038-308e-4039-8ab1-e8be4162c913",
+      "restoreDeleteId": "924240ab-1a12-4124-9f48-4b37de4ec906",
+      "restoreCreateId": "56f597c3-5ce1-4c5f-94d8-faa02269dc57",
+      "responseLoss": "browser withholds actual committed replies; not a physical outage",
+      "originalWindowsToolStarted": false,
+      "nativeGameplayVerified": false,
+      "nativeConsumerAcceptance": false,
+      "completeReplacement": false,
+      "checks": [
+        "code-zero default preview survives reload; actual cancellation reply loss reconciles without creating the default rule",
+        "real test-owned rule creation persists; withheld reply and reload replay the original ID without another insert",
+        "second preview from the same revision cannot overwrite the committed rule and is explicitly cancelled",
+        "history starts a separately previewed restoration; withheld reply replays its own ID and restores the original material pair and independent inventory threshold",
+        "delete, restore-deleted and undo-test-create all persist; initial empty rule table is restored without database rollback",
+        "anonymous, malformed paired costs and reserved-field tampering are refused before preview creation; dedicated wallets unchanged and zero page errors"
+      ],
+      "pageErrors": 0
+    },
+    "readRegression": {
+      "passed": true,
+      "mockedApis": false,
+      "realDeploymentReadAndRefusalVerified": true,
+      "batchReadAndRefusalVerified": true,
+      "receiptControlReadAndRefusalVerified": true,
+      "batchControlReadAndRefusalVerified": true,
+      "cdkReadAndRefusalVerified": true,
+      "actualMailIssued": false,
+      "actualPlayerReceiptVerified": false,
+      "mailComposeUiOnRealCharacterVerified": false,
+      "batchComposeUiOnRealTargetsVerified": false,
+      "checks": [
+        "real administrator login and current mail protocol catalog with native gates pending",
+        "anonymous mail management rejected",
+        "legacy unversioned sender rejected before native issuance",
+        "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+        "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+        "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+        "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+        "real purpose-scoped CDK captcha is a PNG with no-store caching",
+        "real administrator CDK records and public redemption page load without persisting secret inputs",
+        "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+        "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+        "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+        "real batch history modal reads backend and refuses preview with no selected recipients",
+        "real deployed postal records page loads through actual backend"
+      ],
+      "pageErrors": 0,
+      "targetUid": 6,
+      "dedicatedCharacterCount": 0,
+      "balanceUnchanged": 37
+    },
+    "rollback": {
+      "passed": true,
+      "oldImage": "sha256:6ce8cc7cbb340a0d76b091f38e15d5c09d145b552d56f174382d48a4ace0cfa8",
+      "oldAppSHA256": "0892a59f7bff11ae8713ecea5a3a4f3d2b34bf3c48b61091786d2917124f6e7a",
+      "guardSHA256": "2d41baf3f6d436fd07821c8496277dbe605872e6d3fcaa1d03478e7de12f5583",
+      "blockedRequests": [
+        "PUT /api/v1/admin/activities/cross-border",
+        "DELETE /api/v1/admin/activities/cross-border",
+        "POST /api/v1/admin/activities/cross-border/validate",
+        "POST /api/v1/admin/activities/cross-border/history/11ad0a0b-9c91-49f3-9b0b-8f09be4c4ddb/restore",
+        "POST /api/v1/admin/activities/cross-border/history/58325a0d-c8ff-4f95-8020-5419cc825af2/cancellations",
+        "PATCH /api/v1/admin/activities/cross-border",
+        "PUT //api/v1/admin/activities/cross-border",
+        "PUT /api/v1/admin/activities/cross-border?retry=1"
+      ],
+      "oldRuleListReadable": true,
+      "originalOldReaderZeroHistorySupported": false,
+      "frozenZeroHistoryBridgeVerified": true,
+      "liveAdminAuthorizationForFrozenReadsVerified": true,
+      "anonymousHeadAndInvalidTokenDenied": true,
+      "internalAuthorizationRouteNotPublic": true,
+      "frozenRoutesVerified": 17,
+      "firstFailedRollbackPreserved": true,
+      "oldCrossBorderModuleRemainedReadOnly": true,
+      "newCrossBorderHistoryRecoveredAfterRecreation": true,
+      "returnedToCandidate": true,
+      "allBusinessReceiptsPreserved": true,
+      "initialEmptyCrossBorderTablePreserved": true,
+      "sixNativeFieldsUnchanged": true,
+      "modelAndEnvironmentRestored": true,
+      "gameContainerNotRecreated": true,
+      "scope": "old JAR unchanged; authenticated frozen historical receipts only, live current-state inspection requires S29; all business mutations blocked",
+      "completeReplacement": false
+    },
+    "firstRollbackFailure": {
+      "phase": "FAILED_RETURNED_TO_CANDIDATE",
+      "cancelledRequestId": "58325a0d-c8ff-4f95-8020-5419cc825af2",
+      "businessWritesAllowedOnOldImage": false
+    },
+    "compatibilityImage": {
+      "tag": "dof-admin-replacement:20261028-s29-rollback-receipts-readonly",
+      "image": "sha256:6ce8cc7cbb340a0d76b091f38e15d5c09d145b552d56f174382d48a4ace0cfa8",
+      "oldAppSHA256": "0892a59f7bff11ae8713ecea5a3a4f3d2b34bf3c48b61091786d2917124f6e7a",
+      "guardSHA256": "2d41baf3f6d436fd07821c8496277dbe605872e6d3fcaa1d03478e7de12f5583",
+      "originalGuardSHA256": "6171aae17e626f65c82c525107d2a9f088ea3a7d32040af14ec02af53220a282",
+      "manifestSHA256": "3d3788d353dd54ed44c6d36e346f2ac4f44b0a5cae91509461993d9be35b03b0",
+      "snapshotRoutes": 17,
+      "sourceCommit": "dff424be80758111ec1287f6b5d355240f494702",
+      "originalOldReaderZeroHistorySupported": false,
+      "frozenHistoryRequiresLiveAdminAuthorization": true,
+      "publicWriteIsolationVerified": true,
+      "candidateWriteBarrierEstablished": true
+    },
+    "finalVerification": {
+      "passed": true,
+      "initialThreeEquipmentRuleTablesRestored": true,
+      "initialFailedAttemptAndRecoveryReceiptsPreserved": true,
+      "previousTwentyInheritanceAndRecoveryReceiptsPreserved": true,
+      "allTenReceiptsRetainedWithOriginalActorAndExpectedState": true,
+      "actualFiveFieldRuleSnapshotsVerified": true,
+      "cancelledZeroDefaultNeverCreated": true,
+      "noUnresolvedEquipmentRuleOperations": true,
+      "sixNativeFieldsUnchangedByteExactly": true,
+      "entireNativeConfigurationDataUnchanged": true,
+      "oldImageIngressWriteIsolationVerified": true,
+      "originalOldReaderZeroHistorySupported": false,
+      "authenticatedFrozenZeroHistoryBridgeVerified": true,
+      "firstRollbackFailurePreserved": true,
+      "temporaryCandidateWriteBarrierReleased": true,
+      "newCrossBorderHistoryRecoveredAfterRecreation": true,
+      "gamePvfConfigurationAndRuntimeIdentityUnchanged": true,
+      "runtimeStatusOnlyHeartbeatTimestampChanged": true,
+      "walletsAndPriorPausedCodeUnchanged": true,
+      "persistentIdentityKeysUnchanged": true,
+      "baseReserve2GiBMaintained": true,
+      "nativeConsumerAcceptance": false,
+      "nativeGameplayVerified": false,
+      "originalWindowsToolStarted": false,
+      "completeReplacement": false
+    },
+    "processes": {
+      "deploy": {
+        "pid": 215392,
+        "exited": true
+      },
+      "cross-border-browser": {
+        "pid": 216685,
+        "exited": true
+      },
+      "read-browser": {
+        "pid": 217060,
+        "exited": true
+      },
+      "rollback-drill": {
+        "pid": 217523,
+        "exited": true
+      },
+      "rollback-receipts-build": {
+        "pid": 219717,
+        "exited": true
+      },
+      "rollback-receipts-build-v2": {
+        "pid": 219895,
+        "exited": true
+      },
+      "rollback-receipts-build-v3": {
+        "pid": 220534,
+        "exited": true
+      },
+      "rollback-receipts-build-v4": {
+        "pid": 221328,
+        "exited": true
+      },
+      "rollback-receipts-drill": {
+        "pid": 222230,
+        "exited": true
+      }
+    },
+    "compatibilityBuildAttempts": {
+      "rollback-receipts-build": {
+        "phase": "FAILED_CANDIDATE_PROXY_RESTORED",
+        "pid": 219717
+      },
+      "rollback-receipts-build-v2": {
+        "phase": "FAILED_CANDIDATE_PROXY_RESTORED",
+        "pid": 219895
+      },
+      "rollback-receipts-build-v3": {
+        "phase": "FAILED_CANDIDATE_PROXY_RESTORED",
+        "pid": 220534
+      },
+      "rollback-receipts-build-v4": {
+        "phase": "COMPLETED_CANDIDATE_READONLY_AWAITING_DRILL",
+        "pid": 221328
+      }
+    }
+  },
+  "limitations": [
+    "Actual native material checks/debit, equipment destination, failure compensation and client UI remain unverified.",
+    "New reserved value and inventory-threshold defaults are still based on static INSERT-pool evidence; original-tool save-path/default parity awaits user manual review.",
+    "The announcement column remains read-only and is not advertised as a verified broadcast switch.",
+    "Original full-table import/export, bulk clear, independent DP2 voucher and other baseline operations remain pending.",
+    "Reply withholding occurs at the browser after real HTTP commit; physical network/database/disk failures are not claimed.",
+    "Original S27 cannot read cross-border code-zero history (400); only its guarded derivative with authenticated frozen-history bridge is accepted. Current-state inspection and business writes require S29.",
+    "The runtime capability catalog is frozen at source dff424b; evidence-only ledger changes do not alter the running image."
+  ]
+}

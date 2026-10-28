@@ -1,0 +1,176 @@
+{
+  "stage": "S23",
+  "date": "2026-10-28",
+  "purpose": "native equipment inheritance rule management using existing activity operation protocol",
+  "completeReplacement": false,
+  "originalWindowsToolStarted": false,
+  "originalToolEquivalenceVerified": false,
+  "realDeploymentVerified": false,
+  "serverAccessed": false,
+  "nativeConsumerAcceptanceVerified": false,
+  "liveDeploymentUnchanged": "S22 / fe2091c / admin 18080",
+  "sourceEvidence": {
+    "sourceToolSHA256": "c109b4484fc1440b5927f85b2cee2587285fdb0b8b61447a29bd803bb5535e89",
+    "existingHistoricalImageReused": true,
+    "originalProgramStartedThisRun": false,
+    "imageSectionSHA256": {
+      ".text": "3d065c8d8cea151a0a1fc39e65ee3b950b27986a9dd69fd79bb2cdb5441209ee",
+      ".rdata": "50a3bde93ff3e94d8f9019066470edddb6d2ec125ab2e10f55f461aa095e2edd"
+    },
+    "runtimePluginSHA256": "44b1481d503083227a298fb47b5d0f0c4b6a5bb4b4e8d07dfa88e46241a8a42b",
+    "fields": {
+      "code": "equipment code; zero fallback",
+      "restitution": "slash-separated material item IDs, maximum five",
+      "Return_quantity": "paired material quantities",
+      "differ_lv": "maximum absolute equipment-level difference"
+    },
+    "nativeReaders": {
+      "materialWindow": "0x4ace0",
+      "executor": "0x83250",
+      "levelDifferenceCheck": "0x83ac5..0x83ade",
+      "dispatcherToExecutor": "0xf90b7",
+      "dispatcherToMaterialWindow": "0xf90fa",
+      "slashDelimiter": "0x82e4b"
+    },
+    "guiEquivalenceVerified": false,
+    "nativeRuntimeConsumptionVerified": false,
+    "controlStringsMatchedDirectlyInsidePinnedRdataRecords": true
+  },
+  "implementation": {
+    "operation": "feature-024-02",
+    "configurationTable": "dof_native.inheritance",
+    "fixedFields": [
+      "code",
+      "restitution",
+      "Return_quantity",
+      "differ_lv"
+    ],
+    "executor": "existing native plugin; Frida voucher remains independent",
+    "newParallelPlayerMutationOrRewardFlow": false,
+    "zeroCodeFallbackSupported": true,
+    "maxCostPairs": 5,
+    "costListsPreserveWireText": true,
+    "unchangedOpaqueLegacyCostsPreserved": true,
+    "trustedSnapshotRestorationPreservesOriginalText": true,
+    "pairedCostRestoreConflictGuard": true,
+    "newWriteRequiresDurablePreviewAndOriginalRequestId": true,
+    "freshAdministratorCheckedUnderAccountReadLock": true,
+    "knownNativeColumnOrderUnsignedTypesAndPrimaryKeyRequired": true,
+    "unknownNativeOrJournalTriggersRejected": true,
+    "foreignKeysRejected": true,
+    "failedLockValidationCleansLocks": true,
+    "failedUnlockDiscardsPhysicalConnection": true,
+    "originalNativeImportExportFormatVerified": false
+  },
+  "verification": {
+    "standardMaven": {
+      "command": "mvn -Dmaven.test.skip=false test",
+      "passed": true,
+      "total": 457,
+      "passedCases": 190,
+      "skipped": 267,
+      "failures": 0,
+      "errors": 0,
+      "log": "/tmp/dof-admin-s23-maven-candidate.log",
+      "conditionalSkipsCountAsPass": false
+    },
+    "sealedMySQL": {
+      "state": "passed",
+      "expectedTotal": 128,
+      "expectedNativeInheritanceCases": 8,
+      "fixture": "synthetic rule rows and disposable native table definitions; no private original-tool fixture replaced",
+      "junitPassed": true,
+      "result": {
+        "passed": true,
+        "contractTests": 14,
+        "databaseVersion": "5.6.51",
+        "generatedMailReceiptContractTests": 3,
+        "managedPostalContractTests": 12,
+        "postalBatchContractTests": 11,
+        "postalReceiptControlContractTests": 7,
+        "postalBatchControlContractTests": 8,
+        "cdkContractTests": 13,
+        "cdkInventoryContractTests": 13,
+        "pointsContractTests": 8,
+        "activityPreviewControlContractTests": 10,
+        "scriptReleaseContractTests": 21,
+        "nativeInheritanceContractTests": 8,
+        "totalContractTests": 128,
+        "realServiceSqlFaultAndConcurrencyGatePassed": true,
+        "fixtureSchemasRemoved": true,
+        "originalToolEquivalenceVerified": false,
+        "realDeploymentVerified": false,
+        "actualPlayerReceiptVerified": false
+      },
+      "passed": true,
+      "environmentIntegrity": {
+        "completed": true,
+        "exitCode": 0,
+        "inputsUnchanged": true,
+        "environmentUnchanged": true,
+        "evidenceValid": true,
+        "network": "private namespace; no routes or external interfaces",
+        "rootReadOnly": true,
+        "inputsReadOnly": true
+      }
+    },
+    "frontend": {
+      "command": "npm run build",
+      "passed": true
+    },
+    "inheritanceBrowser": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeGameplayVerified": false,
+      "syntheticWrites": 1,
+      "checks": [
+        "real field catalog renders code-zero default, material costs and five-group guidance",
+        "preview freezes exact paired cost text and code zero; one confirmed synthetic write updates the row",
+        "dedicated code creation has an independent request ID and explicit empty cost pair",
+        "unverified cross-border rules remain read-only while inheritance retains its own pending preview"
+      ],
+      "pageErrors": 0
+    },
+    "activityBrowserRegression": {
+      "passed": true,
+      "mockedApis": true,
+      "realDeploymentVerified": false,
+      "originalToolEquivalenceVerified": false,
+      "nativeWritesInMock": 2,
+      "checks": [
+        "preview freezes exact values and UUID before any native submission",
+        "lost native response retains UUID and freezes inputs; storage contains identifiers only",
+        "another lookup cannot overwrite an unresolved operation",
+        "reload reads committed receipt and clears the guard without replaying configuration writes",
+        "independent activity can be edited while the original activity keeps its pending UUID",
+        "section switch and reload recover exact original preview, with no invented UUID or values",
+        "lost cancellation reply reconciles same control ID; cancelled original cannot later write",
+        "confirmed missing preview with no native submit can explicitly return to editing",
+        "schema failures remain visible rather than successful empty records",
+        "permission failures remain visible"
+      ],
+      "pageErrors": 0
+    },
+    "initialBrowserAttempt": {
+      "passed": false,
+      "reason": "test locator omitted the existing read-only suffix; corrected to the actual option text",
+      "productionBug": false
+    }
+  },
+  "limitations": [
+    "No real isolated-server inheritance rule was changed or deployed in this batch.",
+    "Runtime material debit, inheritance, refund, online conflicts, game UI and item effects remain unverified.",
+    "Original-tool GUI, defaults and native import/export comparison remain pending user manual review.",
+    "Cross-border and recovery fields with unconfirmed semantics remain read-only and their complete operations stay in scope.",
+    "Local synthetic SQL and mocked APIs do not count as original-tool or gameplay equivalence."
+  ],
+  "build": {
+    "appSHA256": "7f5f04520de31a7e7bc9ace217e31285c234e5e50daaf9ddd67580750aaadce4",
+    "output": ".dof-easy/admin-replacement-delivery-20261028-s23-inheritance",
+    "productionClassesVerified": 311,
+    "keysAndTestsExcluded": true,
+    "realDeploymentVerified": false
+  }
+}

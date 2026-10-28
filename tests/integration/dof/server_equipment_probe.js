@@ -2,7 +2,7 @@
 // of nested Interceptor listeners. All original instructions still execute.
 (function () {
     var started=false,active=false,packets=[],messages=[],messageBytes=[],headers=[],taps=[];
-    var result={passed:false,playerLoggedIn:false,actualPickupVerified:false,clientDisplayVerified:false};
+    var result={passed:false,playerLoggedIn:false,actualPickupVerified:false,clientDisplayVerified:false,nonTextPayloads:[]};
     var user=null,saved=null,constructed=false,baseline=0;
     function native(at,ret,args){return new NativeFunction(ptr(at),ret,args,{abi:'sysv',exceptions:'propagate'});}
     function hex(at,n){return Array.prototype.map.call(new Uint8Array(at.readByteArray(n)),function(b){return ('0'+b.toString(16)).slice(-2);}).join('');}
@@ -70,7 +70,15 @@
         try {
             observe('0x086c9184','5589e583ec28',function(s){packets.push({minimumState:s.add(12).readS32(),world:!s.add(4).readPointer().isNull()});});
             observe('0x080cb8fc','5589e583ec18',function(s){headers.push([s.add(8).readS32(),s.add(12).readS32()]);});
-            observe('0x0811df08','5589e583ec18',function(s){var n=s.add(12).readS32();if(n>0&&n<1024){var p=s.add(8).readPointer();messages.push(p.readUtf8String(n));messageBytes.push(Array.prototype.slice.call(new Uint8Array(p.readByteArray(n))));}});
+            observe('0x0811df08','5589e583ec18',function(s){
+                var n=s.add(12).readS32();if(n<=0||n>=1024)return;
+                var p=s.add(8).readPointer(),raw=Array.prototype.slice.call(new Uint8Array(p.readByteArray(n))),text;
+                // put_binary also carries non-text packet fields. Preserve their
+                // bytes without turning a decoder exception into a script error.
+                // Missing either expected announcement still fails finish().
+                try{text=p.readUtf8String(n);}catch(e){result.nonTextPayloads.push({length:n,bytes:raw});return;}
+                messages.push(text);messageBytes.push(raw);
+            });
             var dm=native('0x080cc19b','pointer',[])(),find=native('0x0835fa32','pointer',['pointer','int']);
             var rarity=native('0x080f12d6','int',['pointer']),stack=native('0x080f12fa','uint8',['pointer']);
             // IDs located by the prior diagnostic scan, always validated against
