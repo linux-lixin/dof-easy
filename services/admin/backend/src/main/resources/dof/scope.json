@@ -3176,12 +3176,13 @@
             "docs/validation/admin-native-charts-identity-s39-2026-10-28.json",
             "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
             "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json",
-            "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json"
+            "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json",
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
               "location": "dof_native.game_charts_config / game_charts_code",
-              "status": "local_rule_management_and_independent_entry_guards_implemented_real_deployment_pending",
+              "status": "real_configuration_write_restore_and_admin_recreation_verified_native_effect_pending",
               "fieldsEditable": [
                 "min_zhanli",
                 "jiangli_day",
@@ -3198,8 +3199,13 @@
               "newRewardExecutor": false,
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
-                "docs/validation/admin-native-charts-s36-2026-10-28.json"
-              ]
+                "docs/validation/admin-native-charts-s36-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+              ],
+              "realDeploymentReadAndRefusalVerified": true,
+              "realConfigurationWriteAndRestoreVerified": true,
+              "realAdminRecreationVerified": true,
+              "originalToolEquivalenceVerified": false
             }
           ]
         },
@@ -3221,12 +3227,13 @@
             "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
             "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
             "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json",
-            "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json"
+            "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json",
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
               "location": "dof_native.game_charts_config / game_charts_code",
-              "status": "local_independent_ranking_and_worship_write_guards_hardened_real_deployment_pending",
+              "status": "real_deployed_independent_entry_guards_verified_native_effect_pending",
               "fieldsEditable": [],
               "fieldsPreserved": [
                 "id",
@@ -3238,13 +3245,16 @@
               "newRewardExecutor": false,
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
-                "docs/validation/admin-native-charts-s36-2026-10-28.json"
+                "docs/validation/admin-native-charts-s36-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
               ],
-              "newConfigurationWritesEnabled": false
+              "newConfigurationWritesEnabled": false,
+              "realDeploymentReadAndRefusalVerified": true,
+              "originalToolEquivalenceVerified": false
             },
             {
               "location": "dof_native.game_charts_code",
-              "status": "local_reward_crud_and_targeted_restore_verified_deployment_pending",
+              "status": "real_configuration_write_restore_and_admin_recreation_verified_native_effect_pending",
               "fieldsEditable": [
                 "top_index",
                 "code_data",
@@ -3259,8 +3269,13 @@
               "newRewardExecutor": false,
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
-                "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
-              ]
+                "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+              ],
+              "realDeploymentReadAndRefusalVerified": true,
+              "realConfigurationWriteAndRestoreVerified": true,
+              "realAdminRecreationVerified": true,
+              "originalToolEquivalenceVerified": false
             }
           ]
         },
@@ -3278,12 +3293,13 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-native-charts-s36-2026-10-28.json"
+            "docs/validation/admin-native-charts-s36-2026-10-28.json",
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
               "location": "dof_native.game_charts_config / game_charts_code",
-              "status": "local_rule_management_and_independent_entry_guards_implemented_real_deployment_pending",
+              "status": "real_configuration_write_restore_and_admin_recreation_verified_native_effect_pending",
               "fieldsEditable": [
                 "jiangli_day",
                 "jiangli_hour"
@@ -3299,10 +3315,15 @@
               "newRewardExecutor": false,
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
-                "docs/validation/admin-native-charts-s36-2026-10-28.json"
+                "docs/validation/admin-native-charts-s36-2026-10-28.json",
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
               ],
               "nativeFormulaImplemented": false,
-              "nativeSettlementAcceptanceVerified": false
+              "nativeSettlementAcceptanceVerified": false,
+              "realDeploymentReadAndRefusalVerified": true,
+              "realConfigurationWriteAndRestoreVerified": true,
+              "realAdminRecreationVerified": true,
+              "originalToolEquivalenceVerified": false
             }
           ]
         },
