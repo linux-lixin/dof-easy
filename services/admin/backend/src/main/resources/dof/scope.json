@@ -3171,7 +3171,9 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-native-charts-s36-2026-10-28.json"
+            "docs/validation/admin-native-charts-s36-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s38-2026-10-28.json",
+            "docs/validation/admin-native-charts-identity-s39-2026-10-28.json"
           ],
           "implementationSubsets": [
             {

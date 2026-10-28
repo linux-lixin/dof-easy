@@ -39,7 +39,7 @@ public class ChartsContracts {
    com.aiyi.game.dnfserver.service.dof.NativeRecoveryContractTest.class,
    com.aiyi.game.dnfserver.service.dof.NativeCrossBorderContractTest.class};
   Result result=core.run(tests);Map<String,Object> report=new LinkedHashMap<>();
-  boolean passed=result.wasSuccessful()&&result.getRunCount()==44&&skipped[0]==0&&result.getIgnoreCount()==0;
+  boolean passed=result.wasSuccessful()&&result.getRunCount()==45&&skipped[0]==0&&result.getIgnoreCount()==0;
   report.put("passed",passed);report.put("tests",result.getRunCount());report.put("failures",result.getFailureCount());
   report.put("assumptionSkips",skipped[0]);report.put("ignored",result.getIgnoreCount());
   new ObjectMapper().writeValue(new File("/output/contracts.json"),report);
@@ -55,7 +55,7 @@ run=subprocess.run(['/inputs/java/bin/java','-Dnet.bytebuddy.experimental=true',
     '-cp',classpath,'ChartsContracts'],capture_output=True,text=True,timeout=240)
 Path('/output/junit.log').write_text(run.stdout+'\n'+run.stderr)
 summary=json.loads(Path('/output/contracts.json').read_text())
-summary.update(databaseVersion=sql('SELECT VERSION()'),nativeChartsTests=8,nativeChartsRewardsTests=12,equipmentRegressionTests=24,
+summary.update(databaseVersion=sql('SELECT VERSION()'),nativeChartsTests=9,nativeChartsRewardsTests=12,equipmentRegressionTests=24,
     fixtureSchemasRemoved=sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME IN ('dof_native','d_taiwan','taiwan_cain','taiwan_cain_2nd')")=='0',
     realServiceSql=True,syntheticDataOnly=True,serverAccessed=False,nativeGameplayVerified=False,completeReplacement=False)
 Path('/output/result.json').write_text(json.dumps(summary,indent=2)+'\n')

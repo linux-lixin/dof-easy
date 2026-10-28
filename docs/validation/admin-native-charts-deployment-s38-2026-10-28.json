@@ -1,0 +1,123 @@
+{
+  "finalVerification": {
+    "passed": true,
+    "verificationScope": "deployment and existing management regression; native chart preview acceptance failed and requires named-index adapter",
+    "nativeChartPreviewAccepted": false,
+    "sourceCommit": "489c3f38ae776b8a4d74420b2cd8c36539fc359d",
+    "adminImage": "sha256:90300b0c38278f31f93d654caa34a803b124d23aa9f1d4cfb09e74e82044a1db",
+    "appSHA256": "6e1dfaf6170294800cc847c1eeebe2cb25db79f7b126ffe7bc8397e7b608769c",
+    "adminPort": 18080,
+    "realBrowserChecks": 14,
+    "pageErrors": 0,
+    "all633PriorReceiptsByteHashUnchanged": true,
+    "noUnresolvedActivityOperations": true,
+    "nativeRulesAndRewardsUnchanged": true,
+    "protectedWalletsNativeConfigRewardsEquipmentTablesAndPausedCodeUnchanged": true,
+    "gamePvfConfigurationIdentityUnchanged": true,
+    "adminPersistentKeysUnchanged": true,
+    "deploymentOnlyAdminImageChanged": true,
+    "proxyTemplatesAndExpandedConfigVerified": true,
+    "baseReserve2GiBMaintained": true,
+    "configurationWritesPerformed": false,
+    "rollbackImageBuilt": true,
+    "rollbackReaderForNewReceiptsVerified": false,
+    "originalWindowsToolStarted": false,
+    "originalToolEquivalenceVerified": false,
+    "nativeConsumerAcceptanceVerified": false,
+    "nativeGameplayVerified": false,
+    "completeReplacement": false
+  },
+  "regressionBrowser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentReadAndRefusalVerified": true,
+    "batchReadAndRefusalVerified": true,
+    "receiptControlReadAndRefusalVerified": true,
+    "batchControlReadAndRefusalVerified": true,
+    "cdkReadAndRefusalVerified": true,
+    "actualMailIssued": false,
+    "actualPlayerReceiptVerified": false,
+    "mailComposeUiOnRealCharacterVerified": false,
+    "batchComposeUiOnRealTargetsVerified": false,
+    "checks": [
+      "real administrator login and current mail protocol catalog with native gates pending",
+      "anonymous mail management rejected",
+      "legacy unversioned sender rejected before native issuance",
+      "actual native mail schema readable; nonexistent recipient rejected and no mail history fabricated",
+      "real metadata receipt routes, anonymous denial, missing operation ID and nonexistent source refusal without creating receipts",
+      "real batch control routes reject anonymous, missing-ID and nonexistent-parent requests without changing any task",
+      "real CDK history permission, legacy unversioned use refusal and same-ID missing receipt lookup without issuance",
+      "real purpose-scoped CDK captcha is a PNG with no-store caching",
+      "real administrator CDK records and public redemption page load without persisting secret inputs",
+      "dedicated test account has no real character; live issuance and consumption explicitly remain pending",
+      "existing recharge receipts retained and dedicated balance unchanged without any recharge request",
+      "real batch routes, anonymous rejection, empty selection and unversioned start refusal",
+      "real batch history modal reads backend and refuses preview with no selected recipients",
+      "real deployed postal records page loads through actual backend"
+    ],
+    "pageErrors": 0,
+    "targetUid": 6,
+    "dedicatedCharacterCount": 0,
+    "balanceUnchanged": 37
+  },
+  "firstFailure": {
+    "reason": "acceptance runner assumed JWT, but LoginController returns a 32-character opaque token",
+    "productionCodeChanged": false,
+    "configurationWritesPerformed": false,
+    "logSHA256": "f96fdf68dfaeea55569e46f492f38f12e263d86f0bafaf227cce2228f78968dc"
+  },
+  "secondFailure": {
+    "reason": "known live game_charts_config uses named UNIQUE key game_charts_config_pk(id), while the adapter required PRIMARY",
+    "configurationWritesPerformed": false,
+    "nativeChartAcceptancePassed": false,
+    "logSHA256": "7a432f6ddff6bc68c8d942bff14b5fffc795689db3e9f768584b6b5e2a9d30c6"
+  },
+  "rollbackBuild": {
+    "tag": "dof-admin-replacement:20261028-s38-rollback-readonly",
+    "image": "sha256:11ed40a5d8b95c653b8fb988a8603b089fc305bdafe9244981c864b4a52a33e9",
+    "oldAppSHA256": "1982fb0ab8f80cb9c3e134f7c51a42a6b29b7dcbab904e973897d7dfafb3c2bb",
+    "guardSHA256": "00a169acabcd1e2181c1cf1f957cf726fd4a4c4bebd2a84b2cd4ae533f157862",
+    "publicWriteIsolationVerified": false
+  },
+  "stage": "S38",
+  "date": "2026-10-28",
+  "buildIdentity": {
+    "sourceCommit": "489c3f38ae776b8a4d74420b2cd8c36539fc359d",
+    "appSHA256": "6e1dfaf6170294800cc847c1eeebe2cb25db79f7b126ffe7bc8397e7b608769c",
+    "baseAppSHA256": "1982fb0ab8f80cb9c3e134f7c51a42a6b29b7dcbab904e973897d7dfafb3c2bb",
+    "mainCompileClassFiles": 334,
+    "productionClassesPackaged": 333,
+    "allPackagedClassesMatchStandardMaven": true,
+    "classesMatchPackagedJar": true,
+    "keysAndTestsExcluded": true,
+    "excludedMainSampleClass": "com/aiyi/game/dnfserver/test/Test.class",
+    "completeReplacement": false
+  },
+  "liveIndexes": [
+    {
+      "table": "game_charts_config",
+      "index": "game_charts_config_pk",
+      "column": "id",
+      "sequence": 1,
+      "unique": true,
+      "sqlPrimaryKey": false
+    },
+    {
+      "table": "game_charts_code",
+      "index": "PRIMARY",
+      "column": "top_index",
+      "sequence": 1,
+      "unique": true,
+      "sqlPrimaryKey": true
+    }
+  ],
+  "nativeChartAcceptancePassed": false,
+  "namedIndexCorrectionPending": true,
+  "remaining": [
+    "Known named-unique-key layout must pass service SQL and deployment acceptance before native charts writing is considered available.",
+    "Controlled configuration write/recovery, current rollback-reader compatibility and native gameplay remain unverified.",
+    "Original-tool manual comparison and all other unfinished work packages retain their existing scope."
+  ],
+  "originalWindowsToolStarted": false,
+  "completeReplacement": false
+}

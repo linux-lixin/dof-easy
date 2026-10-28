@@ -50,6 +50,17 @@ public class NativeChartsContractTest {
             try{return m.invoke(c,args);}catch(InvocationTargetException e){throw e.getCause();}
         });});ReflectionTestUtils.setField(access,"dataSource",faulty);
     }
+    @Test public void verifiedNamedUniqueIdentityWorksWithoutInventingAPrimaryKey()throws Exception {
+        sql("ALTER TABLE dof_native.game_charts_config DROP PRIMARY KEY,ADD UNIQUE KEY game_charts_config_pk(id)");
+        ActivityConfigService.Edit e=edit("charts");e.values.put("min_zhanli",250);
+        service.preview("charts",e);assertEquals("PERSISTED",service.save("charts",e,false).get("state"));
+        ActivityConfigService.Edit undo=restore(e);service.preview("charts",undo);service.restore("charts",e.requestId,undo);
+        assertEquals("100",scalar("SELECT min_zhanli FROM dof_native.game_charts_config"));
+        sql("ALTER TABLE dof_native.game_charts_config DROP KEY game_charts_config_pk,ADD KEY identity_without_unique(id)");
+        reject(409,()->service.preview("charts",edit("charts")));
+        sql("ALTER TABLE dof_native.game_charts_config ADD UNIQUE KEY unknown_identity(id)");
+        reject(409,()->service.preview("charts",edit("charts")));
+    }
     @Test public void thresholdPreviewReplayAndRestorePreserveNativeSchedule()throws Exception {
         ActivityConfigService.Edit e=edit("charts");e.values.put("min_zhanli",250);
         assertEquals("PREVIEWED",service.preview("charts",e).get("state"));assertEquals("100",scalar("SELECT min_zhanli FROM dof_native.game_charts_config"));

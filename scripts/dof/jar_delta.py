@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import struct
 import zipfile
 
 
@@ -18,6 +19,21 @@ def pieces(path):
     data = path.read_bytes()
     with zipfile.ZipFile(path) as archive:
         offsets = sorted({0, archive.start_dir, len(data)} | {e.header_offset for e in archive.infolist()})
+        # Header metadata can change while the compressed dependency bytes stay
+        # identical (for example when adopting reproducible ZIP timestamps).
+        # Keep those bytes reusable without changing the range-based format.
+        boundaries = set(offsets)
+        for entry in archive.infolist():
+            start = entry.header_offset
+            if data[start:start+4] != b'PK\x03\x04':
+                raise ValueError('Invalid ZIP local header')
+            name_length, extra_length = struct.unpack_from('<HH', data, start+26)
+            content = start + 30 + name_length + extra_length
+            end = content + entry.compress_size
+            if not start < content <= end <= archive.start_dir:
+                raise ValueError('ZIP member outside local data bounds')
+            boundaries.update((content, end))
+        offsets = sorted(boundaries)
     return data, [(a, b - a) for a, b in zip(offsets, offsets[1:])]
 
 

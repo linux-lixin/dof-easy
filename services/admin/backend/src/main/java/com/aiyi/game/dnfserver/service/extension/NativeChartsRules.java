@@ -48,7 +48,10 @@ final class NativeChartsRules {
         boolean primary=false;
         try(Statement s=c.createStatement();ResultSet r=s.executeQuery("SELECT INDEX_NAME,COLUMN_NAME,SEQ_IN_INDEX,NON_UNIQUE FROM information_schema.STATISTICS WHERE TABLE_SCHEMA='dof_native' AND TABLE_NAME='game_charts_config'")) {
             while(r.next()) {
-                if("PRIMARY".equals(r.getString(1))) {if(primary||!"id".equals(r.getString(2))||r.getInt(3)!=1)throw incompatible();primary=true;}
+                // The verified 86-level instance uses a named UNIQUE key, not
+                // a SQL PRIMARY key. Both known layouts require the same
+                // single, non-null integer identity; unknown names stay closed.
+                if(Arrays.asList("PRIMARY","game_charts_config_pk").contains(r.getString(1))) {if(primary||r.getInt(4)!=0||!"id".equals(r.getString(2))||r.getInt(3)!=1)throw incompatible();primary=true;}
                 else if(r.getInt(4)==0&&(!"id".equals(r.getString(2))||r.getInt(3)!=1))throw incompatible();
             }
         }
