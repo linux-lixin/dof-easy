@@ -150,7 +150,8 @@
             "docs/validation/admin-script-release-s19-2026-10-28.json",
             "docs/validation/admin-script-release-s20-2026-10-28.json",
             "docs/validation/admin-client-provenance-s21-2026-10-28.json",
-            "docs/validation/admin-client-provenance-s22-2026-10-28.json"
+            "docs/validation/admin-client-provenance-s22-2026-10-28.json",
+            "docs/validation/admin-script-compression-s35-2026-10-28.json"
           ],
           "implementationStatus": "generation_and_parameter_persistence_deployed_consumer_pending",
           "releaseManagement": {
@@ -174,6 +175,18 @@
               "guardedDowngradeVerified": true,
               "containerRecreationVerified": true
             }
+          },
+          "compressedScriptAudit": {
+            "completeOriginalArtifactIndependentlyVerified": true,
+            "sourceIndexBytes": 82583080,
+            "compressedIndexBytes": 38262851,
+            "resourceBytes": 482630201,
+            "pairedCompressedParameterVerified": false,
+            "markerCandidateRecordedCasesMatched": 8,
+            "markerCandidateRecordedCasesTotal": 12,
+            "nativeConsumerAcceptanceVerified": false,
+            "compressedGenerationEnabled": false,
+            "evidence": "docs/validation/admin-script-compression-s35-2026-10-28.json"
           }
         }
       ]
