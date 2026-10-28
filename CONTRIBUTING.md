@@ -1,40 +1,31 @@
-# 开发与维护
+# 开发与贡献
 
-先读 [项目结构](docs/architecture.md) 和 [当前状态](docs/dof/status.md)。默认部署入口是根目录 `dof.sh`；手动模板在 `deploy`，应用源码在 `services` 和 `clients`。游戏运行要求 Linux x86_64；原生链另需固定免授权输入，默认 WPF 与原生客户端分别验收。
+读者：贡献者。适用：所有模式，在仓库根目录执行。先读[架构](docs/architecture/overview.md)、[当前边界](docs/status/README.md)与[文档维护规范](docs/development/documentation.md)。
 
-## 本地检查
+从最新 main 建立短期 `codex/` 分支，保留其他工作区的未提交文件。按作用拆分提交，经 PR 检查后合并；确认提交进入 main 后删除已合并短期分支。部署必须单独记录源码提交、应用构建提交与实际镜像，文档修改不触发部署。
 
-在仓库根目录，通用检查使用 Python 3.9+，原生检查使用 Python 3.11+；离线部署修复测试在 Linux 上使用 Bash：
+## 检查
+
+Python 文档检查使用 3.11+，不依赖 Docker，不访问服务器：
 
 ```bash
-python -m unittest discover -s tests/unit -p "test_*.py"
-python -m unittest discover -s tests/unit/dof -p "test_*.py"
-python -m unittest discover -s tests/structure -p "test_*.py"
+python scripts/diagnostics/check_docs.py
+python -m unittest discover -s tests/unit -p 'test_docs_checker.py'
+git diff --check
 ```
 
-structure 中的 Compose 检查需要 Docker Compose，但不会启动服务。容器集成验收另按 [测试文档](tests/README.md)执行，
-使用独立临时数据库、网络和卷，不把生产 `.env` 交给测试脚本。
+业务、构建与部署脚本修改按范围执行：
 
-## 构建与改动边界
+```bash
+python -m unittest discover -s tests/unit -p 'test_*.py'
+python -m unittest discover -s tests/unit/dof -p 'test_*.py'
+python -m unittest discover -s tests/structure -p 'test_*.py'
+```
 
-游戏和后台构建入口见 [游戏](services/game/README.md)、[后台](services/admin/README.md)；
-Windows 登录器见 [launcher](clients/launcher/README.md)。只改文档时验证链接即可；改构建路径时必须核对 Docker COPY 与构建上下文。
-SQL 初始化改动需跑 MySQL 5.6 集成测试，平台运行脚本改动需跑对应镜像测试。
+结构测试的 Compose 解析需要 Docker Compose；集成条件与临时卷清理见[测试总览](tests/README.md)。SQL 修改须跑隔离 MySQL 5.6 契约，Java/Vue/WPF 命令及产物见[开发目录](docs/development/README.md)。缺少私有输入或环境的项记为跳过，不能报告通过。不同历史批次数不相加。
 
-`services/game/assets` 现在只供 Ubuntu 构建使用。启动与初始化脚本直接维护源码，不再维护旧平台转换逻辑或补丁副本。修改游戏二进制或兼容文件时必须记录来源和对应哈希；目录整理不能改变资源内容来通过检查。
-不要更改容器内部路径来配合宿主机源码目录重排，除非明确实施运行时迁移。
+## 提交规则
 
-## 提交范围
+不得提交 `.env`、实例运行目录、私钥、玩家数据库、原始日志、客户端包、PVF、镜像归档、捕获样本及本地凭据。`services/game/runtime/ubuntu` 是源码，不是部署产物。正式派生资源可按既定锁提交；原始输入保留私有。保留执行权限、许可证和资源哈希；目录调整不能修改业务资源来使检查通过。
 
-保留脚本执行权限、资源哈希和第三方许可证。提交前运行 `git diff --check`，检查 staged 文件清单。
-`.env`、部署 `runtime/`、后台私钥、数据库数据、原始运行日志、客户端发行包、镜像 tar 和测试状态文件不提交。
-`services/game/runtime/ubuntu` 是源码，必须提交；它不是部署生成目录。
-对外报告区分构建、离线测试、容器验收和真实 Windows 客户端验收，不用其中一项代替其他项。
-
-## 合并与验收记录
-
-从最新 main 建立短期分支，保留其他工作区未提交改动。完成受影响检查后通过 PR 合并，再按 main 提交构建部署。确认分支提交已进入 main 后删除远端短期分支，不删除未合并提交或本地恢复记录。
-
-变更正式派生规则或二进制后，相应原生加载和功能证据失效，必须回归；未受影响的结果不为改文档而重复执行。当前目标为 86 级测试实例，不把通用安装器列出的等级扩写为全部原生配套已验收。迁移工具与历史记录保留，但当前未上线项目不要求数据库迁移。
-
-更新状态时同时维护 [统一状态页](docs/dof/status.md)、相关 Markdown 和机器可读摘要。记录证据日期、提交、镜像及适用范围，区分实际通过、跳过、待验证和不适用；不将文档更新时间写成运行测试时间。
+提交前审查 staged 文件与 `git diff --check`。文档工具仅检查 Git 管理及明确纳入的文件；不要递归扫描其他人的未提交文件。新增文档必须加入 `docs/catalog.json` 的 pages 并从目录首页可达。更改派生规则后，旧客户端消费证据不自动沿用；`releaseReady` 默认 false，完成情况只更新原功能台账。

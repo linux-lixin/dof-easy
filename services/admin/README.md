@@ -1,13 +1,18 @@
 # 网页管理后台
 
-通用后台与原生网页管理共用源码，部署入口不同。最新验证与未完成项见 [当前状态](../../docs/dof/status.md)。
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/services/admin/README.md)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+
+
+通用后台与原生网页管理共用源码，部署入口不同。最新验证与未完成项见 [当前状态](../../docs/status/README.md)。
 
 | 场景 | 构建／启动入口 | 数据初始化 |
 |---|---|---|
 | 默认 `dof` 新实例 | 通用 `Dockerfile`、`entrypoint.sh`，根目录安装器 | 受保护的首次 `init.sql` 初始化 |
 | `native` 隔离网页 | `compile_admin.py` / `package_admin.py`、`Dockerfile.dof-prebuilt`、`dof-entrypoint.sh` | 显式准备专用身份与 `dof-admin.sql` 管理表，升级不重放首次准备 |
 
-原生部署按 [部署与恢复](../../docs/dof/deployment.txt)，API 为 `/api/v1/admin/dof`，页面为 `/admin/dof`。以下通用镜像命令及首次初始化说明不能作为已有原生测试实例升级步骤；不要重跑 `init.sql` 或重置游戏业务库。
+原生部署按 [部署与恢复](../../docs/operations/isolated-admin.md)，API 为 `/api/v1/admin/dof`，页面为 `/admin/dof`。以下通用镜像命令及首次初始化说明不能作为已有原生测试实例升级步骤；不要重跑 `init.sql` 或重置游戏业务库。
 
 前端在 `frontend/`，Java 后端在 `backend/`，后台库种子在 `database/init.sql`，
 容器入口和 Nginx 模板在 `docker/`。各游戏角色共用这一套后台。
@@ -23,7 +28,7 @@ Docker 构建包含前端和后端，不要求宿主机另装 Java/Node。不要
 
 默认入口：[一键安装](../../README.md)；手动模板：[整体部署](../../deploy/manual/all/README.md)、[独立后台](../../deploy/manual/split/admin/README.md)。
 
-开发操作及原上游使用说明见 [后台文档](../../docs/admin/README.md)。
+开发操作及原上游使用说明见 [后台文档](../../docs/development/admin.md)。
 
 ## 首次部署
 

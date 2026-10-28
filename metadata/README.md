@@ -1,6 +1,11 @@
 # 来源与资源清单
 
-原生输入与公共构建输入分开管理。当前版本和验收边界见 [状态页](../docs/dof/status.md)。
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/metadata/README.md)。限制和当前验收边界见[当前状态](../docs/status/README.md)。
+
+
+原生输入与公共构建输入分开管理。当前版本和验收边界见 [状态页](../docs/status/README.md)。
 
 - 原生免授权输入锁：[inputs.lock.json](dof/derivation/inputs.lock.json)。原始名称仅用于显式导入及来源审计。
 - 正式派生资源锁：[runtime.lock.json](../services/game/runtime/ubuntu/gateway/runtime.lock.json)。正式导入、安装和打包均需匹配它，不消费实验副本。
@@ -10,7 +15,7 @@
 
 - `source-lock.json`：三个上游仓库的固定源码基线和当前组件目录；本地修复与目录调整由本仓库 Git 历史记录。
 - `game-assets.lock.json`：392 个随 Git 提供的公共游戏资源，记录路径、原始来源和摘要。已去掉不用的模板 PVF 归档及固定等级程序。来源 URL 不作为下载入口。
-- `build-inputs.lock.json`：422 个仓库内构建输入的大小与 SHA-256，包括公共资源、已处理的插件和数据库初始化文件。
+- `build-inputs.lock.json`：424 个仓库内构建输入的大小与 SHA-256，包括公共资源、已处理的插件和数据库初始化文件。
 - `levels.lock.json`：13 个等级包的 Release 下载地址、归档与程序的大小和 SHA256。
 - Ubuntu 额外依赖清单在 [compat-lock.json](../services/game/docker/ubuntu/compat-lock.json)，许可证保留在其同目录。
 
@@ -26,8 +31,8 @@ python scripts/container/resources.py
 
 修改仓库内输入时，维护者须复核并更新对应摘要；修改插件还需更新 `metadata/build-inputs.lock.json` 中的正式文件记录。构建脚本不自动信任新内容。操作者的插件修改放在实例运行目录，不受源码构建摘要检查影响。
 
-旧 `vipai86-inputs.lock.json` 已撤出当前入口，原始归档校验记录可在 Git 历史和旧 Release 清单查阅。分配理由与兼容策略见 [资源布局](../docs/resource-layout.md)。
+旧 `vipai86-inputs.lock.json` 已撤出当前入口，原始归档校验记录可在 Git 历史和旧 Release 清单查阅。分配理由与兼容策略见 [资源布局](../docs/reference/resources.md)。
 
 Ubuntu 单平台清理移除了 6 个不再使用的锁定资源（VPN、旧网关/代理等）；保留资源仍沿用原 SHA256。启动脚本的 Ubuntu 适配改动由 Git 记录，不冒称它们与上游原始脚本逐字节一致。
 
-原始材料、重复 SQL 和来源归档不再入库。`dof/derivation/` 仅保留显式导入工具需要的规则与哈希；本地测试输入也只保留哈希，不含材料。详见 [资源布局](../docs/resource-layout.md)。
+原始材料、重复 SQL 和来源归档不再入库。`dof/derivation/` 仅保留显式导入工具需要的规则与哈希；本地测试输入也只保留哈希，不含材料。详见 [资源布局](../docs/reference/resources.md)。

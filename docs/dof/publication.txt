@@ -1,42 +1,5 @@
-原生网页后台：源码、发布与检查说明
+# 文档已迁移
 
-范围
-代码已合入 main；最新功能基线和实际部署版本见 status.md。网页负责原生管理、PVF 编码和配套包任务，不运行原 Windows 后台管理工具。
-格式 2 生成端和确定性 PE 读取适配已接入源码；配方 2.2 已去掉强制版本字段，已有真实读取记录属于旧配方，不能作为新版运行通过依据。游戏 DLL 完整消费、控制协议和资源路径仍在联调，不能把源码合并、配置保存或 PVF 文件生成等同于完整游戏链路通过。当前工作记录见 client-reader-validation.md。
+本页仅保留兼容入口。请阅读 [docs/development/admin-packaging.md](../development/admin-packaging.md)。
 
-已包含的代码
-- 原生 UI 编解码、预设与自定义布局管理、预览、版本冲突、审计和定向恢复。
-- 设置、记录、账号安全、注册限制、活动和经济管理页面及适配代码；页面存在不代表所有业务已验收。
-- 流式 PVF 上传，以及从已绑定实例只读 PVF 导入；不压缩编码、参数上下文、尾部校验和持久化任务。
-- 格式 2 的新名配置与背景生成、五文件或绑定 PVF 的六文件包；固定派生读取端和数据库 UUID 绑定，拒绝旧格式任务复用。
-- 隔离参数应用、结果不明时核对、MyISAM 显式锁及字段级恢复。
-- 新原生库 dof_native、DOF_ 管理表、dof-native-1 适配器及 /api/v1/admin/dof 接口。
-
-状态含义
-READY_FOR_TEST：文件检查通过，等待原生消费验证。
-PERSISTED：配置已保存并回读，不代表游戏进程刷新或奖励实际发放。
-完整客户端验收：需要普通账号实际登录、选角、进城、进图、返回和重登；广播、随机盒与团本分别记录。
-压缩发布、原生自动更新消费及未完成业务适配仍是未完成状态。
-
-私有输入与提交边界
-配套登录器、ijl15.dll、配置模板及现有服务器公钥由操作者提供到私有 inputs 目录，只接受固定免授权哈希。
-DOF_LEGACY_UI_PROFILE 可指向只读旧 UI 精确导入文件；未提供时不开放该旧快照的导入。现代 15 种血槽和 3 种角色创建预设仍随代码提供。此显式导入不代表正常运行接受旧环境变量或旧协议回退。
-DNF_COMPANION_PREVIEW 可指向本机配套资源预览 JSON；未提供时不使用示例条目冒充实例配置。
-实际密码、私钥、数据库、玩家数据、实例标识、捕获转储、客户端、PVF、ZIP、任务参数及原始日志不进 Git 或公共镜像。
-原生捕获样本需显式提供；缺样本的测试标记跳过，合成测试密钥不作为部署密钥。
-
-构建与测试
-Java 使用 Maven，或 python3 scripts/dof/compile_admin.py 指定已准备的 JDK 和依赖；参数见 --help。
-Vue 在 services/admin/frontend 执行 npm ci、npm run build（含类型检查）。
-Python：python3 -m unittest discover -s tests/unit/dof -p 'test_*.py'。
-Java 单元：services/admin/backend 下执行 mvn -Dmaven.test.skip=false test；有外部条件的测试须显式启用。
-原生捕获输入：-Ddof.private.fixtures=/本机私有目录。
-旧 UI 精确导入样本：-Ddof.legacy.ui.profile=/本机私有目录/ui-native-100.json。
-MyISAM 契约：dof.contract.properties、dof.contract.migration；测试核对一次性数据库标记、UUID 和不存在玩家库，不能指向游戏数据库。
-
-历史检查与部署（本阶段验证另见 ../validation/stage-2026-10-28.json）
-152 个 Java 主源文件编译、Vue 类型及生产构建通过；Java 回归批次 177 项通过、20 项前置条件不足跳过，Python 网页检查 19 项通过。
-绑定 PVF 导入相关 Java 回归批次 29 项通过、7 项私有样本检查跳过。测试批次重叠，不合计。
-86 级游戏真实加载、网页登录与配置回读、绑定 PVF 导入和加密已有目标实例证据；游戏及现用 PVF 未被后续网页更新改写。
-历史签到查询曾返回 HTTP 409；S50 所核对实例返回 200、取样为空，历史原因未知，详见 status.md。Windows 新读取端和玩家流程待验证。
-部署按 deployment.txt，接口与格式按 protocol.txt；精确结果和镜像摘要见对应验收 JSON。每次部署须使用已合入 main 的提交，网页和游戏各自记录版本，不能因为源代码相同而混写镜像摘要。
+原路径不再维护操作步骤；历史验收 JSON 仍保留原路径。

@@ -1,5 +1,10 @@
 # 本地数据库模式验证
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/tests/integration/mysql/README.md)。限制和当前验收边界见[当前状态](../../../docs/status/README.md)。
+
+
 `compose_matrix.py` 使用真实 Compose CLI 解析内置／外置 × dof／native × 六种有效插件/团本组合，共 24 种模型，不调用 Docker Engine、不启动容器。
 
 ```sh

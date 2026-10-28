@@ -1,5 +1,10 @@
 # 本地服务端原生验证
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/tests/integration/dof/server_stack/README.md)。限制和当前验收边界见[当前状态](../../../../docs/status/README.md)。
+
+
 这是诊断用的完整进程组合，尚不是正式安装包。只能通过
 `scripts/dof/local_environment.py run` 在本机独立网络／PID 命名空间中执行；
 不要在宿主机直接运行 `stack-probe.sh`，也不要传入现有服务器材料或连接参数。

@@ -1,12 +1,17 @@
 # Ubuntu 24.04 整体部署（ALL + 后台）
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/deploy/manual/all/README.md)。限制和当前验收边界见[当前状态](../../../docs/status/README.md)。
+
+
 适用范围：高级手动 Ubuntu 模板、默认 `dof` 登录链与外置 MySQL。默认一键安装及原生 86 级联调另见 [部署导航](../../README.md)；不要把本页首次初始化步骤用于现有原生测试实例升级。
 
 本文默认是全新服务器首次部署：新建运行目录、初始化专用数据库、创建 `admin` 管理员。
 本项目仅提供 Ubuntu 游戏镜像。
 本手动方案支持 amd64 和外部 MySQL；历史验收基线为 MySQL 5.6.51，使用默认 dof 后台与 WPF 登录器。
-实际测试范围和未验收项见 [Ubuntu 验收报告](../../../docs/ubuntu/validation.md)，
-依赖来源见 [兼容库审计](../../../docs/ubuntu/compatibility.md)。
+实际测试范围和未验收项见 [Ubuntu 验收报告](../../../docs/validation/ubuntu.md)，
+依赖来源见 [兼容库审计](../../../docs/reference/platform-compatibility.md)。
 
 Docker 管理容器生命周期；本版保留 Supervisor 管理角色内部的多个旧服务进程。
 日常用 `docker compose up/stop/logs`，排障或单独重启内部服务时才用容器内的 `supervisorctl`。
@@ -189,8 +194,8 @@ docker compose restart game
 curl --fail http://127.0.0.1:18080/api/v1/admin/assist/config-text
 ```
 
-确认返回的“服务器地址”为自己的玩家入口，且玩家可访问后台 API 和[角色端口表](../../../docs/ubuntu/ports.md)列出的游戏端口。
-完整的后台配置、客户端包、登录器配置和更新发布步骤见 [客户端部署文档](../../../docs/launcher/deployment.md#1-开放端口并配置后台)。
+确认返回的“服务器地址”为自己的玩家入口，且玩家可访问后台 API 和[角色端口表](../../../docs/reference/ports.md)列出的游戏端口。
+完整的后台配置、客户端包、登录器配置和更新发布步骤见 [客户端部署文档](../../../docs/operations/wpf-client.md#1-开放端口并配置后台)。
 本轮没有验证真实 Windows 客户端注册、登录、进副本、组队与自动更新下载。
 
 

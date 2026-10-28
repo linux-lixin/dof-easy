@@ -1,5 +1,10 @@
 # 一键端主机验收
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/tests/integration/installer/README.md)。限制和当前验收边界见[当前状态](../../../docs/status/README.md)。
+
+
 仅在新建、可丢弃的 Linux systemd 虚拟机内执行。`guest_probe.py` 会安装软件、创建 Swap、调整 UFW 并启动测试容器，禁止直接在开发主机或现有服务器运行。
 
 将当前 `scripts/container/host.py`、`scripts/container/bootstrap.sh` 和本目录 `guest_probe.py` 放入虚拟机同一目录。准备根用户测试访问方式，在虚拟机建立 `/etc/dof-installer-disposable` 标记。需要独立磁盘和外网下载 Docker 依赖；不要挂入宿主机系统目录、凭据或生产数据。

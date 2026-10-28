@@ -1,6 +1,11 @@
 # Windows 登录器
 
-此工程用于 `LAUNCHER_MODE=dof` 默认模式，产物为 `DNFLogin.exe`。它不是 `native` 原生登录器的新名读取端；原生配套状态见 [当前状态](../../docs/dof/status.md)。
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/clients/launcher/README.md)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+
+
+此工程用于 `LAUNCHER_MODE=dof` 默认模式，产物为 `DNFLogin.exe`。它不是 `native` 原生登录器的新名读取端；原生配套状态见 [当前状态](../../docs/status/README.md)。
 
 本目录保留 WPF 工程 `DNFLogin.slnx` / `DNFLogin.csproj`，命名空间、资源名称和业务逻辑不因目录整理改变。
 `DNFLogin/LoginConfig.cs` 处理本地登录器配置，UI 在各 `*Window.xaml` 及其 C# 文件中。
@@ -15,7 +20,7 @@ dotnet build clients/launcher/DNFLogin.csproj -c Release
 依赖还原需要访问 NuGet。构建产物在本目录 `bin/`、`obj/`，不提交；发布配置位于 `Properties/PublishProfiles/`，
 发布前应按实际目标检查路径，不把源码自带设置当作生产发行配置。
 
-使用、注册、服务器地址和更新发布说明见 [登录器文档](../../docs/launcher/README.md)。
+使用、注册、服务器地址和更新发布说明见 [登录器文档](../../docs/getting-started/login-modes.md)。
 此次目录整理不代表已验证真实 Windows 客户端进游戏或自动更新。
 
 ## 服务器配置与记住密码

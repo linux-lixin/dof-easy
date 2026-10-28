@@ -1,5 +1,10 @@
 # Ubuntu 24.04 部署目录
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/deploy/manual/README.md)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+
+
 适用范围：高级手动 Ubuntu 模板、默认 `dof` 登录链与外置 MySQL。默认一键安装及原生 86 级联调另见 [部署导航](../README.md)；不要把本页首次初始化步骤用于现有原生测试实例升级。
 
 本目录模板连接自建外部 MySQL，使用默认 dof 网页后台；不含内置 MySQL、NetBird/Tailscale 或旧统一登录器网关。
@@ -28,7 +33,7 @@
 改大区/频道后要同时调整端口映射，不能只改 `OPEN_CHANNEL`。
 在仓库根目录可运行 `python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52` 重算；
 若仍位于本指南的 `deploy/manual` 目录，运行 `python3 ../../scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52`。
-当前生成结果见 [角色端口表](../../docs/ubuntu/ports.md)。
+当前生成结果见 [角色端口表](../../docs/reference/ports.md)。
 
 | 角色 | 用途 | 协议/端口 | 来源 |
 |---|---|---|---|
