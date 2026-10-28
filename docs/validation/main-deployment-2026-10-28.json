@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-28",
+  "timezone": "Asia/Hong_Kong",
+  "deployment": {
+    "passed": true,
+    "sourceCommit": "a6ade435a9037a926e8b0c186b0ab31be6db9159",
+    "adminImage": "sha256:f8cf56655a258627717439678ecae04d1e3c3eed0f2accf1defc848453bcfe50",
+    "adminTag": "dof-easy-admin:main-a6ade435",
+    "adminAppSha256": "c3a81e5d0e7cebb6305926affc26ba3ed811d1ec52e741d60b759b20ad90b97d",
+    "frontendFilesVerified": 188,
+    "cleanSourceCompiled": true,
+    "gameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+    "gameSourceMatchesMain": true,
+    "gameRestarted": false,
+    "gameHealthy": true,
+    "databaseUuidVerified": true,
+    "receiptCount": 641,
+    "receiptHashesUnchanged": true,
+    "protectedTablesUnchanged": true,
+    "keysAndPvfUnchanged": true,
+    "adminMountsUnchanged": true,
+    "httpChecks": {
+      "/": 200,
+      "/admin/dof": 200,
+      "anonymousRecords": 401,
+      "recordCatalog": 30,
+      "/api/v1/admin/dof/records/signin-users?page=1&size=1": 200,
+      "/api/v1/admin/activities/charts": 200,
+      "/api/v1/admin/activities/charts-rewards": 200,
+      "/api/v1/admin/dof/scope": 200,
+      "POST /api/v1/charac/6/overTasks": 410,
+      "POST /api/v1/database": 410,
+      "PUT /api/v1/notice": 410,
+      "anonymousLegacyQuest": 401
+    },
+    "backupArchiveVerified": true,
+    "backupCount": 1,
+    "freeBytes": 9543270400,
+    "releaseReady": false,
+    "gameplayAcceptancePerformed": false
+  },
+  "gameRecreation": {
+    "passed": true,
+    "gameImage": "sha256:d72a5afccc88137c3283e8ffec931a801a0e5e5e1ea24cb78e4ee8bcc4a76c22",
+    "gameRecreated": true,
+    "gameHealthy": true,
+    "gameEnvironmentAndMountsPreserved": true,
+    "adminUnchangedDuringGameRecreation": true,
+    "sourceCodeMatchesMain": true,
+    "gameFreshSourceBuildClaimed": false,
+    "sourceOfGameImage": "recovered original immutable S45 root filesystem; main game code unchanged",
+    "gameStartedAt": "2026-10-28T11:54:35.545483484Z"
+  },
+  "gameImageRecovery": {
+    "passed": true,
+    "previousGameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+    "recoveredGameImage": "sha256:d72a5afccc88137c3283e8ffec931a801a0e5e5e1ea24cb78e4ee8bcc4a76c22",
+    "tag": "dof-easy-game:main-a6ade435",
+    "source": "original committed immutable image snapshot",
+    "writableContainerLayerExcluded": true,
+    "instanceMountsExcluded": true,
+    "originalEntryPointAndHealthcheckPreserved": true,
+    "bakedInstanceIdentityRemoved": true,
+    "criticalGameSourcesMatchMain": true,
+    "readonlyRootTarSha256": "4d30135a6d44ad90c3e192f2f86fe3b00a6c835dbb1193d4475ed362ffa96c22",
+    "recoveryCausedByOldImageReferenceCleanup": true,
+    "temporaryRecoveryPayloadRemoved": true
+  },
+  "cleanup": {
+    "passed": true,
+    "oldDeploymentDirectoriesRemoved": 40,
+    "oldDeploymentTreeBytes": 16703307776,
+    "oldImageTagsRemoved": 100,
+    "oldImageIdsBefore": 57,
+    "remainingImageIds": 2,
+    "remainingImages": [
+      "dof-easy-admin:main-a6ade435",
+      "dof-easy-game:main-a6ade435"
+    ],
+    "obsoleteInitContainerRemoved": true,
+    "oldBuildAndTempArtifactsRemoved": true,
+    "backupCount": 1,
+    "currentBackupBytes": 1169141760,
+    "currentBackupRestoreVerified": true,
+    "freeBytesBefore": 3442843648,
+    "freeBytesAfter": 34539814912,
+    "bytesFreedSinceInitialInventory": 31096971264,
+    "liveDataOrVolumesDeleted": false,
+    "sourceCommit": "a6ade435a9037a926e8b0c186b0ab31be6db9159",
+    "initialFinalImageAssertionFailed": true,
+    "gameImageReferenceMistakenlyPruned": true,
+    "gameImageRecoveredFromImmutableSnapshot": true,
+    "gameRecreationVerified": true,
+    "noAdditionalGlobalPruneRunAfterRecovery": true
+  },
+  "backupRestore": {
+    "passed": true,
+    "archiveSHA256": "24afa07d01aea5633a15b4724b48a9fbea524807ac78de18843c1ea27ba4a0e6",
+    "restoredIntoNewDirectory": true,
+    "restoredMembers": 61,
+    "restoredFileBytes": 1802424831,
+    "fullBytesAndMetadataVerified": true,
+    "baseReserveBytes": 2147483648,
+    "databaseRestoreVerified": false,
+    "applicationRecoveryVerified": false,
+    "liveDataModified": false,
+    "completeReplacement": false,
+    "earlierDataFilterExtractionMetadataMismatches": 15,
+    "earlierAttemptCountedAsPass": false,
+    "temporaryRestoresRemoved": true
+  },
+  "browser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentVerified": true,
+    "invalidRequestInjectedForErrorDisplay": true,
+    "responseMocksUsed": false,
+    "checks": [
+      "real bound catalog exposes all thirty fixed record views; anonymous catalog, query and schema access are refused",
+      "real selected record view supplies its default search column and preserves literal Unicode and wildcard text in the first-page request",
+      "owner and period edits remove prior results and pagination; explicit queries start on page one",
+      "changing search column retains text; clearing owner, text and period removes the corresponding active conditions",
+      "real pagination reflects backend hasMore; empty tables keep the next-page action disabled",
+      "a deliberately invalid fixed search column receives a real backend 400, displays its error and clears stale pagination; a normal query recovers",
+      "real structure diagnosis and signin query return 200; all browser record requests remain GET and page errors stay zero"
+    ],
+    "pageErrors": 0,
+    "catalogViews": 30,
+    "samples": [
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "signin-users",
+        "rowCount": 0,
+        "hasMore": false
+      }
+    ],
+    "recordApiMethods": [
+      "GET"
+    ],
+    "populatedNativePaginationVerified": false,
+    "nativeDatabaseEncodingVerified": false,
+    "originalWindowsToolStarted": false,
+    "completeReplacement": false
+  },
+  "finalHealth": {
+    "passed": true,
+    "adminRunning": true,
+    "gameHealthy": true,
+    "authenticatedLoginAfterCleanup": true,
+    "realRecordCatalogAfterCleanup": 30,
+    "protectedTablesStillUnchanged": true,
+    "receiptHashesStillUnchanged": true,
+    "keysAndPvfStillUnchanged": true,
+    "gameRecreationAndHealthVerified": true,
+    "serverSourceCommit": "a6ade435a9037a926e8b0c186b0ab31be6db9159",
+    "trackedSourceClean": true,
+    "runningContainers": [
+      "dof-main-game-1",
+      "dof-main-admin-1"
+    ],
+    "freeBytes": 34539458560,
+    "temporaryAdminCredentialsDeleted": true
+  },
+  "build": {
+    "standardMavenPackageCompleted": false,
+    "freshSourceMavenCompileCompleted": true,
+    "javaSources": 185,
+    "classFiles": 334,
+    "frontendTypeAndProductionBuildPassed": true,
+    "deterministicPackagerUsed": true,
+    "packageAttemptFailures": [
+      "Offline Maven jar plugin unavailable",
+      "JDK certificate trust store unavailable for dependency download"
+    ],
+    "privateFixturesAndKeysExcluded": true,
+    "sourceArchiveSha256": "a2396e8562711ededcf3a69f5bb2748d92eb8723ce0da25ff7bb2098944deb1c",
+    "jarDifferentialReconstructionVerified": true,
+    "staticFilesReused": 105,
+    "staticFilesTransferred": 83
+  },
+  "retention": {
+    "oldVersionsRemovedByExplicitUserRequest": true,
+    "currentManagementBackupCount": 1,
+    "backupScope": "Admin data plus management/native configuration/wallet SQL; not a full game database backup",
+    "oldImageRollbackAvailable": false,
+    "automaticRetentionPolicyChanged": false
+  },
+  "releaseReady": false,
+  "completeReplacement": false,
+  "gameplayAcceptancePerformed": false
+}
