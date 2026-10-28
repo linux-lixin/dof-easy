@@ -1,0 +1,71 @@
+{
+  "stage": "S43",
+  "date": "2026-10-28",
+  "finalVerification": {
+    "passed": true,
+    "verificationScope": "actual old JAR read-only rollback and return to current admin",
+    "oldImage": "sha256:09a51009a88dd356b188bae9532fac6676dba73eb409d93b84387cd077af4adc",
+    "oldAppSHA256": "64f3fbe832743a813725b8da2417c802f01e64ec9148b7b7595ca47be5da9120",
+    "currentImage": "sha256:bf100959ff904aafe8be05b7b3a60d01baa462b9d592e11f755a262a1e9a3953",
+    "guardSHA256": "00a169acabcd1e2181c1cf1f957cf726fd4a4c4bebd2a84b2cd4ae533f157862",
+    "oldReadQueryCount": 10,
+    "newReceiptDetailsVerified": 8,
+    "newReceiptsAndHistoryByteIdenticalAcrossOldAndCurrent": true,
+    "all641ManagedReceiptsUnchanged": true,
+    "anonymousGetHeadAndInvalidTokenDenied": true,
+    "revokedAdministratorGetAndHeadDenied": true,
+    "testAdministratorRoleRestored": true,
+    "businessWriteProbesBlocked": 10,
+    "currentNativeRuleAndRewardListsReadableOnOld": true,
+    "frozenHistoryBridgeUsed": false,
+    "currentImageActuallyRestoredAndRecreated": true,
+    "protectedConfigRewardsWalletsAndPausedCodeUnchanged": true,
+    "persistentKeysModelEnvAndStaticConfigPvfUnchanged": true,
+    "gameContainerIdImageAndStartedAtUnchanged": true,
+    "gameHealthy": true,
+    "verifiedPrivateAdminArchiveReused": true,
+    "baseReserve2GiBMaintained": true,
+    "originalWindowsToolStarted": false,
+    "nativeConsumerAcceptanceVerified": false,
+    "nativeGameplayVerified": false,
+    "completeReplacement": false
+  },
+  "terminalState": {
+    "phase": "READONLY_ROLLBACK_AND_RETURN_VERIFIED_GAMEPLAY_PENDING",
+    "operatorProcessExited": true,
+    "adminId": "0aba86605d32b6e920124ce6db8b7f214fad76e431fe315efb769458011b4832",
+    "adminImage": "sha256:bf100959ff904aafe8be05b7b3a60d01baa462b9d592e11f755a262a1e9a3953",
+    "gameId": "b7050882590d7048085c12adf821f48b766b006ace0d6c820415635f569282a7",
+    "gameImage": "sha256:e417c4162b41d1ca013d75b547896d343fda8465b452dc8b34f5aff62e9e6c07",
+    "gameStartedAt": "2026-10-28T03:28:46.364660336Z",
+    "gameHealthy": true
+  },
+  "capacityBudget": {
+    "freeBytes": 5620817920,
+    "baseReserveBytes": 2147483648,
+    "selectedBackupPeakBytes": 1048576,
+    "otherPeakBytes": 268435456,
+    "verifiedArchiveReusePlanned": true
+  },
+  "operatorScriptSHA256": "0a9f02c7c9092154446f29e8ac5abadc67acd220c304bd7a02f13bd4c9c2782a",
+  "completeReplacement": false,
+  "localChecks": {
+    "serverOperatorSyntaxPassed": true,
+    "rollbackProxyUnitTestsPassed": 8,
+    "initialTestDiscoveryAttempt": {
+      "matchedTests": 0,
+      "exitCode": 5,
+      "countedAsPass": false
+    },
+    "mavenAndFrontendBuildRerun": false,
+    "reason": "Only the server-local integration drill and evidence/ledger changed; current and rollback images were already built."
+  },
+  "validationLimits": [
+    "The pinned old JAR understands these eight native activity receipts; this does not prove arbitrary older images or future journal formats compatible.",
+    "The old image remained read-only at the HTTP ingress; full normal management resumes only on the current image.",
+    "Original Windows tool equivalence, native component consumption, settlement and actual rewards remain unverified.",
+    "This is not a database outage, disk exhaustion, process-kill or full data-restore test.",
+    "The S42 first-run historical gateway.ini comparison gap remains open.",
+    "Only the bound 86-level test instance was checked."
+  ]
+}

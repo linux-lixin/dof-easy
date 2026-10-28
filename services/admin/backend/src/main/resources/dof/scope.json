@@ -3177,7 +3177,8 @@
             "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
             "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json",
             "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json",
-            "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+            "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
@@ -3200,12 +3201,15 @@
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
                 "docs/validation/admin-native-charts-s36-2026-10-28.json",
-                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
               ],
               "realDeploymentReadAndRefusalVerified": true,
               "realConfigurationWriteAndRestoreVerified": true,
               "realAdminRecreationVerified": true,
-              "originalToolEquivalenceVerified": false
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
             }
           ]
         },
@@ -3228,7 +3232,8 @@
             "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
             "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json",
             "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json",
-            "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+            "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
@@ -3246,11 +3251,14 @@
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
                 "docs/validation/admin-native-charts-s36-2026-10-28.json",
-                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
               ],
               "newConfigurationWritesEnabled": false,
               "realDeploymentReadAndRefusalVerified": true,
-              "originalToolEquivalenceVerified": false
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
             },
             {
               "location": "dof_native.game_charts_code",
@@ -3270,12 +3278,15 @@
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
                 "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
-                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
               ],
               "realDeploymentReadAndRefusalVerified": true,
               "realConfigurationWriteAndRestoreVerified": true,
               "realAdminRecreationVerified": true,
-              "originalToolEquivalenceVerified": false
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
             }
           ]
         },
@@ -3294,7 +3305,8 @@
           "failureBehavior": null,
           "evidence": [
             "docs/validation/admin-native-charts-s36-2026-10-28.json",
-            "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+            "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+            "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
@@ -3316,14 +3328,17 @@
               "nativeConsumerAcceptanceVerified": false,
               "evidence": [
                 "docs/validation/admin-native-charts-s36-2026-10-28.json",
-                "docs/validation/admin-native-charts-config-s42-2026-10-28.json"
+                "docs/validation/admin-native-charts-config-s42-2026-10-28.json",
+                "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json"
               ],
               "nativeFormulaImplemented": false,
               "nativeSettlementAcceptanceVerified": false,
               "realDeploymentReadAndRefusalVerified": true,
               "realConfigurationWriteAndRestoreVerified": true,
               "realAdminRecreationVerified": true,
-              "originalToolEquivalenceVerified": false
+              "originalToolEquivalenceVerified": false,
+              "pinnedOldImageReadonlyReceiptRollbackVerified": true,
+              "arbitraryOldImageCompatibilityVerified": false
             }
           ]
         },
