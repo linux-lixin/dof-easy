@@ -2511,7 +2511,7 @@
     "verification": "子项分别记录管理交付与业务验收；未进行客户端测试。",
     "missing": "配置规则、奖励和记录的管理与原生公式/排名/定时结算分别验收；开关、生效方式、实际发奖和竞速/公益榜仍待闭环。",
     "historicalEvidence": "缺管理接入；公式、排名、结算、重复发奖防护待验证",
-    "managementVerification": "S39真实部署：规则及12条奖励读取、具名唯一索引适配、两列长文本及启用入口拒绝通过；配置写入与恢复待受控验收，旧周期可信恢复需先修复，组件及玩法未验。",
+    "managementVerification": "S41恢复修正已部署，真实读取、长字段和启用入口拒绝通过；服务端快照恢复仅有隔离SQL证据，真实保存/恢复、容器重建与实际玩法仍待验。",
     "subfeatures": [
       {
         "id": "feature-044-01",
@@ -2527,7 +2527,8 @@
         "configuration": "dof_native.game_charts_config 的 min_zhanli、jiangli_day、jiangli_hour；其余四字段保留",
         "evidence": [
           "docs/validation/admin-native-charts-s36-2026-10-28.json",
-          "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json"
+          "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+          "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json"
         ],
         "missing": "原工具菜单/默认值、真实部署、组件读取和实际结算/发奖仍待验；不能以配置保存或只读记录替代。",
         "required": "真实部署的预览/保存/回读/恢复、原生读取时机、完整结算与重复发奖防护验证；公式本身未新增执行器"
@@ -2547,7 +2548,8 @@
         "evidence": [
           "docs/validation/admin-native-charts-s36-2026-10-28.json",
           "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
-          "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json"
+          "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+          "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json"
         ],
         "missing": "原工具菜单/默认值、真实部署、组件读取和实际结算/发奖仍待验；不能以配置保存或只读记录替代。",
         "required": "真实部署的预览/保存/回读/恢复、原生读取时机、完整结算与重复发奖防护验证；公式本身未新增执行器"
