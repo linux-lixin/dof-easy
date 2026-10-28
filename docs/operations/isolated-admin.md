@@ -11,26 +11,40 @@
 示例全零 UUID/哈希刻意无法通过校验。账号名是占位示例；密码不填入这个文件。
 密码仅由首次准备脚本随机生成并保存在本机 credentials.json/runtime.env，权限 0600。
 
-首次准备（仅对已有独立游戏/数据库副本，已初始化新 dof_native 原生库）
+## 首次准备
+
+仅对已有独立游戏/数据库副本，已初始化新 dof_native 原生库。
+
+```bash
 python3 scripts/dof/prepare_isolated.py --profile /private/deployment-profile.json \
   --sources services/admin/database --peak-bytes <备份和新增文件预计峰值>
+```
+
 脚本先核对挂载、UUID、隔离标记和容量，保存私有备份，仅添加服务表和专用管理身份。
 它只提取旧 init.sql 的 CREATE 定义，不执行玩家初始化、默认种子或 DROP。
 已存在 runtime.env 时拒绝重新准备，防止升级时重置环境和覆盖发布设置。
 
-客户端来源
-当前安装器实例更新顺序与旧工作目录处理见 client-format-v2-update.md。
+## 客户端来源
+安装器实例更新顺序与旧工作目录处理见[原生发布](native-client-publication.md)。
 在本地私有 Python 环境安装 scripts/protocol/dof/requirements.txt 的导入依赖。
 以下入口显式读取原始配套并确定性派生新读取端，只把改名后的文件交给网页。
+
+```bash
 python3 scripts/protocol/dof/prepare_client_inputs.py --client <配套客户端目录> \
   --public-key <现有服务器公钥DER> --public-sha256 <已核对哈希> \
   --workspace <全新私有来源目录> --instance dof-main \
   --database-uuid <当前实例数据库UUID> --endpoint <游戏地址>
+```
+
 将该目录里的 inputs 中五个普通文件打包到私有传输包（不包含目录条目）：
 tar -cf /private/client-inputs.tar -C <全新私有来源目录> inputs/binding.json \
   inputs/template.dll inputs/game-public.der inputs/dof-launcher.exe inputs/ijl15.dll
 在当前安装器管理的服务器仓库执行：
+
+```bash
 python3 scripts/dof/install_client_inputs.py --instance main --archive /private/client-inputs.tar
+```
+
 main 是安装器实例名，dof-main 是对应网页身份；其他实例按实际名称替换。
 脚本只读核对实时数据库 UUID、管理表绑定和当前游戏公钥，不初始化数据库、不改密钥、
 不重启服务；只安装到尚不存在的网页发布目录。已有输入／任务目录会拒绝覆盖。
@@ -40,17 +54,29 @@ client-reader-validation.md 的状态和流程验收，不能把来源安装成�
 
 构建
 在本地准备 JDK、Java 依赖和前端依赖，compile_admin.py 编译时保留 Java 参数名。
+
+```bash
 python3 scripts/dof/package_admin.py --base-jar <配套SpringBoot归档> --classes <新类目录> \
   --resources services/admin/backend/src/main/resources --frontend <dist> --output <新构建目录>
+```
+
 原 JAR 只提供加载器和依赖；业务类取自本次编译。不复制私有输入或测试文件。
 按 build-manifest.json 校验产物。在服务器使用已核对的本地基础镜像标签构建：
+
+```bash
 docker build --network=none --pull=false --build-arg RUNTIME_IMAGE=<本地标签> <构建目录>
+```
+
 标签必须先核对为预期镜像 ID；不要把 sha256:镜像ID 当作 FROM 标签。
 jar_delta.py 可传输 JAR 差量，但会严格核对基准及目标哈希，和原生游戏更新协议无关。
 
 运行与升级
+
+```bash
 python3 scripts/dof/run_isolated.py --profile /private/deployment-profile.json \
   --image sha256:<本次完整镜像ID> --replace-web --peak-bytes <本次额外峰值>
+```
+
 仅允许替换 profile 中的网页容器。数据库和游戏以及其他 protectedContainers 不操作。
 不发布公网端口；管理页面通过 SSH 隧道访问。不会初始化玩家库或生成身份密钥。
 实际部署目录必须与私有 profile 一致；不要套用其他实例的配置。

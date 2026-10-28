@@ -1,11 +1,9 @@
-# scripts/operations
+# 显式维护与历史迁移工具
 
-用途与读者：维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+用途与读者：维护已有 dof/WPF 实例的运维者；日常安装和升级不自动调用。
 
-事实来源：[operations](.)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+[migrate_launcher_checksum.py](migrate_launcher_checksum.py)只给自有 `dnf_service.CLIENT_LAUNCHER_CONFIG` 与 `CLIENT_LAUNCHER_VERSION` 增加 nullable `SHA256 VARCHAR(64)`。输入 `--instance` 必填，要求安装器管理的内置 db 服务、两个已存在表、管理员容器已停止；external 模式不能照用。
 
-输入与输出：各工具通过 `--help` 列出参数；先阅读所调用脚本，再对隔离副本执行。部署和维护工具可能写入实例、停止容器或生成私有产物；协议探测工具只应指向明确授权的隔离服务。
+查看参数：`python scripts/operations/migrate_launcher_checksum.py --help`。明确需要迁移时在仓库根目录运行 `python scripts/operations/migrate_launcher_checksum.py --instance main`。工具先用 mysqldump 备份两张表到私有 `.dof-easy/backups/`，再做 DDL；DDL 跨表不原子，部分完成后可核对并重试，不执行破坏性 init.sql。
 
-示例（仓库根目录）：`python scripts/diagnostics/ubuntu_ports.py --help`。不得用此示例替代其他脚本自己的参数。运行条件与分类见[脚本总览](../README.md)。
-
-目录内容：`migrate_launcher_checksum.py`.
+成功输出 added 或 alreadyCompatible，且两列类型/可空性一致。失败保留备份、停止写入并检查字段状态；不要删除已有表。新增列不代表当前 WPF 已消费 SHA-256，见[兼容性](../../docs/reference/clients/compatibility.md)。

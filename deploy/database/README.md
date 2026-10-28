@@ -1,9 +1,7 @@
-# deploy/database
+# 内置 MySQL 镜像与兼容种子
 
-用途与读者：维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+用途与读者：维护内置数据库镜像者。适用 internal 模式；external 初始化由[database.py](../../scripts/container/database.py)管理，不启动此镜像。
 
-事实来源：[database](.)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+[Dockerfile](Dockerfile)固定 MySQL 5.6 基础镜像，将 [seed.sql](seed.sql) 与 [compat-tables.sql](compat-tables.sql)按 10/20 顺序放入初始化目录；[my.cnf](my.cnf)提供数据库配置。[generate_compat.py](generate_compat.py)是维护生成工具，改兼容定义后须做隔离 MySQL 5.6 验收，不为升级重灌旧库。
 
-仅存本职责的共享部署模板与构建配置；实例数据和密码保存在实例目录。选择模板、变量、挂载与启动顺序见[部署总览](../README.md)及[手动部署](../../docs/operations/manual-deployment.md)。先渲染 Compose 检查，再启动；失败时保留日志与卷，不重新初始化已有库。
-
-目录内容：`Dockerfile`, `compat-tables.sql`, `generate_compat.py`, `my.cnf`, `seed.sql`.
+在仓库根目录通过 `bash dof.sh build --database internal` 构建所选镜像套件。前提为 Docker、完整输入与可获取的基础镜像；产物为镜像，无推送。首次空卷启动才消费种子；已有卷不因重启重建。成功应分别核对初始化日志、库身份和业务兼容；失败保留卷与日志，不执行 seed.sql 覆盖玩家库。外置说明见[指南](../../docs/operations/external-mysql.md)。

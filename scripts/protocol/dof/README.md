@@ -1,11 +1,7 @@
-# scripts/protocol/dof
+# 原生协议探测与私有输入准备
 
-用途与读者：维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+用途与读者：原生配套开发者。这里存显式协议检查、客户端输入准备和受控探测，不属于正常安装器运行依赖。
 
-事实来源：[requirements.txt](requirements.txt)。限制和当前验收边界见[当前状态](../../../docs/status/README.md)。
+[requirements.txt](requirements.txt)固定离线模板导入依赖 cryptography；在私有 Python 环境安装，不把私有原件放进源码目录。固定来源输入、命令参数和输出见[隔离后台指南](../../../docs/operations/isolated-admin.md)的 prepare_client_inputs 步骤与[客户端格式](../../../docs/reference/native/client-protocol.md)。查看工具参数可运行 `python scripts/protocol/dof/prepare_client_inputs.py --help`；不启动任何 EXE。
 
-输入与输出：各工具通过 `--help` 列出参数；先阅读所调用脚本，再对隔离副本执行。部署和维护工具可能写入实例、停止容器或生成私有产物；协议探测工具只应指向明确授权的隔离服务。
-
-示例（仓库根目录）：`python scripts/diagnostics/ubuntu_ports.py --help`。不得用此示例替代其他脚本自己的参数。运行条件与分类见[脚本总览](../../README.md)。
-
-目录内容：`client_format.py`, `config.py`, `hotkeys.py`, `prepare_client_inputs.py`, `requirements.txt`.
+输入准备读取原始配套、公钥、UUID 和模板，输出私有网页输入归档；探测脚本可能连接目标或生成私有证据，逐个查阅源码与参数，仅对授权隔离目标运行，不能批量执行整个目录。成功仅覆盖该工具报告的协议/文件条件，不等于真实组件消费。失败保留私有输入并核对来源锁，不能绕过哈希接受未知版本。

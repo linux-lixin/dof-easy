@@ -1,11 +1,16 @@
-# scripts/dof
+# 原生资源、隔离部署与恢复工具
 
-用途与读者：维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+用途与读者：native 维护者与验收者。Python 3.11+，在仓库根目录运行；真实容器操作要求 Linux、显式私有 profile 和已核对实例身份。
 
-事实来源：[dof](.)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+| 分类 | 主要入口 | 输入、输出与副作用 |
+|---|---|---|
+| 来源与资源派生 | import_assets.py / build_server_runtime.py / package_server.py | 固定私有原件与锁 → 新目录资源/归档；输入输出分离 |
+| 后台构建 | compile_admin.py / package_admin.py | 源码、JDK/依赖或固定底座 → 类与 JAR/镜像上下文；不等价于 Maven package |
+| 客户端 | client_reader.py / install_client_inputs.py | 固定原件或输入归档 → 派生读取器或实例发布材料；核对 UUID、公钥、来源 |
+| 隔离部署 | prepare_isolated.py / run_isolated.py / deploy_game_test.py | 显式 profile → 私有身份/配置或目标容器重建；不能交叉指向玩家实例 |
+| 归档与恢复 | admin_backup.py / admin_restore_drill.py | 管理归档、固定 SHA 与新隔离目录 → 文件/元数据校验；不做完整玩家数据库恢复 |
+| 协议/审计 | audit_* / native_* / stage_server_probe.py | 逐工具指定来源和隔离对象 → 范围有限的诊断；不得把目录当一套可批量执行命令 |
 
-输入与输出：各工具通过 `--help` 列出参数；先阅读所调用脚本，再对隔离副本执行。部署和维护工具可能写入实例、停止容器或生成私有产物；协议探测工具只应指向明确授权的隔离服务。
+只查看参数的例子：`python scripts/dof/package_server.py --help`。实际调用按[资源派生](../../docs/development/native-resource-derivation.md)、[后台打包](../../docs/development/admin-packaging.md)、[隔离后台](../../docs/operations/isolated-admin.md)、[备份恢复](../../docs/operations/backup-restore.md)执行；不同归档不能混用恢复工具。
 
-示例（仓库根目录）：`python scripts/diagnostics/ubuntu_ports.py --help`。不得用此示例替代其他脚本自己的参数。运行条件与分类见[脚本总览](../README.md)。
-
-目录内容：`admin_backup.py`, `admin_inventory.py`, `admin_restore_drill.py`, `audit_admin_tool.py`, `audit_compressed_script.py`, `audit_native_names.py`, `bridge_compat.py`, `build_server_runtime.py`, `client_reader.py`, `compile_admin.py`, `deploy_game_test.py`, `deployment-profile.example.json`, `deployment_profile.py`, `import_assets.py`, `install_client_inputs.py`, `jar_delta.py`, `local_environment.py`, `migrate_local.py`, `native_candidates.py`, `native_equipment.py`, `native_name_contract.py`, `native_residuals.py`, `native_sql.py`, `native_symbols.py`, `original_reference.py`, `package_admin.py`, `package_server.py`, `prepare_isolated.py`, `release_rollback_proxy.py`, `rollback_equipment_batches_proxy.py`, `rollback_receipts_proxy.py`, `run_isolated.py`, `runtime_apply_contract.py`, `space_budget.py`, `stage_server_probe.py`, `verify_admin_baseline.py`.
+成功应同时记录输入来源、产物哈希、目标身份和所验证层级。失败保留恢复点和未决状态，不重放写入或重跑首次初始化。密码、profile、捕获、归档、客户端与 PVF 全部留私有目录。

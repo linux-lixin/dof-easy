@@ -54,10 +54,11 @@ python tests/integration/test_built_images.py --state-file dist/ubuntu-split-sta
 
 ## 文档和原生验收摘要
 
-仅文档改动可执行链接检查及 JSON 解析，不需启动整套实例：
+文档改动运行 Git 范围完整校验和检查器故障回归，不启动整套实例；文档检查使用 Python 3.11+：
 
 ```sh
-python3 tests/structure/test_deploy_layout.py DeploymentLayout.test_document_links_resolve
+python scripts/diagnostics/check_docs.py
+python -m unittest discover -s tests/unit -p 'test_docs_checker.py'
 python3 -m unittest discover -s tests/unit/dof -p 'test_server_runtime_report.py'
 ```
 

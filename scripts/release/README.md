@@ -1,11 +1,9 @@
-# scripts/release
+# 后台镜像发布工具
 
-用途与读者：维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+用途与读者：镜像发布维护者。适用后台源码镜像发布，不用于原生客户端包，也不部署现有实例。
 
-事实来源：[release](.)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+[admin-image.sh](admin-image.sh)从仓库计算 `services/admin` 构建上下文，使用当前 Buildx 默认架构、标签 latest。输入为交互填写的镜像仓库；脚本确认后调用 `docker buildx build --push`，直接上传镜像，需 Docker、Buildx、依赖网络和目标仓库登录权限。没有无副作用的 `--help` 模式，不能为查看帮助直接运行。
 
-输入与输出：各工具通过 `--help` 列出参数；先阅读所调用脚本，再对隔离副本执行。部署和维护工具可能写入实例、停止容器或生成私有产物；协议探测工具只应指向明确授权的隔离服务。
+示例（仅确需发布时，仓库根目录）：`bash scripts/release/admin-image.sh`。确认前核对目标仓库、提交、架构与标签；成功还须记录远端 digest，不能只看本地提示。失败不代表镜像完整发布，应查询目标仓库再重试。
 
-示例（仓库根目录）：`python scripts/diagnostics/ubuntu_ports.py --help`。不得用此示例替代其他脚本自己的参数。运行条件与分类见[脚本总览](../README.md)。
-
-目录内容：`admin-image.sh`.
+只构建使用 `bash dof.sh build`，不调用发布脚本。完整来源与标签规则见[镜像指南](../../docs/operations/images.md)，类型检查/打包边界见[开发指南](../../docs/development/admin-packaging.md)。

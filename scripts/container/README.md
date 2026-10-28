@@ -1,11 +1,14 @@
-# scripts/container
+# 安装器内部模块
 
-用途与读者：维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+用途与读者：维护根 dof.sh 的开发者。Linux 部署使用 Python 3.11+；这些模块共用实例目录和锁，不另建部署链。
 
-事实来源：[manage.py](manage.py)；[menu.py](menu.py)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+| 模块 | 输入、输出与影响 |
+|---|---|
+| [manage.py](manage.py) / [menu.py](menu.py) | CLI/交互选择 → 实例配置、Compose、初始化、服务启停与备份；会修改主机和实例 |
+| [resources.py](resources.py) | 元数据锁与缓存 → 文件哈希核对和等级包准备，下载按显式模式 |
+| [image_config.py](image_config.py) | 全局/实例仓库与标签 → 镜像引用，不将全局值覆盖已建实例 |
+| [database.py](database.py) | 已核对的实例/数据库身份 → 内外置初始化、权限与导出，禁止覆盖已有外置项目库 |
+| [deployment.py](deployment.py) | 实例选择 → 部署布局与持久化配置 |
+| [host.py](host.py) | 主机状态 → 预算、Docker、Swap 和防火墙处理；按交互确认执行 |
 
-输入与输出：各工具通过 `--help` 列出参数；先阅读所调用脚本，再对隔离副本执行。部署和维护工具可能写入实例、停止容器或生成私有产物；协议探测工具只应指向明确授权的隔离服务。
-
-示例（仓库根目录）：`python scripts/diagnostics/ubuntu_ports.py --help`。不得用此示例替代其他脚本自己的参数。运行条件与分类见[脚本总览](../README.md)。
-
-目录内容：`bootstrap.sh`, `database.py`, `deployment.py`, `host.py`, `image_config.py`, `manage.py`, `menu.py`, `resources.py`.
+在仓库根用 `bash dof.sh install --help` 查看参数，不在 Windows 导入后试部署。默认值以[CLI 参考](../../docs/reference/cli.md)为唯一说明，操作见[安装](../../docs/operations/install.md)与[维护](../../docs/operations/daily-management.md)。成功需配置、镜像、实例身份与健康相符；失败保留日志和数据，不手工清锁绕过并发保护。
