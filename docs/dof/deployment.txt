@@ -75,5 +75,5 @@ PVF 需按原始上传、加密文件、ZIP 及临时文件实际规模计算，
 2026-10-26 保存的记录中，游戏部署为 main 175e0624，网页为 main 1fd1b6c3；中间服务端源码与固定资源没有变化。网页替换未重启游戏或数据库。
 网页登录、配置保存和回读通过，client/script 状态路由返回 200。绑定 PVF 导入及不压缩加密完成，任务仍为 READY_FOR_TEST / NOT_APPLIED，游戏 PVF 和客户端文件未替换。
 网页可将 DOF_GAME_PVF 对应的只读文件导入普通上传任务，无需重复经浏览器传输；请求只传编号和修订，不接受服务器文件路径。
-以下记录形成时 Windows 文件与字段消费端尚未改造验证；当前进度见 client-reader-validation.md。不能把现有旧配套包与新服务端直接部署并宣称联调通过。签到记录查询另有 HTTP 409 待修复。完整版本和证据见 status.md、web-integration-validation.json。
+以下记录形成时 Windows 文件与字段消费端尚未改造验证；当前进度见 client-reader-validation.md。不能把现有旧配套包与新服务端直接部署并宣称联调通过。签到历史 HTTP 409 的原因未知，S50 所核对实例返回 200、取样为空；非空记录仍待验。完整版本和证据见 status.md、web-integration-validation.json。
 历史一次性清理不构成自动保留策略。升级保留的恢复点和私有任务文件按实际清单管理；清理过的旧任务下载需要先恢复对应文件。

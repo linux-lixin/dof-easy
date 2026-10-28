@@ -34,9 +34,9 @@ Java 单元：services/admin/backend 下执行 mvn -Dmaven.test.skip=false test�
 旧 UI 精确导入样本：-Ddof.legacy.ui.profile=/本机私有目录/ui-native-100.json。
 MyISAM 契约：dof.contract.properties、dof.contract.migration；测试核对一次性数据库标记、UUID 和不存在玩家库，不能指向游戏数据库。
 
-已有检查与部署
+历史检查与部署（本阶段验证另见 ../validation/stage-2026-10-28.json）
 152 个 Java 主源文件编译、Vue 类型及生产构建通过；Java 回归批次 177 项通过、20 项前置条件不足跳过，Python 网页检查 19 项通过。
 绑定 PVF 导入相关 Java 回归批次 29 项通过、7 项私有样本检查跳过。测试批次重叠，不合计。
 86 级游戏真实加载、网页登录与配置回读、绑定 PVF 导入和加密已有目标实例证据；游戏及现用 PVF 未被后续网页更新改写。
-签到记录结构不兼容仍返回 HTTP 409；Windows 真实读取和玩家流程待验证。
+历史签到查询曾返回 HTTP 409；S50 所核对实例返回 200、取样为空，历史原因未知，详见 status.md。Windows 新读取端和玩家流程待验证。
 部署按 deployment.txt，接口与格式按 protocol.txt；精确结果和镜像摘要见对应验收 JSON。每次部署须使用已合入 main 的提交，网页和游戏各自记录版本，不能因为源代码相同而混写镜像摘要。
