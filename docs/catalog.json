@@ -155,8 +155,8 @@
       "destination": "docs/reference/clients/compatibility.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "metadata/build-inputs.lock.json",
-        "scripts/container/manage.py"
+        "clients/launcher/MainWindow.xaml.cs",
+        "scripts/dof/client_reader.py"
       ],
       "compatibility": "docs/admin/launcher-integration.md"
     },
@@ -184,8 +184,7 @@
       "destination": "docs/development/native/compressed-script-audit.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "services/admin/docker/Dockerfile",
-        "scripts/dof/package_admin.py"
+        "scripts/dof/audit_compressed_script.py"
       ],
       "compatibility": "docs/admin/script-compression-validation.md"
     },
@@ -231,7 +230,7 @@
       "destination": "docs/operations/external-mysql.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "scripts/container/manage.py"
+        "scripts/container/database.py"
       ],
       "compatibility": "docs/baota-deployment.md"
     },
@@ -267,7 +266,8 @@
       "destination": "docs/operations/native-client-publication.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "scripts/container/manage.py"
+        "scripts/dof/client_reader.py",
+        "scripts/dof/install_client_inputs.py"
       ],
       "compatibility": "docs/dof/client-format-v2-update.md"
     },
@@ -276,7 +276,8 @@
       "destination": "docs/status/native-client.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "docs/validation/main-deployment-2026-10-28.json"
+        "scripts/dof/client_reader.py",
+        "docs/history/clients/reader-validation.md"
       ],
       "compatibility": "docs/dof/client-reader-validation.md"
     },
@@ -294,7 +295,8 @@
       "destination": "docs/operations/isolated-admin.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "scripts/container/manage.py"
+        "scripts/dof/prepare_isolated.py",
+        "scripts/dof/run_isolated.py"
       ],
       "compatibility": "docs/dof/deployment.txt"
     },
@@ -313,7 +315,7 @@
       "destination": "docs/operations/isolated-game.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "scripts/container/manage.py"
+        "scripts/dof/deploy_game_test.py"
       ],
       "compatibility": "docs/dof/game-test-deployment.md"
     },
@@ -322,8 +324,8 @@
       "destination": "docs/development/native-resource-derivation.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "services/admin/docker/Dockerfile",
-        "scripts/dof/package_admin.py"
+        "scripts/dof/import_assets.py",
+        "scripts/dof/package_server.py"
       ],
       "compatibility": "docs/dof/launcher.md"
     },
@@ -362,7 +364,7 @@
       "destination": "docs/status/native-runtime.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "docs/validation/main-deployment-2026-10-28.json"
+        "docs/dof/server-runtime-validation.json"
       ],
       "compatibility": "docs/dof/server-runtime-validation.md"
     },
@@ -452,7 +454,7 @@
       "destination": "docs/operations/images.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "scripts/container/manage.py"
+        "scripts/container/image_config.py"
       ],
       "compatibility": "docs/image-registry.md"
     },
@@ -470,7 +472,7 @@
       "destination": "docs/operations/wpf-client.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "scripts/container/manage.py"
+        "clients/launcher/MainWindow.xaml.cs"
       ],
       "compatibility": "docs/launcher/deployment.md"
     },
@@ -534,8 +536,8 @@
       "destination": "docs/reference/platform-compatibility.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "metadata/build-inputs.lock.json",
-        "scripts/container/manage.py"
+        "services/game/docker/ubuntu/Dockerfile",
+        "services/game/docker/ubuntu/compat-lock.json"
       ],
       "compatibility": "docs/ubuntu/compatibility.md"
     },
@@ -544,8 +546,7 @@
       "destination": "docs/reference/ports.md",
       "handling": "migrate-with-direct-pointer",
       "sources": [
-        "metadata/build-inputs.lock.json",
-        "scripts/container/manage.py"
+        "scripts/diagnostics/ubuntu_ports.py"
       ],
       "compatibility": "docs/ubuntu/ports.md"
     },
@@ -1794,6 +1795,11 @@
       "path": "docs/history/clients/format2-update.md",
       "kind": "history",
       "authority": "docs/history/clients/format2-update.md"
+    },
+    {
+      "path": "docs/history/admin/isolated-admin-before-restructure.md",
+      "kind": "history",
+      "authority": "docs/history/admin/isolated-admin-before-restructure.md"
     }
   ],
   "immutableTextNormalization": [

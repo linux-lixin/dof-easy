@@ -11,7 +11,6 @@
 
 字段、加密、完整性、请求与限制由[读取实现](../../../scripts/dof/client_reader.py)和[后端原生模块](../../../services/admin/backend/src/main/java/com/aiyi/game/dnfserver)核对；以下为仍适用的生成协议细节。格式实现不能代替真实消费验收。
 
-原生客户端配套生成：接口、格式与验收边界
 
 ## 范围
 
@@ -32,20 +31,20 @@ ijl15.dll SHA-256：d2b207e32f1d366c29f43d080366b7880d87659aaeb93a9bd8e36f44bf54
 
 ## 接口
 根路径 /api/v1/admin/dof/，所有接口使用现有管理员认证和隔离实例检查。
-GET script：配套版本、来源修订、容量上限、模式和应用是否已配置。
-GET/POST script/uploads：列表/原始流上传；POST 参数 requestId、revision，Content-Type=application/octet-stream，必须提供长度。
-POST script/uploads/paired：JSON requestId、revision，从部署绑定的 DOF_GAME_PVF 只读复制为普通上传任务；请求不能指定文件系统路径。它不改写游戏 PVF、不应用参数。
-GET script/uploads/{id}：上传状态。重复上传编号不可覆盖，先查询已有记录。
-GET/POST script/tasks：列表/创建任务；JSON 包含 requestId、uploadId、revision。
-GET script/tasks/{id}：进度与结果。GET script/tasks/{id}/download：已校验的加密文件。
-GET/POST client/tasks：保留原登录器任务；可选 scriptTaskId 生成六文件配套包。
-GET client/tasks/{id}/download：验证归档 SHA-256 后下载。
-GET client/releases/status：配置版本及手动模式兼容状态，不返回解密参数。
-GET client/releases：参数应用、核对和恢复历史。
-POST client/releases/preview：requestId、revision、bundleId；只读核对来源与配置版本。
-POST client/releases：同一请求单独应用两处参数。
-POST client/releases/{id}/reconcile：遇断连先核对实际结果，不重新发送原生写操作。
-POST client/releases/{id}/restore：新的 requestId、当前 revision；只恢复本次两处参数。
+- GET script：配套版本、来源修订、容量上限、模式和应用是否已配置。
+- GET/POST script/uploads：列表/原始流上传；POST 参数 requestId、revision，Content-Type=application/octet-stream，必须提供长度。
+- POST script/uploads/paired：JSON requestId、revision，从部署绑定的 DOF_GAME_PVF 只读复制为普通上传任务；请求不能指定文件系统路径。它不改写游戏 PVF、不应用参数。
+- GET script/uploads/{id}：上传状态。重复上传编号不可覆盖，先查询已有记录。
+- GET/POST script/tasks：列表/创建任务；JSON 包含 requestId、uploadId、revision。
+- GET script/tasks/{id}：进度与结果。GET script/tasks/{id}/download：已校验的加密文件。
+- GET/POST client/tasks：保留原登录器任务；可选 scriptTaskId 生成六文件配套包。
+- GET client/tasks/{id}/download：验证归档 SHA-256 后下载。
+- GET client/releases/status：配置版本及手动模式兼容状态，不返回解密参数。
+- GET client/releases：参数应用、核对和恢复历史。
+- POST client/releases/preview：requestId、revision、bundleId；只读核对来源与配置版本。
+- POST client/releases：同一请求单独应用两处参数。
+- POST client/releases/{id}/reconcile：遇断连先核对实际结果，不重新发送原生写操作。
+- POST client/releases/{id}/restore：新的 requestId、当前 revision；只恢复本次两处参数。
 
 ## 配套包现状与目标
 格式 2 的五文件生成器输出 dof-launcher.exe、ijl15.dll、dof-client.dll、manifest.json、使用与恢复.txt；绑定 Script 任务时增加 Script.pvf，共六个文件。
@@ -69,7 +68,7 @@ manifest 自身由整个 ZIP 的 SHA-256 保护。
 完整原始 PVF 的结构检查及对照样本另有测试。新产物最终仍须实际客户端消费和游戏验收。
 当前原生 Scriptverification 和 updatec 必须已经为 0；本阶段不改动它们，也不生成自动更新元数据。
 
-存储与容量
+## 存储与容量
 DOF_CLIENT_WORKSPACE=/app/data/dof-client-publication，须为私有持久化目录。
 inputs 保存锁定版本来源；jobs 保存配套包；script/uploads 保存原始上传；script/tasks 保存加密产物和私有参数。
 生成状态 READY_FOR_TEST 仅表示测试产物就绪；FAILED/INTERRUPTED 不可下载。

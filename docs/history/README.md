@@ -23,3 +23,5 @@
 - [docs/history/upstream/launcher/usage.md](upstream/launcher/usage.md)
 
 - [格式 2 更新阶段原文](clients/format2-update.md)
+
+- [隔离后台部署旧正文](admin/isolated-admin-before-restructure.md)

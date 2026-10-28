@@ -50,9 +50,9 @@ main 是安装器实例名，dof-main 是对应网页身份；其他实例按实
 不重启服务；只安装到尚不存在的网页发布目录。已有输入／任务目录会拒绝覆盖。
 安装主机不需要 Python 密码学依赖；内层 RSA 校验在本地导入和网页生成阶段执行。
 服务端私钥、原管理工具和完整客户端不得加入传输包。新格式真实游戏读取仍须按
-client-reader-validation.md 的状态和流程验收，不能把来源安装成功视为可以进游戏。
+[客户端状态](../status/native-client.md) 的状态和流程验收，不能把来源安装成功视为可以进游戏。
 
-构建
+## 构建
 在本地准备 JDK、Java 依赖和前端依赖，compile_admin.py 编译时保留 Java 参数名。
 
 ```bash
@@ -70,7 +70,7 @@ docker build --network=none --pull=false --build-arg RUNTIME_IMAGE=<本地标签
 标签必须先核对为预期镜像 ID；不要把 sha256:镜像ID 当作 FROM 标签。
 jar_delta.py 可传输 JAR 差量，但会严格核对基准及目标哈希，和原生游戏更新协议无关。
 
-运行与升级
+## 运行与升级
 
 ```bash
 python3 scripts/dof/run_isolated.py --profile /private/deployment-profile.json \
@@ -89,7 +89,7 @@ python3 scripts/dof/run_isolated.py --profile /private/deployment-profile.json \
 PVF 应用需要专用数据库用户对 dof_native.billing.decrypt 和 dof_native.config.pvfencryption
 拥有字段 UPDATE 权限，另需原生表读取/锁和服务库审计权限。不要授予全库玩家写权限。
 
-容量
+## 容量
 每个目标文件系统需至少 2 GiB 可用基础余量，加本步新增峰值。
 PVF 需按原始上传、加密文件、ZIP 及临时文件实际规模计算，不能沿用小登录器包预算。
 读取 statvfs.f_bavail，不使用保留块。空间不够即停止，不清理正式数据、备份或回退镜像。
@@ -102,17 +102,6 @@ PVF 需按原始上传、加密文件、ZIP 及临时文件实际规模计算，
 游戏验收必须保持原 Windows 后台管理工具关闭，使用网页生成包完成进城、战斗、返城和重登。
 正式服部署、切换和重新初始化不属于这些命令的用途。
 
-历史集成记录（不代表本次格式 2 的部署状态）
-2026-10-26 保存的记录中，游戏部署为 main 175e0624，网页为 main 1fd1b6c3；中间服务端源码与固定资源没有变化。网页替换未重启游戏或数据库。
-网页登录、配置保存和回读通过，client/script 状态路由返回 200。绑定 PVF 导入及不压缩加密完成，任务仍为 READY_FOR_TEST / NOT_APPLIED，游戏 PVF 和客户端文件未替换。
-网页可将 DOF_GAME_PVF 对应的只读文件导入普通上传任务，无需重复经浏览器传输；请求只传编号和修订，不接受服务器文件路径。
-以下记录形成时 Windows 文件与字段消费端尚未改造验证；当前进度见 client-reader-validation.md。不能把现有旧配套包与新服务端直接部署并宣称联调通过。签到历史 HTTP 409 的原因未知，S50 所核对实例返回 200、取样为空；非空记录仍待验。完整版本和证据见 status.md、web-integration-validation.json。
-历史一次性清理不构成自动保留策略。升级保留的恢复点和私有任务文件按实际清单管理；清理过的旧任务下载需要先恢复对应文件。
+## 当前限制与失败处理
 
-2026-10-28 main 测试部署与清理
-最新后台源码基线为 a6ade43，具体镜像及游戏镜像引用恢复、重建结果见 status.md。
-旧部署目录、回退镜像与重复备份已按用户要求清理，历史 Sxx 镜像回退命令不再可直接使用。
-当前仅保留 .dof-easy/current-backup/ 一份 admin 数据及管理／原生配置／钱包 SQL 快照，
-不包含完整玩家数据库。manifest.private.json 含当前镜像、文件哈希和备份范围。
-恢复 admin 文件使用 scripts/dof/admin_restore_drill.py，在全新私有目录验证；不要向运行目录解压。
-不得使用此管理快照重置游戏业务库。本次保留安排不是自动清理策略。
+成功需镜像、实例 UUID、公钥、挂载、HTTP 登录及配置回读一致；持久化不代表组件消费。旧镜像只有在你确实保留且已核对时才可回退；当前测试服旧镜像已清理，不能照用历史镜像编号。管理备份范围与隔离恢复见[备份恢复](backup-restore.md)，当前镜像与构建限制见[部署状态](../status/deployment.md)。失败不重跑首次准备、不初始化玩家库；历史批次见[旧正文](../history/admin/isolated-admin-before-restructure.md)。

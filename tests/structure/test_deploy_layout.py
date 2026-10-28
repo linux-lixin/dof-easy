@@ -84,14 +84,9 @@ class DeploymentLayout(unittest.TestCase):
             self.assertEqual(admin['environment']['SPRING_DATASOURCE_USERNAME'],'root')
 
     def test_document_links_resolve(self):
-        docs=[ROOT/'README.md',ROOT/'CONTRIBUTING.md',ROOT/'tests/README.md',
-              *DEPLOY.rglob('*.md'),*(ROOT/'docs').rglob('*.md'),
-              *(ROOT/'services').rglob('README.md'),*(ROOT/'clients').rglob('README.md'),
-              *(ROOT/'metadata').glob('*.md'),*(ROOT/'scripts').rglob('README.md')]
-        for file in docs:
-            for target in re.findall(r'\]\(([^)]+)\)',file.read_text(encoding='utf8')):
-                if re.match(r'\w+://|#|mailto:',target) or target.startswith('/'): continue
-                path=target.partition('#')[0]
-                self.assertTrue((file.parent/path).exists(),f'{file.relative_to(ROOT)}: {target}')
+        result = subprocess.run(
+            [os.sys.executable, str(ROOT/'scripts/diagnostics/check_docs.py')],
+            cwd=ROOT, capture_output=True, text=True, encoding='utf8')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 if __name__=='__main__': unittest.main()
