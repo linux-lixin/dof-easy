@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tarfile
 import tempfile
 import unittest
@@ -41,7 +42,9 @@ class ContainerManager(unittest.TestCase):
             self.assertIn(resource, rules)
 
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(dir=ROOT)
+        # Use Linux's native temporary filesystem for atomic rename semantics;
+        # Windows sandbox fixtures must stay inside the granted workspace.
+        self.temp = tempfile.TemporaryDirectory(dir=ROOT if sys.platform == 'win32' else None)
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.pvf = self.root / 'custom.pvf'
