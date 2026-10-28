@@ -16,6 +16,7 @@
 | `dof/deploy_game_test.py` | 独立、限定目标的游戏测试实例部署与恢复 |
 | `dof/install_client_inputs.py`、`protocol/dof/prepare_client_inputs.py` | 私有客户端来源校验与安装；不等于 Windows 读取端已适配 |
 | `dof/space_budget.py` | 部署和发布的磁盘峰值检查 |
+| `dof/admin_restore_drill.py` | POSIX 主机将固定哈希的 admin-data 归档恢复到全新私有目录，核对全部文件、元数据和容量；不恢复数据库或覆盖当前实例 |
 | `dof/audit_native_names.py`、`dof/stage_server_probe.py`、`dof/local_environment.py` | 原生名称审计和本地隔离探测准备 |
 | `dof/migrate_local.py` | 显式导入历史本地副本；当前未上线项目不需要数据库迁移 |
 | `diagnostics/ubuntu_ports.py` | 从模板生成端口表 |

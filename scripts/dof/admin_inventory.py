@@ -64,6 +64,17 @@ def inventory(scope, plan, minimum_classes=71, minimum_operations=239):
             if operation.get('status') == 'complete' and not complete:
                 raise ValueError('Completed operation lacks stage evidence or native menu confirmation')
             management = operation.get('managementImplementation') or {}
+            package = packages[owners[group['id']]]
+            # Export the source evidence verbatim. A label, package-level success
+            # or subset must never promote an entire operation's verification.
+            remaining = operation.get('remaining') or management.get('blockers') or package.get('remaining', [])
+            if isinstance(remaining, str):
+                remaining = [remaining]
+            evidence = list(operation.get('evidence', []))
+            for key in ('evidence', 'liveEvidence'):
+                value = management.get(key)
+                if isinstance(value, str) and value not in evidence:
+                    evidence.append(value)
             rows.append({'id': operation['id'], 'group': group['id'], 'groupTitle': group['title'], 'name': operation['name'],
                          'workPackage': owners[group['id']], 'nativeMenuConfirmed': operation.get('nativeMenuConfirmed') is True,
                          'input': operation.get('input'), 'nativeLocation': operation.get('nativeLocation') or management.get('nativeLocation'),
@@ -72,6 +83,16 @@ def inventory(scope, plan, minimum_classes=71, minimum_operations=239):
                          'activation': operation.get('activation') or management.get('activation'),
                          'output': operation.get('output'), 'failureBehavior': operation.get('failureBehavior'),
                          'implementationLabel': operation.get('implementationStatus') or management.get('state'),
+                         'dependencies': list(package['dependsOn']),
+                         'remaining': remaining,
+                         'nextStep': remaining[0] if remaining else '逐项核对六阶段证据，未核实不关闭门禁',
+                         'nextStepSource': 'operation' if operation.get('remaining') else 'management' if management.get('blockers') else 'workPackage',
+                         'evidence': evidence,
+                         'implementationSubsets': operation.get('implementationSubsets', []),
+                         'mappingGaps': [key for key, value in {
+                             'entry': management.get('entry'), 'api': management.get('api'),
+                             'nativeLocation': operation.get('nativeLocation') or management.get('nativeLocation'),
+                             'executor': operation.get('executor') or management.get('executor')}.items() if not value],
                          'verification': stages, 'complete': complete})
     if set(owners) != groups:
         raise ValueError('Work package refers to an unknown feature group')
@@ -89,10 +110,12 @@ def inventory(scope, plan, minimum_classes=71, minimum_operations=239):
 
 
 def csv_report(report):
-    out = io.StringIO(); columns = ['id', 'groupTitle', 'name', 'workPackage', 'input', 'nativeLocation', 'executor', 'api', 'entry', 'activation', 'output', 'failureBehavior', 'implementationLabel', *STAGES, 'complete']
+    out = io.StringIO(); columns = ['id', 'groupTitle', 'name', 'workPackage', 'input', 'nativeLocation', 'executor', 'api', 'entry', 'activation', 'output', 'failureBehavior', 'implementationLabel', 'dependencies', 'nextStep', 'nextStepSource', 'mappingGaps', 'evidence', *STAGES, 'complete']
     writer = csv.DictWriter(out, fieldnames=columns); writer.writeheader()
     for row in report['rows']:
         record = {key: row.get(key) for key in columns}
+        for key in ('dependencies', 'mappingGaps', 'evidence'):
+            record[key] = json.dumps(record[key], ensure_ascii=False)
         for stage in STAGES:
             record[stage] = row['verification'][stage]['state']
         # Spreadsheet cells are data, including future operator-authored names.
@@ -108,7 +131,7 @@ def main():
     parser.add_argument('--require-complete', action='store_true')
     args = parser.parse_args()
     try:
-        report = inventory(json.loads(args.scope.read_text()), json.loads(args.plan.read_text()))
+        report = inventory(json.loads(args.scope.read_text(encoding='utf-8')), json.loads(args.plan.read_text(encoding='utf-8')))
     except (ValueError, KeyError, TypeError, OSError) as error:
         parser.exit(2, 'Invalid admin inventory: ' + str(error) + '\n')
     print(csv_report(report) if args.format == 'csv' else json.dumps(report, ensure_ascii=False, indent=2))

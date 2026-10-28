@@ -48,6 +48,21 @@ class InventoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Cyclic'):
             self.report(scope, plan)
 
+    def test_subset_evidence_and_package_next_step_do_not_promote_operation(self):
+        scope, plan = self.fixtures()
+        plan['packages'][0]['remaining'] = ['部署后取得真实业务证据']
+        op = scope['groups'][0]['operations'][0]
+        op['implementationSubsets'] = [{'name': 'one field', 'passed': True}]
+        op['managementImplementation'].update(liveEvidence='docs/partial.json', api='/fixed')
+        row = self.report(scope, plan)['rows'][0]
+        self.assertEqual(row['nextStepSource'], 'workPackage')
+        self.assertEqual(row['evidence'], ['docs/partial.json'])
+        self.assertEqual(row['nextStep'], plan['packages'][0]['remaining'][0])
+        self.assertIn('entry', row['mappingGaps'])
+        self.assertNotIn('api', row['mappingGaps'])
+        self.assertTrue(all(s['state'] == 'pending' for s in row['verification'].values()))
+        self.assertFalse(row['complete'])
+
     def test_spreadsheet_export_cannot_execute_operator_authored_formula_cells(self):
         scope, plan = self.fixtures()
         scope['groups'][0]['operations'][0]['name'] = '=HYPERLINK("https://example.invalid")'

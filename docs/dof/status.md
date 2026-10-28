@@ -2,7 +2,11 @@
 
 当前 admin 部署快照更新至 2026-10-28（UTC+08:00）；下方 2026-10-26 的集成记录保留历史适用范围，不是实时监控。
 
-**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 当前 `dof-main` admin 已部署 S29 源码 `dff424be80758111ec1287f6b5d355240f494702`，镜像 `sha256:152dd09280fd58a23596025b059617c7d0eb24c6de3fb116be066e6a04e0103c`，宿主端口为 18080。S25 继承、S27 回收配置验收保留；S29 跨界规则的真实网页 CRUD、回复丢失核对、并发拒绝、定向恢复和带认证冻结历史的受保护回退通过；旧版原始读取器的零编号历史缺口已单独留证。默认代码 0 没有保存，专用测试行已撤回，三个装备规则表恢复原空状态。原生配置、奖励、钱包、密钥及游戏容器启动身份保持不变。组件消费、玩家材料扣除/装备去向、游戏效果及原工具默认值/批量操作/格式对照仍待验。详见 [S29 验收](../validation/admin-cross-border-s29-2026-10-28.json)、[S27 验收](../validation/admin-recovery-s27-2026-10-28.json) 和 [实施记录](../admin/replacement-implementation.md)。运行镜像内的台账固定在构建提交，后续证据更新不会自动改变它。
+**admin 替代工作仍在 `codex/admin-replacement`，未完成全量替代，`releaseReady=false`。** 最新留存证据为 admin S41：镜像 `sha256:bf100959ff904aafe8be05b7b3a60d01baa462b9d592e11f755a262a1e9a3953`、后端源码 `3bffffa`；game S45：镜像 `sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073`、修复源码 `679cf9b`；admin 宿主端口 18080。这些是历史部署证据，本轮尚未重新连接核对服务器，不能视为实时状态。
+
+S25/S27/S29装备配置闭环、S33批量段间重建、S42排行榜规则及奖励恢复和admin重建、S43固定旧镜像只读回退均保留。S45 Frida配置保留修复已部署，两个实际频道初始化通过；有效非空活动进度、调度发奖和完整干净游戏构建仍待验。S46记录页修复对应本轮基线 `bb01d5a`，已构建并通过7项模拟浏览器检查，尚未部署。当前签到查询200、取样0行；历史409原因未证实。
+
+继续执行R0～R8，沿用71类239项和wp01～wp13，不从接口或测试数量推算完成率。两个门禁分别为admin实现完成、完整替代通过；各工作包保持未完成。详见[当前执行台账](../../services/admin/backend/src/main/resources/dof/execution-plan.json)、[实施记录](../admin/replacement-implementation.md)、[S41部署](../validation/admin-native-charts-deployment-s41-2026-10-28.json)、[S45部署](../validation/admin-frida-config-deployment-s45-2026-10-28.json)和[S46本地验证](../validation/admin-record-filter-pagination-s46-2026-10-28.json)。运行镜像内台账固定在构建提交，后续证据不会自动进入部署。
 
 S26 为回收规则本地实现批次，标准 Maven、136 项隔离 SQL、前端构建及模拟页面证据保留；S27 在此基础上完成真实部署配置与恢复验收。原生玩家操作和原工具对照仍待验，见 [S26 本地验收](../validation/admin-recovery-s26-2026-10-28.json)。
 

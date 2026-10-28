@@ -1,0 +1,183 @@
+{
+  "passed": true,
+  "stage": "S48",
+  "frontendSourceCommit": "bb01d5a6fd79c17bf840be55f2f655ec779bfeae",
+  "backendSourceSnapshotSHA256": "66de1b19e40ed9f1201d57a2333c5dd31e7aeb55e7fbcb9fe3c5b2700d28d7e9",
+  "adminImage": "sha256:a07c47be6847fc39ab05f115bd4a9608183faf3251af31e38dcf74365106210c",
+  "adminTag": "dof-admin-replacement:20261028-s48-sql-retired",
+  "backendAppSHA256": "cd25334f34b54c3341490115c72ccb456efe37a6e5861477826bf45eb28facae",
+  "backendUnchanged": false,
+  "frontendUnchanged": true,
+  "frontendStaticFilesVerified": 188,
+  "adminRecreated": true,
+  "adminMountsUnchanged": true,
+  "gameIdentityAndStartedAtUnchanged": true,
+  "gameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+  "gameHealthy": true,
+  "adminPort": 18080,
+  "databaseUuidVerified": true,
+  "all641ReceiptHashesUnchanged": true,
+  "protectedNativeConfigRewardsEquipmentWalletsRoleAndPausedCodeUnchanged": true,
+  "nativeDeadlineExcluded": true,
+  "keysPvfStaticConfigAndHeartbeatValuesUnchanged": true,
+  "onlyAdminImageReferenceChanged": true,
+  "archiveActuallyRestoredAndVerified": true,
+  "restoredOutputRetained": true,
+  "baseReserve2GiBMaintained": true,
+  "freeBytesAfter": 3505057792,
+  "browser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentVerified": true,
+    "invalidRequestInjectedForErrorDisplay": true,
+    "responseMocksUsed": false,
+    "checks": [
+      "real bound catalog exposes all thirty fixed record views; anonymous catalog, query and schema access are refused",
+      "real selected record view supplies its default search column and preserves literal Unicode and wildcard text in the first-page request",
+      "owner and period edits remove prior results and pagination; explicit queries start on page one",
+      "changing search column retains text; clearing owner, text and period removes the corresponding active conditions",
+      "real pagination reflects backend hasMore; empty tables keep the next-page action disabled",
+      "a deliberately invalid fixed search column receives a real backend 400, displays its error and clears stale pagination; a normal query recovers",
+      "real structure diagnosis and signin query return 200; all browser record requests remain GET and page errors stay zero"
+    ],
+    "pageErrors": 0,
+    "catalogViews": 30,
+    "samples": [
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "signin-users",
+        "rowCount": 0,
+        "hasMore": false
+      }
+    ],
+    "recordApiMethods": [
+      "GET"
+    ],
+    "populatedNativePaginationVerified": false,
+    "nativeDatabaseEncodingVerified": false,
+    "originalWindowsToolStarted": false,
+    "completeReplacement": false
+  },
+  "backendSqlEndpointFixDeployed": true,
+  "sqlEndpointChecks": {
+    "checks": 4,
+    "anonymousRefused": true,
+    "readWriteAndEmptyRequestsGone410": true,
+    "submittedTextNotEchoed": true
+  },
+  "standardMaven": {
+    "run": 528,
+    "passed": 204,
+    "skipped": 324,
+    "failures": 0,
+    "errors": 0
+  },
+  "populatedNativeRecordsVerified": false,
+  "originalWindowsToolStarted": false,
+  "completeReplacement": false,
+  "date": "2026-10-28",
+  "terminalState": {
+    "phase": "DEPLOYED_SQL_RETIREMENT_AND_PROTECTED_DATA_VERIFIED",
+    "operatorProcessExited": true
+  },
+  "buildIdentity": {
+    "baselineCommit": "bb01d5a6fd79c17bf840be55f2f655ec779bfeae",
+    "workingTreeSnapshot": true,
+    "sourceManifestSHA256": "66de1b19e40ed9f1201d57a2333c5dd31e7aeb55e7fbcb9fe3c5b2700d28d7e9",
+    "appSHA256": "cd25334f34b54c3341490115c72ccb456efe37a6e5861477826bf45eb28facae",
+    "baseAppSHA256": "2e1f2a75ad8b6ba9bcceec6241d61332b5c73ef27e556e5c5092f827e081a790",
+    "mainCompileClassFiles": 334,
+    "productionClassesPackaged": 333,
+    "allPackagedClassesMatchStandardMaven": true,
+    "keysPrivateFixturesAndTestClassesExcluded": true,
+    "frontendFilesUnchanged": 188,
+    "standardMaven": {
+      "run": 528,
+      "passed": 204,
+      "skipped": 324,
+      "failures": 0,
+      "errors": 0
+    },
+    "delta": {
+      "targetBytes": 58453141,
+      "transferBytes": 149817,
+      "targetSha256": "cd25334f34b54c3341490115c72ccb456efe37a6e5861477826bf45eb28facae"
+    },
+    "completeReplacement": false
+  },
+  "precedingFrontendAndRestoreEvidence": "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json",
+  "skippedTestConditions": "docs/validation/admin-maven-conditions-r1-2026-10-28.json",
+  "buildAttemptHistory": {
+    "initialMavenJdkMissing": true,
+    "windowsMaven": {
+      "run": 528,
+      "passed": 163,
+      "errors": 41,
+      "failures": 0,
+      "skipped": 324,
+      "reason": "POSIX filesystem attributes and link capabilities unavailable on Windows",
+      "logSHA256": "fa6486548e732740ef0e72a5ba35b8de0c4b25fa2bb311dd8643f8901d195e68"
+    },
+    "linuxFirstRepositoryResolutionFailed": true,
+    "linuxCleanTest": {
+      "startedTests": false,
+      "passed": false,
+      "reason": "maven-clean-plugin:3.1.0 absent from the offline cache",
+      "logSHA256": "488956e0713a4af8c359571ff019bc6ea7280ad4560ad9a23094421525189ea7"
+    },
+    "linuxStandardTest": {
+      "passed": 204,
+      "skipped": 324,
+      "failures": 0,
+      "errors": 0,
+      "logSHA256": "a512d3c0b214c4b91efa13a3fa11174705f540fe5ce535865ac9aa4a9b19656e"
+    }
+  },
+  "validationLimits": [
+    "只封闭旧任意SQL入口，未宣称所有写入口已完成编号、预览和持久化协议；公告等入口继续审计。",
+    "324项条件跳过均已逐项列出，未计为原生通过；独立数据库契约和私有输入条件继续补齐。",
+    "本批标准test通过；clean插件缺失导致离线clean test未运行，不宣称干净完整构建已通过。",
+    "游戏保持S45，没有客户端或游戏效果验收。交易和签到查询仍为空，记录完整性与实际数据库编码待验。",
+    "S47文件归档恢复证明继续保留，不等同临时数据库或应用恢复。",
+    "镜像是固定S47运行镜像加已核验后端JAR，完整源码OCI可复现构建门禁仍由R8独立验收。"
+  ]
+}

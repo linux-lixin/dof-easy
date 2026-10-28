@@ -1073,7 +1073,8 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json"
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json",
+            "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json"
           ],
           "managementImplementation": {
             "state": "read_only_implemented",
@@ -1085,7 +1086,10 @@
             "diagnosisApi": "/api/v1/admin/dof/records/dungeon-runs/schema",
             "sharedRecordFilterUiImplemented": true,
             "sharedRecordFilterUiMockVerified": true,
-            "sharedRecordFilterUiRealDeploymentVerified": false
+            "sharedRecordFilterUiRealDeploymentVerified": true,
+            "sharedRecordFilterUiValidationView": "transactions",
+            "operationSpecificPopulatedRecordsVerified": false,
+            "validationLimit": "共享筛选页在真实部署的空交易表通过；不推定本分类有数据完整性、数据库编码或原工具等价通过。"
           }
         },
         {
@@ -1102,7 +1106,8 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json"
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json",
+            "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json"
           ],
           "managementImplementation": {
             "state": "read_only_implemented",
@@ -1114,7 +1119,10 @@
             "diagnosisApi": "/api/v1/admin/dof/records/auction-transactions/schema",
             "sharedRecordFilterUiImplemented": true,
             "sharedRecordFilterUiMockVerified": true,
-            "sharedRecordFilterUiRealDeploymentVerified": false
+            "sharedRecordFilterUiRealDeploymentVerified": true,
+            "sharedRecordFilterUiValidationView": "transactions",
+            "operationSpecificPopulatedRecordsVerified": false,
+            "validationLimit": "共享筛选页在真实部署的空交易表通过；不推定本分类有数据完整性、数据库编码或原工具等价通过。"
           }
         },
         {
@@ -1131,7 +1139,8 @@
           "output": null,
           "failureBehavior": null,
           "evidence": [
-            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json"
+            "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json",
+            "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json"
           ],
           "managementImplementation": {
             "state": "read_only_implemented",
@@ -1143,7 +1152,10 @@
             "diagnosisApi": "/api/v1/admin/dof/records/chat-reports/schema",
             "sharedRecordFilterUiImplemented": true,
             "sharedRecordFilterUiMockVerified": true,
-            "sharedRecordFilterUiRealDeploymentVerified": false
+            "sharedRecordFilterUiRealDeploymentVerified": true,
+            "sharedRecordFilterUiValidationView": "transactions",
+            "operationSpecificPopulatedRecordsVerified": false,
+            "validationLimit": "共享筛选页在真实部署的空交易表通过；不推定本分类有数据完整性、数据库编码或原工具等价通过。"
           }
         },
         {

@@ -1,0 +1,149 @@
+{
+  "passed": true,
+  "stage": "S47",
+  "frontendSourceCommit": "bb01d5a6fd79c17bf840be55f2f655ec779bfeae",
+  "backendSourceCommit": "3bffffa3072f73894d04fd9b5f9c5d5cb3811b29",
+  "adminImage": "sha256:89b5fdbe14e5d7f24e3529d1f0b65398fb8e6a778135df960e0574f667857a24",
+  "adminTag": "dof-admin-replacement:20261028-s47-records-ui",
+  "backendAppSHA256": "2e1f2a75ad8b6ba9bcceec6241d61332b5c73ef27e556e5c5092f827e081a790",
+  "backendUnchanged": true,
+  "frontendStaticFilesVerified": 188,
+  "adminRecreated": true,
+  "adminMountsUnchanged": true,
+  "gameIdentityAndStartedAtUnchanged": true,
+  "gameImage": "sha256:3533efe1e2c2bef4c781bf3c11b57ba58a7cd5bcdd5e57f966c1c740c35ff073",
+  "gameHealthy": true,
+  "adminPort": 18080,
+  "databaseUuidVerified": true,
+  "all641ReceiptHashesUnchanged": true,
+  "protectedNativeConfigRewardsEquipmentWalletsRoleAndPausedCodeUnchanged": true,
+  "nativeDeadlineExcluded": true,
+  "keysPvfStaticConfigAndHeartbeatValuesUnchanged": true,
+  "onlyAdminImageReferenceChanged": true,
+  "archiveActuallyRestoredAndVerified": true,
+  "restoredOutputRetained": true,
+  "baseReserve2GiBMaintained": true,
+  "freeBytesAfter": 3783659520,
+  "browser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentVerified": true,
+    "invalidRequestInjectedForErrorDisplay": true,
+    "responseMocksUsed": false,
+    "checks": [
+      "real bound catalog exposes all thirty fixed record views; anonymous catalog, query and schema access are refused",
+      "real selected record view supplies its default search column and preserves literal Unicode and wildcard text in the first-page request",
+      "owner and period edits remove prior results and pagination; explicit queries start on page one",
+      "changing search column retains text; clearing owner, text and period removes the corresponding active conditions",
+      "real pagination reflects backend hasMore; empty tables keep the next-page action disabled",
+      "a deliberately invalid fixed search column receives a real backend 400, displays its error and clears stale pagination; a normal query recovers",
+      "real structure diagnosis and signin query return 200; all browser record requests remain GET and page errors stay zero"
+    ],
+    "pageErrors": 0,
+    "catalogViews": 30,
+    "samples": [
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "transactions",
+        "rowCount": 0,
+        "hasMore": false
+      },
+      {
+        "view": "signin-users",
+        "rowCount": 0,
+        "hasMore": false
+      }
+    ],
+    "recordApiMethods": [
+      "GET"
+    ],
+    "populatedNativePaginationVerified": false,
+    "nativeDatabaseEncodingVerified": false,
+    "originalWindowsToolStarted": false,
+    "completeReplacement": false
+  },
+  "backendSqlEndpointFixDeployed": false,
+  "populatedNativeRecordsVerified": false,
+  "originalWindowsToolStarted": false,
+  "completeReplacement": false,
+  "date": "2026-10-28",
+  "restoreDrill": {
+    "passed": true,
+    "archiveSHA256": "4824b3a12710b546adc427745708bb80970e29f9b506d8a6967da849151881f2",
+    "restoredIntoNewDirectory": true,
+    "restoredMembers": 57,
+    "restoredFileBytes": 1757859581,
+    "fullBytesAndMetadataVerified": true,
+    "baseReserveBytes": 2147483648,
+    "databaseRestoreVerified": false,
+    "applicationRecoveryVerified": false,
+    "liveDataModified": false,
+    "completeReplacement": false,
+    "realPrivateArchiveRestored": true,
+    "linuxBackupTestsPassed": 4,
+    "linuxRestoreTestsPassed": 3,
+    "linuxTestsSkipped": 0,
+    "originalTreeStillMatchesArchive": true,
+    "adminAndGameIdentityUnchanged": true,
+    "freeBytesAfter": 3875827712,
+    "restoredOutputRetained": true
+  },
+  "terminalState": {
+    "phase": "DEPLOYED_FRONTEND_REAL_BROWSER_AND_PROTECTED_DATA_VERIFIED",
+    "allOperatorProcessesExited": true
+  },
+  "databaseEngineObservation": {
+    "InnoDB": 305,
+    "MyISAM": 43,
+    "converted": false
+  },
+  "fridaProgressRows": 0,
+  "frontendBuildEvidence": "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json",
+  "sourceSHA256": {
+    "liveBrowserScript": "2e2baded291e666adeab27aac4efca369ad3f0b1fafd5d5b7492010e5dbb37df",
+    "restoreTool": "e46e30e6d6b3293fb02930c94917d471ab5dfac755db407d4cd2633eb670359f",
+    "operatorScript": "8195d5fffea7cecd7e363bff0c60e38877b8e002e1edc94af8fad5ba69a471c3"
+  },
+  "validationLimits": [
+    "交易和签到实际取样均为0行，未完成原生有数据分页、数据库编码及原工具等价验收。",
+    "错误展示通过故意将一次GET的searchField改为固定非法字段触发真实400；没有模拟后端响应。",
+    "权限检查覆盖匿名访问；非管理员细分权限矩阵仍需补齐。",
+    "恢复演练只证明admin文件归档的字节和元数据可恢复，不证明数据库或应用已恢复。",
+    "只发布bb01d5a前端，S41后端保持不变，SQL停用源码尚未部署。",
+    "S33回执旧镜像只读回退、执行段内退出、数据库超时和池恢复、Frida有效非空进度仍待验。"
+  ]
+}
