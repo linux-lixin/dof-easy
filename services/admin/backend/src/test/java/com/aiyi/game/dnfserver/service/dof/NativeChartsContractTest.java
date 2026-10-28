@@ -112,6 +112,23 @@ public class NativeChartsContractTest {
         assertEquals("0:30",scalar("SELECT CONCAT(jiangli_day,':',jiangli_hour) FROM dof_native.game_charts_config"));
         assertNull(scalar("SELECT next_time FROM dof_native.game_charts_config"));
     }
+    @Test public void legacyScheduleRestoresOnlyFromServerSnapshotsAcrossKnownEngines()throws Exception {
+        sql("ALTER TABLE dof_native.game_charts_config DROP PRIMARY KEY,ADD UNIQUE KEY game_charts_config_pk(id)");
+        for(String engine:Arrays.asList("MyISAM","InnoDB")) {
+            sql("ALTER TABLE dof_native.game_charts_config ENGINE="+engine);
+            sql("UPDATE dof_native.game_charts_config SET jiangli_day=0,jiangli_hour=30,next_time=NULL");
+            ActivityConfigService.Edit changed=edit("charts");changed.values.put("jiangli_day",2);changed.values.put("jiangli_hour",4);
+            service.preview("charts",changed);assertEquals("PERSISTED",service.save("charts",changed,false).get("state"));
+            ActivityConfigService.Edit forged=edit("charts");forged.values.put("jiangli_day",0);forged.values.put("jiangli_hour",30);
+            reject(400,()->service.preview("charts",forged));
+            ActivityConfigService.Edit injected=restore(changed);injected.values=new LinkedHashMap<>(forged.values);
+            reject(400,()->service.preview("charts",injected));
+            ActivityConfigService.Edit undo=restore(changed);service.preview("charts",undo);
+            assertEquals("PERSISTED",service.restore("charts",changed.requestId,undo).get("state"));
+            assertEquals("0:30",scalar("SELECT CONCAT(jiangli_day,':',jiangli_hour) FROM dof_native.game_charts_config"));
+            assertNull(scalar("SELECT next_time FROM dof_native.game_charts_config"));
+        }
+    }
     @Test public void unknownFieldsTriggersAndActualPermissionRevocationReject()throws Exception {
         ActivityConfigService.Edit e=edit("charts");e.values.put("min_zhanli",200);
         sql("ALTER TABLE dof_native.game_charts_config ADD unknown_setting INT");reject(409,()->service.preview("charts",e));

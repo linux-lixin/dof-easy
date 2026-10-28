@@ -263,7 +263,9 @@ public class ActivityConfigService {
         if(s.key.equals("inheritance")&&!trustedRestore)NativeInheritanceRules.validate(result,old);
         if(s.key.equals("recovery")&&!trustedRestore)NativeRecoveryRules.validate(result,old);
         if(s.key.equals("cross-border")&&!trustedRestore)NativeCrossBorderRules.validate(result,old);
-        if(s.key.equals("charts"))NativeChartsRules.validate(result,old);
+        // Exact, server-owned snapshots may contain legacy schedules which
+        // remain readable but are intentionally rejected as new user input.
+        if(s.key.equals("charts")&&!trustedRestore)NativeChartsRules.validate(result,old);
         return result;
     }
     private void pair(Map<String,Object> row,String a,String b) {

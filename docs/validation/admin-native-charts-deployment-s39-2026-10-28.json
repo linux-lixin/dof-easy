@@ -1,0 +1,80 @@
+{
+  "finalVerification": {
+    "passed": true,
+    "sourceCommit": "b0b1b4972bc16b21c6cb6692bb141d7a574eef34",
+    "adminImage": "sha256:4c120590f5d15b691d9e2e1e6362c9479e35ed4b7554f9855d58f310d987f332",
+    "appSHA256": "64f3fbe832743a813725b8da2417c802f01e64ec9148b7b7595ca47be5da9120",
+    "adminPort": 18080,
+    "realBrowserChecks": 7,
+    "pageErrors": 0,
+    "all633PriorReceiptsByteHashUnchanged": true,
+    "noUnresolvedActivityOperations": true,
+    "nativeRulesAndRewardsUnchanged": true,
+    "protectedWalletsNativeConfigRewardsEquipmentTablesAndPausedCodeUnchanged": true,
+    "gamePvfConfigurationIdentityUnchanged": true,
+    "adminPersistentKeysUnchanged": true,
+    "deploymentOnlyAdminImageChanged": true,
+    "proxyTemplatesAndExpandedConfigVerified": true,
+    "baseReserve2GiBMaintained": true,
+    "configurationWritesPerformed": false,
+    "rollbackImageBuilt": true,
+    "rollbackReaderForNewReceiptsVerified": false,
+    "originalWindowsToolStarted": false,
+    "originalToolEquivalenceVerified": false,
+    "nativeConsumerAcceptanceVerified": false,
+    "nativeGameplayVerified": false,
+    "completeReplacement": false
+  },
+  "realBrowser": {
+    "passed": true,
+    "mockedApis": false,
+    "realDeploymentVerified": true,
+    "configurationWritesPerformed": false,
+    "originalWindowsToolStarted": false,
+    "nativeConsumerAcceptanceVerified": false,
+    "nativeGameplayVerified": false,
+    "completeReplacement": false,
+    "checks": [
+      "both real native configuration APIs reject anonymous access",
+      "deployed catalog exposes existing-only native rules and reversible rewards with 3000-character paired fields",
+      "bound live instance returns its original active rule and all twelve reward rows",
+      "real ranking page keeps identity, both existing entry flags and native deadline read-only",
+      "real enabled ranking/worship entry guard refuses preview and keeps submit disabled",
+      "real reward form preserves 549 characters in each CSV and rejects writing while native entries remain active",
+      "fresh real API reads retain every original rule/reward value and revision after refused previews"
+    ],
+    "pageErrors": 0
+  },
+  "preservedSelectorFailure": {
+    "reason": "real enabled-entry refusal returned correctly; generic alert selector matched three modal notices",
+    "productionCodeChanged": false,
+    "configurationWritesPerformed": false,
+    "logSHA256": "b9e6e1015af218c0561d9940c53d5cc74bd3052d751973d96054850f2e66347b"
+  },
+  "rollbackBuild": {
+    "tag": "dof-admin-replacement:20261028-s39-rollback-readonly",
+    "image": "sha256:0c56ee6f78c2b2ab99b791f62ddacadd8e94d0996092278b6a77584aab27de70",
+    "oldAppSHA256": "6e1dfaf6170294800cc847c1eeebe2cb25db79f7b126ffe7bc8397e7b608769c",
+    "guardSHA256": "00a169acabcd1e2181c1cf1f957cf726fd4a4c4bebd2a84b2cd4ae533f157862",
+    "publicWriteIsolationVerified": false
+  },
+  "stage": "S39-deployment",
+  "date": "2026-10-28",
+  "buildIdentity": {
+    "sourceCommit": "b0b1b4972bc16b21c6cb6692bb141d7a574eef34",
+    "appSHA256": "64f3fbe832743a813725b8da2417c802f01e64ec9148b7b7595ca47be5da9120",
+    "baseAppSHA256": "6e1dfaf6170294800cc847c1eeebe2cb25db79f7b126ffe7bc8397e7b608769c",
+    "mainCompileClassFiles": 334,
+    "productionClassesPackaged": 333,
+    "allPackagedClassesMatchStandardMaven": true,
+    "classesMatchPackagedJar": true,
+    "keysAndTestsExcluded": true,
+    "excludedMainSampleClass": "com/aiyi/game/dnfserver/test/Test.class",
+    "completeReplacement": false
+  },
+  "nativeNamedUniqueIdentityAccepted": true,
+  "realEnabledEntryRefusalVerified": true,
+  "controlledWriteAcceptancePending": true,
+  "originalWindowsToolStarted": false,
+  "completeReplacement": false
+}

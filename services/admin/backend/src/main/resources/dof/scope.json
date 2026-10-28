@@ -3173,7 +3173,9 @@
           "evidence": [
             "docs/validation/admin-native-charts-s36-2026-10-28.json",
             "docs/validation/admin-native-charts-deployment-s38-2026-10-28.json",
-            "docs/validation/admin-native-charts-identity-s39-2026-10-28.json"
+            "docs/validation/admin-native-charts-identity-s39-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+            "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
@@ -3215,7 +3217,9 @@
           "failureBehavior": null,
           "evidence": [
             "docs/validation/admin-native-charts-s36-2026-10-28.json",
-            "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json"
+            "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json",
+            "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json",
+            "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json"
           ],
           "implementationSubsets": [
             {
