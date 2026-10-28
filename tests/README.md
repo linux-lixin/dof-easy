@@ -1,6 +1,11 @@
 # 测试入口
 
-最新证据及待验证项见 [当前状态](../docs/dof/status.md)。默认模式、原生加载、网页发布与玩家实际流程分别报告；私有样本缺失导致的跳过不能计为通过。下列命令是检查入口，不表示本次文档更新重跑了这些检查。
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/tests/README.md)。限制和当前验收边界见[当前状态](../docs/status/README.md)。
+
+
+最新证据及待验证项见 [当前状态](../docs/status/README.md)。默认模式、原生加载、网页发布与玩家实际流程分别报告；私有样本缺失导致的跳过不能计为通过。下列命令是检查入口，不表示本次文档更新重跑了这些检查。
 
 通用检查使用 Python 3.9+，原生 `tests/unit/dof` 及打包／部署检查使用 Python 3.11+。在仓库根目录执行。不要对整个 `tests` 递归执行 discovery：集成脚本有独立参数和容器生命周期，必须显式调用。
 
@@ -49,14 +54,15 @@ python tests/integration/test_built_images.py --state-file dist/ubuntu-split-sta
 
 ## 文档和原生验收摘要
 
-仅文档改动可执行链接检查及 JSON 解析，不需启动整套实例：
+文档改动运行 Git 范围完整校验和检查器故障回归，不启动整套实例；文档检查使用 Python 3.11+：
 
 ```sh
-python3 tests/structure/test_deploy_layout.py DeploymentLayout.test_document_links_resolve
+python scripts/diagnostics/check_docs.py
+python -m unittest discover -s tests/unit -p 'test_docs_checker.py'
 python3 -m unittest discover -s tests/unit/dof -p 'test_server_runtime_report.py'
 ```
 
-原生后台 Java 私有样本、隔离 MySQL 和编译要求见 [发布说明](../docs/dof/publication.txt)。各历史测试批次有重叠，不把计数相加。Windows 读取、实际登录、奖励入包及团本流程须有对应实际证据，不能由离线合成输入、网页任务状态或进程健康替代。
+原生后台 Java 私有样本、隔离 MySQL 和编译要求见 [发布说明](../docs/development/admin-packaging.md)。各历史测试批次有重叠，不把计数相加。Windows 读取、实际登录、奖励入包及团本流程须有对应实际证据，不能由离线合成输入、网页任务状态或进程健康替代。
 
 ## 内置／外置 MySQL
 

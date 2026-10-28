@@ -1,5 +1,10 @@
 # Durable recharge contract
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/tests/integration/dof/recharge/README.md)。限制和当前验收边界见[当前状态](../../../../docs/status/README.md)。
+
+
 Run the adjacent `run.sh` only through `scripts/dof/local_environment.py`, with its sealed private PID/network namespace and fresh output. It creates a new MySQL 5.6 on namespace loopback and uses no real host or game data. Stage the verified MySQL files under `mysql/`, Java runtime including resolved `conf/security/java.security` under `java/`, actual Maven test jars under `dependencies/`, current compiled production/test classes plus public `dof/` catalog resources under `classes/`, `deploy/database/seed.sql`, `services/admin/database/dof-admin.sql`, and these scripts. CDK contracts additionally require the public `services/admin/database/init.sql` as `admin-init.sql`; only its recharge_key CREATE TABLE statement is extracted, never its DROP/seed statements.
 
 The Java contract independently requires the matching database UUID, a unique disposable marker and absence of both game schemas. It creates synthetic accounts and the actual seed wallet definition/known boundary trigger, then tests the actual service and management journal. Cleanup rechecks the identity and marker and drops only schemas it created. No private native UI sample is substituted for or needed by this database contract.

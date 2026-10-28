@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-28",
+  "timezone": "Asia/Hong_Kong",
+  "documentationBaseline": "ecd4505d1ebdd28486b13a718cd991874efbe96f",
+  "evidenceFile": "docs/validation/main-deployment-2026-10-28.json",
+  "facts": {
+    "applicationSourceCommit": {
+      "value": "a6ade435a9037a926e8b0c186b0ab31be6db9159",
+      "pointer": "/deployment/sourceCommit"
+    },
+    "adminImage": {
+      "value": "sha256:f8cf56655a258627717439678ecae04d1e3c3eed0f2accf1defc848453bcfe50",
+      "pointer": "/deployment/adminImage"
+    },
+    "adminTag": {
+      "value": "dof-easy-admin:main-a6ade435",
+      "pointer": "/deployment/adminTag"
+    },
+    "adminJarSha256": {
+      "value": "c3a81e5d0e7cebb6305926affc26ba3ed811d1ec52e741d60b759b20ad90b97d",
+      "pointer": "/deployment/adminAppSha256"
+    },
+    "gameImage": {
+      "value": "sha256:d72a5afccc88137c3283e8ffec931a801a0e5e5e1ea24cb78e4ee8bcc4a76c22",
+      "pointer": "/gameRecreation/gameImage"
+    },
+    "gameTag": {
+      "value": "dof-easy-game:main-a6ade435",
+      "pointer": "/gameImageRecovery/tag"
+    },
+    "gameHealthy": {
+      "value": true,
+      "pointer": "/gameRecreation/gameHealthy"
+    },
+    "gameFreshSourceBuildClaimed": {
+      "value": false,
+      "pointer": "/gameRecreation/gameFreshSourceBuildClaimed"
+    },
+    "managementBackupCount": {
+      "value": 1,
+      "pointer": "/retention/currentManagementBackupCount"
+    },
+    "backupScope": {
+      "value": "Admin data plus management/native configuration/wallet SQL; not a full game database backup",
+      "pointer": "/retention/backupScope"
+    },
+    "databaseRestoreVerified": {
+      "value": false,
+      "pointer": "/backupRestore/databaseRestoreVerified"
+    },
+    "applicationRecoveryVerified": {
+      "value": false,
+      "pointer": "/backupRestore/applicationRecoveryVerified"
+    },
+    "oldImageRollbackAvailable": {
+      "value": false,
+      "pointer": "/retention/oldImageRollbackAvailable"
+    },
+    "automaticRetentionPolicyChanged": {
+      "value": false,
+      "pointer": "/retention/automaticRetentionPolicyChanged"
+    },
+    "standardMavenPackageCompleted": {
+      "value": false,
+      "pointer": "/build/standardMavenPackageCompleted"
+    },
+    "freshSourceMavenCompileCompleted": {
+      "value": true,
+      "pointer": "/build/freshSourceMavenCompileCompleted"
+    },
+    "releaseReady": {
+      "value": false,
+      "pointer": "/releaseReady"
+    },
+    "completeReplacement": {
+      "value": false,
+      "pointer": "/completeReplacement"
+    },
+    "gameplayAcceptancePerformed": {
+      "value": false,
+      "pointer": "/gameplayAcceptancePerformed"
+    }
+  },
+  "completionLedgers": [
+    "services/admin/backend/src/main/resources/dof/scope.json",
+    "services/admin/backend/src/main/resources/dof/execution-plan.json"
+  ]
+}

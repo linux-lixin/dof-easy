@@ -1,5 +1,10 @@
 # Frida database contract probe
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/tests/integration/dof/frida_database/README.md)。限制和当前验收边界见[当前状态](../../../../docs/status/README.md)。
+
+
 Run only through `scripts/dof/local_environment.py` in a sealed, private network/PID namespace. Never run `run.sh` directly on a host. The probe creates a disposable MySQL 5.6 instance with networking disabled. It does not load game executables or connect to a server.
 
 Stage `probe.py`, `run.sh`, the repository's `scripts/container/database.py` and `deploy/database/seed.sql` under `repo/`, and the verified MySQL 5.6 files under `mysql/`. Add the matching `mysql/usr/bin/mysqldump` with SHA-256 `55aaf7412c4e46017dcf49f5c0c129ecea97f1c8fe4ed1e14634f0530f0ea65b` (the same pinned client used by the game Dockerfile).

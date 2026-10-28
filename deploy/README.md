@@ -1,5 +1,10 @@
 # 部署目录与容器职责
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/deploy/README.md)。限制和当前验收边界见[当前状态](../docs/status/README.md)。
+
+
 新安装统一在仓库根目录运行 `bash dof.sh`。项目不依赖宝塔；宝塔或普通 Nginx 均可作为可选管理／反向代理方式。
 
 ## 当前运行方式
@@ -48,4 +53,4 @@ bash dof.sh status --instance main
 
 若切换失败，先查看报错及 `bash dof.sh logs --instance main`，修复后重试安装／启动；已完成的库初始化不会重复执行。配置快照含秘密，勿提交。需要回到旧拓扑时，应使用更新前的代码和镜像，恢复快照中的实例配置后启动；不能只恢复旧 Compose 文件并混用新代码，也不需要回滚玩家数据库。
 
-手动部署实例仍按 [manual 说明](manual/README.md) 管理独立 `.env` 和 `RUNTIME_ROOT`，不要混用一键端数据目录。新安装步骤见 [菜单说明](../docs/container-installer.md)及[同机 MySQL 指南](../docs/baota-deployment.md)。本轮验证及未执行项目见 [直接端口映射验证](../docs/validation/direct-topology.md)。
+手动部署实例仍按 [manual 说明](manual/README.md) 管理独立 `.env` 和 `RUNTIME_ROOT`，不要混用一键端数据目录。新安装步骤见 [菜单说明](../docs/operations/install.md)及[同机 MySQL 指南](../docs/operations/external-mysql.md)。本轮验证及未执行项目见 [直接端口映射验证](../docs/validation/direct-topology.md)。

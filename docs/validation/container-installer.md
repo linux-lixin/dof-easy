@@ -19,7 +19,7 @@
 
 ## 原容器一键端验证记录
 
-日期：2026-10-26。基线 main `5a5f6c5`。本轮没有连接现有服务器，没有修改开发主机的系统包、防火墙、Swap 或 Docker 配置。主机级操作全部在新建、可丢弃的 Debian 12 虚拟机内执行。当前源码哈希和脱敏结果见 [机器记录](container-installer.json)，入口与恢复步骤见 [安装指南](../container-installer.md)。
+日期：2026-10-26。基线 main `5a5f6c5`。本轮没有连接现有服务器，没有修改开发主机的系统包、防火墙、Swap 或 Docker 配置。主机级操作全部在新建、可丢弃的 Debian 12 虚拟机内执行。当前源码哈希和脱敏结果见 [机器记录](container-installer.json)，入口与恢复步骤见 [安装指南](../operations/install.md)。
 
 ## 脚本和配置
 

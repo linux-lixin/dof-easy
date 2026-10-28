@@ -1,6 +1,11 @@
 # 本地材料导入工具
 
-仅供维护者从自己保存的原始归档准备候选材料，**新安装不需要执行这些脚本**。仓库正式插件位于 `services/game/resources/plugins/`、原生材料位于 `services/game/resources/native/`，由 [统一安装器](../../docs/container-installer.md) 按需启用。
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/scripts/imports/README.md)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+
+
+仅供维护者从自己保存的原始归档准备候选材料，**新安装不需要执行这些脚本**。仓库正式插件位于 `services/game/resources/plugins/`、原生材料位于 `services/game/resources/native/`，由 [统一安装器](../../docs/operations/install.md) 按需启用。
 
 - `prepare_assets.py --source <本地归档目录>`：校验来源清单和归档路径，默认生成 `.dof-easy/imported-assets/`。普通 DP2/Frida 可使用 `--plugins-only`；完整导入保留其原有 86 级来源选择，不替代通用等级选择。种子输出为 `seed/seed.sql`。
 - `prepare_source.py`：转交公共资源校验入口。新命令直接使用 `python3 scripts/container/resources.py`。

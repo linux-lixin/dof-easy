@@ -45,6 +45,6 @@ python3 tests/integration/resource_docker_probe.py --report /tmp/dof-resources-r
 
 Docker 探针复制真实正式资源，并使用两个生产 Dockerfile 的插件 COPY 行及其有效忽略规则。以预载 BusyBox 为基础，检查构建上下文排除原生／审计材料，并逐一校验镜像内 27 个插件文件；不执行游戏程序、不下载依赖。它不是完整游戏镜像构建。
 
-已有实例的数据目录、密钥、插件修改和实际加载路径未改变，无需数据库迁移。撤销此次源码提交可恢复旧仓库资源布局；没有需要恢复的服务器变更。新的正式目录与兼容路径见 [资源布局](../resource-layout.md)。
+已有实例的数据目录、密钥、插件修改和实际加载路径未改变，无需数据库迁移。撤销此次源码提交可恢复旧仓库资源布局；没有需要恢复的服务器变更。新的正式目录与兼容路径见 [资源布局](../reference/resources.md)。
 
 结构化结果及相关输入摘要见 [验证记录](unified-server-resources.json)。测试 VM 已关机，测试镜像已移除。

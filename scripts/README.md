@@ -1,5 +1,10 @@
 # 仓库工具
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/scripts/README.md)。限制和当前验收边界见[当前状态](../docs/status/README.md)。
+
+
 服务端安装和镜像发布仅提供 Linux Shell 入口，使用 Python 3.11+。从仓库根目录运行下表中的 Python 入口；参数以各脚本 `--help` 为准。实际凭据、profile、运行状态和原始归档留在私有目录，正式插件资源位于 `services/game/resources/`。
 
 | 路径 | 用途 |
@@ -28,7 +33,7 @@ python3 scripts/container/resources.py
 python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52
 ```
 
-原生操作先读 [文档入口](../docs/dof/README.md)。游戏部署与网页部署各有独立保护范围，不能把网页脚本改成通用容器操作入口。部署须使用已合入 main 的版本，不能依赖服务器临时改文件。
+原生操作先读 [文档入口](../docs/getting-started/login-modes.md)。游戏部署与网页部署各有独立保护范围，不能把网页脚本改成通用容器操作入口。部署须使用已合入 main 的版本，不能依赖服务器临时改文件。
 
 脚本按用途分类，目录不绑定等级或面板。原 `scripts/vipai86/` 已整理为 `imports/`；游戏内普通插件加载器为 `services/game/runtime/ubuntu/plugins.py`，原生网关适配仍在同级 `gateway/`。安装时由统一菜单选择等级、DP2、Frida 和团本扩展。
 

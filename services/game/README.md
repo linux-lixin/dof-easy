@@ -1,5 +1,10 @@
 # Ubuntu 游戏服务
 
+用途与读者：本模块使用者与维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+
+事实来源：[README.md](https://github.com/linux-lixin/dof-easy/blob/ecd4505d1ebdd28486b13a718cd991874efbe96f/services/game/README.md)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
+
+
 唯一游戏镜像基于 Ubuntu 24.04，支持 ALL、CORE、GAME、P2P 四种角色，游戏容器连接独立 MySQL；通用安装器提供数据库容器，手动模板使用自行管理的外部数据库。
 
 | 目录 | 用途 |
@@ -17,7 +22,7 @@ docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 s
 ```
 
 启动脚本已直接保存为 Ubuntu 版本，不再依靠构建时剪裁旧平台脚本。
-默认部署见 [根 README](../../README.md)，高级手动部署见 [整体](../../deploy/manual/all/README.md) / [拆分](../../deploy/manual/split/README.md)，依赖见 [兼容说明](../../docs/ubuntu/compatibility.md)。
+默认部署见 [根 README](../../README.md)，高级手动部署见 [整体](../../deploy/manual/all/README.md) / [拆分](../../deploy/manual/split/README.md)，依赖见 [兼容说明](../../docs/reference/platform-compatibility.md)。
 `assets` 是构建输入，不是线上运行目录。实际 PVF、公钥、配置和用户 hook 保存在部署的 `runtime` 中。
 
 ## dof-easy 网关目录
@@ -38,10 +43,10 @@ docker build -f services/game/docker/ubuntu/Dockerfile -t dnf-game:ubuntu24.04 s
 
 默认配置为 `plugin.ini`、`anton-raid.ini`、`luke-raid.ini`、`dungeon.lst`，`gateway.ini` 由运行时生成。当前未上线项目直接使用新配置；已有显式离线迁移工具仅保留供历史材料导入，不是本次部署任务。
 
-当前固定资源可确定性派生，受影响的 101 项本地检查通过；86 级实际网关、模块加载和初始化已有证据。网页配置及 PVF 处理已有通过记录，签到记录查询尚有结构不兼容问题；Windows 读取端和实际游戏流程仍待完成（`releaseReady=false`）。详情见 [验收报告](../../docs/dof/server-runtime-validation.md) 和 [资源导入](../../docs/dof/launcher.md)。
+签到最新请求为 200、样本为空；历史 409 保留在原验收记录，不能替代当前结论。详见[当前部署](../../docs/status/deployment.md)。
 
 ## 普通插件与团本
 
-DP2、Frida 和原生资源统一放在 `resources/`，完整的源码、镜像、持久化及加载路径见 [资源布局](../../docs/resource-layout.md)。安装菜单可选 DP2＋Frida、仅 DP2、仅 Frida 或关闭；团本独立开关且依赖 DP2。原生登录必需的凭据适配不随普通插件关闭。
+DP2、Frida 和原生资源统一放在 `resources/`，完整的源码、镜像、持久化及加载路径见 [资源布局](../../docs/reference/resources.md)。安装菜单可选 DP2＋Frida、仅 DP2、仅 Frida 或关闭；团本独立开关且依赖 DP2。原生登录必需的凭据适配不随普通插件关闭。
 
 实例插件修改保存在 `/data/dp/` 与 `/data/plugins/frida/`；`/dp2` 保留上游加载约定。模板不带数据库密码，启动时按当前实例注入。原始材料由维护者本地保管，不再入库。安装菜单自动选择仓库正式资源；DP2 配套 PVF 补丁随 DP2 选装提供。

@@ -1,0 +1,1819 @@
+{
+  "schemaVersion": 1,
+  "baseline": "ecd4505d1ebdd28486b13a718cd991874efbe96f",
+  "scope": "Documentation only; no deployment or acceptance promotion",
+  "originalCount": 86,
+  "evidenceCount": 88,
+  "originals": [
+    {
+      "original": "CONTRIBUTING.md",
+      "destination": "CONTRIBUTING.md",
+      "handling": "retain",
+      "sources": [
+        "dof.sh"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "README.md",
+      "destination": "README.md",
+      "handling": "retain",
+      "sources": [
+        "dof.sh"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "clients/launcher/README.md",
+      "destination": "clients/launcher/README.md",
+      "handling": "retain",
+      "sources": [
+        "clients/launcher"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/README.md",
+      "destination": "deploy/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/README.md",
+      "destination": "deploy/manual/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/all/README.md",
+      "destination": "deploy/manual/all/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual/all"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/build/README.md",
+      "destination": "deploy/manual/build/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual/build"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/split/README.md",
+      "destination": "deploy/manual/split/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual/split"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/split/admin/README.md",
+      "destination": "deploy/manual/split/admin/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual/split/admin"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/split/core/README.md",
+      "destination": "deploy/manual/split/core/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual/split/core"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/split/game/README.md",
+      "destination": "deploy/manual/split/game/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual/split/game"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "deploy/manual/split/p2p/README.md",
+      "destination": "deploy/manual/split/p2p/README.md",
+      "handling": "retain",
+      "sources": [
+        "deploy/manual/split/p2p"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/README.md",
+      "destination": "docs/README.md",
+      "handling": "retain",
+      "sources": [
+        "docs/README.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/admin/README.md",
+      "destination": "docs/development/admin.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "services/admin/docker/Dockerfile",
+        "scripts/dof/package_admin.py"
+      ],
+      "compatibility": "docs/admin/README.md"
+    },
+    {
+      "original": "docs/admin/activities.md",
+      "destination": "docs/operations/admin/activities.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/manage.py"
+      ],
+      "compatibility": "docs/admin/activities.md"
+    },
+    {
+      "original": "docs/admin/extension-management.md",
+      "destination": "docs/operations/admin/records.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/manage.py"
+      ],
+      "compatibility": "docs/admin/extension-management.md"
+    },
+    {
+      "original": "docs/admin/launcher-integration.md",
+      "destination": "docs/reference/clients/compatibility.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "clients/launcher/MainWindow.xaml.cs",
+        "scripts/dof/client_reader.py"
+      ],
+      "compatibility": "docs/admin/launcher-integration.md"
+    },
+    {
+      "original": "docs/admin/plugin-ownership.md",
+      "destination": "docs/architecture/execution-ownership.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/manage.py",
+        "services/game/runtime/ubuntu/bootstrap.sh"
+      ],
+      "compatibility": "docs/admin/plugin-ownership.md"
+    },
+    {
+      "original": "docs/admin/replacement-implementation.md",
+      "destination": "docs/history/admin/2026-10-28-implementation.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/admin/replacement-implementation.md"
+      ],
+      "compatibility": "docs/admin/replacement-implementation.md"
+    },
+    {
+      "original": "docs/admin/script-compression-validation.md",
+      "destination": "docs/development/native/compressed-script-audit.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/dof/audit_compressed_script.py"
+      ],
+      "compatibility": "docs/admin/script-compression-validation.md"
+    },
+    {
+      "original": "docs/admin/upstream/README.md",
+      "destination": "docs/history/upstream/admin/README.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/admin/upstream/README.md"
+      ],
+      "compatibility": "docs/admin/upstream/README.md"
+    },
+    {
+      "original": "docs/admin/upstream/docker-en.md",
+      "destination": "docs/history/upstream/admin/docker-en.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/admin/upstream/docker-en.md"
+      ],
+      "compatibility": "docs/admin/upstream/docker-en.md"
+    },
+    {
+      "original": "docs/admin/upstream/docker-zh.md",
+      "destination": "docs/history/upstream/admin/docker-zh.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/admin/upstream/docker-zh.md"
+      ],
+      "compatibility": "docs/admin/upstream/docker-zh.md"
+    },
+    {
+      "original": "docs/architecture.md",
+      "destination": "docs/architecture/overview.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/manage.py",
+        "services/game/runtime/ubuntu/bootstrap.sh"
+      ],
+      "compatibility": "docs/architecture.md"
+    },
+    {
+      "original": "docs/baota-deployment.md",
+      "destination": "docs/operations/external-mysql.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/database.py"
+      ],
+      "compatibility": "docs/baota-deployment.md"
+    },
+    {
+      "original": "docs/container-installer.md",
+      "destination": "docs/operations/install.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/manage.py"
+      ],
+      "compatibility": "docs/container-installer.md"
+    },
+    {
+      "original": "docs/container-verification.md",
+      "destination": "docs/validation/container-verification.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/container-verification.md"
+      ],
+      "compatibility": "docs/container-verification.md"
+    },
+    {
+      "original": "docs/dof/README.md",
+      "destination": "docs/getting-started/login-modes.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/dof/README.md"
+      ],
+      "compatibility": "docs/dof/README.md"
+    },
+    {
+      "original": "docs/dof/client-format-v2-update.md",
+      "destination": "docs/operations/native-client-publication.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/dof/client_reader.py",
+        "scripts/dof/install_client_inputs.py"
+      ],
+      "compatibility": "docs/dof/client-format-v2-update.md"
+    },
+    {
+      "original": "docs/dof/client-reader-validation.md",
+      "destination": "docs/status/native-client.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/dof/client_reader.py",
+        "docs/history/clients/reader-validation.md"
+      ],
+      "compatibility": "docs/dof/client-reader-validation.md"
+    },
+    {
+      "original": "docs/dof/client-readiness-update.md",
+      "destination": "docs/history/clients/readiness-pr26.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/dof/client-readiness-update.md"
+      ],
+      "compatibility": "docs/dof/client-readiness-update.md"
+    },
+    {
+      "original": "docs/dof/deployment.txt",
+      "destination": "docs/operations/isolated-admin.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/dof/prepare_isolated.py",
+        "scripts/dof/run_isolated.py"
+      ],
+      "compatibility": "docs/dof/deployment.txt"
+    },
+    {
+      "original": "docs/dof/equipment-broadcast.md",
+      "destination": "docs/reference/native/equipment-broadcast.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/protocol/dof",
+        "scripts/dof/client_reader.py"
+      ],
+      "compatibility": "docs/dof/equipment-broadcast.md"
+    },
+    {
+      "original": "docs/dof/game-test-deployment.md",
+      "destination": "docs/operations/isolated-game.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/dof/deploy_game_test.py"
+      ],
+      "compatibility": "docs/dof/game-test-deployment.md"
+    },
+    {
+      "original": "docs/dof/launcher.md",
+      "destination": "docs/development/native-resource-derivation.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/dof/import_assets.py",
+        "scripts/dof/package_server.py"
+      ],
+      "compatibility": "docs/dof/launcher.md"
+    },
+    {
+      "original": "docs/dof/protocol.txt",
+      "destination": "docs/reference/native/client-protocol.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/protocol/dof",
+        "scripts/dof/client_reader.py"
+      ],
+      "compatibility": "docs/dof/protocol.txt"
+    },
+    {
+      "original": "docs/dof/publication.txt",
+      "destination": "docs/development/admin-packaging.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "services/admin/docker/Dockerfile",
+        "scripts/dof/package_admin.py"
+      ],
+      "compatibility": "docs/dof/publication.txt"
+    },
+    {
+      "original": "docs/dof/server-protocol-contract.md",
+      "destination": "docs/reference/native/server-protocol.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/protocol/dof",
+        "scripts/dof/client_reader.py"
+      ],
+      "compatibility": "docs/dof/server-protocol-contract.md"
+    },
+    {
+      "original": "docs/dof/server-runtime-validation.md",
+      "destination": "docs/status/native-runtime.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/dof/server-runtime-validation.json"
+      ],
+      "compatibility": "docs/dof/server-runtime-validation.md"
+    },
+    {
+      "original": "docs/dof/status.md",
+      "destination": "docs/status/README.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/validation/main-deployment-2026-10-28.json"
+      ],
+      "compatibility": "docs/dof/status.md"
+    },
+    {
+      "original": "docs/history/compatibility-audit.md",
+      "destination": "docs/history/compatibility-audit.md",
+      "handling": "retain",
+      "sources": [
+        "docs/history/compatibility-audit.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/history/deployment-fixes-2026-10-15.md",
+      "destination": "docs/history/deployment-fixes-2026-10-15.md",
+      "handling": "retain",
+      "sources": [
+        "docs/history/deployment-fixes-2026-10-15.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/history/game/DeploymentFixes-2026-10-15.md",
+      "destination": "docs/history/game/DeploymentFixes-2026-10-15.md",
+      "handling": "retain",
+      "sources": [
+        "docs/history/game/DeploymentFixes-2026-10-15.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/history/network-helpers/README.md",
+      "destination": "docs/history/network-helpers/README.md",
+      "handling": "retain",
+      "sources": [
+        "docs/history/network-helpers/README.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/history/offline86/README.md",
+      "destination": "docs/history/offline86/README.md",
+      "handling": "retain",
+      "sources": [
+        "docs/history/offline86/README.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/history/ubuntu-abi/README.md",
+      "destination": "docs/history/ubuntu-abi/README.md",
+      "handling": "retain",
+      "sources": [
+        "docs/history/ubuntu-abi/README.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/history/ubuntu-abi/image-geoip-start-proof.txt",
+      "destination": "docs/history/ubuntu-abi/image-geoip-start-proof.txt",
+      "handling": "retain",
+      "sources": [
+        "docs/history/ubuntu-abi/image-geoip-start-proof.txt"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/history/ubuntu-abi/image-shm-start-proof.txt",
+      "destination": "docs/history/ubuntu-abi/image-shm-start-proof.txt",
+      "handling": "retain",
+      "sources": [
+        "docs/history/ubuntu-abi/image-shm-start-proof.txt"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/image-registry.md",
+      "destination": "docs/operations/images.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/image_config.py"
+      ],
+      "compatibility": "docs/image-registry.md"
+    },
+    {
+      "original": "docs/launcher/README.md",
+      "destination": "docs/getting-started/login-modes.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/launcher/README.md"
+      ],
+      "compatibility": "docs/launcher/README.md"
+    },
+    {
+      "original": "docs/launcher/deployment.md",
+      "destination": "docs/operations/wpf-client.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "clients/launcher/MainWindow.xaml.cs"
+      ],
+      "compatibility": "docs/launcher/deployment.md"
+    },
+    {
+      "original": "docs/launcher/usage.md",
+      "destination": "docs/history/upstream/launcher/usage.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/launcher/usage.md"
+      ],
+      "compatibility": "docs/launcher/usage.md"
+    },
+    {
+      "original": "docs/project-layout-validation.md",
+      "destination": "docs/validation/project-layout.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/project-layout-validation.md"
+      ],
+      "compatibility": "docs/project-layout-validation.md"
+    },
+    {
+      "original": "docs/resource-layout.md",
+      "destination": "docs/reference/resources.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "metadata/build-inputs.lock.json",
+        "scripts/container/manage.py"
+      ],
+      "compatibility": "docs/resource-layout.md"
+    },
+    {
+      "original": "docs/stage-2026-10-28.md",
+      "destination": "docs/history/stages/2026-10-28.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/stage-2026-10-28.md"
+      ],
+      "compatibility": "docs/stage-2026-10-28.md"
+    },
+    {
+      "original": "docs/ubuntu/README.md",
+      "destination": "docs/operations/manual-deployment.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/container/manage.py"
+      ],
+      "compatibility": "docs/ubuntu/README.md"
+    },
+    {
+      "original": "docs/ubuntu/cleanup-validation.md",
+      "destination": "docs/validation/ubuntu-cleanup.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/ubuntu/cleanup-validation.md"
+      ],
+      "compatibility": "docs/ubuntu/cleanup-validation.md"
+    },
+    {
+      "original": "docs/ubuntu/compatibility.md",
+      "destination": "docs/reference/platform-compatibility.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "services/game/docker/ubuntu/Dockerfile",
+        "services/game/docker/ubuntu/compat-lock.json"
+      ],
+      "compatibility": "docs/ubuntu/compatibility.md"
+    },
+    {
+      "original": "docs/ubuntu/ports.md",
+      "destination": "docs/reference/ports.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "scripts/diagnostics/ubuntu_ports.py"
+      ],
+      "compatibility": "docs/ubuntu/ports.md"
+    },
+    {
+      "original": "docs/ubuntu/validation.md",
+      "destination": "docs/validation/ubuntu.md",
+      "handling": "migrate-with-direct-pointer",
+      "sources": [
+        "docs/ubuntu/validation.md"
+      ],
+      "compatibility": "docs/ubuntu/validation.md"
+    },
+    {
+      "original": "docs/validation/bundled-native-assets.md",
+      "destination": "docs/validation/bundled-native-assets.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/bundled-native-assets.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/validation/container-installer.md",
+      "destination": "docs/validation/container-installer.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/container-installer.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/validation/deploy-layout.md",
+      "destination": "docs/validation/deploy-layout.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/deploy-layout.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/validation/deployable-resources-only.md",
+      "destination": "docs/validation/deployable-resources-only.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/deployable-resources-only.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/validation/direct-topology.md",
+      "destination": "docs/validation/direct-topology.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/direct-topology.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/validation/mysql-deployment.md",
+      "destination": "docs/validation/mysql-deployment.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/mysql-deployment.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/validation/raid-plugin-layout.md",
+      "destination": "docs/validation/raid-plugin-layout.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/raid-plugin-layout.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "docs/validation/unified-server-resources.md",
+      "destination": "docs/validation/unified-server-resources.md",
+      "handling": "retain",
+      "sources": [
+        "docs/validation/unified-server-resources.md"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "metadata/README.md",
+      "destination": "metadata/README.md",
+      "handling": "retain",
+      "sources": [
+        "metadata"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "metadata/dof/derivation/README.md",
+      "destination": "metadata/dof/derivation/README.md",
+      "handling": "retain",
+      "sources": [
+        "metadata/dof/derivation"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "scripts/README.md",
+      "destination": "scripts/README.md",
+      "handling": "retain",
+      "sources": [
+        "scripts"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "scripts/imports/README.md",
+      "destination": "scripts/imports/README.md",
+      "handling": "retain",
+      "sources": [
+        "scripts/imports"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "services/admin/README.md",
+      "destination": "services/admin/README.md",
+      "handling": "retain",
+      "sources": [
+        "services/admin"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "services/admin/backend/README.md",
+      "destination": "services/admin/backend/README.md",
+      "handling": "retain",
+      "sources": [
+        "services/admin/backend"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "services/admin/frontend/README.md",
+      "destination": "services/admin/frontend/README.md",
+      "handling": "retain",
+      "sources": [
+        "services/admin/frontend"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "services/game/README.md",
+      "destination": "services/game/README.md",
+      "handling": "retain",
+      "sources": [
+        "services/game"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "services/game/resources/README.md",
+      "destination": "services/game/resources/README.md",
+      "handling": "retain",
+      "sources": [
+        "services/game/resources"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "services/game/resources/native/README.md",
+      "destination": "services/game/resources/native/README.md",
+      "handling": "retain",
+      "sources": [
+        "services/game/resources/native"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/README.md",
+      "destination": "tests/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/integration/dof/digest_helper/README.md",
+      "destination": "tests/integration/dof/digest_helper/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests/integration/dof/digest_helper"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/integration/dof/frida_database/README.md",
+      "destination": "tests/integration/dof/frida_database/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests/integration/dof/frida_database"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/integration/dof/postal_read/README.md",
+      "destination": "tests/integration/dof/postal_read/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests/integration/dof/postal_read"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/integration/dof/recharge/README.md",
+      "destination": "tests/integration/dof/recharge/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests/integration/dof/recharge"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/integration/dof/server_stack/README.md",
+      "destination": "tests/integration/dof/server_stack/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests/integration/dof/server_stack"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/integration/installer/README.md",
+      "destination": "tests/integration/installer/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests/integration/installer"
+      ],
+      "compatibility": null
+    },
+    {
+      "original": "tests/integration/mysql/README.md",
+      "destination": "tests/integration/mysql/README.md",
+      "handling": "retain",
+      "sources": [
+        "tests/integration/mysql"
+      ],
+      "compatibility": null
+    }
+  ],
+  "immutable": {
+    "docs/admin/images/admin-login.png": "5f78a2f7056543a5cf0ad020810b5cfaa5709bf69a8fbbfbbe88501807af293b",
+    "docs/admin/images/client.png": "ab980bd88d80cc3793828c5f7563702c0081a98eec03cb0b12de7b6673eedcaf",
+    "docs/admin/images/default-admin.png": "972922c09240678b16ca793832aa58a9a872715cefb673ad7ad9f37c403c4574",
+    "docs/admin/images/home.png": "40a1a127727ade8145372862bafcdee8ccd0dc96e7b1065400da997a6821ae0e",
+    "docs/admin/images/login.png": "7b0c9ba1072985a1a29407543d2c48285c285ac24ae8ae714585df901dfc95be",
+    "docs/admin/images/player-account.png": "3400d9687d4eede2a4d41569540a41df66b43c2e51e7fc71a199d6bab0476793",
+    "docs/admin/images/player-role.png": "701f5e66603df56adf9c6787ae92f63cef1f495f37456355cb72721a9a04142b",
+    "docs/admin/images/pvf.png": "76ceb661f5411c3e1470d8f70eb3c466cb07bf69ed670e7414583c7fbaf7514e",
+    "docs/admin/images/role-info.png": "4632747fa613fda40966be57fc48fbfb3fcf32e5e4ce0d5432ea6f46807e983a",
+    "docs/admin/images/rsa-pri.png": "e5d3f8bfb82c8104ef07ecd5e1acab60d3a51c5a3e7965651ab22a43dd14dc1a",
+    "docs/admin/images/rsa-pub-upload.png": "3dad7ebef5f5e217571c538ad94f2bef20050dde77c84dc6eda184b476679f01",
+    "docs/admin/images/rsa-pub.png": "dfb7acc7704af377ec68162371bbb0cc3891f4f5a6191ed4068b701a92188f9b",
+    "docs/admin/images/rsa.png": "dd6aec2dcb147d53b2e88ec9c6967cf085b3e5b40200ffd7faea3f306f3382c2",
+    "docs/admin/images/send-email.png": "adca76ae40c034c48ff390b79ebbe1632ffcde8a7748f009e6add19d00197b42",
+    "docs/admin/images/test.png": "5766c34dcaab9e87414124ef2c7652dc1c24c671d3e4d8e280c5e66d45d8054f",
+    "docs/admin/images/version.png": "6e1b3442ab8b09d79cfcf07ece37f397065f75fd51edcac525c723f11097a67a",
+    "docs/dof/game-adapter-abi-validation.json": "71023f839f35f0ec281551f7e206b987f3d2e2ede405aa12884ebb2d198a2ce7",
+    "docs/dof/server-runtime-validation.json": "96d74af87d857da4f6d613b096e1435cd79c62e08da920f77a54627439426f5b",
+    "docs/dof/web-integration-validation.json": "ba9250df9cdf0787165867e88b4f917b8964fd2838d92d8948b15e0ada2bccf8",
+    "docs/history/ubuntu-abi/image-audit-verification.json": "0daace72e74ab6a6089526c7b6fb47a8865da9b7637061367299124552047516",
+    "docs/history/ubuntu-abi/image-compat-report.json": "973d3f2df16e89cd1c897fda89a2fd1778d28b78e78a788cbe9ba0790df88c58",
+    "docs/history/ubuntu-abi/image-elf-report.json": "3d809e5a55cf14c9859d8d4b7e8aafda1835e045aa72b7a19ce98e15638ad618",
+    "docs/history/ubuntu-abi/native-after.json": "ec6d1b30ae02bd8a6fd4e4f96c6e190ed4b2601de9836bb6ad824cf6dcf6cd36",
+    "docs/history/ubuntu-abi/native-before.json": "07b5d892abe8d16cd65be27bd8f99047090dc1ffefa73dd31dd6dc172c3662de",
+    "docs/history/ubuntu-abi/redaction-start-proof.json": "917265218fc31ce1f68255836326c2501990798b790d5c9b22621712c9c1f738",
+    "docs/history/ubuntu-abi/start-proof-summary.json": "3f2af9fe610c40dc44a91751e9c071b3cb0f8e2e75d4771e0cf48aacec310e16",
+    "docs/history/ubuntu-abi/start-proof.json": "aaadf5f883a55c80fb28bd03a7f327362d167b2726d93549744fe24c4b147a05",
+    "docs/history/ubuntu-abi/tss-start-proof.json": "22cf7d38b4edd41a119b3f7141a0b32ce88b6b1d3e752446fa37fc5292a5b55d",
+    "docs/history/ubuntu-abi/ubuntu-current-elf.json": "bf9d88348401477869a5ab778b4237a700fa592c408cfb2912dc01d1e656cd86",
+    "docs/history/ubuntu-abi/ubuntu-current-libraries.json": "fff5cded9f7299df5b6fae0c916dc2e33fc3637fce9b676fe51e1a76e41b0a0c",
+    "docs/history/ubuntu-abi/ubuntu-live-libraries.json": "5f09ffaa4ff8c1a96de20718d6b94f1de75c0d01e707299999dd60a631afdb52",
+    "docs/launcher/images/client-conf.png": "d40ae93fd2e6b99cfe6922722f2725abba560a086453b55c4a177a7802a9e27d",
+    "docs/launcher/images/login-conf.png": "597f456ece31753a480bdbc67649b8de231ddb5a9cab2aca7da6c1502061ce97",
+    "docs/launcher/images/login.png": "a2bc0c369367f2a4ac7b6df35ed0c89cbbfcc008a7bf6ac8620cffa4a2a044c8",
+    "docs/launcher/images/update1.png": "3f5a7ffce176155f88629b673a6b20d4188cd458c624e171732446641d8efac8",
+    "docs/launcher/images/update2.png": "fd3180a58dbc17e73d4c89129bb517cc39a28cee7dec577809f36f38654f7b7c",
+    "docs/launcher/images/update_finish.png": "66a31977fdf76ff790c6a04920aa36f27d216633c8aad1c433f6d4a2d7801e81",
+    "docs/ubuntu/validation/ubuntu-all.json": "d11470dc4ec5c666f2d4f04fd1aa48187d4ea5be49892af564032b47e901f8e5",
+    "docs/ubuntu/validation/ubuntu-clean-clone.json": "ba3dba007a70c21c2bff725396f3b7f94147b8131cb587f89fe9ab4c33ba5f92",
+    "docs/ubuntu/validation/ubuntu-only-all.json": "c03fa88c8310018aeaf0de9620ecb707baf9c296912ee4182df15f28a9bf5640",
+    "docs/ubuntu/validation/ubuntu-only-compat-report.json": "a38799c390dca2398a21587e7a10adcada510aaa4cfc0774a6027284f06603a7",
+    "docs/ubuntu/validation/ubuntu-only-elf-report.json": "52b6cd3d042972dfda1780aaca5e65cebd595c8772089b74994b34a8c7debea2",
+    "docs/ubuntu/validation/ubuntu-only-split.json": "012714a42313061fa0d83c4ae69b8ca674102c856a82acd0ee35eab22cf8e756",
+    "docs/ubuntu/validation/ubuntu-onlyguo.json": "bf5c29f63f8550898d69281d56ab923f23bcfd7f4abbbbc99809d9aab8381567",
+    "docs/ubuntu/validation/ubuntu-split.json": "861c4f2118c61d21829eb0b2b160547ec6f91451261bc602d091fe5487a17e03",
+    "docs/ubuntu/validation/ubuntu-startup-notice.json": "d6ab6dcbc2178ac0a9340c0cab9e2f31a095b4c348c85d15f1a0ab5495bb923d",
+    "docs/validation/admin-activity-recovery-s17-2026-10-28.json": "e1f5ebc639b85eded02a62d5dabbe865660b4ed7582f138065cca3fba6506270",
+    "docs/validation/admin-cdk-inventory-s15-2026-10-28.json": "404bc2134980d4a91a3e11a0d6963a852a852185d9630cd3c98d1a8ec5da123d",
+    "docs/validation/admin-cdk-redemption-s14-2026-10-28.json": "be55426163c925d06f99d4f4ca02b513d76b54b0e240029a2a5b1b56acba0dcb",
+    "docs/validation/admin-client-provenance-s21-2026-10-28.json": "afbc10864eecad5e551e4bfb2e08e92fa800cc7e67e945ccddbfc1c293e3a6e3",
+    "docs/validation/admin-client-provenance-s22-2026-10-28.json": "c6a4c0cd525f98cb26d894b1ca5a612d221d3e9e5722d69e969755df6fe0b463",
+    "docs/validation/admin-continuation-r0-r1-2026-10-28.json": "24f5cd171d5ebd8db69aa2845a5144a88bfa515921b717d1af71e4b3b5ae9354",
+    "docs/validation/admin-cross-border-s28-2026-10-28.json": "6d6ba6b7bb3b09181c658678afadf1582a2addfe982f1af44e55b6ace486e361",
+    "docs/validation/admin-cross-border-s29-2026-10-28.json": "65fa3855f0ae39e39709dee116ae03e3801c9fed15814134d225eb5472b315f9",
+    "docs/validation/admin-equipment-batch-s31-2026-10-28.json": "6c963009a855b2ea675cb81c879d90a5885cdad3cfca21e656f72c3018bbc4ae",
+    "docs/validation/admin-equipment-batch-s32-2026-10-28.json": "6b9f20190f64c16592021af29212b2aef69436294a97a94073237c456a64c593",
+    "docs/validation/admin-equipment-batch-s33-2026-10-28.json": "26e21dbf90118cb3838fd3a0904a9b1b543f978f4b64df98570e47813dcec95f",
+    "docs/validation/admin-equipment-dataset-s30-2026-10-28.json": "42d183382027c2a6890147b2bdbe1705a71ad0c128b636420ec41c0e4a6ae2a2",
+    "docs/validation/admin-frida-config-deployment-s45-2026-10-28.json": "58a1867b7d735b0c6c0790fadc96a40d0d5004d032ecd42727eac91d3567ff52",
+    "docs/validation/admin-frida-config-preservation-s44-2026-10-28.json": "f1ab84e5f6f5143c8b7f617c568feea16fe04613a8665d0e5baa5fff8208019d",
+    "docs/validation/admin-frida-s6-2026-10-27.json": "da04b56a4f57264fe41f8b0ad3b79a2afab3ea6e84df77d78aabfac6d6697f6b",
+    "docs/validation/admin-inheritance-s23-2026-10-28.json": "572216dc547db6728abadd3c4630acdc0c424fdd9a623b4daf7753748b2787a0",
+    "docs/validation/admin-inheritance-s24-initial-2026-10-28.json": "6ef678120c9ba864340af14a9a800aeaccf2263e5ab00c6223f43291be2d06c0",
+    "docs/validation/admin-inheritance-s25-2026-10-28.json": "dea5c1cfb892e97c1634aa7918768a380b728ae7cdca8d691eeb8e0ceb16bad3",
+    "docs/validation/admin-jar-delta-s38-2026-10-28.json": "3e50313811d691bbdc853141b8ecedd63a24e53a1e68358036f21dabe25b3a09",
+    "docs/validation/admin-mail-receipt-s9-2026-10-27.json": "9be234d9206aa8922ebe51fe6385f72c5077fb69c7466d49c9ef9208fdfd61fd",
+    "docs/validation/admin-management-r1-2026-10-26.json": "cd52860b423bfddb8f36edc59a04a350e7276ccfb2315e528e72c2713c62f6f3",
+    "docs/validation/admin-management-s2-2026-10-27.json": "56702eadaf9ddd5621ae02d6ea1fb1305bcb121434fce3e70bf35ffd63fd0026",
+    "docs/validation/admin-maven-conditions-r1-2026-10-28.json": "eaee540aa1e50010cb87bcce85c7b192e43a239a19ad7cd3faf209a9f87df2f8",
+    "docs/validation/admin-maven-conditions-s50-2026-10-28.json": "947f1f4fffd467c9e573ee63aae0e62c54527584e035b97b638ba808fff7a066",
+    "docs/validation/admin-native-charts-config-s42-2026-10-28.json": "8970bacaac8d1895183f42db81ec1a5d9121522aadee7a3d0b924d4b08dec9dd",
+    "docs/validation/admin-native-charts-deployment-s38-2026-10-28.json": "f5a6438b6e8ecd0d3fa18161bf901082fb8904906a71ee7e8b5041574f6ec9c5",
+    "docs/validation/admin-native-charts-deployment-s39-2026-10-28.json": "f9641a2a4160084b7fbc1f62f1bbb7cf3a3d05743d9559c6eab6efa51205dbe9",
+    "docs/validation/admin-native-charts-deployment-s41-2026-10-28.json": "615493e1f2dfd4161ac62d1d41301ab89afbe3306d1d81d718048ee51c5c4b4a",
+    "docs/validation/admin-native-charts-identity-s39-2026-10-28.json": "61f28c23c394583d4fc5af12330b2a9a2b0e2c6fd9c94e4abff4cdb1fde08ce3",
+    "docs/validation/admin-native-charts-legacy-restore-s40-2026-10-28.json": "9ca7ac2ef41a092f8e44946c87af19e60ac104851076d8f1359e5f8863d514a8",
+    "docs/validation/admin-native-charts-rewards-s37-2026-10-28.json": "aeb5e67381cf01d94e598ed2099cb6384480d203afa1ad756c569d678593b73e",
+    "docs/validation/admin-native-charts-rollback-s43-2026-10-28.json": "c63512ae8fa61a34405ac387e2d1836d65276166838e98a279e57e2a75b9a1c8",
+    "docs/validation/admin-native-charts-s36-2026-10-28.json": "05fe9b63e82db25652498c73230173c49dbd9fc42073dd835940b36f04509b60",
+    "docs/validation/admin-notice-retirement-s50-2026-10-28.json": "18d8017afef8f3d622ec9b32b6eb6e23b1db66663b6540fc4ef0ce2a7f091e0a",
+    "docs/validation/admin-original-reference-s49-2026-10-28.json": "ddb81be55e737edd3b01ab79fccfd89e84020442282014e6a2173c6e338b2e83",
+    "docs/validation/admin-packaging-s34-2026-10-28.json": "727b453566241626b79cf2d5648739b8ebddb3b3b64d0545001c3524f01bff29",
+    "docs/validation/admin-postal-batch-control-s13-2026-10-27.json": "49de872a5d081d067fa47b72530fe6c5c8a8eb6a52f9ea45052a3aee7c011e47",
+    "docs/validation/admin-postal-batch-s11-2026-10-27.json": "d7cc1c7bfb987dc96025753d3c02b6d75ffeff4083206f760a112a5e61db0f6d",
+    "docs/validation/admin-postal-receipt-control-s12-2026-10-27.json": "73759c025d12f2302ffc7dd6c44542dd143907a2353b9985f9a40294ba0f124c",
+    "docs/validation/admin-postal-s7-2026-10-27.json": "4d085678d336c4591a96d95cc415f23fafaf2ebbd459b0d75e13f6060b65c6a1",
+    "docs/validation/admin-postal-send-s10-2026-10-27.json": "d317e059d557f6a32f51a0f290d36d0d196936a45f109e049cdb2e041bce1913",
+    "docs/validation/admin-raid-s4-2026-10-27.json": "5b8aaf63c2a271a930c6a76266a5a6cf2886040d48f19910ec052715b5c109d3",
+    "docs/validation/admin-recharge-s8-2026-10-27.json": "c9f000dbbf6f94cdef2163883f26343b6f210aa637733bac4c06df511d7c7ebb",
+    "docs/validation/admin-record-filter-deployment-s47-2026-10-28.json": "e82154bfcce02c29030d69ff2a6f5ebfaf4348b380019940d9c6152ae951eb9e",
+    "docs/validation/admin-record-filter-pagination-s46-2026-10-28.json": "45f43d41cd3cb541dfd35bfa6ad88137f8aaed21cf3f1f2ebe7dddab5ef686e5",
+    "docs/validation/admin-recovery-s26-2026-10-28.json": "a650ceb323657208dc6578d36fb7ba15a2738fcdfe62c6024fde84bec36d1048",
+    "docs/validation/admin-recovery-s27-2026-10-28.json": "0bef23252a0ed06058d9ddfbe24606285b1f7819daf726ee16d3d5c4662cdf60",
+    "docs/validation/admin-registration-s3-2026-10-27.json": "71615806145a582bcf1cf793aed7341a85fd76c03a66c18fe35fcfd0a15caee2",
+    "docs/validation/admin-replacement-2026-10-26.json": "81beaea714b5849b744a2ceaadc0b1572e216a2fdce4b44ca8837d90ff3123cc",
+    "docs/validation/admin-runtime-s5-2026-10-27.json": "29424236d6068e0abe49b10ed13b9c2b35c2b3d40cd64ba7e9db859b8c9b7c60",
+    "docs/validation/admin-script-compression-s35-2026-10-28.json": "579028705f716b2a0b31ecc5ce3897519e2fa5b3aa8ceaaabf00ff1387401bb3",
+    "docs/validation/admin-script-release-s19-2026-10-28.json": "236a89d5d0af00e6eb130589867172144a37655f8ca5f0c20b20d8ce1927e41c",
+    "docs/validation/admin-script-release-s20-2026-10-28.json": "0af976e73e700b351c1910d3fcd3c591204c2eb5d42d32b61aeb2d608ed10d0c",
+    "docs/validation/admin-script-roundtrip-s18-2026-10-28.json": "f7b433e10195e396ed18aa1e045c256dfb7affd26edfa36b2dea9be8a111eadc",
+    "docs/validation/admin-sql-retirement-s48-2026-10-28.json": "3e7cf2e7be49ff2df56dd965b70ae8b56dfb823007594da53b1a6320241ac63c",
+    "docs/validation/admin-token-coupons-s16-2026-10-28.json": "7234d4fd2582046749e722daf3039422dc70a735d0963866dad5094ca5e6758c",
+    "docs/validation/admin-tool-static-2026-10-27.json": "3dc3dc6a3202b0705bd2e4d6d1506fd58d3c179add8d1ea9092e019f799487a1",
+    "docs/validation/container-installer.json": "c8be1c2a017a3c413f606c0b53eb6a02930b28a87ee80cd66f1dbc06eddc5572",
+    "docs/validation/deployable-resources-only.json": "98ac623ccdf3c698d85112bbac8e91872508ab012882d9a3c6d2bb062c8c4461",
+    "docs/validation/main-deployment-2026-10-28.json": "8954658050f87b638a0a5419905aeaf74c7cc217ea0c6a01b2450797edfb7afa",
+    "docs/validation/mysql-deployment.json": "4291738ab4c090567513aed28333c619ce19c2840d438e0455df16e0eef2aacb",
+    "docs/validation/project-layout-2026-10-16.json": "4fad02918b843a233f3dd9a8f88b92bb81d7d7f51b4e1f901c9f5b9766a68488",
+    "docs/validation/stage-2026-10-28.json": "db0705be53db29f6dd041bf43292059c3206824afbfc0b30f23acfb8046a4510",
+    "docs/validation/unified-server-resources.json": "d0da2e85b0cb198242a526e76f4d8029df09ea40ce653604472e0b0dbc0bbdb6",
+    "services/game/LICENSE": "35bb2098654e271b77a04fed6fc6c8f4009d1696cb801ec47390b9dc58f1b5eb",
+    "services/game/THIRD_PARTY_NOTICES.txt": "299348b94043c5d682632f77b443a70f003288b8ab826b0a1d14ed35691a9939",
+    "services/game/assets/home/template/neople/auction/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/auction/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/bridge/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/bridge/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/channel/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/channel/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/community/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/community/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/coserver/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/coserver/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/dbmw_guild/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/dbmw_guild/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/dbmw_mnt/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/dbmw_mnt/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/dbmw_stat/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/dbmw_stat/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/game/Script/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/game/history/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/game/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/game/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/guild/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/guild/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/manager/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/manager/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/monitor/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/monitor/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/point/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/point/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/relay/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/relay/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/secsvr/gunnersvr/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/secsvr/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/secsvr/zergsvr/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/statics/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/statics/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/stun/log/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "services/game/assets/home/template/neople/stun/pid/readme.md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "pages": [
+    {
+      "path": "CONTRIBUTING.md",
+      "kind": "current",
+      "authority": "CONTRIBUTING.md"
+    },
+    {
+      "path": "README.md",
+      "kind": "current",
+      "authority": "README.md"
+    },
+    {
+      "path": "clients/launcher/README.md",
+      "kind": "current",
+      "authority": "clients/launcher/README.md"
+    },
+    {
+      "path": "deploy/README.md",
+      "kind": "current",
+      "authority": "deploy/README.md"
+    },
+    {
+      "path": "deploy/bootstrap/README.md",
+      "kind": "current",
+      "authority": "deploy/bootstrap/README.md"
+    },
+    {
+      "path": "deploy/database/README.md",
+      "kind": "current",
+      "authority": "deploy/database/README.md"
+    },
+    {
+      "path": "deploy/manual/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/README.md"
+    },
+    {
+      "path": "deploy/manual/all/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/all/README.md"
+    },
+    {
+      "path": "deploy/manual/build/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/build/README.md"
+    },
+    {
+      "path": "deploy/manual/split/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/split/README.md"
+    },
+    {
+      "path": "deploy/manual/split/admin/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/split/admin/README.md"
+    },
+    {
+      "path": "deploy/manual/split/core/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/split/core/README.md"
+    },
+    {
+      "path": "deploy/manual/split/game/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/split/game/README.md"
+    },
+    {
+      "path": "deploy/manual/split/p2p/README.md",
+      "kind": "current",
+      "authority": "deploy/manual/split/p2p/README.md"
+    },
+    {
+      "path": "deploy/nginx/README.md",
+      "kind": "current",
+      "authority": "deploy/nginx/README.md"
+    },
+    {
+      "path": "deploy/shared/README.md",
+      "kind": "current",
+      "authority": "deploy/shared/README.md"
+    },
+    {
+      "path": "docs/README.md",
+      "kind": "current",
+      "authority": "docs/README.md"
+    },
+    {
+      "path": "docs/admin/README.md",
+      "kind": "redirect",
+      "authority": "docs/development/admin.md"
+    },
+    {
+      "path": "docs/admin/activities.md",
+      "kind": "redirect",
+      "authority": "docs/operations/admin/activities.md"
+    },
+    {
+      "path": "docs/admin/extension-management.md",
+      "kind": "redirect",
+      "authority": "docs/operations/admin/records.md"
+    },
+    {
+      "path": "docs/admin/launcher-integration.md",
+      "kind": "redirect",
+      "authority": "docs/reference/clients/compatibility.md"
+    },
+    {
+      "path": "docs/admin/plugin-ownership.md",
+      "kind": "redirect",
+      "authority": "docs/architecture/execution-ownership.md"
+    },
+    {
+      "path": "docs/admin/replacement-implementation.md",
+      "kind": "redirect",
+      "authority": "docs/history/admin/2026-10-28-implementation.md"
+    },
+    {
+      "path": "docs/admin/script-compression-validation.md",
+      "kind": "redirect",
+      "authority": "docs/development/native/compressed-script-audit.md"
+    },
+    {
+      "path": "docs/admin/upstream/README.md",
+      "kind": "redirect",
+      "authority": "docs/history/upstream/admin/README.md"
+    },
+    {
+      "path": "docs/admin/upstream/docker-en.md",
+      "kind": "redirect",
+      "authority": "docs/history/upstream/admin/docker-en.md"
+    },
+    {
+      "path": "docs/admin/upstream/docker-zh.md",
+      "kind": "redirect",
+      "authority": "docs/history/upstream/admin/docker-zh.md"
+    },
+    {
+      "path": "docs/architecture.md",
+      "kind": "redirect",
+      "authority": "docs/architecture/overview.md"
+    },
+    {
+      "path": "docs/architecture/README.md",
+      "kind": "current",
+      "authority": "docs/architecture/README.md"
+    },
+    {
+      "path": "docs/architecture/execution-ownership.md",
+      "kind": "current",
+      "authority": "docs/architecture/execution-ownership.md"
+    },
+    {
+      "path": "docs/architecture/overview.md",
+      "kind": "current",
+      "authority": "docs/architecture/overview.md"
+    },
+    {
+      "path": "docs/baota-deployment.md",
+      "kind": "redirect",
+      "authority": "docs/operations/external-mysql.md"
+    },
+    {
+      "path": "docs/container-installer.md",
+      "kind": "redirect",
+      "authority": "docs/operations/install.md"
+    },
+    {
+      "path": "docs/container-verification.md",
+      "kind": "redirect",
+      "authority": "docs/validation/container-verification.md"
+    },
+    {
+      "path": "docs/development/README.md",
+      "kind": "current",
+      "authority": "docs/development/README.md"
+    },
+    {
+      "path": "docs/development/active-plan.md",
+      "kind": "current",
+      "authority": "docs/development/active-plan.md"
+    },
+    {
+      "path": "docs/development/admin-packaging.md",
+      "kind": "current",
+      "authority": "docs/development/admin-packaging.md"
+    },
+    {
+      "path": "docs/development/admin.md",
+      "kind": "current",
+      "authority": "docs/development/admin.md"
+    },
+    {
+      "path": "docs/development/documentation.md",
+      "kind": "current",
+      "authority": "docs/development/documentation.md"
+    },
+    {
+      "path": "docs/development/native-resource-derivation.md",
+      "kind": "current",
+      "authority": "docs/development/native-resource-derivation.md"
+    },
+    {
+      "path": "docs/development/native/compressed-script-audit.md",
+      "kind": "current",
+      "authority": "docs/development/native/compressed-script-audit.md"
+    },
+    {
+      "path": "docs/development/wpf.md",
+      "kind": "current",
+      "authority": "docs/development/wpf.md"
+    },
+    {
+      "path": "docs/dof/README.md",
+      "kind": "redirect",
+      "authority": "docs/getting-started/login-modes.md"
+    },
+    {
+      "path": "docs/dof/client-format-v2-update.md",
+      "kind": "redirect",
+      "authority": "docs/operations/native-client-publication.md"
+    },
+    {
+      "path": "docs/dof/client-reader-validation.md",
+      "kind": "redirect",
+      "authority": "docs/status/native-client.md"
+    },
+    {
+      "path": "docs/dof/client-readiness-update.md",
+      "kind": "redirect",
+      "authority": "docs/history/clients/readiness-pr26.md"
+    },
+    {
+      "path": "docs/dof/deployment.txt",
+      "kind": "redirect",
+      "authority": "docs/operations/isolated-admin.md"
+    },
+    {
+      "path": "docs/dof/equipment-broadcast.md",
+      "kind": "redirect",
+      "authority": "docs/reference/native/equipment-broadcast.md"
+    },
+    {
+      "path": "docs/dof/game-test-deployment.md",
+      "kind": "redirect",
+      "authority": "docs/operations/isolated-game.md"
+    },
+    {
+      "path": "docs/dof/launcher.md",
+      "kind": "redirect",
+      "authority": "docs/development/native-resource-derivation.md"
+    },
+    {
+      "path": "docs/dof/protocol.txt",
+      "kind": "redirect",
+      "authority": "docs/reference/native/client-protocol.md"
+    },
+    {
+      "path": "docs/dof/publication.txt",
+      "kind": "redirect",
+      "authority": "docs/development/admin-packaging.md"
+    },
+    {
+      "path": "docs/dof/server-protocol-contract.md",
+      "kind": "redirect",
+      "authority": "docs/reference/native/server-protocol.md"
+    },
+    {
+      "path": "docs/dof/server-runtime-validation.md",
+      "kind": "redirect",
+      "authority": "docs/status/native-runtime.md"
+    },
+    {
+      "path": "docs/dof/status.md",
+      "kind": "redirect",
+      "authority": "docs/status/README.md"
+    },
+    {
+      "path": "docs/getting-started/README.md",
+      "kind": "current",
+      "authority": "docs/getting-started/README.md"
+    },
+    {
+      "path": "docs/getting-started/login-modes.md",
+      "kind": "current",
+      "authority": "docs/getting-started/login-modes.md"
+    },
+    {
+      "path": "docs/getting-started/prerequisites.md",
+      "kind": "current",
+      "authority": "docs/getting-started/prerequisites.md"
+    },
+    {
+      "path": "docs/getting-started/quickstart.md",
+      "kind": "current",
+      "authority": "docs/getting-started/quickstart.md"
+    },
+    {
+      "path": "docs/history/README.md",
+      "kind": "history",
+      "authority": "docs/history/README.md"
+    },
+    {
+      "path": "docs/history/admin/2026-10-28-implementation.md",
+      "kind": "history",
+      "authority": "docs/history/admin/2026-10-28-implementation.md"
+    },
+    {
+      "path": "docs/history/admin/activities-batches.md",
+      "kind": "history",
+      "authority": "docs/history/admin/activities-batches.md"
+    },
+    {
+      "path": "docs/history/clients/protocol-before-format2.md",
+      "kind": "history",
+      "authority": "docs/history/clients/protocol-before-format2.md"
+    },
+    {
+      "path": "docs/history/clients/reader-validation.md",
+      "kind": "history",
+      "authority": "docs/history/clients/reader-validation.md"
+    },
+    {
+      "path": "docs/history/clients/readiness-pr26.md",
+      "kind": "history",
+      "authority": "docs/history/clients/readiness-pr26.md"
+    },
+    {
+      "path": "docs/history/compatibility-audit.md",
+      "kind": "history",
+      "authority": "docs/history/compatibility-audit.md"
+    },
+    {
+      "path": "docs/history/deployment-fixes-2026-10-15.md",
+      "kind": "history",
+      "authority": "docs/history/deployment-fixes-2026-10-15.md"
+    },
+    {
+      "path": "docs/history/game/DeploymentFixes-2026-10-15.md",
+      "kind": "history",
+      "authority": "docs/history/game/DeploymentFixes-2026-10-15.md"
+    },
+    {
+      "path": "docs/history/network-helpers/README.md",
+      "kind": "history",
+      "authority": "docs/history/network-helpers/README.md"
+    },
+    {
+      "path": "docs/history/offline86/README.md",
+      "kind": "history",
+      "authority": "docs/history/offline86/README.md"
+    },
+    {
+      "path": "docs/history/stages/2026-10-28.md",
+      "kind": "history",
+      "authority": "docs/history/stages/2026-10-28.md"
+    },
+    {
+      "path": "docs/history/stages/status-before-restructure.md",
+      "kind": "history",
+      "authority": "docs/history/stages/status-before-restructure.md"
+    },
+    {
+      "path": "docs/history/ubuntu-abi/README.md",
+      "kind": "history",
+      "authority": "docs/history/ubuntu-abi/README.md"
+    },
+    {
+      "path": "docs/history/ubuntu-abi/image-geoip-start-proof.txt",
+      "kind": "history",
+      "authority": "docs/history/ubuntu-abi/image-geoip-start-proof.txt"
+    },
+    {
+      "path": "docs/history/ubuntu-abi/image-shm-start-proof.txt",
+      "kind": "history",
+      "authority": "docs/history/ubuntu-abi/image-shm-start-proof.txt"
+    },
+    {
+      "path": "docs/history/upstream/admin/README.md",
+      "kind": "history",
+      "authority": "docs/history/upstream/admin/README.md"
+    },
+    {
+      "path": "docs/history/upstream/admin/docker-en.md",
+      "kind": "history",
+      "authority": "docs/history/upstream/admin/docker-en.md"
+    },
+    {
+      "path": "docs/history/upstream/admin/docker-zh.md",
+      "kind": "history",
+      "authority": "docs/history/upstream/admin/docker-zh.md"
+    },
+    {
+      "path": "docs/history/upstream/launcher/usage.md",
+      "kind": "history",
+      "authority": "docs/history/upstream/launcher/usage.md"
+    },
+    {
+      "path": "docs/image-registry.md",
+      "kind": "redirect",
+      "authority": "docs/operations/images.md"
+    },
+    {
+      "path": "docs/launcher/README.md",
+      "kind": "redirect",
+      "authority": "docs/getting-started/login-modes.md"
+    },
+    {
+      "path": "docs/launcher/deployment.md",
+      "kind": "redirect",
+      "authority": "docs/operations/wpf-client.md"
+    },
+    {
+      "path": "docs/launcher/usage.md",
+      "kind": "redirect",
+      "authority": "docs/history/upstream/launcher/usage.md"
+    },
+    {
+      "path": "docs/migration-inventory.md",
+      "kind": "current",
+      "authority": "docs/migration-inventory.md"
+    },
+    {
+      "path": "docs/operations/README.md",
+      "kind": "current",
+      "authority": "docs/operations/README.md"
+    },
+    {
+      "path": "docs/operations/admin/README.md",
+      "kind": "current",
+      "authority": "docs/operations/admin/README.md"
+    },
+    {
+      "path": "docs/operations/admin/activities.md",
+      "kind": "current",
+      "authority": "docs/operations/admin/activities.md"
+    },
+    {
+      "path": "docs/operations/admin/records.md",
+      "kind": "current",
+      "authority": "docs/operations/admin/records.md"
+    },
+    {
+      "path": "docs/operations/backup-restore.md",
+      "kind": "current",
+      "authority": "docs/operations/backup-restore.md"
+    },
+    {
+      "path": "docs/operations/daily-management.md",
+      "kind": "current",
+      "authority": "docs/operations/daily-management.md"
+    },
+    {
+      "path": "docs/operations/external-mysql.md",
+      "kind": "current",
+      "authority": "docs/operations/external-mysql.md"
+    },
+    {
+      "path": "docs/operations/images.md",
+      "kind": "current",
+      "authority": "docs/operations/images.md"
+    },
+    {
+      "path": "docs/operations/install.md",
+      "kind": "current",
+      "authority": "docs/operations/install.md"
+    },
+    {
+      "path": "docs/operations/isolated-admin.md",
+      "kind": "current",
+      "authority": "docs/operations/isolated-admin.md"
+    },
+    {
+      "path": "docs/operations/isolated-game.md",
+      "kind": "current",
+      "authority": "docs/operations/isolated-game.md"
+    },
+    {
+      "path": "docs/operations/manual-deployment.md",
+      "kind": "current",
+      "authority": "docs/operations/manual-deployment.md"
+    },
+    {
+      "path": "docs/operations/native-client-publication.md",
+      "kind": "current",
+      "authority": "docs/operations/native-client-publication.md"
+    },
+    {
+      "path": "docs/operations/troubleshooting.md",
+      "kind": "current",
+      "authority": "docs/operations/troubleshooting.md"
+    },
+    {
+      "path": "docs/operations/upgrade.md",
+      "kind": "current",
+      "authority": "docs/operations/upgrade.md"
+    },
+    {
+      "path": "docs/operations/wpf-client.md",
+      "kind": "current",
+      "authority": "docs/operations/wpf-client.md"
+    },
+    {
+      "path": "docs/project-layout-validation.md",
+      "kind": "redirect",
+      "authority": "docs/validation/project-layout.md"
+    },
+    {
+      "path": "docs/reference/README.md",
+      "kind": "current",
+      "authority": "docs/reference/README.md"
+    },
+    {
+      "path": "docs/reference/admin-api.md",
+      "kind": "current",
+      "authority": "docs/reference/admin-api.md"
+    },
+    {
+      "path": "docs/reference/cli.md",
+      "kind": "current",
+      "authority": "docs/reference/cli.md"
+    },
+    {
+      "path": "docs/reference/clients/compatibility.md",
+      "kind": "current",
+      "authority": "docs/reference/clients/compatibility.md"
+    },
+    {
+      "path": "docs/reference/configuration.md",
+      "kind": "current",
+      "authority": "docs/reference/configuration.md"
+    },
+    {
+      "path": "docs/reference/native/client-protocol.md",
+      "kind": "current",
+      "authority": "docs/reference/native/client-protocol.md"
+    },
+    {
+      "path": "docs/reference/native/equipment-broadcast.md",
+      "kind": "current",
+      "authority": "docs/reference/native/equipment-broadcast.md"
+    },
+    {
+      "path": "docs/reference/native/server-protocol.md",
+      "kind": "current",
+      "authority": "docs/reference/native/server-protocol.md"
+    },
+    {
+      "path": "docs/reference/platform-compatibility.md",
+      "kind": "current",
+      "authority": "docs/reference/platform-compatibility.md"
+    },
+    {
+      "path": "docs/reference/ports.md",
+      "kind": "current",
+      "authority": "docs/reference/ports.md"
+    },
+    {
+      "path": "docs/reference/resources.md",
+      "kind": "current",
+      "authority": "docs/reference/resources.md"
+    },
+    {
+      "path": "docs/resource-layout.md",
+      "kind": "redirect",
+      "authority": "docs/reference/resources.md"
+    },
+    {
+      "path": "docs/stage-2026-10-28.md",
+      "kind": "redirect",
+      "authority": "docs/history/stages/2026-10-28.md"
+    },
+    {
+      "path": "docs/status/README.md",
+      "kind": "current",
+      "authority": "docs/status/README.md"
+    },
+    {
+      "path": "docs/status/capabilities.md",
+      "kind": "current",
+      "authority": "docs/status/capabilities.md"
+    },
+    {
+      "path": "docs/status/deployment.md",
+      "kind": "current",
+      "authority": "docs/status/deployment.md"
+    },
+    {
+      "path": "docs/status/fact-corrections.md",
+      "kind": "current",
+      "authority": "docs/status/fact-corrections.md"
+    },
+    {
+      "path": "docs/status/native-client.md",
+      "kind": "current",
+      "authority": "docs/status/native-client.md"
+    },
+    {
+      "path": "docs/status/native-runtime.md",
+      "kind": "current",
+      "authority": "docs/status/native-runtime.md"
+    },
+    {
+      "path": "docs/ubuntu/README.md",
+      "kind": "redirect",
+      "authority": "docs/operations/manual-deployment.md"
+    },
+    {
+      "path": "docs/ubuntu/cleanup-validation.md",
+      "kind": "redirect",
+      "authority": "docs/validation/ubuntu-cleanup.md"
+    },
+    {
+      "path": "docs/ubuntu/compatibility.md",
+      "kind": "redirect",
+      "authority": "docs/reference/platform-compatibility.md"
+    },
+    {
+      "path": "docs/ubuntu/ports.md",
+      "kind": "redirect",
+      "authority": "docs/reference/ports.md"
+    },
+    {
+      "path": "docs/ubuntu/validation.md",
+      "kind": "redirect",
+      "authority": "docs/validation/ubuntu.md"
+    },
+    {
+      "path": "docs/validation/README.md",
+      "kind": "validation",
+      "authority": "docs/validation/README.md"
+    },
+    {
+      "path": "docs/validation/bundled-native-assets.md",
+      "kind": "validation",
+      "authority": "docs/validation/bundled-native-assets.md"
+    },
+    {
+      "path": "docs/validation/container-installer.md",
+      "kind": "validation",
+      "authority": "docs/validation/container-installer.md"
+    },
+    {
+      "path": "docs/validation/container-verification.md",
+      "kind": "validation",
+      "authority": "docs/validation/container-verification.md"
+    },
+    {
+      "path": "docs/validation/deploy-layout.md",
+      "kind": "validation",
+      "authority": "docs/validation/deploy-layout.md"
+    },
+    {
+      "path": "docs/validation/deployable-resources-only.md",
+      "kind": "validation",
+      "authority": "docs/validation/deployable-resources-only.md"
+    },
+    {
+      "path": "docs/validation/direct-topology.md",
+      "kind": "validation",
+      "authority": "docs/validation/direct-topology.md"
+    },
+    {
+      "path": "docs/validation/documentation-restructure.md",
+      "kind": "validation",
+      "authority": "docs/validation/documentation-restructure.md"
+    },
+    {
+      "path": "docs/validation/mysql-deployment.md",
+      "kind": "validation",
+      "authority": "docs/validation/mysql-deployment.md"
+    },
+    {
+      "path": "docs/validation/project-layout.md",
+      "kind": "validation",
+      "authority": "docs/validation/project-layout.md"
+    },
+    {
+      "path": "docs/validation/raid-plugin-layout.md",
+      "kind": "validation",
+      "authority": "docs/validation/raid-plugin-layout.md"
+    },
+    {
+      "path": "docs/validation/ubuntu-cleanup.md",
+      "kind": "validation",
+      "authority": "docs/validation/ubuntu-cleanup.md"
+    },
+    {
+      "path": "docs/validation/ubuntu.md",
+      "kind": "validation",
+      "authority": "docs/validation/ubuntu.md"
+    },
+    {
+      "path": "docs/validation/unified-server-resources.md",
+      "kind": "validation",
+      "authority": "docs/validation/unified-server-resources.md"
+    },
+    {
+      "path": "metadata/README.md",
+      "kind": "current",
+      "authority": "metadata/README.md"
+    },
+    {
+      "path": "metadata/dof/README.md",
+      "kind": "current",
+      "authority": "metadata/dof/README.md"
+    },
+    {
+      "path": "metadata/dof/derivation/README.md",
+      "kind": "current",
+      "authority": "metadata/dof/derivation/README.md"
+    },
+    {
+      "path": "scripts/README.md",
+      "kind": "current",
+      "authority": "scripts/README.md"
+    },
+    {
+      "path": "scripts/container/README.md",
+      "kind": "current",
+      "authority": "scripts/container/README.md"
+    },
+    {
+      "path": "scripts/diagnostics/README.md",
+      "kind": "current",
+      "authority": "scripts/diagnostics/README.md"
+    },
+    {
+      "path": "scripts/dof/README.md",
+      "kind": "current",
+      "authority": "scripts/dof/README.md"
+    },
+    {
+      "path": "scripts/imports/README.md",
+      "kind": "current",
+      "authority": "scripts/imports/README.md"
+    },
+    {
+      "path": "scripts/operations/README.md",
+      "kind": "current",
+      "authority": "scripts/operations/README.md"
+    },
+    {
+      "path": "scripts/protocol/dof/README.md",
+      "kind": "current",
+      "authority": "scripts/protocol/dof/README.md"
+    },
+    {
+      "path": "scripts/release/README.md",
+      "kind": "current",
+      "authority": "scripts/release/README.md"
+    },
+    {
+      "path": "services/admin/README.md",
+      "kind": "current",
+      "authority": "services/admin/README.md"
+    },
+    {
+      "path": "services/admin/backend/README.md",
+      "kind": "current",
+      "authority": "services/admin/backend/README.md"
+    },
+    {
+      "path": "services/admin/frontend/README.md",
+      "kind": "current",
+      "authority": "services/admin/frontend/README.md"
+    },
+    {
+      "path": "services/game/README.md",
+      "kind": "current",
+      "authority": "services/game/README.md"
+    },
+    {
+      "path": "services/game/resources/README.md",
+      "kind": "current",
+      "authority": "services/game/resources/README.md"
+    },
+    {
+      "path": "services/game/resources/native/README.md",
+      "kind": "current",
+      "authority": "services/game/resources/native/README.md"
+    },
+    {
+      "path": "tests/README.md",
+      "kind": "current",
+      "authority": "tests/README.md"
+    },
+    {
+      "path": "tests/integration/README.md",
+      "kind": "current",
+      "authority": "tests/integration/README.md"
+    },
+    {
+      "path": "tests/integration/admin/README.md",
+      "kind": "current",
+      "authority": "tests/integration/admin/README.md"
+    },
+    {
+      "path": "tests/integration/dof/README.md",
+      "kind": "current",
+      "authority": "tests/integration/dof/README.md"
+    },
+    {
+      "path": "tests/integration/dof/digest_helper/README.md",
+      "kind": "current",
+      "authority": "tests/integration/dof/digest_helper/README.md"
+    },
+    {
+      "path": "tests/integration/dof/frida_database/README.md",
+      "kind": "current",
+      "authority": "tests/integration/dof/frida_database/README.md"
+    },
+    {
+      "path": "tests/integration/dof/postal_read/README.md",
+      "kind": "current",
+      "authority": "tests/integration/dof/postal_read/README.md"
+    },
+    {
+      "path": "tests/integration/dof/recharge/README.md",
+      "kind": "current",
+      "authority": "tests/integration/dof/recharge/README.md"
+    },
+    {
+      "path": "tests/integration/dof/server_stack/README.md",
+      "kind": "current",
+      "authority": "tests/integration/dof/server_stack/README.md"
+    },
+    {
+      "path": "tests/integration/installer/README.md",
+      "kind": "current",
+      "authority": "tests/integration/installer/README.md"
+    },
+    {
+      "path": "tests/integration/mysql/README.md",
+      "kind": "current",
+      "authority": "tests/integration/mysql/README.md"
+    },
+    {
+      "path": "tests/structure/README.md",
+      "kind": "current",
+      "authority": "tests/structure/README.md"
+    },
+    {
+      "path": "tests/unit/README.md",
+      "kind": "current",
+      "authority": "tests/unit/README.md"
+    },
+    {
+      "path": "docs/history/clients/format2-update.md",
+      "kind": "history",
+      "authority": "docs/history/clients/format2-update.md"
+    },
+    {
+      "path": "docs/history/admin/isolated-admin-before-restructure.md",
+      "kind": "history",
+      "authority": "docs/history/admin/isolated-admin-before-restructure.md"
+    },
+    {
+      "path": "docs/history/admin/isolated-game-before-restructure.md",
+      "kind": "history",
+      "authority": "docs/history/admin/isolated-game-before-restructure.md"
+    },
+    {
+      "path": "docs/reference/admin-activities.md",
+      "kind": "current",
+      "authority": "docs/reference/admin-activities.md"
+    }
+  ],
+  "immutableTextNormalization": [
+    "services/game/LICENSE",
+    "services/game/THIRD_PARTY_NOTICES.txt"
+  ]
+}
