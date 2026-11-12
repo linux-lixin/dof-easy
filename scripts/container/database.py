@@ -23,7 +23,8 @@ DATABASES = GAME_DATABASES + ('d_channel_cain', 'dof_native', 'dnf_service')
 
 
 def required_databases(values):
-    return DATABASES + (('frida',) if values.get('PLUGIN_MODE') in ('frida', 'dp2-frida') else ())
+    selected = GAME_DATABASES + ('d_channel_cain', 'qk') if values.get('LAUNCHER_MODE') == 'qingkong' else DATABASES
+    return selected + (('frida',) if values.get('PLUGIN_MODE') in ('frida', 'dp2-frida') else ())
 
 
 def backup_databases(instance, values):
@@ -203,6 +204,8 @@ def native_schema(state, query):
 
 
 def web_management_enabled(values):
+    if values.get('LAUNCHER_MODE') == 'qingkong':
+        return False
     return (values.get('LAUNCHER_MODE', 'dof') == 'native'
             or values.get('RAID_EXTENSION', 'off') == 'on'
             or values.get('DOF_ADMIN_ENABLED') == 'true')
@@ -344,14 +347,22 @@ def initialize_external(instance, values, query):
     with tarfile.open(CHANNEL_SEED) as archive:
         channel = archive.extractfile('d_channel.sql').read().decode('utf-8')
     query('CREATE DATABASE d_channel_cain CHARACTER SET utf8; USE d_channel_cain;' + channel)
-    for schema in ('dof_native','dnf_service'):
+    qingkong = values.get('LAUNCHER_MODE') == 'qingkong'
+    for schema in (('qk',) if qingkong else ('dof_native','dnf_service')):
         query('CREATE DATABASE '+schema+' CHARACTER SET utf8;')
     game = account_sql('game',values['GAME_DB_PASSWORD'],host)
     query('CREATE USER '+game+" IDENTIFIED BY '"+values['GAME_DB_PASSWORD']+"';")
-    for schema in DATABASES:
+    schemas = GAME_DATABASES + ('d_channel_cain', 'qk') if qingkong else DATABASES
+    for schema in schemas:
         query('GRANT ALL PRIVILEGES ON `'+schema.replace('_', r'\_')+'`.* TO '+game+';')
     prepare_frida(instance, values, query, db_uuid)
-    db_uuid = prepare_web(instance,values,query)
+    if qingkong:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('qingkong_database', ROOT / 'scripts/container/qingkong_database.py')
+        original = importlib.util.module_from_spec(spec); spec.loader.exec_module(original)
+        original.initialize(instance / 'runtime/game/data/qingkong', query)
+    else:
+        db_uuid = prepare_web(instance,values,query)
     # Update encrypted game connection credentials in the game container at
     # startup; no legacy init/grant script is allowed on this external DB.
     private_json(marker,dict(expected,state='ready',databases=required_databases(values)))

@@ -94,7 +94,7 @@ def prepare(resources, offline=False):
     run([sys.executable, ROOT / 'scripts/container/resources.py'])
 
 
-def build(settings, database_mode='internal'):
+def build(settings, database_mode='internal', launcher_mode='dof'):
     # Docker reuses unchanged layers; all levels share these three images.
     references = image_config.references(settings)
     for tag, context, dockerfile in (
@@ -102,19 +102,23 @@ def build(settings, database_mode='internal'):
         ('admin', 'services/admin', 'docker/Dockerfile'),
         ('game', 'services/game', 'docker/ubuntu/Dockerfile'),
     ):
-        if database_mode == 'external' and tag == 'db':
+        if (database_mode == 'external' and tag == 'db') or (launcher_mode == 'qingkong' and tag == 'admin'):
             continue
         print('构建共享镜像：' + tag, flush=True)
         run(['docker', 'build', '-t', references[tag], '-f', ROOT / context / dockerfile, ROOT / context])
 
 
-def acquire_images(settings, mode, archive=None, database_mode='internal'):
+def acquire_images(settings, mode, archive=None, database_mode='internal', launcher_mode='dof'):
     references = image_config.references(settings)
     if database_mode == 'external':
         references.pop('db')
+    if launcher_mode == 'qingkong':
+        references.pop('admin')
     if mode == 'build':
         prepare(None)
-        if database_mode == 'external':
+        if launcher_mode == 'qingkong':
+            build(settings, database_mode, launcher_mode)
+        elif database_mode == 'external':
             build(settings, database_mode)
         else:
             build(settings)
@@ -160,7 +164,13 @@ def read_env(root):
 def initial_values(args, row, root):
     raid = getattr(args, 'raid_extension', None) or 'off'
     launcher = getattr(args, 'launcher', None) or 'dof'
-    raid_assets.profile_for({'LAUNCHER_MODE': launcher})
+    raid_assets.profile_for({'LAUNCHER_MODE': launcher, 'RAID_EXTENSION': raid})
+    if launcher == 'qingkong' and getattr(args, 'database', None) != 'external':
+        raise ValueError('qingkong requires --database external')
+    if launcher == 'qingkong' and getattr(args, 'dof_assets', None):
+        raise ValueError('qingkong requires --qingkong-assets, not derived --dof-assets')
+    if launcher != 'qingkong' and getattr(args, 'qingkong_assets', None):
+        raise ValueError('--qingkong-assets requires --launcher qingkong')
     raid_assets.validate_options(args.plugins, raid)
     channels = runtime_config.channels(args.channels)
     if not 1 <= args.admin_port <= 65535:
@@ -178,7 +188,7 @@ def initial_values(args, row, root):
 
 def ports_override(values):
     ports = []
-    if raid_assets.launcher_mode(values) == 'native':
+    if raid_assets.launcher_mode(values) in ('native', 'qingkong'):
         ports.append(f"{values.get('GAME_BIND_IP', values['BIND_IP'])}:8887:8887/tcp")
     for channel in runtime_config.channels(values['OPEN_CHANNEL']):
         for base, protocol in ((30000, 'tcp'), (31000, 'udp')):
@@ -191,8 +201,9 @@ def published_ports(values):
     game = values.get('GAME_BIND_IP', values['BIND_IP'])
     items = [(game, port, protocol) for port, protocol in
              ((7001,'tcp'),(7001,'udp'),(7300,'tcp'),(7300,'udp'),(2311,'udp'),(2312,'udp'),(2313,'udp'))]
-    items.append((values.get('ADMIN_BIND_IP','127.0.0.1'),int(values['ADMIN_PORT']),'tcp'))
-    if raid_assets.launcher_mode(values) == 'native':
+    if raid_assets.launcher_mode(values) != 'qingkong':
+        items.append((values.get('ADMIN_BIND_IP','127.0.0.1'),int(values['ADMIN_PORT']),'tcp'))
+    if raid_assets.launcher_mode(values) in ('native', 'qingkong'):
         items.append((game,8887,'tcp'))
     for channel in runtime_config.channels(values['OPEN_CHANNEL']):
         items += [(game,30000+channel,'tcp'),(game,31000+channel,'udp')]
@@ -221,10 +232,10 @@ def check_ports(values, previous=None):
 
 
 def check_gateway_port(values, previous=None):
-    if raid_assets.launcher_mode(values) != 'native':
+    if raid_assets.launcher_mode(values) not in ('native', 'qingkong'):
         return
     bind = values.get('GAME_BIND_IP', values['BIND_IP'])
-    if previous and raid_assets.launcher_mode(previous) == 'native' and bind == previous.get('GAME_BIND_IP', previous['BIND_IP']):
+    if previous and raid_assets.launcher_mode(previous) in ('native', 'qingkong') and bind == previous.get('GAME_BIND_IP', previous['BIND_IP']):
         return
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
@@ -280,9 +291,9 @@ def create_instance(root, args, row, archive, image_settings=None):
         if raid_assets.required(values):
             raid_assets.validate_game(data / 'df_game_r')
             profile = raid_assets.profile_for(values)
-            supplied = getattr(args, 'dof_assets', None)
+            supplied = asset_source(args, values)
             raid_assets.install(supplied or default_dof_assets(values), raid_assets.state_for(values, data), profile)
-        if raid_assets.required(values):
+        if raid_assets.required(values) and raid_assets.launcher_mode(values) != 'qingkong':
             converter = module('dof_server_pvf', 'services/game/runtime/ubuntu/gateway/pvf.py')
             record = converter.convert(pvf, data / 'Script.pvf')
             write_json(stage / 'pvf-migration.json', record)
@@ -298,8 +309,14 @@ def create_instance(root, args, row, archive, image_settings=None):
     return values
 
 
+def asset_source(args, values):
+    name = 'qingkong_assets' if raid_assets.launcher_mode(values) == 'qingkong' else 'dof_assets'
+    return getattr(args, name, None)
+
+
 def default_dof_assets(values):
-    raid_assets.profile_for(values)
+    if raid_assets.profile_for(values) == 'qingkong':
+        raise ValueError('qingkong requires --qingkong-assets with verified original files')
     return ROOT / 'services/game/resources/native'
 
 
@@ -309,7 +326,7 @@ def validate_raid(root, values):
     if raid_assets.required(values):
         state = raid_assets.state_for(values, root / 'runtime/game/data')
         raid_assets.verify(state / 'assets', raid_assets.profile_for(values))
-        raid_assets.verify_config(state)
+        raid_assets.verify_config(state, raid_assets.profile_for(values))
         raid_assets.validate_game(root / 'runtime/game/data/df_game_r')
 
 
@@ -455,14 +472,24 @@ def start(root, recreate=False):
         values['DOF_ADMIN_ENABLED']='true'
         write_env(root/'.env',values)
     compose(root, *args)
-    if raid_assets.launcher_mode(values) == 'native':
+    if raid_assets.launcher_mode(values) in ('native', 'qingkong'):
         # Older cached images ignore LAUNCHER_MODE. Do not accept their generic
         # health status as a successful launcher migration.
         compose(root, 'exec', '-T', 'game', 'python3', '-c',
                 "import sys,os; sys.path[:0]=['/opt/dnf/ubuntu','/opt/dof-easy/runtime']; "
                 "from gateway import assets as raid_assets; import health; "
-                "assert raid_assets.launcher_mode(os.environ)=='native'; "
+                "assert raid_assets.launcher_mode(os.environ)==" + repr(raid_assets.launcher_mode(values)) + "; "
                 "raid_assets.preflight(); health.check()")
+    if raid_assets.launcher_mode(values) == 'qingkong':
+        client = root / 'client'; client.mkdir(exist_ok=True)
+        with (client / 'publickey.pem').open('wb') as stream:
+            compose(root, 'exec', '-T', 'game', 'cat', '/data/publickey.pem', stdout=stream)
+        write_json(client / 'qingkong-endpoints.json', dict(launcherMode='qingkong',
+            serverAddress=values['PUBLIC_IP'], gatewayPort=8887,
+            channels=runtime_config.channels(values['OPEN_CHANNEL'])))
+        print('晴空服务端健康检查通过；网关 '+values['PUBLIC_IP']+':8887；使用原版 Windows 后台。')
+        print('客户端公钥：'+str(client / 'publickey.pem')+'；仍需 Windows 实际登录验收。')
+        return
     # Probe the actual Java API through the directly published admin port.
     admin_bind = values.get('ADMIN_BIND_IP', values['BIND_IP'])
     host = '127.0.0.1' if admin_bind == '0.0.0.0' else admin_bind
@@ -662,7 +689,8 @@ def main(argv=None):
             p.add_argument('--mysql-config', type=Path, required=True, help='服务器本地 0600 管理员配置；不会保存或导出凭据')
             p.add_argument('--mysql-bin', help='本机 mysql 客户端路径')
         if command in ('install', 'config'):
-            p.add_argument('--launcher', choices=('dof', 'native'), help='玩家登录方式；旧实例默认 dof')
+            p.add_argument('--launcher', choices=('dof', 'native', 'qingkong'), help='玩家登录方式；旧实例默认 dof')
+            p.add_argument('--qingkong-assets', type=Path, help='晴空原版已校验资源目录（仅新实例）')
             p.add_argument('--dof-assets', type=Path, help='已派生并校验的正式服务端资源目录')
             p.add_argument('--raid-extension', choices=('on', 'off'), help='团本扩展，默认关闭；启用需要 DP2')
         if command == 'install':
@@ -750,6 +778,8 @@ def main(argv=None):
                         raise ValueError('已有实例不能改数据库连接身份')
                 if args.launcher is not None and args.launcher != values.get('LAUNCHER_MODE', 'dof'):
                     raise ValueError('已有实例切换登录方式请使用 config --launcher。')
+                if args.qingkong_assets:
+                    raise ValueError('晴空资源只能在新实例安装时导入')
                 if args.dof_assets:
                     raise ValueError('已有实例导入原生资源请使用 config --dof-assets。')
                 if args.raid_extension is not None and args.raid_extension != values.get('RAID_EXTENSION', 'off'):
@@ -766,7 +796,7 @@ def main(argv=None):
                 check_ports(initial)
                 check_gateway_port(initial)
                 if raid_assets.required(initial):
-                    raid_assets.verify(args.dof_assets or default_dof_assets(initial))
+                    raid_assets.verify(asset_source(args, initial) or default_dof_assets(initial), raid_assets.profile_for(initial))
                 elif args.dof_assets:
                     raise ValueError('--dof-assets 需要原生登录或团本扩展')
                 if args.pvf.is_symlink() or not args.pvf.is_file() or args.pvf.suffix.lower() != '.pvf' or args.pvf.stat().st_size < 1024:
@@ -774,7 +804,9 @@ def main(argv=None):
             settings = image_config.resolve(args, image_config.load(STATE), values, allow_local=args.build or args.offline)
             selected_mode=database.kind(values or initial)
             image_args=(settings,'offline' if args.offline else 'build' if args.build else 'pull',args.images)
-            if selected_mode == 'external':
+            if raid_assets.launcher_mode(values or initial) == 'qingkong':
+                acquire_images(*image_args,database_mode='external',launcher_mode='qingkong')
+            elif selected_mode == 'external':
                 acquire_images(*image_args,database_mode='external')
             else:
                 acquire_images(*image_args)
@@ -792,6 +824,8 @@ def main(argv=None):
             start(root)
         else:
             values = read_env(root)
+            if args.command == 'config' and getattr(args, 'qingkong_assets', None):
+                raise ValueError('晴空资源只能在新实例安装时导入')
             if args.command == 'plugin-db':
                 if database.kind(values) != 'external':
                     raise ValueError('plugin-db 仅用于绑定的外置 MySQL 实例')
@@ -824,6 +858,8 @@ def main(argv=None):
                 check_instance(root, validate_extension=False)
                 previous = dict(values)
                 if args.launcher is not None:
+                    if args.launcher == 'qingkong' and database.kind(values) != 'external':
+                        raise ValueError('qingkong requires a new external database instance')
                     if database.kind(values) == 'external' and args.launcher != values.get('LAUNCHER_MODE','dof'):
                         raise ValueError('外置数据库实例不自动切换登录协议；请使用新实例')
                     values['LAUNCHER_MODE'] = args.launcher
@@ -843,6 +879,8 @@ def main(argv=None):
                 check_ports(values, previous)
                 check_gateway_port(values, previous)
                 profile = raid_assets.profile_for(values)
+                if args.dof_assets and raid_assets.launcher_mode(values) == 'qingkong':
+                    raise ValueError('晴空实例不接受派生 --dof-assets')
                 if args.dof_assets and not raid_assets.required(values):
                     raise ValueError('--dof-assets 需要原生登录或团本扩展')
                 target = raid_assets.state_for(values, root / 'runtime/game/data')
@@ -860,7 +898,7 @@ def main(argv=None):
                                 shutil.copyfile(raid_assets.regular(config, old), target / 'config' / config.name)
                 validate_raid(root, values)
                 apply_configuration(root, values)
-                if args.ip:
+                if args.ip and raid_assets.launcher_mode(values) != 'qingkong':
                     update_admin_address(root, values['PUBLIC_IP'])
     return 0
 

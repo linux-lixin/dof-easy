@@ -13,6 +13,12 @@ def configure(model, values, root, databases, previous=None):
         services['keys']['image'] = values.get('DOF_KEYS_IMAGE') or previous_keys['image']
     external = values.get('DOF_DATABASE_KIND', 'internal') == 'external'
     native = values.get('LAUNCHER_MODE', 'dof') == 'native'
+    qingkong = values.get('LAUNCHER_MODE') == 'qingkong'
+    if qingkong:
+        if not external:
+            raise ValueError('qingkong requires external MySQL')
+        services.pop('admin', None)
+        services['keys']['image'] = services['game']['image']
     if external:
         services.pop('db', None)
         model.get('volumes', {}).pop('database', None)
@@ -34,12 +40,13 @@ def configure(model, values, root, databases, previous=None):
                    MAIN_MYSQL_PORT=values['DOF_DB_PORT'],MYSQL_PORT=values['DOF_DB_PORT'],
                    MAIN_MYSQL_ROOT_PASSWORD='unused',DNF_DB_ROOT_PASSWORD='unused',
                    MAIN_MYSQL_GAME_ALLOW_IP=values['DOF_DB_ALLOW_HOST'],MYSQL_GAME_ALLOW_IP=values['DOF_DB_ALLOW_HOST'])
-        services['admin']['networks']['public']=None
-        services['admin']['environment'].update(
-            SPRING_DATASOURCE_URL='jdbc:mysql://'+values['DOF_DB_HOST']+':'+values['DOF_DB_PORT']+'/dnf_service?useUnicode=true&characterEncoding=utf8&useSSL=false',
-            SPRING_DATASOURCE_USERNAME='game',SPRING_DATASOURCE_PASSWORD=values['GAME_DB_PASSWORD'])
+        if not qingkong:
+            services['admin']['networks']['public']=None
+            services['admin']['environment'].update(
+                SPRING_DATASOURCE_URL='jdbc:mysql://'+values['DOF_DB_HOST']+':'+values['DOF_DB_PORT']+'/dnf_service?useUnicode=true&characterEncoding=utf8&useSSL=false',
+                SPRING_DATASOURCE_USERNAME='game',SPRING_DATASOURCE_PASSWORD=values['GAME_DB_PASSWORD'])
     managed = native or values.get('RAID_EXTENSION', 'off') == 'on' or values.get('DOF_ADMIN_ENABLED') == 'true'
-    if managed:
+    if managed and not qingkong:
         services['game']['environment'].update(DOF_INSTANCE_ID='dof-'+root.name,
             DOF_DATABASE_UUID=values.get('DOF_DATABASE_UUID',''))
         admin=services['admin']
