@@ -26,7 +26,20 @@ def templates():
             ('plugin.ini', 'anton-raid.ini', 'luke-raid.ini', 'dungeon.lst', 'equipment.json')]
 
 
+def qingkong_assets():
+    import importlib.util
+    path = BASE.parent / 'qingkong/assets.py'
+    if not path.is_file():
+        path = Path('/opt/dnf/ubuntu/qingkong/assets.py')
+    spec = importlib.util.spec_from_file_location('qingkong_assets', path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def manifest(profile='native'):
+    if profile == 'qingkong':
+        return qingkong_assets().manifest()
     if profile != 'native':
         raise ValueError('Only the derived native server runtime is accepted')
     value = json.loads(LOCK.read_text())
@@ -37,24 +50,28 @@ def manifest(profile='native'):
 
 def launcher_mode(values):
     mode = values.get('LAUNCHER_MODE', 'dof')
-    if mode not in ('dof', 'native'):
-        raise ValueError('LAUNCHER_MODE must be dof or native; import old data explicitly')
+    if mode not in ('dof', 'native', 'qingkong'):
+        raise ValueError('LAUNCHER_MODE must be dof, native or qingkong; import old data explicitly')
     return mode
 
 
 def required(values):
-    return launcher_mode(values) == 'native' or values.get('RAID_EXTENSION', 'off') == 'on'
+    return launcher_mode(values) in ('native', 'qingkong') or values.get('RAID_EXTENSION', 'off') == 'on'
 
 
 def profile_for(values):
-    launcher_mode(values)
+    if launcher_mode(values) == 'qingkong':
+        if values.get('RAID_EXTENSION', 'off') != 'off':
+            raise ValueError('qingkong uses original raid configuration; RAID_EXTENSION must be off')
+        return 'qingkong'
     if any(name.startswith('QINGKONG_') for name in values):
         raise ValueError('Old native environment settings require explicit offline migration')
     return 'native'
 
 
 def state_for(values, data=Path('/data')):
-    profile_for(values)
+    if profile_for(values) == 'qingkong':
+        return Path(data) / 'qingkong'
     return Path(data) / 'dof-easy'
 
 
@@ -78,6 +95,8 @@ def validate_options(mode, enabled):
 
 
 def verify(root, profile='native'):
+    if profile == 'qingkong':
+        return qingkong_assets().verify(root)
     root = Path(root)
     expected = json.loads(LOCK.read_text())
     actual = json.loads(regular(root / 'manifest.json', root).read_text())
@@ -93,7 +112,9 @@ def verify(root, profile='native'):
     return root
 
 
-def verify_config(root):
+def verify_config(root, profile='native'):
+    if profile == 'qingkong':
+        return qingkong_assets().verify_config(root)
     for name, _ in templates():
         regular(Path(root) / 'config' / name, root)
 
@@ -140,6 +161,8 @@ def validate_game(path):
 
 
 def install(source, target, profile='native'):
+    if profile == 'qingkong':
+        return qingkong_assets().install(source, target)
     source, target = verify(source, profile), Path(target).absolute()
     if target.is_symlink() or any(p.is_symlink() for p in target.parents):
         raise ValueError('Installation target cannot contain links')
@@ -179,7 +202,8 @@ def install(source, target, profile='native'):
 
 
 def preflight():
-    profile_for(os.environ)
+    if profile_for(os.environ) == 'qingkong':
+        return qingkong_assets().preflight()
     validate_options(os.environ.get('PLUGIN_MODE', 'dp2-frida'), os.environ.get('RAID_EXTENSION', 'off'))
     if required(os.environ) and os.environ.get('SERVER_TYPE', 'ALL') in ('ALL', 'GAME'):
         state = state_for(os.environ)

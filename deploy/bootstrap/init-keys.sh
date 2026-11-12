@@ -26,16 +26,23 @@ chmod 600 /keys/private.key /keys/publickey.pem /game/publickey.pem
 
 # The native gateway reuses the instance login identity.
 case "${LAUNCHER_MODE:-dof}" in
-    dof|native) ;;
+    dof|native|qingkong) ;;
     *) echo 'Invalid LAUNCHER_MODE' >&2; exit 1 ;;
 esac
-if [ "${RAID_EXTENSION:-off}" = on ] || [ "${LAUNCHER_MODE:-dof}" = native ]; then
-    test -d /game/dof-easy
-    mkdir -p /game/dof-easy/keys
+if [ "${RAID_EXTENSION:-off}" = on ] || [ "${LAUNCHER_MODE:-dof}" = native ] || [ "${LAUNCHER_MODE:-dof}" = qingkong ]; then
+    gateway_state=/game/dof-easy
+    if [ "${LAUNCHER_MODE:-dof}" = qingkong ]; then
+        [ "${RAID_EXTENSION:-off}" = off ] || { echo 'Qingkong requires RAID_EXTENSION=off' >&2; exit 1; }
+        gateway_state=/game/qingkong
+    fi
+    test -d "$gateway_state"
+    test ! -L "$gateway_state"
+    test ! -L "$gateway_state/keys"
+    mkdir -p "$gateway_state/keys"
     for entry in privatekey.pem publickey.pem; do
         source=/keys/publickey.pem
         [ "$entry" != privatekey.pem ] || source=/keys/private.key
-        target=/game/dof-easy/keys/$entry
+        target=$gateway_state/keys/$entry
         test ! -L "$target"
         if [ -e "$target" ]; then
             cmp -s "$source" "$target" || { echo 'Native key differs; nothing overwritten' >&2; exit 1; }

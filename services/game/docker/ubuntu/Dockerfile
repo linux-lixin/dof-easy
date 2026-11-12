@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 FROM mysql:5.6@sha256:20575ecebe6216036d25dab5903808211f1e9ba63dc7825ac20cb975e34cfcae AS mysql56_client
 # This manifest is pinned; build on an x86_64 Docker host using its default platform.
 FROM ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55 AS runtime
@@ -46,6 +45,11 @@ FROM runtime AS game
 # Use the matching pinned client without adding/running a database service.
 COPY --from=mysql56_client /usr/bin/mysqldump /usr/local/bin/dof-mysqldump56
 COPY --from=mysql56_client /usr/share/doc/mysql-community-client/copyright /opt/dnf/licenses/mysql56-client-copyright
+# Original Qingkong libuv needs the legacy glibc libnsl SONAME removed in Noble.
+# Keep it private to QK's amd64 loader path; never patch the supplied libuv.
+COPY --from=mysql56_client /lib/x86_64-linux-gnu/libnsl-2.24.so /opt/qingkong/amd64/libnsl.so.1
+COPY --from=mysql56_client /usr/share/doc/libc6/copyright /opt/dnf/licenses/qingkong-libnsl-copyright
+RUN echo '2637c7317a3059440922897e03208f9e19866fa7be5ecbc11d9e18a0e62db3de  /opt/qingkong/amd64/libnsl.so.1' | sha256sum -c -
 RUN echo '55aaf7412c4e46017dcf49f5c0c129ecea97f1c8fe4ed1e14634f0530f0ea65b  /usr/local/bin/dof-mysqldump56' | sha256sum -c - \
  && /usr/local/bin/dof-mysqldump56 --version
 COPY assets/home/template/ /home/template/

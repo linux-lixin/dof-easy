@@ -74,7 +74,13 @@ fi
 chmod 700 -R /data/dp
 # Install the explicitly selected ordinary plugins.
 python3 /opt/dnf/ubuntu/plugins.py || exit 1
-python3 /opt/dof-easy/runtime/gateway/service.py prepare || exit 1
+if [ "${LAUNCHER_MODE:-dof}" = qingkong ]; then
+  rm -f /etc/supervisor/conf.d/dof-gateway.conf
+  python3 /opt/dnf/ubuntu/qingkong/service.py prepare || exit 1
+else
+  rm -f /etc/supervisor/conf.d/qingkong.conf
+  python3 /opt/dof-easy/runtime/gateway/service.py prepare || exit 1
+fi
 # 重设supervisor web网页密码
 sed -i "s/^username=.*/username=$WEB_USER/" /etc/supervisord.conf
 sed -i "s/^password=.*/password=$WEB_PASS/" /etc/supervisord.conf

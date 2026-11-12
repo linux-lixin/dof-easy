@@ -22,6 +22,20 @@ def snapshot():
             if protocol=='udp' or columns[3]=='0A': ports[protocol].add(int(columns[1].split(':')[1],16))
     return processes,ports
 
+def qingkong_ready(state=Path('/data/qingkong'), game=Path('/home/neople/game'),
+                   public=Path('/data/publickey.pem'), ready=Path('/run/qingkong/gateway-ready'),
+                   proc=Path('/proc')):
+    pid = ready.read_text().strip()
+    if not pid.isdecimal() or os.readlink(proc / pid / 'exe') != '/root/QK':
+        raise ValueError('Original Qingkong gateway process is not ready')
+    for name in ('privatekey.pem', 'publickey.pem'):
+        expected = (state / 'keys' / name).read_bytes()
+        if not expected or (game / name).read_bytes() != expected:
+            raise ValueError('Qingkong runtime login identity differs')
+    if (game / 'publickey.pem').read_bytes() != public.read_bytes():
+        raise ValueError('Qingkong public login identity differs')
+
+
 def check():
     role=os.environ.get('SERVER_TYPE','ALL'); group=os.environ.get('SERVER_GROUP','3')
     processes,ports=snapshot()
@@ -43,7 +57,12 @@ def check():
     if role in ('GAME','ALL'):
         required+=['gunnersvr','zergsvr','secagent']
         gateway_conf = Path('/etc/supervisor/conf.d/dof-gateway.conf')
-        if gateway_conf.exists() or os.environ.get('LAUNCHER_MODE', 'dof') == 'native' or os.environ.get('RAID_EXTENSION', 'off') == 'on':
+        if os.environ.get('LAUNCHER_MODE', 'dof') == 'qingkong':
+            if not Path('/etc/supervisor/conf.d/qingkong.conf').exists():
+                raise ValueError('Qingkong supervisor configuration missing')
+            qingkong_ready()
+            tcp.add(8887)
+        elif gateway_conf.exists() or os.environ.get('LAUNCHER_MODE', 'dof') == 'native' or os.environ.get('RAID_EXTENSION', 'off') == 'on':
             if not gateway_conf.exists():
                 raise ValueError('Native supervisor configuration missing')
             required.append('dof-gateway')

@@ -12,6 +12,7 @@
 - [docs/operations/external-mysql.md](external-mysql.md)
 - [docs/operations/images.md](images.md)
 - [docs/operations/install.md](install.md)
+- [晴空原版与宝塔部署](qingkong-baota.md)
 - [docs/operations/isolated-admin.md](isolated-admin.md)
 - [docs/operations/isolated-game.md](isolated-game.md)
 - [docs/operations/manual-deployment.md](manual-deployment.md)

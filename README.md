@@ -1,6 +1,8 @@
 # dof-easy
 
-Linux x86_64 游戏容器、Java/Vue 管理后台和两种独立登录配套。安装器提供 13 个等级选项，默认 86；当前原生联调范围以 86 级证据为准，其他等级和完整玩家流程需分别验收。`releaseReady=false`。
+Linux x86_64 游戏容器、Java/Vue 管理后台和三种独立登录配套。安装器提供 13 个等级选项，默认 86；当前原生联调范围以 86 级证据为准，其他等级和完整玩家流程需分别验收。`releaseReady=false`。
+
+晴空原版登录器、网关、插件和 Windows 后台配套使用独立的 `qingkong` 模式，连接宝塔 MySQL，见[晴空原版部署](docs/operations/qingkong-baota.md)。原有 `dof` / `native` 模式继续保留。
 
 ## 首次使用
 
