@@ -1,6 +1,6 @@
 # 升级与分支
 
-main 只维护晴空原版和外置 MySQL；旧 dof/native 或 internal 数据库实例会被拒绝，不会自动转换。需要旧产品时继续使用 [旧 main 备份](https://github.com/linux-lixin/dof-easy/tree/backup/main-before-qingkong-20261112) 或 [晴空接入前的混合模式分支](https://github.com/linux-lixin/dof-easy/tree/qingkong-baota-20261112)。
+main 只维护晴空原版和外置 MySQL；旧 dof/native 或 internal 数据库实例会被拒绝，不会自动转换。需要旧产品时继续使用 [旧 main 备份](https://github.com/linux-lixin/dof-easy/tree/backup/main-before-qingkong-20261112)。
 
 已运行的晴空实例先做[备份](backup-restore.md)，记录当前源码提交与镜像标签。更新源码本身不会重启服务器；只有显式执行安装/重启操作才影响实例。构建新标签时只生成 game 镜像，不创建新数据库。
 

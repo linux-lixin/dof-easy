@@ -13,6 +13,6 @@ sudo bash dof.sh
 - [验证边界](docs/status/README.md)：服务器检查与 Windows 游戏验收的区别。
 - [贡献说明](CONTRIBUTING.md)：测试和提交约定。
 
-本分支已移除旧 WPF/派生登录器、Java/Vue 网页后台、DP2 与普通 Frida 玩法插件及其专用工具。保留的 `frida.so` 仅用于晴空数据库凭据兼容，原版晴空二进制不改名、不修改协议。旧代码保存在 [原 main 备份](https://github.com/linux-lixin/dof-easy/tree/backup/main-before-qingkong-20261112)；此前同时支持多种模式的版本保存在 [晴空接入分支](https://github.com/linux-lixin/dof-easy/tree/qingkong-baota-20261112)。旧 dof/native 实例应继续使用对应旧分支，不能原地切换为晴空。
+本分支已移除旧 WPF/派生登录器、Java/Vue 网页后台、DP2 与普通 Frida 玩法插件及其专用工具。保留的 `frida.so` 仅用于晴空数据库凭据兼容，原版晴空二进制不改名、不修改协议。旧代码保存在 [原 main 备份](https://github.com/linux-lixin/dof-easy/tree/backup/main-before-qingkong-20261112)。旧 dof/native 实例应继续使用该备份分支，不能原地切换为晴空。
 
 资源来源及许可证见 [metadata](metadata/README.md)、[游戏许可证](services/game/LICENSE)和[第三方说明](services/game/THIRD_PARTY_NOTICES.txt)。
