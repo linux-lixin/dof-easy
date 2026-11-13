@@ -35,6 +35,10 @@
       "kind": "current"
     },
     {
+      "path": "docs/operations/daily-management.md",
+      "kind": "current"
+    },
+    {
       "path": "docs/operations/external-mysql.md",
       "kind": "current"
     },
@@ -48,6 +52,10 @@
     },
     {
       "path": "docs/operations/upgrade.md",
+      "kind": "current"
+    },
+    {
+      "path": "docs/operations/windows-tools.md",
       "kind": "current"
     },
     {

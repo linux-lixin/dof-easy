@@ -1,7 +1,7 @@
-# 实例密钥初始化
+# 密钥初始化
 
-[init-keys.sh](init-keys.sh)在 game 镜像的一次性容器内初始化和核对晴空实例密钥。只由安装器调用；已有密钥或游戏副本不一致时退出，不覆盖。
+[init-keys.sh](init-keys.sh)由安装器在 game 镜像的一次性容器中调用，初始化或核对实例密钥。已有私钥、公钥或运行副本不一致时退出，不覆盖冲突文件。
 
-历史持久化目录 runtime/admin/data 仍作为密钥存放路径保留，用于兼容已部署晴空实例；这不代表 Java 后台仍在运行。密钥属于私有实例数据，不能提交 Git，也不能通过删除后重新生成来处理冲突。
+为了兼容既有晴空实例，历史路径 `runtime/admin/data` 仍用于存放密钥；这个目录名不表示 Java 后台在运行。密钥是私有实例身份，不能提交 Git，也不能通过删除后重新生成来处理冲突。
 
-参见[备份恢复](../../docs/operations/backup-restore.md)。
+[备份与恢复](../../docs/operations/backup-restore.md) · [部署模板](../README.md)
