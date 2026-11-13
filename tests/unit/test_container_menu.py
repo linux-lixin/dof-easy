@@ -30,12 +30,23 @@ class ContainerMenu(unittest.TestCase):
         mock = patch.object(menu.shutil,'which',return_value=None);mock.start();self.addCleanup(mock.stop)
         mock = patch.object(menu,'detect_public_ipv4',return_value='8.8.4.4');mock.start();self.addCleanup(mock.stop)
         for target, name, value in ((menu,'mysql_binary','/mysql'),(menu,'mysql_sockets',[]),
+                                    (menu,'inspect_network',(['172.17.0.1'],[])),
+                                    (menu.getpass,'getpass','private'),
                                     (menu.host,'public_database_listener',False)):
             mock = patch.object(target,name,return_value=value);mock.start();self.addCleanup(mock.stop)
+        def query(sql):
+            if sql.startswith('SELECT VERSION'):return '5.6.51\t11111111-1111-1111-1111-111111111111'
+            if sql=='SHOW DATABASES;':return 'mysql'
+            if sql.startswith('SELECT COUNT'):return '0'
+            if 'max_allowed_packet' in sql:return '0.0.0.0\t3306\t67108864\tmode:'
+            return '0.0.0.0\t3306'
+        mock=patch.object(menu.manager.database,'host_query',return_value=query);mock.start();self.addCleanup(mock.stop)
+        mock=patch.object(menu.sys,'platform','linux');mock.start();self.addCleanup(mock.stop)
+        mock=patch.object(menu.sys,'version_info',(3,12));mock.start();self.addCleanup(mock.stop)
 
 
-    def inputs(self, level='', database='1'):
-        return [level, '192.0.2.1', str(self.pvf), '', '', '', database, '1', '', '', '0', '2']
+    def inputs(self, level='', database='2'):
+        return [level, '192.0.2.1', str(self.pvf), '', '', '1', '0', '2', '172.17.0.1', '', '']
 
     def test_public_ip_default_override_and_failure_reprompt(self):
         for detected, answers, expected in [
@@ -52,7 +63,7 @@ class ContainerMenu(unittest.TestCase):
         for ram in (menu.host.MIN_RAM, menu.host.GIB, 2*menu.host.GIB, int(3.8*menu.host.GIB)):
             answers = self.inputs()
             answers[1] = ''  # Accept detected IP.
-            answers[-2] = ''  # Accept recommended total Swap.
+            answers[6] = ''  # Accept recommended total Swap.
             events = []
             with self.subTest(ram=ram), patch.object(menu.host,'memory',return_value={
                     'MemTotal':ram,'MemAvailable':ram//2,'SwapTotal':0}), \
@@ -60,7 +71,7 @@ class ContainerMenu(unittest.TestCase):
                  patch.object(menu.host,'create_swap',side_effect=lambda total:events.append(('swap',total))), \
                  patch.object(menu.manager,'docker_check'), \
                  patch.object(menu,'assets_directory',return_value=Path('/verified')), \
-                 patch.object(menu,'web_instructions'), \
+                 patch.object(menu,'game_instructions'), \
                  patch.object(menu.manager,'main',side_effect=lambda args:events.append(('deploy',args))):
                 menu.install('test')
             self.assertEqual(events[0],('swap',8*menu.host.GIB))
@@ -81,50 +92,29 @@ class ContainerMenu(unittest.TestCase):
         for value, expected in [('', '86'), ('70', '70'), ('120', '120')]:
             with self.subTest(level=value), patch('builtins.input', side_effect=self.inputs(value)+['y']), \
                  patch.object(menu.manager, 'docker_check'), patch.object(menu, 'assets_directory', return_value=Path('/verified assets')), \
-                 patch.object(menu, 'web_instructions'), patch.object(menu.manager, 'main') as run:
+                 patch.object(menu, 'game_instructions'), patch.object(menu.manager, 'main') as run:
                 menu.install('test')
                 args=run.call_args.args[0]
                 self.assertEqual(args[args.index('--level')+1], expected)
-                self.assertEqual(args[args.index('--launcher')+1], 'native')
+                self.assertEqual(args[args.index('--launcher')+1], 'qingkong')
                 self.assertEqual(args[args.index('--raid-extension')+1], 'off')
-                self.assertEqual(args[args.index('--database')+1], 'internal')
-                self.assertIn(str(self.pvf), args)
+                self.assertEqual(args[args.index('--database')+1], 'external')
+                self.assertIn(str(self.pvf.resolve()), args)
                 self.assertIn('/verified assets', args)
                 self.assertIn('--build', args)
 
-    def test_no_assets_question_uses_checked_in_bundle(self):
-        answers=self.inputs()
-        with patch('builtins.input',side_effect=answers+['y']) as prompts, \
-             patch.object(menu.manager,'docker_check'),patch.object(menu,'web_instructions'), \
-             patch.object(menu.manager,'main') as run:
-            menu.install('test')
-        self.assertFalse(any('资源目录' in str(call) for call in prompts.call_args_list))
-        args=run.call_args.args[0]
-        self.assertEqual(Path(args[args.index('--dof-assets')+1]),menu.manager.ROOT/'services/game/resources/native')
 
     def test_invalid_level_reprompt_and_cancel_leave_host_unchanged(self):
         with patch('builtins.input',side_effect=['88']+self.inputs('86')+['n']), \
              patch.object(menu.manager,'main') as deploy,patch.object(menu,'assets_directory') as assets:
             menu.install('test')
-        deploy.assert_not_called(); assets.assert_not_called()
+        deploy.assert_not_called(); assets.assert_called_once()
         menu.host.prepare_dependencies.assert_not_called()
 
-    def test_plugin_combinations_and_preserve_disabled_raid(self):
-        for plugin in menu.manager.MODES:
-            with patch('builtins.input',side_effect=[plugin]+(['off'] if plugin in ('dp2','dp2-frida') else [])):
-                self.assertEqual(menu.plugin_selection(),(plugin,'off'))
-        with patch('builtins.input',side_effect=['','']):
-            self.assertEqual(menu.plugin_selection({'PLUGIN_MODE':'dp2','RAID_EXTENSION':'off'}),('dp2','off'))
-        with patch('builtins.input',side_effect=['','']):
-            self.assertEqual(menu.plugin_selection(),('dp2-frida','off'))
-        with patch('builtins.input',side_effect=['','']):
-            self.assertEqual(menu.plugin_selection({'PLUGIN_MODE':'dp2','RAID_EXTENSION':'on'}),('dp2','on'))
-        with patch('builtins.input',side_effect=['','1']):
-            self.assertEqual(menu.plugin_selection(),('dp2-frida','on'))
 
     def test_existing_instance_only_starts_without_install_prompts(self):
         (menu.manager.STATE/'instances/test').mkdir(parents=True)
-        with patch('builtins.input') as inputs, patch.object(menu.manager, 'main') as run, patch.object(menu, 'web_instructions'):
+        with patch('builtins.input') as inputs, patch.object(menu.manager, 'main') as run, patch.object(menu, 'game_instructions'):
             menu.install('test')
         inputs.assert_not_called(); run.assert_called_once_with(['start', '--instance', 'test'])
 
@@ -142,11 +132,11 @@ class ContainerMenu(unittest.TestCase):
                 self.assertIn('user="bootstrap_admin"',content)
                 self.assertIn('protocol=TCP',content)
                 if fail:raise ValueError('simulated deploy failure')
-            with patch('builtins.input',side_effect=self.inputs(database='2')+['172.17.0.1','','bootstrap_admin','y']) as prompts, \
+            with patch('builtins.input',side_effect=self.inputs(database='2')[:-1]+['bootstrap_admin','y']) as prompts, \
                  patch.object(menu.manager,'docker_check'), patch.object(menu,'inspect_network',return_value=(['172.17.0.1'],[])), \
                  patch.object(menu.manager.database,'host_query',return_value=Mock(return_value='0.0.0.0\t3306')), \
                  patch.object(menu.getpass,'getpass',return_value=secret), patch.object(menu,'check_external',return_value='172.17.0.1'), \
-                 patch.object(menu,'assets_directory',return_value=Path('/verified')),patch.object(menu,'web_instructions'), \
+                 patch.object(menu,'assets_directory',return_value=Path('/verified')),patch.object(menu,'game_instructions'), \
                  patch.object(menu.manager,'main',side_effect=run):
                 if fail:
                     with self.assertRaisesRegex(ValueError,'simulated'):menu.install('test')
@@ -158,16 +148,16 @@ class ContainerMenu(unittest.TestCase):
     def test_wildcard_mysql_respects_firewall_choice_and_deploys(self):
         for firewall_choice in ('1','2'):
             menu.host.firewall.reset_mock()
-            answers=self.inputs(database='2'); answers[-1]=firewall_choice
+            answers=self.inputs(database='2'); answers[7]=firewall_choice
             with self.subTest(firewall=firewall_choice), \
-                 patch('builtins.input',side_effect=answers+['172.17.0.1','','','y']), \
+                 patch('builtins.input',side_effect=answers+['y']), \
                  patch.object(menu.getpass,'getpass',return_value='private'), \
                  patch.object(menu.manager.database,'host_query',return_value=Mock(return_value='0.0.0.0\t3306')), \
                  patch.object(menu,'check_external',return_value='0.0.0.0'), \
                  patch.object(menu,'inspect_network',return_value=(['172.17.0.1'],[])), \
                  patch.object(menu.manager,'docker_check'), \
                  patch.object(menu,'assets_directory',return_value=Path('/verified')), \
-                 patch.object(menu,'web_instructions'),patch.object(menu.manager,'main') as deploy:
+                 patch.object(menu,'game_instructions'),patch.object(menu.manager,'main') as deploy:
                 menu.install('test')
             deploy.assert_called_once()
             if firewall_choice == '1':
@@ -200,13 +190,13 @@ class ContainerMenu(unittest.TestCase):
         run.assert_called_once_with(['status','--instance','other'])
 
     def test_firewall_precedes_new_docker_and_errors_stop_deploy(self):
-        answers=self.inputs();answers[-1]='1'
+        answers=self.inputs();answers[7]='1'
         events=[]
         with patch('builtins.input',side_effect=answers+['y']), \
              patch.object(menu,'assets_directory',return_value=Path('/verified')), \
              patch.object(menu.host,'prepare_dependencies',side_effect=lambda **kw:events.append('base' if kw else 'docker')), \
              patch.object(menu.host,'firewall',side_effect=lambda **kw:events.append('firewall')), \
-             patch.object(menu.manager,'docker_check'),patch.object(menu,'web_instructions'), \
+             patch.object(menu.manager,'docker_check'),patch.object(menu,'game_instructions'), \
              patch.object(menu.manager,'main',side_effect=lambda args:events.append('deploy')):
             menu.install('test')
         self.assertEqual(events,['base','firewall','docker','deploy'])
@@ -227,22 +217,13 @@ class ContainerMenu(unittest.TestCase):
         self.assertIn('无原始摘要',output.getvalue())
         self.assertNotIn('main-other',output.getvalue())
 
-    def test_generated_proxy_keeps_existing_user_config(self):
-        root=menu.manager.instance_path('test');root.mkdir(parents=True)
-        with patch.object(menu.manager,'read_env',return_value={'ADMIN_PORT':'18888','OPEN_CHANNEL':'15,52','PUBLIC_IP':'192.0.2.1'}):
-            menu.web_instructions('test')
-            path=root/'nginx-location.conf.example'
-            self.assertIn('127.0.0.1:18888',path.read_text())
-            path.write_text('operator config')
-            menu.web_instructions('test')
-            self.assertEqual(path.read_text(),'operator config')
-
 
 class AutomaticMySQL(unittest.TestCase):
     def test_binary_discovery_checks_baota_custom_and_path(self):
         for chosen in ('/www/server/mysql/bin/mysql','/usr/local/mysql/bin/mysql','/usr/bin/mysql'):
             with patch.object(menu.shutil,'which',return_value='/usr/bin/mysql'), \
                  patch.object(Path,'is_file',lambda path: str(path)==chosen), \
+                 patch.object(Path,'resolve',lambda path, **kwargs:path), \
                  patch.object(menu.os,'access',return_value=True):
                 self.assertEqual(menu.mysql_binary(),chosen)
         with patch.object(Path,'is_file',return_value=False), self.assertRaisesRegex(ValueError,'未检测到'):

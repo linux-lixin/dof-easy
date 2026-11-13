@@ -56,21 +56,12 @@ def check():
             raise ValueError('relay registration not current')
     if role in ('GAME','ALL'):
         required+=['gunnersvr','zergsvr','secagent']
-        gateway_conf = Path('/etc/supervisor/conf.d/dof-gateway.conf')
-        if os.environ.get('LAUNCHER_MODE', 'dof') == 'qingkong':
-            if not Path('/etc/supervisor/conf.d/qingkong.conf').exists():
-                raise ValueError('Qingkong supervisor configuration missing')
-            qingkong_ready()
-            tcp.add(8887)
-        elif gateway_conf.exists() or os.environ.get('LAUNCHER_MODE', 'dof') == 'native' or os.environ.get('RAID_EXTENSION', 'off') == 'on':
-            if not gateway_conf.exists():
-                raise ValueError('Native supervisor configuration missing')
-            required.append('dof-gateway')
-            tcp.add(8887)
-            if not Path('/run/dof-easy/gateway-ready').exists():
-                raise ValueError('Native gateway not ready')
-            if Path('/home/neople/game/publickey.pem').read_bytes() != Path('/data/publickey.pem').read_bytes():
-                raise ValueError('Native login key differs')
+        if os.environ.get('LAUNCHER_MODE', 'qingkong') != 'qingkong':
+            raise ValueError('Only original Qingkong is supported')
+        if not Path('/etc/supervisor/conf.d/qingkong.conf').exists():
+            raise ValueError('Qingkong supervisor configuration missing')
+        qingkong_ready()
+        tcp.add(8887)
         names=('cain','diregie','siroco','prey','casillas','hilder')
         for channel in channels(os.environ.get('OPEN_CHANNEL','11,52')):
             name=names[int(group)-1]+f'{channel:02d}'

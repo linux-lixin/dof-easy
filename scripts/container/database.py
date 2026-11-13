@@ -19,12 +19,14 @@ SEED = ROOT / 'deploy/database/seed.sql'
 COMPAT = ROOT / 'deploy/database/compat-tables.sql'
 GAME_DATABASES = tuple(re.findall(r'CREATE DATABASE /\*!32312 IF NOT EXISTS\*/ `([a-z0-9_]+)`', SEED.read_text()))
 CHANNEL_SEED = ROOT / 'services/game/assets/home/template/init/init_sql.tgz'
-DATABASES = GAME_DATABASES + ('d_channel_cain', 'dof_native', 'dnf_service')
+DATABASES = GAME_DATABASES + ('d_channel_cain', 'qk')
 
 
 def required_databases(values):
-    selected = GAME_DATABASES + ('d_channel_cain', 'qk') if values.get('LAUNCHER_MODE') == 'qingkong' else DATABASES
-    return selected + (('frida',) if values.get('PLUGIN_MODE') in ('frida', 'dp2-frida') else ())
+    kind(values)
+    if values.get('LAUNCHER_MODE') != 'qingkong' or values.get('PLUGIN_MODE', 'none') != 'none' or values.get('RAID_EXTENSION', 'off') != 'off':
+        raise ValueError('Only original qingkong with plugins none and raid off is supported')
+    return DATABASES
 
 
 def backup_databases(instance, values):
@@ -36,93 +38,19 @@ def backup_databases(instance, values):
         saved = json.loads(marker.read_text())
         if saved.get('databaseUuid') != values.get('DOF_DATABASE_UUID') or saved.get('instanceId') != 'dof-'+instance.name:
             raise ValueError('数据库备份实例身份不匹配')
-        if 'frida' in saved.get('databases', []) and 'frida' not in selected:
-            selected += ('frida',)  # Disabled plugins still own progress that must be backed up.
     return selected
 
 
-FRIDA_TABLE = ('CREATE TABLE frida.game_event (event_id varchar(30) NOT NULL, '
-               'event_info mediumtext NULL, PRIMARY KEY (event_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;')
-
-
-def frida_table_exists(query):
-    """Validate the shipped script's exact storage contract before any DDL."""
-    row = query("SELECT CONCAT(TABLE_TYPE,'|',COALESCE(ENGINE,''),'|',COALESCE(TABLE_COLLATION,'')) FROM information_schema.TABLES WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event';")
-    if not row:
-        return False
-    if not re.fullmatch(r'BASE TABLE\|InnoDB\|utf8_[a-z0-9_]+', row):
-        raise ValueError('frida.game_event 引擎或字符集不兼容，未修改原表')
-    columns = query("SELECT CONCAT(COLUMN_NAME,'|',COLUMN_TYPE,'|',IS_NULLABLE,'|',COALESCE(COLUMN_DEFAULT,'<NULL>'),'|',EXTRA,'|',COALESCE(CHARACTER_SET_NAME,'')) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' ORDER BY ORDINAL_POSITION;")
-    expected = 'event_id|varchar(30)|NO|<NULL>||utf8\nevent_info|mediumtext|YES|<NULL>||utf8'
-    primary = query("SELECT CONCAT(COLUMN_NAME,'|',COALESCE(SUB_PART,'<NULL>')) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' AND INDEX_NAME='PRIMARY' ORDER BY SEQ_IN_INDEX;")
-    unique = query("SELECT DISTINCT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' AND NON_UNIQUE=0 ORDER BY INDEX_NAME;")
-    if columns != expected or primary != 'event_id|<NULL>' or unique != 'PRIMARY':
-        raise ValueError('frida.game_event 字段或主键不兼容，未修改原表或活动进度')
-    triggers = query("SELECT COUNT(*) FROM information_schema.TRIGGERS WHERE EVENT_OBJECT_SCHEMA='frida' AND EVENT_OBJECT_TABLE='game_event';")
-    references = query("SELECT COUNT(*) FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA='frida' AND TABLE_NAME='game_event' AND REFERENCED_TABLE_NAME IS NOT NULL;")
-    if triggers != '0' or references != '0':
-        raise ValueError('frida.game_event 存在未知触发器或外键，未修改原表或活动进度')
-    return True
-
-
-def prepare_frida(instance, values, query, db_uuid):
-    """Explicit installer migration, never game-side privilege escalation."""
-    if 'frida' not in required_databases(values):
-        return False
-    if identity(query) != db_uuid or (values.get('DOF_DATABASE_UUID') and values['DOF_DATABASE_UUID'] != db_uuid):
-        raise ValueError('Frida 数据库 UUID 不匹配')
-    external = instance / 'external-database.json'
-    if external.is_symlink() or not external.is_file():
-        raise ValueError('缺少外置数据库实例身份，拒绝插件库写入')
-    ownership = json.loads(external.read_text())
-    expected = dict(databaseUuid=db_uuid, instanceId='dof-'+instance.name,
-                    host=values['DOF_DB_HOST'], port=values['DOF_DB_PORT'], grantHost=values['DOF_DB_ALLOW_HOST'])
-    if any(ownership.get(k) != v for k,v in expected.items()) or ownership.get('state') not in ('ready','initializing'):
-        raise ValueError('Frida 数据库实例绑定不匹配')
-    host = values['DOF_DB_ALLOW_HOST']
-    net = ipaddress.IPv4Network(host, strict=True)
-    private_ranges = [ipaddress.IPv4Network(n) for n in ('10.0.0.0/8','172.16.0.0/12','192.168.0.0/16')]
-    if not any(net.subnet_of(n) for n in private_ranges) or not 16 <= net.prefixlen <= 28:
-        raise ValueError('Frida 授权仅限实例专用私网')
-    account = account_sql('game', 'unusedpass', host)
-    if query("SELECT COUNT(*) FROM mysql.user WHERE User='game' AND Host='"+host+"';") != '1':
-        raise ValueError('实例 game 数据库账号不存在，未创建或重置账号')
-    marker = instance / 'plugin-databases.json'
-    if marker.is_symlink() or marker.with_suffix('.new').is_symlink():
-        raise ValueError('插件数据库记录不能为符号链接')
-    version = hashlib.sha256(FRIDA_TABLE.encode()).hexdigest()
-    saved = json.loads(marker.read_text()) if marker.exists() else {}
-    if saved and (any(saved.get(k) != v for k,v in expected.items()) or saved.get('schemaSHA256') != version
-                  or saved.get('state') not in ('applying','ready') or not isinstance(saved.get('operationId'), str)):
-        raise ValueError('插件数据库记录绑定或版本冲突')
-    exists = frida_table_exists(query)
-    record = dict(expected, schemaSHA256=version, operationId=saved.get('operationId',str(uuid.uuid4())), state='applying')
-    private_json(marker, record)
-    query('CREATE DATABASE IF NOT EXISTS frida CHARACTER SET utf8;')
-    if not exists:
-        query(FRIDA_TABLE)
-    if not frida_table_exists(query):
-        raise ValueError('Frida 表创建结果未确认；保留 applying 记录')
-    # Exactly the operations used by the pinned script; no global grants or DDL removal.
-    query('GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, LOCK TABLES ON frida.* TO '+account+';')
-    private_json(marker, dict(record, state='ready'))
-    return True
-
-
 def kind(values):
-    result = values.get('DOF_DATABASE_KIND', 'internal')
-    if result not in ('internal', 'external'):
-        raise ValueError('Invalid database mode')
-    return result
+    if values.get('DOF_DATABASE_KIND') != 'external':
+        raise ValueError('qingkong requires external MySQL; existing internal databases are not migrated')
+    return 'external'
 
 
 def external_options(args):
-    mode = getattr(args, 'database', None) or 'internal'
-    if mode == 'internal':
-        if any(getattr(args, name, None) is not None for name in
-               ('db_host', 'db_port', 'db_allow_host', 'mysql_config', 'mysql_bin')):
-            raise ValueError('外置 MySQL 参数需要 --database external')
-        return {'DOF_DATABASE_KIND': mode}
+    mode = getattr(args, 'database', None) or 'external'
+    if mode != 'external':
+        raise ValueError('qingkong requires --database external')
     host = str(ipaddress.IPv4Address(args.db_host or ''))
     address = ipaddress.IPv4Address(host)
     if address.is_loopback or address.is_unspecified or address.is_multicast or not address.is_private:
@@ -191,125 +119,9 @@ def account_sql(user, password, host):
     return "'"+user+"'@'"+host+"'"
 
 
-def native_schema(state, query):
-    # Import only verified CREATE definitions and known seeds, never embedded DROP.
-    import sys
-    gateway = ROOT / 'services/game/runtime/ubuntu'
-    sys.path.insert(0, str(gateway))
-    try:
-        from gateway.schema import initialize
-        initialize(state / 'assets/runtime/gateway/schema.sql', query)
-    finally:
-        sys.path.remove(str(gateway))
-
-
-def web_management_enabled(values):
-    if values.get('LAUNCHER_MODE') == 'qingkong':
-        return False
-    return (values.get('LAUNCHER_MODE', 'dof') == 'native'
-            or values.get('RAID_EXTENSION', 'off') == 'on'
-            or values.get('DOF_ADMIN_ENABLED') == 'true')
-
-
-def bind_plugin_files(instance, name, db_uuid):
-    root = instance / 'runtime/game/data/dof-easy/config'
-    if not root.is_dir() or root.resolve() != root.absolute():
-        raise ValueError('插件配置目录缺失或通过符号链接重定向')
-    marker = root / '.admin-instance.json'
-    expected = dict(instanceId=name, databaseUuid=db_uuid, environment='isolated')
-    if marker.is_symlink():
-        raise ValueError('插件配置实例标记不能是符号链接')
-    if marker.exists():
-        if json.loads(marker.read_text()) != expected:
-            raise ValueError('插件配置目录已绑定其他实例，拒绝覆盖')
-        return
-    fd = os.open(marker, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
-    with os.fdopen(fd, 'w') as stream:
-        json.dump(expected, stream); stream.write('\n'); stream.flush(); os.fsync(stream.fileno())
-
-
-def management_migrations(query):
-    """Only additive management DDL; safe to rerun after identity/binding checks."""
-    source = (ROOT / 'services/admin/database/dof-admin.sql').read_text()
-    statements = [s.strip() for s in re.sub(r'(?m)^\s*--.*$', '', source).split(';') if s.strip()]
-    for sql in statements:
-        if (not re.match(r'^CREATE TABLE IF NOT EXISTS dnf_service\.(?:DOF_[A-Z0-9_]+|REGISTRATION_POLICY|REGISTRATION_CODES|REGISTRATION_AUDIT)\b', sql)
-                or re.search(r'\b(?:DROP|TRUNCATE|INSERT|UPDATE|DELETE|ALTER|REPLACE)\b', sql, re.I)):
-            raise ValueError('管理迁移包含非追加式语句，停止执行')
-    query(';\n'.join(statements) + ';')
-
-
-def prepare_web(instance, values, query):
-    """Shared native web preparation for internal and external MySQL."""
-    db_uuid = identity(query)
-    native = web_management_enabled(values)
-    name = 'dof-' + instance.name
-    marker = instance / 'database-web.json'
-    if marker.exists():
-        saved = json.loads(marker.read_text())
-        expected = dict(databaseUuid=db_uuid, instanceId=name, native=native, state='ready')
-        # Enabling plugin management is additive. An existing generic instance
-        # keeps its accounts, passwords and settings; only the binding is added.
-        upgrade = native and saved == dict(expected, native=False)
-        if saved != expected and not upgrade:
-            raise ValueError('网页数据库身份或模式改变；拒绝覆盖绑定')
-        if native and not upgrade:
-            binding = query("SELECT CONCAT(database_uuid,'|',adapter_version) FROM dnf_service.DOF_INSTANCE_BINDING WHERE instance_id='"+name+"';")
-            if binding != db_uuid+'|dof-native-1':
-                raise ValueError('原生网页数据库绑定不符')
-            bind_plugin_files(instance, name, db_uuid)
-            management_migrations(query)
-        if not upgrade:
-            return db_uuid
-    # Explicitly additive schema extraction, preserving previous UI and accounts.
-    init = (ROOT / 'services/admin/database/init.sql').read_text()
-    definitions = re.findall(r'CREATE TABLE `([A-Za-z_]+)` (\(.*?\) ENGINE=.*?);', init, re.S)
-    if len(definitions) != 7:
-        raise ValueError('Unexpected service schema')
-    columns = set(query("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='d_taiwan' AND TABLE_NAME='accounts';").splitlines())
-    for column, ddl in [('admin','INT(10)'),('parent_uid','INT(10)'),('isRobot','TINYINT(3) DEFAULT 0')]:
-        if column not in columns:
-            query('ALTER TABLE d_taiwan.accounts ADD COLUMN '+column+' '+ddl+';')
-    query('CREATE DATABASE IF NOT EXISTS dnf_service CHARACTER SET utf8;')
-    for table, body in definitions:
-        query('CREATE TABLE IF NOT EXISTS dnf_service.`'+table+'` '+body+';')
-    seed = re.search(r"INSERT INTO `ASSIST_CONFIG` .*? VALUES \(1, '(.*?)', '", init)
-    if not seed:
-        raise ValueError('Missing default web configuration')
-    config_value = json.loads(seed[1].replace('\\"', '"').replace('${DNF_PUBLIC_IP}', values['PUBLIC_IP']).replace('${DNF_MAX_LEVEL}', values['DNF_MAX_LEVEL']))
-    config = json.dumps(config_value, ensure_ascii=False).encode().hex()
-    query('INSERT INTO dnf_service.ASSIST_CONFIG (ID,CONFIG_JSON,UPDATE_TIME) SELECT 1,CONVERT(0x'+config+' USING utf8),NOW() FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM dnf_service.ASSIST_CONFIG WHERE ID=1);')
-    query("INSERT INTO dnf_service.CLIENT_LAUNCHER_CONFIG (ID,VERSION,DOWNLOAD_URL,MD5,REMARK,UPDATE_TIME,TITLE) SELECT 1,'1.0.0','','','',NOW(),CONVERT(0x"+'地下城与勇士'.encode().hex()+" USING utf8) FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM dnf_service.CLIENT_LAUNCHER_CONFIG WHERE ID=1);")
-    admin_hash = hashlib.md5(values['ADMIN_PASSWORD'].encode()).hexdigest()
-    existing = query("SELECT CONCAT(password,'|',COALESCE(admin,0)) FROM d_taiwan.accounts WHERE accountname='admin';")
-    if existing and existing != admin_hash+'|1':
-        raise ValueError('已有 admin 账号与实例凭据不符；不会重置密码')
-    if not existing:
-        query("INSERT INTO d_taiwan.accounts (accountname,password,qq,VIP,admin,parent_uid,isRobot) VALUES ('admin','"+admin_hash+"','','',1,0,0);")
-    query('INSERT INTO dnf_service.ADMIN_TEMP_PASSWORD (id,PASSWORD) SELECT 1,CONVERT(0x'+values['ADMIN_TEMP_SECRET'].encode().hex()+' USING utf8) FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM dnf_service.ADMIN_TEMP_PASSWORD WHERE id=1);')
-    if native:
-        native_schema(instance / 'runtime/game/data/dof-easy', query)
-        management_migrations(query)
-        other = query("SELECT instance_id FROM dnf_service.DOF_INSTANCE_BINDING WHERE instance_id <> '"+name+"';")
-        if other:
-            raise ValueError('数据库已绑定其他原生实例')
-        expected = 'isolated|'+db_uuid+'|dof-native-1'
-        existing = query("SELECT CONCAT(environment,'|',database_uuid,'|',adapter_version) FROM dnf_service.DOF_INSTANCE_BINDING WHERE instance_id='"+name+"';")
-        if existing and existing != expected:
-            raise ValueError('原生网页绑定冲突')
-        if not existing:
-            query("INSERT INTO dnf_service.DOF_INSTANCE_BINDING VALUES ('"+name+"','isolated','"+db_uuid+"','dof-native-1');")
-    data = instance/'runtime/admin/data'; data.mkdir(parents=True, exist_ok=True, mode=0o700)
-    if native:
-        private_json(data/'dof-isolated.json', dict(instanceId=name,databaseUuid=db_uuid,environment='isolated'))
-        bind_plugin_files(instance, name, db_uuid)
-    (data/'.db_initialized').touch(mode=0o600)
-    private_json(marker, dict(databaseUuid=db_uuid,instanceId=name,native=native,state='ready'))
-    return db_uuid
-
-
 def initialize_external(instance, values, query):
     """Only a fresh schema set can be provisioned; retries never replay a dump."""
+    required_databases(values)
     db_uuid = identity(query)
     marker = instance / 'external-database.json'
     expected = dict(databaseUuid=db_uuid,host=values['DOF_DB_HOST'],port=values['DOF_DB_PORT'],
@@ -320,8 +132,6 @@ def initialize_external(instance, values, query):
             raise ValueError('外置数据库身份改变；拒绝继续初始化')
         if saved.get('state') != 'ready':
             raise ValueError('上次初始化中断；保留现场，禁止自动重放种子。请按恢复文档处理')
-        if prepare_frida(instance, values, query, db_uuid):
-            private_json(marker, dict(saved, databases=list(dict.fromkeys(saved.get('databases', []) + list(required_databases(values))))))
         return db_uuid
     existing = set(query('SHOW DATABASES;').splitlines())
     if existing.intersection(required_databases(values)):
@@ -347,22 +157,15 @@ def initialize_external(instance, values, query):
     with tarfile.open(CHANNEL_SEED) as archive:
         channel = archive.extractfile('d_channel.sql').read().decode('utf-8')
     query('CREATE DATABASE d_channel_cain CHARACTER SET utf8; USE d_channel_cain;' + channel)
-    qingkong = values.get('LAUNCHER_MODE') == 'qingkong'
-    for schema in (('qk',) if qingkong else ('dof_native','dnf_service')):
-        query('CREATE DATABASE '+schema+' CHARACTER SET utf8;')
+    query('CREATE DATABASE qk CHARACTER SET utf8;')
     game = account_sql('game',values['GAME_DB_PASSWORD'],host)
     query('CREATE USER '+game+" IDENTIFIED BY '"+values['GAME_DB_PASSWORD']+"';")
-    schemas = GAME_DATABASES + ('d_channel_cain', 'qk') if qingkong else DATABASES
-    for schema in schemas:
+    for schema in DATABASES:
         query('GRANT ALL PRIVILEGES ON `'+schema.replace('_', r'\_')+'`.* TO '+game+';')
-    prepare_frida(instance, values, query, db_uuid)
-    if qingkong:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location('qingkong_database', ROOT / 'scripts/container/qingkong_database.py')
-        original = importlib.util.module_from_spec(spec); spec.loader.exec_module(original)
-        original.initialize(instance / 'runtime/game/data/qingkong', query)
-    else:
-        db_uuid = prepare_web(instance,values,query)
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('qingkong_database', ROOT / 'scripts/container/qingkong_database.py')
+    original = importlib.util.module_from_spec(spec); spec.loader.exec_module(original)
+    original.initialize(instance / 'runtime/game/data/qingkong', query)
     # Update encrypted game connection credentials in the game container at
     # startup; no legacy init/grant script is allowed on this external DB.
     private_json(marker,dict(expected,state='ready',databases=required_databases(values)))

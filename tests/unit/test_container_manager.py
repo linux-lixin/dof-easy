@@ -54,7 +54,15 @@ class ContainerManager(unittest.TestCase):
         self.archive = self.root / 'game.tar.gz'
         self.make_archive()
         self.args = argparse.Namespace(instance='main', ip='203.0.113.70', bind='127.0.0.1', admin_port=18080,
-                                       plugins='none', channels='11-12,52', pvf=self.pvf)
+                                       plugins='none', channels='11-12,52', pvf=self.pvf, database='external', launcher='qingkong',
+                                       db_host='172.17.0.1', db_port=3306, db_allow_host='172.29.86.0/255.255.255.0', mysql_config=Path('/private/client.cnf'))
+        # Asset byte/ABI validation is independently exercised by Qingkong runtime tests.
+        for name in ('verify', 'verify_config', 'validate_game', 'install'):
+            stub=patch.object(manager.raid_assets,name);stub.start();self.addCleanup(stub.stop)
+        for name in ('prepare_database', 'check_ports', 'check_gateway_port'):
+            stub=patch.object(manager,name);stub.start();self.addCleanup(stub.stop)
+        stub=patch.object(manager.sys,'platform','linux');stub.start();self.addCleanup(stub.stop)
+        self.db_args=['--db-host','172.17.0.1','--db-allow-host','172.29.86.0/255.255.255.0','--mysql-config','/private/client.cnf']
 
     def make_archive(self, name='df_game_r', kind=tarfile.REGTYPE):
         with tarfile.open(self.archive, 'w:gz') as archive:
@@ -82,44 +90,12 @@ class ContainerManager(unittest.TestCase):
             manager.create_instance(instance, self.args, self.row, self.archive)
         self.assertEqual((instance / '.env').read_bytes(), before)
 
-    def test_raid_defaults_off_and_incompatible_enable_preserves_instance(self):
-        instance = self.root / 'main'
-        values = manager.create_instance(instance, self.args, self.row, self.archive)
-        self.assertEqual(values['RAID_EXTENSION'], 'off')
-        before = (instance / '.env').read_bytes()
-        with patch.object(manager, 'instance_path', return_value=instance), patch.object(manager, 'docker_check'), \
-             patch.object(manager, 'catalog', return_value={70: self.row}), \
-             patch.object(manager, 'start') as start:
-            with self.assertRaisesRegex(ValueError, 'DP2'):
-                manager.main(['config', '--raid-extension', 'on', '--plugins', 'frida'])
-            start.assert_not_called()
-        self.assertEqual((instance / '.env').read_bytes(), before)
-
-    def test_disabling_raid_can_recover_from_missing_optional_assets(self):
-        instance = self.root / 'main'
-        values = manager.create_instance(instance, self.args, self.row, self.archive)
-        values.update(PLUGIN_MODE='dp2', RAID_EXTENSION='on')
-        manager.write_env(instance / '.env', values)
-        with patch.object(manager, 'instance_path', return_value=instance), patch.object(manager, 'docker_check'), \
-             patch.object(manager, 'catalog', return_value={70: self.row}), \
-             patch.object(manager, 'start') as start:
-            manager.main(['config', '--raid-extension', 'off'])
-            start.assert_called_once_with(instance, recreate=True)
-        self.assertEqual(manager.read_env(instance)['RAID_EXTENSION'], 'off')
-
-    def test_raid_rejects_missing_resources_before_publishing_new_instance(self):
-        self.args.plugins = 'dp2'
-        self.args.raid_extension = 'on'
-        self.args.dof_assets = self.root / 'missing'
-        with self.assertRaises(ValueError):
-            manager.create_instance(self.root / 'main', self.args, self.row, self.archive)
-        self.assertFalse((self.root / 'main').exists())
 
     def test_tampered_game_rejected_and_separate_instances_have_separate_secrets(self):
         first = manager.create_instance(self.root / 'main', self.args, self.row, self.archive)
         self.args.instance = 'second'
         second = manager.create_instance(self.root / 'second', self.args, self.row, self.archive)
-        for key in ('ADMIN_PASSWORD', 'GAME_DB_PASSWORD', 'DB_ROOT_PASSWORD'):
+        for key in ('SUPERVISOR_PASSWORD', 'GAME_DB_PASSWORD'):
             self.assertNotEqual(first[key], second[key])
         (self.root / 'main/runtime/game/data/df_game_r').write_bytes(b'tampered')
         with patch.object(manager, 'catalog', return_value={70: self.row}), self.assertRaises(ValueError):
@@ -142,12 +118,6 @@ class ContainerManager(unittest.TestCase):
             with self.assertRaises(ValueError):
                 manager.instance_path(name)
 
-    def test_conflicting_web_game_port_is_rejected_before_bind(self):
-        values = manager.initial_values(self.args,self.row,self.root/'main')
-        values['ADMIN_PORT'] = '7001'
-        with patch.object(manager.socket,'socket') as socket_mock,self.assertRaisesRegex(ValueError,'互相冲突'):
-            manager.check_ports(values)
-        socket_mock.assert_not_called()
 
     def test_channel_config_updates_ports_and_preserves_other_values(self):
         instance=self.root/'main'
@@ -168,7 +138,7 @@ class ContainerManager(unittest.TestCase):
         ports = manager.ports_override(values)['services']['game']['ports']
         self.assertIn('127.0.0.1:30011:30011/tcp', ports)
         self.assertNotIn('127.0.0.1:30015:30015/tcp', ports)
-    def test_game_binding_is_independent_of_admin(self):
+    def test_game_binding_updates_all_published_ports(self):
         values = manager.initial_values(self.args, self.row, self.root / 'main')
         values['GAME_BIND_IP'] = '0.0.0.0'
         self.assertTrue(all(p.startswith('0.0.0.0:') for p in manager.ports_override(values)['services']['game']['ports']))
@@ -192,7 +162,7 @@ class ContainerManager(unittest.TestCase):
              patch.object(manager, 'prepare') as prepare, patch.object(manager, 'build') as build, \
              patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker, \
              patch.object(manager, 'start') as start:
-            manager.main(['install', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
+            manager.main(['install', *self.db_args, '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
             record = json.loads((self.root / 'state/instances/main/instance.json').read_text())
             self.assertEqual(record['level'], 86)
             prepare.assert_not_called()
@@ -215,7 +185,7 @@ class ContainerManager(unittest.TestCase):
              patch.object(manager, 'prepare') as prepare, patch.object(manager, 'build') as build, \
              patch.object(manager, 'run', return_value=subprocess.CompletedProcess([], 0, 'linux/amd64\n')) as docker, \
              patch.object(manager, 'start'), patch.object(manager.urllib.request, 'urlopen') as network:
-            manager.main(['install', '--level', '70', '--ip', '127.0.0.1', '--pvf', str(self.pvf), '--resources', str(cache), '--offline'])
+            manager.main(['install', *self.db_args, '--level', '70', '--ip', '127.0.0.1', '--pvf', str(self.pvf), '--resources', str(cache), '--offline'])
             prepare.assert_not_called()
             build.assert_not_called()
             network.assert_not_called()
@@ -226,7 +196,7 @@ class ContainerManager(unittest.TestCase):
              patch.object(manager, 'catalog', return_value={70: self.row}), \
              patch.object(manager, 'fetch') as fetch, patch.object(manager, 'build') as build:
             with self.assertRaisesRegex(ValueError, '尚未配置镜像仓库'):
-                manager.main(['install', '--level', '70', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
+                manager.main(['install', *self.db_args, '--level', '70', '--ip', '127.0.0.1', '--pvf', str(self.pvf)])
             fetch.assert_not_called()
             build.assert_not_called()
             self.assertFalse((self.root / 'state/instances/main').exists())
@@ -269,8 +239,8 @@ class ContainerManager(unittest.TestCase):
              patch.object(manager, 'catalog', return_value={70: self.row}), \
              patch.object(manager, 'acquire_images') as acquire, patch.object(manager, 'start'):
             manager.main(['install'])
-            acquire.assert_called_once_with(settings, 'pull', None)
-        with patch.dict(os.environ, {'DOF_GAME_IMAGE': 'other:image'}), patch.object(manager, 'run') as docker:
+            acquire.assert_called_once_with(settings, 'pull', None, database_mode='external', launcher_mode='qingkong')
+        with patch.dict(os.environ, {'DOF_GAME_IMAGE': 'other:image'}), patch.object(manager, 'run', return_value=subprocess.CompletedProcess([],0,json.dumps({'services':{'game':{'image':'game:test','environment':{}},'keys':{}},'networks':{'public':{}}}))) as docker:
             manager.compose(instance, 'config')
             self.assertEqual(docker.call_args.kwargs['env']['DOF_GAME_IMAGE'], 'ghcr.io/instance-owner/dof-easy-game:v1')
 
@@ -298,10 +268,7 @@ class ContainerManager(unittest.TestCase):
             command = docker.call_args.args[0]
             self.assertIn('ghcr.io/backup-owner/dof-easy-game:v3', command)
             self.assertNotIn('dof-easy-game:local', command)
-            dump = next(call.args[-1] for call in compose.call_args_list if any('mysqldump' in str(arg) for arg in call.args))
-            self.assertIn('--all-databases', dump)
-            self.assertIn('--ignore-table=mysql.innodb_index_stats', dump)
-            self.assertIn('--ignore-table=mysql.innodb_table_stats', dump)
+            self.assertTrue(any(call.args[-1]=='dump' and 'db-tools' in call.args for call in compose.call_args_list))
 
     def test_registry_settings_persist_without_touching_docker(self):
         with patch.object(manager, 'STATE', self.root / 'state'), patch.object(manager, 'docker_check') as docker:
@@ -335,7 +302,7 @@ class ContainerManager(unittest.TestCase):
              patch.object(manager, 'catalog', return_value={70: self.row}), \
              patch.object(manager, 'acquire_images') as acquire, patch.object(manager, 'start'):
             manager.main(['install', '--tag', 'v2'])
-            acquire.assert_called_once_with({'registry': 'ghcr.io/instance-owner', 'tag': 'v2'}, 'pull', None)
+            acquire.assert_called_once_with({'registry': 'ghcr.io/instance-owner', 'tag': 'v2'}, 'pull', None, database_mode='external', launcher_mode='qingkong')
         after = manager.read_env(instance)
         for key, value in before.items():
             if not key.startswith('DOF_') and key != 'IMAGE_TAG':

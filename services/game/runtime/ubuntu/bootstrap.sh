@@ -12,11 +12,10 @@ rm -rf /data/monitor_ip/MONITOR_PUBLIC_IP
 # 清除MONITOR_RELAY_CONFIG文件
 rm -rf /data/relay/MONITOR_RELAY_CONFIG
 # Preserve logs across restarts.
-# 清理/dp2目录
-rm -rf /dp2
-# 给supervisor扩展文件赋予权限[可用于扩展第三方网关]
 mkdir -p /data/conf.d
-# 创建DP目录
+# Shared init/start scripts still use /dp2/libhook.so for the base game hook.
+# Preserve this deployed path; ordinary DP2 gameplay libraries are not installed.
+rm -rf /dp2
 mkdir -p /data/dp
 ln -s /data/dp /dp2
 # 创建日志目录
@@ -70,17 +69,7 @@ fi
 if [ -f "/data/publickey.pem" ];then
   cp /data/publickey.pem /home/neople/game/
 fi
-# Limit persistent plugin permissions to the container owner.
-chmod 700 -R /data/dp
-# Install the explicitly selected ordinary plugins.
-python3 /opt/dnf/ubuntu/plugins.py || exit 1
-if [ "${LAUNCHER_MODE:-dof}" = qingkong ]; then
-  rm -f /etc/supervisor/conf.d/dof-gateway.conf
-  python3 /opt/dnf/ubuntu/qingkong/service.py prepare || exit 1
-else
-  rm -f /etc/supervisor/conf.d/qingkong.conf
-  python3 /opt/dof-easy/runtime/gateway/service.py prepare || exit 1
-fi
+python3 /opt/dnf/ubuntu/qingkong/service.py prepare || exit 1
 # 重设supervisor web网页密码
 sed -i "s/^username=.*/username=$WEB_USER/" /etc/supervisord.conf
 sed -i "s/^password=.*/password=$WEB_PASS/" /etc/supervisord.conf

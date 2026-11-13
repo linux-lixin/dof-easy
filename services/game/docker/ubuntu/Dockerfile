@@ -28,8 +28,6 @@ COPY docker/ubuntu/audit/geoip-probe.c /tmp/geoip-probe.c
 RUN gcc -m32 -I/tmp/geoip/libGeoIP -L/opt/dnf/compat/i386/lib -o /tmp/geoip-probe /tmp/geoip-probe.c -lGeoIP
 COPY docker/ubuntu/legacy-shm.c /tmp/legacy-shm.c
 COPY docker/ubuntu/legacy-stat.c /tmp/legacy-stat.c
-COPY docker/ubuntu/admin-runtime-digest.c /tmp/admin-runtime-digest.c
-RUN gcc -m32 -shared -fPIC -fvisibility=hidden -fno-ident -Wl,--build-id=none -Wall -Wextra -Werror -O2 -o /tmp/libdof-admin-runtime.so /tmp/admin-runtime-digest.c
 RUN gcc -m32 -shared -fPIC -Wall -Wextra -Werror -O2 -o /tmp/liblegacy-stat.so /tmp/legacy-stat.c -ldl
 COPY docker/ubuntu/frida-compat.c docker/ubuntu/frida-compat.map /tmp/
 COPY docker/ubuntu/audit/frida-probe.c /tmp/frida-probe.c
@@ -63,8 +61,6 @@ COPY --from=hooks /tmp/geoip/LICENSE /opt/dnf/licenses/GeoIP-LICENSE
 COPY --from=hooks /tmp/geoip-probe /opt/dnf/audit/geoip-probe
 COPY --from=hooks /tmp/liblegacy-shm.so /opt/dnf/compat/i386/liblegacy-shm.so
 COPY --from=hooks /tmp/liblegacy-stat.so /opt/dnf/compat/i386/liblegacy-stat.so
-COPY --from=hooks /tmp/libdof-admin-runtime.so /opt/dnf/compat/i386/libdof-admin-runtime.so
-COPY docker/ubuntu/admin-runtime-digest.c /opt/dnf/compat/i386/admin-runtime-digest.c
 COPY --from=hooks /tmp/shm-probe /opt/dnf/audit/shm-probe
 COPY --from=hooks /tmp/libfrida-compat.so /opt/dnf/compat/i386/libfrida-compat.so
 COPY --from=hooks /tmp/frida-probe /opt/dnf/audit/frida-probe
@@ -101,9 +97,7 @@ RUN python3 /opt/dnf/ubuntu/bridge_compat.py \
  && install -m 755 /opt/dnf/audit/bridge-repair/df_bridge_r /home/template/neople/bridge/df_bridge_r \
  && rm /opt/dnf/audit/bridge-repair/df_bridge_r \
  && python3 /opt/dnf/audit/elf-audit.py /home/template/neople/bridge --output /opt/dnf/audit/bridge-elf.json
-COPY resources/plugins/dp2/ /opt/dnf/plugins/dp2/
-COPY resources/plugins/frida/ /opt/dnf/plugins/frida/
-COPY resources/plugins/raid/ /opt/dnf/plugins/raid/
+COPY resources/plugins/frida/frida.so /opt/dnf/plugins/frida/frida.so
 RUN python3 /opt/dnf/audit/elf-audit.py /opt/dnf/plugins --preload-i386 /opt/dnf/compat/i386/libfrida-compat.so --output /opt/dnf/audit/plugins-elf.json
 RUN --network=none python3 /opt/dnf/audit/frida-probe.py --gadget /opt/dnf/plugins/frida/frida.so --shim /opt/dnf/compat/i386/libfrida-compat.so --probe /opt/dnf/audit/frida-probe > /opt/dnf/audit/frida-start-proof.txt
 RUN python3 /opt/dnf/ubuntu/prepare_image.py \

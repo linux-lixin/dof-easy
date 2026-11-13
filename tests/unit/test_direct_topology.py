@@ -45,7 +45,7 @@ class DirectTopology(unittest.TestCase):
             commands,stub=self.exercise(root,items)
             with stub:m.retire_legacy_helpers(root)
             self.assertEqual(commands[0][3:6],['--all','--filter','label=com.docker.compose.project=dof-main'])
-            self.assertEqual(commands[-2],['docker','container','stop','--time','30','game-id','admin-id'])
+            self.assertEqual(commands[-2],['docker','container','stop','--time','30','game-id'])
             self.assertEqual(commands[-1],['docker','container','rm','--force','netguard-id','ingress-id','db-check-id'])
             self.assertEqual((root/'player-data').read_text(),'keep')
             copies=list((root/'config-backups').glob('*/.env'))
@@ -94,11 +94,11 @@ class DirectTopology(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)/'main';root.mkdir()
             (root/'channels.json').write_text('{"services":{"netguard":{"ports":[]}}}')
-            values=dict(LAUNCHER_MODE='dof',PLUGIN_MODE='none',BIND_IP='127.0.0.1',OPEN_CHANNEL='15,52')
-            with patch.object(m,'read_env',return_value=values),patch.object(m,'run') as run:
+            values=dict(LAUNCHER_MODE='qingkong',PLUGIN_MODE='none',BIND_IP='127.0.0.1',OPEN_CHANNEL='15,52',DOF_DATABASE_KIND='external',DOF_DB_HOST='172.17.0.1',DOF_DB_PORT='3306',DOF_DB_ALLOW_HOST='172.29.86.0/255.255.255.0',DOF_DB_SUBNET='172.29.86.0/24',GAME_DB_PASSWORD='test1234')
+            with patch.object(m,'read_env',return_value=values),patch.object(m,'run',return_value=subprocess.CompletedProcess([],0,json.dumps({'services':{'game':{'image':'game:test','environment':{}},'keys':{}},'networks':{'public':{}}}))) as run:
                 m.compose(root,'ps')
             model=json.loads((root/'channels.json').read_text())
             self.assertEqual(set(model['services']),{'game'})
-            run.assert_called_once()
+            self.assertEqual(run.call_count,2)
 
 if __name__=='__main__':unittest.main()

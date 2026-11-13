@@ -29,7 +29,6 @@ class QingkongInstall(unittest.TestCase):
         self.assertEqual(manager.raid_assets.state_for(values,Path('/data')),Path('/data/qingkong'))
         self.assertTrue(manager.raid_assets.required(values))
         self.assertEqual(db.required_databases(values),db.GAME_DATABASES+('d_channel_cain','qk'))
-        self.assertFalse(db.web_management_enabled(dict(values,DOF_ADMIN_ENABLED='true')))
         with self.assertRaises(ValueError): manager.raid_assets.profile_for(dict(values,RAID_EXTENSION='on'))
     def test_only_game_and_gateway_ports(self):
         ports=manager.published_ports(self.values())
@@ -66,9 +65,9 @@ class QingkongInstall(unittest.TestCase):
                  patch.object(manager,'read_env',return_value=values), patch.object(manager,'check_instance'), \
                  patch.object(manager,'check_ports'), patch.object(manager,'check_gateway_port'), \
                  patch.object(manager.raid_assets,'validate_game'), patch.object(manager,'validate_raid'), \
-                 patch.object(manager,'apply_configuration') as apply, patch.object(manager,'update_admin_address') as web:
+                 patch.object(manager,'apply_configuration') as apply:
                 manager.main(['config','--ip','43.155.147.117'])
-                apply.assert_called_once();web.assert_not_called()
+                apply.assert_called_once()
     def test_original_schema_preserves_names_and_filters_destructive_commands(self):
         module=load('qingkong_schema','scripts/container/qingkong_database.py')
         block=('DROP DATABASE qk;CREATE DATABASE qk;USE qk;CREATE TABLE `billing` (ID int);'
@@ -81,26 +80,4 @@ class QingkongInstall(unittest.TestCase):
         self.assertIn('INSERT INTO qingkong_config VALUES (1)',statements)
         self.assertFalse(any(s.startswith(('DROP','USE','CREATE DATABASE')) for s in statements))
         with self.assertRaises(ValueError):module.statements(raw+b'changed')
-    def test_frida_grants_are_left_to_restricted_migration(self):
-        with tempfile.TemporaryDirectory() as folder:
-            root=Path(folder);instance=root/'instance';instance.mkdir()
-            seed=root/'seed.sql';seed.write_text('-- seed')
-            compat=root/'compat.sql';compat.write_text('-- compat')
-            channel=root/'channel.tgz'
-            with tarfile.open(channel,'w:gz') as archive:
-                item=tarfile.TarInfo('d_channel.sql');item.size=0;archive.addfile(item,io.BytesIO())
-            (root/'metadata').mkdir()
-            (root/'metadata/build-inputs.lock.json').write_text(json.dumps(dict(files=[dict(path=p.name,sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in (seed,compat,channel)])))
-            calls=[];values=dict(self.values(),LAUNCHER_MODE='native',PLUGIN_MODE='frida')
-            def query(sql):
-                calls.append(sql)
-                if sql=='SELECT VERSION(),@@server_uuid;':return '5.6.50\t'+values['DOF_DATABASE_UUID']
-                if sql=='SHOW DATABASES;':return 'mysql'
-                if sql.startswith('SELECT COUNT'):return '0'
-                if sql.startswith('SHOW GRANTS'):return 'GRANT ALL PRIVILEGES ON *.* WITH GRANT OPTION'
-                return ''
-            with patch.object(db,'ROOT',root),patch.object(db,'SEED',seed),patch.object(db,'COMPAT',compat),patch.object(db,'CHANNEL_SEED',channel),patch.object(db,'prepare_frida') as frida,patch.object(db,'prepare_web',return_value=values['DOF_DATABASE_UUID']):
-                db.initialize_external(instance,values,query)
-                frida.assert_called_once()
-            self.assertFalse(any(sql.startswith('GRANT ALL') and 'frida' in sql for sql in calls))
 if __name__=='__main__': unittest.main()

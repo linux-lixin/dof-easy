@@ -1,36 +1,27 @@
-# CLI 与新建默认值
+# 命令与默认值
 
-用途与读者：命令行操作者。适用范围：dof / native；具体差异见正文。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+仓库根目录执行 `sudo bash dof.sh` 进入菜单。`bash dof.sh --help` 与子命令 `--help` 是完整参数来源。
 
-事实来源：[manage.py](../../scripts/container/manage.py)；[menu.py](../../scripts/container/menu.py)；[raid_assets.py](../../services/game/runtime/ubuntu/gateway/assets.py)。限制和当前验收边界见[当前状态](../status/README.md)。
-
-
-在仓库根目录通过 `bash dof.sh 子命令 --help` 查询参数。以下默认值只适用于新建实例；已有实例读自己的配置。
-
-| 项 | 菜单 | 高级 install |
+| 设置 | 参数 | 默认值 |
 |---|---|---|
-| 登录模式 | native | dof |
-| 镜像来源 | build | pull |
-| 网页绑定 | 0.0.0.0 | 127.0.0.1 |
-| 网页端口 | 18080 | 18080 |
-| 频道 | 15,52 | 15,52 |
-| 游戏绑定 | 0.0.0.0 | 0.0.0.0 |
-| 等级 | 86 | 86 |
-| 数据库 | internal | internal |
-| 插件 | dp2-frida | dp2-frida |
-| 团本扩展 | off | off |
+| 等级 | --level | 86 |
+| 频道 | --channels | 15,52 |
+| 游戏绑定 | --bind | 0.0.0.0 |
+| 登录器 | --launcher | qingkong |
+| 数据库 | --database | external |
+| 插件 | --plugins | none |
 
-install 的 `--launcher`、`--database`、`--level`、`--ip`、`--pvf`、`--channels`、`--bind`、`--admin-bind`、`--admin-port` 定义见[参数源码](../../scripts/container/manage.py)。`--offline` 与 `--build` 互斥；默认拉取失败不回退构建。外置参数 `--db-host` 必须为容器可达私网 IPv4，端口默认 3306，初始化管理员文件权限 0600。
+`--raid-extension` 只能为 `off`；晴空原版团本使用原包配置。`--qingkong-assets` 指向原版资源目录，菜单默认 `/opt/dof-inputs/qingkong-original`。首次安装仍需提供匹配 PVF、公网 IP、外置数据库地址和初始化凭据，详见[部署](../operations/qingkong-baota.md)。
 
-| 命令 | 作用和副作用 |
+| 命令 | 用途 |
 |---|---|
-| images / build | 配置新建镜像默认值 / 显式本机构建，不上传 |
-| install | 新建或更新实例，可能初始化及重建服务 |
-| start / stop / restart | 使用实例镜像启停或重建，不拉取 |
-| config | 修改实例配置并核对/重建 |
-| status / logs | 查看运行状态与服务日志 |
-| backup | 暂停写入服务、导出并归档后恢复原运行服务 |
-| resources / versions | 缓存等级资源 / 列出支持等级 |
-| plugin-db | 用明确提供的本机管理员配置准备插件数据库权限 |
+| install | 新建实例或沿用已有晴空实例启动 |
+| build | 从源码构建 game 镜像，不上传 |
+| images | 查看或配置镜像仓库、标签 |
+| resources / versions | 下载等级资源 / 查看资源目录支持的等级 |
+| start / stop / restart | 实例生命周期操作 |
+| status / logs | 查看状态和日志 |
+| config | 修改 IP、监听地址或频道等配置 |
+| backup | 导出实例数据库和备份材料 |
 
-`--instance` 默认 main，适用于实例命令。没有通用 restore 子命令。安装器频道 15,52 与[手动端口模板](ports.md)默认 11,52 的适用范围不同。成功与失败处理见对应[运维指南](../operations/README.md)。
+`install --build` 显式源码构建；`install --offline` 只用本地资源和镜像，可用 `--images` 导入预先准备的镜像包。两者互斥。不带这两个参数时按配置获取发布镜像；本次清理未同时发布新镜像，应先用 `--build`。不创建 Java 后台、数据库镜像或旧登录器文件。

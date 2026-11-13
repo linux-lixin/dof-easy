@@ -1,9 +1,5 @@
-# tests/integration
+# 隔离数据库验证
 
-用途与读者：维护者。适用范围：以正文所列实例和模式为准。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+`python3 tests/integration/test_mysql56_fixes.py` 使用独立名称、无外部网络和无发布端口的临时 MySQL 5.6 容器，验证游戏 SQL 种子的 q_id 修复、历史引用保护和月表跨年创建。需要 Docker 与对应测试镜像；结束时清理本次测试容器。
 
-事实来源：[README.md](../README.md)。限制和当前验收边界见[当前状态](../../docs/status/README.md)。
-
-在仓库根目录运行。结构与单元测试见[贡献指南](../../CONTRIBUTING.md)，容器、数据库及私有材料条件见[测试总览](../README.md)。缺少条件应记为跳过，不计为通过。集成测试仅用临时独立项目和卷；结束后按各叶子指南清理该项目，禁止清理现有实例。
-
-目录内容：`admin`, `dof`, `installer`, `mysql`, `resource_docker_probe.py`, `test_built_images.py`, `test_mysql56_fixes.py`, `test_registry_images.py`, `test_ubuntu_images.py`.
+此脚本不操作宝塔或线上实例。完整晴空服务器与 Windows 客户端流程需要匹配私有原包及单独验收，边界见[状态](../../docs/status/README.md)。

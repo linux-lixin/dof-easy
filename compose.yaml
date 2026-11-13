@@ -1,32 +1,7 @@
 # Managed by dof.sh; levels and PVF are instance data.
 services:
-  db:
-    image: ${DOF_DB_IMAGE:-dof-easy-db:local}
-    pull_policy: never
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Run configure.py first}
-      MYSQL_ROOT_HOST: '%'
-    volumes:
-    - database:/var/lib/mysql
-    networks:
-    - private
-    healthcheck:
-      test:
-      - CMD-SHELL
-      - MYSQL_PWD="$$MYSQL_ROOT_PASSWORD" mysql -uroot -N -e "SELECT 1 FROM d_taiwan.accounts
-        LIMIT 1" >/dev/null
-      interval: 10s
-      timeout: 5s
-      start_period: 180s
-      retries: 30
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
   keys:
-    image: ${DOF_ADMIN_IMAGE:-dof-easy-admin:local}
+    image: ${DOF_GAME_IMAGE:-dof-easy-game:local}
     pull_policy: never
     entrypoint:
     - /bin/sh
@@ -34,7 +9,7 @@ services:
     network_mode: none
     environment:
       RAID_EXTENSION: ${RAID_EXTENSION:-off}
-      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
+      LAUNCHER_MODE: ${LAUNCHER_MODE:-qingkong}
     volumes:
     - ./deploy/bootstrap/init-keys.sh:/init-keys.sh:ro
     - ${RUNTIME_ROOT:-./runtime}/admin/data:/keys
@@ -54,8 +29,6 @@ services:
         soft: 65535
         hard: 65535
     depends_on:
-      db:
-        condition: service_healthy
       keys:
         condition: service_completed_successfully
     ports:
@@ -82,23 +55,24 @@ services:
       P2P_RELAY_INDEX: '1'
       AUTO_PUBLIC_IP: 'false'
       DDNS_ENABLE: 'false'
-      MAIN_MYSQL_HOST: db
-      MAIN_MYSQL_PORT: '3306'
-      MAIN_MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set password}
+      DOF_DATABASE_KIND: external
+      DOF_DATABASE_MODE: existing
+      MAIN_MYSQL_HOST: ${DOF_DB_HOST:?Set external MySQL host}
+      MAIN_MYSQL_PORT: ${DOF_DB_PORT:-3306}
+      MAIN_MYSQL_ROOT_PASSWORD: unused
       MAIN_MYSQL_GAME_ALLOW_IP: '%'
-      MYSQL_HOST: db
-      MYSQL_PORT: '3306'
+      MYSQL_HOST: ${DOF_DB_HOST:?Set external MySQL host}
+      MYSQL_PORT: ${DOF_DB_PORT:-3306}
       MYSQL_GAME_ALLOW_IP: '%'
-      DNF_DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Set password}
+      DNF_DB_ROOT_PASSWORD: unused
       DOF_DB_GAME_PASSWORD: ${GAME_DB_PASSWORD:?required}
       DNF_DB_GAME_PASSWORD: ${GAME_DB_PASSWORD:?Set password}
       MYSQL_INIT_SSL_MODE: disabled
       WEB_USER: admin
       WEB_PASS: ${SUPERVISOR_PASSWORD:?Set password}
-      PLUGIN_MODE: ${PLUGIN_MODE:-dp2-frida}
+      PLUGIN_MODE: ${PLUGIN_MODE:-none}
       RAID_EXTENSION: ${RAID_EXTENSION:-off}
-      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
-      DNF_READINESS_PROFILE: native
+      LAUNCHER_MODE: ${LAUNCHER_MODE:-qingkong}
       DNF_MAX_LEVEL: ${DNF_MAX_LEVEL:?Run dof.sh install}
       DNF_GAME_SHA256: ${DNF_GAME_SHA256:?Run dof.sh install}
     volumes:
@@ -119,39 +93,6 @@ services:
     - ${RUNTIME_ROOT:-./runtime}/game/core-log/statics:/home/neople/statics/log
     - ${RUNTIME_ROOT:-./runtime}/game/core-log/stun:/home/neople/stun/log
     - ${RUNTIME_ROOT:-./runtime}/game/log:/home/neople/game/log
-    - ${RUNTIME_ROOT:-./runtime}/game/frida-log:/home/neople/game/frida_log
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-  admin:
-    image: ${DOF_ADMIN_IMAGE:-dof-easy-admin:local}
-    pull_policy: never
-    restart: unless-stopped
-    depends_on:
-      game:
-        condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/dnf_service?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ${DB_ROOT_PASSWORD:?Set password}
-      MYSQL_INIT_SSL_MODE: disabled
-      DNF_PVF_PATH: /app/game-resources/Script.pvf
-      DNF_PVF_INDEX: /app/data/pvf-index.json
-      DNF_PUBLIC_IP: ${PUBLIC_IP:?Set public IPv4}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set password}
-      ADMIN_TEMP_SECRET: ${ADMIN_TEMP_SECRET:?Set secret}
-      LAUNCHER_MODE: ${LAUNCHER_MODE:-dof}
-      DNF_MAX_LEVEL: ${DNF_MAX_LEVEL:?Run dof.sh install}
-    volumes:
-    - ${RUNTIME_ROOT:-./runtime}/admin/data:/app/data
-    - ${RUNTIME_ROOT:-./runtime}/game/data/Script.pvf:/app/game-resources/Script.pvf:ro
-    networks:
-    - private
-    - public
-    ports:
-    - ${ADMIN_BIND_IP:-${BIND_IP:-127.0.0.1}}:${ADMIN_PORT:-18080}:80/tcp
     logging:
       driver: json-file
       options:
@@ -163,5 +104,3 @@ networks:
     internal: true
   public:
     driver: bridge
-volumes:
-  database: null

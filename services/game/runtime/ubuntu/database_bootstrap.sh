@@ -1,20 +1,8 @@
 #!/bin/bash
 set -e
-case "${DOF_DATABASE_MODE:-provision}" in
-  existing)
-    echo "Existing game database: legacy initialization and grant rewriting skipped."
-    if [ "${DOF_DATABASE_KIND:-internal}" = external ]; then
-      python3 /opt/dnf/ubuntu/external_database.py configure
-    fi
-    exit 0
-    ;;
-  provision) ;;
-  *) echo "DOF_DATABASE_MODE must be existing or provision" >&2; exit 1 ;;
-esac
-if [ ! -d /home/template/init/init_sql ]; then
-  mkdir -p /home/template/init/init_sql
-  tar -zxf /home/template/init/init_sql.tgz -C /home/template/init/init_sql
+if [ "${DOF_DATABASE_MODE:-existing}" != existing ] || [ "${DOF_DATABASE_KIND:-external}" != external ]; then
+  echo 'Original Qingkong requires external MySQL in existing mode' >&2
+  exit 1
 fi
-bash /home/template/init/prepare_login_seed.sh
-bash /home/template/init/init_main_db.sh
-bash /home/template/init/init_server_group_db.sh
+echo 'Existing game database: legacy initialization and grant rewriting skipped.'
+python3 /opt/dnf/ubuntu/external_database.py configure

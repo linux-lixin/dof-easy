@@ -107,46 +107,32 @@ arch = 'i386' if head[4] == 1 else 'amd64'
 environment = dict(os.environ)
 environment.pop('LD_LIBRARY_PATH', None)
 if arch == 'i386':
-    library_root = '/opt/qingkong/i386' if environment.get('LAUNCHER_MODE') == 'qingkong' else '/opt/dof-easy/lib/i386'
+    library_root = '/opt/qingkong/i386'
     environment['LD_LIBRARY_PATH'] = library_root + ':/opt/dnf/compat/i386'
-elif binary.name == 'QK' and environment.get('LAUNCHER_MODE') == 'qingkong':
+elif binary.name == 'QK':
     environment['LD_LIBRARY_PATH'] = '/root/qingkong:/opt/qingkong/amd64'
 # The adapter passes preloads through a neutral name so Python itself never loads them.
 preload = environment.pop('DNF_GAME_PRELOAD', '')
 environment.pop('LD_PRELOAD', None)
-# Plugins are selected explicitly and loaded only into the game process.
+# Only the original modules and their credential adapter load into game channels.
 if binary.name == 'df_game_r':
-    mode = environment.get('PLUGIN_MODE', 'dp2-frida')
-    if mode not in ('none', 'dp2', 'frida', 'dp2-frida'):
-        raise SystemExit('invalid PLUGIN_MODE')
-    entries = [name for name in preload.split(':') if name]
-    selected = []
-    if mode in ('dp2', 'dp2-frida'): selected.append('/dp2/libdp2pre.so')
-    raid = environment.get('RAID_EXTENSION', 'off')
-    launcher = environment.get('LAUNCHER_MODE', 'dof')
-    if launcher not in ('dof', 'native', 'qingkong'):
-        raise SystemExit('invalid LAUNCHER_MODE')
-    qingkong_required = launcher == 'qingkong'
-    if qingkong_required and raid != 'off':
+    if environment.get('PLUGIN_MODE', 'none') != 'none':
+        raise SystemExit('Original Qingkong requires PLUGIN_MODE=none')
+    if environment.get('LAUNCHER_MODE', 'qingkong') != 'qingkong':
+        raise SystemExit('Only original Qingkong is supported')
+    if environment.get('RAID_EXTENSION', 'off') != 'off':
         raise SystemExit('Original Qingkong requires RAID_EXTENSION=off')
-    native_required = raid == 'on' or launcher == 'native'
-    gateway_required = native_required or qingkong_required
-    if raid not in ('on', 'off') or (raid == 'on' and mode not in ('dp2', 'dp2-frida')):
-        raise SystemExit('invalid raid extension / DP2 combination')
-    if mode in ('frida', 'dp2-frida') or gateway_required:
-        selected.extend(['/opt/dnf/compat/i386/libfrida-compat.so', '/home/neople/game/frida.so'])
-    if gateway_required:
-        marker = '/run/qingkong/gateway-ready' if qingkong_required else '/run/dof-easy/gateway-ready'
-        import time
-        deadline = time.monotonic() + 120
-        while not Path(marker).is_file():
-            if time.monotonic() >= deadline:
-                raise SystemExit('Selected gateway not ready')
-            time.sleep(0.5)
-        selected.append('/root/qk_plugin.so' if qingkong_required else '/opt/dof-easy/lib/libdof-plugin.so')
-    for loader in selected:
-        if not Path(loader).is_file(): raise SystemExit('missing selected plugin: '+loader)
-        if loader not in entries: entries.append(loader)
+    deadline = time.monotonic() + 120
+    while not Path('/run/qingkong/gateway-ready').is_file():
+        if time.monotonic() >= deadline:
+            raise SystemExit('Original Qingkong gateway not ready')
+        time.sleep(0.5)
+    entries = [name for name in preload.split(':') if name]
+    for loader in ('/opt/dnf/compat/i386/libfrida-compat.so', '/home/neople/game/frida.so', '/root/qk_plugin.so'):
+        if not Path(loader).is_file():
+            raise SystemExit('Missing original Qingkong loader: ' + loader)
+        if loader not in entries:
+            entries.append(loader)
     preload = ':'.join(entries)
 if arch == 'i386':
     shim = '/opt/dnf/compat/i386/liblegacy-shm.so'

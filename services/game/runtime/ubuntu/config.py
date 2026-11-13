@@ -7,7 +7,7 @@ import shlex
 import subprocess
 import sys
 
-DEFAULTS = dict(DOF_DATABASE_MODE='provision', SERVER_TYPE='ALL', SERVER_GROUP='3', SERVER_GROUP_DB='cain',
+DEFAULTS = dict(DOF_DATABASE_KIND='external', DOF_DATABASE_MODE='existing', LAUNCHER_MODE='qingkong', PLUGIN_MODE='none', RAID_EXTENSION='off', SERVER_TYPE='ALL', SERVER_GROUP='3', SERVER_GROUP_DB='cain',
                 CORE_PUBLIC_IP='127.0.0.1', MAIN_BRIDGE_IP='127.0.0.1',
                 P2P_PUBLIC_IP='127.0.0.1', OPEN_CHANNEL='11,52', CLIENT_POOL_SIZE='3',
                 GAME_CHANNEL_HOSTS='',
@@ -49,8 +49,10 @@ def channel_hosts(value, expected_channels):
 
 def validate(given):
     env = dict(DEFAULTS, **given)
-    if env['DOF_DATABASE_MODE'] not in ('existing', 'provision'):
-        raise ValueError('DOF_DATABASE_MODE must be existing or provision')
+    if env['DOF_DATABASE_KIND'] != 'external' or env['DOF_DATABASE_MODE'] != 'existing':
+        raise ValueError('Original Qingkong requires external MySQL in existing mode')
+    if env['LAUNCHER_MODE'] != 'qingkong' or env['PLUGIN_MODE'] != 'none' or env['RAID_EXTENSION'] != 'off':
+        raise ValueError('Only original qingkong with plugins none and raid off is supported')
     role = env['SERVER_TYPE']
     if role not in ('ALL','CORE','GAME','P2P'):
         raise ValueError('SERVER_TYPE must be ALL, CORE, GAME or P2P')

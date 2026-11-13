@@ -1,13 +1,9 @@
-# 当前状态
+# 验收边界
 
-用途：提供当前结论与证据入口，面向安装、运维和开发。基线 `main@ecd4505`；最新已存部署证据日期 2026-10-28。本次只重组文档，未重新连接测试服务器、构建业务或执行游戏验收。
+2026-11-12，晴空接入版本在私有 Ubuntu 24.04 / 宝塔 MySQL 5.6.50 / 86 级实例完成镜像构建、原版组件哈希、网关初始化、两个频道加载、受限数据库凭据适配、密钥一致及五个公网 TCP 入口检查。
 
-- [部署、镜像与备份](deployment.md)：应用构建源码 `a6ade435`，最终实际镜像、恢复来源及保留范围。
-- [功能与剩余门禁](capabilities.md)：引用原完成台账，不新建完成口径。
-- [原生客户端](native-client.md)：格式 2 / 配方 2.2 与真实读取边界。
-- [原生运行时](native-runtime.md)：服务端加载证据及未完成玩家流程。
-- [事实修正表](fact-corrections.md)、[机器索引](current.json)、[验证结果](../validation/documentation-restructure.md)。
+main 随后的单模式清理改变默认安装流程并删除旧产品；源码检查和构建结果应以对应提交的测试记录为准。更新 GitHub 不代表现有服务器已切换到清理后的镜像，也不触发数据库重置。
 
-`releaseReady=false`、`completeReplacement=false`、`gameplayAcceptancePerformed=false`。S46 筛选分页已进入后续 main 部署；签到查询最新为 200、样本为空；历史 409 原因未知。代码已部署、配置保存、组件消费和玩家流程不能互相替代。
+尚未验收：Windows 原版后台完整操作、普通玩家登录、选角、进城、进图、返城、重登、公网 UDP 游戏流量和灾备恢复。这些边界不能由单元测试或容器健康状态替代。其他等级虽然保留下载目录，其晴空兼容性仍需各自验证。
 
-历史批次正文见[重组前快照](../history/stages/status-before-restructure.md)与[实施档案](../history/admin/2026-10-28-implementation.md)，原证据全部在[验收索引](../validation/README.md)。本页表示最后一次已存证据，不是实时监控。
+[部署指南](../operations/qingkong-baota.md)列出固定输入和配置；真实地址、密钥、凭据及原始日志保留私有。

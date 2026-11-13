@@ -43,7 +43,7 @@ def dump():
     databases = json.loads(os.environ['DOF_BACKUP_DATABASES'])
     if not databases or any(not re.fullmatch('[a-z][a-z0-9_]*', d) or d in ('mysql','sys','performance_schema','information_schema') for d in databases):
         raise ValueError('Invalid project backup scope')
-    # Game and web writers are stopped by the manager. LOCK TABLES also covers
+    # Game writers are stopped by the manager. LOCK TABLES also covers
     # MyISAM; no global/system databases or users are included in this dump.
     result = subprocess.run(command('dof-mysqldump56')+['--skip-ssl','--hex-blob','--lock-tables','--databases',*databases],
         env=dict(os.environ,MYSQL_PWD=os.environ['DNF_DB_GAME_PASSWORD']), stderr=subprocess.PIPE)

@@ -64,10 +64,21 @@ class QingkongRuntimeTests(unittest.TestCase):
     def test_preflight_rejects_derived_raid_and_unknown_plugin_mode(self):
         assets, _ = self.modules()
         self.assertEqual(assets.state_for({}, Path('/instance')), Path('/instance/qingkong'))
-        for mode in ('none', 'dp2', 'frida', 'dp2-frida'):
-            assets.validate_options(mode, 'off')
-            with self.assertRaises(ValueError): assets.validate_options(mode, 'on')
+        assets.validate_options('none', 'off')
+        with self.assertRaises(ValueError): assets.validate_options('none', 'on')
+        for mode in ('dp2', 'frida', 'dp2-frida'):
+            with self.assertRaises(ValueError): assets.validate_options(mode, 'off')
         with self.assertRaises(ValueError): assets.validate_options('unknown', 'off')
+
+    def test_original_gateway_config_is_validated_before_installing(self):
+        assets, _ = self.modules()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve(); source, lock = self.fixture(root, assets)
+            with patch.object(assets, 'LOCK', lock):
+                for data in ('[Gate]\ngateProt=8888\n', '[Gate]\ngateProt=8887\n'):
+                    (source / 'config/config.ini').write_text(data)
+                    with self.assertRaises(ValueError): assets.install(source, root / 'state')
+                    self.assertFalse((root / 'state').exists())
 
     def test_gateway_config_changes_only_managed_fields(self):
         assets, service = self.modules()
@@ -163,8 +174,8 @@ class QingkongProcessIntegration(unittest.TestCase):
             exec(compile(source, 'run-game', 'exec'), {})
         return execute.call_args[0][2], exists
 
-    def test_all_qingkong_modes_get_one_gadget_and_original_plugin(self):
-        for mode in ('none', 'dp2', 'frida', 'dp2-frida'):
+    def test_qingkong_gets_one_credential_gadget_and_original_plugin(self):
+        for mode in ('none',):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
                 environment, exists = self.run_game(directory, mode)
                 loaders = environment['LD_PRELOAD'].split(':')
@@ -173,6 +184,11 @@ class QingkongProcessIntegration(unittest.TestCase):
                 self.assertNotIn('/opt/dof-easy/lib/libdof-plugin.so', loaders)
                 self.assertEqual('/dp2/libdp2pre.so' in loaders, mode in ('dp2', 'dp2-frida'))
                 self.assertEqual(environment['LD_LIBRARY_PATH'], '/opt/qingkong/i386:/opt/dnf/compat/i386')
+
+    def test_ordinary_gameplay_modes_cannot_be_loaded(self):
+        for mode in ('dp2', 'frida', 'dp2-frida'):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                with self.assertRaises(SystemExit): self.run_game(directory, mode)
 
     def test_original_qk_uses_only_amd64_dependency_directory(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -230,10 +246,60 @@ class QingkongProcessIntegration(unittest.TestCase):
             self.assertEqual(marker_data['platform'], 'ubuntu24')
             self.assertEqual(set(marker_data['files']), {'run/start.sh'})
 
+    def test_shared_base_hook_path_is_available_before_template_initialization(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory).resolve()
+            (root/'home/template/init').mkdir(parents=True)
+            (root/'run/dnf').mkdir(parents=True)
+            (root/'dev/shm').mkdir(parents=True)
+            (root/'home/template/init/libhook.so').write_bytes(b'shared base hook fixture')
+            init=root/'home/template/init/init.sh'
+            init.write_text('cp "'+str(root/'home/template/init/libhook.so')+'" "'+str(root/'data/dp/libhook.so')+'" || exit 1\nexit 23\n')
+            source=(BASE/'bootstrap.sh').read_text()
+            import re
+            source=re.sub(r'(?<![A-Za-z0-9_}])/(data|home|run|dev|dp2)(?=/|["\s]|$)',lambda match:str(root/match[1]),source)
+            result=subprocess.run(['bash','-c',source],env=dict(os.environ,SERVER_TYPE='ALL'),capture_output=True,text=True)
+            self.assertEqual(result.returncode,23,result.stderr)
+            self.assertEqual((root/'dp2/libhook.so').read_bytes(),b'shared base hook fixture')
+
     def test_bootstrap_and_keys_route_original_profile(self):
         bootstrap=(BASE/'bootstrap.sh').read_text()
         keys=(ROOT/'deploy/bootstrap/init-keys.sh').read_text()
         self.assertIn('/opt/dnf/ubuntu/qingkong/service.py prepare', bootstrap)
         self.assertIn('/game/qingkong', keys)
+
+
+class QingkongKeys(unittest.TestCase):
+    def execute(self, root, launcher='qingkong'):
+        source = (ROOT/'deploy/bootstrap/init-keys.sh').read_text()
+        import re
+        source = re.sub(r'(?<![A-Za-z0-9_}])/(keys|game)(?=/|\s|$)', lambda match: str(root/match[1]), source)
+        source = source.replace('/tmp/derived.pub', str(root/'derived.pub'))
+        return subprocess.run(['sh','-c',source], env=dict(os.environ,LAUNCHER_MODE=launcher,RAID_EXTENSION='off'),capture_output=True,text=True)
+
+    def test_unsupported_mode_is_rejected_before_generating_keys(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            result = self.execute(root, 'native')
+            self.assertNotEqual(result.returncode,0)
+            self.assertFalse((root/'keys').exists())
+
+    @unittest.skipUnless(sys.platform == 'linux', 'requires deployed Linux OpenSSL pkey -check')
+    def test_existing_keys_are_preserved_and_conflicting_game_key_is_not_overwritten(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve(); (root/'game/qingkong').mkdir(parents=True)
+            result = self.execute(root)
+            self.assertEqual(result.returncode,0,result.stderr)
+            before = (root/'keys/private.key').read_bytes()
+            public = (root/'keys/publickey.pem').read_bytes()
+            self.assertEqual((root/'game/qingkong/keys/privatekey.pem').read_bytes(), before)
+            self.assertEqual((root/'game/publickey.pem').read_bytes(), public)
+            self.assertEqual(self.execute(root).returncode,0)
+            self.assertEqual((root/'keys/private.key').read_bytes(),before)
+            (root/'game/publickey.pem').write_bytes(b'operator different key')
+            result = self.execute(root)
+            self.assertNotEqual(result.returncode,0)
+            self.assertEqual((root/'game/publickey.pem').read_bytes(),b'operator different key')
+            self.assertEqual((root/'keys/private.key').read_bytes(),before)
 
 if __name__ == '__main__': unittest.main()

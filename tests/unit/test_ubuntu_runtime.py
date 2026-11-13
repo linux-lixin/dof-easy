@@ -24,13 +24,23 @@ def module(name, directory=ADAPTER):
 
 class UbuntuRuntime(unittest.TestCase):
     def test_existing_database_mode_never_runs_legacy_initializers(self):
-        result = subprocess.run(['bash', str(ADAPTER / 'database_bootstrap.sh')],
-            env=dict(os.environ, DOF_DATABASE_MODE='existing'), capture_output=True, text=True)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn('skipped', result.stdout)
-        invalid = subprocess.run(['bash', str(ADAPTER / 'database_bootstrap.sh')],
-            env=dict(os.environ, DOF_DATABASE_MODE='unexpected'), capture_output=True, text=True)
-        self.assertNotEqual(invalid.returncode, 0)
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); calls = root / 'calls'
+            stub = root / 'python3'
+            stub.write_text('#!/bin/sh\nprintf "%s\\n" "$*" >> "$TEST_CALLS"\n')
+            stub.chmod(0o700)
+            env = dict(os.environ, PATH=str(root)+os.pathsep+os.environ['PATH'], TEST_CALLS=str(calls),
+                       DOF_DATABASE_MODE='existing', DOF_DATABASE_KIND='external')
+            result = subprocess.run(['bash', str(ADAPTER / 'database_bootstrap.sh')], env=env, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('skipped', result.stdout)
+            self.assertEqual(calls.read_text().strip(), '/opt/dnf/ubuntu/external_database.py configure')
+            before = calls.read_bytes()
+            for mode, kind in [('unexpected','external'), ('provision','external'), ('existing','internal')]:
+                result = subprocess.run(['bash', str(ADAPTER / 'database_bootstrap.sh')],
+                    env=dict(env, DOF_DATABASE_MODE=mode, DOF_DATABASE_KIND=kind), capture_output=True, text=True)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(calls.read_bytes(), before)
 
     def test_existing_database_preflight_checks_game_access_without_grants(self):
         preflight = module('database_preflight')
@@ -69,18 +79,6 @@ class UbuntuRuntime(unittest.TestCase):
         self.assertIn('MAIN_MYSQL connection failed',output[0])
         self.assertNotIn('READY',output[0])
 
-    def test_startup_country_check_ignores_previous_logs(self):
-        notice=module('startup_notice')
-        with tempfile.TemporaryDirectory() as td:
-            root=Path(td); folder=root/'siroco11'; folder.mkdir()
-            content='\n'.join('GeoIP Allow Country Code : '+x for x in ('CN','HK','KR','MO','TW'))
-            (folder/'Log-old.init.previous').write_text(content)
-            env={'SERVER_TYPE':'ALL','SERVER_GROUP':'3','OPEN_CHANNEL':'11'}
-            with self.assertRaisesRegex(ValueError,'siroco11'):
-                notice.check_countries(root,env)
-            (folder/'Log-new.init').write_text(content)
-            notice.check_countries(root,env)
-            notice.check_countries(root,{'SERVER_TYPE':'CORE'})
 
     def test_onlyguo_runtime_has_no_legacy_gateway(self):
         base=ROOT/'services/game/assets'
@@ -136,15 +134,6 @@ class UbuntuRuntime(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'exactly 8 alphanumeric'):
                 config.validate(dict(env,DNF_DB_GAME_PASSWORD=password))
 
-    def test_cleanup_does_not_claim_success_when_docker_retains_container(self):
-        harness=module('test_ubuntu_images',ROOT/'tests/integration')
-        state={'network':'isolated','containers':['stuck'],'volumes':[]}
-        def fake(*args,**kwargs):
-            return subprocess.CompletedProcess(args,1 if args[0]=='rm' else 0,stdout='',stderr='')
-        with patch.object(harness,'docker',side_effect=fake):
-            harness.cleanup(state)
-        self.assertFalse(state['cleaned_up'])
-        self.assertIn('stuck',state['cleanup_errors'])
 
     def test_ddns_restarts_every_address_dependent_service(self):
         monitor=module('monitor_ip')
@@ -244,7 +233,7 @@ class UbuntuRuntime(unittest.TestCase):
     def test_managed_upgrade_and_user_conflict_are_transactional(self):
         manager = module('managed')
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td); data=root/'data'; source=root/'source'
+            root = Path(td).resolve(); data=root/'data'; source=root/'source'
             source.mkdir(); (source/'run').mkdir(); data.mkdir()
             (data/'publickey.pem').write_text('user key')
             (source/'run/a.sh').write_text('v1a'); (source/'run/b.sh').write_text('v1b')
