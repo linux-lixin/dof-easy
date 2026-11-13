@@ -1,14 +1,7 @@
-# 安装器内部模块
+# 晴空实例管理
 
-用途与读者：维护根 dof.sh 的开发者。Linux 部署使用 Python 3.11+；这些模块共用实例目录和锁，不另建部署链。
+入口 `sudo bash dof.sh`；[manage.py](manage.py)和[menu.py](menu.py)共用晴空、外置数据库的安装流程。默认 86 级、原版晴空、MySQL 5.6、普通插件 none、派生团本 off。
 
-| 模块 | 输入、输出与影响 |
-|---|---|
-| [manage.py](manage.py) / [menu.py](menu.py) | CLI/交互选择 → 实例配置、Compose、初始化、服务启停与备份；会修改主机和实例 |
-| [resources.py](resources.py) | 元数据锁与缓存 → 文件哈希核对和等级包准备，下载按显式模式 |
-| [image_config.py](image_config.py) | 全局/实例仓库与标签 → 镜像引用，不将全局值覆盖已建实例 |
-| [database.py](database.py) | 已核对的实例/数据库身份 → 内外置初始化、权限与导出，禁止覆盖已有外置项目库 |
-| [deployment.py](deployment.py) | 实例选择 → 部署布局与持久化配置 |
-| [host.py](host.py) | 主机状态 → 预算、Docker、Swap 和防火墙处理；按交互确认执行 |
+安装前检查原包和配置、数据库版本及现有身份。仅构建 game 镜像，密钥初始化与 db-tools 复用同一镜像。已有 dof/native/internal 实例被拒绝，不静默迁移。
 
-在仓库根用 `bash dof.sh install --help` 查看参数，不在 Windows 导入后试部署。默认值以[CLI 参考](../../docs/reference/cli.md)为唯一说明，操作见[安装](../../docs/operations/install.md)与[维护](../../docs/operations/daily-management.md)。成功需配置、镜像、实例身份与健康相符；失败保留日志和数据，不手工清锁绕过并发保护。
+使用方法见[CLI](../../docs/reference/cli.md)和[部署](../../docs/operations/qingkong-baota.md)。

@@ -1,92 +1,43 @@
-"""Validate actual Compose resolution after directory moves, without starting services."""
+"""Resolve the maintained Qingkong Compose template without starting services."""
 import json
 import os
 from pathlib import Path
-import re
 import subprocess
 import tempfile
 import unittest
 
 ROOT=Path(__file__).resolve().parents[2]
-DEPLOY=ROOT/'deploy'
-
-def config(folder, overrides=None):
-    # Do not accidentally use real shell credentials while checking example files.
-    variables=set()
-    for p in DEPLOY.rglob('*.yaml'):
-        variables.update(re.findall(r'\$\{([A-Z_][A-Z_0-9]*)',p.read_text()))
-    env={k:v for k,v in os.environ.items() if k not in variables}
-    env.update(overrides or {})
-    result=subprocess.run(['docker','compose','--env-file',str(folder/'.env.example'),
-                           '-f',str(folder/'compose.yaml'),'config','--format','json'],
-                          cwd=ROOT,env=env,capture_output=True,text=True,encoding='utf8')
-    if result.returncode: raise AssertionError(result.stderr)
-    return json.loads(result.stdout)
 
 class DeploymentLayout(unittest.TestCase):
-    def test_image_entrypoints_match_runtime_consumers(self):
-        runtime=ROOT/'services/game/runtime/ubuntu'
-        self.assertTrue((runtime/'plugins.py').is_file())
-        self.assertIn('python3 /opt/dnf/ubuntu/plugins.py || exit 1', (runtime/'bootstrap.sh').read_text())
-        self.assertFalse((runtime/'vipai86.py').exists())
-
-    def test_all_leaf_composes_have_docs_and_resolve_local_mounts(self):
-        files=list(DEPLOY.rglob('compose.yaml'))
-        self.assertEqual(len(files),5)
-        for file in files:
-            with self.subTest(file=file.relative_to(ROOT)):
-                self.assertTrue((file.parent/'README.md').is_file())
-                self.assertTrue((file.parent/'.env.example').is_file())
-                model=config(file.parent)
-                for name,service in model['services'].items():
-                    self.assertNotIn('platform',service)
-                    self.assertFalse(service.get('privileged',False))
-                    self.assertNotIn('NET_ADMIN',service.get('cap_add',[]))
-                    self.assertFalse(any('/dev/net/tun' in str(d) for d in service.get('devices',[])))
-                    for mount in service.get('volumes',[]):
-                        if mount['type']=='bind':
-                            source=Path(mount['source']).resolve()
-                            self.assertEqual(os.path.commonpath((file.parent.resolve(),source)),str(file.parent.resolve()),
-                                             f'{name}: mount escaped its deployment leaf: {source}')
-
-    def test_ubuntu_roles_and_existing_project_names(self):
-        for subdir,service,role,project in (
-            ('all','game','ALL','dnf-ubuntu-all'),
-            ('split/core','core','CORE','dnf-ubuntu-core'),
-            ('split/game','game','GAME','dnf-ubuntu-game'),
-            ('split/p2p','p2p','P2P','dnf-ubuntu-p2p')):
-            with self.subTest(role=role):
-                folder=DEPLOY/'manual'/subdir
-                model=config(folder)
-                self.assertEqual(model['name'],project)
-                spec=model['services'][service]
-                self.assertEqual(spec['environment']['SERVER_TYPE'],role)
-                mount=next(v for v in spec['volumes'] if v['target']=='/data')
-                self.assertEqual(Path(mount['source']).resolve(),(folder/'runtime'/service/'data').resolve())
-                if role=='P2P':
-                    self.assertFalse(any('MYSQL' in k or 'PASSWORD' in k for k in spec['environment']))
-
-    def test_runtime_override_reuses_existing_data(self):
-        with tempfile.TemporaryDirectory() as old:
-            for relative in ('manual/all','manual/split/game','manual/split/core','manual/split/p2p','manual/split/admin'):
-                model=config(DEPLOY/relative,{'RUNTIME_ROOT':Path(old).as_posix()})
-                for service in model['services'].values():
-                    for mount in service.get('volumes',[]):
-                        if mount['target'] in ('/data','/home/neople/game/log','/app/data'):
-                            self.assertEqual(os.path.commonpath((Path(old).resolve(),Path(mount['source']).resolve())),str(Path(old).resolve()))
-
-    def test_independent_admin_requires_no_game_configuration(self):
-        for platform in ('manual',):
-            model=config(DEPLOY/platform/'split/admin')
-            self.assertEqual(set(model['services']),{'admin'})
-            admin=model['services']['admin']
-            self.assertNotIn('depends_on',admin)
-            self.assertEqual(admin['environment']['SPRING_DATASOURCE_USERNAME'],'root')
+    def test_resolved_services_and_identity_mounts(self):
+        # No operator environment or real database credentials enter this check.
+        env={k:v for k,v in os.environ.items() if k in ('PATH','HOME','DOCKER_CONFIG')}
+        env.update(PUBLIC_IP='203.0.113.10',DOF_DB_HOST='10.0.0.10',
+                   GAME_DB_PASSWORD='example-game-password',SUPERVISOR_PASSWORD='example-supervisor-password',
+                   DNF_MAX_LEVEL='86',DNF_GAME_SHA256='0'*64)
+        with tempfile.TemporaryDirectory() as directory:
+            env['RUNTIME_ROOT']=directory
+            result=subprocess.run(['docker','compose','--env-file','/dev/null','-f',str(ROOT/'compose.yaml'),
+                                   'config','--format','json'],env=env,cwd=ROOT,capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stderr)
+            model=json.loads(result.stdout)
+            self.assertEqual(set(model['services']),{'game','keys'})
+            game=model['services']['game']; keys=model['services']['keys']
+            self.assertEqual(game['image'],keys['image'])
+            self.assertEqual(game['environment']['LAUNCHER_MODE'],'qingkong')
+            self.assertEqual(game['environment']['DOF_DATABASE_KIND'],'external')
+            self.assertEqual(game['environment']['PLUGIN_MODE'],'none')
+            self.assertEqual(keys['network_mode'],'none')
+            mounts={v['target']:v['source'] for v in keys['volumes']}
+            self.assertEqual(Path(mounts['/keys']),Path(directory)/'admin/data')
+            self.assertEqual(Path(mounts['/game']),Path(directory)/'game/data')
+            for service in model['services'].values():
+                self.assertFalse(service.get('privileged',False))
+                self.assertNotIn('NET_ADMIN',service.get('cap_add',[]))
 
     def test_document_links_resolve(self):
-        result = subprocess.run(
-            [os.sys.executable, str(ROOT/'scripts/diagnostics/check_docs.py')],
-            cwd=ROOT, capture_output=True, text=True, encoding='utf8')
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        result=subprocess.run([os.sys.executable,str(ROOT/'scripts/diagnostics/check_docs.py')],
+                              cwd=ROOT,capture_output=True,text=True)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
 
 if __name__=='__main__': unittest.main()

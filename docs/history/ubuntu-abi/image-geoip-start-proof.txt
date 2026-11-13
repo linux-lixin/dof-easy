@@ -1,1 +1,0 @@
-PASS: i386 GeoIP_new loaded the default country database

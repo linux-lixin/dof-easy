@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 import tempfile
 
-ROLES = ('db', 'admin', 'game')
+ROLES = ('game',)
 KEYS = {role: 'DOF_' + role.upper() + '_IMAGE' for role in ROLES}
 
 

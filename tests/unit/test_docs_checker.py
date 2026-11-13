@@ -60,21 +60,8 @@ class DocumentationChecker(unittest.TestCase):
         errors=docs.check_default_table(self.root, [('频道','--channels')])
         self.assertTrue(any('default' in e for e in errors))
 
-    def test_status_evidence_mismatch_and_stale_game_field(self):
-        self.put('evidence.json', json.dumps({'deployment':{'gameImage':'old'}, 'gameRecreation':{'gameImage':'final'},'releaseReady':False}))
-        current={'evidenceFile':'evidence.json','facts':{'gameImage':{'value':'final','pointer':'/deployment/gameImage'},'releaseReady':{'value':False,'pointer':'/releaseReady'}}}
-        self.assertTrue(docs.check_status(self.root,current,{'evidence.json'}))
-        current['facts']['gameImage']['pointer']='/gameRecreation/gameImage'
-        self.assertEqual(docs.check_status(self.root,current,{'evidence.json'}),[])
 
-    def test_immutable_bytes_changed(self):
-        self.put('evidence.json','changed')
-        errors=docs.check_immutable(self.root, {'evidence.json':'0'*64}, {'evidence.json'})
-        self.assertTrue(any('immutable' in e for e in errors))
 
-    def test_redirect_chain_is_rejected(self):
-        pages=[{'path':'old.md','kind':'redirect','authority':'middle.md'}, {'path':'middle.md','kind':'redirect','authority':'new.md'}, {'path':'new.md','kind':'current','authority':'new.md'}]
-        self.assertTrue(docs.check_redirects(pages,{'old.md':{'middle.md'},'middle.md':{'new.md'}}))
 
     def test_private_material_and_real_password_patterns(self):
         self.put('README.md','password = "non-example-strong-secret"\n-----BEGIN PRIVATE KEY-----')
@@ -88,31 +75,22 @@ class DocumentationChecker(unittest.TestCase):
         self.assertEqual(docs.tracked_files(self.root),{'README.md'})
         self.assertEqual(docs.tracked_files(self.root,['other-audit.md']),{'README.md','other-audit.md'})
 
-    def test_status_date_and_required_facts_cannot_disappear(self):
-        self.put('evidence.json',json.dumps({'date':'2026-10-28','timezone':'Asia/Hong_Kong'}))
-        current={'evidenceFile':'evidence.json','asOf':'2026-10-27','facts':{}}
-        self.assertTrue(docs.check_status(self.root,current,{'evidence.json'},strict=True))
 
-    def test_port_table_drift_is_detected(self):
-        self.put('scripts/diagnostics/ubuntu_ports.py',"def render(group, channels):\n    return '| GAME | 30011 |\\n'\n")
-        self.put('docs/reference/ports.md','| GAME | 30012 |\n')
-        self.assertTrue(docs.check_port_table(self.root))
 
-    def test_missing_ledger_reference_is_detected(self):
-        self.put('scope.json',json.dumps({'note':'history docs/validation/gone.json'}))
-        self.assertTrue(docs.check_ledger_references(self.root,['scope.json'],{'scope.json'}))
 
-    def test_tampering_frozen_hash_cannot_redefine_baseline(self):
-        catalog=json.loads((ROOT/'docs/catalog.json').read_text(encoding='utf8'))
-        path=next(p for p in catalog['immutable'] if p.endswith('.json'))
-        catalog['immutable'][path]='0'*64
-        errors=docs.check_baseline(ROOT,catalog,docs.tracked_files(ROOT))
-        self.assertTrue(any('hash differs from baseline' in e and path in e for e in errors))
 
-    def test_superseded_deployment_claims_cannot_return_to_current_guides(self):
-        self.put('docs/operations/isolated-game.md','签到记录仍返回结构不兼容的 HTTP 409。')
-        self.put('docs/operations/admin/activities.md','该实现尚未部署到86级实例，需先修复并部署后再验收。')
-        pages=[{'path':p,'kind':'current'} for p in ('docs/operations/isolated-game.md','docs/operations/admin/activities.md')]
-        self.assertEqual(len(docs.check_superseded_claims(self.root,pages)),2)
+
+class CurrentCatalog(unittest.TestCase):
+    def test_unregistered_and_missing_pages_fail(self):
+        pages = [{'path':'README.md','kind':'current'}]
+        errors = docs.check_catalog(pages, {'README.md', 'docs/new.md'})
+        self.assertTrue(any('unregistered' in e for e in errors))
+        self.assertTrue(docs.check_catalog(pages, set()))
+
+    def test_complete_catalog_passes_and_duplicates_fail(self):
+        pages = [{'path':'README.md','kind':'current'}]
+        self.assertEqual(docs.check_catalog(pages, {'README.md'}), [])
+        self.assertTrue(docs.check_catalog(pages + pages, {'README.md'}))
+
 
 if __name__=='__main__': unittest.main()

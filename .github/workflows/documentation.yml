@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,8 +17,12 @@ jobs:
           python-version: '3.11'
       - name: Documentation contracts
         run: python scripts/diagnostics/check_docs.py
-      - name: Checker regression fixtures
-        run: python -m unittest discover -s tests/unit -p 'test_docs_checker.py'
+      - name: Linux i386 test prerequisites
+        run: sudo apt-get update && sudo apt-get install -y gcc-multilib libc6-dev-i386
+      - name: Unit tests
+        run: python -m unittest discover -s tests/unit -p 'test_*.py'
+      - name: Qingkong structure and shared resource integrity
+        run: python -m unittest discover -s tests/structure -p 'test_*.py'
       - name: Whitespace
         env:
           BASE_REV: ${{ github.event.pull_request.base.sha || github.event.before }}

@@ -49,7 +49,7 @@ PY
                 cwd=folder,env=env,input=answer,text=True,capture_output=True,timeout=10)
             called=json.loads((root/'called.json').read_text()) if (root/'called.json').exists() else None
             boot=(root/'bootstrap-called').read_text() if (root/'bootstrap-called').exists() else None
-            return result,called,boot,str(root)
+            return result,called,boot,str(root.resolve())
 
     def test_no_arguments_open_menu_from_checkout(self):
         result,called,boot,root=self.invoke()

@@ -1,5 +1,7 @@
 #!/bin/sh
 set -eu
+[ "${LAUNCHER_MODE:-qingkong}" = qingkong ] || { echo 'Only original Qingkong is supported' >&2; exit 1; }
+[ "${RAID_EXTENSION:-off}" = off ] || { echo 'Qingkong requires RAID_EXTENSION=off' >&2; exit 1; }
 umask 077
 mkdir -p /keys /game
 private_tmp=/keys/.private.new.$$
@@ -24,31 +26,21 @@ else
 fi
 chmod 600 /keys/private.key /keys/publickey.pem /game/publickey.pem
 
-# The native gateway reuses the instance login identity.
-case "${LAUNCHER_MODE:-dof}" in
-    dof|native|qingkong) ;;
-    *) echo 'Invalid LAUNCHER_MODE' >&2; exit 1 ;;
-esac
-if [ "${RAID_EXTENSION:-off}" = on ] || [ "${LAUNCHER_MODE:-dof}" = native ] || [ "${LAUNCHER_MODE:-dof}" = qingkong ]; then
-    gateway_state=/game/dof-easy
-    if [ "${LAUNCHER_MODE:-dof}" = qingkong ]; then
-        [ "${RAID_EXTENSION:-off}" = off ] || { echo 'Qingkong requires RAID_EXTENSION=off' >&2; exit 1; }
-        gateway_state=/game/qingkong
+# Keep the deployed key directory stable while copying its identity to Qingkong.
+gateway_state=/game/qingkong
+test -d "$gateway_state"
+test ! -L "$gateway_state"
+test ! -L "$gateway_state/keys"
+mkdir -p "$gateway_state/keys"
+for entry in privatekey.pem publickey.pem; do
+    source=/keys/publickey.pem
+    [ "$entry" != privatekey.pem ] || source=/keys/private.key
+    target=$gateway_state/keys/$entry
+    test ! -L "$target"
+    if [ -e "$target" ]; then
+        cmp -s "$source" "$target" || { echo 'Qingkong key differs; nothing overwritten' >&2; exit 1; }
+    else
+        cp "$source" "$target"
     fi
-    test -d "$gateway_state"
-    test ! -L "$gateway_state"
-    test ! -L "$gateway_state/keys"
-    mkdir -p "$gateway_state/keys"
-    for entry in privatekey.pem publickey.pem; do
-        source=/keys/publickey.pem
-        [ "$entry" != privatekey.pem ] || source=/keys/private.key
-        target=$gateway_state/keys/$entry
-        test ! -L "$target"
-        if [ -e "$target" ]; then
-            cmp -s "$source" "$target" || { echo 'Native key differs; nothing overwritten' >&2; exit 1; }
-        else
-            cp "$source" "$target"
-        fi
-        chmod 600 "$target"
-    done
-fi
+    chmod 600 "$target"
+done

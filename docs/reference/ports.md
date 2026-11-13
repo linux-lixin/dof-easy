@@ -1,32 +1,15 @@
-# 端口参考
+# 端口
 
-用途与读者：运维与开发人员。适用范围：dof / native；具体差异见正文。前置条件与操作见正文，执行后核对成功信号；历史证据不代表本次重新执行。
+以下为默认频道 `15,52` 和当前晴空配套的玩家入口。更改频道后按生成的 Compose 配置和实例 `client/qingkong-endpoints.json` 核对实际值。
 
-事实来源：[ubuntu_ports.py](../../scripts/diagnostics/ubuntu_ports.py)。限制和当前验收边界见[当前状态](../status/README.md)。
+| 用途 | 协议 | 端口 |
+|---|---|---|
+| 晴空原版网关 | TCP | 8887 |
+| 频道列表、relay | TCP/UDP | 7001、7300 |
+| 游戏频道 | TCP | 30015、30052 |
+| 游戏频道 | UDP | 31015、31052 |
+| STUN | UDP | 2311–2313 |
 
-以下表格是手动模板的 group=3、channels=11,52 示例。安装器默认 channels=15,52，必须显式传给生成器；不可直接照搬手动表作为安装器安全组。运行 `python scripts/diagnostics/ubuntu_ports.py --group 3 --channels "15,52"` 获取对应清单。
+宝塔数据库的 3306 只允许需要连接的可信 Docker 网段，不作为玩家入口。Windows 晴空后台按原包说明连接，仓库不会启动 Java/Vue 网页端口。
 
-## Ubuntu 角色端口表
-
-由 `python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 11,52` 从配置生成。
-
-节点端口仅向可信节点开放；管理、容器内部端口见部署指南。
-
-| 角色 | 用途 | 协议 | 端口 | 配置来源 |
-|---|---|---|---|---|
-| CORE | 玩家频道列表 | TCP/UDP | 7001 | channel/cfg/server.cfg |
-| CORE | 节点 bridge | TCP/UDP | 7000 | bridge/cfg/server.cfg |
-| CORE | 节点 monitor | TCP/UDP | 33303 | monitor/cfg/server.cfg |
-| CORE | 节点 guild | TCP/UDP | 33403 | guild/cfg/server.cfg |
-| CORE | 节点 statistic | UDP | 33503 | statics/cfg/server.cfg |
-| CORE | 节点 auction | TCP/UDP | 33803 | auction/cfg/server.cfg |
-| CORE | 节点 point | TCP/UDP | 33603 | point/cfg/server.cfg |
-| CORE | 节点 community | TCP | 33100 | community/cfg/server.cfg |
-| P2P | 玩家 relay | TCP/UDP | 7300 | relay/cfg/relay.cfg |
-| GAME | 玩家频道 11 | TCP | 30011 | game/cfg/server.template |
-| GAME | 玩家频道 11 | UDP | 31011 | game/cfg/server.template |
-| GAME | 玩家频道 52 | TCP | 30052 | game/cfg/server.template |
-| GAME | 玩家频道 52 | UDP | 31052 | game/cfg/server.template |
-| P2P | 玩家 STUN | UDP | 2311、2312、2313 | stun/cfg/server.cfg |
-| CORE | 节点 doublecheck | UDP | 33703 | game/cfg/server.template |
-| CORE | 节点 relay 注册 | TCP | 5003 | ubuntu/relay.py |
+节点内部端口可由 `python3 scripts/diagnostics/ubuntu_ports.py --group 3 --channels 15,52` 从游戏配置生成；不要将内部端口全部放到公网。云安全组和宿主机防火墙需共同配置。

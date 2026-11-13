@@ -87,18 +87,6 @@ try:
         assert sql("SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA='taiwan_cain_log' AND TABLE_NAME IN ('log_response_time_202612','log_response_time_202701');").stdout.strip()=='2'
         print('Monthly maintenance: year rollover and repeat execution passed.',flush=True)
 
-    sql('USE d_taiwan;\n'+ddl(main,'accounts'))
-    backend=(ROOT/'services/admin/database/init.sql').read_text(encoding='utf8').replace('${DB_NAME}','dnf_service')
-    sql(backend)
-    bootstrap=(ROOT/'deploy/shared/bootstrap-admin.sql.example').read_text(encoding='utf8')
-    bootstrap=bootstrap.replace('CHANGE_ME_NEW_PRIVATE_ADMIN_PASSWORD','localtestonly').replace('CHANGE_ME_DIFFERENT_PRIVATE_TEMP_SECRET','testsecretone')
-    sql(bootstrap)
-    assert sql("SELECT COUNT(*) FROM d_taiwan.accounts WHERE accountname='admin' AND admin=1;").stdout.strip()=='1'
-    assert sql('SELECT COUNT(*) FROM dnf_service.ADMIN_TEMP_PASSWORD WHERE id=1;').stdout.strip()=='1'
-    upsert=bootstrap[bootstrap.index('INSERT INTO dnf_service.ADMIN_TEMP_PASSWORD'):]
-    sql(upsert.replace('testsecretone','testsecrettwo'))
-    assert sql("SELECT COUNT(*) FROM dnf_service.ADMIN_TEMP_PASSWORD WHERE id=1 AND PASSWORD='testsecrettwo';").stdout.strip()=='1'
-    print('Backend original schema + bootstrap: admin created; empty/existing auth row passed.',flush=True)
     print('All isolated MySQL 5.6 checks passed.',flush=True)
 finally:
     docker('rm','-fv',NAME,check=False)

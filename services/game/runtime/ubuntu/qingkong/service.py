@@ -29,10 +29,28 @@ def add_adapter(script, adapter):
     return adapter + b'\n' + script
 
 
-def install_gateway_keys(state=None, public=Path('/data/publickey.pem'), game=Path('/home/neople/game')):
-    from gateway.service import install_gateway_keys as install_validated_keys
-    from qingkong.assets import state_for
-    install_validated_keys(state if state is not None else state_for(os.environ), public, game)
+def install_gateway_keys(state=None, public=Path('/data/publickey.pem'),
+                         game=Path('/home/neople/game')):
+    if state is None:
+        from qingkong.assets import state_for
+        state = state_for(os.environ)
+    private = state / 'keys/privatekey.pem'
+    paths = (private, public, game / 'privatekey.pem', game / 'publickey.pem')
+    if any(p.is_symlink() for p in paths):
+        raise ValueError('Qingkong key paths must not be symlinks')
+    if any(not 0 < p.stat().st_size <= 16384 for p in (private, public)):
+        raise ValueError('invalid Qingkong key size')
+    contents = private.read_bytes(), public.read_bytes()
+    derived = subprocess.run(['openssl', 'pkey', '-pubout', '-outform', 'DER'],
+                             input=contents[0], capture_output=True, check=True).stdout
+    configured = subprocess.run(['openssl', 'pkey', '-pubin', '-outform', 'DER'],
+                                input=contents[1], capture_output=True, check=True).stdout
+    if not derived or derived != configured:
+        raise ValueError('Qingkong private key differs from the login public key')
+    for name, content in zip(('privatekey.pem', 'publickey.pem'), contents):
+        target = game / name
+        target.write_bytes(content)
+        target.chmod(0o600)
 
 
 def runtime_game_ready(source=Path('/data/df_game_r'), game=Path('/home/neople/game/df_game_r')):
@@ -49,8 +67,13 @@ def runtime_game_ready(source=Path('/data/df_game_r'), game=Path('/home/neople/g
 
 
 def channels_running():
-    from gateway.service import channels_running as running
-    return running()
+    for comm in Path('/proc').glob('[0-9]*/comm'):
+        try:
+            if comm.read_text().strip() == 'df_game_r':
+                return True
+        except (FileNotFoundError, ProcessLookupError):
+            pass
+    return False
 
 
 def configure(state, values):
@@ -106,7 +129,7 @@ def link(target, source):
 
 def prepare_libraries(state, root=Path('/root'), game=Path('/home/neople/game'), i386=Path('/opt/qingkong/i386')):
     from qingkong.assets import verify, manifest
-    from gateway.binary import prepare as copy_verified
+    from qingkong.binary import prepare as copy_verified
     source = verify(state / 'assets')
     for row in manifest():
         target = (game if row['path'] == 'libantisvrinline.so' else root) / row['path']
@@ -121,7 +144,7 @@ def prepare_libraries(state, root=Path('/root'), game=Path('/home/neople/game'),
 
 def prepare(conf=Path('/etc/supervisor/conf.d/qingkong.conf')):
     READY.unlink(missing_ok=True)
-    if os.environ.get('LAUNCHER_MODE', 'dof') != 'qingkong' or os.environ.get('SERVER_TYPE', 'ALL') not in ('ALL', 'GAME'):
+    if os.environ.get('LAUNCHER_MODE', 'qingkong') != 'qingkong' or os.environ.get('SERVER_TYPE', 'ALL') not in ('ALL', 'GAME'):
         conf.unlink(missing_ok=True)
         return
     from qingkong.assets import preflight, state_for, CONFIGS
@@ -133,9 +156,7 @@ def prepare(conf=Path('/etc/supervisor/conf.d/qingkong.conf')):
     configure(state, os.environ)
     for name in CONFIGS:
         link(Path('/root') / name, state / 'config' / name)
-    mode = os.environ.get('PLUGIN_MODE', 'dp2-frida')
-    body = (Path('/data/plugins/frida/frida.js').read_bytes() if mode in ('frida', 'dp2-frida')
-            else b'rpc.exports = {init: function () {}};\n')
+    body = b'rpc.exports = {init: function () {}};\n'
     wrapper = READY.parent / 'game-adapter.js'
     wrapper.write_bytes(add_adapter(body, (BASE / 'db_adapter.js').read_bytes()))
     wrapper.chmod(0o600)

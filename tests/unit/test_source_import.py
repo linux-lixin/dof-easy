@@ -25,7 +25,7 @@ class SourcePreparation(unittest.TestCase):
 
     def test_shared_build_inputs_are_available_without_network(self):
         with patch('urllib.request.urlopen', side_effect=AssertionError('Unexpected network access')):
-            self.assertEqual(source.verify_build_inputs(), 424)
+            self.assertEqual(source.verify_build_inputs(), len(json.loads((ROOT/'metadata/build-inputs.lock.json').read_text())['files']))
 
     def test_missing_or_changed_repo_input_is_rejected_without_restore(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(source, 'ROOT', Path(directory)):
@@ -41,9 +41,6 @@ class SourcePreparation(unittest.TestCase):
                 source.verify_build_inputs()
             self.assertEqual(target.read_bytes(), b'wrong')
 
-    def test_published_plugin_has_no_static_database_password(self):
-        config = json.loads((ROOT / 'services/game/resources/plugins/frida/frida_config.json').read_text())
-        self.assertEqual(config['db_config']['password'], '')
 
     def row(self, data):
         return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}

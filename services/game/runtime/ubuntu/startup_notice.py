@@ -1,19 +1,8 @@
-"""Report stable service readiness using the explicitly selected binary profile.
-
-Legacy dof requires fresh GeoIP log markers. The unmodified native executable
-does not emit those markers, so its profile requires stable native processes
-and the same real process/port/database health checks. Neither proves gameplay.
-"""
+"""Report stable Qingkong service readiness; gameplay still requires client validation."""
 import os
-from pathlib import Path
-import re
 import subprocess
 import sys
 import time
-
-COUNTRIES={'CN','HK','KR','MO','TW'}
-PATTERN=re.compile(rb'GeoIP Allow Country Code\s*:\s*(CN|HK|KR|MO|TW)\b')
-
 
 def channel_names(env):
     if env.get('SERVER_TYPE','ALL') not in ('ALL','GAME'):
@@ -22,21 +11,7 @@ def channel_names(env):
     return [group+f'{int(number):02d}' for number in env.get('OPEN_CHANNEL','11,52').split(',')]
 
 
-def check_countries(root,env):
-    for name in channel_names(env):
-        seen=set()
-        for path in (Path(root)/name).glob('Log*.init'):
-            if path.is_symlink() or not path.is_file():
-                continue
-            try:
-                with path.open('rb') as stream:
-                    for line in stream:
-                        match=PATTERN.search(line)
-                        if match: seen.add(match[1].decode('ascii'))
-            except FileNotFoundError:
-                continue
-        if seen!=COUNTRIES:
-            raise ValueError('channel '+name+' current initialization incomplete')
+
 
 
 def output(message):
@@ -44,22 +19,19 @@ def output(message):
 
 
 def make_check(health,env,log_root='/home/neople/game/log'):
-    profile=env.get('DNF_READINESS_PROFILE','dof')
-    if profile not in ('dof','native'):
-        raise ValueError('DNF_READINESS_PROFILE must be dof or native')
+    profile=env.get('LAUNCHER_MODE','qingkong')
+    if profile != 'qingkong':
+        raise ValueError('LAUNCHER_MODE must be qingkong')
 
     def check():
         health.check()
-        if profile=='dof':
-            check_countries(log_root,env)
-            return None
         processes,_=health.snapshot()
         # Ignore health helpers/shells whose short-lived PIDs naturally change.
-        # An actual native service restart resets the three-sample window.
+        # An Qingkong service restart resets the three-sample window.
         fingerprint=tuple(sorted((pid,name,tuple(args)) for pid,name,args in processes
-                                 if name.startswith('df_') or name in ('gunnersvr','zergsvr','secagent')))
+                                 if name.startswith('df_') or name in ('QK','gunnersvr','zergsvr','secagent')))
         if not fingerprint:
-            raise ValueError('native processes disappeared after health check')
+            raise ValueError('Qingkong processes disappeared after health check')
         return fingerprint
     return check
 
@@ -98,10 +70,7 @@ def main():
     role=os.environ.get('SERVER_TYPE','ALL')
     names=channel_names(os.environ)
     detail=role+('；频道：'+'、'.join(names) if names else '')
-    if os.environ.get('DNF_READINESS_PROFILE','dof') == 'native':
-        message=f'[启动完成] 服务健康检查已连续稳定通过（{detail}）；尚未验证客户端实玩流程'
-    else:
-        message=f'[启动完成] 游戏服务已全部就绪（{detail}）'
+    message=f'[启动完成] 服务健康检查已连续稳定通过（{detail}）；尚未验证客户端实玩流程'
     return wait_ready(check,message,int(os.environ.get('STARTUP_TIMEOUT','600')))
 
 

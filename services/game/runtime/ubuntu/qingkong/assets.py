@@ -1,4 +1,5 @@
 """Install the pinned original Qingkong payload without transforming its bytes."""
+import configparser
 import hashlib
 import json
 import os
@@ -48,6 +49,19 @@ def verify(source, profile='qingkong'):
 def verify_config(state):
     for name in CONFIGS:
         regular(Path(state) / 'config' / name, state)
+    parser = configparser.ConfigParser(interpolation=None)
+    parser.optionxform = str
+    try:
+        parser.read_string((Path(state) / 'config/config.ini').read_text(encoding='utf-8-sig'))
+        if parser['Gate']['gateProt'] != '8887':
+            raise ValueError('Original Qingkong gateway must use port 8887')
+        for section, keys in {'Gate': ('DfGameR',), 'db': ('db_host', 'db_prot', 'db_user_name', 'db_password', 'db_database_name')}.items():
+            for key in keys:
+                parser[section][key]
+        if parser['db']['db_database_name'] != 'd_taiwan':
+            raise ValueError('Original Qingkong requires database d_taiwan')
+    except (configparser.Error, KeyError, UnicodeError) as error:
+        raise ValueError('Original Qingkong config.ini is missing valid Gate/db settings') from error
 
 
 def state_for(values, data=Path('/data')):
@@ -55,8 +69,8 @@ def state_for(values, data=Path('/data')):
 
 
 def validate_options(mode, raid):
-    if mode not in ('none', 'dp2', 'frida', 'dp2-frida'):
-        raise ValueError('Invalid Qingkong PLUGIN_MODE')
+    if mode != 'none':
+        raise ValueError('Original Qingkong requires PLUGIN_MODE=none')
     if raid != 'off':
         raise ValueError('Original Qingkong requires RAID_EXTENSION=off')
 
@@ -93,7 +107,7 @@ def install(source, state, profile='qingkong'):
 
 
 def preflight():
-    validate_options(os.environ.get('PLUGIN_MODE', 'dp2-frida'), os.environ.get('RAID_EXTENSION', 'off'))
+    validate_options(os.environ.get('PLUGIN_MODE', 'none'), os.environ.get('RAID_EXTENSION', 'off'))
     if os.environ.get('SERVER_TYPE', 'ALL') in ('ALL', 'GAME'):
         state = state_for(os.environ)
         verify(state / 'assets')

@@ -1,30 +1,12 @@
-"""Verify and install the single pinned, derived server runtime."""
+"""Original Qingkong facade and shared pinned game ABI validation."""
 import hashlib
 import json
 import os
 from pathlib import Path
-import shutil
 import struct
-import tempfile
 
 BASE = Path(__file__).resolve().parent
-LOCK = BASE / 'runtime.lock.json'
 GAME_ABI = BASE / 'game-abi.json'
-RAID_CONFIGS = ('anton-raid.ini', 'luke-raid.ini')
-RESOURCE_ROOT = BASE.parents[2] / 'resources'
-RAID_DEFAULTS = (RESOURCE_ROOT / 'plugins/raid/config' if RESOURCE_ROOT.is_dir()
-                 else Path('/opt/dnf/plugins/raid/config'))
-
-
-def template_path(name):
-    """Resource/package location; the native ABI still reads state/config/*.ini."""
-    return Path('plugins/raid/config' if name in RAID_CONFIGS else 'config') / name
-
-
-def templates():
-    return [(name, (RAID_DEFAULTS if name in RAID_CONFIGS else BASE / 'defaults') / name) for name in
-            ('plugin.ini', 'anton-raid.ini', 'luke-raid.ini', 'dungeon.lst', 'equipment.json')]
-
 
 def qingkong_assets():
     import importlib.util
@@ -37,86 +19,53 @@ def qingkong_assets():
     return module
 
 
-def manifest(profile='native'):
-    if profile == 'qingkong':
-        return qingkong_assets().manifest()
-    if profile != 'native':
-        raise ValueError('Only the derived native server runtime is accepted')
-    value = json.loads(LOCK.read_text())
-    if value.get('schema') != 2 or value.get('sourceEdition') != 'replacement-only':
-        raise ValueError('Invalid server runtime lock')
-    return value['files']
-
-
 def launcher_mode(values):
-    mode = values.get('LAUNCHER_MODE', 'dof')
-    if mode not in ('dof', 'native', 'qingkong'):
-        raise ValueError('LAUNCHER_MODE must be dof, native or qingkong; import old data explicitly')
+    mode = values.get('LAUNCHER_MODE', 'qingkong')
+    if mode != 'qingkong':
+        raise ValueError('Only original qingkong is supported; existing modes are not migrated')
     return mode
 
 
-def required(values):
-    return launcher_mode(values) in ('native', 'qingkong') or values.get('RAID_EXTENSION', 'off') == 'on'
+def validate_options(mode, enabled):
+    return qingkong_assets().validate_options(mode, enabled)
 
 
 def profile_for(values):
-    if launcher_mode(values) == 'qingkong':
-        if values.get('RAID_EXTENSION', 'off') != 'off':
-            raise ValueError('qingkong uses original raid configuration; RAID_EXTENSION must be off')
-        return 'qingkong'
-    if any(name.startswith('QINGKONG_') for name in values):
-        raise ValueError('Old native environment settings require explicit offline migration')
-    return 'native'
+    launcher_mode(values)
+    validate_options(values.get('PLUGIN_MODE', 'none'), values.get('RAID_EXTENSION', 'off'))
+    return 'qingkong'
+
+
+def required(values):
+    profile_for(values)
+    return True
 
 
 def state_for(values, data=Path('/data')):
-    if profile_for(values) == 'qingkong':
-        return Path(data) / 'qingkong'
-    return Path(data) / 'dof-easy'
+    profile_for(values)
+    return Path(data) / 'qingkong'
+
+
+def manifest(profile='qingkong'):
+    return qingkong_assets().manifest(profile)
 
 
 def regular(path, root):
-    path, root = Path(path), Path(root)
-    for item in (path, *path.parents):
-        if item.is_symlink():
-            raise ValueError('Server assets must not contain links: ' + str(path))
-        if item == root:
-            break
-    if not path.is_file():
-        raise ValueError('Missing server asset: ' + str(path))
-    return path
+    return qingkong_assets().regular(path, root)
 
 
-def validate_options(mode, enabled):
-    if enabled not in ('on', 'off'):
-        raise ValueError('RAID_EXTENSION must be on or off')
-    if enabled == 'on' and mode not in ('dp2', 'dp2-frida'):
-        raise ValueError('Raid extension requires DP2 (dp2 or dp2-frida)')
+def verify(root, profile='qingkong'):
+    return qingkong_assets().verify(root, profile)
 
 
-def verify(root, profile='native'):
-    if profile == 'qingkong':
-        return qingkong_assets().verify(root)
-    root = Path(root)
-    expected = json.loads(LOCK.read_text())
-    actual = json.loads(regular(root / 'manifest.json', root).read_text())
-    if actual != expected:
-        raise ValueError('Server runtime manifest differs from the installed version')
-    for row in manifest(profile):
-        path = regular(root / row['path'], root)
-        raw = path.read_bytes()
-        if len(raw) != row['bytes'] or hashlib.sha256(raw).hexdigest() != row['sha256']:
-            raise ValueError('Server runtime hash mismatch: ' + row['path'])
-        if 'elf_class' in row and (raw[:4] != b'\x7fELF' or raw[4] != row['elf_class']):
-            raise ValueError('Server runtime architecture mismatch: ' + row['path'])
-    return root
+def verify_config(root, profile='qingkong'):
+    if profile != 'qingkong':
+        raise ValueError('Expected original Qingkong profile')
+    return qingkong_assets().verify_config(root)
 
 
-def verify_config(root, profile='native'):
-    if profile == 'qingkong':
-        return qingkong_assets().verify_config(root)
-    for name, _ in templates():
-        regular(Path(root) / 'config' / name, root)
+def install(source, target, profile='qingkong'):
+    return qingkong_assets().install(source, target, profile)
 
 
 def validate_game(path):
@@ -160,55 +109,9 @@ def validate_game(path):
             raise ValueError('Unsupported game ABI function: ' + row['symbols'][0])
 
 
-def install(source, target, profile='native'):
-    if profile == 'qingkong':
-        return qingkong_assets().install(source, target)
-    source, target = verify(source, profile), Path(target).absolute()
-    if target.is_symlink() or any(p.is_symlink() for p in target.parents):
-        raise ValueError('Installation target cannot contain links')
-    if target.exists():
-        verify(target / 'assets', profile)
-        verify_config(target)
-        return
-    target.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix='.dof-install-', dir=target.parent) as temporary:
-        stage = Path(temporary) / 'state'
-        assets = stage / 'assets'; assets.mkdir(parents=True, mode=0o700)
-        for row in manifest(profile):
-            destination = assets / row['path']; destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(source / row['path'], destination)
-            destination.chmod(0o700 if row['path'].startswith('bin/') else 0o600)
-        shutil.copyfile(source / 'manifest.json', assets / 'manifest.json')
-        (stage / 'config').mkdir(mode=0o700)
-        for name, default in templates():
-            custom = source / template_path(name)
-            previous = source / 'config' / name
-            if name in RAID_CONFIGS and (previous.exists() or previous.is_symlink()):
-                raise ValueError('Move raid bundle configuration to plugins/raid/config/: ' + name)
-            data = (regular(custom, source) if custom.exists() or custom.is_symlink()
-                    else regular(default, default.parent)).read_text(encoding='utf-8-sig')
-            if name == 'plugin.ini':
-                import re
-                for key in ('Inlay_function', 'Equ_unlocked_instantly', 'Task_Completion_coupon'):
-                    data, count = re.subn(r'(?m)^' + key + r'\s*=.*$', key + '=0', data)
-                    if count != 1:
-                        raise ValueError('Missing or duplicate feature ownership switch: ' + key)
-            path = stage / 'config' / name; path.write_text(data); path.chmod(0o600)
-        (stage / 'keys').mkdir(mode=0o700)
-        verify(assets, profile); verify_config(stage)
-        if target.exists() or target.is_symlink():
-            raise ValueError('Installation target appeared during preparation')
-        stage.rename(target)
-
-
 def preflight():
-    if profile_for(os.environ) == 'qingkong':
-        return qingkong_assets().preflight()
-    validate_options(os.environ.get('PLUGIN_MODE', 'dp2-frida'), os.environ.get('RAID_EXTENSION', 'off'))
-    if required(os.environ) and os.environ.get('SERVER_TYPE', 'ALL') in ('ALL', 'GAME'):
-        state = state_for(os.environ)
-        verify(state / 'assets'); verify_config(state)
-        validate_game('/data/df_game_r')
+    profile_for(os.environ)
+    return qingkong_assets().preflight()
 
 
 if __name__ == '__main__':

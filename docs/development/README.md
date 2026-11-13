@@ -1,62 +1,15 @@
-# 开发与构建
+# 开发与检查
 
-先准备工具链，再构建、测试和维护文档。 读者：对应任务的安装者、运维者或开发者。适用模式、前提、预期结果与限制以所选页面为准。
+使用 Python 3.11+；game 镜像的完整检查需要 Linux amd64、Docker/Compose 和完整仓库资源。纯单元测试不应访问线上数据库。
 
-[返回文档首页](../README.md)
+```bash
+python3 scripts/diagnostics/check_docs.py
+python3 -m unittest discover -s tests/unit -p 'test_*.py'
+python3 -m unittest discover -s tests/structure -p 'test_*.py'
+git diff --check
+sudo bash dof.sh build --tag qingkong-check
+```
 
-- [docs/development/active-plan.md](active-plan.md)
-- [docs/development/admin-packaging.md](admin-packaging.md)
-- [docs/development/admin.md](admin.md)
-- [docs/development/documentation.md](documentation.md)
-- [docs/development/native-resource-derivation.md](native-resource-derivation.md)
-- [docs/development/native/compressed-script-audit.md](native/compressed-script-audit.md)
-- [docs/development/wpf.md](wpf.md)
+缺少完整二进制资源、i386 编译器或 Docker 的检查必须明确记为失败或跳过。文档检查验证 Git 管理的链接、导航、目录及 CLI 默认值；新增文档需加入 `docs/catalog.json`。本地设计草稿不发布。
 
-## 组件与工具入口
-
-- [CONTRIBUTING.md](../../CONTRIBUTING.md)
-- [README.md](../../README.md)
-- [clients/launcher/README.md](../../clients/launcher/README.md)
-- [deploy/README.md](../../deploy/README.md)
-- [deploy/bootstrap/README.md](../../deploy/bootstrap/README.md)
-- [deploy/database/README.md](../../deploy/database/README.md)
-- [deploy/manual/README.md](../../deploy/manual/README.md)
-- [deploy/manual/all/README.md](../../deploy/manual/all/README.md)
-- [deploy/manual/build/README.md](../../deploy/manual/build/README.md)
-- [deploy/manual/split/README.md](../../deploy/manual/split/README.md)
-- [deploy/manual/split/admin/README.md](../../deploy/manual/split/admin/README.md)
-- [deploy/manual/split/core/README.md](../../deploy/manual/split/core/README.md)
-- [deploy/manual/split/game/README.md](../../deploy/manual/split/game/README.md)
-- [deploy/manual/split/p2p/README.md](../../deploy/manual/split/p2p/README.md)
-- [deploy/nginx/README.md](../../deploy/nginx/README.md)
-- [deploy/shared/README.md](../../deploy/shared/README.md)
-- [metadata/README.md](../../metadata/README.md)
-- [metadata/dof/README.md](../../metadata/dof/README.md)
-- [metadata/dof/derivation/README.md](../../metadata/dof/derivation/README.md)
-- [scripts/README.md](../../scripts/README.md)
-- [scripts/container/README.md](../../scripts/container/README.md)
-- [scripts/diagnostics/README.md](../../scripts/diagnostics/README.md)
-- [scripts/dof/README.md](../../scripts/dof/README.md)
-- [scripts/imports/README.md](../../scripts/imports/README.md)
-- [scripts/operations/README.md](../../scripts/operations/README.md)
-- [scripts/protocol/dof/README.md](../../scripts/protocol/dof/README.md)
-- [scripts/release/README.md](../../scripts/release/README.md)
-- [services/admin/README.md](../../services/admin/README.md)
-- [services/admin/backend/README.md](../../services/admin/backend/README.md)
-- [services/admin/frontend/README.md](../../services/admin/frontend/README.md)
-- [services/game/README.md](../../services/game/README.md)
-- [services/game/resources/README.md](../../services/game/resources/README.md)
-- [services/game/resources/native/README.md](../../services/game/resources/native/README.md)
-- [tests/README.md](../../tests/README.md)
-- [tests/integration/README.md](../../tests/integration/README.md)
-- [tests/integration/admin/README.md](../../tests/integration/admin/README.md)
-- [tests/integration/dof/README.md](../../tests/integration/dof/README.md)
-- [tests/integration/dof/digest_helper/README.md](../../tests/integration/dof/digest_helper/README.md)
-- [tests/integration/dof/frida_database/README.md](../../tests/integration/dof/frida_database/README.md)
-- [tests/integration/dof/postal_read/README.md](../../tests/integration/dof/postal_read/README.md)
-- [tests/integration/dof/recharge/README.md](../../tests/integration/dof/recharge/README.md)
-- [tests/integration/dof/server_stack/README.md](../../tests/integration/dof/server_stack/README.md)
-- [tests/integration/installer/README.md](../../tests/integration/installer/README.md)
-- [tests/integration/mysql/README.md](../../tests/integration/mysql/README.md)
-- [tests/structure/README.md](../../tests/structure/README.md)
-- [tests/unit/README.md](../../tests/unit/README.md)
+保留原始共享游戏资源和兼容库哈希。晴空私有原包由独立输入清单校验；数据库适配使用 `frida.so`，不得误删或加载已移除的普通玩法脚本。详见[资源目录](../../services/game/resources/README.md)和[测试说明](../../tests/README.md)。

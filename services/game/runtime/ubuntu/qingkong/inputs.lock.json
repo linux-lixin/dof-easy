@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "profile": "qingkong-2.8-replacement",
-  "source": "Verified original 2.8 dependencies plus the complete operator-supplied replacement trio; Windows tool is pinned in metadata/dof/runtime.lock.json.",
+  "source": "Verified private original Qingkong 2.8 dependencies and matched operator-supplied replacement trio; the matching original Windows tool is supplied separately.",
   "files": [
     {
       "path": "QK",

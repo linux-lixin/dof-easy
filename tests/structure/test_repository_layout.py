@@ -6,7 +6,6 @@ from pathlib import Path
 import shlex
 import subprocess
 import unittest
-import xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -53,8 +52,7 @@ class RepositoryLayout(unittest.TestCase):
                     self.assertEqual(hashlib.sha256((folder/record['file']).read_bytes()).hexdigest(),record['sha256'])
 
     def test_docker_copy_inputs_exist_inside_correct_context(self):
-        for context,dockerfile in [('services/game','docker/ubuntu/Dockerfile'),
-                                   ('services/admin','docker/Dockerfile')]:
+        for context,dockerfile in [('services/game','docker/ubuntu/Dockerfile')]:
             folder=ROOT/context
             for line in (folder/dockerfile).read_text(encoding='utf8').splitlines():
                 if not line.startswith(('COPY ','ADD ')) or '--from=' in line: continue
@@ -63,17 +61,16 @@ class RepositoryLayout(unittest.TestCase):
                     self.assertNotIn('..',Path(source).parts)
                     self.assertTrue(glob.glob(str(folder/source)),f'{context}/{dockerfile}: missing {source}')
 
-    def test_source_components_and_solution_references_exist(self):
+    def test_only_qingkong_product_components_remain(self):
         origins=json.loads((ROOT/'metadata/source-lock.json').read_text(encoding='utf8'))['repositories']
-        self.assertEqual({r['directory'] for r in origins},{'services/game','services/admin','clients/launcher'})
-        for origin in origins: self.assertTrue((ROOT/origin['directory']).is_dir())
-        launcher=ROOT/'clients/launcher'
-        for project in ET.parse(launcher/'DNFLogin.slnx').getroot().findall('Project'):
-            self.assertTrue((launcher/project.attrib['Path']).is_file())
-        for resource in ET.parse(launcher/'DNFLogin.csproj').iter('Resource'):
-            self.assertTrue((launcher/resource.attrib['Include'].replace('\\','/')).is_file())
-        self.assertTrue((ROOT/'services/admin/backend/pom.xml').is_file())
-        self.assertTrue((ROOT/'services/admin/frontend/package-lock.json').is_file())
+        self.assertEqual({r['directory'] for r in origins},{'services/game'})
+        for path in ('clients/launcher', 'services/admin', 'services/game/resources/native',
+                     'services/game/resources/plugins/dp2', 'services/game/resources/plugins/raid',
+                     'deploy/database/Dockerfile', 'scripts/dof', 'scripts/protocol'):
+            target=ROOT/path
+            self.assertFalse(target.is_file() or target.is_dir() and any(p.is_file() for p in target.rglob('*')),path)
+        frida=ROOT/'services/game/resources/plugins/frida'
+        self.assertEqual({p.name for p in frida.iterdir() if p.is_file()},{'frida.so'})
 
     def test_runtime_source_and_compat_archives_are_not_ignored(self):
         paths=['services/game/runtime/ubuntu/entrypoint.sh','services/game/runtime/ubuntu/health.py',
